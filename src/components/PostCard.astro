@@ -1,16 +1,25 @@
 ---
 import type { Post } from '../lib/posts';
 import { formatDate } from '../lib/posts';
-interface Props { post: Post; variant?: 'default' | 'horizontal' | 'compact'; }
-const { post, variant = 'default' } = Astro.props;
+interface Props { post: Post; variant?: 'default' | 'horizontal' | 'compact'; eager?: boolean; }
+const { post, variant = 'default', eager = false } = Astro.props;
+const imageWidth = post.data.imageWidth ?? 1280;
+const imageHeight = post.data.imageHeight ?? 720;
 ---
 <article class:list={['post-card', `post-card--${variant}`]} data-post-card data-category={post.data.categorySlug}>
   <a class="post-card-media" href={`/posts/${post.id}/`} aria-label={post.data.title}>
     {post.data.image ? (
-      <img src={post.data.image} alt={post.data.imageAlt ?? post.data.title} loading="lazy" width="1280" height="720" />
-    ) : (
-      <span class="image-fallback">بريق</span>
-    )}
+      <img
+        src={post.data.image}
+        alt={post.data.imageAlt ?? post.data.title}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        decoding="async"
+        width={imageWidth}
+        height={imageHeight}
+        style={`object-position:${post.data.imagePosition ?? 'center'}`}
+      />
+    ) : <span class="image-fallback" aria-hidden="true">بريق</span>}
   </a>
   <div class="post-card-body">
     <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>

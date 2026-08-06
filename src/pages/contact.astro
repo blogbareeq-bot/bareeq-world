@@ -1,14 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { site } from '../config/site';
 import { getPublishedPosts } from '../lib/posts';
+import { site } from '../config/site';
 const posts = await getPublishedPosts();
 ---
-<BaseLayout title="اتصل بنا" description="تواصل مع فريق عالم بريق" latestPosts={posts.slice(0, 6)}>
-  <section class="page-hero shell"><span class="eyebrow">تواصل معنا</span><h1>يسعدنا سماعك</h1><p>للملاحظات والاقتراحات والتعاون، راسلنا عبر البريد الرسمي.</p></section>
+<BaseLayout title="اتصل بنا" description="تواصل مع فريق عالم بريق لإرسال الملاحظات والتصحيحات والاقتراحات وفرص التعاون المناسبة." canonicalPath="/contact/" latestPosts={posts.slice(0,6)}>
+  <section class="page-hero compact shell"><span class="eyebrow">يسعدنا سماعك</span><h1>اتصل بنا</h1><p>نرحب بالملاحظات والتصحيحات والاقتراحات التي تساعد على تطوير المحتوى.</p></section>
   <section class="contact-card shell">
-    <div><span>البريد الإلكتروني</span><a href={`mailto:${site.email}`}>{site.email}</a></div>
-    <p>نحاول الرد على الرسائل المهمة خلال مدة مناسبة. لا ترسل بيانات شخصية أو مالية حساسة عبر البريد.</p>
-    <a class="button primary" href={`mailto:${site.email}?subject=${encodeURIComponent('رسالة إلى عالم بريق')}`}>إرسال رسالة</a>
+    <span>البريد الإلكتروني الرسمي</span>
+    <a href={`mailto:${site.email}?subject=${encodeURIComponent('رسالة إلى عالم بريق')}`}>{site.email}</a>
+    <p>نستخدم البريد المباشر حاليًا بدل نموذج غير مربوط بخدمة إرسال، حتى تتأكد من أن رسالتك تصل إلى وجهتها فعلًا.</p>
+    <a class="button primary" href={`mailto:${site.email}?subject=${encodeURIComponent('رسالة إلى عالم بريق')}`}>إرسال رسالة بالبريد</a>
+    <div class="contact-topics">
+      <h2>يمكنك التواصل معنا بشأن</h2>
+      <ul><li>اقتراح فكرة أو موضوع جديد.</li><li>التنبيه إلى معلومة تحتاج إلى مراجعة أو تحديث.</li><li>مشاركة ملاحظة تتعلق بتجربة الموقع.</li><li>فرصة تعاون مناسبة لهوية المدونة.</li></ul>
+    </div>
   </section>
 </BaseLayout>

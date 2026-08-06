@@ -13,21 +13,56 @@ interface Props {
   latestPosts?: Post[];
   type?: 'website' | 'article';
   noindex?: boolean;
+  publishedAt?: Date;
+  updatedAt?: Date;
 }
 
 const {
   title = site.name,
   description = site.description,
-  image = '/images/social-card.webp',
+  image = site.socialImage,
   canonicalPath = Astro.url.pathname,
   latestPosts = [],
   type = 'website',
-  noindex = false
+  noindex = false,
+  publishedAt,
+  updatedAt
 } = Astro.props;
 
+const cleanDescription = description.replace(/\s+/g, ' ').trim();
+const metaDescription = cleanDescription.length > 160 ? `${cleanDescription.slice(0, 157).trimEnd()}…` : cleanDescription;
 const fullTitle = title === site.name ? `${site.name} — ${site.tagline}` : `${title} | ${site.name}`;
 const canonical = new URL(canonicalPath, Astro.site ?? site.url).toString();
-const socialImage = new URL(image, Astro.site ?? site.url).toString();
+const socialImage = new URL(image || site.socialImage, Astro.site ?? site.url).toString();
+const baseSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${site.url}/#organization`,
+    name: site.name,
+    alternateName: site.brand,
+    url: site.url,
+    logo: { '@type': 'ImageObject', url: new URL(site.logo, site.url).toString() },
+    email: site.email,
+    description: site.description
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${site.url}/#website`,
+    url: site.url,
+    name: site.name,
+    alternateName: site.brand,
+    description: site.description,
+    inLanguage: 'ar',
+    publisher: { '@id': `${site.url}/#organization` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${site.url}/search/?q={search_term_string}`,
+      'query-input': 'required name=search_term_string'
+    }
+  }
+];
 ---
 <!doctype html>
 <html lang="ar" dir="rtl" data-theme="light">
@@ -37,33 +72,40 @@ const socialImage = new URL(image, Astro.site ?? site.url).toString();
     <meta name="theme-color" content="#FAF9F6" />
     <meta name="color-scheme" content="light dark" />
     <title>{fullTitle}</title>
-    <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="description" content={metaDescription} />
+    <meta name="author" content="فريق بريق" />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={site.logo} type="image/png" />
+    <link rel="apple-touch-icon" href={site.logo} />
     <link rel="alternate" type="application/rss+xml" title="عالم بريق" href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet" />
+
     <meta property="og:locale" content="ar_AR" />
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={metaDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
+    <meta property="og:image:secure_url" content={socialImage} />
+    <meta property="og:image:alt" content={title} />
+    {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
+    {updatedAt && <meta property="article:modified_time" content={updatedAt.toISOString()} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={socialImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(baseSchema)}></script>
     <script is:inline>
       (() => {
         try {
           const saved = localStorage.getItem('bareeq-theme');
           const theme = saved === 'dark' || saved === 'light' ? saved : 'light';
           document.documentElement.dataset.theme = theme;
-          const meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute('content', theme === 'dark' ? '#071421' : '#FAF9F6');
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#071421' : '#FAF9F6');
         } catch {}
       })();
     </script>
@@ -71,48 +113,71 @@ const socialImage = new URL(image, Astro.site ?? site.url).toString();
   <body>
     <a class="skip-link" href="#main-content">انتقل إلى المحتوى</a>
     <Header latestPosts={latestPosts} />
-    <main id="main-content">
-      <slot />
-    </main>
+    <main id="main-content"><slot /></main>
     <Footer />
     <button class="back-to-top" type="button" data-back-top aria-label="العودة إلى أعلى الصفحة">↑</button>
     <script is:inline>
       (() => {
         const root = document.documentElement;
         const themeToggle = document.querySelector('[data-theme-toggle]');
+        const syncThemeButton = () => themeToggle?.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
+        syncThemeButton();
         themeToggle?.addEventListener('click', () => {
           const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
           root.dataset.theme = next;
-          localStorage.setItem('bareeq-theme', next);
-          const meta = document.querySelector('meta[name="theme-color"]');
-          meta?.setAttribute('content', next === 'dark' ? '#071421' : '#FAF9F6');
+          try { localStorage.setItem('bareeq-theme', next); } catch {}
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', next === 'dark' ? '#071421' : '#FAF9F6');
+          syncThemeButton();
         });
 
         const drawer = document.querySelector('[data-mobile-drawer]');
+        const panel = drawer?.querySelector('.drawer-panel');
         const openButton = document.querySelector('[data-menu-open]');
         const closeButton = document.querySelector('[data-menu-close]');
+        let previousFocus = null;
+        const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
         const closeDrawer = () => {
           drawer?.classList.remove('is-open');
           drawer?.setAttribute('aria-hidden', 'true');
+          openButton?.setAttribute('aria-expanded', 'false');
           document.body.classList.remove('drawer-open');
+          if (previousFocus instanceof HTMLElement) previousFocus.focus();
         };
-        openButton?.addEventListener('click', () => {
+        const openDrawer = () => {
+          previousFocus = document.activeElement;
           drawer?.classList.add('is-open');
           drawer?.setAttribute('aria-hidden', 'false');
+          openButton?.setAttribute('aria-expanded', 'true');
           document.body.classList.add('drawer-open');
-        });
+          const first = panel?.querySelector(focusableSelector);
+          if (first instanceof HTMLElement) first.focus();
+        };
+        openButton?.addEventListener('click', openDrawer);
         closeButton?.addEventListener('click', closeDrawer);
-        drawer?.addEventListener('click', (event) => {
-          if (event.target === drawer) closeDrawer();
-        });
+        drawer?.addEventListener('click', (event) => { if (event.target === drawer) closeDrawer(); });
+        drawer?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeDrawer));
         document.addEventListener('keydown', (event) => {
-          if (event.key === 'Escape') closeDrawer();
+          if (event.key === 'Escape' && drawer?.classList.contains('is-open')) closeDrawer();
+          if (event.key === 'Tab' && drawer?.classList.contains('is-open') && panel) {
+            const focusable = [...panel.querySelectorAll(focusableSelector)].filter((el) => el instanceof HTMLElement && !el.hasAttribute('hidden'));
+            if (!focusable.length) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+            else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+          }
+        });
+
+        document.querySelectorAll('a[target="_blank"]').forEach((link) => {
+          const rel = new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
+          rel.add('noopener'); rel.add('noreferrer');
+          link.setAttribute('rel', [...rel].join(' '));
         });
 
         const backTop = document.querySelector('[data-back-top]');
         const updateBackTop = () => backTop?.classList.toggle('visible', scrollY > 500);
         addEventListener('scroll', updateBackTop, { passive: true });
-        backTop?.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+        backTop?.addEventListener('click', () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
         updateBackTop();
       })();
     </script>

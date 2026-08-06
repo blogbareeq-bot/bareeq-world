@@ -1,16 +1,20 @@
 ---
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentPage from '../components/ContentPage.astro';
 import { getPublishedPosts } from '../lib/posts';
+import { site } from '../config/site';
 const posts = await getPublishedPosts();
+const page = await getEntry('pages', 'about');
 ---
-<BaseLayout title="من نحن" description="تعرف على رسالة عالم بريق وقيمه" latestPosts={posts.slice(0, 6)}>
-  <section class="page-hero shell"><span class="eyebrow">من نحن</span><h1>عالم بريق… نافذتك إلى المعرفة</h1><p>مشروع عربي معرفي يقرّب الفكرة، ويمنح القارئ مساحة هادئة للتأمل والفهم.</p></section>
-  <article class="static-page shell prose">
-    <h2>رسالتنا</h2>
-    <p>نؤمن أن الفكرة الجيدة لا تحتاج إلى تعقيد، وأن المعرفة تصبح أكثر أثرًا حين تُقدّم بلغة واضحة وتصميم مريح واحترام لعقل القارئ.</p>
-    <h2>ماذا نقدّم؟</h2>
-    <p>مقالات في التفكير والكتب والثقافات والتقنية وتبسيط المفاهيم، ضمن أقسام مترابطة تخدم القارئ العربي الباحث عن محتوى نافع وممتع.</p>
-    <h2>قيم بريق</h2>
-    <ul><li>الوضوح دون تسطيح.</li><li>الموثوقية دون جفاف.</li><li>الجمال في خدمة المعنى.</li><li>احترام وقت القارئ وخصوصيته.</li></ul>
-  </article>
+<BaseLayout title="عن بريق" description={page?.data.description ?? site.description} canonicalPath="/about/" latestPosts={posts.slice(0,6)}>
+  <section class="page-hero compact shell"><span class="eyebrow">قصتنا ومنهجنا</span><h1>عن بريق</h1><p>منصة عربية معرفية مستقلة يدير محتواها فريق بريق، وتجمع بين وضوح الفكرة وراحة القراءة.</p></section>
+  <div class="shell content-page-wrap">
+    <aside class="identity-card">
+      <img src={site.logo} alt={`الشعار الرسمي لمدونة ${site.brand}`} width="2526" height="1664" loading="eager" decoding="async" />
+      <p><strong>إدارة المحتوى:</strong> فريق بريق</p>
+      <p><strong>البريد:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></p>
+    </aside>
+    {page && <ContentPage page={page} />}
+  </div>
 </BaseLayout>

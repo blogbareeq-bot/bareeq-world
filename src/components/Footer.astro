@@ -8,11 +8,11 @@ const year = new Date().getFullYear();
     <div>
       <span>مساحتك اليومية لفكرة أجمل</span>
       <h2>فكرة واحدة قد تغيّر زاوية نظرك</h2>
-      <p>تصفّح محتوى عربيًا هادئًا، واضحًا، ومصممًا ليترك أثرًا.</p>
+      <p>اكتشف محتوى عربيًا واضحًا وهادئًا، صُمّم ليمنحك معرفة تبقى معك.</p>
     </div>
     <div class="closing-actions">
-      <a class="button primary" href="/articles/">اكتشف أحدث المقالات</a>
-      <a class="button ghost" href="/about/">تعرّف على بريق</a>
+      <a class="button primary" href="/articles/">اكتشف المقالات</a>
+      <a class="button ghost" href="/start-here/">ابدأ من هنا</a>
     </div>
   </div>
 </section>
@@ -20,31 +20,29 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <div class="shell footer-grid">
     <section class="footer-brand">
-      <Logo />
+      <Logo inverse />
       <p>{site.description}</p>
       <a href={`mailto:${site.email}`}>{site.email}</a>
     </section>
     <section>
       <h2>أقسام بريق</h2>
-      <ul>
-        {categories.map((category) => (
-          <li><a href={`/category/${category.slug}/`}>{category.name}</a></li>
-        ))}
-      </ul>
+      <ul>{categories.map((category) => <li><a href={`/category/${category.slug}/`}>{category.name}</a></li>)}</ul>
     </section>
     <section>
       <h2>روابط مهمة</h2>
       <ul>
-        <li><a href="/about/">من نحن</a></li>
+        <li><a href="/start-here/">ابدأ من هنا</a></li>
+        <li><a href="/about/">عن بريق</a></li>
         <li><a href="/contact/">اتصل بنا</a></li>
         <li><a href="/privacy/">سياسة الخصوصية</a></li>
         <li><a href="/terms/">شروط الاستخدام</a></li>
+        <li><a href="/disclaimer/">إخلاء المسؤولية</a></li>
         <li><a href="/rss.xml">RSS</a></li>
       </ul>
     </section>
   </div>
   <div class="shell footer-bottom">
     <p>© {year} عالم بريق. جميع الحقوق محفوظة.</p>
-    <p>صُمّم بعناية للمحتوى العربي.</p>
+    <p>منصة عربية معرفية مستقلة.</p>
   </div>
 </footer>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../../lib/posts';
+import { series } from '../../config/site';
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="سلاسل بريق" description="مسارات قراءة مترابطة تجمع مقالات عالم بريق بحسب الفكرة والموضوع." canonicalPath="/series/" latestPosts={posts.slice(0,6)}>
+  <section class="page-hero compact shell"><span class="eyebrow">رحلات معرفية</span><h1>سلاسل بريق</h1><p>اختر مسارًا واقرأ مجموعة مترابطة من المقالات بدل التنقل العشوائي.</p></section>
+  <section class="shell section-gap"><div class="series-grid series-grid-large">
+    {series.map((item) => {
+      const count = posts.filter((post) => item.categorySlugs.includes(post.data.categorySlug as never)).length;
+      return <a class="series-card" href={`/series/${item.slug}/`}><span>{count} مقالات</span><h2>{item.title}</h2><p>{item.description}</p><strong>ابدأ السلسلة ←</strong></a>;
+    })}
+  </div></section>
+</BaseLayout>

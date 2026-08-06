@@ -9,7 +9,6 @@ export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.draft !== true);
   return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
 }
-
 interface Props { post: CollectionEntry<'posts'>; }
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
@@ -17,42 +16,56 @@ const allPosts = await getPublishedPosts();
 const currentIndex = allPosts.findIndex((entry) => entry.id === post.id);
 const newer = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
 const older = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
-const related = allPosts
-  .filter((entry) => entry.id !== post.id && entry.data.categorySlug === post.data.categorySlug)
-  .slice(0, 3);
-const articleUrl = absoluteUrl(`/posts/${post.id}/`, Astro.site?.toString());
+const sameCategory = allPosts.filter((entry) => entry.id !== post.id && entry.data.categorySlug === post.data.categorySlug);
+const related = [...sameCategory, ...allPosts.filter((entry) => entry.id !== post.id && !sameCategory.includes(entry))].slice(0, 3);
+const articlePath = `/posts/${post.id}/`;
+const articleUrl = absoluteUrl(articlePath, Astro.site?.toString());
 const shareText = encodeURIComponent(post.data.title);
 const shareUrl = encodeURIComponent(articleUrl);
 const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
-const structuredData = {
+const breadcrumbSchema = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'الرئيسية', item: site.url },
+    { '@type': 'ListItem', position: 2, name: post.data.category, item: absoluteUrl(`/category/${post.data.categorySlug}/`) },
+    { '@type': 'ListItem', position: 3, name: post.data.title, item: articleUrl }
+  ]
+};
+const articleSchema = {
   '@context': 'https://schema.org',
-  '@type': 'Article',
+  '@type': 'BlogPosting',
   headline: post.data.title,
   description: post.data.description,
   datePublished: post.data.publishedAt.toISOString(),
   dateModified: (post.data.updatedAt ?? post.data.publishedAt).toISOString(),
-  author: { '@type': 'Organization', name: post.data.author },
-  publisher: { '@type': 'Organization', name: site.name },
+  inLanguage: 'ar',
+  author: { '@type': 'Organization', name: post.data.author, url: site.url },
+  publisher: { '@id': `${site.url}/#organization` },
   mainEntityOfPage: articleUrl,
-  ...(post.data.image ? { image: absoluteUrl(post.data.image, Astro.site?.toString()) } : {})
+  articleSection: post.data.category,
+  keywords: post.data.tags.join(', '),
+  wordCount: Math.max(300, post.data.readingMinutes * 180),
+  ...(post.data.image ? { image: { '@type': 'ImageObject', url: absoluteUrl(post.data.image), width: post.data.imageWidth, height: post.data.imageHeight } } : {})
 };
 ---
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
   image={post.data.image}
-  canonicalPath={`/posts/${post.id}/`}
+  canonicalPath={articlePath}
   latestPosts={allPosts.slice(0, 6)}
   type="article"
+  publishedAt={post.data.publishedAt}
+  updatedAt={post.data.updatedAt ?? post.data.publishedAt}
 >
   <div class="reading-progress" data-reading-progress></div>
-  <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify([articleSchema, breadcrumbSchema])}></script>
 
   <article class="article-shell shell">
     <header class="article-header">
       <nav class="breadcrumbs" aria-label="مسار الصفحة">
-        <a href="/">الرئيسية</a><span>←</span>
-        <a href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
+        <a href="/">الرئيسية</a><span aria-hidden="true">‹</span>
+        <a href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a><span aria-hidden="true">‹</span>
+        <span aria-current="page">المقال</span>
       </nav>
       <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
       <h1>{post.data.title}</h1>
@@ -66,30 +79,30 @@ const structuredData = {
 
     {post.data.image && (
       <figure class="article-cover">
-        <img src={post.data.image} alt={post.data.imageAlt ?? post.data.title} width="1280" height="720" fetchpriority="high" />
+        <img
+          src={post.data.image}
+          alt={post.data.imageAlt ?? post.data.title}
+          width={post.data.imageWidth ?? 1280}
+          height={post.data.imageHeight ?? 720}
+          fetchpriority="high"
+          decoding="async"
+          style={`object-position:${post.data.imagePosition ?? 'center'}`}
+        />
       </figure>
     )}
 
-    <div class:list={['article-layout', { 'has-toc': toc.length > 0 }]}>
+    <div class:list={['article-layout', { 'has-toc': toc.length > 0 }]}> 
       {toc.length > 0 && (
         <aside class="article-toc" aria-label="محتويات المقال">
           <strong>في هذا المقال</strong>
-          <ol>
-            {toc.map((heading) => (
-              <li class:list={[`depth-${heading.depth}`]}><a href={`#${heading.slug}`}>{heading.text}</a></li>
-            ))}
-          </ol>
+          <ol>{toc.map((heading) => <li class:list={[`depth-${heading.depth}`]}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol>
         </aside>
       )}
-      <div class="article-content prose">
-        <Content />
-      </div>
+      <div class="article-content prose"><Content /></div>
     </div>
 
     <footer class="article-footer">
-      {post.data.tags.length > 0 && (
-        <div class="tag-list">{post.data.tags.map((tag) => <span>#{tag}</span>)}</div>
-      )}
+      {post.data.tags.length > 0 && <nav class="tag-list" aria-label="وسوم المقال">{post.data.tags.map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</nav>}
       <div class="share-box">
         <strong>شارك الفكرة</strong>
         <div>
@@ -104,8 +117,8 @@ const structuredData = {
 
   {(newer || older) && (
     <nav class="article-navigation shell" aria-label="التنقل بين المقالات">
-      {newer ? <a href={`/posts/${newer.id}/`}><span>المقال الأحدث</span><strong>{newer.data.title}</strong></a> : <span></span>}
-      {older ? <a href={`/posts/${older.id}/`}><span>المقال السابق</span><strong>{older.data.title}</strong></a> : <span></span>}
+      {newer ? <a class="next-article" href={`/posts/${newer.id}/`}><span>المقال الأحدث <b aria-hidden="true">←</b></span><strong>{newer.data.title}</strong></a> : <span></span>}
+      {older ? <a class="previous-article" href={`/posts/${older.id}/`}><span><b aria-hidden="true">→</b> المقال السابق</span><strong>{older.data.title}</strong></a> : <span></span>}
     </nav>
   )}
 
@@ -124,17 +137,15 @@ const structuredData = {
         const value = total > 0 ? Math.min(100, (scrollY / total) * 100) : 0;
         if (bar) bar.style.transform = `scaleX(${value / 100})`;
       };
-      addEventListener('scroll', update, { passive: true });
-      update();
+      addEventListener('scroll', update, { passive: true }); update();
       document.querySelector('[data-copy-link]')?.addEventListener('click', async (event) => {
         const button = event.currentTarget;
         if (!(button instanceof HTMLButtonElement)) return;
         try {
           await navigator.clipboard.writeText(button.dataset.url ?? location.href);
-          const old = button.textContent;
-          button.textContent = 'تم النسخ';
+          const old = button.textContent; button.textContent = 'تم النسخ';
           setTimeout(() => button.textContent = old, 1600);
-        } catch {}
+        } catch { button.textContent = 'انسخ الرابط من المتصفح'; }
       });
     })();
   </script>

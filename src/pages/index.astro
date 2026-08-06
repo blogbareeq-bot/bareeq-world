@@ -4,25 +4,49 @@ import CategoryStrip from '../components/CategoryStrip.astro';
 import ValuesStrip from '../components/ValuesStrip.astro';
 import PostCard from '../components/PostCard.astro';
 import { getPublishedPosts, formatDate } from '../lib/posts';
-import { categories, site } from '../config/site';
+import { categories, series, site } from '../config/site';
 
 const posts = await getPublishedPosts();
 const featured = posts.find((post) => post.data.featured) ?? posts[0];
 const sidePosts = posts.filter((post) => post.id !== featured?.id).slice(0, 3);
 const excluded = new Set([featured?.id, ...sidePosts.map((post) => post.id)]);
 const latestPosts = posts.filter((post) => !excluded.has(post.id)).slice(0, 8);
+const latestCategories = categories.filter((category) => latestPosts.some((post) => post.data.categorySlug === category.slug));
+const homeSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${site.name} — ${site.tagline}`,
+  description: site.description,
+  url: site.url,
+  inLanguage: 'ar',
+  mainEntity: posts.slice(0, 8).map((post) => ({
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    url: new URL(`/posts/${post.id}/`, site.url).toString(),
+    datePublished: post.data.publishedAt.toISOString()
+  }))
+};
 ---
 <BaseLayout latestPosts={posts.slice(0, 6)}>
+  <script type="application/ld+json" set:html={JSON.stringify(homeSchema)}></script>
   <CategoryStrip />
 
-  {featured && (
-    <section class="hero-editorial shell section-gap">
+  {featured ? (
+    <section class="hero-editorial shell section-gap" aria-label="المقالات المختارة">
       <article class="hero-featured">
         <a class="hero-link" href={`/posts/${featured.id}/`}>
           {featured.data.image ? (
-            <img src={featured.data.image} alt={featured.data.imageAlt ?? featured.data.title} fetchpriority="high" width="1280" height="720" />
-          ) : <span class="image-fallback">بريق</span>}
-          <span class="hero-overlay"></span>
+            <img
+              src={featured.data.image}
+              alt={featured.data.imageAlt ?? featured.data.title}
+              fetchpriority="high"
+              decoding="async"
+              width={featured.data.imageWidth ?? 1280}
+              height={featured.data.imageHeight ?? 720}
+              style={`object-position:${featured.data.imagePosition ?? 'center'}`}
+            />
+          ) : <span class="image-fallback" aria-hidden="true">بريق</span>}
+          <span class="hero-overlay" aria-hidden="true"></span>
           <div class="hero-content">
             <span class="featured-badge">مقال مختار</span>
             <h1>{featured.data.title}</h1>
@@ -34,71 +58,71 @@ const latestPosts = posts.filter((post) => !excluded.has(post.id)).slice(0, 8);
           </div>
         </a>
       </article>
-
       <div class="hero-side-list">
-        {sidePosts.map((post) => (
-          <PostCard post={post} variant="horizontal" />
-        ))}
+        {sidePosts.map((post, index) => <PostCard post={post} variant="horizontal" eager={index === 0} />)}
       </div>
     </section>
+  ) : (
+    <section class="shell empty-state section-gap"><h1>أهلًا بك في عالم بريق</h1><p>المقالات قيد التجهيز.</p></section>
   )}
 
   <ValuesStrip />
 
-  <section class="latest-section shell section-gap">
+  <section class="latest-section section-band shell section-gap">
     <div class="section-heading">
-      <div>
-        <span class="eyebrow">تصفّح المزيد</span>
-        <h2>أحدث المقالات</h2>
-      </div>
+      <div><span class="eyebrow">تصفّح المزيد</span><h2>أحدث المقالات</h2></div>
       <a href="/articles/">عرض جميع المقالات</a>
     </div>
-
-    <div class="filter-pills" role="group" aria-label="تصفية أحدث المقالات">
-      <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
-      {categories.map((category) => (
-        <button type="button" data-filter={category.slug} aria-pressed="false">{category.name}</button>
-      ))}
-    </div>
-
-    <div class="latest-grid" data-latest-grid>
-      {latestPosts.map((post) => <PostCard post={post} />)}
-    </div>
-
-    {latestPosts.length === 0 && (
-      <div class="empty-state">
-        <h2>المحتوى قيد التجهيز</h2>
-        <p>أضف مقالات جديدة إلى مجلد المحتوى، وستظهر هنا تلقائيًا.</p>
-      </div>
+    {latestPosts.length > 0 && (
+      <>
+        <div class="filter-pills" role="group" aria-label="تصفية أحدث المقالات">
+          <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
+          {latestCategories.map((category) => <button type="button" data-filter={category.slug} aria-pressed="false">{category.name}</button>)}
+        </div>
+        <div class="latest-grid" data-latest-grid>{latestPosts.map((post) => <PostCard post={post} />)}</div>
+      </>
     )}
+  </section>
+
+  <section class="series-preview section-band-alt shell section-gap" aria-labelledby="series-title">
+    <div class="section-heading">
+      <div><span class="eyebrow">مسارات مترابطة</span><h2 id="series-title">سلاسل بريق</h2></div>
+      <a href="/series/">عرض السلاسل</a>
+    </div>
+    <div class="series-grid">
+      {series.map((item) => {
+        const count = posts.filter((post) => item.categorySlugs.includes(post.data.categorySlug as never)).length;
+        return <a class="series-card" href={`/series/${item.slug}/`}><span>{count} مقالات</span><h3>{item.title}</h3><p>{item.description}</p></a>;
+      })}
+    </div>
   </section>
 
   <section class="knowledge-banner shell section-gap">
     <div>
-      <span class="eyebrow">عالم بريق</span>
+      <span class="eyebrow">ابدأ رحلتك</span>
       <h2>معرفة هادئة، تصميم مريح، ومحتوى يبقى معك</h2>
       <p>{site.description}</p>
     </div>
-    <a class="button primary" href="/about/">اعرف قصتنا</a>
+    <a class="button primary" href="/start-here/">ابدأ من هنا</a>
+  </section>
+
+  <section class="newsletter-soon shell section-gap" aria-labelledby="newsletter-title">
+    <div><span class="eyebrow">قريبًا</span><h2 id="newsletter-title">نشرة بريق البريدية</h2><p>نعمل على إعداد نشرة مختصرة تحمل أفضل الأفكار إلى بريدك. لن نطلب بريدك قبل تشغيل الخدمة فعليًا.</p></div>
   </section>
 
   <script is:inline>
     (() => {
       const buttons = [...document.querySelectorAll('[data-filter]')];
-      const cards = [...document.querySelectorAll('[data-post-card]')];
-      buttons.forEach((button) => {
-        button.addEventListener('click', () => {
-          const filter = button.dataset.filter;
-          buttons.forEach((item) => {
-            const active = item === button;
-            item.classList.toggle('active', active);
-            item.setAttribute('aria-pressed', String(active));
-          });
-          cards.forEach((card) => {
-            card.hidden = filter !== 'all' && card.dataset.category !== filter;
-          });
+      const cards = [...document.querySelectorAll('[data-latest-grid] [data-post-card]')];
+      buttons.forEach((button) => button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+        buttons.forEach((item) => {
+          const active = item === button;
+          item.classList.toggle('active', active);
+          item.setAttribute('aria-pressed', String(active));
         });
-      });
+        cards.forEach((card) => { card.hidden = filter !== 'all' && card.dataset.category !== filter; });
+      }));
     })();
   </script>
 </BaseLayout>
