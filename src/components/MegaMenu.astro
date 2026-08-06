@@ -9,12 +9,13 @@ const groups = categories.map((category) => ({
 }));
 ---
 <div class="mega-menu" id="sections-mega-menu" data-mega-menu aria-hidden="true">
-  <div class="mega-menu-inner shell-wide">
-    <div class="mega-menu-intro">
-      <span class="eyebrow">استكشف بريق</span>
-      <strong>خمسة أبواب للمعرفة</strong>
-      <p>اختر المجال الأقرب إليك، أو ابدأ من أحدث ما نُشر في كل قسم.</p>
-      <a href="/articles/">تصفح جميع المقالات</a>
+  <div class="mega-menu-inner shell-full">
+    <div class="mega-menu-top">
+      <div>
+        <span class="eyebrow">استكشف بريق</span>
+        <strong>أحدث ما نُشر في الأقسام الخمسة</strong>
+      </div>
+      <a href="/articles/">تصفح جميع المقالات <span aria-hidden="true">←</span></a>
     </div>
     <div class="mega-menu-grid">
       {groups.map((group) => (
@@ -25,10 +26,14 @@ const groups = categories.map((category) => ({
           </a>
           {group.posts.length ? (
             <ol class="mega-menu-posts">
-              {group.posts.map((post, index) => (
+              {group.posts.map((post) => (
                 <li>
                   <a href={`/posts/${post.id}/`}>
-                    <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                    <span class="mega-menu-post-media" aria-hidden="true">
+                      {post.data.image ? (
+                        <img src={post.data.image} alt="" loading="lazy" decoding="async" width="96" height="72" />
+                      ) : <b>{group.icon}</b>}
+                    </span>
                     <strong>{post.data.title}</strong>
                   </a>
                 </li>

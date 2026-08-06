@@ -10,10 +10,12 @@ const featured = posts.find((post) => post.data.featured) ?? posts[0];
 const bookWeek = posts.find((post) => post.data.categorySlug === 'bareeq-books' && post.id !== featured?.id);
 const sidePosts = posts
   .filter((post) => post.id !== featured?.id && post.id !== bookWeek?.id)
-  .slice(0, 2);
+  .slice(0, 3);
 const excluded = new Set([featured?.id, bookWeek?.id, ...sidePosts.map((post) => post.id)].filter(Boolean));
 const latestPosts = posts.filter((post) => !excluded.has(post.id)).slice(0, 6);
 const latestCategories = categories.filter((category) => latestPosts.some((post) => post.data.categorySlug === category.slug));
+const showLatestFilters = latestPosts.length >= 6 && latestCategories.length > 1;
+const latestGridClass = `latest-grid--count-${Math.min(latestPosts.length, 6)}`;
 const used = new Set([...excluded, ...latestPosts.map((post) => post.id)]);
 const editorPicks = posts.filter((post) => !used.has(post.id)).slice(0, 3);
 const homeSchema = {
@@ -80,11 +82,13 @@ const homeSchema = {
       </div>
       {latestPosts.length > 0 && (
         <>
-          <div class="filter-pills" role="group" aria-label="تصفية أحدث المقالات">
-            <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
-            {latestCategories.map((category) => <button type="button" data-filter={category.slug} aria-pressed="false">{category.name}</button>)}
-          </div>
-          <div class="latest-grid latest-grid--equal" data-latest-grid>
+          {showLatestFilters && (
+            <div class="filter-pills" role="group" aria-label="تصفية أحدث المقالات">
+              <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
+              {latestCategories.map((category) => <button type="button" data-filter={category.slug} aria-pressed="false">{category.name}</button>)}
+            </div>
+          )}
+          <div class:list={["latest-grid", "latest-grid--equal", latestGridClass]} data-latest-grid>
             {latestPosts.map((post) => <PostCard post={post} />)}
           </div>
           <p class="filter-empty" data-filter-empty hidden>لا توجد مقالات مطابقة في هذه المجموعة.</p>

@@ -118,8 +118,8 @@ const articleSchema = {
 
   {(newer || older) && (
     <nav class="article-navigation shell" aria-label="التنقل بين المقالات">
-      {newer ? <a class="next-article" href={`/posts/${newer.id}/`}><span>المقال الأحدث <b aria-hidden="true">←</b></span><strong>{newer.data.title}</strong></a> : <span></span>}
-      {older ? <a class="previous-article" href={`/posts/${older.id}/`}><span><b aria-hidden="true">→</b> المقال السابق</span><strong>{older.data.title}</strong></a> : <span></span>}
+      {older ? <a class="previous-article" href={`/posts/${older.id}/`}><span>المقال السابق <b aria-hidden="true">→</b></span><strong>{older.data.title}</strong></a> : <span></span>}
+      {newer ? <a class="next-article" href={`/posts/${newer.id}/`}><span><b aria-hidden="true">←</b> المقال التالي</span><strong>{newer.data.title}</strong></a> : <span></span>}
     </nav>
   )}
 

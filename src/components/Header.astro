@@ -13,8 +13,7 @@ const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : curr
     <div class="shell-full utility-inner">
       <p>معرفة هادئة تساعدك على رؤية الفكرة من زاوية أوضح</p>
       <nav aria-label="روابط مساندة">
-        <a href="/start-here/">ابدأ من هنا</a>
-        <a href="/about/">عن بريق</a>
+        <a href="/privacy/">سياسة الخصوصية</a>
         <a href="/contact/">اتصل بنا</a>
       </nav>
     </div>
@@ -32,7 +31,6 @@ const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : curr
           </button>
           <MegaMenu posts={allPosts} />
         </div>
-        <a class:list={[{ active: isActive('/series/') }]} aria-current={isActive('/series/') ? 'page' : undefined} href="/series/">سلاسل بريق</a>
         <a class:list={[{ active: isActive('/start-here/') }]} aria-current={isActive('/start-here/') ? 'page' : undefined} href="/start-here/">ابدأ من هنا</a>
         <a class:list={[{ active: isActive('/about/') }]} aria-current={isActive('/about/') ? 'page' : undefined} href="/about/">عن بريق</a>
       </nav>
@@ -94,7 +92,6 @@ const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : curr
             );
           })}
         </div>
-        <a href="/series/">سلاسل بريق</a>
         <a href="/start-here/">ابدأ من هنا</a>
         <a href="/about/">عن بريق</a>
         <a href="/contact/">اتصل بنا</a>
