@@ -1,14 +1,15 @@
 {
   "name": "bareeq-world",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/check-dist.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "audit:dist": "node scripts/check-dist.mjs"
   },
   "dependencies": {
     "astro": "6.4.8"

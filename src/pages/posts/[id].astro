@@ -74,6 +74,7 @@ const articleSchema = {
         <span>{post.data.author}</span>
         <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
         <span>{post.data.readingMinutes} دقائق قراءة</span>
+        {post.data.updatedAt && post.data.updatedAt.valueOf() !== post.data.publishedAt.valueOf() && <span>آخر تحديث: {formatDate(post.data.updatedAt)}</span>}
       </div>
     </header>
 
@@ -95,10 +96,10 @@ const articleSchema = {
       {toc.length > 0 && (
         <aside class="article-toc" aria-label="محتويات المقال">
           <strong>في هذا المقال</strong>
-          <ol>{toc.map((heading) => <li class:list={[`depth-${heading.depth}`]}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol>
+          <ol>{toc.map((heading) => <li class:list={[`depth-${heading.depth}`]}><a data-toc-link href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol>
         </aside>
       )}
-      <div class="article-content prose"><Content /></div>
+      <div class="article-content prose" data-article-content><Content /></div>
     </div>
 
     <footer class="article-footer">
@@ -132,12 +133,30 @@ const articleSchema = {
   <script is:inline>
     (() => {
       const bar = document.querySelector('[data-reading-progress]');
+      const articleContent = document.querySelector('[data-article-content]');
       const update = () => {
-        const total = document.documentElement.scrollHeight - innerHeight;
-        const value = total > 0 ? Math.min(100, (scrollY / total) * 100) : 0;
-        if (bar) bar.style.transform = `scaleX(${value / 100})`;
+        if (!articleContent) return;
+        const rect = articleContent.getBoundingClientRect();
+        const start = scrollY + rect.top - innerHeight * 0.2;
+        const total = Math.max(1, articleContent.scrollHeight - innerHeight * 0.6);
+        const value = Math.max(0, Math.min(1, (scrollY - start) / total));
+        if (bar) bar.style.transform = `scaleX(${value})`;
       };
       addEventListener('scroll', update, { passive: true }); update();
+
+      const tocLinks = [...document.querySelectorAll('[data-toc-link]')];
+      const tocHeadings = tocLinks.map((link) => {
+        const id = decodeURIComponent(link.getAttribute('href')?.slice(1) || '');
+        return { link, heading: document.getElementById(id) };
+      }).filter((item) => item.heading);
+      if (tocHeadings.length) {
+        const observer = new IntersectionObserver((entries) => {
+          const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+          if (!visible) return;
+          tocLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`));
+        }, { rootMargin: '-18% 0px -70% 0px', threshold: [0, 1] });
+        tocHeadings.forEach(({ heading }) => observer.observe(heading));
+      }
       document.querySelector('[data-copy-link]')?.addEventListener('click', async (event) => {
         const button = event.currentTarget;
         if (!(button instanceof HTMLButtonElement)) return;

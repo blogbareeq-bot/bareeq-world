@@ -4,25 +4,24 @@ import { categories, site } from '../config/site';
 const year = new Date().getFullYear();
 ---
 <section class="closing-cta">
-  <div class="shell closing-inner">
+  <div class="shell-wide closing-inner">
     <div>
       <span>مساحتك اليومية لفكرة أجمل</span>
       <h2>فكرة واحدة قد تغيّر زاوية نظرك</h2>
-      <p>اكتشف محتوى عربيًا واضحًا وهادئًا، صُمّم ليمنحك معرفة تبقى معك.</p>
+      <p>محتوى عربي هادئ وموثوق يصل إليك دون ضجيج، ويمنحك معرفة تبقى معك.</p>
     </div>
     <div class="closing-actions">
-      <a class="button primary" href="/articles/">اكتشف المقالات</a>
-      <a class="button ghost" href="/start-here/">ابدأ من هنا</a>
+      <a class="button primary" href="/articles/">اكتشف أحدث المقالات</a>
+      <span class="button ghost disabled-action" aria-disabled="true">النشرة البريدية — قريبًا</span>
     </div>
   </div>
 </section>
 
 <footer class="site-footer">
-  <div class="shell footer-grid">
+  <div class="shell-wide footer-grid">
     <section class="footer-brand">
       <Logo inverse />
       <p>{site.description}</p>
-      <a href={`mailto:${site.email}`}>{site.email}</a>
     </section>
     <section>
       <h2>أقسام بريق</h2>
@@ -33,15 +32,21 @@ const year = new Date().getFullYear();
       <ul>
         <li><a href="/start-here/">ابدأ من هنا</a></li>
         <li><a href="/about/">عن بريق</a></li>
-        <li><a href="/contact/">اتصل بنا</a></li>
+        <li><a href="/series/">سلاسل بريق</a></li>
         <li><a href="/privacy/">سياسة الخصوصية</a></li>
         <li><a href="/terms/">شروط الاستخدام</a></li>
         <li><a href="/disclaimer/">إخلاء المسؤولية</a></li>
-        <li><a href="/rss.xml">RSS</a></li>
       </ul>
     </section>
+    <section class="footer-contact">
+      <h2>تواصل معنا</h2>
+      <p>للاقتراحات والاستفسارات والتعاون التحريري:</p>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      <a href="/contact/">صفحة التواصل</a>
+      <a href="/rss.xml">خلاصة RSS</a>
+    </section>
   </div>
-  <div class="shell footer-bottom">
+  <div class="shell-wide footer-bottom">
     <p>© {year} عالم بريق. جميع الحقوق محفوظة.</p>
     <p>منصة عربية معرفية مستقلة.</p>
   </div>

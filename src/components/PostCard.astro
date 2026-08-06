@@ -1,30 +1,52 @@
 ---
 import type { Post } from '../lib/posts';
 import { formatDate } from '../lib/posts';
-interface Props { post: Post; variant?: 'default' | 'horizontal' | 'compact'; eager?: boolean; }
-const { post, variant = 'default', eager = false } = Astro.props;
+import { categories } from '../config/site';
+interface Props {
+  post: Post;
+  variant?: 'default' | 'vertical' | 'horizontal' | 'compact' | 'text-only';
+  eager?: boolean;
+  showExcerpt?: boolean;
+  headingLevel?: 'h2' | 'h3' | 'h4';
+}
+const {
+  post,
+  variant = 'default',
+  eager = false,
+  showExcerpt = true,
+  headingLevel: Heading = 'h3'
+} = Astro.props;
+const normalizedVariant = variant === 'default' ? 'vertical' : variant;
 const imageWidth = post.data.imageWidth ?? 1280;
 const imageHeight = post.data.imageHeight ?? 720;
+const category = categories.find((item) => item.slug === post.data.categorySlug);
 ---
-<article class:list={['post-card', `post-card--${variant}`]} data-post-card data-category={post.data.categorySlug}>
-  <a class="post-card-media" href={`/posts/${post.id}/`} aria-label={post.data.title}>
-    {post.data.image ? (
-      <img
-        src={post.data.image}
-        alt={post.data.imageAlt ?? post.data.title}
-        loading={eager ? 'eager' : 'lazy'}
-        fetchpriority={eager ? 'high' : 'auto'}
-        decoding="async"
-        width={imageWidth}
-        height={imageHeight}
-        style={`object-position:${post.data.imagePosition ?? 'center'}`}
-      />
-    ) : <span class="image-fallback" aria-hidden="true">بريق</span>}
-  </a>
+<article
+  class:list={['post-card', `post-card--${normalizedVariant}`]}
+  style={`--category-color:${category?.color ?? '#087566'}`}
+  data-post-card
+  data-category={post.data.categorySlug}
+>
+  {normalizedVariant !== 'text-only' && (
+    <a class="post-card-media" href={`/posts/${post.id}/`} aria-label={post.data.title}>
+      {post.data.image ? (
+        <img
+          src={post.data.image}
+          alt={post.data.imageAlt ?? post.data.title}
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : 'auto'}
+          decoding="async"
+          width={imageWidth}
+          height={imageHeight}
+          style={`object-position:${post.data.imagePosition ?? 'center'}`}
+        />
+      ) : <span class="image-fallback" aria-hidden="true">{category?.icon ?? '◇'}</span>}
+    </a>
+  )}
   <div class="post-card-body">
     <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
-    <h3><a href={`/posts/${post.id}/`}>{post.data.title}</a></h3>
-    <p>{post.data.description}</p>
+    <Heading><a href={`/posts/${post.id}/`}>{post.data.title}</a></Heading>
+    {showExcerpt && <p>{post.data.description}</p>}
     <div class="post-card-meta">
       <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
       <span>{post.data.readingMinutes} دقائق قراءة</span>

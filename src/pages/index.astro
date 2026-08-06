@@ -1,17 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CategoryStrip from '../components/CategoryStrip.astro';
 import ValuesStrip from '../components/ValuesStrip.astro';
 import PostCard from '../components/PostCard.astro';
 import { getPublishedPosts, formatDate } from '../lib/posts';
-import { categories, series, site } from '../config/site';
+import { categories, site } from '../config/site';
 
 const posts = await getPublishedPosts();
 const featured = posts.find((post) => post.data.featured) ?? posts[0];
-const sidePosts = posts.filter((post) => post.id !== featured?.id).slice(0, 3);
-const excluded = new Set([featured?.id, ...sidePosts.map((post) => post.id)]);
-const latestPosts = posts.filter((post) => !excluded.has(post.id)).slice(0, 8);
+const bookWeek = posts.find((post) => post.data.categorySlug === 'bareeq-books' && post.id !== featured?.id);
+const sidePosts = posts
+  .filter((post) => post.id !== featured?.id && post.id !== bookWeek?.id)
+  .slice(0, 2);
+const excluded = new Set([featured?.id, bookWeek?.id, ...sidePosts.map((post) => post.id)].filter(Boolean));
+const latestPosts = posts.filter((post) => !excluded.has(post.id)).slice(0, 6);
 const latestCategories = categories.filter((category) => latestPosts.some((post) => post.data.categorySlug === category.slug));
+const used = new Set([...excluded, ...latestPosts.map((post) => post.id)]);
+const editorPicks = posts.filter((post) => !used.has(post.id)).slice(0, 3);
 const homeSchema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
@@ -29,10 +33,9 @@ const homeSchema = {
 ---
 <BaseLayout latestPosts={posts.slice(0, 6)}>
   <script type="application/ld+json" set:html={JSON.stringify(homeSchema)}></script>
-  <CategoryStrip />
 
   {featured ? (
-    <section class="hero-editorial shell section-gap" aria-label="المقالات المختارة">
+    <section class="hero-editorial shell-wide section-gap" aria-label="المقالات المختارة">
       <article class="hero-featured">
         <a class="hero-link" href={`/posts/${featured.id}/`}>
           {featured.data.image ? (
@@ -52,6 +55,7 @@ const homeSchema = {
             <h1>{featured.data.title}</h1>
             <p>{featured.data.description}</p>
             <div class="hero-meta">
+              <span>{featured.data.category}</span>
               <time datetime={featured.data.publishedAt.toISOString()}>{formatDate(featured.data.publishedAt)}</time>
               <span>{featured.data.readingMinutes} دقائق قراءة</span>
             </div>
@@ -59,61 +63,66 @@ const homeSchema = {
         </a>
       </article>
       <div class="hero-side-list">
-        {sidePosts.map((post, index) => <PostCard post={post} variant="horizontal" eager={index === 0} />)}
+        {sidePosts.map((post) => <PostCard post={post} variant="horizontal" eager showExcerpt={false} />)}
       </div>
     </section>
   ) : (
-    <section class="shell empty-state section-gap"><h1>أهلًا بك في عالم بريق</h1><p>المقالات قيد التجهيز.</p></section>
+    <section class="shell-wide empty-state section-gap"><h1>أهلًا بك في عالم بريق</h1><p>المقالات قيد التجهيز.</p></section>
   )}
 
   <ValuesStrip />
 
-  <section class="latest-section section-band shell section-gap">
-    <div class="section-heading">
-      <div><span class="eyebrow">تصفّح المزيد</span><h2>أحدث المقالات</h2></div>
-      <a href="/articles/">عرض جميع المقالات</a>
-    </div>
-    {latestPosts.length > 0 && (
-      <>
-        <div class="filter-pills" role="group" aria-label="تصفية أحدث المقالات">
-          <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
-          {latestCategories.map((category) => <button type="button" data-filter={category.slug} aria-pressed="false">{category.name}</button>)}
-        </div>
-        <div class="latest-grid" data-latest-grid>{latestPosts.map((post) => <PostCard post={post} />)}</div>
-      </>
-    )}
-  </section>
-
-  <section class="series-preview section-band-alt shell section-gap" aria-labelledby="series-title">
-    <div class="section-heading">
-      <div><span class="eyebrow">مسارات مترابطة</span><h2 id="series-title">سلاسل بريق</h2></div>
-      <a href="/series/">عرض السلاسل</a>
-    </div>
-    <div class="series-grid">
-      {series.map((item) => {
-        const count = posts.filter((post) => item.categorySlugs.includes(post.data.categorySlug as never)).length;
-        return <a class="series-card" href={`/series/${item.slug}/`}><span>{count} مقالات</span><h3>{item.title}</h3><p>{item.description}</p></a>;
-      })}
+  <section class="home-band home-band--latest section-gap">
+    <div class="shell-wide">
+      <div class="section-heading">
+        <div><span class="eyebrow">تصفّح المزيد</span><h2>أحدث المقالات</h2><p>أفكار جديدة من أبواب بريق الخمسة، دون تكرار ما ظهر في الواجهة الرئيسية.</p></div>
+        <a href="/articles/">عرض جميع المقالات</a>
+      </div>
+      {latestPosts.length > 0 && (
+        <>
+          <div class="filter-pills" role="group" aria-label="تصفية أحدث المقالات">
+            <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
+            {latestCategories.map((category) => <button type="button" data-filter={category.slug} aria-pressed="false">{category.name}</button>)}
+          </div>
+          <div class="latest-grid latest-grid--equal" data-latest-grid>
+            {latestPosts.map((post) => <PostCard post={post} />)}
+          </div>
+          <p class="filter-empty" data-filter-empty hidden>لا توجد مقالات مطابقة في هذه المجموعة.</p>
+        </>
+      )}
     </div>
   </section>
 
-  <section class="knowledge-banner shell section-gap">
-    <div>
-      <span class="eyebrow">ابدأ رحلتك</span>
-      <h2>معرفة هادئة، تصميم مريح، ومحتوى يبقى معك</h2>
-      <p>{site.description}</p>
-    </div>
-    <a class="button primary" href="/start-here/">ابدأ من هنا</a>
-  </section>
+  {bookWeek && (
+    <section class="book-feature shell-wide section-gap" aria-labelledby="book-feature-title">
+      <div class="book-feature-media">
+        {bookWeek.data.image ? <img src={bookWeek.data.image} alt={bookWeek.data.imageAlt ?? bookWeek.data.title} loading="lazy" decoding="async" width={bookWeek.data.imageWidth ?? 1280} height={bookWeek.data.imageHeight ?? 720} style={`object-position:${bookWeek.data.imagePosition ?? 'center'}`} /> : <span class="image-fallback">▤</span>}
+      </div>
+      <div class="book-feature-content">
+        <span class="eyebrow">من بريق الكتب</span>
+        <h2 id="book-feature-title">كتاب الأسبوع</h2>
+        <h3><a href={`/posts/${bookWeek.id}/`}>{bookWeek.data.title}</a></h3>
+        <p>{bookWeek.data.description}</p>
+        <div class="book-feature-meta"><time datetime={bookWeek.data.publishedAt.toISOString()}>{formatDate(bookWeek.data.publishedAt)}</time><span>{bookWeek.data.readingMinutes} دقائق قراءة</span></div>
+        <a class="button primary" href={`/posts/${bookWeek.id}/`}>اقرأ المقال</a>
+      </div>
+    </section>
+  )}
 
-  <section class="newsletter-soon shell section-gap" aria-labelledby="newsletter-title">
-    <div><span class="eyebrow">قريبًا</span><h2 id="newsletter-title">نشرة بريق البريدية</h2><p>نعمل على إعداد نشرة مختصرة تحمل أفضل الأفكار إلى بريدك. لن نطلب بريدك قبل تشغيل الخدمة فعليًا.</p></div>
-  </section>
+  {editorPicks.length === 3 && (
+    <section class="home-band home-band--picks section-gap">
+      <div class="shell-wide">
+        <div class="section-heading"><div><span class="eyebrow">ينتقيها المحرر</span><h2>اختيارات بريق</h2></div></div>
+        <div class="editor-picks-grid">{editorPicks.map((post) => <PostCard post={post} variant="text-only" />)}</div>
+      </div>
+    </section>
+  )}
 
   <script is:inline>
     (() => {
       const buttons = [...document.querySelectorAll('[data-filter]')];
       const cards = [...document.querySelectorAll('[data-latest-grid] [data-post-card]')];
+      const empty = document.querySelector('[data-filter-empty]');
       buttons.forEach((button) => button.addEventListener('click', () => {
         const filter = button.dataset.filter;
         buttons.forEach((item) => {
@@ -121,7 +130,13 @@ const homeSchema = {
           item.classList.toggle('active', active);
           item.setAttribute('aria-pressed', String(active));
         });
-        cards.forEach((card) => { card.hidden = filter !== 'all' && card.dataset.category !== filter; });
+        let visible = 0;
+        cards.forEach((card) => {
+          const hidden = filter !== 'all' && card.dataset.category !== filter;
+          card.hidden = hidden;
+          if (!hidden) visible += 1;
+        });
+        if (empty) empty.hidden = visible !== 0;
       }));
     })();
   </script>

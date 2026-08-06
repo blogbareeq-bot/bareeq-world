@@ -4,12 +4,14 @@ interface Props { compact?: boolean; inverse?: boolean; }
 const { compact = false, inverse = false } = Astro.props;
 ---
 <a class:list={['brand-logo', { compact, inverse }]} href="/" aria-label={`${site.name} — الرئيسية`}>
-  <img
-    src={site.logo}
-    alt={`شعار ${site.brand} — ${site.tagline}`}
-    width="2526"
-    height="1664"
-    decoding="async"
-  />
-  <span class="visually-hidden">{site.name} — {site.tagline}</span>
+  <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+    <rect width="64" height="64" rx="16" class="brand-mark-bg" />
+    <path d="M14 17 33 10v38l-19 6V17Z" class="brand-mark-window" />
+    <path d="M14 17h19M14 36h19M23 14v36" class="brand-mark-grid" />
+    <path d="M40 21h12M40 30l11 5M40 12l10-5" class="brand-mark-rays" />
+  </svg>
+  <span class="brand-wording">
+    <strong>{site.brand}</strong>
+    {!compact && <small>{site.tagline}</small>}
+  </span>
 </a>

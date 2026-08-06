@@ -76,8 +76,8 @@ const baseSchema = [
     <meta name="author" content="فريق بريق" />
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href={site.logo} type="image/png" />
-    <link rel="apple-touch-icon" href={site.logo} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={site.originalLogo} />
     <link rel="alternate" type="application/rss+xml" title="عالم بريق" href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -128,6 +128,67 @@ const baseSchema = [
           try { localStorage.setItem('bareeq-theme', next); } catch {}
           document.querySelector('meta[name="theme-color"]')?.setAttribute('content', next === 'dark' ? '#071421' : '#FAF9F6');
           syncThemeButton();
+        });
+
+        const stickyHeader = document.querySelector('[data-sticky-header]');
+        const updateStickyHeader = () => stickyHeader?.classList.toggle('is-scrolled', scrollY > 36);
+        addEventListener('scroll', updateStickyHeader, { passive: true });
+        updateStickyHeader();
+
+        const megaRoot = document.querySelector('[data-mega-root]');
+        const megaTrigger = document.querySelector('[data-mega-trigger]');
+        const megaMenu = document.querySelector('[data-mega-menu]');
+        let megaOpen = false;
+        const setMega = (open) => {
+          megaOpen = open;
+          megaRoot?.classList.toggle('is-open', open);
+          megaTrigger?.setAttribute('aria-expanded', String(open));
+          megaMenu?.setAttribute('aria-hidden', String(!open));
+        };
+        megaTrigger?.addEventListener('click', () => setMega(!megaOpen));
+        megaTrigger?.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            setMega(true);
+            const first = megaMenu?.querySelector('a');
+            if (first instanceof HTMLElement) first.focus();
+          }
+        });
+        megaRoot?.addEventListener('focusin', () => setMega(true));
+        megaRoot?.addEventListener('focusout', (event) => {
+          if (!megaRoot.contains(event.relatedTarget)) setMega(false);
+        });
+        megaRoot?.addEventListener('pointerenter', () => {
+          if (matchMedia('(hover:hover) and (pointer:fine)').matches) setMega(true);
+        });
+        megaRoot?.addEventListener('pointerleave', () => {
+          if (matchMedia('(hover:hover) and (pointer:fine)').matches) setMega(false);
+        });
+        document.addEventListener('click', (event) => {
+          if (megaOpen && megaRoot && !megaRoot.contains(event.target)) setMega(false);
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && megaOpen) {
+            setMega(false);
+            if (megaTrigger instanceof HTMLElement) megaTrigger.focus();
+          }
+        });
+
+        const ticker = document.querySelector('[data-ticker]');
+        const tickerToggle = document.querySelector('[data-ticker-toggle]');
+        const setTickerPaused = (paused) => {
+          ticker?.classList.toggle('is-paused', paused);
+          tickerToggle?.setAttribute('aria-pressed', String(paused));
+          tickerToggle?.setAttribute('aria-label', paused ? 'تشغيل حركة أحدث المقالات' : 'إيقاف حركة أحدث المقالات');
+          if (tickerToggle) tickerToggle.textContent = paused ? '▶' : 'Ⅱ';
+          try { localStorage.setItem('bareeq-ticker-paused', paused ? '1' : '0'); } catch {}
+        };
+        let tickerPaused = false;
+        try { tickerPaused = localStorage.getItem('bareeq-ticker-paused') === '1'; } catch {}
+        setTickerPaused(tickerPaused);
+        tickerToggle?.addEventListener('click', () => {
+          tickerPaused = !ticker?.classList.contains('is-paused');
+          setTickerPaused(tickerPaused);
         });
 
         const drawer = document.querySelector('[data-mobile-drawer]');
