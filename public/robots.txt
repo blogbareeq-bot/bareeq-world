@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bareeqworld.com/sitemap.xml

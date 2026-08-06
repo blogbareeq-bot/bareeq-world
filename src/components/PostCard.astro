@@ -1,0 +1,24 @@
+---
+import type { Post } from '../lib/posts';
+import { formatDate } from '../lib/posts';
+interface Props { post: Post; variant?: 'default' | 'horizontal' | 'compact'; }
+const { post, variant = 'default' } = Astro.props;
+---
+<article class:list={['post-card', `post-card--${variant}`]} data-post-card data-category={post.data.categorySlug}>
+  <a class="post-card-media" href={`/posts/${post.id}/`} aria-label={post.data.title}>
+    {post.data.image ? (
+      <img src={post.data.image} alt={post.data.imageAlt ?? post.data.title} loading="lazy" width="1280" height="720" />
+    ) : (
+      <span class="image-fallback">بريق</span>
+    )}
+  </a>
+  <div class="post-card-body">
+    <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
+    <h3><a href={`/posts/${post.id}/`}>{post.data.title}</a></h3>
+    <p>{post.data.description}</p>
+    <div class="post-card-meta">
+      <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+      <span>{post.data.readingMinutes} دقائق قراءة</span>
+    </div>
+  </div>
+</article>

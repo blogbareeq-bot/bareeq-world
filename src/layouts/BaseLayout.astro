@@ -1,0 +1,120 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import { site } from '../config/site';
+import type { Post } from '../lib/posts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalPath?: string;
+  latestPosts?: Post[];
+  type?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const {
+  title = site.name,
+  description = site.description,
+  image = '/images/social-card.webp',
+  canonicalPath = Astro.url.pathname,
+  latestPosts = [],
+  type = 'website',
+  noindex = false
+} = Astro.props;
+
+const fullTitle = title === site.name ? `${site.name} — ${site.tagline}` : `${title} | ${site.name}`;
+const canonical = new URL(canonicalPath, Astro.site ?? site.url).toString();
+const socialImage = new URL(image, Astro.site ?? site.url).toString();
+---
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#FAF9F6" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="عالم بريق" href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet" />
+    <meta property="og:locale" content="ar_AR" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem('bareeq-theme');
+          const theme = saved === 'dark' || saved === 'light' ? saved : 'light';
+          document.documentElement.dataset.theme = theme;
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', theme === 'dark' ? '#071421' : '#FAF9F6');
+        } catch {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">انتقل إلى المحتوى</a>
+    <Header latestPosts={latestPosts} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <button class="back-to-top" type="button" data-back-top aria-label="العودة إلى أعلى الصفحة">↑</button>
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const themeToggle = document.querySelector('[data-theme-toggle]');
+        themeToggle?.addEventListener('click', () => {
+          const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          localStorage.setItem('bareeq-theme', next);
+          const meta = document.querySelector('meta[name="theme-color"]');
+          meta?.setAttribute('content', next === 'dark' ? '#071421' : '#FAF9F6');
+        });
+
+        const drawer = document.querySelector('[data-mobile-drawer]');
+        const openButton = document.querySelector('[data-menu-open]');
+        const closeButton = document.querySelector('[data-menu-close]');
+        const closeDrawer = () => {
+          drawer?.classList.remove('is-open');
+          drawer?.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('drawer-open');
+        };
+        openButton?.addEventListener('click', () => {
+          drawer?.classList.add('is-open');
+          drawer?.setAttribute('aria-hidden', 'false');
+          document.body.classList.add('drawer-open');
+        });
+        closeButton?.addEventListener('click', closeDrawer);
+        drawer?.addEventListener('click', (event) => {
+          if (event.target === drawer) closeDrawer();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') closeDrawer();
+        });
+
+        const backTop = document.querySelector('[data-back-top]');
+        const updateBackTop = () => backTop?.classList.toggle('visible', scrollY > 500);
+        addEventListener('scroll', updateBackTop, { passive: true });
+        backTop?.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+        updateBackTop();
+      })();
+    </script>
+  </body>
+</html>

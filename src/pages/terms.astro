@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="شروط الاستخدام وإخلاء المسؤولية" description="شروط استخدام عالم بريق" latestPosts={posts.slice(0, 6)}>
+  <section class="page-hero compact shell"><span class="eyebrow">شروط الاستخدام</span><h1>الاستخدام المسؤول للمحتوى</h1><p>آخر تحديث: 6 أغسطس 2026</p></section>
+  <article class="static-page shell prose">
+    <h2>طبيعة المحتوى</h2><p>المحتوى معرفي وتثقيفي عام، ولا يُعد بديلًا عن المشورة الطبية أو القانونية أو المالية المتخصصة.</p>
+    <h2>حقوق المحتوى</h2><p>يجوز مشاركة روابط المقالات والاقتباس المحدود مع ذكر المصدر. لا يجوز إعادة نشر المقال كاملًا دون إذن.</p>
+    <h2>دقة المعلومات</h2><p>نبذل عناية معقولة في المراجعة، لكن قد تتغير المعلومات بمرور الوقت. يتحمل المستخدم مسؤولية التحقق عند اتخاذ قرارات مهمة.</p>
+    <h2>التعديلات</h2><p>قد تُحدّث هذه الشروط عند الحاجة، ويصبح الإصدار المنشور هو المعتمد.</p>
+  </article>
+</BaseLayout>

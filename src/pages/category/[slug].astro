@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { categories } from '../../config/site';
+import { getPublishedPosts } from '../../lib/posts';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { slug: category.slug }, props: { category } }));
+}
+
+const { category } = Astro.props;
+const allPosts = await getPublishedPosts();
+const posts = allPosts.filter((post) => post.data.categorySlug === category.slug);
+---
+<BaseLayout title={category.name} description={category.short} latestPosts={allPosts.slice(0, 6)}>
+  <section class="page-hero category-hero shell">
+    <span class="category-hero-icon">{category.icon}</span>
+    <div><span class="eyebrow">قسم معرفي</span><h1>{category.name}</h1><p>{category.short}</p></div>
+    <strong>{posts.length} مقالات</strong>
+  </section>
+
+  {posts.length > 0 ? (
+    <section class="shell archive-grid section-gap">
+      {posts.map((post) => <PostCard post={post} />)}
+    </section>
+  ) : (
+    <section class="shell empty-state section-gap"><h2>لا توجد مقالات منشورة بعد</h2><p>سيصل المحتوى الجديد إلى هذا القسم قريبًا.</p></section>
+  )}
+</BaseLayout>

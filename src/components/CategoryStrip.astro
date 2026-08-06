@@ -1,0 +1,13 @@
+---
+import { categories } from '../config/site';
+---
+<nav class="category-strip" aria-label="أقسام عالم بريق">
+  <div class="shell category-strip-inner">
+    {categories.map((category) => (
+      <a href={`/category/${category.slug}/`}>
+        <span class="category-icon">{category.icon}</span>
+        <span><strong>{category.name}</strong><small>{category.short}</small></span>
+      </a>
+    ))}
+  </div>
+</nav>

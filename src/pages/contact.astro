@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="اتصل بنا" description="تواصل مع فريق عالم بريق" latestPosts={posts.slice(0, 6)}>
+  <section class="page-hero shell"><span class="eyebrow">تواصل معنا</span><h1>يسعدنا سماعك</h1><p>للملاحظات والاقتراحات والتعاون، راسلنا عبر البريد الرسمي.</p></section>
+  <section class="contact-card shell">
+    <div><span>البريد الإلكتروني</span><a href={`mailto:${site.email}`}>{site.email}</a></div>
+    <p>نحاول الرد على الرسائل المهمة خلال مدة مناسبة. لا ترسل بيانات شخصية أو مالية حساسة عبر البريد.</p>
+    <a class="button primary" href={`mailto:${site.email}?subject=${encodeURIComponent('رسالة إلى عالم بريق')}`}>إرسال رسالة</a>
+  </section>
+</BaseLayout>

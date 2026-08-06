@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPublishedPosts } from '../../lib/posts';
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="جميع المقالات" description="تصفّح جميع مقالات عالم بريق" latestPosts={posts.slice(0, 6)}>
+  <section class="page-hero compact shell">
+    <span class="eyebrow">مكتبة بريق</span>
+    <h1>جميع المقالات</h1>
+    <p>أفكار وقراءات ومعارف مرتبة لتصل إلى ما تبحث عنه بسهولة.</p>
+  </section>
+  <section class="shell archive-grid section-gap">
+    {posts.map((post) => <PostCard post={post} />)}
+  </section>
+</BaseLayout>

@@ -1,0 +1,79 @@
+---
+import Logo from './Logo.astro';
+import { categories } from '../config/site';
+import type { Post } from '../lib/posts';
+interface Props { latestPosts?: Post[]; }
+const { latestPosts = [] } = Astro.props;
+---
+<header class="site-header" data-site-header>
+  <div class="utility-bar">
+    <div class="shell utility-inner">
+      <p>مرحبًا بك في عالم بريق — مساحة للمعرفة التي تُضيء الفكرة</p>
+      <nav aria-label="روابط مساندة">
+        <a href="/about/">من نحن</a>
+        <a href="/contact/">اتصل بنا</a>
+        <a href="/privacy/">الخصوصية</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="main-header shell">
+    <Logo />
+    <nav class="desktop-nav" aria-label="التنقل الرئيسي">
+      <a href="/">الرئيسية</a>
+      {categories.map((category) => (
+        <a href={`/category/${category.slug}/`}>{category.name}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <a class="icon-button" href="/search/" aria-label="البحث">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+      </a>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="تغيير الوضع اللوني">
+        <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.7A8.5 8.5 0 1 1 11.3 3 6.5 6.5 0 0 0 21 12.7Z"/></svg>
+      </button>
+      <button class="icon-button mobile-menu-button" type="button" data-menu-open aria-label="فتح القائمة">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+
+  {latestPosts.length > 0 && (
+    <div class="ticker" aria-label="أحدث المقالات">
+      <div class="shell ticker-inner">
+        <span class="ticker-label">أحدث المقالات</span>
+        <div class="ticker-viewport">
+          <div class="ticker-track">
+            {[...latestPosts, ...latestPosts].map((post) => (
+              <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <div class="mobile-drawer" data-mobile-drawer aria-hidden="true">
+    <div class="drawer-panel">
+      <div class="drawer-head">
+        <Logo compact />
+        <button class="icon-button" type="button" data-menu-close aria-label="إغلاق القائمة">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <nav class="mobile-nav" aria-label="قائمة الجوال">
+        <a href="/">الرئيسية</a>
+        {categories.map((category) => (
+          <a href={`/category/${category.slug}/`}>
+            <span>{category.icon}</span>
+            <span><strong>{category.name}</strong><small>{category.short}</small></span>
+          </a>
+        ))}
+        <a href="/articles/">جميع المقالات</a>
+        <a href="/about/">من نحن</a>
+        <a href="/contact/">اتصل بنا</a>
+      </nav>
+    </div>
+  </div>
+</header>

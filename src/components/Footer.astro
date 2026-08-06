@@ -1,0 +1,50 @@
+---
+import Logo from './Logo.astro';
+import { categories, site } from '../config/site';
+const year = new Date().getFullYear();
+---
+<section class="closing-cta">
+  <div class="shell closing-inner">
+    <div>
+      <span>مساحتك اليومية لفكرة أجمل</span>
+      <h2>فكرة واحدة قد تغيّر زاوية نظرك</h2>
+      <p>تصفّح محتوى عربيًا هادئًا، واضحًا، ومصممًا ليترك أثرًا.</p>
+    </div>
+    <div class="closing-actions">
+      <a class="button primary" href="/articles/">اكتشف أحدث المقالات</a>
+      <a class="button ghost" href="/about/">تعرّف على بريق</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="shell footer-grid">
+    <section class="footer-brand">
+      <Logo />
+      <p>{site.description}</p>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </section>
+    <section>
+      <h2>أقسام بريق</h2>
+      <ul>
+        {categories.map((category) => (
+          <li><a href={`/category/${category.slug}/`}>{category.name}</a></li>
+        ))}
+      </ul>
+    </section>
+    <section>
+      <h2>روابط مهمة</h2>
+      <ul>
+        <li><a href="/about/">من نحن</a></li>
+        <li><a href="/contact/">اتصل بنا</a></li>
+        <li><a href="/privacy/">سياسة الخصوصية</a></li>
+        <li><a href="/terms/">شروط الاستخدام</a></li>
+        <li><a href="/rss.xml">RSS</a></li>
+      </ul>
+    </section>
+  </div>
+  <div class="shell footer-bottom">
+    <p>© {year} عالم بريق. جميع الحقوق محفوظة.</p>
+    <p>صُمّم بعناية للمحتوى العربي.</p>
+  </div>
+</footer>

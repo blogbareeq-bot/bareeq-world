@@ -1,0 +1,141 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { formatDate, getPublishedPosts, absoluteUrl } from '../../lib/posts';
+import { site } from '../../config/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => data.draft !== true);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+interface Props { post: CollectionEntry<'posts'>; }
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const allPosts = await getPublishedPosts();
+const currentIndex = allPosts.findIndex((entry) => entry.id === post.id);
+const newer = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
+const older = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
+const related = allPosts
+  .filter((entry) => entry.id !== post.id && entry.data.categorySlug === post.data.categorySlug)
+  .slice(0, 3);
+const articleUrl = absoluteUrl(`/posts/${post.id}/`, Astro.site?.toString());
+const shareText = encodeURIComponent(post.data.title);
+const shareUrl = encodeURIComponent(articleUrl);
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishedAt.toISOString(),
+  dateModified: (post.data.updatedAt ?? post.data.publishedAt).toISOString(),
+  author: { '@type': 'Organization', name: post.data.author },
+  publisher: { '@type': 'Organization', name: site.name },
+  mainEntityOfPage: articleUrl,
+  ...(post.data.image ? { image: absoluteUrl(post.data.image, Astro.site?.toString()) } : {})
+};
+---
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image}
+  canonicalPath={`/posts/${post.id}/`}
+  latestPosts={allPosts.slice(0, 6)}
+  type="article"
+>
+  <div class="reading-progress" data-reading-progress></div>
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+
+  <article class="article-shell shell">
+    <header class="article-header">
+      <nav class="breadcrumbs" aria-label="مسار الصفحة">
+        <a href="/">الرئيسية</a><span>←</span>
+        <a href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
+      </nav>
+      <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
+      <h1>{post.data.title}</h1>
+      <p class="article-lead">{post.data.description}</p>
+      <div class="article-meta">
+        <span>{post.data.author}</span>
+        <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+        <span>{post.data.readingMinutes} دقائق قراءة</span>
+      </div>
+    </header>
+
+    {post.data.image && (
+      <figure class="article-cover">
+        <img src={post.data.image} alt={post.data.imageAlt ?? post.data.title} width="1280" height="720" fetchpriority="high" />
+      </figure>
+    )}
+
+    <div class:list={['article-layout', { 'has-toc': toc.length > 0 }]}>
+      {toc.length > 0 && (
+        <aside class="article-toc" aria-label="محتويات المقال">
+          <strong>في هذا المقال</strong>
+          <ol>
+            {toc.map((heading) => (
+              <li class:list={[`depth-${heading.depth}`]}><a href={`#${heading.slug}`}>{heading.text}</a></li>
+            ))}
+          </ol>
+        </aside>
+      )}
+      <div class="article-content prose">
+        <Content />
+      </div>
+    </div>
+
+    <footer class="article-footer">
+      {post.data.tags.length > 0 && (
+        <div class="tag-list">{post.data.tags.map((tag) => <span>#{tag}</span>)}</div>
+      )}
+      <div class="share-box">
+        <strong>شارك الفكرة</strong>
+        <div>
+          <a target="_blank" rel="noopener noreferrer" href={`https://wa.me/?text=${shareText}%20${shareUrl}`}>واتساب</a>
+          <a target="_blank" rel="noopener noreferrer" href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}>X</a>
+          <a target="_blank" rel="noopener noreferrer" href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}>فيسبوك</a>
+          <button type="button" data-copy-link data-url={articleUrl}>نسخ الرابط</button>
+        </div>
+      </div>
+    </footer>
+  </article>
+
+  {(newer || older) && (
+    <nav class="article-navigation shell" aria-label="التنقل بين المقالات">
+      {newer ? <a href={`/posts/${newer.id}/`}><span>المقال الأحدث</span><strong>{newer.data.title}</strong></a> : <span></span>}
+      {older ? <a href={`/posts/${older.id}/`}><span>المقال السابق</span><strong>{older.data.title}</strong></a> : <span></span>}
+    </nav>
+  )}
+
+  {related.length > 0 && (
+    <section class="shell related-section section-gap">
+      <div class="section-heading"><div><span class="eyebrow">واصل القراءة</span><h2>مقالات ذات صلة</h2></div></div>
+      <div class="archive-grid">{related.map((entry) => <PostCard post={entry} />)}</div>
+    </section>
+  )}
+
+  <script is:inline>
+    (() => {
+      const bar = document.querySelector('[data-reading-progress]');
+      const update = () => {
+        const total = document.documentElement.scrollHeight - innerHeight;
+        const value = total > 0 ? Math.min(100, (scrollY / total) * 100) : 0;
+        if (bar) bar.style.transform = `scaleX(${value / 100})`;
+      };
+      addEventListener('scroll', update, { passive: true });
+      update();
+      document.querySelector('[data-copy-link]')?.addEventListener('click', async (event) => {
+        const button = event.currentTarget;
+        if (!(button instanceof HTMLButtonElement)) return;
+        try {
+          await navigator.clipboard.writeText(button.dataset.url ?? location.href);
+          const old = button.textContent;
+          button.textContent = 'تم النسخ';
+          setTimeout(() => button.textContent = old, 1600);
+        } catch {}
+      });
+    })();
+  </script>
+</BaseLayout>

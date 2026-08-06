@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="سياسة الخصوصية" description="سياسة الخصوصية في عالم بريق" latestPosts={posts.slice(0, 6)}>
+  <section class="page-hero compact shell"><span class="eyebrow">سياسة الخصوصية</span><h1>خصوصيتك مهمة</h1><p>آخر تحديث: 6 أغسطس 2026</p></section>
+  <article class="static-page shell prose">
+    <h2>المعلومات التي نجمعها</h2><p>لا يطلب الموقع حسابًا للتصفح. قد تجمع خدمات الاستضافة سجلات تقنية أساسية لأغراض الأمان والأداء، مثل عنوان IP ونوع المتصفح.</p>
+    <h2>ملفات الارتباط</h2><p>يحفظ الموقع اختيار الوضع اللوني محليًا في جهازك. لا نستخدم ملفات ارتباط إعلانية في النسخة الحالية.</p>
+    <h2>الروابط الخارجية</h2><p>قد تتضمن المقالات روابط إلى مواقع أخرى، وتخضع تلك المواقع لسياساتها المستقلة.</p>
+    <h2>التواصل</h2><p>عند مراسلتنا، نستخدم بيانات الرسالة للرد فقط، ولا نبيع بيانات المستخدمين.</p>
+  </article>
+</BaseLayout>

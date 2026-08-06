@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="الصفحة غير موجودة" description="تعذر العثور على الصفحة المطلوبة" latestPosts={posts.slice(0, 6)} noindex>
+  <section class="not-found shell">
+    <strong>404</strong>
+    <h1>يبدو أنك ضللت الطريق، لكن المعرفة لا تضيع</h1>
+    <p>قد يكون الرابط قد تغيّر أو لم يعد موجودًا.</p>
+    <div><a class="button primary" href="/">العودة للرئيسية</a><a class="button secondary" href="/search/">البحث في بريق</a></div>
+  </section>
+</BaseLayout>
