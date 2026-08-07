@@ -1,6 +1,6 @@
 ---
 import Logo from './Logo.astro';
-import MegaMenu from './MegaMenu.astro';
+import CategoryStrip from './CategoryStrip.astro';
 import { categories } from '../config/site';
 import { getPublishedPosts, type Post } from '../lib/posts';
 interface Props { latestPosts?: Post[]; }
@@ -9,28 +9,12 @@ const allPosts = await getPublishedPosts();
 const currentPath = Astro.url.pathname;
 const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : currentPath.startsWith(prefix);
 ---
-<div class="utility-bar">
-    <div class="shell-full utility-inner">
-      <p>معرفة هادئة تساعدك على رؤية الفكرة من زاوية أوضح</p>
-      <nav aria-label="روابط مساندة">
-        <a href="/privacy/">سياسة الخصوصية</a>
-        <a href="/contact/">اتصل بنا</a>
-      </nav>
-    </div>
-</div>
-
 <header class="site-header sticky-header" data-sticky-header>
   <div class="main-header shell-full">
       <Logo />
       <nav class="desktop-nav" aria-label="التنقل الرئيسي">
         <a class:list={[{ active: isActive('/') }]} aria-current={isActive('/') ? 'page' : undefined} href="/">الرئيسية</a>
         <a class:list={[{ active: isActive('/articles/') }]} aria-current={isActive('/articles/') ? 'page' : undefined} href="/articles/">المقالات</a>
-        <div class="nav-sections" data-mega-root>
-          <button class="desktop-nav-trigger" type="button" data-mega-trigger aria-expanded="false" aria-controls="sections-mega-menu">
-            الأقسام <span aria-hidden="true">⌄</span>
-          </button>
-          <MegaMenu posts={allPosts} />
-        </div>
         <a class:list={[{ active: isActive('/start-here/') }]} aria-current={isActive('/start-here/') ? 'page' : undefined} href="/start-here/">ابدأ من هنا</a>
         <a class:list={[{ active: isActive('/about/') }]} aria-current={isActive('/about/') ? 'page' : undefined} href="/about/">عن بريق</a>
       </nav>
@@ -65,6 +49,8 @@ const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : curr
       </div>
     </div>
   )}
+
+<CategoryStrip posts={allPosts} />
 
 <div id="mobile-drawer" class="mobile-drawer" data-mobile-drawer aria-hidden="true">
     <div class="drawer-panel" role="dialog" aria-modal="true" aria-label="قائمة الموقع">

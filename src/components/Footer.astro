@@ -1,6 +1,6 @@
 ---
 import Logo from './Logo.astro';
-import { categories, site } from '../config/site';
+import { site } from '../config/site';
 const year = new Date().getFullYear();
 ---
 <section class="closing-cta">
@@ -22,10 +22,6 @@ const year = new Date().getFullYear();
     <section class="footer-brand">
       <Logo inverse />
       <p>{site.description}</p>
-    </section>
-    <section>
-      <h2>أقسام بريق</h2>
-      <ul>{categories.map((category) => <li><a href={`/category/${category.slug}/`}>{category.name}</a></li>)}</ul>
     </section>
     <section>
       <h2>روابط مهمة</h2>

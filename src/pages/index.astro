@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ValuesStrip from '../components/ValuesStrip.astro';
 import PostCard from '../components/PostCard.astro';
 import { getPublishedPosts, formatDate } from '../lib/posts';
-import { categories, site } from '../config/site';
+import { site } from '../config/site';
 
 const posts = await getPublishedPosts();
 const featured = posts.find((post) => post.data.featured) ?? posts[0];
@@ -13,8 +13,6 @@ const sidePosts = posts
   .slice(0, 3);
 const excluded = new Set([featured?.id, bookWeek?.id, ...sidePosts.map((post) => post.id)].filter(Boolean));
 const latestPosts = posts.filter((post) => !excluded.has(post.id)).slice(0, 6);
-const latestCategories = categories.filter((category) => latestPosts.some((post) => post.data.categorySlug === category.slug));
-const showLatestFilters = latestPosts.length >= 6 && latestCategories.length > 1;
 const latestGridClass = `latest-grid--count-${Math.min(latestPosts.length, 6)}`;
 const used = new Set([...excluded, ...latestPosts.map((post) => post.id)]);
 const editorPicks = posts.filter((post) => !used.has(post.id)).slice(0, 3);
@@ -33,7 +31,7 @@ const homeSchema = {
   }))
 };
 ---
-<BaseLayout latestPosts={posts.slice(0, 6)}>
+<BaseLayout latestPosts={posts.slice(0, 6)} preloadImage={featured?.data.image}>
   <script type="application/ld+json" set:html={JSON.stringify(homeSchema)}></script>
 
   {featured ? (
@@ -44,6 +42,7 @@ const homeSchema = {
             <img
               src={featured.data.image}
               alt={featured.data.imageAlt ?? featured.data.title}
+              loading="eager"
               fetchpriority="high"
               decoding="async"
               width={featured.data.imageWidth ?? 1280}
@@ -65,7 +64,7 @@ const homeSchema = {
         </a>
       </article>
       <div class="hero-side-list">
-        {sidePosts.map((post) => <PostCard post={post} variant="horizontal" eager showExcerpt={false} />)}
+        {sidePosts.map((post) => <PostCard post={post} variant="horizontal" headingLevel="h2" showExcerpt={false} />)}
       </div>
     </section>
   ) : (
@@ -81,18 +80,9 @@ const homeSchema = {
         <a href="/articles/">عرض جميع المقالات</a>
       </div>
       {latestPosts.length > 0 && (
-        <>
-          {showLatestFilters && (
-            <div class="filter-pills" role="group" aria-label="تصفية أحدث المقالات">
-              <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
-              {latestCategories.map((category) => <button type="button" data-filter={category.slug} aria-pressed="false">{category.name}</button>)}
-            </div>
-          )}
-          <div class:list={["latest-grid", "latest-grid--equal", latestGridClass]} data-latest-grid>
-            {latestPosts.map((post) => <PostCard post={post} />)}
-          </div>
-          <p class="filter-empty" data-filter-empty hidden>لا توجد مقالات مطابقة في هذه المجموعة.</p>
-        </>
+        <div class:list={["latest-grid", "latest-grid--equal", latestGridClass]}>
+          {latestPosts.map((post) => <PostCard post={post} />)}
+        </div>
       )}
     </div>
   </section>
@@ -121,27 +111,4 @@ const homeSchema = {
       </div>
     </section>
   )}
-
-  <script is:inline>
-    (() => {
-      const buttons = [...document.querySelectorAll('[data-filter]')];
-      const cards = [...document.querySelectorAll('[data-latest-grid] [data-post-card]')];
-      const empty = document.querySelector('[data-filter-empty]');
-      buttons.forEach((button) => button.addEventListener('click', () => {
-        const filter = button.dataset.filter;
-        buttons.forEach((item) => {
-          const active = item === button;
-          item.classList.toggle('active', active);
-          item.setAttribute('aria-pressed', String(active));
-        });
-        let visible = 0;
-        cards.forEach((card) => {
-          const hidden = filter !== 'all' && card.dataset.category !== filter;
-          card.hidden = hidden;
-          if (!hidden) visible += 1;
-        });
-        if (empty) empty.hidden = visible !== 0;
-      }));
-    })();
-  </script>
 </BaseLayout>

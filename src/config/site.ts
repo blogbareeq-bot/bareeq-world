@@ -6,15 +6,17 @@ export const site = {
   url: 'https://bareeqworld.com',
   email: 'blogbareeq@gmail.com',
   logo: '/favicon.svg',
-  originalLogo: '/images/bareeq-logo-official.png',
-  socialImage: '/images/bareeq-logo-official.png'
+  originalLogo: '/images/apple-touch-icon.png',
+  socialImage: '/images/bareeq-social-card.webp',
+  socialImageWidth: 1200,
+  socialImageHeight: 630
 };
 
 export const categories = [
   { name: 'أطياف العقل', slug: 'atyaf-al-aql', arabicSlug: 'أطياف-العقل', short: 'قرارات وعمل العقل', description: 'علم النفس والتفكير والقرارات', icon: '◌', color: '#7c3aed' },
   { name: 'بريق الكتب', slug: 'bareeq-books', arabicSlug: 'بريق-الكتب', short: 'كتب وأفكار تستحق القراءة', description: 'قراءات ومراجعات وأفكار من الكتب', icon: '▤', color: '#087566' },
   { name: 'نافذة على العالم', slug: 'window-on-world', arabicSlug: 'نافذة-على-العالم', short: 'ثقافات واكتشافات', description: 'ثقافات وتجارب توسّع زاوية النظر', icon: '◎', color: '#2563eb' },
-  { name: 'المستقبل الآن', slug: 'future-now', arabicSlug: 'المستقبل-الآن', short: 'التقنية والذكاء الاصطناعي', description: 'التقنية والذكاء الاصطناعي والمستقبل', icon: '✦', color: '#b87512' },
+  { name: 'المستقبل الآن', slug: 'future-now', arabicSlug: 'المستقبل-الآن', short: 'التقنية والذكاء الاصطناعي', description: 'التقنية والذكاء الاصطناعي والمستقبل', icon: '✦', color: '#9a5f0b' },
   { name: 'ببساطة…', slug: 'simply', arabicSlug: 'ببساطة', short: 'تبسيط المفاهيم المعقدة', description: 'شرح واضح للأفكار المعقدة', icon: '◇', color: '#0a2342' }
 ] as const;
 

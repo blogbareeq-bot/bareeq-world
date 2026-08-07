@@ -12,5 +12,5 @@ const posts = allPosts.filter((post) => post.data.tags.includes(tag));
 ---
 <BaseLayout title={`وسم: ${tag}`} description={`مقالات عالم بريق المرتبطة بوسم ${tag}.`} canonicalPath={`/tags/${encodeURIComponent(tag)}/`} latestPosts={allPosts.slice(0,6)}>
   <section class="page-hero compact shell"><span class="eyebrow">وسم معرفي</span><h1>#{tag}</h1><p>{posts.length} مقالات مرتبطة بهذا الوسم.</p></section>
-  <section class="shell section-gap"><div class="archive-grid">{posts.map((post) => <PostCard post={post} />)}</div></section>
+  <section class="shell section-gap"><div class="archive-grid">{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div></section>
 </BaseLayout>

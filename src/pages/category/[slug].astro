@@ -19,6 +19,6 @@ const breadcrumb = { '@context':'https://schema.org','@type':'BreadcrumbList',it
     <strong>{posts.length} مقالات</strong>
   </section>
   <section class="shell section-gap">
-    {posts.length ? <div class="archive-grid">{posts.map((post) => <PostCard post={post} />)}</div> : <div class="empty-state"><h2>لا توجد مقالات بعد</h2><p>سيُضاف المحتوى إلى هذا القسم قريبًا.</p></div>}
+    {posts.length ? <div class="archive-grid">{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div> : <div class="empty-state"><h2>لا توجد مقالات بعد</h2><p>سيُضاف المحتوى إلى هذا القسم قريبًا.</p></div>}
   </section>
 </BaseLayout>

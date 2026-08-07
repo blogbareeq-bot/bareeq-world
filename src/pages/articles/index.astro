@@ -12,7 +12,7 @@ const posts = await getPublishedPosts();
       <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
       {categories.filter((category) => posts.some((post) => post.data.categorySlug === category.slug)).map((category) => <button type="button" data-filter={category.slug} aria-pressed="false">{category.name}</button>)}
     </div>
-    <div class="archive-grid" data-archive-grid>{posts.map((post) => <PostCard post={post} />)}</div>
+    <div class="archive-grid" data-archive-grid>{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div>
     <p class="filter-empty" data-filter-empty hidden>لا توجد مقالات في هذا القسم حاليًا.</p>
   </section>
   <script is:inline>

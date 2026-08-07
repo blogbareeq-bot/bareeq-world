@@ -9,6 +9,9 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  preloadImage?: string;
   canonicalPath?: string;
   latestPosts?: Post[];
   type?: 'website' | 'article';
@@ -21,6 +24,9 @@ const {
   title = site.name,
   description = site.description,
   image = site.socialImage,
+  imageWidth = site.socialImageWidth,
+  imageHeight = site.socialImageHeight,
+  preloadImage,
   canonicalPath = Astro.url.pathname,
   latestPosts = [],
   type = 'website',
@@ -79,6 +85,7 @@ const baseSchema = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href={site.originalLogo} />
     <link rel="alternate" type="application/rss+xml" title="عالم بريق" href="/rss.xml" />
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -92,15 +99,19 @@ const baseSchema = [
     <meta property="og:image" content={socialImage} />
     <meta property="og:image:secure_url" content={socialImage} />
     <meta property="og:image:alt" content={title} />
+    <meta property="og:image:width" content={String(imageWidth)} />
+    <meta property="og:image:height" content={String(imageHeight)} />
     {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
     {updatedAt && <meta property="article:modified_time" content={updatedAt.toISOString()} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content={title} />
     <script type="application/ld+json" set:html={JSON.stringify(baseSchema)}></script>
     <script is:inline>
       (() => {
+        document.documentElement.classList.add('js');
         try {
           const saved = localStorage.getItem('bareeq-theme');
           const theme = saved === 'dark' || saved === 'light' ? saved : 'light';
@@ -135,43 +146,58 @@ const baseSchema = [
         addEventListener('scroll', updateStickyHeader, { passive: true });
         updateStickyHeader();
 
-        const megaRoot = document.querySelector('[data-mega-root]');
-        const megaTrigger = document.querySelector('[data-mega-trigger]');
-        const megaMenu = document.querySelector('[data-mega-menu]');
-        let megaOpen = false;
-        const setMega = (open) => {
-          megaOpen = open;
-          megaRoot?.classList.toggle('is-open', open);
-          megaTrigger?.setAttribute('aria-expanded', String(open));
-          megaMenu?.setAttribute('aria-hidden', String(!open));
+        const categoryRoots = [...document.querySelectorAll('[data-category-menu-root]')];
+        const setCategoryMenu = (root, open) => {
+          const trigger = root.querySelector('[data-category-menu-trigger]');
+          const menu = root.querySelector('[data-category-menu]');
+          root.classList.toggle('is-open', open);
+          trigger?.setAttribute('aria-expanded', String(open));
+          menu?.setAttribute('aria-hidden', String(!open));
         };
-        megaTrigger?.addEventListener('click', () => setMega(!megaOpen));
-        megaTrigger?.addEventListener('keydown', (event) => {
-          if (event.key === 'ArrowDown') {
-            event.preventDefault();
-            setMega(true);
-            const first = megaMenu?.querySelector('a');
-            if (first instanceof HTMLElement) first.focus();
-          }
-        });
-        megaRoot?.addEventListener('focusin', () => setMega(true));
-        megaRoot?.addEventListener('focusout', (event) => {
-          if (!megaRoot.contains(event.relatedTarget)) setMega(false);
-        });
-        megaRoot?.addEventListener('pointerenter', () => {
-          if (matchMedia('(hover:hover) and (pointer:fine)').matches) setMega(true);
-        });
-        megaRoot?.addEventListener('pointerleave', () => {
-          if (matchMedia('(hover:hover) and (pointer:fine)').matches) setMega(false);
+        const closeCategoryMenus = (except = null) => {
+          categoryRoots.forEach((root) => {
+            if (root !== except) setCategoryMenu(root, false);
+          });
+        };
+        categoryRoots.forEach((root) => {
+          const trigger = root.querySelector('[data-category-menu-trigger]');
+          const menu = root.querySelector('[data-category-menu]');
+          trigger?.addEventListener('click', () => {
+            const willOpen = !root.classList.contains('is-open');
+            closeCategoryMenus(root);
+            setCategoryMenu(root, willOpen);
+          });
+          trigger?.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowDown') {
+              event.preventDefault();
+              closeCategoryMenus(root);
+              setCategoryMenu(root, true);
+              const first = menu?.querySelector('a');
+              if (first instanceof HTMLElement) first.focus();
+            }
+          });
+          root.addEventListener('focusout', (event) => {
+            if (!root.contains(event.relatedTarget)) setCategoryMenu(root, false);
+          });
+          root.addEventListener('pointerenter', () => {
+            if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+              closeCategoryMenus(root);
+              setCategoryMenu(root, true);
+            }
+          });
+          root.addEventListener('pointerleave', () => {
+            if (matchMedia('(hover:hover) and (pointer:fine)').matches) setCategoryMenu(root, false);
+          });
+          root.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && root.classList.contains('is-open')) {
+              event.preventDefault();
+              setCategoryMenu(root, false);
+              if (trigger instanceof HTMLElement) trigger.focus();
+            }
+          });
         });
         document.addEventListener('click', (event) => {
-          if (megaOpen && megaRoot && !megaRoot.contains(event.target)) setMega(false);
-        });
-        document.addEventListener('keydown', (event) => {
-          if (event.key === 'Escape' && megaOpen) {
-            setMega(false);
-            if (megaTrigger instanceof HTMLElement) megaTrigger.focus();
-          }
+          if (!categoryRoots.some((root) => root.contains(event.target))) closeCategoryMenus();
         });
 
         const ticker = document.querySelector('[data-ticker]');

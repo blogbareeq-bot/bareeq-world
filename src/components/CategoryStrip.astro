@@ -1,13 +1,58 @@
 ---
 import { categories } from '../config/site';
+import type { Post } from '../lib/posts';
+
+interface Props { posts?: Post[]; }
+const { posts = [] } = Astro.props;
+const currentPath = Astro.url.pathname;
+const groups = categories.map((category) => ({
+  ...category,
+  posts: posts.filter((post) => post.data.categorySlug === category.slug).slice(0, 3)
+}));
 ---
 <nav class="category-strip" aria-label="أقسام عالم بريق">
-  <div class="shell category-strip-inner">
-    {categories.map((category) => (
-      <a href={`/category/${category.slug}/`}>
-        <span class="category-icon">{category.icon}</span>
-        <span><strong>{category.name}</strong><small>{category.short}</small></span>
-      </a>
+  <div class="shell-full category-strip-inner">
+    <a class:list={['category-all-link', { active: currentPath === '/articles/' }]} href="/articles/" aria-current={currentPath === '/articles/' ? 'page' : undefined}>
+      <span aria-hidden="true">الكل</span>
+    </a>
+    {groups.map((group) => (
+      <div class:list={['category-nav-item', { active: currentPath.startsWith(`/category/${group.slug}/`) }]} data-category-menu-root>
+        <button
+          class="category-nav-trigger"
+          type="button"
+          data-category-menu-trigger
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls={`category-menu-${group.slug}`}
+        >
+          <span class="category-icon" aria-hidden="true">{group.icon}</span>
+          <span>{group.name}</span>
+          <span class="category-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <a class="category-mobile-link" href={`/category/${group.slug}/`} aria-current={currentPath.startsWith(`/category/${group.slug}/`) ? 'page' : undefined}>
+          <span class="category-icon" aria-hidden="true">{group.icon}</span>
+          <span>{group.name}</span>
+        </a>
+        <div class="category-dropdown" id={`category-menu-${group.slug}`} data-category-menu aria-hidden="true">
+          <a class="category-dropdown-title" href={`/category/${group.slug}/`}>
+            <span class="category-icon" aria-hidden="true">{group.icon}</span>
+            <span><strong>{group.name}</strong><small>{group.description}</small></span>
+          </a>
+          {group.posts.length > 0 ? (
+            <ol>
+              {group.posts.map((post) => (
+                <li>
+                  <a href={`/posts/${post.id}/`}>
+                    {post.data.image ? <img src={post.data.image} alt="" loading="lazy" decoding="async" width="72" height="54" /> : <span class="category-dropdown-fallback" aria-hidden="true">{group.icon}</span>}
+                    <strong>{post.data.title}</strong>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          ) : <p>مقالات هذا القسم قيد الإعداد.</p>}
+          <a class="category-dropdown-browse" href={`/category/${group.slug}/`}>تصفح القسم <span aria-hidden="true">←</span></a>
+        </div>
+      </div>
     ))}
   </div>
 </nav>
