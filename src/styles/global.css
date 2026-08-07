@@ -615,9 +615,9 @@ main{min-width:0}
    Keeps the technical foundation of V3 while fixing the editorial rhythm.
    ========================================================================== */
 :root{
-  --width-full:1600px;
-  --width-wide:1500px;
-  --page-gutter:clamp(18px,2.5vw,42px);
+  --width-full:2048px;
+  --width-wide:1920px;
+  --page-gutter:clamp(14px,1.45vw,28px);
 }
 
 /* A clearer, less crowded header */
@@ -811,9 +811,7 @@ main{min-width:0}
 
 .category-strip{position:relative;z-index:1050;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 96%,var(--gold-100));box-shadow:0 7px 18px rgba(6,24,45,.045)}
 .category-strip-inner{min-height:54px;display:flex;align-items:center;justify-content:center;gap:7px;overflow:visible}
-.category-all-link,.category-nav-trigger,.category-mobile-link{min-height:38px;align-items:center;gap:7px;padding:7px 12px!important;color:var(--text);border:1px solid var(--line);border-radius:999px!important;background:var(--surface);font-size:.78rem;font-weight:700;white-space:nowrap;transition:border-color .18s ease,color .18s ease,background .18s ease}
-.category-all-link{display:inline-flex!important;color:#7f520f;border-color:color-mix(in srgb,var(--gold-600) 32%,var(--line));background:var(--gold-100)}
-.category-all-link:hover,.category-all-link.active{color:#fff!important;border-color:var(--gold-600);background:var(--gold-600)!important}
+.category-nav-trigger,.category-mobile-link{min-height:38px;align-items:center;gap:7px;padding:7px 12px!important;color:var(--text);border:1px solid var(--line);border-radius:999px!important;background:var(--surface);font-size:.78rem;font-weight:700;white-space:nowrap;transition:border-color .18s ease,color .18s ease,background .18s ease}
 .category-nav-item{position:relative;flex:0 0 auto}
 .category-nav-trigger{display:inline-flex;cursor:pointer}
 .category-nav-trigger:hover,.category-nav-item.is-open .category-nav-trigger,.category-nav-item.active .category-nav-trigger{color:var(--teal-700);border-color:color-mix(in srgb,var(--teal-700) 45%,var(--line));background:var(--teal-100)}
@@ -850,7 +848,7 @@ main{min-width:0}
   .category-strip-inner::-webkit-scrollbar{display:none}
   .category-nav-trigger,.category-dropdown{display:none}
   .category-mobile-link{display:inline-flex!important}
-  .category-all-link,.category-mobile-link{min-height:36px;padding:6px 10px!important;font-size:.74rem}
+  .category-mobile-link{min-height:36px;padding:6px 10px!important;font-size:.74rem}
   .category-mobile-link[aria-current='page']{color:var(--teal-700);border-color:color-mix(in srgb,var(--teal-700) 45%,var(--line));background:var(--teal-100)}
 }
 
@@ -875,3 +873,19 @@ main{min-width:0}
   .icon-button{width:37px;height:37px}
   .icon-button svg{width:20px;height:20px}
 }
+
+/* ========================================================================== 
+   BAREEQ 3.2.1 — FULL-WIDTH REFINEMENT
+   Uses the available viewport confidently while preserving readable prose.
+   ========================================================================== */
+
+@media(min-width:1800px){
+  .shell,.shell-wide{width:min(calc(100% - (var(--page-gutter) * 2)),var(--width-wide))}
+  .shell-full{width:min(calc(100% - (var(--page-gutter) * 2)),var(--width-full))}
+}
+
+.footer-contact h2,
+.footer-contact p,
+.footer-contact a{color:#f4f7fa}
+.footer-contact a{font-weight:600;text-decoration-color:transparent;text-underline-offset:4px}
+.footer-contact a:hover{text-decoration:underline;text-decoration-color:currentColor}

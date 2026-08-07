@@ -12,9 +12,6 @@ const groups = categories.map((category) => ({
 ---
 <nav class="category-strip" aria-label="أقسام عالم بريق">
   <div class="shell-full category-strip-inner">
-    <a class:list={['category-all-link', { active: currentPath === '/articles/' }]} href="/articles/" aria-current={currentPath === '/articles/' ? 'page' : undefined}>
-      <span aria-hidden="true">الكل</span>
-    </a>
     {groups.map((group) => (
       <div class:list={['category-nav-item', { active: currentPath.startsWith(`/category/${group.slug}/`) }]} data-category-menu-root>
         <button
