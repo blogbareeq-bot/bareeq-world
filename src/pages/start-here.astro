@@ -6,7 +6,7 @@ import { categories } from '../config/site';
 const posts = await getPublishedPosts();
 const starters = categories.map((category) => posts.find((post) => post.data.categorySlug === category.slug)).filter(Boolean);
 ---
-<BaseLayout title="ابدأ من هنا" description="دليل سريع للزائر الجديد لاكتشاف عالم بريق وأقسامه وأفضل نقطة للبدء." canonicalPath="/start-here/" latestPosts={posts.slice(0,6)}>
+<BaseLayout title="ابدأ من هنا" description="دليل واضح للزائر الجديد لاكتشاف عالم بريق وأقسامه الخمسة، واختيار أول مقال ومسار قراءة مناسب لاهتمامه." canonicalPath="/start-here/" latestPosts={posts.slice(0,6)}>
   <section class="page-hero shell"><span class="eyebrow">مرحبًا بك</span><h1>ابدأ من هنا</h1><p>بريق منصة معرفية عربية تجمع العقل والكتب والثقافة والتقنية وتبسيط المفاهيم. اختر الباب الأقرب إلى فضولك.</p></section>
   <section class="shell start-steps section-gap">
     <article><span>1</span><h2>اختر قسمًا</h2><p>تعرّف على المسارات الخمسة من شريط الأقسام في أعلى الموقع.</p></article>

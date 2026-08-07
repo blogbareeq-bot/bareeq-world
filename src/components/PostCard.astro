@@ -1,7 +1,9 @@
 ---
 import type { Post } from '../lib/posts';
-import { formatDate } from '../lib/posts';
+import { formatDate, formatReadingMinutes } from '../lib/posts';
 import { categories } from '../config/site';
+import CategoryIcon from './CategoryIcon.astro';
+import { responsiveImage } from '../lib/images';
 interface Props {
   post: Post;
   variant?: 'default' | 'vertical' | 'horizontal' | 'compact' | 'text-only';
@@ -20,10 +22,14 @@ const normalizedVariant = variant === 'default' ? 'vertical' : variant;
 const imageWidth = post.data.imageWidth ?? 1280;
 const imageHeight = post.data.imageHeight ?? 720;
 const category = categories.find((item) => item.slug === post.data.categorySlug);
+const image = responsiveImage(post.data.image);
+const imageSizes = normalizedVariant === 'horizontal'
+  ? '(max-width: 700px) 112px, 160px'
+  : '(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 25vw';
 ---
 <article
   class:list={['post-card', `post-card--${normalizedVariant}`]}
-  style={`--category-color:${category?.color ?? '#087566'}`}
+  style={`--category-color:${category?.color ?? '#087566'};--category-color-dark:${category?.darkColor ?? '#6ee7d0'}`}
   data-post-card
   data-category={post.data.categorySlug}
 >
@@ -31,7 +37,9 @@ const category = categories.find((item) => item.slug === post.data.categorySlug)
     <a class="post-card-media" href={`/posts/${post.id}/`} aria-label={post.data.title}>
       {post.data.image ? (
         <img
-          src={post.data.image}
+          src={image.src}
+          srcset={image.srcset}
+          sizes={imageSizes}
           alt={post.data.imageAlt ?? post.data.title}
           loading={eager ? 'eager' : 'lazy'}
           fetchpriority={eager ? 'high' : 'auto'}
@@ -40,7 +48,7 @@ const category = categories.find((item) => item.slug === post.data.categorySlug)
           height={imageHeight}
           style={`object-position:${post.data.imagePosition ?? 'center'}`}
         />
-      ) : <span class="image-fallback" aria-hidden="true">{category?.icon ?? '◇'}</span>}
+      ) : <span class="image-fallback"><CategoryIcon name={category?.icon ?? 'simple'} /></span>}
     </a>
   )}
   <div class="post-card-body">
@@ -49,7 +57,7 @@ const category = categories.find((item) => item.slug === post.data.categorySlug)
     {showExcerpt && <p>{post.data.description}</p>}
     <div class="post-card-meta">
       <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
-      <span>{post.data.readingMinutes} دقائق قراءة</span>
+      <span>{formatReadingMinutes(post.data.readingMinutes)}</span>
     </div>
   </div>
 </article>

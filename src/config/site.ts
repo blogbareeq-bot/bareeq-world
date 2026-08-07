@@ -5,19 +5,19 @@ export const site = {
   description: 'منصة عربية معرفية تقدّم أفكارًا موثوقة وممتعة بأسلوب واضح وهادئ، في العقل والكتب والثقافة والتقنية وتبسيط المفاهيم.',
   url: 'https://bareeqworld.com',
   email: 'blogbareeq@gmail.com',
-  logo: '/favicon.svg',
+  logo: '/images/apple-touch-icon.png',
   originalLogo: '/images/apple-touch-icon.png',
-  socialImage: '/images/bareeq-social-card.webp',
+  socialImage: '/images/bareeq-social-card.jpg',
   socialImageWidth: 1200,
   socialImageHeight: 630
 };
 
 export const categories = [
-  { name: 'أطياف العقل', slug: 'atyaf-al-aql', arabicSlug: 'أطياف-العقل', short: 'قرارات وعمل العقل', description: 'علم النفس والتفكير والقرارات', icon: '◌', color: '#7c3aed' },
-  { name: 'بريق الكتب', slug: 'bareeq-books', arabicSlug: 'بريق-الكتب', short: 'كتب وأفكار تستحق القراءة', description: 'قراءات ومراجعات وأفكار من الكتب', icon: '▤', color: '#087566' },
-  { name: 'نافذة على العالم', slug: 'window-on-world', arabicSlug: 'نافذة-على-العالم', short: 'ثقافات واكتشافات', description: 'ثقافات وتجارب توسّع زاوية النظر', icon: '◎', color: '#2563eb' },
-  { name: 'المستقبل الآن', slug: 'future-now', arabicSlug: 'المستقبل-الآن', short: 'التقنية والذكاء الاصطناعي', description: 'التقنية والذكاء الاصطناعي والمستقبل', icon: '✦', color: '#9a5f0b' },
-  { name: 'ببساطة…', slug: 'simply', arabicSlug: 'ببساطة', short: 'تبسيط المفاهيم المعقدة', description: 'شرح واضح للأفكار المعقدة', icon: '◇', color: '#0a2342' }
+  { name: 'أطياف العقل', slug: 'atyaf-al-aql', arabicSlug: 'أطياف-العقل', short: 'تفكير أوضح وقرارات أكثر وعيًا', description: 'مقالات تساعدك على فهم التفكير والسلوك والمغالطات، واتخاذ قرارات يومية أكثر وعيًا وهدوءًا.', icon: 'mind', color: '#6d28d9', darkColor: '#c4b5fd' },
+  { name: 'بريق الكتب', slug: 'bareeq-books', arabicSlug: 'بريق-الكتب', short: 'كتب وأفكار تستحق أن تبقى', description: 'قراءات ومراجعات تربط أفكار الكتب بالحياة والعمل، وتعرض ما يفيد القارئ بوضوح وتوازن.', icon: 'book', color: '#087566', darkColor: '#6ee7d0' },
+  { name: 'نافذة على العالم', slug: 'window-on-world', arabicSlug: 'نافذة-على-العالم', short: 'ثقافات وتجارب توسّع زاوية النظر', description: 'رحلات موثقة بين ثقافات المجتمعات وعاداتها وتجاربها، توسّع زاوية النظر وتحترم اختلاف الناس.', icon: 'world', color: '#1d4ed8', darkColor: '#93c5fd' },
+  { name: 'المستقبل الآن', slug: 'future-now', arabicSlug: 'المستقبل-الآن', short: 'التقنية كما تؤثر في يومنا وغدنا', description: 'شرح واضح للتقنية والذكاء الاصطناعي والتحولات الرقمية، وكيف تؤثر في يومنا وقراراتنا ومستقبلنا.', icon: 'future', color: '#965708', darkColor: '#f9c76b' },
+  { name: 'ببساطة…', slug: 'simply', arabicSlug: 'ببساطة', short: 'أفكار معقدة بلغة واضحة وقريبة', description: 'تبسيط للمفاهيم العلمية والصحية والفكرية المعقدة بلغة قريبة، مع الحفاظ على الدقة وحدود المعرفة.', icon: 'simple', color: '#0a2342', darkColor: '#a7c7e7' }
 ] as const;
 
 export const series = [

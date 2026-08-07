@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { getPublishedPosts } from '../../lib/posts';
+import { getPublishedPosts, formatArticleCount } from '../../lib/posts';
 import { categories, site } from '../../config/site';
+import CategoryIcon from '../../components/CategoryIcon.astro';
 export function getStaticPaths() { return categories.map((category) => ({ params: { slug: category.slug }, props: { category } })); }
 const { category } = Astro.props;
 const posts = (await getPublishedPosts()).filter((post) => post.data.categorySlug === category.slug);
@@ -11,12 +12,12 @@ const breadcrumb = { '@context':'https://schema.org','@type':'BreadcrumbList',it
   {'@type':'ListItem',position:2,name:category.name,item:new URL(`/category/${category.slug}/`,site.url).toString()}
 ]};
 ---
-<BaseLayout title={category.name} description={category.short} canonicalPath={`/category/${category.slug}/`} latestPosts={(await getPublishedPosts()).slice(0,6)}>
+<BaseLayout title={category.name} description={category.description} canonicalPath={`/category/${category.slug}/`} latestPosts={(await getPublishedPosts()).slice(0,6)}>
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)}></script>
-  <section class="page-hero compact shell category-hero">
-    <span class="category-hero-icon" aria-hidden="true">{category.icon}</span>
+  <section class="page-hero compact shell category-hero" style={`--category-color:${category.color};--category-color-dark:${category.darkColor}`}>
+    <span class="category-hero-icon"><CategoryIcon name={category.icon} /></span>
     <div><span class="eyebrow">أقسام بريق</span><h1>{category.name}</h1><p>{category.short}</p></div>
-    <strong>{posts.length} مقالات</strong>
+    <strong>{formatArticleCount(posts.length)}</strong>
   </section>
   <section class="shell section-gap">
     {posts.length ? <div class="archive-grid">{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div> : <div class="empty-state"><h2>لا توجد مقالات بعد</h2><p>سيُضاف المحتوى إلى هذا القسم قريبًا.</p></div>}

@@ -3,6 +3,7 @@ import Logo from './Logo.astro';
 import CategoryStrip from './CategoryStrip.astro';
 import { categories } from '../config/site';
 import { getPublishedPosts, type Post } from '../lib/posts';
+import CategoryIcon from './CategoryIcon.astro';
 interface Props { latestPosts?: Post[]; }
 const { latestPosts = [] } = Astro.props;
 const allPosts = await getPublishedPosts();
@@ -52,7 +53,7 @@ const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : curr
 
 <CategoryStrip posts={allPosts} />
 
-<div id="mobile-drawer" class="mobile-drawer" data-mobile-drawer aria-hidden="true">
+<div id="mobile-drawer" class="mobile-drawer" data-mobile-drawer aria-hidden="true" inert>
     <div class="drawer-panel" role="dialog" aria-modal="true" aria-label="قائمة الموقع">
       <div class="drawer-head">
         <Logo compact inverse />
@@ -68,8 +69,8 @@ const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : curr
           {categories.map((category) => {
             const categoryPosts = allPosts.filter((post) => post.data.categorySlug === category.slug).slice(0, 3);
             return (
-              <details>
-                <summary><span aria-hidden="true">{category.icon}</span><span>{category.name}</span></summary>
+              <details style={`--category-color:${category.color};--category-color-dark:${category.darkColor}`}>
+                <summary><span class="mobile-category-icon"><CategoryIcon name={category.icon} /></span><span>{category.name}</span></summary>
                 <div>
                   {categoryPosts.map((post) => <a href={`/posts/${post.id}/`}>{post.data.title}</a>)}
                   <a class="mobile-category-all" href={`/category/${category.slug}/`}>تصفح القسم ←</a>

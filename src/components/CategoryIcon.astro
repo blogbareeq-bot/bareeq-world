@@ -1,0 +1,14 @@
+---
+interface Props {
+  name: 'mind' | 'book' | 'world' | 'future' | 'simple' | string;
+  class?: string;
+}
+const { name, class: className } = Astro.props;
+---
+<svg class={className} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  {name === 'mind' && <><path d="M9 4.5a3 3 0 0 0-4.4 3.2A3.4 3.4 0 0 0 4 14a3.5 3.5 0 0 0 4 4.9V6.2A2.2 2.2 0 0 1 9 4.5Z"/><path d="M15 4.5a3 3 0 0 1 4.4 3.2A3.4 3.4 0 0 1 20 14a3.5 3.5 0 0 1-4 4.9V6.2a2.2 2.2 0 0 0-1-1.7ZM8 10H5.5M16 10h2.5M8 15H6.5M16 15h1.5"/></>}
+  {name === 'book' && <><path d="M4.5 5.5A2.5 2.5 0 0 1 7 3h5v16H7a2.5 2.5 0 0 0-2.5 2V5.5Z"/><path d="M19.5 5.5A2.5 2.5 0 0 0 17 3h-5v16h5a2.5 2.5 0 0 1 2.5 2V5.5Z"/></>}
+  {name === 'world' && <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.5 5.5 3.5 9S14.4 18.5 12 21c-2.4-2.5-3.5-5.5-3.5-9S9.6 5.5 12 3Z"/></>}
+  {name === 'future' && <><path d="m12 2 1.7 5.3L19 9l-5.3 1.7L12 16l-1.7-5.3L5 9l5.3-1.7L12 2Z"/><path d="m18 15 .9 2.6 2.6.9-2.6.9L18 22l-.9-2.6-2.6-.9 2.6-.9L18 15Z"/></>}
+  {name === 'simple' && <><path d="M9 18h6M10 21h4"/><path d="M8.1 14.7A7 7 0 1 1 15.9 14.7c-.8.6-1.4 1.4-1.6 2.3h-4.6c-.2-.9-.8-1.7-1.6-2.3Z"/><path d="M9.5 8.5a3.5 3.5 0 0 1 4.8-1.3"/></>}
+</svg>

@@ -1,6 +1,8 @@
 ---
 import { categories } from '../config/site';
 import type { Post } from '../lib/posts';
+import CategoryIcon from './CategoryIcon.astro';
+import { thumbnailImage } from '../lib/images';
 
 interface Props { posts?: Post[]; }
 const { posts = [] } = Astro.props;
@@ -13,7 +15,11 @@ const groups = categories.map((category) => ({
 <nav class="category-strip" aria-label="أقسام عالم بريق">
   <div class="shell-full category-strip-inner">
     {groups.map((group) => (
-      <div class:list={['category-nav-item', { active: currentPath.startsWith(`/category/${group.slug}/`) }]} data-category-menu-root>
+      <div
+        class:list={['category-nav-item', { active: currentPath.startsWith(`/category/${group.slug}/`) }]}
+        style={`--category-color:${group.color};--category-color-dark:${group.darkColor}`}
+        data-category-menu-root
+      >
         <button
           class="category-nav-trigger"
           type="button"
@@ -22,17 +28,17 @@ const groups = categories.map((category) => ({
           aria-haspopup="true"
           aria-controls={`category-menu-${group.slug}`}
         >
-          <span class="category-icon" aria-hidden="true">{group.icon}</span>
+          <span class="category-icon"><CategoryIcon name={group.icon} /></span>
           <span>{group.name}</span>
           <span class="category-chevron" aria-hidden="true">⌄</span>
         </button>
         <a class="category-mobile-link" href={`/category/${group.slug}/`} aria-current={currentPath.startsWith(`/category/${group.slug}/`) ? 'page' : undefined}>
-          <span class="category-icon" aria-hidden="true">{group.icon}</span>
+          <span class="category-icon"><CategoryIcon name={group.icon} /></span>
           <span>{group.name}</span>
         </a>
         <div class="category-dropdown" id={`category-menu-${group.slug}`} data-category-menu aria-hidden="true">
           <a class="category-dropdown-title" href={`/category/${group.slug}/`}>
-            <span class="category-icon" aria-hidden="true">{group.icon}</span>
+            <span class="category-icon"><CategoryIcon name={group.icon} /></span>
             <span><strong>{group.name}</strong><small>{group.description}</small></span>
           </a>
           {group.posts.length > 0 ? (
@@ -40,7 +46,7 @@ const groups = categories.map((category) => ({
               {group.posts.map((post) => (
                 <li>
                   <a href={`/posts/${post.id}/`}>
-                    {post.data.image ? <img src={post.data.image} alt="" loading="lazy" decoding="async" width="72" height="54" /> : <span class="category-dropdown-fallback" aria-hidden="true">{group.icon}</span>}
+                    {post.data.image ? <img data-src={thumbnailImage(post.data.image)} alt="" loading="lazy" decoding="async" width="96" height="72" /> : <span class="category-dropdown-fallback"><CategoryIcon name={group.icon} /></span>}
                     <strong>{post.data.title}</strong>
                   </a>
                 </li>

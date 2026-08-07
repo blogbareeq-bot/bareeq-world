@@ -2,8 +2,10 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { formatDate, getPublishedPosts, absoluteUrl } from '../../lib/posts';
+import { formatDate, formatReadingMinutes, getPublishedPosts, absoluteUrl, postWordCount } from '../../lib/posts';
 import { site } from '../../config/site';
+import { responsiveImage, socialImage } from '../../lib/images';
+import { categories } from '../../config/site';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.draft !== true);
@@ -23,6 +25,9 @@ const articleUrl = absoluteUrl(articlePath, Astro.site?.toString());
 const shareText = encodeURIComponent(post.data.title);
 const shareUrl = encodeURIComponent(articleUrl);
 const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const coverImage = responsiveImage(post.data.image);
+const shareImage = socialImage(post.data.image);
+const category = categories.find((item) => item.slug === post.data.categorySlug);
 const breadcrumbSchema = {
   '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'الرئيسية', item: site.url },
@@ -43,16 +48,16 @@ const articleSchema = {
   mainEntityOfPage: articleUrl,
   articleSection: post.data.category,
   keywords: post.data.tags.join(', '),
-  wordCount: Math.max(300, post.data.readingMinutes * 180),
-  ...(post.data.image ? { image: { '@type': 'ImageObject', url: absoluteUrl(post.data.image), width: post.data.imageWidth, height: post.data.imageHeight } } : {})
+  wordCount: postWordCount(post),
+  ...(shareImage ? { image: { '@type': 'ImageObject', url: absoluteUrl(shareImage), width: 1200, height: 630 } } : {})
 };
 ---
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
-  image={post.data.image}
-  imageWidth={post.data.imageWidth}
-  imageHeight={post.data.imageHeight}
+  image={shareImage}
+  imageWidth={1200}
+  imageHeight={630}
   canonicalPath={articlePath}
   latestPosts={allPosts.slice(0, 6)}
   type="article"
@@ -77,12 +82,12 @@ const articleSchema = {
         <a href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a><span aria-hidden="true">‹</span>
         <span aria-current="page">المقال</span>
       </nav>
-      <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
+      <a class="category-chip" style={`--category-color:${category?.color ?? '#087566'};--category-color-dark:${category?.darkColor ?? '#6ee7d0'}`} href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
       <h1>{post.data.title}</h1>
       <div class="article-meta">
         <span>{post.data.author}</span>
         <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
-        <span>{post.data.readingMinutes} دقائق قراءة</span>
+        <span>{formatReadingMinutes(post.data.readingMinutes)}</span>
         {post.data.updatedAt && post.data.updatedAt.valueOf() !== post.data.publishedAt.valueOf() && <span>آخر تحديث: {formatDate(post.data.updatedAt)}</span>}
       </div>
     </header>
@@ -90,7 +95,9 @@ const articleSchema = {
     {post.data.image && (
       <figure class="article-cover">
         <img
-          src={post.data.image}
+          src={coverImage.src}
+          srcset={coverImage.srcset}
+          sizes="(max-width: 900px) 100vw, 1180px"
           alt={post.data.imageAlt ?? post.data.title}
           width={post.data.imageWidth ?? 1280}
           height={post.data.imageHeight ?? 720}
@@ -143,71 +150,5 @@ const articleSchema = {
     </section>
   )}
 
-  <script is:inline>
-    (() => {
-      const bar = document.querySelector('[data-reading-progress]');
-      const articleContent = document.querySelector('[data-article-content]');
-      const update = () => {
-        if (!articleContent) return;
-        const rect = articleContent.getBoundingClientRect();
-        const start = scrollY + rect.top - innerHeight * 0.2;
-        const total = Math.max(1, articleContent.scrollHeight - innerHeight * 0.6);
-        const value = Math.max(0, Math.min(1, (scrollY - start) / total));
-        if (bar) {
-          bar.style.transform = `scaleX(${value})`;
-          bar.setAttribute('aria-valuenow', String(Math.round(value * 100)));
-        }
-      };
-      addEventListener('scroll', update, { passive: true }); update();
-
-      const tocLinks = [...document.querySelectorAll('[data-toc-link]')];
-      const tocHeadings = tocLinks.map((link) => {
-        const id = decodeURIComponent(link.getAttribute('href')?.slice(1) || '');
-        return { link, heading: document.getElementById(id) };
-      }).filter((item) => item.heading);
-      let tocFrame = 0;
-      const updateActiveHeading = () => {
-        tocFrame = 0;
-        if (!tocHeadings.length) return;
-        const threshold = Math.min(innerHeight * 0.3, 220);
-        let current = tocHeadings[0];
-        tocHeadings.forEach((item) => {
-          if (item.heading.getBoundingClientRect().top <= threshold) current = item;
-        });
-        tocLinks.forEach((link) => {
-          const active = link === current.link;
-          link.classList.toggle('active', active);
-          if (active) link.setAttribute('aria-current', 'location');
-          else link.removeAttribute('aria-current');
-        });
-      };
-      const scheduleTocUpdate = () => {
-        if (!tocFrame) tocFrame = requestAnimationFrame(updateActiveHeading);
-      };
-      addEventListener('scroll', scheduleTocUpdate, { passive: true });
-      addEventListener('resize', scheduleTocUpdate, { passive: true });
-      updateActiveHeading();
-
-      const tocBox = document.querySelector('[data-article-toc]');
-      const tocToggle = document.querySelector('[data-toc-toggle]');
-      const setTocOpen = (open) => {
-        tocBox?.classList.toggle('is-open', open);
-        tocToggle?.setAttribute('aria-expanded', String(open));
-        if (tocToggle) tocToggle.textContent = open ? 'إخفاء الفهرس' : 'عرض الفهرس';
-      };
-      tocToggle?.addEventListener('click', () => setTocOpen(!tocBox?.classList.contains('is-open')));
-      tocLinks.forEach((link) => link.addEventListener('click', () => {
-        if (matchMedia('(max-width: 1000px)').matches) setTocOpen(false);
-      }));
-      document.querySelector('[data-copy-link]')?.addEventListener('click', async (event) => {
-        const button = event.currentTarget;
-        if (!(button instanceof HTMLButtonElement)) return;
-        try {
-          await navigator.clipboard.writeText(button.dataset.url ?? location.href);
-          const old = button.textContent; button.textContent = 'تم النسخ';
-          setTimeout(() => button.textContent = old, 1600);
-        } catch { button.textContent = 'انسخ الرابط من المتصفح'; }
-      });
-    })();
-  </script>
+  <script is:inline src="/scripts/article.js"></script>
 </BaseLayout>

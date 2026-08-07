@@ -1,17 +1,48 @@
 import type { APIRoute } from 'astro';
+import { getCollection } from 'astro:content';
 import { getPublishedPosts, escapeXml, uniqueTags } from '../lib/posts';
 import { categories, series, site } from '../config/site';
+
+function latestDate(dates: Date[]): Date {
+  return new Date(Math.max(...dates.map((date) => date.valueOf())));
+}
 
 export const GET: APIRoute = async ({ site: astroSite }) => {
   const base = astroSite?.toString() ?? site.url;
   const posts = await getPublishedPosts();
-  const tags = uniqueTags(posts);
-  const staticPaths = ['/', '/articles/', '/start-here/', '/series/', '/about/', '/contact/', '/privacy/', '/terms/', '/disclaimer/'];
+  const pages = await getCollection('pages');
+  const latestPostDate = latestDate(posts.map((post) => post.data.updatedAt ?? post.data.publishedAt));
+  const pageDate = (id: string) => pages.find((page) => page.id === id)?.data.updatedAt ?? latestPostDate;
+  const tagCounts = new Map(uniqueTags(posts).map((tag) => [tag, posts.filter((post) => post.data.tags.includes(tag))]));
+  const staticPaths = [
+    { path: '/', date: latestPostDate },
+    { path: '/articles/', date: latestPostDate },
+    { path: '/start-here/', date: latestPostDate },
+    { path: '/series/', date: latestPostDate },
+    { path: '/about/', date: pageDate('about') },
+    { path: '/contact/', date: pageDate('contact-source') },
+    { path: '/privacy/', date: pageDate('privacy') },
+    { path: '/terms/', date: pageDate('terms') },
+    { path: '/disclaimer/', date: pageDate('disclaimer') },
+    { path: '/editorial-policy/', date: pageDate('editorial-policy') }
+  ];
+  const categoryPaths = categories.map((category) => {
+    const relevant = posts.filter((post) => post.data.categorySlug === category.slug);
+    return { path: `/category/${category.slug}/`, date: latestDate(relevant.map((post) => post.data.updatedAt ?? post.data.publishedAt)) };
+  });
+  const seriesPaths = series.flatMap((item) => {
+    const relevant = posts.filter((post) => item.categorySlugs.includes(post.data.categorySlug as never));
+    return relevant.length < 2 ? [] : [{ path: `/series/${item.slug}/`, date: latestDate(relevant.map((post) => post.data.updatedAt ?? post.data.publishedAt)) }];
+  });
+  const tagPaths = [...tagCounts.entries()].flatMap(([tag, relevant]) => relevant.length < 2 ? [] : [{
+    path: `/tags/${encodeURIComponent(tag)}/`,
+    date: latestDate(relevant.map((post) => post.data.updatedAt ?? post.data.publishedAt))
+  }]);
   const urls = [
-    ...staticPaths.map((path) => ({ path, date: new Date() })),
-    ...categories.map((category) => ({ path: `/category/${category.slug}/`, date: new Date() })),
-    ...series.map((item) => ({ path: `/series/${item.slug}/`, date: new Date() })),
-    ...tags.map((tag) => ({ path: `/tags/${encodeURIComponent(tag)}/`, date: new Date() })),
+    ...staticPaths,
+    ...categoryPaths,
+    ...seriesPaths,
+    ...tagPaths,
     ...posts.map((post) => ({ path: `/posts/${post.id}/`, date: post.data.updatedAt ?? post.data.publishedAt }))
   ];
   const entries = urls.map(({ path, date }) => `<url><loc>${escapeXml(new URL(path, base).toString())}</loc><lastmod>${date.toISOString().slice(0, 10)}</lastmod></url>`).join('');

@@ -1,12 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { getPublishedPosts } from '../../lib/posts';
+import { getPublishedPosts, formatArticleCount } from '../../lib/posts';
 import { categories } from '../../config/site';
 const posts = await getPublishedPosts();
 ---
 <BaseLayout title="جميع المقالات" description="تصفح جميع مقالات عالم بريق في العقل والكتب والثقافة والتقنية وتبسيط المفاهيم." canonicalPath="/articles/" latestPosts={posts.slice(0,6)}>
-  <section class="page-hero compact shell"><span class="eyebrow">المكتبة الكاملة</span><h1>جميع المقالات</h1><p>{posts.length} مقالات أصلية موزعة على أقسام بريق الخمسة.</p></section>
+  <section class="page-hero compact shell"><span class="eyebrow">المكتبة الكاملة</span><h1>جميع المقالات</h1><p>{formatArticleCount(posts.length)} موزعة على أقسام بريق الخمسة.</p></section>
   <section class="shell section-gap archive-section">
     <div class="filter-pills" role="group" aria-label="تصفية المقالات">
       <button class="active" type="button" data-filter="all" aria-pressed="true">الكل</button>
@@ -15,18 +15,5 @@ const posts = await getPublishedPosts();
     <div class="archive-grid" data-archive-grid>{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div>
     <p class="filter-empty" data-filter-empty hidden>لا توجد مقالات في هذا القسم حاليًا.</p>
   </section>
-  <script is:inline>
-    (() => {
-      const buttons = [...document.querySelectorAll('[data-filter]')];
-      const cards = [...document.querySelectorAll('[data-archive-grid] [data-post-card]')];
-      const empty = document.querySelector('[data-filter-empty]');
-      buttons.forEach((button) => button.addEventListener('click', () => {
-        const filter = button.dataset.filter;
-        let visible = 0;
-        buttons.forEach((item) => { const active = item === button; item.classList.toggle('active', active); item.setAttribute('aria-pressed', String(active)); });
-        cards.forEach((card) => { const show = filter === 'all' || card.dataset.category === filter; card.hidden = !show; if (show) visible++; });
-        if (empty) empty.hidden = visible !== 0;
-      }));
-    })();
-  </script>
+  <script is:inline src="/scripts/articles.js"></script>
 </BaseLayout>

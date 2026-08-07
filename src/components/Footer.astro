@@ -8,11 +8,11 @@ const year = new Date().getFullYear();
     <div>
       <span>مساحتك اليومية لفكرة أجمل</span>
       <h2>فكرة واحدة قد تغيّر زاوية نظرك</h2>
-      <p>محتوى عربي هادئ وموثوق يصل إليك دون ضجيج، ويمنحك معرفة تبقى معك.</p>
+      <p>محتوى عربي هادئ ومدقق يمنحك معرفة واضحة تبقى معك.</p>
     </div>
     <div class="closing-actions">
       <a class="button primary" href="/articles/">اكتشف أحدث المقالات</a>
-      <span class="button ghost disabled-action" aria-disabled="true">النشرة البريدية — قريبًا</span>
+      <a class="button ghost" href="/start-here/">ابدأ من هنا</a>
     </div>
   </div>
 </section>
@@ -23,8 +23,8 @@ const year = new Date().getFullYear();
       <Logo inverse />
       <p>{site.description}</p>
     </section>
-    <section>
-      <h2>روابط مهمة</h2>
+    <details class="footer-section" data-footer-details open>
+      <summary>روابط مهمة</summary>
       <ul>
         <li><a href="/start-here/">ابدأ من هنا</a></li>
         <li><a href="/about/">عن بريق</a></li>
@@ -32,15 +32,16 @@ const year = new Date().getFullYear();
         <li><a href="/privacy/">سياسة الخصوصية</a></li>
         <li><a href="/terms/">شروط الاستخدام</a></li>
         <li><a href="/disclaimer/">إخلاء المسؤولية</a></li>
+        <li><a href="/editorial-policy/">سياسة التحرير والتصحيح</a></li>
       </ul>
-    </section>
-    <section class="footer-contact">
-      <h2>تواصل معنا</h2>
+    </details>
+    <details class="footer-section footer-contact" data-footer-details open>
+      <summary>تواصل معنا</summary>
       <p>للاقتراحات والاستفسارات والتعاون التحريري:</p>
-      <a href={`mailto:${site.email}`}>{site.email}</a>
+      <a class="footer-email" dir="ltr" href={`mailto:${site.email}`}>{site.email}</a>
       <a href="/contact/">صفحة التواصل</a>
       <a href="/rss.xml">خلاصة RSS</a>
-    </section>
+    </details>
   </div>
   <div class="shell-wide footer-bottom">
     <p>© {year} عالم بريق. جميع الحقوق محفوظة.</p>
