@@ -11,6 +11,7 @@ const baseScript = await readFile(path.join(root, '_astro', baseScriptName), 'ut
 const articleScript = await readFile(path.join(root, 'scripts', 'article.js'), 'utf8');
 const articlesScript = await readFile(path.join(root, 'scripts', 'articles.js'), 'utf8');
 const searchScript = await readFile(path.join(root, 'scripts', 'search.js'), 'utf8');
+const analyticsConsentScript = await readFile(path.join(root, 'scripts', 'analytics-consent.js'), 'utf8');
 
 function createDom(html, width) {
   const dom = new JSDOM(html, { url: 'https://bareeqworld.com/', runScripts: 'outside-only', pretendToBeVisual: true });
@@ -76,6 +77,24 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
 }
 
 {
+  const dom = createDom(homeHtml, 390);
+  const { window } = dom;
+  window.eval(analyticsConsentScript);
+  const banner = window.document.querySelector('[data-analytics-consent]');
+  if (banner?.hidden || !window.document.body.classList.contains('analytics-consent-open')) failures.push('first visit does not expose the optional analytics choice');
+  if (window.document.querySelector('script[data-bareeq-analytics]')) failures.push('Google Analytics loads before consent');
+  window.document.querySelector('[data-analytics-accept]')?.click();
+  const googleTag = window.document.querySelector('script[data-bareeq-analytics]');
+  if (window.localStorage.getItem('bareeq-analytics-consent-v1') !== 'granted' || !banner?.hidden) failures.push('analytics acceptance is not saved or does not close the notice');
+  if (!googleTag?.src.includes('G-N3NQMF7RHN') || !window.__bareeqAnalyticsLoaded) failures.push('analytics acceptance does not load the configured Google tag');
+  window.document.querySelector('[data-analytics-settings]')?.click();
+  if (banner?.hidden || window.document.activeElement?.id !== 'analytics-consent-title') failures.push('footer privacy control does not reopen and focus the analytics choice');
+  window.document.querySelector('[data-analytics-reject]')?.click();
+  if (window.localStorage.getItem('bareeq-analytics-consent-v1') !== 'denied' || !banner?.hidden) failures.push('analytics withdrawal is not saved or does not close the notice');
+  dom.window.close();
+}
+
+{
   const articleDirectory = path.join(root, 'posts', 'لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء');
   const html = await readFile(path.join(articleDirectory, 'index.html'), 'utf8');
   const dom = createDom(html, 390);
@@ -120,4 +139,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Interaction audit passed: menus, keyboard, drawer, theme, ticker, footer accordions, article TOC/progress, filters, and search.');
+console.log('Interaction audit passed: menus, keyboard, drawer, theme, ticker, footer accordions, analytics consent, article TOC/progress, filters, and search.');

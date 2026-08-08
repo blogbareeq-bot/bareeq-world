@@ -85,6 +85,11 @@ for (const file of htmlFiles) {
   const inlineStyles = (html.match(/\sstyle=["'][^"']*["']/gi) ?? []).length;
   if (inlineStyles) failures.push(`${relativeFile} -> ${inlineStyles} inline style attribute(s) blocked by the strict CSP`);
 
+  const consentDialogs = (html.match(/\bdata-analytics-consent(?:\s|>)/gi) ?? []).length;
+  if (consentDialogs !== 1) failures.push(`${relativeFile} -> expected one analytics consent dialog, found ${consentDialogs}`);
+  if (!/\bdata-measurement-id=["']G-N3NQMF7RHN["']/i.test(html)) failures.push(`${relativeFile} -> GA4 measurement ID is missing from the consent component`);
+  if (/<script\b[^>]*\bsrc=["']https:\/\/www\.googletagmanager\.com/i.test(html)) failures.push(`${relativeFile} -> Google tag loads before visitor consent`);
+
   const cardMediaBlocks = [...html.matchAll(/<a\b[^>]*class=["'][^"']*post-card-media[^"']*["'][^>]*>([\s\S]*?)<\/a>/gi)];
   for (const [, block] of cardMediaBlocks) {
     const imageTag = block.match(/<img\b[^>]*>/i)?.[0];
@@ -163,8 +168,16 @@ const headers = await readFile(path.join(root, '_headers'), 'utf8');
 for (const requiredHeader of ['Content-Security-Policy', 'Strict-Transport-Security', 'X-Content-Type-Options', 'Referrer-Policy']) {
   if (!headers.includes(requiredHeader)) failures.push(`_headers -> missing ${requiredHeader}`);
 }
+for (const analyticsSource of ['https://www.googletagmanager.com', 'https://*.google-analytics.com', 'https://*.analytics.google.com']) {
+  if (!headers.includes(analyticsSource)) failures.push(`_headers -> missing consented analytics CSP source ${analyticsSource}`);
+}
 if (/fonts\.googleapis\.com|fonts\.gstatic\.com/i.test((await Promise.all(htmlFiles.map((file) => readFile(file, 'utf8')))).join(''))) {
   failures.push('external Google Fonts request remains in generated HTML');
+}
+
+const privacyHtml = pagesByPath.get('/privacy/')?.html ?? '';
+if (!/id=["']google-analytics["']/i.test(privacyHtml) || !/متابعة دون قياس|سحب الموافقة/i.test(privacyHtml)) {
+  failures.push('privacy page -> optional GA4 measurement and withdrawal choice are not documented');
 }
 
 const redirectRules = await readFile(path.join(root, '_redirects'), 'utf8');

@@ -1,0 +1,28 @@
+---
+import { site } from '../config/site';
+---
+<aside
+  class="analytics-consent"
+  data-analytics-consent
+  data-measurement-id={site.analyticsMeasurementId}
+  data-production-host="bareeqworld.com"
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="analytics-consent-title"
+  aria-describedby="analytics-consent-description"
+  aria-hidden="true"
+  hidden
+>
+  <div class="analytics-consent-copy">
+    <strong id="analytics-consent-title" tabindex="-1">قياس اختياري يحترم قرارك</strong>
+    <p id="analytics-consent-description">
+      نستخدم Google Analytics بعد موافقتك فقط لفهم الزيارات وتحسين تجربة القراءة. لا نستخدمه حاليًا للإعلانات المخصّصة.
+      <a href="/privacy/#google-analytics">اعرف التفاصيل وخياراتك</a>
+    </p>
+  </div>
+  <div class="analytics-consent-actions">
+    <button class="button secondary" type="button" data-analytics-reject>متابعة دون قياس</button>
+    <button class="button primary" type="button" data-analytics-accept>السماح بالقياس</button>
+  </div>
+</aside>
+<script is:inline src="/scripts/analytics-consent.js" defer></script>

@@ -9,7 +9,8 @@ export const site = {
   originalLogo: '/images/apple-touch-icon.png',
   socialImage: '/images/bareeq-social-card.jpg',
   socialImageWidth: 1200,
-  socialImageHeight: 630
+  socialImageHeight: 630,
+  analyticsMeasurementId: 'G-N3NQMF7RHN'
 };
 
 export const categories = [
