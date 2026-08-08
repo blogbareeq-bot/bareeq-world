@@ -1,5 +1,6 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
+import sharp from 'sharp';
 
 const root = path.resolve('dist');
 const htmlFiles = [];
@@ -81,8 +82,28 @@ for (const file of htmlFiles) {
   if (imagesWithoutAlt.length) failures.push(`${relativeFile} -> ${imagesWithoutAlt.length} image(s) missing alt`);
   if (imagesWithoutDimensions.length) failures.push(`${relativeFile} -> ${imagesWithoutDimensions.length} image(s) missing width/height`);
 
+  const inlineStyles = (html.match(/\sstyle=["'][^"']*["']/gi) ?? []).length;
+  if (inlineStyles) failures.push(`${relativeFile} -> ${inlineStyles} inline style attribute(s) blocked by the strict CSP`);
+
+  const cardMediaBlocks = [...html.matchAll(/<a\b[^>]*class=["'][^"']*post-card-media[^"']*["'][^>]*>([\s\S]*?)<\/a>/gi)];
+  for (const [, block] of cardMediaBlocks) {
+    const imageTag = block.match(/<img\b[^>]*>/i)?.[0];
+    if (!imageTag) continue;
+    if (!/\bsrc=["']\/images\/thumbnails\//i.test(imageTag)) failures.push(`${relativeFile} -> post card does not use a dedicated thumbnail`);
+    const width = Number(imageTag.match(/\bwidth=["'](\d+)["']/i)?.[1]);
+    const height = Number(imageTag.match(/\bheight=["'](\d+)["']/i)?.[1]);
+    if (width * 9 !== height * 16) failures.push(`${relativeFile} -> post card image dimensions are not 16:9 (${width}x${height})`);
+  }
+
   const highPriorityImages = (html.match(/<img\b[^>]*\bfetchpriority=["']high["'][^>]*>/gi) ?? []).length;
   if (highPriorityImages > 1) failures.push(`${relativeFile} -> ${highPriorityImages} high-priority images; maximum is one`);
+
+  const imagePreloads = [...html.matchAll(/<link\b[^>]*\brel=["']preload["'][^>]*\bas=["']image["'][^>]*>/gi)].map((match) => match[0]);
+  for (const preload of imagePreloads) {
+    if (!/\bimagesrcset=["'][^"']+["']/i.test(preload) || !/\bimagesizes=["'][^"']+["']/i.test(preload)) {
+      failures.push(`${relativeFile} -> responsive image preload is missing imagesrcset/imagesizes`);
+    }
+  }
 
   if (/\b(?:href|src)=["'](?:|#)["']/i.test(html)) failures.push(`${relativeFile} -> empty or hash-only href/src`);
 
@@ -111,6 +132,9 @@ for (const file of htmlFiles) {
     if (indexableCanonicals.has(canonical)) failures.push(`${relativeFile} -> duplicate canonical with ${indexableCanonicals.get(canonical)}`);
     else indexableCanonicals.set(canonical, relativeFile);
   }
+
+  const modifiedTime = html.match(/<meta\s+property=["']article:modified_time["']\s+content=["']([^"']+)["']/i)?.[1];
+  if (modifiedTime && new Date(modifiedTime).valueOf() > Date.now() + 5 * 60 * 1000) failures.push(`${relativeFile} -> article modified time is in the future: ${modifiedTime}`);
 
   const executableInlineScripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
     .filter(([, attrs, body]) => !/\bsrc=/i.test(attrs) && !/type=["'](?:application\/ld\+json|application\/json)["']/i.test(attrs) && body.trim());
@@ -141,6 +165,29 @@ for (const requiredHeader of ['Content-Security-Policy', 'Strict-Transport-Secur
 }
 if (/fonts\.googleapis\.com|fonts\.gstatic\.com/i.test((await Promise.all(htmlFiles.map((file) => readFile(file, 'utf8')))).join(''))) {
   failures.push('external Google Fonts request remains in generated HTML');
+}
+
+const redirectRules = await readFile(path.join(root, '_redirects'), 'utf8');
+const postSourceRoot = path.resolve('src', 'content', 'posts');
+for (const name of (await readdir(postSourceRoot)).filter((file) => /\.(?:md|mdx)$/i.test(file))) {
+  const source = await readFile(path.join(postSourceRoot, name), 'utf8');
+  const legacyPath = source.match(/^legacyPath:\s*["']([^"']+)["']/m)?.[1];
+  if (legacyPath && !redirectRules.split(/\r?\n/).some((line) => line.trim().startsWith(`${legacyPath} `))) {
+    failures.push(`_redirects -> missing Blogger legacy path ${legacyPath}`);
+  }
+}
+if (!/^\/feeds\/posts\/default\s+\/rss\.xml\s+301\s*$/m.test(redirectRules)) failures.push('_redirects -> missing Blogger feed redirect');
+
+const thumbnailDirectory = path.join(root, 'images', 'thumbnails');
+const thumbnailFiles = (await readdir(thumbnailDirectory)).filter((name) => name.endsWith('.webp'));
+if (thumbnailFiles.length !== 32) failures.push(`images/thumbnails -> expected 32 generated files, found ${thumbnailFiles.length}`);
+for (const name of thumbnailFiles) {
+  const expectedWidth = Number(name.match(/-(320|640|960|1280)\.webp$/)?.[1]);
+  const metadata = await sharp(path.join(thumbnailDirectory, name)).metadata();
+  const expectedHeight = Math.round(expectedWidth * 9 / 16);
+  if (!expectedWidth || metadata.width !== expectedWidth || metadata.height !== expectedHeight) {
+    failures.push(`images/thumbnails/${name} -> expected ${expectedWidth || '?'}x${expectedHeight || '?'}, found ${metadata.width}x${metadata.height}`);
+  }
 }
 
 if (failures.length) {

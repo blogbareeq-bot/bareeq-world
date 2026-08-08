@@ -4,7 +4,7 @@ import ValuesStrip from '../components/ValuesStrip.astro';
 import PostCard from '../components/PostCard.astro';
 import { getPublishedPosts, formatDate, formatReadingMinutes } from '../lib/posts';
 import { site } from '../config/site';
-import { responsiveImage } from '../lib/images';
+import { responsiveThumbnail } from '../lib/images';
 
 const posts = await getPublishedPosts();
 const featured = posts.find((post) => post.data.featured) ?? posts[0];
@@ -17,7 +17,8 @@ const latestPosts = posts.filter((post) => !excluded.has(post.id)).slice(0, 6);
 const latestGridClass = `latest-grid--count-${Math.min(latestPosts.length, 6)}`;
 const used = new Set([...excluded, ...latestPosts.map((post) => post.id)]);
 const editorPicks = posts.filter((post) => !used.has(post.id)).slice(0, 3);
-const featuredImage = responsiveImage(featured?.data.image);
+const featuredImage = responsiveThumbnail(featured?.data.thumbnail ?? featured?.data.image);
+const bookImage = responsiveThumbnail(bookWeek?.data.thumbnail ?? bookWeek?.data.image);
 const homeSchema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
@@ -33,25 +34,29 @@ const homeSchema = {
   }))
 };
 ---
-<BaseLayout latestPosts={posts.slice(0, 6)} preloadImage={featuredImage.src}>
+<BaseLayout
+  latestPosts={posts.slice(0, 6)}
+  preloadImage={featuredImage.src}
+  preloadSrcset={featuredImage.srcset}
+  preloadSizes="(max-width: 900px) 100vw, 70vw"
+>
   <script type="application/ld+json" set:html={JSON.stringify(homeSchema)}></script>
 
   {featured ? (
     <section class="hero-editorial shell-wide section-gap" aria-label="المقالات المختارة">
       <article class="hero-featured">
         <a class="hero-link" href={`/posts/${featured.id}/`}>
-          {featured.data.image ? (
+          {(featured.data.thumbnail || featured.data.image) ? (
             <img
               src={featuredImage.src}
               srcset={featuredImage.srcset}
               sizes="(max-width: 900px) 100vw, 70vw"
-              alt={featured.data.imageAlt ?? featured.data.title}
+              alt={featured.data.thumbnailAlt ?? featured.data.imageAlt ?? featured.data.title}
               loading="eager"
               fetchpriority="high"
               decoding="async"
-              width={featured.data.imageWidth ?? 1280}
-              height={featured.data.imageHeight ?? 720}
-              style={`object-position:${featured.data.imagePosition ?? 'center'}`}
+              width={featured.data.thumbnail ? featured.data.thumbnailWidth : (featured.data.imageWidth ?? 1280)}
+              height={featured.data.thumbnail ? featured.data.thumbnailHeight : (featured.data.imageHeight ?? 720)}
             />
           ) : <span class="image-fallback" aria-hidden="true">بريق</span>}
           <span class="hero-overlay" aria-hidden="true"></span>
@@ -94,7 +99,18 @@ const homeSchema = {
   {bookWeek && (
     <section class="book-feature shell-wide section-gap" aria-labelledby="book-feature-title">
       <div class="book-feature-media">
-        {bookWeek.data.image ? <img src={responsiveImage(bookWeek.data.image).src} srcset={responsiveImage(bookWeek.data.image).srcset} sizes="(max-width: 800px) 100vw, 48vw" alt={bookWeek.data.imageAlt ?? bookWeek.data.title} loading="lazy" decoding="async" width={bookWeek.data.imageWidth ?? 1280} height={bookWeek.data.imageHeight ?? 720} style={`object-position:${bookWeek.data.imagePosition ?? 'center'}`} /> : <span class="image-fallback">بريق</span>}
+        {(bookWeek.data.thumbnail || bookWeek.data.image) ? (
+          <img
+            src={bookImage.src}
+            srcset={bookImage.srcset}
+            sizes="(max-width: 800px) 100vw, 48vw"
+            alt={bookWeek.data.thumbnailAlt ?? bookWeek.data.imageAlt ?? bookWeek.data.title}
+            loading="lazy"
+            decoding="async"
+            width={bookWeek.data.thumbnail ? bookWeek.data.thumbnailWidth : (bookWeek.data.imageWidth ?? 1280)}
+            height={bookWeek.data.thumbnail ? bookWeek.data.thumbnailHeight : (bookWeek.data.imageHeight ?? 720)}
+          />
+        ) : <span class="image-fallback">بريق</span>}
       </div>
       <div class="book-feature-content">
         <span class="eyebrow">من بريق الكتب</span>

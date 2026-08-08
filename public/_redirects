@@ -16,6 +16,10 @@
 /p/privacy-policy.html /privacy/ 301
 /p/terms.html /terms/ 301
 
+# Legacy Blogger feeds
+/feeds/posts/default /rss.xml 301
+/feeds/posts/default/* /rss.xml 301
+
 # Category aliases used by the previous preview
 /categories/أطياف-العقل/ /category/atyaf-al-aql/ 301
 /category/أطياف-العقل/ /category/atyaf-al-aql/ 301

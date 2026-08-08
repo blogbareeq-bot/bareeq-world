@@ -8,8 +8,9 @@
     const total = Math.max(1, articleContent.scrollHeight - innerHeight * 0.6);
     const value = Math.max(0, Math.min(1, (scrollY - start) / total));
     if (bar) {
-      bar.style.transform = `scaleX(${value})`;
-      bar.setAttribute('aria-valuenow', String(Math.round(value * 100)));
+      const percentage = Math.round(value * 100);
+      if (bar instanceof HTMLProgressElement) bar.value = percentage;
+      bar.setAttribute('aria-valuenow', String(percentage));
     }
   };
   addEventListener('scroll', update, { passive: true });

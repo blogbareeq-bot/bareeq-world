@@ -48,6 +48,7 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
   if (trigger?.getAttribute('aria-expanded') !== 'false') failures.push('outside click does not close desktop category menu');
   trigger?.focus();
   trigger?.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+  await new Promise((resolve) => setTimeout(resolve, 240));
   if (!window.document.activeElement?.closest('[data-category-menu]')) failures.push('ArrowDown does not move focus into category dropdown');
   window.document.activeElement?.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
   if (window.document.activeElement !== trigger || trigger?.getAttribute('aria-expanded') !== 'false') failures.push('Escape does not close category dropdown and return focus');

@@ -5,7 +5,6 @@ import PostCard from '../../components/PostCard.astro';
 import { formatDate, formatReadingMinutes, getPublishedPosts, absoluteUrl, postWordCount } from '../../lib/posts';
 import { site } from '../../config/site';
 import { responsiveImage, socialImage } from '../../lib/images';
-import { categories } from '../../config/site';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.draft !== true);
@@ -26,8 +25,7 @@ const shareText = encodeURIComponent(post.data.title);
 const shareUrl = encodeURIComponent(articleUrl);
 const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const coverImage = responsiveImage(post.data.image);
-const shareImage = socialImage(post.data.image);
-const category = categories.find((item) => item.slug === post.data.categorySlug);
+const shareImage = socialImage(post.data.thumbnail ?? post.data.image);
 const breadcrumbSchema = {
   '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'الرئيسية', item: site.url },
@@ -64,25 +62,24 @@ const articleSchema = {
   publishedAt={post.data.publishedAt}
   updatedAt={post.data.updatedAt ?? post.data.publishedAt}
 >
-  <div
+  <progress
     class="reading-progress"
     data-reading-progress
-    role="progressbar"
+    value="0"
+    max="100"
     aria-label="تقدم قراءة المقال"
-    aria-valuemin="0"
-    aria-valuemax="100"
     aria-valuenow="0"
-  ></div>
+  ></progress>
   <script type="application/ld+json" set:html={JSON.stringify([articleSchema, breadcrumbSchema])}></script>
 
-  <article class="article-shell shell">
+  <article class:list={['article-shell', 'shell', 'category-theme', `category-theme--${post.data.categorySlug}`]}>
     <header class="article-header">
       <nav class="breadcrumbs" aria-label="مسار الصفحة">
         <a href="/">الرئيسية</a><span aria-hidden="true">‹</span>
         <a href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a><span aria-hidden="true">‹</span>
         <span aria-current="page">المقال</span>
       </nav>
-      <a class="category-chip" style={`--category-color:${category?.color ?? '#087566'};--category-color-dark:${category?.darkColor ?? '#6ee7d0'}`} href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
+      <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
       <h1>{post.data.title}</h1>
       <div class="article-meta">
         <span>{post.data.author}</span>
@@ -104,7 +101,6 @@ const articleSchema = {
           loading="eager"
           fetchpriority="high"
           decoding="async"
-          style={`object-position:${post.data.imagePosition ?? 'center'}`}
         />
       </figure>
     )}

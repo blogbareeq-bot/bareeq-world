@@ -18,6 +18,8 @@ interface Props {
   imageWidth?: number;
   imageHeight?: number;
   preloadImage?: string;
+  preloadSrcset?: string;
+  preloadSizes?: string;
   canonicalPath?: string;
   latestPosts?: Post[];
   type?: 'website' | 'article';
@@ -33,6 +35,8 @@ const {
   imageWidth = site.socialImageWidth,
   imageHeight = site.socialImageHeight,
   preloadImage,
+  preloadSrcset,
+  preloadSizes,
   canonicalPath = Astro.url.pathname,
   latestPosts = [],
   type = 'website',
@@ -90,7 +94,7 @@ const baseSchema = [
     <link rel="apple-touch-icon" href={site.originalLogo} />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="alternate" type="application/rss+xml" title="عالم بريق" href="/rss.xml" />
-    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} imagesrcset={preloadSrcset} imagesizes={preloadSizes} fetchpriority="high" />}
 
     <meta property="og:locale" content="ar_AR" />
     <meta property="og:type" content={type} />
@@ -172,10 +176,13 @@ const baseSchema = [
               event.preventDefault();
               closeCategoryMenus(root);
               setCategoryMenu(root, true);
-              requestAnimationFrame(() => {
+              const focusFirstLink = () => {
+                if (!root.classList.contains('is-open')) return;
                 const first = menu?.querySelector('a');
-                if (first instanceof HTMLElement) first.focus();
-              });
+                if (first instanceof HTMLElement) first.focus({ preventScroll: true });
+              };
+              requestAnimationFrame(focusFirstLink);
+              setTimeout(focusFirstLink, 210);
             }
           });
           root.addEventListener('focusout', (event) => {

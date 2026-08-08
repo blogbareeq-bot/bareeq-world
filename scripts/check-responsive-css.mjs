@@ -5,6 +5,7 @@ import postcss from 'postcss';
 const cssRoot = path.resolve('dist', '_astro');
 const cssFiles = (await readdir(cssRoot)).filter((name) => name.endsWith('.css')).sort();
 const candidates = [];
+const footerTargetCandidates = [];
 const roots = [];
 let order = 0;
 
@@ -33,6 +34,16 @@ for (const name of cssFiles) {
     }
     candidates.push({ value: declaration.value, media, order: order++ });
   });
+  root.walkRules((rule) => {
+    if (!rule.selectors?.some((selector) => selector.includes('.footer-section li a') || selector.includes('.footer-contact>a'))) return;
+    const declaration = [...rule.nodes].reverse().find((node) => node.type === 'decl' && node.prop === 'min-height');
+    if (!declaration) return;
+    const media = [];
+    for (let parent = rule.parent; parent; parent = parent.parent) {
+      if (parent.type === 'atrule' && parent.name === 'media') media.push(parent.params);
+    }
+    footerTargetCandidates.push({ value: declaration.value, media, order: order++ });
+  });
 }
 
 function resolvedValue(width) {
@@ -51,6 +62,11 @@ const expectations = [
 ];
 
 const failures = expectations.filter(({ width, test }) => !test(resolvedValue(width)));
+const footerTargetAt390 = footerTargetCandidates
+  .filter((candidate) => candidate.media.every((params) => mediaApplies(params, 390)))
+  .sort((a, b) => a.order - b.order)
+  .at(-1)?.value;
+if (!footerTargetAt390 || Number.parseFloat(footerTargetAt390) < 44) failures.push({ width: 390, label: 'أهداف لمس التذييل 44px', actual: footerTargetAt390 });
 const shellWide = roots.flatMap((root) => {
   const values = [];
   root.walkRules(':root', (rule) => rule.walkDecls('--shell-wide', (declaration) => values.push(declaration.value)));
@@ -70,4 +86,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Responsive CSS passed: full-width shell, visible overflow diagnostics, and footer at 320, 390, 700, 768, and 1024px.');
+console.log('Responsive CSS passed: full-width shell, visible overflow diagnostics, 44px footer targets, and footer layout at 320, 390, 700, 768, and 1024px.');

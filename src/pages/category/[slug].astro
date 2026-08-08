@@ -14,7 +14,7 @@ const breadcrumb = { '@context':'https://schema.org','@type':'BreadcrumbList',it
 ---
 <BaseLayout title={category.name} description={category.description} canonicalPath={`/category/${category.slug}/`} latestPosts={(await getPublishedPosts()).slice(0,6)}>
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)}></script>
-  <section class="page-hero compact shell category-hero" style={`--category-color:${category.color};--category-color-dark:${category.darkColor}`}>
+  <section class:list={['page-hero', 'compact', 'shell', 'category-hero', 'category-theme', `category-theme--${category.slug}`]}>
     <span class="category-hero-icon"><CategoryIcon name={category.icon} /></span>
     <div><span class="eyebrow">أقسام بريق</span><h1>{category.name}</h1><p>{category.short}</p></div>
     <strong>{formatArticleCount(posts.length)}</strong>

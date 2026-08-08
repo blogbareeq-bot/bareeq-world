@@ -16,8 +16,7 @@ const groups = categories.map((category) => ({
   <div class="shell-full category-strip-inner">
     {groups.map((group) => (
       <div
-        class:list={['category-nav-item', { active: currentPath.startsWith(`/category/${group.slug}/`) }]}
-        style={`--category-color:${group.color};--category-color-dark:${group.darkColor}`}
+        class:list={['category-nav-item', 'category-theme', `category-theme--${group.slug}`, { active: currentPath.startsWith(`/category/${group.slug}/`) }]}
         data-category-menu-root
       >
         <button
@@ -46,7 +45,7 @@ const groups = categories.map((category) => ({
               {group.posts.map((post) => (
                 <li>
                   <a href={`/posts/${post.id}/`}>
-                    {post.data.image ? <img data-src={thumbnailImage(post.data.image)} alt="" loading="lazy" decoding="async" width="96" height="72" /> : <span class="category-dropdown-fallback"><CategoryIcon name={group.icon} /></span>}
+                    {(post.data.thumbnail || post.data.image) ? <img data-src={thumbnailImage(post.data.thumbnail ?? post.data.image)} alt="" loading="lazy" decoding="async" width="96" height="54" /> : <span class="category-dropdown-fallback"><CategoryIcon name={group.icon} /></span>}
                     <strong>{post.data.title}</strong>
                   </a>
                 </li>

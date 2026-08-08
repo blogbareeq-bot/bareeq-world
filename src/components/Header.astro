@@ -69,7 +69,7 @@ const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : curr
           {categories.map((category) => {
             const categoryPosts = allPosts.filter((post) => post.data.categorySlug === category.slug).slice(0, 3);
             return (
-              <details style={`--category-color:${category.color};--category-color-dark:${category.darkColor}`}>
+              <details class:list={['category-theme', `category-theme--${category.slug}`]}>
                 <summary><span class="mobile-category-icon"><CategoryIcon name={category.icon} /></span><span>{category.name}</span></summary>
                 <div>
                   {categoryPosts.map((post) => <a href={`/posts/${post.id}/`}>{post.data.title}</a>)}
