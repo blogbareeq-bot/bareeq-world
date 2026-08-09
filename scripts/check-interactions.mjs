@@ -39,6 +39,9 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
 {
   const dom = createDom(homeHtml, 1440);
   const { window } = dom;
+  const headerSearch = window.document.querySelector('.header-search-link');
+  if (headerSearch?.getAttribute('href') !== '/search/' || !headerSearch.textContent?.includes('ابحث في بريق')) failures.push('desktop header search field is missing or points to the wrong page');
+  if ([...window.document.querySelectorAll('[data-category-menu-trigger]')].some((node) => node.querySelector('.category-article-count'))) failures.push('article counts leaked into top-level category triggers');
   const trigger = window.document.querySelector('[data-category-menu-trigger]');
   const menuRoot = trigger?.closest('[data-category-menu-root]');
   menuRoot?.dispatchEvent(new window.Event('pointerenter', { bubbles: false }));
@@ -146,4 +149,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Interaction audit passed: menus, keyboard, drawer, theme, ticker, footer accordions, analytics consent, article TOC/progress, filters, and search.');
+console.log('Interaction audit passed: redesigned header search, uncluttered category triggers, menus, keyboard, drawer, theme, ticker, footer accordions, analytics consent, article TOC/progress, filters, and search.');

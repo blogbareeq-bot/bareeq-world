@@ -104,6 +104,18 @@ const categoryDropdownWidth = resolvedDeclaration('.category-dropdown', 'width',
 if (!categoryDropdownWidth?.startsWith('min(520px,') || !categoryDropdownWidth.includes('100vw - 32px')) {
   failures.push({ width: 1440, label: 'قائمة أقسام أوسع بلا تجاوز للشاشة', actual: categoryDropdownWidth });
 }
+if (resolvedDeclaration('.category-strip-inner', 'max-width', 1440) !== '1360px') {
+  failures.push({ width: 1440, label: 'شريط أقسام عائم موسّع ومحدود', actual: resolvedDeclaration('.category-strip-inner', 'max-width', 1440) });
+}
+if (resolvedDeclaration('.header-search-link span', 'display', 1024) !== 'none') {
+  failures.push({ width: 1024, label: 'اختصار البحث إلى أيقونة على الأجهزة المتوسطة', actual: resolvedDeclaration('.header-search-link span', 'display', 1024) });
+}
+if (resolvedDeclaration('.ticker-track>a', 'display', 390) !== 'none' || resolvedDeclaration('.ticker-track>a:first-child', 'display', 390) !== 'block') {
+  failures.push({ width: 390, label: 'عنوان أحدث واحد فقط على الجوال', actual: `${resolvedDeclaration('.ticker-track>a', 'display', 390)}/${resolvedDeclaration('.ticker-track>a:first-child', 'display', 390)}` });
+}
+if (resolvedDeclaration('.category-strip-inner', 'overflow-x', 768) !== 'auto') {
+  failures.push({ width: 768, label: 'تمرير أفقي آمن للأقسام', actual: resolvedDeclaration('.category-strip-inner', 'overflow-x', 768) });
+}
 if (resolvedDeclaration('.home-intro-inner', 'flex-direction', 390) !== 'column') {
   failures.push({ width: 390, label: 'نبذة رئيسية عمودية على الجوال', actual: resolvedDeclaration('.home-intro-inner', 'flex-direction', 390) });
 }
@@ -132,4 +144,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Responsive CSS passed: full-width shell, larger bounded category menus, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and balanced footer layout from 320px through wide desktop.');
+console.log('Responsive CSS passed: redesigned header/search/ticker, floating category bar, single mobile headline, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and balanced footer layout from 320px through wide desktop.');
