@@ -5,7 +5,7 @@ publishedAt: "2026-08-09T05:45:00.000Z"
 category: "المستقبل الآن"
 categorySlug: "future-now"
 seriesSlug: "technology-simply"
-featured: false
+featured: true
 draft: false
 author: "فريق بريق"
 tags: ["ذكاء اصطناعي", "أتمتة"]
