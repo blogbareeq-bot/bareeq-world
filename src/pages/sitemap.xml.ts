@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { getPublishedPosts, escapeXml, uniqueTags } from '../lib/posts';
-import { categories, series, site } from '../config/site';
+import { archivePolicy, categories, series, site } from '../config/site';
 
 function latestDate(dates: Date[]): Date {
   return new Date(Math.max(...dates.map((date) => date.valueOf())));
@@ -20,6 +20,7 @@ export const GET: APIRoute = async ({ site: astroSite }) => {
     { path: '/start-here/', date: latestPostDate },
     { path: '/series/', date: latestPostDate },
     { path: '/about/', date: pageDate('about') },
+    { path: '/team/', date: pageDate('team') },
     { path: '/contact/', date: pageDate('contact-source') },
     { path: '/privacy/', date: pageDate('privacy') },
     { path: '/terms/', date: pageDate('terms') },
@@ -31,10 +32,10 @@ export const GET: APIRoute = async ({ site: astroSite }) => {
     return { path: `/category/${category.slug}/`, date: latestDate(relevant.map((post) => post.data.updatedAt ?? post.data.publishedAt)) };
   });
   const seriesPaths = series.flatMap((item) => {
-    const relevant = posts.filter((post) => item.categorySlugs.includes(post.data.categorySlug as never));
-    return relevant.length < 2 ? [] : [{ path: `/series/${item.slug}/`, date: latestDate(relevant.map((post) => post.data.updatedAt ?? post.data.publishedAt)) }];
+    const relevant = posts.filter((post) => post.data.seriesSlug === item.slug);
+    return relevant.length < archivePolicy.minPostsToIndexArchive ? [] : [{ path: `/series/${item.slug}/`, date: latestDate(relevant.map((post) => post.data.updatedAt ?? post.data.publishedAt)) }];
   });
-  const tagPaths = [...tagCounts.entries()].flatMap(([tag, relevant]) => relevant.length < 2 ? [] : [{
+  const tagPaths = [...tagCounts.entries()].flatMap(([tag, relevant]) => relevant.length < archivePolicy.minPostsToIndexArchive ? [] : [{
     path: `/tags/${encodeURIComponent(tag)}/`,
     date: latestDate(relevant.map((post) => post.data.updatedAt ?? post.data.publishedAt))
   }]);

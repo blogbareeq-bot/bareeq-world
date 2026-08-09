@@ -2,13 +2,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getPublishedPosts } from '../../lib/posts';
-import { series } from '../../config/site';
+import { archivePolicy, series } from '../../config/site';
 export function getStaticPaths() { return series.map((item) => ({ params:{slug:item.slug}, props:{item} })); }
 const { item } = Astro.props;
 const allPosts = await getPublishedPosts();
-const posts = allPosts.filter((post) => item.categorySlugs.includes(post.data.categorySlug as never));
+const posts = allPosts.filter((post) => post.data.seriesSlug === item.slug);
 ---
-<BaseLayout title={item.title} description={item.description} canonicalPath={`/series/${item.slug}/`} latestPosts={allPosts.slice(0,6)} noindex={posts.length < 2}>
+<BaseLayout title={item.title} description={item.description} canonicalPath={`/series/${item.slug}/`} latestPosts={allPosts.slice(0,6)} noindex={posts.length < archivePolicy.minPostsToIndexArchive}>
   <section class="page-hero compact shell"><span class="eyebrow">سلسلة بريق</span><h1>{item.title}</h1><p>{item.description}</p></section>
   <section class="shell section-gap"><div class="archive-grid">{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div></section>
 </BaseLayout>

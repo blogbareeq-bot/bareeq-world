@@ -12,7 +12,7 @@ const page = await getEntry('pages', 'about');
   <div class="shell content-page-wrap">
     <aside class="identity-card">
       <img src={site.logo} alt={`الشعار الرسمي لمدونة ${site.brand}`} width="180" height="180" loading="eager" decoding="async" />
-      <p><strong>إدارة المحتوى:</strong> فريق بريق</p>
+      <p><strong>إدارة المحتوى:</strong> <a href="/team/">فريق بريق</a></p>
       <p><strong>البريد:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></p>
     </aside>
     {page && <ContentPage page={page} />}

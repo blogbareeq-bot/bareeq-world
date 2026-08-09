@@ -4,6 +4,7 @@ import { z } from 'astro/zod';
 
 const categoryNames = ['أطياف العقل', 'بريق الكتب', 'نافذة على العالم', 'المستقبل الآن', 'ببساطة…'] as const;
 const categorySlugs = ['atyaf-al-aql', 'bareeq-books', 'window-on-world', 'future-now', 'simply'] as const;
+const seriesSlugs = ['mind-and-decisions', 'technology-simply', 'windows-to-world', 'books-for-life'] as const;
 
 const posts = defineCollection({
   loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
@@ -14,6 +15,7 @@ const posts = defineCollection({
     updatedAt: z.coerce.date().optional(),
     category: z.enum(categoryNames),
     categorySlug: z.enum(categorySlugs),
+    seriesSlug: z.enum(seriesSlugs).optional(),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     imageWidth: z.number().int().positive().optional(),
@@ -25,8 +27,7 @@ const posts = defineCollection({
     thumbnailHeight: z.number().int().positive().default(900),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
-    readingMinutes: z.number().int().positive().default(5),
-    tags: z.array(z.string()).default([]),
+    tags: z.array(z.string()).max(2).default([]),
     author: z.string().default('فريق بريق'),
     legacyPath: z.string().optional()
   })

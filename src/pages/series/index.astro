@@ -1,15 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPublishedPosts, formatArticleCount } from '../../lib/posts';
-import { series } from '../../config/site';
+import { archivePolicy, series } from '../../config/site';
 const posts = await getPublishedPosts();
+const visibleSeries = series
+  .map((item) => ({ item, count: posts.filter((post) => post.data.seriesSlug === item.slug).length }))
+  .filter(({ count }) => count >= archivePolicy.minPostsToShowSeries);
 ---
 <BaseLayout title="سلاسل بريق" description="مسارات قراءة مترابطة تجمع مقالات عالم بريق بحسب الفكرة والموضوع، وتساعدك على متابعة المعرفة بترتيب واضح." canonicalPath="/series/" latestPosts={posts.slice(0,6)}>
   <section class="page-hero compact shell"><span class="eyebrow">رحلات معرفية</span><h1>سلاسل بريق</h1><p>اختر مسارًا واقرأ مجموعة مترابطة من المقالات بدل التنقل العشوائي.</p></section>
   <section class="shell section-gap"><div class="series-grid series-grid-large">
-    {series.map((item) => {
-      const count = posts.filter((post) => item.categorySlugs.includes(post.data.categorySlug as never)).length;
-      return <a class="series-card" href={`/series/${item.slug}/`}><span>{formatArticleCount(count)}</span><h2>{item.title}</h2><p>{item.description}</p><strong>ابدأ السلسلة ←</strong></a>;
+    {visibleSeries.map(({ item, count }) => {
+      return <a class="series-card" href={`/series/${item.slug}/`}><span>{formatArticleCount(count)} · مسار قيد البناء</span><h2>{item.title}</h2><p>{item.description}</p><strong>استكشف المسار ←</strong></a>;
     })}
   </div></section>
 </BaseLayout>

@@ -1,14 +1,14 @@
 {
   "name": "bareeq-world",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "start": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "generate:images": "node scripts/generate-images.mjs",
     "build": "node scripts/clean-dist.mjs && node --check functions/_middleware.js && node --check public/scripts/analytics-consent.js && node scripts/check-middleware.mjs && npm run generate:images && ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/check-dist.mjs && node scripts/check-responsive-css.mjs && node scripts/check-contrast.mjs && node scripts/check-interactions.mjs",
-    "preview": "astro preview",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "astro": "astro",
     "audit:dist": "node scripts/check-middleware.mjs && node scripts/check-dist.mjs && node scripts/check-responsive-css.mjs && node scripts/check-contrast.mjs && node scripts/check-interactions.mjs"
   },

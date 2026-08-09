@@ -2,7 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { formatDate, formatReadingMinutes, getPublishedPosts, absoluteUrl, postWordCount } from '../../lib/posts';
+import { formatDate, formatReadingMinutes, getPublishedPosts, absoluteUrl, postWordCount, postReadingMinutes, getRelatedPosts } from '../../lib/posts';
 import { site } from '../../config/site';
 import { responsiveImage, socialImage } from '../../lib/images';
 
@@ -17,8 +17,8 @@ const allPosts = await getPublishedPosts();
 const currentIndex = allPosts.findIndex((entry) => entry.id === post.id);
 const newer = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
 const older = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
-const sameCategory = allPosts.filter((entry) => entry.id !== post.id && entry.data.categorySlug === post.data.categorySlug);
-const related = [...sameCategory, ...allPosts.filter((entry) => entry.id !== post.id && !sameCategory.includes(entry))].slice(0, 3);
+const related = getRelatedPosts(post, allPosts);
+const readingMinutes = postReadingMinutes(post);
 const articlePath = `/posts/${post.id}/`;
 const articleUrl = absoluteUrl(articlePath, Astro.site?.toString());
 const shareText = encodeURIComponent(post.data.title);
@@ -41,12 +41,13 @@ const articleSchema = {
   datePublished: post.data.publishedAt.toISOString(),
   dateModified: (post.data.updatedAt ?? post.data.publishedAt).toISOString(),
   inLanguage: 'ar',
-  author: { '@type': 'Organization', name: post.data.author, url: site.url },
+  author: { '@type': 'Organization', name: post.data.author, url: absoluteUrl('/team/') },
   publisher: { '@id': `${site.url}/#organization` },
   mainEntityOfPage: articleUrl,
   articleSection: post.data.category,
   keywords: post.data.tags.join(', '),
   wordCount: postWordCount(post),
+  timeRequired: `PT${readingMinutes}M`,
   ...(shareImage ? { image: { '@type': 'ImageObject', url: absoluteUrl(shareImage), width: 1200, height: 630 } } : {})
 };
 ---
@@ -82,9 +83,9 @@ const articleSchema = {
       <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
       <h1>{post.data.title}</h1>
       <div class="article-meta">
-        <span>{post.data.author}</span>
+        <a class="article-author" href="/team/" rel="author">{post.data.author}</a>
         <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
-        <span>{formatReadingMinutes(post.data.readingMinutes)}</span>
+        <span>{formatReadingMinutes(readingMinutes)}</span>
         {post.data.updatedAt && post.data.updatedAt.valueOf() !== post.data.publishedAt.valueOf() && <span>آخر تحديث: {formatDate(post.data.updatedAt)}</span>}
       </div>
     </header>
@@ -141,7 +142,7 @@ const articleSchema = {
 
   {related.length > 0 && (
     <section class="shell related-section section-gap">
-      <div class="section-heading"><div><span class="eyebrow">واصل القراءة</span><h2>مقالات ذات صلة</h2></div></div>
+      <div class="section-heading"><div><span class="eyebrow">واصل القراءة</span><h2>مقالات مرتبطة بالموضوع</h2></div></div>
       <div class="archive-grid">{related.map((entry) => <PostCard post={entry} />)}</div>
     </section>
   )}

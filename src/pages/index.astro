@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ValuesStrip from '../components/ValuesStrip.astro';
+import HomeIntro from '../components/HomeIntro.astro';
 import PostCard from '../components/PostCard.astro';
-import { getPublishedPosts, formatDate, formatReadingMinutes } from '../lib/posts';
+import { getPublishedPosts, formatDate, formatReadingMinutes, postReadingMinutes } from '../lib/posts';
 import { site } from '../config/site';
 import { responsiveThumbnail } from '../lib/images';
 
@@ -42,6 +43,8 @@ const homeSchema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(homeSchema)}></script>
 
+  <HomeIntro />
+
   {featured ? (
     <section class="hero-editorial shell-wide section-gap" aria-label="المقالات المختارة">
       <article class="hero-featured">
@@ -67,7 +70,7 @@ const homeSchema = {
             <div class="hero-meta">
               <span>{featured.data.category}</span>
               <time datetime={featured.data.publishedAt.toISOString()}>{formatDate(featured.data.publishedAt)}</time>
-              <span>{formatReadingMinutes(featured.data.readingMinutes)}</span>
+              <span>{formatReadingMinutes(postReadingMinutes(featured))}</span>
             </div>
           </div>
         </a>
@@ -117,7 +120,7 @@ const homeSchema = {
         <h2 id="book-feature-title">قراءة الأسبوع</h2>
         <h3><a href={`/posts/${bookWeek.id}/`}>{bookWeek.data.title}</a></h3>
         <p>{bookWeek.data.description}</p>
-        <div class="book-feature-meta"><time datetime={bookWeek.data.publishedAt.toISOString()}>{formatDate(bookWeek.data.publishedAt)}</time><span>{formatReadingMinutes(bookWeek.data.readingMinutes)}</span></div>
+        <div class="book-feature-meta"><time datetime={bookWeek.data.publishedAt.toISOString()}>{formatDate(bookWeek.data.publishedAt)}</time><span>{formatReadingMinutes(postReadingMinutes(bookWeek))}</span></div>
         <a class="button primary" href={`/posts/${bookWeek.id}/`}>اقرأ المقال</a>
       </div>
     </section>

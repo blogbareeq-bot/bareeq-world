@@ -53,6 +53,27 @@ function resolvedValue(width) {
     .at(-1)?.value;
 }
 
+function resolvedDeclaration(selector, property, width) {
+  const matches = [];
+  let declarationOrder = 0;
+  for (const root of roots) {
+    root.walkRules((rule) => {
+      if (!rule.selectors?.some((candidate) => candidate.trim() === selector)) return;
+      const declaration = [...rule.nodes].reverse().find((node) => node.type === 'decl' && node.prop === property);
+      if (!declaration) return;
+      const media = [];
+      for (let parent = rule.parent; parent; parent = parent.parent) {
+        if (parent.type === 'atrule' && parent.name === 'media') media.push(parent.params);
+      }
+      matches.push({ value: declaration.value, media, order: declarationOrder++ });
+    });
+  }
+  return matches
+    .filter((candidate) => candidate.media.every((params) => mediaApplies(params, width)))
+    .sort((a, b) => a.order - b.order)
+    .at(-1)?.value;
+}
+
 const expectations = [
   { width: 320, test: (value) => value === 'minmax(0,1fr)', label: 'عمود واحد' },
   { width: 390, test: (value) => value === 'minmax(0,1fr)', label: 'عمود واحد' },
@@ -67,6 +88,15 @@ const footerTargetAt390 = footerTargetCandidates
   .sort((a, b) => a.order - b.order)
   .at(-1)?.value;
 if (!footerTargetAt390 || Number.parseFloat(footerTargetAt390) < 44) failures.push({ width: 390, label: 'أهداف لمس التذييل 44px', actual: footerTargetAt390 });
+if (resolvedDeclaration('.home-intro-inner', 'flex-direction', 390) !== 'column') {
+  failures.push({ width: 390, label: 'نبذة رئيسية عمودية على الجوال', actual: resolvedDeclaration('.home-intro-inner', 'flex-direction', 390) });
+}
+if (resolvedDeclaration('.home-intro-actions', 'display', 390) !== 'grid') {
+  failures.push({ width: 390, label: 'أزرار نبذة بلا تجاوز أفقي', actual: resolvedDeclaration('.home-intro-actions', 'display', 390) });
+}
+if (resolvedDeclaration('.category-introduction', 'grid-template-columns', 700) !== 'minmax(0,1fr)') {
+  failures.push({ width: 700, label: 'مقدمة قسم أحادية العمود', actual: resolvedDeclaration('.category-introduction', 'grid-template-columns', 700) });
+}
 const shellWide = roots.flatMap((root) => {
   const values = [];
   root.walkRules(':root', (rule) => rule.walkDecls('--shell-wide', (declaration) => values.push(declaration.value)));
@@ -86,4 +116,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Responsive CSS passed: full-width shell, visible overflow diagnostics, 44px footer targets, and footer layout at 320, 390, 700, 768, and 1024px.');
+console.log('Responsive CSS passed: full-width shell, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and footer layout at 320, 390, 700, 768, and 1024px.');

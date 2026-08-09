@@ -26,6 +26,11 @@ function stripTags(value) {
   return value.replace(/<[^>]+>/g, '').replace(/&(?:amp|quot|#39|lt|gt);/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+function classTokenCount(html, token) {
+  return [...html.matchAll(/\bclass=["']([^"']*)["']/gi)]
+    .filter((match) => match[1].split(/\s+/).includes(token)).length;
+}
+
 async function exists(file) {
   try { await stat(file); return true; } catch { return false; }
 }
@@ -145,12 +150,20 @@ for (const file of htmlFiles) {
     .filter(([, attrs, body]) => !/\bsrc=/i.test(attrs) && !/type=["'](?:application\/ld\+json|application\/json)["']/i.test(attrs) && body.trim());
   if (executableInlineScripts.length) failures.push(`${relativeFile} -> ${executableInlineScripts.length} executable inline script(s)`);
 
-  if (relativeFile.startsWith(`posts${path.sep}`) && !relativeFile.includes('مرحبا-بك-في-بريق')) {
+  if (relativeFile.startsWith(`posts${path.sep}`)) {
     const article = html.match(/<div class="article-content prose"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i)?.[1] ?? '';
     if (!/href=["']https?:\/\//i.test(article)) failures.push(`${relativeFile} -> published knowledge article has no clickable external source`);
+    if (!/href=["']\/(?:posts|start-here)\//i.test(article)) failures.push(`${relativeFile} -> published article has no contextual internal link`);
+    if (!/<a\b[^>]*class=["'][^"']*article-author[^"']*["'][^>]*href=["']\/team\/["'][^>]*rel=["']author["']/i.test(html)) {
+      failures.push(`${relativeFile} -> article byline does not link to the transparent team profile`);
+    }
     if (/النسخة الأولى|النسخة الثانية|شاركنا في التعليقات|اشترك في القائمة البريدية/i.test(article)) failures.push(`${relativeFile} -> contains internal/editorial or unavailable-feature copy`);
   }
 }
+
+const generatedPostPages = [...pagesByPath.keys()].filter((pagePath) => pagePath.startsWith('/posts/'));
+const retiredWelcomePath = '/posts/مرحبا-بك-في-بريق-حيث-تبدا-رحلتك-نحو-المعرفه-ببساطه/';
+if (pagesByPath.has(retiredWelcomePath)) failures.push(`${retiredWelcomePath} -> retired welcome article must not be generated`);
 
 const sitemap = await readFile(path.join(root, 'sitemap.xml'), 'utf8');
 for (const match of sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)) {
@@ -180,9 +193,26 @@ if (!/id=["']google-analytics["']/i.test(privacyHtml) || !/متابعة دون �
   failures.push('privacy page -> optional GA4 measurement and withdrawal choice are not documented');
 }
 
+const homeHtml = pagesByPath.get('/')?.html ?? '';
+const homeIntroCount = classTokenCount(homeHtml, 'home-intro');
+if (homeIntroCount !== 1) failures.push(`homepage -> expected one identity introduction, found ${homeIntroCount}`);
+if (homeHtml.indexOf('home-intro') > homeHtml.indexOf('hero-editorial')) failures.push('homepage -> identity introduction must appear before the editorial hero');
+if (/\bclosing-cta\b/i.test(homeHtml)) failures.push('homepage -> retired duplicated closing introduction remains');
+if (classTokenCount(homeHtml, 'category-strip') !== 1) failures.push('homepage -> category navigation must appear exactly once in the header');
+const footerHtml = homeHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? '';
+if (/href=["']\/category\//i.test(footerHtml)) failures.push('homepage -> category navigation is repeated in the footer');
+for (const categoryPath of ['/category/atyaf-al-aql/', '/category/bareeq-books/', '/category/window-on-world/', '/category/future-now/', '/category/simply/']) {
+  const categoryHtml = pagesByPath.get(categoryPath)?.html ?? '';
+  if (classTokenCount(categoryHtml, 'category-introduction') !== 1) {
+    failures.push(`${categoryPath} -> missing unique category introduction`);
+  }
+}
+
 const redirectRules = await readFile(path.join(root, '_redirects'), 'utf8');
 const postSourceRoot = path.resolve('src', 'content', 'posts');
-for (const name of (await readdir(postSourceRoot)).filter((file) => /\.(?:md|mdx)$/i.test(file))) {
+const postSourceFiles = (await readdir(postSourceRoot)).filter((file) => /\.(?:md|mdx)$/i.test(file));
+if (generatedPostPages.length !== postSourceFiles.length) failures.push(`posts -> expected ${postSourceFiles.length} generated article pages, found ${generatedPostPages.length}`);
+for (const name of postSourceFiles) {
   const source = await readFile(path.join(postSourceRoot, name), 'utf8');
   const legacyPath = source.match(/^legacyPath:\s*["']([^"']+)["']/m)?.[1];
   if (legacyPath && !redirectRules.split(/\r?\n/).some((line) => line.trim().startsWith(`${legacyPath} `))) {
@@ -190,10 +220,13 @@ for (const name of (await readdir(postSourceRoot)).filter((file) => /\.(?:md|mdx
   }
 }
 if (!/^\/feeds\/posts\/default\s+\/rss\.xml\s+301\s*$/m.test(redirectRules)) failures.push('_redirects -> missing Blogger feed redirect');
+if (!/^\/2026\/07\/blog-post\.html\s+\/start-here\/\s+301\s*$/m.test(redirectRules)) failures.push('_redirects -> retired Blogger welcome URL must point to /start-here/');
+if (!/^\/posts\/مرحبا-بك-في-بريق-حيث-تبدا-رحلتك-نحو-المعرفه-ببساطه\/\s+\/start-here\/\s+301\s*$/m.test(redirectRules)) failures.push('_redirects -> retired welcome article URL must point to /start-here/');
 
 const thumbnailDirectory = path.join(root, 'images', 'thumbnails');
 const thumbnailFiles = (await readdir(thumbnailDirectory)).filter((name) => name.endsWith('.webp'));
-if (thumbnailFiles.length !== 32) failures.push(`images/thumbnails -> expected 32 generated files, found ${thumbnailFiles.length}`);
+const expectedThumbnailFiles = postSourceFiles.length * 4;
+if (thumbnailFiles.length !== expectedThumbnailFiles) failures.push(`images/thumbnails -> expected ${expectedThumbnailFiles} generated files, found ${thumbnailFiles.length}`);
 for (const name of thumbnailFiles) {
   const expectedWidth = Number(name.match(/-(320|640|960|1280)\.webp$/)?.[1]);
   const metadata = await sharp(path.join(thumbnailDirectory, name)).metadata();

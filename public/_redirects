@@ -1,5 +1,5 @@
 # Blogger legacy article URLs
-/2026/07/blog-post.html /posts/مرحبا-بك-في-بريق-حيث-تبدا-رحلتك-نحو-المعرفه-ببساطه/ 301
+/2026/07/blog-post.html /start-here/ 301
 /2026/07/blog-post_486.html /posts/كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه/ 301
 /2026/07/blog-post_16.html /posts/اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا/ 301
 /2026/07/blog-post_110.html /posts/عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء/ 301
@@ -7,6 +7,9 @@
 /2026/07/blog-post_26.html /posts/كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار/ 301
 /2026/08/blog-post_04.html /posts/اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا/ 301
 /2026/08/why-satellites-dont-fall.html /posts/لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء/ 301
+
+# Retired welcome article: its useful introduction now lives in Start Here and About
+/posts/مرحبا-بك-في-بريق-حيث-تبدا-رحلتك-نحو-المعرفه-ببساطه/ /start-here/ 301
 
 # Common legacy Blogger page paths
 /p/about.html /about/ 301

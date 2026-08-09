@@ -37,9 +37,32 @@ export function formatReadingMinutes(value: number): string {
 export function postWordCount(post: Post): number {
   return post.body
     .replace(/^---[\s\S]*?---/m, '')
-    .replace(/<[^>]+>|[`*_>#\[\]()!-]/g, ' ')
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/https?:\/\/\S+/g, ' ')
+    .replace(/<[^>]+>|[`*_>#\[\]()|~!-]/g, ' ')
     .split(/\s+/u)
     .filter(Boolean).length;
+}
+
+export function postReadingMinutes(post: Post): number {
+  return Math.max(1, Math.ceil(postWordCount(post) / 170));
+}
+
+export function getRelatedPosts(post: Post, posts: Post[], limit = 3): Post[] {
+  return posts
+    .filter((candidate) => candidate.id !== post.id)
+    .map((candidate) => {
+      const sharedTags = candidate.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
+      const sameSeries = Boolean(post.data.seriesSlug && candidate.data.seriesSlug === post.data.seriesSlug);
+      const sameCategory = candidate.data.categorySlug === post.data.categorySlug;
+      const score = (sameSeries ? 8 : 0) + (sharedTags * 3) + (sameCategory ? 2 : 0);
+      return { candidate, score };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || b.candidate.data.publishedAt.valueOf() - a.candidate.data.publishedAt.valueOf())
+    .slice(0, limit)
+    .map(({ candidate }) => candidate);
 }
 
 export function absoluteUrl(path: string, siteUrl = 'https://bareeqworld.com'): string {

@@ -1,6 +1,6 @@
 ---
 import type { Post } from '../lib/posts';
-import { formatDate, formatReadingMinutes } from '../lib/posts';
+import { formatDate, formatReadingMinutes, postReadingMinutes } from '../lib/posts';
 import { categories } from '../config/site';
 import CategoryIcon from './CategoryIcon.astro';
 import { responsiveImage, responsiveThumbnail } from '../lib/images';
@@ -56,7 +56,7 @@ const imageSizes = normalizedVariant === 'horizontal'
     {showExcerpt && <p>{post.data.description}</p>}
     <div class="post-card-meta">
       <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
-      <span>{formatReadingMinutes(post.data.readingMinutes)}</span>
+      <span>{formatReadingMinutes(postReadingMinutes(post))}</span>
     </div>
   </div>
 </article>

@@ -19,6 +19,16 @@ const breadcrumb = { '@context':'https://schema.org','@type':'BreadcrumbList',it
     <div><span class="eyebrow">أقسام بريق</span><h1>{category.name}</h1><p>{category.short}</p></div>
     <strong>{formatArticleCount(posts.length)}</strong>
   </section>
+  <section class:list={['category-introduction', 'shell', 'category-theme', `category-theme--${category.slug}`]} aria-labelledby="category-introduction-title">
+    <div>
+      <span class="eyebrow">دليل هذا القسم</span>
+      <h2 id="category-introduction-title">ما الذي ستجده هنا؟</h2>
+      <p>{category.intro}</p>
+    </div>
+    <ul aria-label="موضوعات القسم">
+      {category.topics.map((topic) => <li>{topic}</li>)}
+    </ul>
+  </section>
   <section class="shell section-gap">
     {posts.length ? <div class="archive-grid">{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div> : <div class="empty-state"><h2>لا توجد مقالات بعد</h2><p>سيُضاف المحتوى إلى هذا القسم قريبًا.</p></div>}
   </section>
