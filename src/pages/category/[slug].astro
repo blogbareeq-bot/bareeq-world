@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPublishedPosts, formatArticleCount } from '../../lib/posts';
+import { categories, site } from '../../config/site';
+import CategoryIcon from '../../components/CategoryIcon.astro';
+export function getStaticPaths() { return categories.map((category) => ({ params: { slug: category.slug }, props: { category } })); }
+const { category } = Astro.props;
+const posts = (await getPublishedPosts()).filter((post) => post.data.categorySlug === category.slug);
+const breadcrumb = { '@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
+  {'@type':'ListItem',position:1,name:'الرئيسية',item:site.url},
+  {'@type':'ListItem',position:2,name:category.name,item:new URL(`/category/${category.slug}/`,site.url).toString()}
+]};
+---
+<BaseLayout title={category.name} description={category.description} canonicalPath={`/category/${category.slug}/`} latestPosts={(await getPublishedPosts()).slice(0,6)}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)}></script>
+  <section class:list={['page-hero', 'compact', 'shell', 'category-hero', 'category-theme', `category-theme--${category.slug}`]}>
+    <span class="category-hero-icon"><CategoryIcon name={category.icon} /></span>
+    <div><span class="eyebrow">أقسام بريق</span><h1>{category.name}</h1><p>{category.short}</p></div>
+    <strong>{formatArticleCount(posts.length)}</strong>
+  </section>
+  <section class:list={['category-introduction', 'shell', 'category-theme', `category-theme--${category.slug}`]} aria-labelledby="category-introduction-title">
+    <div>
+      <span class="eyebrow">دليل هذا القسم</span>
+      <h2 id="category-introduction-title">ما الذي ستجده هنا؟</h2>
+      <p>{category.intro}</p>
+    </div>
+    <ul aria-label="موضوعات القسم">
+      {category.topics.map((topic) => <li>{topic}</li>)}
+    </ul>
+  </section>
+  <section class="shell section-gap">
+    {posts.length ? <div class="archive-grid">{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div> : <div class="empty-state"><h2>لا توجد مقالات بعد</h2><p>سيُضاف المحتوى إلى هذا القسم قريبًا.</p></div>}
+  </section>
+</BaseLayout>

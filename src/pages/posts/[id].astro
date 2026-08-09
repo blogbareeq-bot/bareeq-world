@@ -1,0 +1,151 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { formatDate, formatReadingMinutes, getPublishedPosts, absoluteUrl, postWordCount, postReadingMinutes, getRelatedPosts } from '../../lib/posts';
+import { site } from '../../config/site';
+import { responsiveImage, socialImage } from '../../lib/images';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => data.draft !== true);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+interface Props { post: CollectionEntry<'posts'>; }
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const allPosts = await getPublishedPosts();
+const currentIndex = allPosts.findIndex((entry) => entry.id === post.id);
+const newer = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
+const older = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
+const related = getRelatedPosts(post, allPosts);
+const readingMinutes = postReadingMinutes(post);
+const articlePath = `/posts/${post.id}/`;
+const articleUrl = absoluteUrl(articlePath, Astro.site?.toString());
+const shareText = encodeURIComponent(post.data.title);
+const shareUrl = encodeURIComponent(articleUrl);
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const coverImage = responsiveImage(post.data.image);
+const shareImage = socialImage(post.data.thumbnail ?? post.data.image);
+const breadcrumbSchema = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'الرئيسية', item: site.url },
+    { '@type': 'ListItem', position: 2, name: post.data.category, item: absoluteUrl(`/category/${post.data.categorySlug}/`) },
+    { '@type': 'ListItem', position: 3, name: post.data.title, item: articleUrl }
+  ]
+};
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishedAt.toISOString(),
+  dateModified: (post.data.updatedAt ?? post.data.publishedAt).toISOString(),
+  inLanguage: 'ar',
+  author: { '@type': 'Organization', name: post.data.author, url: absoluteUrl('/team/') },
+  publisher: { '@id': `${site.url}/#organization` },
+  mainEntityOfPage: articleUrl,
+  articleSection: post.data.category,
+  keywords: post.data.tags.join(', '),
+  wordCount: postWordCount(post),
+  timeRequired: `PT${readingMinutes}M`,
+  ...(shareImage ? { image: { '@type': 'ImageObject', url: absoluteUrl(shareImage), width: 1200, height: 630 } } : {})
+};
+---
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={shareImage}
+  imageWidth={1200}
+  imageHeight={630}
+  canonicalPath={articlePath}
+  latestPosts={allPosts.slice(0, 6)}
+  type="article"
+  publishedAt={post.data.publishedAt}
+  updatedAt={post.data.updatedAt ?? post.data.publishedAt}
+>
+  <progress
+    class="reading-progress"
+    data-reading-progress
+    value="0"
+    max="100"
+    aria-label="تقدم قراءة المقال"
+    aria-valuenow="0"
+  ></progress>
+  <script type="application/ld+json" set:html={JSON.stringify([articleSchema, breadcrumbSchema])}></script>
+
+  <article class:list={['article-shell', 'shell', 'category-theme', `category-theme--${post.data.categorySlug}`]}>
+    <header class="article-header">
+      <nav class="breadcrumbs" aria-label="مسار الصفحة">
+        <a href="/">الرئيسية</a><span aria-hidden="true">‹</span>
+        <a href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a><span aria-hidden="true">‹</span>
+        <span aria-current="page">المقال</span>
+      </nav>
+      <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
+      <h1>{post.data.title}</h1>
+      <div class="article-meta">
+        <a class="article-author" href="/team/" rel="author">{post.data.author}</a>
+        <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+        <span>{formatReadingMinutes(readingMinutes)}</span>
+        {post.data.updatedAt && post.data.updatedAt.valueOf() !== post.data.publishedAt.valueOf() && <span>آخر تحديث: {formatDate(post.data.updatedAt)}</span>}
+      </div>
+    </header>
+
+    {post.data.image && (
+      <figure class="article-cover">
+        <img
+          src={coverImage.src}
+          srcset={coverImage.srcset}
+          sizes="(max-width: 900px) 100vw, 1180px"
+          alt={post.data.imageAlt ?? post.data.title}
+          width={post.data.imageWidth ?? 1280}
+          height={post.data.imageHeight ?? 720}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </figure>
+    )}
+
+    <div class:list={['article-layout', { 'has-toc': toc.length > 0 }]}> 
+      {toc.length > 0 && (
+        <aside class="article-toc" data-article-toc aria-label="محتويات المقال">
+          <div class="article-toc-head">
+            <strong>في هذا المقال</strong>
+            <button class="toc-toggle" type="button" data-toc-toggle aria-expanded="false" aria-controls="article-toc-list">عرض الفهرس</button>
+          </div>
+          <ol id="article-toc-list">{toc.map((heading) => <li class:list={[`depth-${heading.depth}`]}><a data-toc-link href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol>
+        </aside>
+      )}
+      <div class="article-content prose" data-article-content><Content /></div>
+    </div>
+
+    <footer class="article-footer">
+      {post.data.tags.length > 0 && <nav class="tag-list" aria-label="وسوم المقال">{post.data.tags.map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</nav>}
+      <div class="share-box">
+        <strong>شارك الفكرة</strong>
+        <div>
+          <a target="_blank" rel="noopener noreferrer" href={`https://wa.me/?text=${shareText}%20${shareUrl}`}>واتساب</a>
+          <a target="_blank" rel="noopener noreferrer" href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}>X</a>
+          <a target="_blank" rel="noopener noreferrer" href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}>فيسبوك</a>
+          <button type="button" data-copy-link data-url={articleUrl}>نسخ الرابط</button>
+        </div>
+      </div>
+    </footer>
+  </article>
+
+  {(newer || older) && (
+    <nav class="article-navigation shell" aria-label="التنقل بين المقالات">
+      {older ? <a class="previous-article" href={`/posts/${older.id}/`}><span>المقال السابق <b aria-hidden="true">→</b></span><strong>{older.data.title}</strong></a> : <span></span>}
+      {newer ? <a class="next-article" href={`/posts/${newer.id}/`}><span><b aria-hidden="true">←</b> المقال التالي</span><strong>{newer.data.title}</strong></a> : <span></span>}
+    </nav>
+  )}
+
+  {related.length > 0 && (
+    <section class="shell related-section section-gap">
+      <div class="section-heading"><div><span class="eyebrow">واصل القراءة</span><h2>مقالات مرتبطة بالموضوع</h2></div></div>
+      <div class="archive-grid">{related.map((entry) => <PostCard post={entry} />)}</div>
+    </section>
+  )}
+
+  <script is:inline src="/scripts/article.js"></script>
+</BaseLayout>

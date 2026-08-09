@@ -1,6 +1,18 @@
 (() => {
   const bar = document.querySelector('[data-reading-progress]');
   const articleContent = document.querySelector('[data-article-content]');
+  let sentReadDepth = false;
+  let sentEngagedTime = false;
+  const articleEventData = () => ({
+    article_path: location.pathname,
+    article_title: document.querySelector('.article-header h1')?.textContent?.trim() ?? document.title,
+    engagement_type: 'editorial_reading'
+  });
+  const sendArticleEvent = (name) => {
+    if (!window.__bareeqAnalyticsLoaded || typeof window.gtag !== 'function') return false;
+    window.gtag('event', name, articleEventData());
+    return true;
+  };
   const update = () => {
     if (!articleContent) return;
     const rect = articleContent.getBoundingClientRect();
@@ -11,10 +23,28 @@
       const percentage = Math.round(value * 100);
       if (bar instanceof HTMLProgressElement) bar.value = percentage;
       bar.setAttribute('aria-valuenow', String(percentage));
+      if (percentage >= 75 && !sentReadDepth) {
+        sentReadDepth = sendArticleEvent('article_read_75');
+      }
     }
   };
   addEventListener('scroll', update, { passive: true });
   update();
+
+  let visibleReadingSeconds = 0;
+  const sendEngagedTime = () => {
+    if (visibleReadingSeconds < 60 || sentEngagedTime) return;
+    sentEngagedTime = sendArticleEvent('article_engaged_60s');
+    if (sentEngagedTime) clearInterval(engagementTimer);
+  };
+  const engagementTimer = setInterval(() => {
+    if (document.visibilityState === 'visible') visibleReadingSeconds += 5;
+    sendEngagedTime();
+  }, 5000);
+  addEventListener('bareeq:analytics-ready', () => {
+    update();
+    sendEngagedTime();
+  });
 
   const tocLinks = [...document.querySelectorAll('[data-toc-link]')];
   const tocHeadings = tocLinks.map((link) => {

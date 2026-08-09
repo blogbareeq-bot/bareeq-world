@@ -94,6 +94,8 @@ for (const file of htmlFiles) {
   if (consentDialogs !== 1) failures.push(`${relativeFile} -> expected one analytics consent dialog, found ${consentDialogs}`);
   if (!/\bdata-measurement-id=["']G-N3NQMF7RHN["']/i.test(html)) failures.push(`${relativeFile} -> GA4 measurement ID is missing from the consent component`);
   if (/<script\b[^>]*\bsrc=["']https:\/\/www\.googletagmanager\.com/i.test(html)) failures.push(`${relativeFile} -> Google tag loads before visitor consent`);
+  if (/\bdata-analytics-consent[^>]*\brole=["']dialog["']/i.test(html)) failures.push(`${relativeFile} -> non-modal analytics notice uses an incompatible dialog role`);
+  if (!/<link\b[^>]*\brel=["']preload["'][^>]*\bas=["']font["'][^>]*\btype=["']font\/woff2["']/i.test(html)) failures.push(`${relativeFile} -> Cairo heading font is not preloaded`);
 
   const cardMediaBlocks = [...html.matchAll(/<a\b[^>]*class=["'][^"']*post-card-media[^"']*["'][^>]*>([\s\S]*?)<\/a>/gi)];
   for (const [, block] of cardMediaBlocks) {
@@ -189,7 +191,7 @@ if (/fonts\.googleapis\.com|fonts\.gstatic\.com/i.test((await Promise.all(htmlFi
 }
 
 const privacyHtml = pagesByPath.get('/privacy/')?.html ?? '';
-if (!/id=["']google-analytics["']/i.test(privacyHtml) || !/متابعة دون قياس|سحب الموافقة/i.test(privacyHtml)) {
+if (!/id=["']google-analytics["']/i.test(privacyHtml) || !/متابعة دون قياس|سحب الموافقة/i.test(privacyHtml) || !/75%|60 ثانية/i.test(privacyHtml)) {
   failures.push('privacy page -> optional GA4 measurement and withdrawal choice are not documented');
 }
 
@@ -199,6 +201,8 @@ if (homeIntroCount !== 1) failures.push(`homepage -> expected one identity intro
 if (homeHtml.indexOf('home-intro') > homeHtml.indexOf('hero-editorial')) failures.push('homepage -> identity introduction must appear before the editorial hero');
 if (/\bclosing-cta\b/i.test(homeHtml)) failures.push('homepage -> retired duplicated closing introduction remains');
 if (classTokenCount(homeHtml, 'category-strip') !== 1) failures.push('homepage -> category navigation must appear exactly once in the header');
+if (classTokenCount(homeHtml, 'category-article-count') !== 5) failures.push('homepage -> every desktop category dropdown must expose its published article count');
+if (classTokenCount(homeHtml, 'mobile-category-count') !== 5) failures.push('homepage -> every mobile category group must expose its published article count');
 const footerHtml = homeHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? '';
 if (/href=["']\/category\//i.test(footerHtml)) failures.push('homepage -> category navigation is repeated in the footer');
 for (const categoryPath of ['/category/atyaf-al-aql/', '/category/bareeq-books/', '/category/window-on-world/', '/category/future-now/', '/category/simply/']) {

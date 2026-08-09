@@ -1,0 +1,38 @@
+---
+import Logo from './Logo.astro';
+import { site } from '../config/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="shell-wide footer-grid">
+    <section class="footer-brand">
+      <Logo inverse />
+      <p>{site.description}</p>
+    </section>
+    <details class="footer-section" data-footer-details open>
+      <summary>روابط مهمة</summary>
+      <ul>
+        <li><a href="/start-here/">ابدأ من هنا</a></li>
+        <li><a href="/about/">عن بريق</a></li>
+        <li><a href="/team/">فريق بريق</a></li>
+        <li><a href="/series/">سلاسل بريق</a></li>
+        <li><a href="/privacy/">سياسة الخصوصية</a></li>
+        <li><a href="/terms/">شروط الاستخدام</a></li>
+        <li><a href="/disclaimer/">إخلاء المسؤولية</a></li>
+        <li><a href="/editorial-policy/">سياسة التحرير والتصحيح</a></li>
+        <li><button class="footer-privacy-settings" type="button" data-analytics-settings>إعدادات القياس والخصوصية</button></li>
+      </ul>
+    </details>
+    <details class="footer-section footer-contact" data-footer-details open>
+      <summary>تواصل معنا</summary>
+      <p>للاقتراحات والاستفسارات والتعاون التحريري:</p>
+      <a class="footer-email" dir="ltr" href={`mailto:${site.email}`}>{site.email}</a>
+      <a href="/contact/">صفحة التواصل</a>
+      <a href="/rss.xml">خلاصة RSS</a>
+    </details>
+  </div>
+  <div class="shell-wide footer-bottom">
+    <p>© {year} عالم بريق. جميع الحقوق محفوظة.</p>
+    <p>منصة عربية معرفية مستقلة.</p>
+  </div>
+</footer>

@@ -78,6 +78,7 @@
       cookie_expires: 34128000,
       send_page_view: true
     });
+    window.dispatchEvent(new CustomEvent('bareeq:analytics-ready'));
 
     const script = document.createElement('script');
     script.async = true;

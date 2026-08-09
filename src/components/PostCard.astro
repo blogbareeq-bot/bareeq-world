@@ -1,0 +1,62 @@
+---
+import type { Post } from '../lib/posts';
+import { formatDate, formatReadingMinutes, postReadingMinutes } from '../lib/posts';
+import { categories } from '../config/site';
+import CategoryIcon from './CategoryIcon.astro';
+import { responsiveImage, responsiveThumbnail } from '../lib/images';
+interface Props {
+  post: Post;
+  variant?: 'default' | 'vertical' | 'horizontal' | 'compact' | 'text-only';
+  eager?: boolean;
+  showExcerpt?: boolean;
+  headingLevel?: 'h2' | 'h3' | 'h4';
+}
+const {
+  post,
+  variant = 'default',
+  eager = false,
+  showExcerpt = true,
+  headingLevel: Heading = 'h3'
+} = Astro.props;
+const normalizedVariant = variant === 'default' ? 'vertical' : variant;
+const mediaPath = post.data.thumbnail ?? post.data.image;
+const imageWidth = post.data.thumbnail ? post.data.thumbnailWidth : (post.data.imageWidth ?? 1280);
+const imageHeight = post.data.thumbnail ? post.data.thumbnailHeight : (post.data.imageHeight ?? 720);
+const category = categories.find((item) => item.slug === post.data.categorySlug);
+const image = post.data.thumbnail ? responsiveThumbnail(post.data.thumbnail) : responsiveImage(post.data.image);
+const imageSizes = normalizedVariant === 'horizontal'
+  ? '(max-width: 700px) 112px, 160px'
+  : '(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 25vw';
+---
+<article
+  class:list={['post-card', `post-card--${normalizedVariant}`, 'category-theme', `category-theme--${post.data.categorySlug}`]}
+  data-post-card
+  data-category={post.data.categorySlug}
+>
+  {normalizedVariant !== 'text-only' && (
+    <a class="post-card-media" href={`/posts/${post.id}/`} aria-label={post.data.title}>
+      {mediaPath ? (
+        <img
+          src={image.src}
+          srcset={image.srcset}
+          sizes={imageSizes}
+          alt={post.data.thumbnailAlt ?? post.data.imageAlt ?? post.data.title}
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : 'auto'}
+          decoding="async"
+          width={imageWidth}
+          height={imageHeight}
+        />
+      ) : <span class="image-fallback"><CategoryIcon name={category?.icon ?? 'simple'} /></span>}
+    </a>
+  )}
+  <div class="post-card-body">
+    <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
+    <Heading><a href={`/posts/${post.id}/`}>{post.data.title}</a></Heading>
+    {showExcerpt && <p>{post.data.description}</p>}
+    <div class="post-card-meta">
+      <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+      <span>{formatReadingMinutes(postReadingMinutes(post))}</span>
+    </div>
+  </div>
+</article>

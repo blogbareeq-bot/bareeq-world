@@ -1,0 +1,16 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentPage from '../components/ContentPage.astro';
+import { getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+const page = await getEntry('pages', 'team');
+---
+<BaseLayout title="فريق بريق" description={page?.data.description} canonicalPath="/team/" latestPosts={posts.slice(0,6)}>
+  <section class="page-hero compact shell">
+    <span class="eyebrow">مسؤولية تحريرية واضحة</span>
+    <h1>فريق بريق</h1>
+    <p>من يقف خلف المحتوى، وما الذي تعنيه المراجعة في عالم بريق؟</p>
+  </section>
+  <div class="shell narrow-page">{page && <ContentPage page={page} />}</div>
+</BaseLayout>

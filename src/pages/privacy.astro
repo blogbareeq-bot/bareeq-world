@@ -1,0 +1,12 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentPage from '../components/ContentPage.astro';
+import { getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+const page = await getEntry('pages', 'privacy');
+---
+<BaseLayout title="سياسة الخصوصية" description={page?.data.description} canonicalPath="/privacy/" latestPosts={posts.slice(0,6)}>
+  <section class="page-hero compact shell"><span class="eyebrow">الشفافية والثقة</span><h1>سياسة الخصوصية</h1><p>كيف نتعامل مع البيانات والخدمات الخارجية في عالم بريق.</p></section>
+  <div class="shell narrow-page">{page && <ContentPage page={page} />}</div>
+</BaseLayout>

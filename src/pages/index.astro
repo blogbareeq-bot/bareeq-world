@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ValuesStrip from '../components/ValuesStrip.astro';
+import HomeIntro from '../components/HomeIntro.astro';
+import PostCard from '../components/PostCard.astro';
+import { getPublishedPosts, formatDate, formatReadingMinutes, postReadingMinutes } from '../lib/posts';
+import { site } from '../config/site';
+import { responsiveThumbnail } from '../lib/images';
+
+const posts = await getPublishedPosts();
+const featured = posts.find((post) => post.data.featured) ?? posts[0];
+const bookWeek = posts.find((post) => post.data.categorySlug === 'bareeq-books' && post.id !== featured?.id);
+const sidePosts = posts
+  .filter((post) => post.id !== featured?.id && post.id !== bookWeek?.id)
+  .slice(0, 3);
+const excluded = new Set([featured?.id, bookWeek?.id, ...sidePosts.map((post) => post.id)].filter(Boolean));
+const latestPosts = posts.filter((post) => !excluded.has(post.id)).slice(0, 6);
+const latestGridClass = `latest-grid--count-${Math.min(latestPosts.length, 6)}`;
+const used = new Set([...excluded, ...latestPosts.map((post) => post.id)]);
+const editorPicks = posts.filter((post) => !used.has(post.id)).slice(0, 3);
+const featuredImage = responsiveThumbnail(featured?.data.thumbnail ?? featured?.data.image);
+const bookImage = responsiveThumbnail(bookWeek?.data.thumbnail ?? bookWeek?.data.image);
+const homeSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${site.name} — ${site.tagline}`,
+  description: site.description,
+  url: site.url,
+  inLanguage: 'ar',
+  mainEntity: posts.slice(0, 8).map((post) => ({
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    url: new URL(`/posts/${post.id}/`, site.url).toString(),
+    datePublished: post.data.publishedAt.toISOString()
+  }))
+};
+---
+<BaseLayout
+  latestPosts={posts.slice(0, 6)}
+  preloadImage={featuredImage.src}
+  preloadSrcset={featuredImage.srcset}
+  preloadSizes="(max-width: 900px) 100vw, 70vw"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(homeSchema)}></script>
+
+  <HomeIntro />
+
+  {featured ? (
+    <section class="hero-editorial shell-wide section-gap" aria-label="المقالات المختارة">
+      <article class="hero-featured">
+        <a class="hero-link" href={`/posts/${featured.id}/`}>
+          {(featured.data.thumbnail || featured.data.image) ? (
+            <img
+              src={featuredImage.src}
+              srcset={featuredImage.srcset}
+              sizes="(max-width: 900px) 100vw, 70vw"
+              alt={featured.data.thumbnailAlt ?? featured.data.imageAlt ?? featured.data.title}
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              width={featured.data.thumbnail ? featured.data.thumbnailWidth : (featured.data.imageWidth ?? 1280)}
+              height={featured.data.thumbnail ? featured.data.thumbnailHeight : (featured.data.imageHeight ?? 720)}
+            />
+          ) : <span class="image-fallback" aria-hidden="true">بريق</span>}
+          <span class="hero-overlay" aria-hidden="true"></span>
+          <div class="hero-content">
+            <span class="featured-badge">مقال مختار</span>
+            <h1>{featured.data.title}</h1>
+            <p>{featured.data.description}</p>
+            <div class="hero-meta">
+              <span>{featured.data.category}</span>
+              <time datetime={featured.data.publishedAt.toISOString()}>{formatDate(featured.data.publishedAt)}</time>
+              <span>{formatReadingMinutes(postReadingMinutes(featured))}</span>
+            </div>
+          </div>
+        </a>
+      </article>
+      <div class="hero-side-list">
+        {sidePosts.map((post) => <PostCard post={post} variant="horizontal" headingLevel="h2" showExcerpt={false} />)}
+      </div>
+    </section>
+  ) : (
+    <section class="shell-wide empty-state section-gap"><h1>أهلًا بك في عالم بريق</h1><p>المقالات قيد التجهيز.</p></section>
+  )}
+
+  <ValuesStrip />
+
+  <section class="home-band home-band--latest section-gap">
+    <div class="shell-wide">
+      <div class="section-heading">
+        <div><span class="eyebrow">واصل الاستكشاف</span><h2>مقالات أخرى تستحق القراءة</h2><p>اختيارات إضافية من أبواب بريق الخمسة، دون تكرار ما ظهر في الواجهة.</p></div>
+        <a href="/articles/">عرض جميع المقالات</a>
+      </div>
+      {latestPosts.length > 0 && (
+        <div class:list={["latest-grid", "latest-grid--equal", latestGridClass]}>
+          {latestPosts.map((post) => <PostCard post={post} />)}
+        </div>
+      )}
+    </div>
+  </section>
+
+  {bookWeek && (
+    <section class="book-feature shell-wide section-gap" aria-labelledby="book-feature-title">
+      <div class="book-feature-media">
+        {(bookWeek.data.thumbnail || bookWeek.data.image) ? (
+          <img
+            src={bookImage.src}
+            srcset={bookImage.srcset}
+            sizes="(max-width: 800px) 100vw, 48vw"
+            alt={bookWeek.data.thumbnailAlt ?? bookWeek.data.imageAlt ?? bookWeek.data.title}
+            loading="lazy"
+            decoding="async"
+            width={bookWeek.data.thumbnail ? bookWeek.data.thumbnailWidth : (bookWeek.data.imageWidth ?? 1280)}
+            height={bookWeek.data.thumbnail ? bookWeek.data.thumbnailHeight : (bookWeek.data.imageHeight ?? 720)}
+          />
+        ) : <span class="image-fallback">بريق</span>}
+      </div>
+      <div class="book-feature-content">
+        <span class="eyebrow">من بريق الكتب</span>
+        <h2 id="book-feature-title">قراءة الأسبوع</h2>
+        <h3><a href={`/posts/${bookWeek.id}/`}>{bookWeek.data.title}</a></h3>
+        <p>{bookWeek.data.description}</p>
+        <div class="book-feature-meta"><time datetime={bookWeek.data.publishedAt.toISOString()}>{formatDate(bookWeek.data.publishedAt)}</time><span>{formatReadingMinutes(postReadingMinutes(bookWeek))}</span></div>
+        <a class="button primary" href={`/posts/${bookWeek.id}/`}>اقرأ المقال</a>
+      </div>
+    </section>
+  )}
+
+  {editorPicks.length === 3 && (
+    <section class="home-band home-band--picks section-gap">
+      <div class="shell-wide">
+        <div class="section-heading"><div><span class="eyebrow">ينتقيها المحرر</span><h2>اختيارات بريق</h2></div></div>
+        <div class="editor-picks-grid">{editorPicks.map((post) => <PostCard post={post} variant="text-only" />)}</div>
+      </div>
+    </section>
+  )}
+</BaseLayout>

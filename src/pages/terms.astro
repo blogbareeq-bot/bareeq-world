@@ -1,0 +1,12 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentPage from '../components/ContentPage.astro';
+import { getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+const page = await getEntry('pages', 'terms');
+---
+<BaseLayout title="شروط الاستخدام" description={page?.data.description} canonicalPath="/terms/" latestPosts={posts.slice(0,6)}>
+  <section class="page-hero compact shell"><span class="eyebrow">الاستخدام المسؤول</span><h1>شروط الاستخدام</h1><p>القواعد المنظمة لاستخدام المحتوى وحدود المسؤولية.</p></section>
+  <div class="shell narrow-page">{page && <ContentPage page={page} />}</div>
+</BaseLayout>

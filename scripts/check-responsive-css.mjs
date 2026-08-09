@@ -79,7 +79,7 @@ const expectations = [
   { width: 390, test: (value) => value === 'minmax(0,1fr)', label: 'عمود واحد' },
   { width: 700, test: (value) => value === 'minmax(0,1fr)', label: 'عمود واحد' },
   { width: 768, test: (value) => value?.includes('repeat(2'), label: 'عمودان' },
-  { width: 1024, test: (value) => value?.includes('1.35fr') && value?.includes('.75fr'), label: 'ثلاثة أعمدة' }
+  { width: 1024, test: (value) => value?.includes('1.05fr') && value?.includes('1.2fr'), label: 'ثلاثة أعمدة متوازنة' }
 ];
 
 const failures = expectations.filter(({ width, test }) => !test(resolvedValue(width)));
@@ -88,6 +88,22 @@ const footerTargetAt390 = footerTargetCandidates
   .sort((a, b) => a.order - b.order)
   .at(-1)?.value;
 if (!footerTargetAt390 || Number.parseFloat(footerTargetAt390) < 44) failures.push({ width: 390, label: 'أهداف لمس التذييل 44px', actual: footerTargetAt390 });
+if (resolvedDeclaration('.footer-section ul', 'grid-template-columns', 390) !== 'minmax(0,1fr)') {
+  failures.push({ width: 390, label: 'روابط تذييل أحادية العمود', actual: resolvedDeclaration('.footer-section ul', 'grid-template-columns', 390) });
+}
+if (!resolvedDeclaration('.footer-section ul', 'grid-template-columns', 768)?.includes('repeat(2')) {
+  failures.push({ width: 768, label: 'روابط تذييل موزعة على عمودين', actual: resolvedDeclaration('.footer-section ul', 'grid-template-columns', 768) });
+}
+if (!resolvedDeclaration('.footer-section ul', 'grid-template-columns', 1440)?.includes('repeat(3')) {
+  failures.push({ width: 1440, label: 'روابط تذييل موزعة على ثلاثة أعمدة', actual: resolvedDeclaration('.footer-section ul', 'grid-template-columns', 1440) });
+}
+if (resolvedDeclaration('.site-footer .footer-grid', 'max-width', 1440) !== '1320px') {
+  failures.push({ width: 1440, label: 'حد عرض متوازن للتذييل', actual: resolvedDeclaration('.site-footer .footer-grid', 'max-width', 1440) });
+}
+const categoryDropdownWidth = resolvedDeclaration('.category-dropdown', 'width', 1440);
+if (!categoryDropdownWidth?.startsWith('min(520px,') || !categoryDropdownWidth.includes('100vw - 32px')) {
+  failures.push({ width: 1440, label: 'قائمة أقسام أوسع بلا تجاوز للشاشة', actual: categoryDropdownWidth });
+}
 if (resolvedDeclaration('.home-intro-inner', 'flex-direction', 390) !== 'column') {
   failures.push({ width: 390, label: 'نبذة رئيسية عمودية على الجوال', actual: resolvedDeclaration('.home-intro-inner', 'flex-direction', 390) });
 }
@@ -116,4 +132,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Responsive CSS passed: full-width shell, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and footer layout at 320, 390, 700, 768, and 1024px.');
+console.log('Responsive CSS passed: full-width shell, larger bounded category menus, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and balanced footer layout from 320px through wide desktop.');

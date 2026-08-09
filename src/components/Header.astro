@@ -1,0 +1,92 @@
+---
+import Logo from './Logo.astro';
+import CategoryStrip from './CategoryStrip.astro';
+import { categories } from '../config/site';
+import { formatArticleCount, getPublishedPosts, type Post } from '../lib/posts';
+import CategoryIcon from './CategoryIcon.astro';
+interface Props { latestPosts?: Post[]; }
+const { latestPosts = [] } = Astro.props;
+const allPosts = await getPublishedPosts();
+const currentPath = Astro.url.pathname;
+const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : currentPath.startsWith(prefix);
+---
+<header class="site-header sticky-header" data-sticky-header>
+  <div class="main-header shell-full">
+      <Logo />
+      <nav class="desktop-nav" aria-label="التنقل الرئيسي">
+        <a class:list={[{ active: isActive('/') }]} aria-current={isActive('/') ? 'page' : undefined} href="/">الرئيسية</a>
+        <a class:list={[{ active: isActive('/articles/') }]} aria-current={isActive('/articles/') ? 'page' : undefined} href="/articles/">المقالات</a>
+        <a class:list={[{ active: isActive('/start-here/') }]} aria-current={isActive('/start-here/') ? 'page' : undefined} href="/start-here/">ابدأ من هنا</a>
+        <a class:list={[{ active: isActive('/about/') }]} aria-current={isActive('/about/') ? 'page' : undefined} href="/about/">عن بريق</a>
+      </nav>
+      <div class="header-actions">
+        <a class="icon-button" href="/search/" aria-label="البحث">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+        </a>
+        <button class="icon-button" type="button" data-theme-toggle aria-label="تغيير الوضع اللوني" aria-pressed="false">
+          <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.7A8.5 8.5 0 1 1 11.3 3 6.5 6.5 0 0 0 21 12.7Z"/></svg>
+        </button>
+        <button class="icon-button mobile-menu-button" type="button" data-menu-open aria-label="فتح القائمة" aria-expanded="false" aria-controls="mobile-drawer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+  </div>
+</header>
+
+{latestPosts.length > 0 && (
+    <div class="ticker" aria-label="أحدث المقالات" data-ticker>
+      <div class="shell-wide ticker-inner">
+        <span class="ticker-label">أحدث المقالات</span>
+        <div class="ticker-viewport">
+          <div class="ticker-track" data-ticker-track>
+            {latestPosts.map((post) => <a href={`/posts/${post.id}/`}>{post.data.title}</a>)}
+            <span class="ticker-copy" aria-hidden="true">
+              {latestPosts.map((post) => <a tabindex="-1" href={`/posts/${post.id}/`}>{post.data.title}</a>)}
+            </span>
+          </div>
+        </div>
+        <button class="ticker-toggle" type="button" data-ticker-toggle aria-pressed="false" aria-label="إيقاف حركة أحدث المقالات">Ⅱ</button>
+      </div>
+    </div>
+  )}
+
+<CategoryStrip posts={allPosts} />
+
+<div id="mobile-drawer" class="mobile-drawer" data-mobile-drawer aria-hidden="true" inert>
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-label="قائمة الموقع">
+      <div class="drawer-head">
+        <Logo compact inverse />
+        <button class="icon-button" type="button" data-menu-close aria-label="إغلاق القائمة">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <nav class="mobile-nav" aria-label="قائمة الجوال">
+        <a href="/">الرئيسية</a>
+        <a href="/articles/">جميع المقالات</a>
+        <div class="mobile-categories">
+          <strong>الأقسام</strong>
+          {categories.map((category) => {
+            const allCategoryPosts = allPosts.filter((post) => post.data.draft !== true && post.data.categorySlug === category.slug);
+            const categoryPosts = allCategoryPosts.slice(0, 3);
+            return (
+              <details class:list={['category-theme', `category-theme--${category.slug}`]}>
+                <summary>
+                  <span class="mobile-category-icon"><CategoryIcon name={category.icon} /></span>
+                  <span>{category.name}</span>
+                  <span class="mobile-category-count">{formatArticleCount(allCategoryPosts.length)}</span>
+                </summary>
+                <div>
+                  {categoryPosts.map((post) => <a href={`/posts/${post.id}/`}>{post.data.title}</a>)}
+                  <a class="mobile-category-all" href={`/category/${category.slug}/`}>تصفح القسم ←</a>
+                </div>
+              </details>
+            );
+          })}
+        </div>
+        <a href="/start-here/">ابدأ من هنا</a>
+        <a href="/about/">عن بريق</a>
+        <a href="/contact/">اتصل بنا</a>
+      </nav>
+    </div>
+  </div>

@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+const searchIndex = posts.map((post) => ({
+  title: post.data.title,
+  description: post.data.description,
+  category: post.data.category,
+  tags: post.data.tags,
+  url: `/posts/${post.id}/`
+}));
+const safeIndex = JSON.stringify(searchIndex).replaceAll('<', '\\u003c');
+---
+<BaseLayout title="البحث" description="ابحث في مقالات عالم بريق" latestPosts={posts.slice(0, 6)} noindex>
+  <section class="search-page shell">
+    <span class="eyebrow">ابحث في بريق</span>
+    <h1>ما الفكرة التي تبحث عنها؟</h1>
+    <label class="search-field">
+      <span class="visually-hidden">عبارة البحث</span>
+      <input type="search" placeholder="اكتب كلمة أو عنوان مقال…" autocomplete="off" data-search-input />
+      <span aria-hidden="true">⌕</span>
+    </label>
+    <p class="search-count" data-search-count aria-live="polite">ابدأ بالكتابة لعرض النتائج.</p>
+    <div class="search-results" data-search-results></div>
+  </section>
+  <script id="search-index" type="application/json" set:html={safeIndex}></script>
+  <script is:inline src="/scripts/search.js"></script>
+</BaseLayout>
