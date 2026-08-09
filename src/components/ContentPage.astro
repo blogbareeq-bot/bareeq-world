@@ -1,8 +1,0 @@
----
-import type { CollectionEntry } from 'astro:content';
-import { render } from 'astro:content';
-interface Props { page: CollectionEntry<'pages'>; }
-const { page } = Astro.props;
-const { Content } = await render(page);
----
-<article class="static-page prose"><Content /></article>
