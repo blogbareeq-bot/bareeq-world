@@ -56,7 +56,7 @@ export const series = [
   { slug: 'mind-and-decisions', title: 'العقل والقرارات', description: 'مقالات لفهم طريقة التفكير، والمغالطات، وبناء الوعي والاختيارات الأفضل.' },
   { slug: 'technology-simply', title: 'التقنية ببساطة', description: 'شرح واضح لما يحدث خلف الشاشات، من الإنترنت والذكاء الاصطناعي إلى الفضاء.' },
   { slug: 'windows-to-world', title: 'نوافذ إلى العالم', description: 'ثقافات وعادات وتجارب توسّع زاوية النظر إلى البشر والمجتمعات.' },
-  { slug: 'books-for-life', title: 'كتب للحياة', description: 'أفكار وقراءات تربط الكتب بالصحة والعمل والحياة اليومية.' }
+  { slug: 'books-for-life', title: 'كتب للحياة', description: 'قراءات نقدية وعملية تربط أفكار الكتب بالصحة والعمل والحياة اليومية، وتوضح ما يمكن تطبيقه منها بوعي وتوازن.' }
 ] as const;
 
 export type CategorySlug = (typeof categories)[number]['slug'];
