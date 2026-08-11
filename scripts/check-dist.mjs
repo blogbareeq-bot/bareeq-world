@@ -153,7 +153,17 @@ for (const file of htmlFiles) {
   if (executableInlineScripts.length) failures.push(`${relativeFile} -> ${executableInlineScripts.length} executable inline script(s)`);
 
   if (relativeFile.startsWith(`posts${path.sep}`)) {
-    const article = html.match(/<div class="article-content prose"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i)?.[1] ?? '';
+    // Locate the article body using its dedicated data attribute rather than
+    // assuming any HTML attribute order. ReadingModes adds id/data attributes
+    // to this element, and Astro may serialize attributes in a different order.
+    const articleOpen = html.match(/<div\b[^>]*\bdata-article-content\b[^>]*>/i);
+    let article = '';
+    if (articleOpen?.index !== undefined) {
+      const articleStart = articleOpen.index + articleOpen[0].length;
+      const footerMatch = html.slice(articleStart).match(/<footer\b(?=[^>]*\bclass=["'][^"']*\barticle-footer\b[^"']*["'])/i);
+      const articleEnd = footerMatch?.index !== undefined ? articleStart + footerMatch.index : -1;
+      if (articleEnd > articleStart) article = html.slice(articleStart, articleEnd);
+    }
     if (!/href=["']https?:\/\//i.test(article)) failures.push(`${relativeFile} -> published knowledge article has no clickable external source`);
     if (!/href=["']\/(?:posts|start-here)\//i.test(article)) failures.push(`${relativeFile} -> published article has no contextual internal link`);
     if (!/<a\b[^>]*class=["'][^"']*article-author[^"']*["'][^>]*href=["']\/team\/["'][^>]*rel=["']author["']/i.test(html)) {
