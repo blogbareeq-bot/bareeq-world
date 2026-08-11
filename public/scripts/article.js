@@ -99,7 +99,7 @@
   });
 
 
-  // Reading modes: full text, Arabic speech synthesis, and editorial summary.
+  // Reading modes: full text, pre-generated Azure AI Speech audio, and editorial summary.
   const modes = document.querySelector('[data-reading-modes]');
   if (modes && articleContent) {
     const modeButtons = [...modes.querySelectorAll('[data-reading-mode]')];
@@ -109,13 +109,14 @@
     const playLabel = modes.querySelector('[data-audio-play-label]');
     const audioStatus = modes.querySelector('[data-audio-status]');
     const rateSelect = modes.querySelector('[data-audio-rate]');
+    const audioPart = modes.querySelector('[data-audio-part]');
+    const audioTime = modes.querySelector('[data-audio-time]');
+    const audio = modes.querySelector('[data-article-audio]');
     const summaryRead = modes.querySelector('[data-summary-read]');
-    const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
-    let chunks = [];
-    let chunkIndex = 0;
-    let speaking = false;
-    let paused = false;
-    let speechToken = 0;
+    const manifestUrl = modes.dataset.audioManifest;
+    let manifest = null;
+    let partIndex = 0;
+    let finished = false;
 
     const setMode = (name) => {
       modeButtons.forEach((button) => {
@@ -130,64 +131,120 @@
     modeButtons.forEach((button) => button.addEventListener('click', () => setMode(button.dataset.readingMode || 'read')));
     summaryRead?.addEventListener('click', () => setMode('read'));
 
-    const cleanText = () => [...articleContent.querySelectorAll('h2,h3,p,li')]
-      .filter((node) => !node.closest('table, .sources, [aria-hidden="true"]'))
-      .map((node) => node.textContent?.replace(/\s+/g, ' ').trim())
-      .filter(Boolean);
-    const splitSpeech = () => {
-      const result = [];
-      cleanText().forEach((text) => {
-        if (text.length <= 650) result.push(text);
-        else {
-          const sentences = text.match(/[^.!؟؛]+[.!؟؛]?/g) || [text];
-          let part = '';
-          sentences.forEach((sentence) => {
-            if ((part + sentence).length > 650 && part) { result.push(part.trim()); part = ''; }
-            part += sentence;
-          });
-          if (part.trim()) result.push(part.trim());
-        }
-      });
-      return result;
+    const formatClock = (seconds) => {
+      if (!Number.isFinite(seconds) || seconds < 0) return '';
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${String(secs).padStart(2, '0')}`;
     };
-    const preferredArabicVoice = () => speechSynthesis.getVoices().find((voice) => /^ar(-|_)/i.test(voice.lang) && /Saudi|Hamed|Maged|Tarik|Arabic/i.test(voice.name))
-      || speechSynthesis.getVoices().find((voice) => /^ar(-|_)/i.test(voice.lang));
-    const speakNext = (token = speechToken) => {
-      if (token !== speechToken) return;
-      if (!speaking || chunkIndex >= chunks.length) {
-        speaking = false; paused = false; modes.classList.remove('is-speaking');
-        if (playLabel) playLabel.textContent = 'ابدأ الاستماع';
-        if (audioStatus) audioStatus.textContent = chunkIndex >= chunks.length ? 'اكتملت قراءة المقال' : 'جاهز للقراءة الصوتية';
-        return;
+    const updatePartStatus = () => {
+      if (!manifest || !audioPart) return;
+      audioPart.textContent = manifest.parts.length > 1 ? `المقطع ${partIndex + 1} من ${manifest.parts.length}` : 'المقال كاملًا';
+    };
+    const updateTime = () => {
+      if (!audio || !audioTime) return;
+      const current = formatClock(audio.currentTime);
+      const duration = formatClock(audio.duration);
+      audioTime.textContent = duration ? `${current} / ${duration}` : current;
+    };
+    const setPlayingUi = (playing) => {
+      modes.classList.toggle('is-speaking', playing);
+      if (playLabel) playLabel.textContent = playing ? 'إيقاف مؤقت' : (finished ? 'استمع من البداية' : 'متابعة');
+      if (playButton) playButton.setAttribute('aria-label', playing ? 'إيقاف القراءة الصوتية مؤقتًا' : 'متابعة القراءة الصوتية');
+    };
+    const setPart = (index) => {
+      if (!audio || !manifest?.parts?.[index]) return false;
+      partIndex = index;
+      finished = false;
+      audio.src = manifest.parts[index].src;
+      audio.playbackRate = Number(rateSelect?.value || 1);
+      audio.load();
+      updatePartStatus();
+      updateTime();
+      return true;
+    };
+    const playCurrent = async () => {
+      if (!audio) return;
+      try {
+        await audio.play();
+      } catch {
+        modes.classList.remove('is-speaking');
+        if (playLabel) playLabel.textContent = 'متابعة';
+        if (audioStatus) audioStatus.textContent = 'اضغط «متابعة» لتشغيل المقطع التالي';
       }
-      const utterance = new SpeechSynthesisUtterance(chunks[chunkIndex]);
-      utterance.lang = 'ar-SA';
-      utterance.rate = Number(rateSelect?.value || 1);
-      const voice = preferredArabicVoice(); if (voice) utterance.voice = voice;
-      utterance.onend = () => { if (token !== speechToken) return; chunkIndex += 1; speakNext(token); };
-      utterance.onerror = () => { if (token !== speechToken) return; speaking = false; paused = false; modes.classList.remove('is-speaking'); if (playLabel) playLabel.textContent = 'ابدأ الاستماع'; if (audioStatus) audioStatus.textContent = 'تعذر إكمال القراءة على هذا الجهاز'; };
-      speechSynthesis.speak(utterance);
     };
-    if (!speechSupported && playButton) {
+
+    const prepareAudio = async () => {
+      if (!audio || !playButton || !manifestUrl) return;
       playButton.disabled = true;
-      if (audioStatus) audioStatus.textContent = 'القراءة الصوتية غير مدعومة في هذا المتصفح';
-    }
+      try {
+        const response = await fetch(manifestUrl, { cache: 'force-cache', credentials: 'same-origin' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (!Array.isArray(data.parts) || data.parts.length === 0 || !data.parts.every((part) => typeof part?.src === 'string' && part.src.endsWith('.mp3'))) {
+          throw new Error('Invalid audio manifest');
+        }
+        manifest = data;
+        setPart(0);
+        playButton.disabled = false;
+        if (playLabel) playLabel.textContent = 'ابدأ الاستماع';
+        if (playButton) playButton.setAttribute('aria-label', 'بدء الاستماع');
+        if (audioStatus) audioStatus.textContent = 'القراءة الصوتية جاهزة';
+      } catch {
+        playButton.disabled = true;
+        if (playLabel) playLabel.textContent = 'الصوت غير متاح';
+        if (audioStatus) audioStatus.textContent = 'تعذر تحميل القراءة الصوتية لهذا المقال';
+      }
+    };
+
     playButton?.addEventListener('click', () => {
-      if (!speechSupported) return;
-      if (speaking && !paused) { speechSynthesis.pause(); paused = true; modes.classList.remove('is-speaking'); if (playLabel) playLabel.textContent = 'متابعة'; if (audioStatus) audioStatus.textContent = 'متوقف مؤقتًا'; return; }
-      if (speaking && paused) { speechSynthesis.resume(); paused = false; modes.classList.add('is-speaking'); if (playLabel) playLabel.textContent = 'إيقاف مؤقت'; if (audioStatus) audioStatus.textContent = 'جارٍ قراءة المقال'; return; }
-      chunks = splitSpeech(); chunkIndex = 0; speaking = chunks.length > 0; paused = false; speechToken += 1; modes.classList.toggle('is-speaking', speaking);
-      if (!speaking) { if (audioStatus) audioStatus.textContent = 'لا يوجد نص متاح للقراءة'; return; }
-      if (playLabel) playLabel.textContent = 'إيقاف مؤقت'; if (audioStatus) audioStatus.textContent = 'جارٍ قراءة المقال'; speakNext(speechToken);
+      if (!audio || playButton.disabled || !manifest) return;
+      if (finished) setPart(0);
+      if (audio.paused) void playCurrent();
+      else audio.pause();
     });
     rateSelect?.addEventListener('change', () => {
-      if (!speaking) return;
-      speechToken += 1;
-      const token = speechToken;
-      speechSynthesis.cancel();
-      paused = false;
-      queueMicrotask(() => speakNext(token));
+      if (audio) audio.playbackRate = Number(rateSelect.value || 1);
     });
-    addEventListener('pagehide', () => { if (speechSupported) { speechToken += 1; speechSynthesis.cancel(); } });
+    audio?.addEventListener('play', () => {
+      finished = false;
+      setPlayingUi(true);
+      if (audioStatus) audioStatus.textContent = 'جارٍ تشغيل القراءة الصوتية';
+    });
+    audio?.addEventListener('pause', () => {
+      if (audio.ended) return;
+      setPlayingUi(false);
+      if (audioStatus && !finished) audioStatus.textContent = 'متوقف مؤقتًا';
+    });
+    audio?.addEventListener('loadedmetadata', () => {
+      updatePartStatus();
+      updateTime();
+    });
+    audio?.addEventListener('timeupdate', updateTime);
+    audio?.addEventListener('ended', () => {
+      if (!manifest) return;
+      if (partIndex + 1 < manifest.parts.length) {
+        setPart(partIndex + 1);
+        if (audioStatus) audioStatus.textContent = 'جارٍ الانتقال إلى المقطع التالي';
+        void playCurrent();
+        return;
+      }
+      finished = true;
+      modes.classList.remove('is-speaking');
+      if (playLabel) playLabel.textContent = 'استمع من البداية';
+      if (playButton) playButton.setAttribute('aria-label', 'إعادة تشغيل القراءة الصوتية');
+      if (audioStatus) audioStatus.textContent = 'اكتملت قراءة المقال';
+      updateTime();
+    });
+    audio?.addEventListener('error', () => {
+      modes.classList.remove('is-speaking');
+      if (playLabel) playLabel.textContent = 'إعادة المحاولة';
+      if (audioStatus) audioStatus.textContent = 'تعذر تشغيل هذا المقطع. تحقق من الاتصال ثم أعد المحاولة';
+    });
+    addEventListener('pagehide', () => audio?.pause());
+
+    // Prepare the manifest and first MP3 before the user's play tap. This keeps
+    // the actual audio.play() call directly inside a user gesture on mobile Safari/Chrome.
+    void prepareAudio();
   }
 })();

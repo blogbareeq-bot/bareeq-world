@@ -6,6 +6,7 @@ import ReadingModes from '../../components/ReadingModes.astro';
 import { formatDate, formatReadingMinutes, getPublishedPosts, absoluteUrl, postWordCount, postReadingMinutes, getRelatedPosts } from '../../lib/posts';
 import { site } from '../../config/site';
 import { responsiveImage, socialImage } from '../../lib/images';
+import { createHash } from 'node:crypto';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.draft !== true);
@@ -21,6 +22,8 @@ const older = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts
 const related = getRelatedPosts(post, allPosts);
 const readingMinutes = postReadingMinutes(post);
 const articlePath = `/posts/${post.id}/`;
+const audioKey = createHash('sha256').update(post.id).digest('hex').slice(0, 16);
+const audioManifest = `/audio/articles/${audioKey}/manifest.json`;
 const articleUrl = absoluteUrl(articlePath, Astro.site?.toString());
 const shareText = encodeURIComponent(post.data.title);
 const shareUrl = encodeURIComponent(articleUrl);
@@ -107,7 +110,7 @@ const articleSchema = {
       </figure>
     )}
 
-    <ReadingModes summary={post.data.quickSummary ?? post.data.description} readingMinutes={readingMinutes} />
+    <ReadingModes summary={post.data.quickSummary ?? post.data.description} readingMinutes={readingMinutes} audioManifest={audioManifest} />
 
     <div class:list={['article-layout', { 'has-toc': toc.length > 0 }]}> 
       {toc.length > 0 && (
