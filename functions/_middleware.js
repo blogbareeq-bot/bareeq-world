@@ -2,6 +2,8 @@ export async function onRequest(context) {
   const response = await context.next();
   const headers = new Headers(response.headers);
   const hostname = new URL(context.request.url).hostname.toLowerCase();
+  const contentType = headers.get('Content-Type') ?? '';
+  if (contentType.includes('text/html')) headers.delete('Access-Control-Allow-Origin');
   if (hostname.endsWith('.pages.dev')) {
     headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
   } else {

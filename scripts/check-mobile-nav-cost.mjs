@@ -6,6 +6,7 @@ const env = await readFile(new URL('../.env.example', import.meta.url), 'utf8');
 const failures = [];
 const mobile900 = css.match(/@media \(max-width:900px\) \{([\s\S]*?)\n\}/)?.[1] || '';
 if (!mobile900.includes('display:flex') || !mobile900.includes('flex-wrap:wrap') || !mobile900.includes('flex:1 1 104px')) failures.push('Mobile category strip is not using adaptive wrapped flex navigation.');
+if (!mobile900.includes('.category-strip{position:relative;top:auto}')) failures.push('Category strip must stop being sticky at tablet/mobile widths.');
 if (mobile900.includes('overflow-x:auto')) failures.push('Mobile category strip still requires horizontal scrolling.');
 if (!mobile900.includes('white-space:normal')) failures.push('Mobile category names are not allowed to wrap.');
 if (!header.includes('ticker-label-mobile') || !header.includes('ticker-title-mobile') || !header.includes('compactTickerTitle')) failures.push('Compact mobile ticker labels/titles are missing.');

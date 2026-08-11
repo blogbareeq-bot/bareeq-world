@@ -8,7 +8,7 @@ const { item } = Astro.props;
 const allPosts = await getPublishedPosts();
 const posts = allPosts.filter((post) => post.data.seriesSlug === item.slug);
 ---
-<BaseLayout title={item.title} description={item.description} canonicalPath={`/series/${item.slug}/`} latestPosts={allPosts.slice(0,6)} noindex={posts.length < archivePolicy.minPostsToIndexArchive}>
+<BaseLayout title={item.title} description={item.description} canonicalPath={`/series/${item.slug}/`} latestPosts={allPosts.slice(0,6)} noindex={posts.length < archivePolicy.minPostsToIndexSeries}>
   <section class="page-hero compact shell"><span class="eyebrow">سلسلة بريق</span><h1>{item.title}</h1><p>{item.description}</p></section>
   <section class="shell section-gap"><div class="archive-grid">{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div></section>
 </BaseLayout>

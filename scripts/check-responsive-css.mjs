@@ -46,6 +46,15 @@ for (const name of cssFiles) {
   });
 }
 
+
+function flexBasisMatches(value, expectedBasis) {
+  if (!value) return false;
+  const normalized = value.trim().replace(/\s+/g, ' ');
+  // CSS minifiers may legally reduce `flex: 1 1 104px` to `flex: 104px`.
+  // Both resolve to grow=1, shrink=1 and the same flex-basis.
+  return normalized === expectedBasis || normalized === `1 1 ${expectedBasis}`;
+}
+
 function resolvedValue(width) {
   return candidates
     .filter((candidate) => candidate.media.every((params) => mediaApplies(params, width)))
@@ -116,8 +125,18 @@ if (resolvedDeclaration('.ticker-track>a', 'display', 390) !== 'none' || resolve
 if (resolvedDeclaration('.category-strip-inner', 'display', 768) !== 'flex' || resolvedDeclaration('.category-strip-inner', 'flex-wrap', 768) !== 'wrap' || resolvedDeclaration('.category-strip-inner', 'overflow', 768) !== 'visible') {
   failures.push({ width: 768, label: 'أقسام ملتفة بلا تمرير أفقي', actual: `${resolvedDeclaration('.category-strip-inner', 'display', 768)}/${resolvedDeclaration('.category-strip-inner', 'flex-wrap', 768)}/${resolvedDeclaration('.category-strip-inner', 'overflow', 768)}` });
 }
-if (resolvedDeclaration('.category-nav-item', 'flex', 390) !== '1 1 104px') {
-  failures.push({ width: 390, label: 'توزيع Adaptive متوازن للأقسام', actual: resolvedDeclaration('.category-nav-item', 'flex', 390) });
+const categoryFlex390 = resolvedDeclaration('.category-nav-item', 'flex', 390);
+if (!flexBasisMatches(categoryFlex390, '104px')) {
+  failures.push({ width: 390, label: 'توزيع Adaptive متوازن للأقسام', actual: categoryFlex390 });
+}
+if (resolvedDeclaration('.category-strip', 'position', 390) !== 'relative' || resolvedDeclaration('.category-strip', 'top', 390) !== 'auto') {
+  failures.push({ width: 390, label: 'شريط أقسام غير لاصق على الجوال', actual: `${resolvedDeclaration('.category-strip', 'position', 390)}/${resolvedDeclaration('.category-strip', 'top', 390)}` });
+}
+if (resolvedDeclaration('.category-strip', 'position', 768) !== 'relative' || resolvedDeclaration('.category-strip', 'top', 768) !== 'auto') {
+  failures.push({ width: 768, label: 'شريط أقسام غير لاصق على التابلت', actual: `${resolvedDeclaration('.category-strip', 'position', 768)}/${resolvedDeclaration('.category-strip', 'top', 768)}` });
+}
+if (resolvedDeclaration('.desktop-nav', 'display', 820) !== 'flex' || resolvedDeclaration('.desktop-nav', 'display', 800) !== 'none') {
+  failures.push({ width: '800/820', label: 'نقطة انتقال التنقل إلى الهامبرغر عند 800px', actual: `${resolvedDeclaration('.desktop-nav', 'display', 800)}/${resolvedDeclaration('.desktop-nav', 'display', 820)}` });
 }
 if (resolvedDeclaration('.category-mobile-link', 'white-space', 390) !== 'normal') {
   failures.push({ width: 390, label: 'أسماء أقسام كاملة قابلة للالتفاف', actual: resolvedDeclaration('.category-mobile-link', 'white-space', 390) });
@@ -150,4 +169,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Responsive CSS passed: redesigned header/search/ticker, floating adaptive category bar without horizontal scrolling, compact mobile headline, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and balanced footer layout from 320px through wide desktop.');
+console.log('Responsive CSS passed: redesigned header/search/ticker, adaptive non-sticky category bar without horizontal scrolling and minifier-safe flex semantics, compact mobile headline, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and balanced footer layout from 320px through wide desktop.');

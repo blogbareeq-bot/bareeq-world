@@ -8,6 +8,7 @@ import '@fontsource/cairo/arabic-700.css';
 import '@fontsource/cairo/arabic-800.css';
 import cairoHeadingFont from '@fontsource/cairo/files/cairo-arabic-700-normal.woff2?url';
 import '@fontsource/ibm-plex-sans-arabic/arabic-400.css';
+import ibmBodyFont from '@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-400-normal.woff2?url';
 import '@fontsource/ibm-plex-sans-arabic/arabic-500.css';
 import '@fontsource/ibm-plex-sans-arabic/arabic-600.css';
 import { site } from '../config/site';
@@ -76,7 +77,12 @@ const baseSchema = [
     alternateName: site.brand,
     description: site.description,
     inLanguage: 'ar',
-    publisher: { '@id': `${site.url}/#organization` }
+    publisher: { '@id': `${site.url}/#organization` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: { '@type': 'EntryPoint', urlTemplate: `${site.url}/search/?q={search_term_string}` },
+      'query-input': 'required name=search_term_string'
+    }
   }
 ];
 ---
@@ -97,6 +103,7 @@ const baseSchema = [
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="alternate" type="application/rss+xml" title="عالم بريق" href="/rss.xml" />
     <link rel="preload" as="font" type="font/woff2" href={cairoHeadingFont} crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href={ibmBodyFont} crossorigin="anonymous" />
     {preloadImage && <link rel="preload" as="image" href={preloadImage} imagesrcset={preloadSrcset} imagesizes={preloadSizes} fetchpriority="high" />}
 
     <meta property="og:locale" content="ar_AR" />

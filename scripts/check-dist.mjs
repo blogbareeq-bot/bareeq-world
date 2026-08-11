@@ -96,6 +96,8 @@ for (const file of htmlFiles) {
   if (/<script\b[^>]*\bsrc=["']https:\/\/www\.googletagmanager\.com/i.test(html)) failures.push(`${relativeFile} -> Google tag loads before visitor consent`);
   if (/\bdata-analytics-consent[^>]*\brole=["']dialog["']/i.test(html)) failures.push(`${relativeFile} -> non-modal analytics notice uses an incompatible dialog role`);
   if (!/<link\b[^>]*\brel=["']preload["'][^>]*\bas=["']font["'][^>]*\btype=["']font\/woff2["']/i.test(html)) failures.push(`${relativeFile} -> Cairo heading font is not preloaded`);
+  const fontPreloads = [...html.matchAll(/<link\b[^>]*\brel=["']preload["'][^>]*\bas=["']font["'][^>]*>/gi)].map((match) => match[0]);
+  if (fontPreloads.length < 2 || !fontPreloads.some((tag) => /ibm-plex-sans-arabic/i.test(tag))) failures.push(`${relativeFile} -> IBM Plex Sans Arabic 400 body font is not preloaded`);
 
   const cardMediaBlocks = [...html.matchAll(/<a\b[^>]*class=["'][^"']*post-card-media[^"']*["'][^>]*>([\s\S]*?)<\/a>/gi)];
   for (const [, block] of cardMediaBlocks) {
@@ -170,6 +172,9 @@ for (const file of htmlFiles) {
       failures.push(`${relativeFile} -> article byline does not link to the transparent team profile`);
     }
     if (/النسخة الأولى|النسخة الثانية|شاركنا في التعليقات|اشترك في القائمة البريدية/i.test(article)) failures.push(`${relativeFile} -> contains internal/editorial or unavailable-feature copy`);
+    if (/%25D8|%25D9/i.test(html)) failures.push(`${relativeFile} -> Arabic social sharing URL is double-encoded`);
+    if (/aria-current=["']page["']>المقال<\/span>/i.test(html)) failures.push(`${relativeFile} -> visible breadcrumb still ends with generic "المقال"`);
+    if (/class=["'][^"']*depth-3[^"']*["']/i.test(html)) failures.push(`${relativeFile} -> article TOC still includes H3 entries`);
   }
 }
 
@@ -183,6 +188,9 @@ for (const match of sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)) {
   const page = pagesByPath.get(pathname);
   if (!page) failures.push(`sitemap.xml -> missing generated page ${pathname}`);
   else if (/content=["']noindex,/i.test(page.html)) failures.push(`sitemap.xml -> includes noindex page ${pathname}`);
+}
+for (const requiredSeries of ['/series/mind-and-decisions/', '/series/windows-to-world/', '/series/technology-simply/', '/series/books-for-life/']) {
+  if (!sitemap.includes(`<loc>https://bareeqworld.com${requiredSeries}</loc>`)) failures.push(`sitemap.xml -> missing indexable series ${requiredSeries}`);
 }
 
 for (const stalePath of ['admin/index.html', 'images/bareeq-logo-official.png', 'images/bareeq-logo-display.png']) {
@@ -200,12 +208,18 @@ if (/fonts\.googleapis\.com|fonts\.gstatic\.com/i.test((await Promise.all(htmlFi
   failures.push('external Google Fonts request remains in generated HTML');
 }
 
+for (const iconPath of ['images/pwa-192.png', 'images/pwa-512.png']) {
+  if (!(await exists(path.join(root, iconPath)))) failures.push(`PWA -> missing ${iconPath}`);
+}
+
 const privacyHtml = pagesByPath.get('/privacy/')?.html ?? '';
 if (!/id=["']google-analytics["']/i.test(privacyHtml) || !/متابعة دون قياس|سحب الموافقة/i.test(privacyHtml) || !/75%|60 ثانية/i.test(privacyHtml)) {
   failures.push('privacy page -> optional GA4 measurement and withdrawal choice are not documented');
 }
 
 const homeHtml = pagesByPath.get('/')?.html ?? '';
+if (!/<h1\b[^>]*>\s*عالم بريق — نافذتك إلى المعرفة\s*<\/h1>/u.test(homeHtml)) failures.push('homepage -> canonical brand promise must be the visible H1');
+if (!/\"@type\":\"SearchAction\"/.test(homeHtml) || !/search\/?\?q=\{search_term_string\}/.test(homeHtml)) failures.push('homepage -> WebSite SearchAction is missing or malformed');
 const homeIntroCount = classTokenCount(homeHtml, 'home-intro');
 if (homeIntroCount !== 1) failures.push(`homepage -> expected one identity introduction, found ${homeIntroCount}`);
 if (homeHtml.indexOf('home-intro') > homeHtml.indexOf('hero-editorial')) failures.push('homepage -> identity introduction must appear before the editorial hero');

@@ -33,7 +33,7 @@ export const GET: APIRoute = async ({ site: astroSite }) => {
   });
   const seriesPaths = series.flatMap((item) => {
     const relevant = posts.filter((post) => post.data.seriesSlug === item.slug);
-    return relevant.length < archivePolicy.minPostsToIndexArchive ? [] : [{ path: `/series/${item.slug}/`, date: latestDate(relevant.map((post) => post.data.updatedAt ?? post.data.publishedAt)) }];
+    return relevant.length < archivePolicy.minPostsToIndexSeries ? [] : [{ path: `/series/${item.slug}/`, date: latestDate(relevant.map((post) => post.data.updatedAt ?? post.data.publishedAt)) }];
   });
   const tagPaths = [...tagCounts.entries()].flatMap(([tag, relevant]) => relevant.length < archivePolicy.minPostsToIndexArchive ? [] : [{
     path: `/tags/${encodeURIComponent(tag)}/`,

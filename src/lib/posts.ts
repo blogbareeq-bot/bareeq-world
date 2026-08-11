@@ -56,7 +56,12 @@ export function getRelatedPosts(post: Post, posts: Post[], limit = 3): Post[] {
       const sharedTags = candidate.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
       const sameSeries = Boolean(post.data.seriesSlug && candidate.data.seriesSlug === post.data.seriesSlug);
       const sameCategory = candidate.data.categorySlug === post.data.categorySlug;
-      const score = (sameSeries ? 8 : 0) + (sharedTags * 3) + (sameCategory ? 2 : 0);
+      // Category alone is too broad for a meaningful recommendation (e.g. economy vs space).
+      // Require a shared series or at least one shared tag; category only breaks close ties.
+      const relatedByIntent = sameSeries || sharedTags > 0;
+      const score = relatedByIntent
+        ? (sameSeries ? 8 : 0) + (sharedTags * 3) + (sameCategory ? 1 : 0)
+        : 0;
       return { candidate, score };
     })
     .filter(({ score }) => score > 0)

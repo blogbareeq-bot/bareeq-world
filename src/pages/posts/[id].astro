@@ -36,8 +36,13 @@ try {
 }
 const articleUrl = absoluteUrl(articlePath, Astro.site?.toString());
 const shareText = encodeURIComponent(post.data.title);
-const shareUrl = encodeURIComponent(articleUrl);
-const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+// URL.toString() percent-encodes Arabic paths. Decode once before encoding it
+// as a share-query value so social links never contain the broken %25D8 form.
+const shareUrl = encodeURIComponent(decodeURI(articleUrl));
+const toc = headings.filter((heading) => heading.depth === 2);
+const breadcrumbTitle = [...post.data.title].length > 54
+  ? `${[...post.data.title].slice(0, 51).join('').trimEnd()}…`
+  : post.data.title;
 const coverImage = responsiveImage(post.data.image);
 const shareImage = socialImage(post.data.thumbnail ?? post.data.image);
 const breadcrumbSchema = {
@@ -92,7 +97,7 @@ const articleSchema = {
       <nav class="breadcrumbs" aria-label="مسار الصفحة">
         <a href="/">الرئيسية</a><span aria-hidden="true">‹</span>
         <a href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a><span aria-hidden="true">‹</span>
-        <span aria-current="page">المقال</span>
+        <span class="breadcrumb-current" aria-current="page" title={post.data.title}>{breadcrumbTitle}</span>
       </nav>
       <a class="category-chip" href={`/category/${post.data.categorySlug}/`}>{post.data.category}</a>
       <h1>{post.data.title}</h1>

@@ -49,13 +49,14 @@ export const categories = [
 export const archivePolicy = {
   maxTagsPerPost: 2,
   minPostsToShowSeries: 2,
+  minPostsToIndexSeries: 2,
   minPostsToIndexArchive: 3
 } as const;
 
 export const series = [
   { slug: 'mind-and-decisions', title: 'العقل والقرارات', description: 'مقالات لفهم طريقة التفكير، والمغالطات، وبناء الوعي والاختيارات الأفضل.' },
   { slug: 'technology-simply', title: 'التقنية ببساطة', description: 'شرح واضح لما يحدث خلف الشاشات، من الإنترنت والذكاء الاصطناعي إلى الفضاء.' },
-  { slug: 'windows-to-world', title: 'نوافذ إلى العالم', description: 'ثقافات وعادات وتجارب توسّع زاوية النظر إلى البشر والمجتمعات.' },
+  { slug: 'windows-to-world', title: 'نوافذ إلى العالم', description: 'ثقافات وعادات وتجارب موثقة توسّع زاوية النظر إلى البشر والمجتمعات، وتضع الاختلاف في سياقه الإنساني.' },
   { slug: 'books-for-life', title: 'كتب للحياة', description: 'قراءات نقدية وعملية تربط أفكار الكتب بالصحة والعمل والحياة اليومية، وتوضح ما يمكن تطبيقه منها بوعي وتوازن.' }
 ] as const;
 
