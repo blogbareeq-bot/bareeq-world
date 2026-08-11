@@ -13,12 +13,16 @@ const DEFAULT_VOICE = process.env.AZURE_SPEECH_VOICE?.trim() || 'ar-SA-HamedNeur
 const SYNTHESIS_RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';
 const OUTPUT_FORMAT = 'audio-48khz-96kbitrate-mono-mp3';
 const PLAN_ONLY = process.argv.includes('--plan');
+const SYNC_PLAN_ONLY = process.argv.includes('--sync-plan');
 const MAX_REQUEST_BYTES = 6000; // smaller parts keep Azure responses compact and resilient on CI/mobile-oriented builds.
 const MIN_SYNTHESIS_INTERVAL_MS = Number(process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200'); // F0 allows 20 synthesis transactions per rolling 60 seconds.
-const GENERATOR_VERSION = 4;
+const GENERATOR_VERSION = 5;
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.7.1';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.8.0';
+const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
+const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
+const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
 
 const encoder = new TextEncoder();
 const byteLength = (value) => encoder.encode(value).byteLength;
@@ -39,49 +43,132 @@ function parsePost(source, filename) {
   return { title, draft, body };
 }
 
-function stripMarkdown(body) {
-  body = body.replace(/\n##\s+(?:المصادر(?:\s+والتحقق|\s+والقراءة\s+الإضافية)?|المراجع|References?)\b[\s\S]*$/i, '');
-  body = body.replace(/```[\s\S]*?```/g, ' ');
-  body = body.replace(/!\[([^\]]*)\]\([^)]*\)/g, ' ');
-  body = body.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');
-  body = body.replace(/^\s*\|.*\|\s*$/gm, ' ');
-  body = body.replace(/^\s*[-:| ]{3,}\s*$/gm, ' ');
-  body = body.replace(/<[^>]+>/g, ' ');
-  body = body.replace(/^\s{0,3}#{1,6}\s+/gm, '\n');
-  body = body.replace(/^\s*>\s?/gm, '');
-  body = body.replace(/^\s*[-*+]\s+/gm, '');
-  body = body.replace(/^\s*\d+[.)]\s+/gm, '');
-  body = body.replace(/[*_~`]/g, '');
-  body = body.replace(/\([^)]*https?:\/\/[^)]*\)/g, ' ');
-  body = body.replace(/https?:\/\/\S+/g, ' ');
-  body = body.replace(/\s+([،؛؟.!])/g, '$1');
-  body = body.replace(/[ \t]+/g, ' ');
-  body = body.replace(/\n{3,}/g, '\n\n');
-  return body.trim();
+function stripReferences(body) {
+  return body.replace(/\n##\s+(?:المصادر(?:\s+والتحقق|\s+والقراءة\s+الإضافية)?|المراجع|References?)\b[\s\S]*$/i, '').trim();
 }
 
-const pronunciationMap = new Map([
-  ['OpenAI', 'أوبن إيه آي'],
-  ['ChatGPT', 'شات جي بي تي'],
-  ['NIST', 'إن آي إس تي'],
-  ['OWASP', 'أو واسب'],
-  ['Google', 'غوغل'],
-  ['Microsoft', 'مايكروسوفت'],
-  ['Azure', 'أزور'],
-  ['NASA', 'ناسا'],
-  ['UNESCO', 'يونسكو'],
-  ['AI', 'إيه آي'],
-]);
+function cleanInlineMarkdown(text) {
+  return text
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[*_~`]/g, '')
+    .replace(/\([^)]*https?:\/\/[^)]*\)/g, ' ')
+    .replace(/https?:\/\/\S+/g, ' ')
+    .replace(/\s+([،؛؟.!])/g, '$1')
+    .replace(/[ \t]+/g, ' ')
+    .trim();
+}
 
-function optimizeForSpeech(text) {
-  for (const [from, to] of pronunciationMap) {
-    text = text.replace(new RegExp(`\\b${from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g'), to);
-  }
+function normalizeMatchText(text) {
+  return text
+    .normalize('NFKD')
+    .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+function getSpeechReplacements(articleId) {
+  const global = Array.isArray(SPEECH_OVERRIDES.global) ? SPEECH_OVERRIDES.global : [];
+  const local = Array.isArray(SPEECH_OVERRIDES.articles?.[articleId]) ? SPEECH_OVERRIDES.articles[articleId] : [];
+  return [...global, ...local]
+    .filter((item) => typeof item?.from === 'string' && item.from && typeof item?.to === 'string')
+    .sort((a, b) => b.from.length - a.from.length);
+}
+
+function applySpeechOverrides(text, articleId) {
+  for (const { from, to } of getSpeechReplacements(articleId)) text = text.split(from).join(to);
+  return text;
+}
+
+function optimizeForSpeech(text, articleId) {
+  text = applySpeechOverrides(text, articleId);
   text = text.replace(/(\d+(?:[.,]\d+)?)\s*%/g, '$1 في المئة');
+  text = text.replace(/\b(\d+)\s*[–—-]\s*(\d+)\b/g, '$1 إلى $2');
   text = text.replace(/\n+/g, '. ');
   text = text.replace(/\.{2,}/g, '.');
   text = text.replace(/\s+/g, ' ').trim();
   return text;
+}
+
+function extractSpeechSegments(body, articleId) {
+  body = stripReferences(body)
+    .replace(/```[\s\S]*?```/g, '\n')
+    .replace(/<!--[\s\S]*?-->/g, '\n');
+
+  const lines = body.split(/\r?\n/);
+  const segments = [];
+  let paragraph = [];
+  let quote = [];
+  let order = 0;
+
+  const addSegment = (type, raw) => {
+    const visibleText = cleanInlineMarkdown(raw);
+    if (!visibleText || visibleText.length < 2) return;
+    const match = normalizeMatchText(visibleText);
+    if (!match) return;
+    order += 1;
+    segments.push({
+      id: `b${String(order).padStart(4, '0')}`,
+      type,
+      visibleText,
+      match: match.slice(0, 120),
+      spokenText: optimizeForSpeech(visibleText, articleId),
+    });
+  };
+  const flushParagraph = () => {
+    if (paragraph.length) addSegment('paragraph', paragraph.join(' '));
+    paragraph = [];
+  };
+  const flushQuote = () => {
+    if (quote.length) addSegment('quote', quote.join(' '));
+    quote = [];
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      flushParagraph();
+      flushQuote();
+      continue;
+    }
+    if (/^\|.*\|$/.test(trimmed) || /^[-:| ]{3,}$/.test(trimmed)) {
+      flushParagraph();
+      flushQuote();
+      continue;
+    }
+    if (/^!\[[^\]]*\]\([^)]*\)\s*$/.test(trimmed)) {
+      flushParagraph();
+      flushQuote();
+      continue;
+    }
+    const heading = trimmed.match(/^(#{2,4})\s+(.+)$/);
+    if (heading) {
+      flushParagraph();
+      flushQuote();
+      addSegment(`h${heading[1].length}`, heading[2]);
+      continue;
+    }
+    const listItem = trimmed.match(/^(?:[-*+]\s+|\d+[.)]\s+)(.+)$/);
+    if (listItem) {
+      flushParagraph();
+      flushQuote();
+      addSegment('list-item', listItem[1]);
+      continue;
+    }
+    if (/^>\s?/.test(trimmed)) {
+      flushParagraph();
+      quote.push(trimmed.replace(/^>\s?/, ''));
+      continue;
+    }
+    if (quote.length) flushQuote();
+    paragraph.push(trimmed);
+  }
+  flushParagraph();
+  flushQuote();
+  return segments;
 }
 
 function splitByBytes(text, maxBytes = MAX_REQUEST_BYTES) {
@@ -130,6 +217,73 @@ function splitByBytes(text, maxBytes = MAX_REQUEST_BYTES) {
   }
   if (current) chunks.push(current.trim());
   return chunks.filter(Boolean);
+}
+
+function estimateSpeechWeight(text) {
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  const letters = [...text.replace(/\s/g, '')].length;
+  const strongPauses = (text.match(/[.!؟]/g) || []).length;
+  const mediumPauses = (text.match(/[،؛:]/g) || []).length;
+  return Math.max(1, words + letters / 22 + strongPauses * 1.1 + mediumPauses * 0.45);
+}
+
+function joinSpeechPieces(items) {
+  let text = '';
+  for (const item of items) {
+    if (!text) text = item.text;
+    else text += /[.!؟؛:]$/.test(text) ? ` ${item.text}` : `. ${item.text}`;
+  }
+  return text.trim();
+}
+
+function buildAudioParts(title, segments, articleId) {
+  const items = [{ segmentId: null, type: 'title', match: '', text: optimizeForSpeech(title, articleId) }];
+  for (const segment of segments) {
+    const pieces = splitByBytes(segment.spokenText);
+    for (const text of pieces) items.push({ segmentId: segment.id, type: segment.type, match: segment.match, text });
+  }
+
+  const parts = [];
+  let current = [];
+  const flush = () => {
+    if (!current.length) return;
+    const text = joinSpeechPieces(current);
+    const weights = current.map((item) => estimateSpeechWeight(item.text));
+    const total = weights.reduce((sum, weight) => sum + weight, 0) || 1;
+    let elapsed = 0;
+    const sync = [];
+    for (let index = 0; index < current.length; index += 1) {
+      const item = current[index];
+      const start = elapsed / total;
+      elapsed += weights[index];
+      const end = elapsed / total;
+      if (!item.segmentId) continue;
+      const previous = sync[sync.length - 1];
+      if (previous?.id === item.segmentId) previous.end = Number(end.toFixed(6));
+      else sync.push({
+        id: item.segmentId,
+        type: item.type,
+        match: item.match,
+        start: Number(start.toFixed(6)),
+        end: Number(end.toFixed(6)),
+      });
+    }
+    parts.push({ text, items: current, sync });
+    current = [];
+  };
+
+  for (const item of items) {
+    const candidate = joinSpeechPieces([...current, item]);
+    if (current.length && byteLength(candidate) > MAX_REQUEST_BYTES) flush();
+    current.push(item);
+    if (byteLength(joinSpeechPieces(current)) > MAX_REQUEST_BYTES) {
+      const overflow = current.pop();
+      flush();
+      current = [overflow];
+    }
+  }
+  flush();
+  return parts;
 }
 
 function escapeXml(text) {
@@ -239,9 +393,15 @@ async function throttleSynthesis() {
   lastSynthesisAt = Date.now();
 }
 
-async function synthesize(apiKey, voice, text) {
+async function synthesize(apiKey, voice, part) {
   const { synthesize } = getAzureUrls();
-  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${LANGUAGE}"><voice name="${escapeXml(voice)}"><prosody rate="${escapeXml(SYNTHESIS_RATE)}">${escapeXml(text)}</prosody></voice></speak>`;
+  const paragraphs = part.items.map((item) => {
+    const body = `<prosody rate="${escapeXml(SYNTHESIS_RATE)}">${escapeXml(item.text)}</prosody>`;
+    if (item.type === 'title') return `<p>${body}<break time="260ms"/></p>`;
+    if (/^h\d$/.test(item.type)) return `<p><break time="160ms"/>${body}<break time="180ms"/></p>`;
+    return `<p>${body}</p>`;
+  }).join('');
+  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${LANGUAGE}"><voice name="${escapeXml(voice)}">${paragraphs}</voice></speak>`;
   if (byteLength(ssml) >= 64000) throw new Error('Azure SSML request exceeds the 64 KB real-time synthesis limit.');
   return requestBinary(synthesize, {
     method: 'POST',
@@ -263,12 +423,12 @@ async function loadPosts() {
     const post = parsePost(source, name);
     if (post.draft) continue;
     const id = name.replace(/\.md$/, '');
-    const spokenBody = optimizeForSpeech(stripMarkdown(post.body));
-    const spokenText = optimizeForSpeech(`${post.title}. ${spokenBody}`);
-    const chunks = splitByBytes(spokenText);
-    if (!spokenText || !chunks.length) throw new Error(`${name}: no speech text after cleanup.`);
-    if (chunks.some((chunk) => byteLength(chunk) > MAX_REQUEST_BYTES)) throw new Error(`${name}: a TTS chunk exceeds ${MAX_REQUEST_BYTES} bytes.`);
-    posts.push({ id, title: post.title, spokenText, chunks, key: audioKeyFor(id) });
+    const segments = extractSpeechSegments(post.body, id);
+    const audioParts = buildAudioParts(post.title, segments, id);
+    const spokenText = joinSpeechPieces(audioParts.map((part) => ({ text: part.text })));
+    if (!spokenText || !audioParts.length || !segments.length) throw new Error(`${name}: no speech text after cleanup.`);
+    if (audioParts.some((part) => byteLength(part.text) > MAX_REQUEST_BYTES)) throw new Error(`${name}: a TTS part exceeds ${MAX_REQUEST_BYTES} bytes.`);
+    posts.push({ id, title: post.title, spokenText, segments, audioParts, key: audioKeyFor(id) });
   }
   return posts;
 }
@@ -279,7 +439,8 @@ async function hasCompleteCache(post, hash) {
   if (!await exists(manifestPath)) return false;
   try {
     const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
-    if (manifest.sourceHash !== hash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.language !== LANGUAGE || !Array.isArray(manifest.parts) || !manifest.parts.length) return false;
+    if (manifest.sourceHash !== hash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.language !== LANGUAGE || manifest.syncVersion !== 1 || !Array.isArray(manifest.parts) || !manifest.parts.length) return false;
+    if (!manifest.parts.every((part) => Array.isArray(part.sync))) return false;
     for (const part of manifest.parts) {
       if (!await exists(path.join(ROOT, 'public', part.src.replace(/^\//, '')))) return false;
     }
@@ -295,7 +456,8 @@ async function restoreFromProduction(post) {
   if (!response.ok) return false;
   let manifest;
   try { manifest = await response.json(); } catch { return false; }
-  if (manifest.sourceHash !== post.sourceHash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.language !== LANGUAGE || !Array.isArray(manifest.parts) || !manifest.parts.length) return false;
+  if (manifest.sourceHash !== post.sourceHash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.language !== LANGUAGE || manifest.syncVersion !== 1 || !Array.isArray(manifest.parts) || !manifest.parts.length) return false;
+  if (!manifest.parts.every((part) => Array.isArray(part.sync))) return false;
   if (!manifest.parts.every((part) => typeof part?.src === 'string' && part.src.startsWith(`/audio/articles/${post.key}/`) && part.src.endsWith('.mp3'))) return false;
 
   const finalDir = path.join(AUDIO_ROOT, post.key);
@@ -320,18 +482,23 @@ async function restoreFromProduction(post) {
 const posts = await loadPosts();
 const totalChars = posts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
 const totalBytes = posts.reduce((sum, post) => sum + byteLength(post.spokenText), 0);
-const totalRequests = posts.reduce((sum, post) => sum + post.chunks.length, 0);
+const totalRequests = posts.reduce((sum, post) => sum + post.audioParts.length, 0);
+
+if (SYNC_PLAN_ONLY) {
+  console.log(JSON.stringify(posts.map((post) => ({ id: post.id, segments: post.segments.map(({ id, type, match }) => ({ id, type, matchLength: match.length })), parts: post.audioParts.map((part) => ({ sync: part.sync.map(({ id, start, end }) => ({ id, start, end })) })) })), null, 2));
+  process.exit(0);
+}
 
 if (PLAN_ONLY) {
   console.log(`Azure AI Speech audio plan: ${posts.length} articles, ${totalRequests} synthesis request(s), ${totalChars} characters, ${totalBytes} UTF-8 bytes.`);
-  for (const post of posts) console.log(`- ${post.id}: ${post.chunks.length} part(s), ${[...post.spokenText].length} chars`);
+  for (const post of posts) console.log(`- ${post.id}: ${post.audioParts.length} part(s), ${post.segments.length} sync block(s), ${[...post.spokenText].length} chars`);
   process.exit(0);
 }
 
 await mkdir(AUDIO_ROOT, { recursive: true });
 const prepared = posts.map((post) => ({
   ...post,
-  sourceHash: sha(JSON.stringify({ generatorVersion: GENERATOR_VERSION, provider: 'azure', region: REGION, language: LANGUAGE, voice: DEFAULT_VOICE, rate: SYNTHESIS_RATE, outputFormat: OUTPUT_FORMAT, text: post.spokenText })),
+  sourceHash: sha(JSON.stringify({ generatorVersion: GENERATOR_VERSION, speechOverridesVersion: SPEECH_OVERRIDES_VERSION, provider: 'azure', region: REGION, language: LANGUAGE, voice: DEFAULT_VOICE, rate: SYNTHESIS_RATE, outputFormat: OUTPUT_FORMAT, text: post.spokenText, sync: post.audioParts.map((part) => part.sync) })),
 }));
 
 let missing = [];
@@ -365,20 +532,24 @@ for (const post of missing) {
   await mkdir(tempDir, { recursive: true });
   const parts = [];
   try {
-    for (let index = 0; index < post.chunks.length; index += 1) {
+    for (let index = 0; index < post.audioParts.length; index += 1) {
+      const audioPart = post.audioParts[index];
       const filename = `part-${String(index + 1).padStart(3, '0')}-${post.sourceHash.slice(0, 8)}.mp3`;
-      const audio = await synthesize(API_KEY, voice, post.chunks[index]);
+      const audio = await synthesize(API_KEY, voice, audioPart);
       if (audio.length < 100) throw new Error(`${post.id}: generated MP3 ${filename} is unexpectedly small.`);
       await writeFile(path.join(tempDir, filename), audio);
       parts.push({
         src: `/audio/articles/${post.key}/${filename}`,
-        characters: [...post.chunks[index]].length,
+        characters: [...audioPart.text].length,
         bytes: audio.length,
+        sync: audioPart.sync,
       });
     }
     const manifest = {
-      version: 1,
+      version: 2,
       generatorVersion: GENERATOR_VERSION,
+      syncVersion: 1,
+      speechOverridesVersion: SPEECH_OVERRIDES_VERSION,
       provider: 'Microsoft Azure AI Speech',
       model: 'Neural TTS',
       language: LANGUAGE,
@@ -388,6 +559,7 @@ for (const post of missing) {
       articleId: post.id,
       title: post.title,
       sourceHash: post.sourceHash,
+      syncMethod: 'paragraph-weighted',
       parts,
     };
     await writeFile(path.join(tempDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');

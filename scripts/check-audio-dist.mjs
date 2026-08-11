@@ -17,21 +17,31 @@ for (const name of posts) {
   let manifest;
   try { manifest = JSON.parse(await readFile(manifestFile, 'utf8')); }
   catch { throw new Error(`${id}: production audio manifest is missing or invalid.`); }
-  if (manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.language !== 'ar-SA') {
+  if (manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.language !== 'ar-SA' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') {
     throw new Error(`${id}: production audio is not Azure AI Speech Saudi Arabic.`);
   }
   if (typeof manifest.voice !== 'string' || !manifest.voice.startsWith('ar-SA-')) throw new Error(`${id}: unexpected Azure voice ${manifest.voice}.`);
   if (manifest.outputFormat !== 'audio-48khz-96kbitrate-mono-mp3') throw new Error(`${id}: unexpected Azure audio format.`);
   if (!Array.isArray(manifest.parts) || !manifest.parts.length) throw new Error(`${id}: audio manifest has no MP3 parts.`);
+  const syncIds = new Set();
   for (const part of manifest.parts) {
     if (typeof part.src !== 'string' || !part.src.startsWith(`/audio/articles/${key}/`) || !part.src.endsWith('.mp3')) {
       throw new Error(`${id}: unsafe or invalid MP3 path in manifest.`);
+    }
+    if (!Array.isArray(part.sync)) throw new Error(`${id}: MP3 part has no text synchronization metadata.`);
+    let previousStart = -1;
+    for (const entry of part.sync) {
+      if (typeof entry?.id !== 'string' || typeof entry?.match !== 'string' || entry.match.length < 2) throw new Error(`${id}: invalid synchronized text entry.`);
+      if (!(entry.start >= 0 && entry.end <= 1 && entry.start < entry.end) || entry.start < previousStart) throw new Error(`${id}: invalid synchronized timing ratios.`);
+      previousStart = entry.start;
+      syncIds.add(entry.id);
     }
     const file = path.join(dist, part.src.replace(/^\//, ''));
     const info = await stat(file).catch(() => null);
     if (!info?.isFile() || info.size < 100) throw new Error(`${id}: missing or empty MP3: ${part.src}`);
     totalParts += 1;
   }
+  if (!syncIds.size) throw new Error(`${id}: production manifest has no synchronized article blocks.`);
 }
 
 const textFiles = [];
@@ -49,4 +59,4 @@ for (const file of textFiles) {
   if (/AZURE_SPEECH_KEY/.test(text)) throw new Error(`Azure secret variable name leaked into production output: ${path.relative(dist, file)}`);
   if (secret && secret.length >= 16 && text.includes(secret)) throw new Error(`Azure Speech key leaked into production output: ${path.relative(dist, file)}`);
 }
-console.log(`Production Azure AI Speech audio audit passed: ${totalParts} MP3 part(s).`);
+console.log(`Production synchronized Azure AI Speech audio audit passed: ${totalParts} MP3 part(s).`);

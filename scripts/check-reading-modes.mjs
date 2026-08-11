@@ -11,14 +11,15 @@ const required = async (file, needles) => {
 
 await required('src/components/ReadingModes.astro', [
   'اقرأ بالطريقة التي تناسبك', 'data-reading-mode="read"', 'data-reading-mode="listen"',
-  'data-reading-mode="summary"', 'data-audio-play', 'data-audio-rate', 'data-summary-panel',
-  'data-article-audio', 'data-audio-manifest={audioManifest}'
+  'data-reading-mode="summary"', 'data-audio-play', 'data-audio-stop', 'data-audio-rate', 'data-summary-panel',
+  'data-article-audio', 'data-audio-manifest={audioManifest}', 'tabindex="-1"'
 ]);
 await required('src/pages/posts/[id].astro', [
   'import ReadingModes', '<ReadingModes', 'id="article-content"', 'data-article-content', 'audioManifest={audioManifest}'
 ]);
 await required('public/scripts/article.js', [
-  'prepareAudio', 'fetch(manifestUrl', 'audio.play()', "audio?.addEventListener('ended'", 'pagehide'
+  'prepareAudio', 'fetch(manifestUrl', 'audio.play()', "audio?.addEventListener('ended'", 'pagehide',
+  'ArrowLeft', 'ArrowRight', 'Home', 'End', 'stopAudio', 'is-audio-active'
 ]);
 await required('src/content.config.ts', ['quickSummary:']);
 
