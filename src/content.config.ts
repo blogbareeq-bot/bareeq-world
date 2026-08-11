@@ -29,7 +29,8 @@ const posts = defineCollection({
     draft: z.boolean().default(false),
     tags: z.array(z.string()).max(2).default([]),
     author: z.string().default('فريق بريق'),
-    legacyPath: z.string().optional()
+    legacyPath: z.string().optional(),
+    quickSummary: z.string().min(50).optional()
   })
 });
 

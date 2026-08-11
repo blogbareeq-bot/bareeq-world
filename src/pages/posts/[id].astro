@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import ReadingModes from '../../components/ReadingModes.astro';
 import { formatDate, formatReadingMinutes, getPublishedPosts, absoluteUrl, postWordCount, postReadingMinutes, getRelatedPosts } from '../../lib/posts';
 import { site } from '../../config/site';
 import { responsiveImage, socialImage } from '../../lib/images';
@@ -106,6 +107,8 @@ const articleSchema = {
       </figure>
     )}
 
+    <ReadingModes summary={post.data.quickSummary ?? post.data.description} readingMinutes={readingMinutes} />
+
     <div class:list={['article-layout', { 'has-toc': toc.length > 0 }]}> 
       {toc.length > 0 && (
         <aside class="article-toc" data-article-toc aria-label="محتويات المقال">
@@ -116,7 +119,7 @@ const articleSchema = {
           <ol id="article-toc-list">{toc.map((heading) => <li class:list={[`depth-${heading.depth}`]}><a data-toc-link href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol>
         </aside>
       )}
-      <div class="article-content prose" data-article-content><Content /></div>
+      <div id="article-content" class="article-content prose" data-article-content><Content /></div>
     </div>
 
     <footer class="article-footer">

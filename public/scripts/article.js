@@ -97,4 +97,97 @@
       button.textContent = 'انسخ الرابط من المتصفح';
     }
   });
+
+
+  // Reading modes: full text, Arabic speech synthesis, and editorial summary.
+  const modes = document.querySelector('[data-reading-modes]');
+  if (modes && articleContent) {
+    const modeButtons = [...modes.querySelectorAll('[data-reading-mode]')];
+    const listenPanel = modes.querySelector('[data-listen-panel]');
+    const summaryPanel = modes.querySelector('[data-summary-panel]');
+    const playButton = modes.querySelector('[data-audio-play]');
+    const playLabel = modes.querySelector('[data-audio-play-label]');
+    const audioStatus = modes.querySelector('[data-audio-status]');
+    const rateSelect = modes.querySelector('[data-audio-rate]');
+    const summaryRead = modes.querySelector('[data-summary-read]');
+    const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+    let chunks = [];
+    let chunkIndex = 0;
+    let speaking = false;
+    let paused = false;
+    let speechToken = 0;
+
+    const setMode = (name) => {
+      modeButtons.forEach((button) => {
+        const active = button.dataset.readingMode === name;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-selected', String(active));
+      });
+      if (listenPanel) listenPanel.hidden = name !== 'listen';
+      if (summaryPanel) summaryPanel.hidden = name !== 'summary';
+      if (name === 'read') articleContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    modeButtons.forEach((button) => button.addEventListener('click', () => setMode(button.dataset.readingMode || 'read')));
+    summaryRead?.addEventListener('click', () => setMode('read'));
+
+    const cleanText = () => [...articleContent.querySelectorAll('h2,h3,p,li')]
+      .filter((node) => !node.closest('table, .sources, [aria-hidden="true"]'))
+      .map((node) => node.textContent?.replace(/\s+/g, ' ').trim())
+      .filter(Boolean);
+    const splitSpeech = () => {
+      const result = [];
+      cleanText().forEach((text) => {
+        if (text.length <= 650) result.push(text);
+        else {
+          const sentences = text.match(/[^.!؟؛]+[.!؟؛]?/g) || [text];
+          let part = '';
+          sentences.forEach((sentence) => {
+            if ((part + sentence).length > 650 && part) { result.push(part.trim()); part = ''; }
+            part += sentence;
+          });
+          if (part.trim()) result.push(part.trim());
+        }
+      });
+      return result;
+    };
+    const preferredArabicVoice = () => speechSynthesis.getVoices().find((voice) => /^ar(-|_)/i.test(voice.lang) && /Saudi|Hamed|Maged|Tarik|Arabic/i.test(voice.name))
+      || speechSynthesis.getVoices().find((voice) => /^ar(-|_)/i.test(voice.lang));
+    const speakNext = (token = speechToken) => {
+      if (token !== speechToken) return;
+      if (!speaking || chunkIndex >= chunks.length) {
+        speaking = false; paused = false; modes.classList.remove('is-speaking');
+        if (playLabel) playLabel.textContent = 'ابدأ الاستماع';
+        if (audioStatus) audioStatus.textContent = chunkIndex >= chunks.length ? 'اكتملت قراءة المقال' : 'جاهز للقراءة الصوتية';
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(chunks[chunkIndex]);
+      utterance.lang = 'ar-SA';
+      utterance.rate = Number(rateSelect?.value || 1);
+      const voice = preferredArabicVoice(); if (voice) utterance.voice = voice;
+      utterance.onend = () => { if (token !== speechToken) return; chunkIndex += 1; speakNext(token); };
+      utterance.onerror = () => { if (token !== speechToken) return; speaking = false; paused = false; modes.classList.remove('is-speaking'); if (playLabel) playLabel.textContent = 'ابدأ الاستماع'; if (audioStatus) audioStatus.textContent = 'تعذر إكمال القراءة على هذا الجهاز'; };
+      speechSynthesis.speak(utterance);
+    };
+    if (!speechSupported && playButton) {
+      playButton.disabled = true;
+      if (audioStatus) audioStatus.textContent = 'القراءة الصوتية غير مدعومة في هذا المتصفح';
+    }
+    playButton?.addEventListener('click', () => {
+      if (!speechSupported) return;
+      if (speaking && !paused) { speechSynthesis.pause(); paused = true; modes.classList.remove('is-speaking'); if (playLabel) playLabel.textContent = 'متابعة'; if (audioStatus) audioStatus.textContent = 'متوقف مؤقتًا'; return; }
+      if (speaking && paused) { speechSynthesis.resume(); paused = false; modes.classList.add('is-speaking'); if (playLabel) playLabel.textContent = 'إيقاف مؤقت'; if (audioStatus) audioStatus.textContent = 'جارٍ قراءة المقال'; return; }
+      chunks = splitSpeech(); chunkIndex = 0; speaking = chunks.length > 0; paused = false; speechToken += 1; modes.classList.toggle('is-speaking', speaking);
+      if (!speaking) { if (audioStatus) audioStatus.textContent = 'لا يوجد نص متاح للقراءة'; return; }
+      if (playLabel) playLabel.textContent = 'إيقاف مؤقت'; if (audioStatus) audioStatus.textContent = 'جارٍ قراءة المقال'; speakNext(speechToken);
+    });
+    rateSelect?.addEventListener('change', () => {
+      if (!speaking) return;
+      speechToken += 1;
+      const token = speechToken;
+      speechSynthesis.cancel();
+      paused = false;
+      queueMicrotask(() => speakNext(token));
+    });
+    addEventListener('pagehide', () => { if (speechSupported) { speechToken += 1; speechSynthesis.cancel(); } });
+  }
 })();

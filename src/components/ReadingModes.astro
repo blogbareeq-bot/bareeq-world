@@ -1,0 +1,43 @@
+---
+interface Props {
+  summary: string;
+  readingMinutes: number;
+}
+const { summary, readingMinutes } = Astro.props;
+---
+<section class="reading-modes" data-reading-modes aria-labelledby="reading-modes-title">
+  <div class="reading-modes__intro">
+    <span class="reading-modes__spark" aria-hidden="true">✦</span>
+    <div>
+      <h2 id="reading-modes-title">اقرأ بالطريقة التي تناسبك</h2>
+      <p>النص كاملًا، بصوت مسموع، أو خلاصة مركّزة — اختر ما يناسب وقتك.</p>
+    </div>
+  </div>
+
+  <div class="reading-modes__tabs" role="tablist" aria-label="طريقة متابعة المقال">
+    <button class="reading-mode is-active" type="button" role="tab" aria-selected="true" data-reading-mode="read" aria-controls="article-content">
+      <span class="reading-mode__icon" aria-hidden="true">📖</span><span><b>قراءة</b><small>النص الكامل · {readingMinutes} د</small></span>
+    </button>
+    <button class="reading-mode" type="button" role="tab" aria-selected="false" data-reading-mode="listen" aria-controls="reading-listen-panel">
+      <span class="reading-mode__icon" aria-hidden="true">🎧</span><span><b>استماع</b><small data-listen-label>استمع أثناء انشغالك</small></span>
+    </button>
+    <button class="reading-mode" type="button" role="tab" aria-selected="false" data-reading-mode="summary" aria-controls="reading-summary-panel">
+      <span class="reading-mode__icon" aria-hidden="true">✨</span><span><b>الخلاصة</b><small>الفكرة في أقل من دقيقة</small></span>
+    </button>
+  </div>
+
+  <div id="reading-listen-panel" class="reading-modes__panel reading-modes__panel--listen" data-listen-panel role="tabpanel" hidden>
+    <div class="audio-control-row">
+      <button class="audio-play" type="button" data-audio-play aria-label="بدء الاستماع"><span aria-hidden="true">▶</span><span data-audio-play-label>ابدأ الاستماع</span></button>
+      <div class="audio-status" aria-live="polite"><span class="audio-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span data-audio-status>جاهز للقراءة الصوتية</span></div>
+      <label class="audio-speed">السرعة <select data-audio-rate aria-label="سرعة القراءة"><option value="0.85">0.85×</option><option value="1" selected>1×</option><option value="1.15">1.15×</option><option value="1.3">1.3×</option><option value="1.5">1.5×</option></select></label>
+    </div>
+    <p class="audio-note">يستخدم صوت العربية المتاح على جهازك. يمكنك متابعة التصفح أثناء الاستماع.</p>
+  </div>
+
+  <div id="reading-summary-panel" class="reading-modes__panel reading-modes__panel--summary" data-summary-panel role="tabpanel" hidden>
+    <span class="summary-kicker">خلاصة بريق</span>
+    <p>{summary}</p>
+    <button class="summary-read" type="button" data-summary-read>انتقل إلى المقال الكامل <span aria-hidden="true">←</span></button>
+  </div>
+</section>
