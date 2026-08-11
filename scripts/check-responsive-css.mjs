@@ -138,6 +138,9 @@ if (resolvedDeclaration('.category-strip', 'position', 768) !== 'relative' || re
 if (resolvedDeclaration('.desktop-nav', 'display', 820) !== 'flex' || resolvedDeclaration('.desktop-nav', 'display', 800) !== 'none') {
   failures.push({ width: '800/820', label: 'نقطة انتقال التنقل إلى الهامبرغر عند 800px', actual: `${resolvedDeclaration('.desktop-nav', 'display', 800)}/${resolvedDeclaration('.desktop-nav', 'display', 820)}` });
 }
+if (resolvedDeclaration('.category-mobile-link', 'display', 390) !== 'flex' || resolvedDeclaration('.category-mobile-link', 'display', 768) !== 'flex') {
+  failures.push({ width: '390/768', label: 'روابط الأقسام ظاهرة فعليًا على الجوال والتابلت', actual: `${resolvedDeclaration('.category-mobile-link', 'display', 390)}/${resolvedDeclaration('.category-mobile-link', 'display', 768)}` });
+}
 if (resolvedDeclaration('.category-mobile-link', 'white-space', 390) !== 'normal') {
   failures.push({ width: 390, label: 'أسماء أقسام كاملة قابلة للالتفاف', actual: resolvedDeclaration('.category-mobile-link', 'white-space', 390) });
 }

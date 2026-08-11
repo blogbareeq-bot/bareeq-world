@@ -478,7 +478,7 @@ bdi,[dir='ltr'],code{unicode-bidi:isolate}
   .category-strip-inner{display:flex;flex-wrap:wrap;align-items:stretch;justify-content:center;gap:5px;overflow:visible}
   .category-nav-item{flex:1 1 104px}
   .category-nav-trigger,.category-dropdown{display:none}
-  .category-mobile-link{width:100%;min-width:0;justify-content:center;white-space:normal;text-align:center;line-height:1.35}
+  .category-mobile-link{display:flex;width:100%;min-width:0;justify-content:center;white-space:normal;text-align:center;line-height:1.35}
   .latest-grid,.archive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .book-feature{grid-template-columns:minmax(0,1fr)}
   .book-feature-media{min-height:0;max-height:none}

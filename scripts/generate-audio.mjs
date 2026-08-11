@@ -14,6 +14,8 @@ const SYNTHESIS_RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';
 const OUTPUT_FORMAT = 'audio-48khz-96kbitrate-mono-mp3';
 const PLAN_ONLY = process.argv.includes('--plan');
 const SYNC_PLAN_ONLY = process.argv.includes('--sync-plan');
+const SPEECH_QA_JSON = process.argv.includes('--speech-qa-json') || process.argv.some((arg) => arg.startsWith('--speech-qa-output='));
+const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-output='))?.slice('--speech-qa-output='.length) || '';
 const MAX_REQUEST_BYTES = 6000; // smaller parts keep Azure responses compact and resilient on CI/mobile-oriented builds.
 const MIN_SYNTHESIS_INTERVAL_MS = Number(process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200'); // F0 allows 20 synthesis transactions per rolling 60 seconds.
 const GENERATOR_VERSION = 5;
@@ -22,10 +24,11 @@ const BUILD_WARNING_CHARS = Number(process.env.AZURE_SPEECH_BUILD_WARNING_CHARS 
 const BUILD_HARD_LIMIT_CHARS = Number(process.env.AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS || '450000');
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.10.0';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.12.0';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
 const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
+const SPEECH_REVIEW_VERSION = Number(SPEECH_OVERRIDES.reviewVersion || 1);
 
 const encoder = new TextEncoder();
 const byteLength = (value) => encoder.encode(value).byteLength;
@@ -492,6 +495,18 @@ if (SYNC_PLAN_ONLY) {
   process.exit(0);
 }
 
+if (SPEECH_QA_JSON) {
+  const payload = JSON.stringify(posts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    segments: post.segments.map(({ id, type, visibleText, spokenText }) => ({ id, type, visibleText, spokenText })),
+    spokenText: post.spokenText
+  })), null, 2) + '\n';
+  if (SPEECH_QA_OUTPUT) await writeFile(path.resolve(ROOT, SPEECH_QA_OUTPUT), payload);
+  else console.log(payload.trimEnd());
+  process.exit(0);
+}
+
 if (PLAN_ONLY) {
   console.log(`Azure AI Speech audio plan: ${posts.length} articles, ${totalRequests} synthesis request(s), ${totalChars} characters, ${totalBytes} UTF-8 bytes.`);
   for (const post of posts) console.log(`- ${post.id}: ${post.audioParts.length} part(s), ${post.segments.length} sync block(s), ${[...post.spokenText].length} chars`);
@@ -565,6 +580,7 @@ for (const post of missing) {
       generatorVersion: GENERATOR_VERSION,
       syncVersion: 1,
       speechOverridesVersion: SPEECH_OVERRIDES_VERSION,
+      speechReviewVersion: SPEECH_REVIEW_VERSION,
       provider: 'Microsoft Azure AI Speech',
       model: 'Neural TTS',
       language: LANGUAGE,

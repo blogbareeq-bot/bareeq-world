@@ -21,7 +21,7 @@ const [pkgText, home, intro, postPage, postsLib, sitemap, seriesPage, siteConfig
 ]);
 
 const pkg = JSON.parse(pkgText);
-if (pkg.version !== '4.11.0') failures.push(`Expected package version 4.11.0, got ${pkg.version}`);
+if (pkg.version !== '4.12.0') failures.push(`Expected package version 4.12.0, got ${pkg.version}`);
 
 // Homepage identity/heading hierarchy.
 if (!/<h1\b[^>]*>عالم بريق — نافذتك إلى المعرفة<\/h1>/u.test(intro)) failures.push('Homepage identity H1 is missing or does not use the canonical brand promise.');
@@ -58,6 +58,7 @@ const mobile420 = css.match(/@media \(max-width:420px\) \{([\s\S]*?)\n\}/)?.[1] 
 const mobile800 = css.match(/@media \(max-width:800px\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
 if (!mobile900.includes('.category-strip{position:relative;top:auto}')) failures.push('Category strip remains sticky on tablet/mobile.');
 if (!mobile900.includes('flex-wrap:wrap') || mobile900.includes('overflow-x:auto')) failures.push('Category navigation is not a wrapped non-scrolling layout at <=900px.');
+if (!mobile900.includes('.category-mobile-link{display:flex')) failures.push('Category mobile links are hidden at <=900px.');
 if (!mobile800.includes('.desktop-nav{display:none}')) failures.push('Desktop navigation breakpoint was not moved to <=800px.');
 if (css.match(/@media \(max-width:1000px\) \{([\s\S]*?)\n\}/)?.[1]?.includes('.desktop-nav{display:none}')) failures.push('Desktop nav still disappears prematurely at <=1000px.');
 if (!mobile420.includes('-webkit-line-clamp:1') || mobile420.includes('.hero-content p{display:none}')) failures.push('Hero description must remain as a compact one-line excerpt on small phones.');
@@ -82,4 +83,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Launch-readiness source audit passed: heading identity, single-encoded Arabic sharing, H2-only TOC, real breadcrumbs, intent-based related posts, complete series sitemap policy, SearchAction, body-font preload, mobile chrome/nav fixes, HTML CORS hardening, and PWA icons.');
+console.log('Launch-readiness source audit passed: heading identity, single-encoded Arabic sharing, H2-only TOC, real breadcrumbs, intent-based related posts, complete series sitemap policy, SearchAction, body-font preload, visible wrapped mobile categories, HTML CORS hardening, and PWA icons.');
