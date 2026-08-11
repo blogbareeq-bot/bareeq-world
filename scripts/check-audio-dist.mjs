@@ -21,7 +21,7 @@ for (const name of posts) {
     throw new Error(`${id}: production audio is not Azure AI Speech Saudi Arabic.`);
   }
   if (typeof manifest.voice !== 'string' || !manifest.voice.startsWith('ar-SA-')) throw new Error(`${id}: unexpected Azure voice ${manifest.voice}.`);
-  if (manifest.outputFormat !== 'audio-48khz-192kbitrate-mono-mp3') throw new Error(`${id}: unexpected Azure audio format.`);
+  if (manifest.outputFormat !== 'audio-48khz-96kbitrate-mono-mp3') throw new Error(`${id}: unexpected Azure audio format.`);
   if (!Array.isArray(manifest.parts) || !manifest.parts.length) throw new Error(`${id}: audio manifest has no MP3 parts.`);
   for (const part of manifest.parts) {
     if (typeof part.src !== 'string' || !part.src.startsWith(`/audio/articles/${key}/`) || !part.src.endsWith('.mp3')) {

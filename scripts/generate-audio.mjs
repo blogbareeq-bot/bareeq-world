@@ -11,14 +11,14 @@ const RESOURCE_ENDPOINT = process.env.AZURE_SPEECH_ENDPOINT?.trim().replace(/\/$
 const LANGUAGE = 'ar-SA';
 const DEFAULT_VOICE = process.env.AZURE_SPEECH_VOICE?.trim() || 'ar-SA-HamedNeural';
 const SYNTHESIS_RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';
-const OUTPUT_FORMAT = 'audio-48khz-192kbitrate-mono-mp3';
+const OUTPUT_FORMAT = 'audio-48khz-96kbitrate-mono-mp3';
 const PLAN_ONLY = process.argv.includes('--plan');
-const MAX_REQUEST_BYTES = 12000; // keeps each part well below the 64 KB SSML limit and comfortably below 10 minutes.
+const MAX_REQUEST_BYTES = 6000; // smaller parts keep Azure responses compact and resilient on CI/mobile-oriented builds.
 const MIN_SYNTHESIS_INTERVAL_MS = Number(process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200'); // F0 allows 20 synthesis transactions per rolling 60 seconds.
-const GENERATOR_VERSION = 3;
+const GENERATOR_VERSION = 4;
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.7.0';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.7.1';
 
 const encoder = new TextEncoder();
 const byteLength = (value) => encoder.encode(value).byteLength;
@@ -136,17 +136,73 @@ function escapeXml(text) {
   return text.replace(/[<>&"']/g, (char) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' }[char]));
 }
 
+const MAX_FETCH_RETRIES = Number(process.env.AZURE_SPEECH_MAX_RETRIES || '5');
+
+function retryDelay(attempt, response = null) {
+  const retryAfter = response ? Number(response.headers.get('retry-after')) : NaN;
+  if (Number.isFinite(retryAfter) && retryAfter > 0) return retryAfter * 1000;
+  return Math.min(30000, 1500 * (2 ** attempt));
+}
+
+function transportCode(error) {
+  return error?.cause?.code || error?.code || '';
+}
+
+function isRetryableTransportError(error) {
+  const code = transportCode(error);
+  return error instanceof TypeError
+    || ['UND_ERR_SOCKET', 'UND_ERR_CONNECT_TIMEOUT', 'ECONNRESET', 'ECONNREFUSED', 'EPIPE', 'ETIMEDOUT'].includes(code);
+}
+
 async function request(url, options = {}, attempt = 0) {
-  const response = await fetch(url, options);
-  if (response.ok) return response;
-  const body = await response.text();
-  if ((response.status === 429 || response.status >= 500) && attempt < 5) {
-    const retryAfter = Number(response.headers.get('retry-after'));
-    const wait = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : Math.min(30000, 1000 * (2 ** attempt));
-    await sleep(wait);
-    return request(url, options, attempt + 1);
+  try {
+    const response = await fetch(url, options);
+    if (response.ok) return response;
+    const body = await response.text().catch(() => '');
+    if ((response.status === 429 || response.status >= 500) && attempt < MAX_FETCH_RETRIES) {
+      const wait = retryDelay(attempt, response);
+      console.warn(`Azure request HTTP ${response.status}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
+      await sleep(wait);
+      return request(url, options, attempt + 1);
+    }
+    throw new Error(`Azure Speech request failed (${response.status}): ${body.slice(0, 700)}`);
+  } catch (error) {
+    if (attempt < MAX_FETCH_RETRIES && isRetryableTransportError(error)) {
+      const wait = retryDelay(attempt);
+      console.warn(`Azure request transport error ${transportCode(error) || error.name}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
+      await sleep(wait);
+      return request(url, options, attempt + 1);
+    }
+    throw error;
   }
-  throw new Error(`Azure Speech request failed (${response.status}): ${body.slice(0, 700)}`);
+}
+
+async function requestBinary(url, options = {}, { attempt = 0, throttle = false, label = 'binary request' } = {}) {
+  try {
+    if (throttle) await throttleSynthesis();
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      const body = await response.text().catch(() => '');
+      if ((response.status === 429 || response.status >= 500) && attempt < MAX_FETCH_RETRIES) {
+        const wait = retryDelay(attempt, response);
+        console.warn(`${label} HTTP ${response.status}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
+        await sleep(wait);
+        return requestBinary(url, options, { attempt: attempt + 1, throttle, label });
+      }
+      throw new Error(`Azure Speech request failed (${response.status}): ${body.slice(0, 700)}`);
+    }
+    const bytes = Buffer.from(await response.arrayBuffer());
+    if (bytes.length < 100) throw new Error(`${label}: response is unexpectedly small (${bytes.length} bytes).`);
+    return bytes;
+  } catch (error) {
+    if (attempt < MAX_FETCH_RETRIES && isRetryableTransportError(error)) {
+      const wait = retryDelay(attempt);
+      console.warn(`${label} transport error ${transportCode(error) || error.name}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
+      await sleep(wait);
+      return requestBinary(url, options, { attempt: attempt + 1, throttle, label });
+    }
+    throw error;
+  }
 }
 
 function getAzureUrls() {
@@ -184,11 +240,10 @@ async function throttleSynthesis() {
 }
 
 async function synthesize(apiKey, voice, text) {
-  await throttleSynthesis();
   const { synthesize } = getAzureUrls();
   const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${LANGUAGE}"><voice name="${escapeXml(voice)}"><prosody rate="${escapeXml(SYNTHESIS_RATE)}">${escapeXml(text)}</prosody></voice></speak>`;
   if (byteLength(ssml) >= 64000) throw new Error('Azure SSML request exceeds the 64 KB real-time synthesis limit.');
-  const response = await request(synthesize, {
+  return requestBinary(synthesize, {
     method: 'POST',
     headers: {
       'Ocp-Apim-Subscription-Key': apiKey,
@@ -197,8 +252,7 @@ async function synthesize(apiKey, voice, text) {
       'User-Agent': USER_AGENT,
     },
     body: ssml,
-  });
-  return Buffer.from(await response.arrayBuffer());
+  }, { throttle: true, label: 'Azure synthesis' });
 }
 
 async function loadPosts() {
@@ -250,10 +304,7 @@ async function restoreFromProduction(post) {
   await mkdir(tempDir, { recursive: true });
   try {
     for (const part of manifest.parts) {
-      const audioResponse = await fetch(`${CACHE_ORIGIN}${part.src}`, { headers: { 'User-Agent': USER_AGENT } });
-      if (!audioResponse.ok) throw new Error(`HTTP ${audioResponse.status}`);
-      const bytes = Buffer.from(await audioResponse.arrayBuffer());
-      if (bytes.length < 100) throw new Error('Cached MP3 is unexpectedly small.');
+      const bytes = await requestBinary(`${CACHE_ORIGIN}${part.src}`, { headers: { 'User-Agent': USER_AGENT } }, { label: 'Production audio cache download' });
       await writeFile(path.join(tempDir, path.basename(part.src)), bytes);
     }
     await writeFile(path.join(tempDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');

@@ -23,12 +23,12 @@ requireAll('article.js', client, [
   'actual audio.play() call directly inside a user gesture on mobile Safari/Chrome'
 ]);
 if (client.includes('speechSynthesis') || client.includes('SpeechSynthesisUtterance')) {
-  throw new Error('Browser speech synthesis must not be used as the primary/fallback reader in v4.7.0.');
+  throw new Error('Browser speech synthesis must not be used as the primary/fallback reader in v4.7.1.');
 }
 requireAll('generate-audio.mjs', generator, [
   'AZURE_SPEECH_KEY', 'AZURE_SPEECH_REGION', 'AZURE_SPEECH_ENDPOINT', "LANGUAGE = 'ar-SA'", 'ar-SA-HamedNeural',
-  'Ocp-Apim-Subscription-Key', "'X-Microsoft-OutputFormat': OUTPUT_FORMAT", 'audio-48khz-192kbitrate-mono-mp3',
-  'MAX_REQUEST_BYTES = 12000', "AZURE_SPEECH_MIN_INTERVAL_MS || '3200'", 'sourceHash', 'manifest.json'
+  'Ocp-Apim-Subscription-Key', "'X-Microsoft-OutputFormat': OUTPUT_FORMAT", 'audio-48khz-96kbitrate-mono-mp3',
+  'MAX_REQUEST_BYTES = 6000', "AZURE_SPEECH_MIN_INTERVAL_MS || '3200'", 'MAX_FETCH_RETRIES', 'UND_ERR_SOCKET', 'requestBinary(', 'sourceHash', 'manifest.json'
 ]);
 if (!pkg.scripts?.build?.includes('npm run generate:audio')) throw new Error('Build does not generate/validate Azure audio.');
 console.log('Azure AI Speech + mobile HTMLAudio audit passed.');
