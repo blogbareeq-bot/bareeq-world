@@ -1,4 +1,8 @@
-# عالم بريق — V4.9.0 Fresh Home + Tablet Audio Release
+# Bareeq World v4.10.0
+
+> تحديث واجهة الجوال وحماية استهلاك القراءة الصوتية.
+
+# عالم بريق — V4.10.0 Mobile Navigation + Azure Cost Guard Release
 
 نسخة إطلاق كاملة من **عالم بريق — نافذتك إلى المعرفة**، مبنية بـAstro ومهيأة للنشر من GitHub إلى Cloudflare Pages.
 

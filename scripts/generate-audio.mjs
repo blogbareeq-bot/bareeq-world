@@ -17,9 +17,12 @@ const SYNC_PLAN_ONLY = process.argv.includes('--sync-plan');
 const MAX_REQUEST_BYTES = 6000; // smaller parts keep Azure responses compact and resilient on CI/mobile-oriented builds.
 const MIN_SYNTHESIS_INTERVAL_MS = Number(process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200'); // F0 allows 20 synthesis transactions per rolling 60 seconds.
 const GENERATOR_VERSION = 5;
+const AZURE_FREE_MONTHLY_CHARS = Number(process.env.AZURE_SPEECH_FREE_MONTHLY_CHARS || '500000');
+const BUILD_WARNING_CHARS = Number(process.env.AZURE_SPEECH_BUILD_WARNING_CHARS || '400000');
+const BUILD_HARD_LIMIT_CHARS = Number(process.env.AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS || '450000');
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.8.0';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.10.0';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
 const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
@@ -511,6 +514,18 @@ if (missing.length) {
     else stillMissing.push(post);
   }
   missing = stillMissing;
+}
+
+const missingChars = missing.reduce((sum, post) => sum + [...post.spokenText].length, 0);
+const missingRequests = missing.reduce((sum, post) => sum + post.audioParts.length, 0);
+const percent = AZURE_FREE_MONTHLY_CHARS > 0 ? (missingChars / AZURE_FREE_MONTHLY_CHARS) * 100 : 0;
+console.log(`Azure Speech cost guard: this build needs ${missingChars.toLocaleString('en-US')} new synthesis character(s) across ${missingRequests} request(s), about ${percent.toFixed(1)}% of the configured ${AZURE_FREE_MONTHLY_CHARS.toLocaleString('en-US')} monthly allowance.`);
+console.log('Note: this is a per-build estimate, not Azure account monthly usage. Unchanged published audio is restored and does not consume new synthesis characters.');
+if (BUILD_WARNING_CHARS > 0 && missingChars >= BUILD_WARNING_CHARS) {
+  console.warn(`⚠ Azure Speech usage warning: this build will synthesize ${missingChars.toLocaleString('en-US')} characters (warning threshold: ${BUILD_WARNING_CHARS.toLocaleString('en-US')}).`);
+}
+if (BUILD_HARD_LIMIT_CHARS > 0 && missingChars > BUILD_HARD_LIMIT_CHARS) {
+  throw new Error(`Azure Speech safety stop: this build would synthesize ${missingChars.toLocaleString('en-US')} characters, above the configured hard limit of ${BUILD_HARD_LIMIT_CHARS.toLocaleString('en-US')}. Raise AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS deliberately if this is expected.`);
 }
 
 if (!API_KEY && missing.length) {

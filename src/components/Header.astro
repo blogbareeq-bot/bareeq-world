@@ -9,6 +9,17 @@ const { latestPosts = [] } = Astro.props;
 const allPosts = await getPublishedPosts();
 const currentPath = Astro.url.pathname;
 const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : currentPath.startsWith(prefix);
+const compactTickerTitle = (title: string, max = 42) => {
+  if ([...title].length <= max) return title;
+  const words = title.split(/\s+/);
+  let result = '';
+  for (const word of words) {
+    const candidate = result ? `${result} ${word}` : word;
+    if ([...candidate].length > max) break;
+    result = candidate;
+  }
+  return result || [...title].slice(0, max).join('');
+};
 ---
 <header class="site-header sticky-header" data-sticky-header>
   <div class="main-header shell-full">
@@ -38,10 +49,10 @@ const isActive = (prefix: string) => prefix === '/' ? currentPath === '/' : curr
 {latestPosts.length > 0 && (
     <div class="ticker" aria-label="أحدث المقالات" data-ticker>
       <div class="shell-wide ticker-inner">
-        <span class="ticker-label">أحدث المقالات</span>
+        <span class="ticker-label"><span class="ticker-label-full">أحدث المقالات</span><span class="ticker-label-mobile">جديد</span></span>
         <div class="ticker-viewport">
           <div class="ticker-track" data-ticker-track>
-            {latestPosts.map((post) => <a href={`/posts/${post.id}/`}>{post.data.title}</a>)}
+            {latestPosts.map((post) => <a href={`/posts/${post.id}/`} aria-label={post.data.title}><span class="ticker-title-full">{post.data.title}</span><span class="ticker-title-mobile">{compactTickerTitle(post.data.title)}</span></a>)}
             <span class="ticker-copy" aria-hidden="true">
               {latestPosts.map((post) => <a tabindex="-1" href={`/posts/${post.id}/`}>{post.data.title}</a>)}
             </span>
