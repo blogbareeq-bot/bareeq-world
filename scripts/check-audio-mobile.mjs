@@ -12,20 +12,20 @@ const requireAll = (name, text, needles) => {
 };
 
 requireAll('ReadingModes.astro', component, [
-  'data-audio-manifest={audioManifest}', 'data-article-audio', 'preload="metadata"', 'data-audio-play', 'data-audio-stop', 'disabled',
+  'data-audio-manifest={audioManifest}', 'data-audio-manifest-inline', 'data-article-audio', 'preload="none"', 'playsinline', 'data-audio-play', 'data-audio-stop', 'data-audio-native-fallback', 'disabled',
   'Azure AI Speech', 'تتبّع الفقرة'
 ]);
 requireAll('[id].astro', page, [
   "createHash('sha256')", "slice(0, 16)", 'audioManifest={audioManifest}'
 ]);
 requireAll('article.js', client, [
-  'fetch(manifestUrl', 'prepareAudio()', 'audio.src = manifest.parts[index].src', 'audio.load()',
-  "playButton?.addEventListener('click'", 'void playCurrent()', "audio?.addEventListener('ended'", 'audio.playbackRate',
-  'actual audio.play() call directly inside a user gesture on mobile Safari/Chrome', 'stopAudio', 'buildSyncTargets', 'syncTextToAudio',
+  'fetch(manifestUrl', 'prepareAudio()', 'readInlineManifest', 'applyManifest', 'audio.src = manifest.parts[index].src',
+  "playButton?.addEventListener('click'", "audio?.addEventListener('ended'", 'audio.playbackRate',
+  'This call is intentionally synchronous inside the click handler on first play.', 'requestPlay', 'stopAudio', 'buildSyncTargets', 'syncTextToAudio',
   'smartScrollTo', 'userNavigatingUntil'
 ]);
 if (client.includes('speechSynthesis') || client.includes('SpeechSynthesisUtterance')) {
-  throw new Error('Browser speech synthesis must not be used as the primary/fallback reader in v4.8.0.');
+  throw new Error('Browser speech synthesis must not be used as the primary/fallback reader in v4.9.0.');
 }
 requireAll('generate-audio.mjs', generator, [
   'AZURE_SPEECH_KEY', 'AZURE_SPEECH_REGION', 'AZURE_SPEECH_ENDPOINT', "LANGUAGE = 'ar-SA'", 'ar-SA-HamedNeural',
@@ -37,4 +37,4 @@ requireAll('global.css', styles, ['.audio-play{min-height:44px', '.audio-stop{mi
 if (!pkg.scripts?.build?.includes('npm run generate:audio') || !pkg.scripts?.build?.includes('check-audio-sync.mjs')) {
   throw new Error('Build does not generate/validate synchronized Azure audio.');
 }
-console.log('Azure AI Speech + synchronized mobile HTMLAudio audit passed.');
+console.log('Azure AI Speech + synchronized mobile/tablet HTMLAudio audit passed.');

@@ -8,7 +8,8 @@ import { site } from '../config/site';
 import { responsiveThumbnail } from '../lib/images';
 
 const posts = await getPublishedPosts();
-const featured = posts.find((post) => post.data.featured) ?? posts[0];
+// The home hero always follows publishing chronology so every new article refreshes the front page.
+const featured = posts[0];
 const bookWeek = posts.find((post) => post.data.categorySlug === 'bareeq-books' && post.id !== featured?.id);
 const sidePosts = posts
   .filter((post) => post.id !== featured?.id && post.id !== bookWeek?.id)
@@ -46,7 +47,7 @@ const homeSchema = {
   <HomeIntro />
 
   {featured ? (
-    <section class="hero-editorial shell-wide section-gap" aria-label="المقالات المختارة">
+    <section class="hero-editorial shell-wide section-gap" aria-label="جديد بريق وأحدث المقالات">
       <article class="hero-featured">
         <a class="hero-link" href={`/posts/${featured.id}/`}>
           {(featured.data.thumbnail || featured.data.image) ? (
@@ -64,7 +65,7 @@ const homeSchema = {
           ) : <span class="image-fallback" aria-hidden="true">بريق</span>}
           <span class="hero-overlay" aria-hidden="true"></span>
           <div class="hero-content">
-            <span class="featured-badge">مقال مختار</span>
+            <span class="featured-badge">جديد بريق</span>
             <h1>{featured.data.title}</h1>
             <p>{featured.data.description}</p>
             <div class="hero-meta">

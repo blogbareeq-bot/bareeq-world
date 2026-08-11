@@ -100,7 +100,7 @@
 
 
   // Reading modes: full text, pre-generated Azure AI Speech audio, editorial summary,
-  // and synchronized paragraph tracking. Audio remains HTML5-based for mobile reliability.
+  // synchronized paragraph tracking, and a native-controls fallback for tablet browsers.
   const modes = document.querySelector('[data-reading-modes]');
   if (modes && articleContent) {
     const modeButtons = [...modes.querySelectorAll('[data-reading-mode]')];
@@ -108,16 +108,23 @@
     const summaryPanel = modes.querySelector('[data-summary-panel]');
     const playButton = modes.querySelector('[data-audio-play]');
     const stopButton = modes.querySelector('[data-audio-stop]');
+    const nativeFallbackButton = modes.querySelector('[data-audio-native-fallback]');
     const playLabel = modes.querySelector('[data-audio-play-label]');
     const audioStatus = modes.querySelector('[data-audio-status]');
     const rateSelect = modes.querySelector('[data-audio-rate]');
     const audioPart = modes.querySelector('[data-audio-part]');
     const audioTime = modes.querySelector('[data-audio-time]');
     const audio = modes.querySelector('[data-article-audio]');
+    const inlineManifestNode = modes.querySelector('[data-audio-manifest-inline]');
     const summaryRead = modes.querySelector('[data-summary-read]');
     const manifestUrl = modes.dataset.audioManifest;
     const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    const MANIFEST_TIMEOUT_MS = 9000;
+    const PLAY_START_TIMEOUT_MS = 18000;
     let manifest = null;
+    let preparingManifest = null;
+    let playStartTimer = 0;
+    let awaitingPlaybackStart = false;
     let partIndex = 0;
     let finished = false;
     let activeMode = 'read';
@@ -138,8 +145,8 @@
       if (!blockText || !hint) return 0;
       if (blockText === hint) return 1000;
       if (blockText.startsWith(hint) || hint.startsWith(blockText)) return 850 - Math.min(200, Math.abs(blockText.length - hint.length));
-      const prefix = hint.slice(0, Math.min(64, hint.length));
-      if (prefix.length >= 16 && blockText.includes(prefix)) return 650;
+      const prefixText = hint.slice(0, Math.min(64, hint.length));
+      if (prefixText.length >= 16 && blockText.includes(prefixText)) return 650;
       const shorter = blockText.length < hint.length ? blockText : hint;
       if (shorter.length >= 24 && (blockText.includes(shorter) || hint.includes(shorter))) return 500;
       return 0;
@@ -147,6 +154,11 @@
 
     const buildSyncTargets = () => {
       syncTargets.clear();
+      articleContent.querySelectorAll('[data-audio-sync-id]').forEach((element) => {
+        element.removeAttribute('data-audio-sync-id');
+        element.classList.remove('is-audio-active');
+        element.removeAttribute('data-audio-current');
+      });
       const entries = [];
       const seen = new Set();
       manifest?.parts?.forEach((part) => part.sync?.forEach((entry) => {
@@ -249,6 +261,7 @@
       });
       if (listenPanel) listenPanel.hidden = name !== 'listen';
       if (summaryPanel) summaryPanel.hidden = name !== 'summary';
+      if (name === 'listen' && !manifest && !preparingManifest) void prepareAudio();
       if (name === 'read') articleContent.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
     };
     modeButtons.forEach((button, index) => {
@@ -283,6 +296,14 @@
       const duration = formatClock(audio.duration);
       audioTime.textContent = duration ? `${current} / ${duration}` : current;
     };
+    const clearPlayStartTimer = () => {
+      if (playStartTimer) clearTimeout(playStartTimer);
+      playStartTimer = 0;
+    };
+    const markPlaybackStarted = () => {
+      awaitingPlaybackStart = false;
+      clearPlayStartTimer();
+    };
     const setPlayingUi = (playing) => {
       modes.classList.toggle('is-speaking', playing);
       if (playLabel) playLabel.textContent = playing ? 'إيقاف مؤقت' : (finished ? 'استمع من البداية' : 'متابعة');
@@ -294,28 +315,59 @@
     };
     const setPart = (index) => {
       if (!audio || !manifest?.parts?.[index]) return false;
+      clearPlayStartTimer();
       partIndex = index;
       finished = false;
       audio.src = manifest.parts[index].src;
       audio.playbackRate = Number(rateSelect?.value || 1);
-      audio.load();
+      // Do not call load() here. On iPadOS/Android tablets the first play must remain
+      // directly tied to the user's tap; audio.play() will load the same-origin MP3 itself.
       updatePartStatus();
       updateTime();
       updateStopAvailability();
       return true;
     };
-    const playCurrent = async () => {
-      if (!audio) return;
-      try {
-        await audio.play();
-      } catch {
-        modes.classList.remove('is-speaking');
-        if (playLabel) playLabel.textContent = 'متابعة';
-        if (audioStatus) audioStatus.textContent = 'اضغط «متابعة» لتشغيل المقطع التالي';
-      }
+
+    const exposeNativeFallback = (message = 'يمكنك استخدام مشغّل الجهاز إذا منع المتصفح التشغيل المخصص') => {
+      if (nativeFallbackButton) nativeFallbackButton.hidden = false;
+      if (audioStatus) audioStatus.textContent = message;
     };
+
+    const handlePlayFailure = (error, { automatic = false } = {}) => {
+      awaitingPlaybackStart = false;
+      clearPlayStartTimer();
+      modes.classList.remove('is-speaking');
+      const blocked = error?.name === 'NotAllowedError';
+      if (playLabel) playLabel.textContent = automatic ? 'متابعة' : 'إعادة المحاولة';
+      if (audioStatus) {
+        audioStatus.textContent = blocked
+          ? 'منع الجهاز التشغيل التلقائي. اضغط «إعادة المحاولة» أو استخدم مشغّل الجهاز'
+          : 'تعذر بدء الصوت. أعد المحاولة أو استخدم مشغّل الجهاز';
+      }
+      exposeNativeFallback(audioStatus?.textContent || undefined);
+    };
+
+    const requestPlay = ({ automatic = false } = {}) => {
+      if (!audio) return;
+      clearPlayStartTimer();
+      awaitingPlaybackStart = true;
+      if (audioStatus) audioStatus.textContent = automatic ? 'جارٍ الانتقال إلى المقطع التالي' : 'جارٍ بدء القراءة الصوتية';
+      // This call is intentionally synchronous inside the click handler on first play.
+      const promise = audio.play();
+      playStartTimer = setTimeout(() => {
+        if (!awaitingPlaybackStart) return;
+        awaitingPlaybackStart = false;
+        try { audio.pause(); } catch {}
+        if (playLabel) playLabel.textContent = 'إعادة المحاولة';
+        exposeNativeFallback('استغرق بدء الصوت وقتًا أطول من المتوقع. أعد المحاولة أو استخدم مشغّل الجهاز');
+      }, PLAY_START_TIMEOUT_MS);
+      if (promise && typeof promise.catch === 'function') promise.catch((error) => handlePlayFailure(error, { automatic }));
+    };
+
     const stopAudio = () => {
       if (!audio || !manifest) return;
+      awaitingPlaybackStart = false;
+      clearPlayStartTimer();
       audio.pause();
       finished = false;
       clearActiveSync();
@@ -331,55 +383,112 @@
       updateStopAvailability();
     };
 
-    const prepareAudio = async () => {
-      if (!audio || !playButton || !manifestUrl) return;
-      playButton.disabled = true;
+    const isValidManifest = (data) => Boolean(data && Array.isArray(data.parts) && data.parts.length && data.parts.every((part) => typeof part?.src === 'string' && part.src.endsWith('.mp3') && Array.isArray(part.sync)));
+    const applyManifest = (data) => {
+      if (!isValidManifest(data) || !audio || !playButton) return false;
+      manifest = data;
+      buildSyncTargets();
+      setPart(0);
+      playButton.disabled = false;
       if (stopButton) stopButton.disabled = true;
-      try {
-        const response = await fetch(manifestUrl, { cache: 'force-cache', credentials: 'same-origin' });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        if (!Array.isArray(data.parts) || data.parts.length === 0 || !data.parts.every((part) => typeof part?.src === 'string' && part.src.endsWith('.mp3') && Array.isArray(part.sync))) {
-          throw new Error('Invalid synchronized audio manifest');
-        }
-        manifest = data;
-        buildSyncTargets();
-        setPart(0);
-        playButton.disabled = false;
-        updateStopAvailability();
-        if (playLabel) playLabel.textContent = 'ابدأ الاستماع';
-        playButton.setAttribute('aria-label', 'بدء الاستماع');
-        if (audioStatus) audioStatus.textContent = syncTargets.size ? 'القراءة الصوتية جاهزة مع تتبّع النص' : 'القراءة الصوتية جاهزة';
-      } catch {
-        playButton.disabled = true;
-        if (stopButton) stopButton.disabled = true;
-        if (playLabel) playLabel.textContent = 'الصوت غير متاح';
-        if (audioStatus) audioStatus.textContent = 'تعذر تحميل القراءة الصوتية لهذا المقال';
-      }
+      if (playLabel) playLabel.textContent = 'ابدأ الاستماع';
+      playButton.setAttribute('aria-label', 'بدء الاستماع');
+      if (audioStatus) audioStatus.textContent = syncTargets.size ? 'القراءة الصوتية جاهزة مع تتبّع النص' : 'القراءة الصوتية جاهزة';
+      return true;
     };
 
+    const readInlineManifest = () => {
+      if (!inlineManifestNode?.textContent) return null;
+      try {
+        const parsed = JSON.parse(inlineManifestNode.textContent);
+        return isValidManifest(parsed) ? parsed : null;
+      } catch { return null; }
+    };
+
+    const fetchManifestAttempt = async () => {
+      if (!manifestUrl) throw new Error('Missing manifest URL');
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), MANIFEST_TIMEOUT_MS);
+      try {
+        const response = await fetch(manifestUrl, { cache: 'force-cache', credentials: 'same-origin', signal: controller.signal });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (!isValidManifest(data)) throw new Error('Invalid synchronized audio manifest');
+        return data;
+      } finally { clearTimeout(timeout); }
+    };
+
+    async function prepareAudio() {
+      if (!audio || !playButton) return false;
+      if (manifest) return true;
+      if (preparingManifest) return preparingManifest;
+      playButton.disabled = true;
+      if (stopButton) stopButton.disabled = true;
+      if (playLabel) playLabel.textContent = 'تهيئة الصوت…';
+      if (audioStatus) audioStatus.textContent = 'جارٍ تهيئة القراءة الصوتية';
+      preparingManifest = (async () => {
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          try {
+            const data = await fetchManifestAttempt();
+            return applyManifest(data);
+          } catch {
+            if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 350));
+          }
+        }
+        playButton.disabled = false;
+        if (playLabel) playLabel.textContent = 'إعادة التهيئة';
+        if (audioStatus) audioStatus.textContent = 'تعذر تهيئة الصوت. اضغط «إعادة التهيئة» للمحاولة مجددًا';
+        return false;
+      })();
+      try { return await preparingManifest; }
+      finally { preparingManifest = null; }
+    }
+
     playButton?.addEventListener('click', () => {
-      if (!audio || playButton.disabled || !manifest) return;
+      if (!audio || playButton.disabled) return;
+      if (!manifest) {
+        void prepareAudio();
+        return;
+      }
       if (finished) setPart(0);
-      if (audio.paused) void playCurrent();
+      if (audio.paused) requestPlay({ automatic: false });
       else audio.pause();
     });
     stopButton?.addEventListener('click', stopAudio);
+    nativeFallbackButton?.addEventListener('click', () => {
+      if (!audio || !manifest) return;
+      modes.classList.add('use-native-audio');
+      nativeFallbackButton.hidden = true;
+      audio.controls = true;
+      audio.preload = 'metadata';
+      if (!audio.src) setPart(partIndex);
+      if (audioStatus) audioStatus.textContent = 'مشغّل الجهاز جاهز';
+      requestPlay({ automatic: false });
+    });
     rateSelect?.addEventListener('change', () => {
       if (audio) audio.playbackRate = Number(rateSelect.value || 1);
+    });
+    audio?.addEventListener('loadstart', () => {
+      if (!audioStatus || modes.classList.contains('is-speaking')) return;
+      audioStatus.textContent = 'جارٍ تحميل المقطع الصوتي';
+    });
+    audio?.addEventListener('playing', () => {
+      markPlaybackStarted();
+      if (audioStatus) audioStatus.textContent = 'جارٍ تشغيل القراءة الصوتية';
     });
     audio?.addEventListener('play', () => {
       finished = false;
       setPlayingUi(true);
       updateStopAvailability();
       syncTextToAudio();
-      if (audioStatus) audioStatus.textContent = 'جارٍ تشغيل القراءة الصوتية';
     });
     audio?.addEventListener('pause', () => {
+      awaitingPlaybackStart = false;
+      clearPlayStartTimer();
       if (audio.ended) return;
       setPlayingUi(false);
       updateStopAvailability();
-      if (audioStatus && !finished) audioStatus.textContent = 'متوقف مؤقتًا';
+      if (audioStatus && !finished && !modes.classList.contains('use-native-audio')) audioStatus.textContent = 'متوقف مؤقتًا';
     });
     audio?.addEventListener('loadedmetadata', () => {
       updatePartStatus();
@@ -393,11 +502,12 @@
       syncTextToAudio();
     });
     audio?.addEventListener('ended', () => {
+      awaitingPlaybackStart = false;
+      clearPlayStartTimer();
       if (!manifest) return;
       if (partIndex + 1 < manifest.parts.length) {
         setPart(partIndex + 1);
-        if (audioStatus) audioStatus.textContent = 'جارٍ الانتقال إلى المقطع التالي';
-        void playCurrent();
+        requestPlay({ automatic: true });
         return;
       }
       finished = true;
@@ -409,16 +519,23 @@
       updateStopAvailability();
     });
     audio?.addEventListener('error', () => {
+      awaitingPlaybackStart = false;
+      clearPlayStartTimer();
       modes.classList.remove('is-speaking');
       if (playLabel) playLabel.textContent = 'إعادة المحاولة';
-      if (audioStatus) audioStatus.textContent = 'تعذر تشغيل هذا المقطع. تحقق من الاتصال ثم أعد المحاولة';
+      exposeNativeFallback('تعذر تشغيل هذا المقطع. تحقق من الاتصال ثم أعد المحاولة أو استخدم مشغّل الجهاز');
       updateStopAvailability();
     });
-    addEventListener('pagehide', () => audio?.pause());
+    addEventListener('pagehide', () => {
+      awaitingPlaybackStart = false;
+      clearPlayStartTimer();
+      audio?.pause();
+    });
 
-    // Prepare the manifest and first MP3 before the user's play tap. This keeps
-    // the actual audio.play() call directly inside a user gesture on mobile Safari/Chrome.
-    void prepareAudio();
+    // Production builds embed the tiny manifest in HTML, eliminating the manifest fetch
+    // that could remain pending on some tablets. Network fetch remains a resilient dev fallback.
+    const embeddedManifest = readInlineManifest();
+    if (!applyManifest(embeddedManifest)) void prepareAudio();
   }
 
 })();

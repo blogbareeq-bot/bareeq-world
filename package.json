@@ -1,18 +1,18 @@
 {
   "name": "bareeq-world",
-  "version": "4.8.0",
+  "version": "4.9.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "start": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "generate:images": "node scripts/generate-images.mjs",
-    "build": "node scripts/clean-dist.mjs && node --check functions/_middleware.js && node --check public/scripts/analytics-consent.js && node --check public/scripts/article.js && node --check scripts/generate-audio.mjs && node scripts/check-middleware.mjs && node scripts/check-reading-modes.mjs && node scripts/check-audio-mobile.mjs && node scripts/check-audio-sync.mjs && npm run generate:images && npm run generate:audio && ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/check-audio-dist.mjs && node scripts/check-dist.mjs && node scripts/check-responsive-css.mjs && node scripts/check-contrast.mjs && node scripts/check-interactions.mjs",
+    "build": "node scripts/clean-dist.mjs && node --check functions/_middleware.js && node --check public/scripts/analytics-consent.js && node --check public/scripts/article.js && node --check scripts/generate-audio.mjs && node scripts/check-middleware.mjs && node scripts/check-reading-modes.mjs && node scripts/check-audio-mobile.mjs && node scripts/check-audio-sync.mjs && node scripts/check-tablet-audio.mjs && npm run generate:images && npm run generate:audio && ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/check-audio-dist.mjs && node scripts/check-dist.mjs && node scripts/check-responsive-css.mjs && node scripts/check-contrast.mjs && node scripts/check-interactions.mjs",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "astro": "astro",
     "audit:dist": "node scripts/check-middleware.mjs && node scripts/check-dist.mjs && node scripts/check-responsive-css.mjs && node scripts/check-contrast.mjs && node scripts/check-interactions.mjs",
     "generate:audio": "node scripts/generate-audio.mjs",
-    "audit:audio": "node scripts/check-audio-mobile.mjs && node scripts/check-audio-sync.mjs && node scripts/check-audio-dist.mjs"
+    "audit:audio": "node scripts/check-audio-mobile.mjs && node scripts/check-audio-sync.mjs && node scripts/check-tablet-audio.mjs && node scripts/check-audio-dist.mjs"
   },
   "dependencies": {
     "@fontsource/cairo": "5.3.0",
