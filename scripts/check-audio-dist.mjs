@@ -7,18 +7,23 @@ const root = process.cwd();
 const postDir = path.join(root, 'src', 'content', 'posts');
 const auditPublicAudio = process.env.BAREEQ_AUDIO_AUDIT_PUBLIC === '1';
 const dist = path.join(root, auditPublicAudio ? 'public' : 'dist');
-const provider = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'openai';
+const provider = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'bundled';
+if (!['bundled', 'openai', 'azure'].includes(provider)) throw new Error('BAREEQ_TTS_PROVIDER must be bundled, openai, or azure.');
 const allowPartial = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
 const expected = provider === 'azure'
   ? { name: 'Microsoft Azure AI Speech', model: 'Neural TTS', language: 'ar-SA', format: 'audio-48khz-96kbitrate-mono-mp3', voices: [['hamed', 'ar-SA-HamedNeural'], ['zariyah', 'ar-SA-ZariyahNeural']] }
-  : { name: 'OpenAI', model: 'gpt-4o-mini-tts-2025-12-15', language: 'ar', format: 'mp3', voices: [['cedar', 'cedar'], ['marin', 'marin']] };
+  : provider === 'openai' ? { name: 'OpenAI', model: 'gpt-4o-mini-tts-2025-12-15', language: 'ar', format: 'mp3', voices: [['cedar', 'cedar'], ['marin', 'marin']] } : null;
 const studioMap = JSON.parse(await readFile(path.join(root, 'scripts', 'studio-audio-map.json'), 'utf8'));
-const requiredStudioArticles = new Set(provider === 'openai' ? Object.values(studioMap.imports || {}).map((item) => item.articleId) : []);
+const requiredStudioArticles = new Set(['bundled', 'openai'].includes(provider) ? Object.values(studioMap.imports || {}).map((item) => item.articleId) : []);
+const bundledMap = JSON.parse(await readFile(path.join(root, 'scripts', 'bundled-azure-audio-map.json'), 'utf8'));
+const bundledByArticle = new Map((bundledMap.articles || []).map((item) => [item.articleId, item]));
+const requiredBundledArticles = new Set(provider === 'bundled' ? bundledByArticle.keys() : []);
 const posts = (await readdir(postDir)).filter((name) => name.endsWith('.md')).sort();
 let totalParts = 0;
 let totalFiles = 0;
 let checkedArticles = 0;
 let importedArticles = 0;
+let bundledArticles = 0;
 
 const hex256 = /^[a-f0-9]{64}$/;
 const sha = (value) => createHash('sha256').update(value).digest('hex');
@@ -37,13 +42,22 @@ for (const name of posts) {
   }
 
   const imported = manifest.version === 4 && manifest.importerVersion === 1;
+  const bundled = manifest.version === 5 && manifest.importerVersion === 1;
   if (imported) {
-    if (provider !== 'openai' || manifest.provider !== 'OpenAI' || manifest.model !== expected.model || manifest.language !== 'ar' || manifest.outputFormat !== 'mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'studio-block-timestamps') throw new Error(`${id}: imported Studio metadata is invalid.`);
+    if (!['bundled', 'openai'].includes(provider) || manifest.provider !== 'OpenAI' || manifest.model !== 'gpt-4o-mini-tts-2025-12-15' || manifest.language !== 'ar' || manifest.outputFormat !== 'mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'studio-block-timestamps') throw new Error(`${id}: imported Studio metadata is invalid.`);
     if (manifest.contractTest || manifest.importedRelease?.targetBareeqVersion !== 'V4.16.0' || !manifest.importedRelease?.releaseId || !hex256.test(manifest.importedRelease?.manifestSha256 || '') || !hex256.test(manifest.importedRelease?.textSha256 || '')) throw new Error(`${id}: imported release provenance is incomplete.`);
     if (manifest.defaultVoice !== 'cedar' || !Array.isArray(manifest.voices) || manifest.voices.length !== 1 || manifest.voices[0]?.id !== 'cedar' || manifest.voices[0]?.providerVoice !== 'cedar' || !(manifest.voices[0]?.totalDurationSeconds > 0)) throw new Error(`${id}: approved Studio pilot must contain the single Cedar voice.`);
     if (!requiredStudioArticles.has(id)) throw new Error(`${id}: unapproved Studio import appeared in production output.`);
     importedArticles += 1;
+  } else if (bundled) {
+    const config = bundledByArticle.get(id);
+    if (provider !== 'bundled' || !config || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.language !== 'ar-SA' || manifest.outputFormat !== 'audio-48khz-96kbitrate-mono-mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted-legacy') throw new Error(`${id}: bundled Azure metadata is invalid.`);
+    if (manifest.contractTest || manifest.sourceHash !== config.sourceSnapshotSha256 || manifest.bundledRelease?.schema !== 'bareeq.bundled-azure.v1' || manifest.bundledRelease?.releaseId !== bundledMap.releaseId || manifest.bundledRelease?.sourceManifestSha256 !== config.sourceManifestSha256 || manifest.bundledRelease?.legacySourceHash !== config.legacySourceHash) throw new Error(`${id}: bundled Azure provenance is incomplete or changed.`);
+    if (manifest.defaultVoice !== 'hamed' || !Array.isArray(manifest.voices) || manifest.voices.length !== 1 || manifest.voices[0]?.id !== 'hamed' || manifest.voices[0]?.providerVoice !== 'ar-SA-HamedNeural' || !(manifest.voices[0]?.totalDurationSeconds > 0)) throw new Error(`${id}: bundled Azure article must contain exactly the approved Hamed voice.`);
+    if (!requiredBundledArticles.has(id) || !Array.isArray(manifest.parts) || manifest.parts.length !== config.parts.length) throw new Error(`${id}: unapproved or incomplete bundled Azure article appeared in production output.`);
+    bundledArticles += 1;
   } else {
+    if (!expected) throw new Error(`${id}: zero-cost bundled mode may not contain generated audio.`);
     if (manifest.version !== 3 || manifest.generatorVersion !== 6 || manifest.provider !== expected.name || manifest.model !== expected.model || manifest.language !== expected.language || manifest.outputFormat !== expected.format || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') throw new Error(`${id}: generated audio metadata does not match ${expected.name}.`);
     if (Boolean(manifest.contractTest) !== (process.env.BAREEQ_TTS_CONTRACT_TEST === '1')) throw new Error(`${id}: contract-test audio escaped its explicit test boundary.`);
     if (manifest.defaultVoice !== expected.voices[0][0] || !Array.isArray(manifest.voices) || manifest.voices.length !== 2) throw new Error(`${id}: generated audio requires exactly two ordered listening choices.`);
@@ -76,8 +90,9 @@ for (const name of posts) {
     for (const voiceId of voices) {
       const asset = part.audio[voiceId];
       const importedPrefix = `/audio/articles/${key}/releases/${manifest.importedRelease?.releaseId}/`;
+      const bundledPrefix = `/audio/articles/${key}/releases/${manifest.bundledRelease?.releaseId}/`;
       const generatedPrefix = `/audio/articles/${key}/${voiceId}-part-`;
-      const safePrefix = imported ? importedPrefix : generatedPrefix;
+      const safePrefix = imported ? importedPrefix : bundled ? bundledPrefix : generatedPrefix;
       if (typeof asset?.src !== 'string' || !asset.src.startsWith(safePrefix) || asset.src.includes('..') || !asset.src.endsWith('.mp3') || assetPaths.has(asset.src) || !(asset.durationSeconds > 0)) throw new Error(`${id}: unsafe or invalid ${voiceId} MP3 metadata.`);
       assetPaths.add(asset.src);
       const file = path.join(dist, asset.src.replace(/^\//, ''));
@@ -102,7 +117,8 @@ for (const name of posts) {
   checkedArticles += 1;
 }
 
-if (provider === 'openai' && importedArticles !== requiredStudioArticles.size) throw new Error(`Expected ${requiredStudioArticles.size} approved Studio import(s), found ${importedArticles}.`);
+if (['bundled', 'openai'].includes(provider) && importedArticles !== requiredStudioArticles.size) throw new Error(`Expected ${requiredStudioArticles.size} approved Studio import(s), found ${importedArticles}.`);
+if (provider === 'bundled' && bundledArticles !== requiredBundledArticles.size) throw new Error(`Expected ${requiredBundledArticles.size} approved bundled Azure article(s), found ${bundledArticles}.`);
 if (!checkedArticles) throw new Error('No production audio article was audited.');
 if (!allowPartial && checkedArticles !== posts.length) throw new Error(`Expected audio for all ${posts.length} articles, audited ${checkedArticles}.`);
 
@@ -123,4 +139,4 @@ for (const file of textFiles) {
   for (const secret of secrets) if (text.includes(secret)) throw new Error(`Speech API key leaked into production output: ${path.relative(dist, file)}`);
 }
 
-console.log(`Production audio audit passed${auditPublicAudio ? ' at the pre-build public stage' : ''}: ${checkedArticles} article(s), ${importedArticles} approved Studio import(s), ${totalParts} synchronized track(s), ${totalFiles} timed MP3 file(s), no text/key leakage.`);
+console.log(`Production audio audit passed${auditPublicAudio ? ' at the pre-build public stage' : ''}: ${checkedArticles} article(s), ${importedArticles} approved Studio import(s), ${bundledArticles} bundled Azure Hamed article(s), ${totalParts} synchronized track(s), ${totalFiles} timed MP3 file(s), no text/key leakage.`);

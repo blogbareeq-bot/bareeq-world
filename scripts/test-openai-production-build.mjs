@@ -66,7 +66,8 @@ const runChild = (command, args, env = contractEnv) => new Promise((resolve, rej
 try {
   await rm(path.join(ROOT, 'public', 'audio'), { recursive: true, force: true });
   if (AUDIO_ONLY) {
-    exitCode = await runChild(process.execPath, ['scripts/import-studio-audio.mjs']);
+    exitCode = await runChild(process.execPath, ['scripts/import-bundled-azure-audio.mjs']);
+    if (exitCode === 0) exitCode = await runChild(process.execPath, ['scripts/import-studio-audio.mjs']);
     if (exitCode === 0) exitCode = await runChild(process.execPath, ['scripts/generate-audio.mjs']);
     if (exitCode === 0) exitCode = await runChild(process.execPath, ['scripts/check-audio-dist.mjs'], { ...contractEnv, BAREEQ_AUDIO_AUDIT_PUBLIC: '1' });
   } else {
@@ -86,6 +87,7 @@ try {
   await rm(tempDir, { recursive: true, force: true });
   if (AUDIO_ONLY) {
     await rm(path.join(ROOT, 'public', 'audio'), { recursive: true, force: true });
+    execFileSync(process.execPath, ['scripts/import-bundled-azure-audio.mjs'], { cwd: ROOT, stdio: 'inherit' });
     execFileSync(process.execPath, ['scripts/import-studio-audio.mjs'], { cwd: ROOT, stdio: 'inherit' });
   }
 }

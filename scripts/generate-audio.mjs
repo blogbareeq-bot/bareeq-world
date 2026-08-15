@@ -6,8 +6,8 @@ import { mp3DurationSeconds } from './mp3-duration.mjs';
 const ROOT = process.cwd();
 const POSTS_DIR = path.join(ROOT, 'src', 'content', 'posts');
 const AUDIO_ROOT = path.join(ROOT, 'public', 'audio', 'articles');
-const PROVIDER = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'openai';
-if (!['openai', 'azure'].includes(PROVIDER)) throw new Error('BAREEQ_TTS_PROVIDER must be openai or azure.');
+const PROVIDER = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'bundled';
+if (!['bundled', 'openai', 'azure'].includes(PROVIDER)) throw new Error('BAREEQ_TTS_PROVIDER must be bundled, openai, or azure.');
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY?.trim();
 const AZURE_API_KEY = process.env.AZURE_SPEECH_KEY?.trim();
 const REGION = process.env.AZURE_SPEECH_REGION?.trim().toLowerCase() || 'eastus';
@@ -23,27 +23,27 @@ if (contractEndpoint) {
   if (parsed.protocol !== 'http:' || !['127.0.0.1', 'localhost', '::1'].includes(parsed.hostname)) throw new Error('The contract-test OpenAI endpoint must be local HTTP.');
 }
 const OPENAI_ENDPOINT = contractEndpoint || OPENAI_OFFICIAL_ENDPOINT;
-const LANGUAGE = PROVIDER === 'openai' ? 'ar' : 'ar-SA';
+const LANGUAGE = PROVIDER === 'openai' ? 'ar' : PROVIDER === 'azure' ? 'ar-SA' : 'ar';
 const SYNTHESIS_RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';
-const OUTPUT_FORMAT = PROVIDER === 'openai' ? 'mp3' : 'audio-48khz-96kbitrate-mono-mp3';
-const MODEL = PROVIDER === 'openai' ? OPENAI_MODEL : 'Neural TTS';
-const PROVIDER_NAME = PROVIDER === 'openai' ? 'OpenAI' : 'Microsoft Azure AI Speech';
+const OUTPUT_FORMAT = PROVIDER === 'openai' ? 'mp3' : PROVIDER === 'azure' ? 'audio-48khz-96kbitrate-mono-mp3' : 'mixed-mp3';
+const MODEL = PROVIDER === 'openai' ? OPENAI_MODEL : PROVIDER === 'azure' ? 'Neural TTS' : 'Approved offline releases';
+const PROVIDER_NAME = PROVIDER === 'openai' ? 'OpenAI' : PROVIDER === 'azure' ? 'Microsoft Azure AI Speech' : 'Bundled Cedar + Azure Hamed';
 const VOICES = PROVIDER === 'openai'
   ? [
       { id: 'cedar', label: 'سيدر (Cedar)', providerVoice: 'cedar', description: 'هادئ وواضح' },
       { id: 'marin', label: 'مارين (Marin)', providerVoice: 'marin', description: 'دافئ وطبيعي' },
     ]
-  : [
+  : PROVIDER === 'azure' ? [
       { id: 'hamed', label: 'حامد', providerVoice: 'ar-SA-HamedNeural', description: 'صوت سعودي رجالي' },
       { id: 'zariyah', label: 'زارية', providerVoice: 'ar-SA-ZariyahNeural', description: 'صوت سعودي نسائي' },
-    ];
+    ] : [];
 const PLAN_ONLY = process.argv.includes('--plan');
 const SYNC_PLAN_ONLY = process.argv.includes('--sync-plan');
 const SPEECH_QA_JSON = process.argv.includes('--speech-qa-json') || process.argv.some((arg) => arg.startsWith('--speech-qa-output='));
 const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-output='))?.slice('--speech-qa-output='.length) || '';
 const ALLOW_PARTIAL = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
-const MAX_REQUEST_BYTES = PROVIDER === 'openai' ? 4800 : 6000; // OpenAI's model accepts 2,000 input tokens; Arabic parts stay conservatively below that bound.
-const MIN_SYNTHESIS_INTERVAL_MS = Number(PROVIDER === 'openai' ? (process.env.OPENAI_TTS_MIN_INTERVAL_MS || '200') : (process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200'));
+const MAX_REQUEST_BYTES = PROVIDER === 'azure' ? 6000 : 4800; // OpenAI's model accepts 2,000 input tokens; Arabic parts stay conservatively below that bound.
+const MIN_SYNTHESIS_INTERVAL_MS = Number(PROVIDER === 'openai' ? (process.env.OPENAI_TTS_MIN_INTERVAL_MS || '200') : PROVIDER === 'azure' ? (process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200') : '0');
 const GENERATOR_VERSION = 6;
 const AZURE_FREE_MONTHLY_CHARS = Number(process.env.AZURE_SPEECH_FREE_MONTHLY_CHARS || '500000');
 const BUILD_WARNING_CHARS = Number(process.env.AZURE_SPEECH_BUILD_WARNING_CHARS || '400000');
@@ -55,7 +55,7 @@ const OPENAI_ARABIC_CHARS_PER_TEXT_TOKEN = Number(process.env.OPENAI_TTS_ARABIC_
 const OPENAI_AUDIO_TOKENS_PER_SECOND = Number(process.env.OPENAI_TTS_AUDIO_TOKENS_PER_SECOND || '50');
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.16.0';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.16.1';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
 const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
@@ -63,6 +63,9 @@ const SPEECH_REVIEW_VERSION = Number(SPEECH_OVERRIDES.reviewVersion || 1);
 const STUDIO_MAP_FILE = path.join(ROOT, 'scripts', 'studio-audio-map.json');
 const STUDIO_MAP = JSON.parse(await readFile(STUDIO_MAP_FILE, 'utf8'));
 const STUDIO_ARTICLE_IDS = new Set(Object.values(STUDIO_MAP.imports || {}).map((item) => item?.articleId).filter(Boolean));
+const BUNDLED_MAP_FILE = path.join(ROOT, 'scripts', 'bundled-azure-audio-map.json');
+const BUNDLED_MAP = JSON.parse(await readFile(BUNDLED_MAP_FILE, 'utf8'));
+const BUNDLED_BY_ARTICLE = new Map((BUNDLED_MAP.articles || []).map((item) => [item.articleId, item]));
 
 const encoder = new TextEncoder();
 const byteLength = (value) => encoder.encode(value).byteLength;
@@ -519,8 +522,50 @@ function providerFingerprint(post) {
   }));
 }
 
+function bundledManifestAssets(manifest, post) {
+  if (PROVIDER !== 'bundled' || manifest.version !== 5 || manifest.importerVersion !== 1 || manifest.articleId !== post.id) return null;
+  if (manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.language !== 'ar-SA' || manifest.outputFormat !== 'audio-48khz-96kbitrate-mono-mp3') return null;
+  if (manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted-legacy' || manifest.contractTest) return null;
+  const config = BUNDLED_BY_ARTICLE.get(post.id);
+  if (!config || config.audioKey !== post.key || manifest.sourceHash !== config.sourceSnapshotSha256) return null;
+  if (manifest.bundledRelease?.schema !== 'bareeq.bundled-azure.v1' || manifest.bundledRelease?.releaseId !== BUNDLED_MAP.releaseId || manifest.bundledRelease?.sourceManifestSha256 !== config.sourceManifestSha256 || manifest.bundledRelease?.legacySourceHash !== config.legacySourceHash) return null;
+  if (manifest.defaultVoice !== 'hamed' || !Array.isArray(manifest.voices) || manifest.voices.length !== 1) return null;
+  const voice = manifest.voices[0];
+  if (voice?.id !== 'hamed' || voice?.providerVoice !== 'ar-SA-HamedNeural' || typeof voice?.label !== 'string' || !(voice.totalDurationSeconds > 0)) return null;
+  if (!Array.isArray(manifest.parts) || manifest.parts.length !== config.parts.length) return null;
+
+  const assets = [];
+  const paths = new Set();
+  const seenIds = new Set();
+  let segmentIndex = 0;
+  let totalDurationSeconds = 0;
+  for (let partIndex = 0; partIndex < manifest.parts.length; partIndex += 1) {
+    const part = manifest.parts[partIndex];
+    const expected = config.parts[partIndex];
+    if (!Array.isArray(part?.sync) || !part.sync.length || !part.audio || typeof part.audio !== 'object') return null;
+    let previousStart = -1;
+    for (const entry of part.sync) {
+      const segment = post.segments[segmentIndex];
+      if (!segment || entry?.id !== segment.id || entry?.type !== segment.type || entry?.match !== segment.match || seenIds.has(entry.id)) return null;
+      if (!(entry.start >= 0 && entry.end <= 1 && entry.start < entry.end) || entry.start < previousStart) return null;
+      seenIds.add(entry.id);
+      previousStart = entry.start;
+      segmentIndex += 1;
+    }
+    const asset = part.audio.hamed;
+    const prefix = `/audio/articles/${post.key}/releases/${BUNDLED_MAP.releaseId}/`;
+    if (typeof asset?.src !== 'string' || !asset.src.startsWith(prefix) || path.basename(asset.src) !== expected.file || !asset.src.endsWith('.mp3') || paths.has(asset.src)) return null;
+    if (asset.bytes !== expected.bytes || asset.sha256 !== expected.sha256 || Math.abs(asset.durationSeconds - expected.durationSeconds) > 0.1) return null;
+    paths.add(asset.src);
+    assets.push(asset);
+    totalDurationSeconds += asset.durationSeconds;
+  }
+  if (segmentIndex !== post.segments.length || Math.abs(totalDurationSeconds - voice.totalDurationSeconds) > 0.1) return null;
+  return assets;
+}
+
 function importedManifestAssets(manifest, post) {
-  if (PROVIDER !== 'openai' || manifest.version !== 4 || manifest.importerVersion !== 1 || manifest.articleId !== post.id || manifest.provider !== 'OpenAI' || manifest.model !== OPENAI_MODEL || manifest.language !== 'ar' || manifest.outputFormat !== 'mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'studio-block-timestamps') return null;
+  if (!['bundled', 'openai'].includes(PROVIDER) || manifest.version !== 4 || manifest.importerVersion !== 1 || manifest.articleId !== post.id || manifest.provider !== 'OpenAI' || manifest.model !== OPENAI_MODEL || manifest.language !== 'ar' || manifest.outputFormat !== 'mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'studio-block-timestamps') return null;
   if (!manifest.importedRelease || manifest.importedRelease.targetBareeqVersion !== 'V4.16.0' || !/^[a-z0-9][a-z0-9._-]*$/i.test(manifest.importedRelease.releaseId || '')) return null;
   if (manifest.contractTest || !Array.isArray(manifest.voices) || !manifest.voices.length || !Array.isArray(manifest.parts) || manifest.parts.length !== 1) return null;
   if (!manifest.voices.some((voice) => voice?.id === manifest.defaultVoice)) return null;
@@ -556,6 +601,9 @@ function importedManifestAssets(manifest, post) {
 function manifestAssets(manifest, post) {
   const imported = importedManifestAssets(manifest, post);
   if (imported) return imported;
+  const bundled = bundledManifestAssets(manifest, post);
+  if (bundled) return bundled;
+  if (PROVIDER === 'bundled') return null;
   if (manifest.version !== 3 || manifest.sourceHash !== post.sourceHash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== PROVIDER_NAME || manifest.model !== MODEL || manifest.language !== LANGUAGE || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') return null;
   if (Boolean(manifest.contractTest) !== CONTRACT_TEST || !Array.isArray(manifest.voices) || manifest.voices.length !== VOICES.length || !Array.isArray(manifest.parts) || !manifest.parts.length) return null;
   if (manifest.defaultVoice !== VOICES[0].id) return null;
@@ -661,6 +709,16 @@ if (SPEECH_QA_JSON) {
 }
 
 if (PLAN_ONLY) {
+  if (PROVIDER === 'bundled') {
+    console.log(`Bundled mixed audio plan: ${posts.length} articles, 0 synthesis request(s), 0 billable character(s), ${sourceBytes} source UTF-8 bytes.`);
+    console.log('Voices: approved Studio Cedar for the cultural-habits article + bundled Azure Hamed for the other ten articles.');
+    for (const post of posts) {
+      console.log(STUDIO_ARTICLE_IDS.has(post.id)
+        ? `- ${post.id}: approved Bareeq Voice Studio release (Cedar), no synthesis request`
+        : `- ${post.id}: approved bundled Azure Hamed release, no synthesis request`);
+    }
+    process.exit(0);
+  }
   const generationPosts = PROVIDER === 'openai' ? posts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id)) : posts;
   const generationRequests = generationPosts.reduce((sum, post) => sum + post.audioParts.length, 0);
   const generationChars = generationPosts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
@@ -681,7 +739,7 @@ const prepared = posts.map((post) => ({ ...post, sourceHash: providerFingerprint
 let missing = [];
 for (const post of prepared) if (!await hasCompleteCache(post)) missing.push(post);
 
-if (missing.length && !CONTRACT_TEST && !ALLOW_PARTIAL) {
+if (missing.length && PROVIDER !== 'bundled' && !CONTRACT_TEST && !ALLOW_PARTIAL) {
   const stillMissing = [];
   for (const post of missing) {
     if (await restoreFromProduction(post)) console.log(`↺ ${post.id}: restored unchanged ${PROVIDER_NAME} dual-voice audio from production cache.`);
@@ -694,13 +752,15 @@ const missingSourceChars = missing.reduce((sum, post) => sum + [...post.spokenTe
 const missingChars = missingSourceChars * VOICES.length;
 const missingRequests = missing.reduce((sum, post) => sum + post.audioParts.length, 0) * VOICES.length;
 
-if (PROVIDER === 'openai') {
+if (PROVIDER === 'bundled' && missing.length) {
+  throw new Error(`Bundled production audio is missing or no longer matches ${missing.length} article(s): ${missing.map((post) => post.id).join(', ')}. This zero-cost build never calls a synthesis API. Restore the approved audio-releases bundle or deliberately regenerate and re-lock the affected recording(s).`);
+} else if (PROVIDER === 'openai') {
   const estimate = estimateOpenAiCost(missingChars, missingRequests);
   console.log(`OpenAI TTS cost guard: this build needs ${missingRequests} new request(s), ${missingChars.toLocaleString('en-US')} billable character(s), and an estimated $${estimate.usd.toFixed(2)} for Cedar + Marin.`);
   console.log('Note: this is a conservative per-build estimate, not the OpenAI account bill. Unchanged published audio is restored without new synthesis.');
   if (OPENAI_BUILD_WARNING_USD > 0 && estimate.usd >= OPENAI_BUILD_WARNING_USD) console.warn(`⚠ OpenAI TTS usage warning: estimated $${estimate.usd.toFixed(2)} (warning threshold: $${OPENAI_BUILD_WARNING_USD.toFixed(2)}).`);
   if (OPENAI_BUILD_HARD_LIMIT_USD > 0 && estimate.usd > OPENAI_BUILD_HARD_LIMIT_USD) throw new Error(`OpenAI TTS safety stop: estimated $${estimate.usd.toFixed(2)} exceeds the configured $${OPENAI_BUILD_HARD_LIMIT_USD.toFixed(2)} hard limit. Raise OPENAI_TTS_BUILD_HARD_LIMIT_USD deliberately if this full regeneration is expected.`);
-} else {
+} else if (PROVIDER === 'azure') {
   const percent = AZURE_FREE_MONTHLY_CHARS > 0 ? (missingChars / AZURE_FREE_MONTHLY_CHARS) * 100 : 0;
   console.log(`Azure Speech cost guard: this build needs ${missingChars.toLocaleString('en-US')} new synthesis character(s) across ${missingRequests} request(s), about ${percent.toFixed(1)}% of the configured ${AZURE_FREE_MONTHLY_CHARS.toLocaleString('en-US')} monthly allowance.`);
   console.log('Note: this is a per-build estimate, not Azure account monthly usage. Unchanged published audio is restored without new synthesis.');
@@ -708,7 +768,7 @@ if (PROVIDER === 'openai') {
   if (BUILD_HARD_LIMIT_CHARS > 0 && missingChars > BUILD_HARD_LIMIT_CHARS) throw new Error(`Azure Speech safety stop: this build would synthesize ${missingChars.toLocaleString('en-US')} characters, above the configured hard limit of ${BUILD_HARD_LIMIT_CHARS.toLocaleString('en-US')}. Raise AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS deliberately if this is expected.`);
 }
 
-const API_KEY = PROVIDER === 'openai' ? OPENAI_API_KEY : AZURE_API_KEY;
+const API_KEY = PROVIDER === 'openai' ? OPENAI_API_KEY : PROVIDER === 'azure' ? AZURE_API_KEY : '';
 if (!API_KEY && missing.length) {
   if (ALLOW_PARTIAL) {
     console.warn(`⚠ Offline pilot mode: preserving ${posts.length - missing.length} verified audio article(s) and skipping ${missing.length} unavailable article(s). This mode is for local release verification only.`);
@@ -719,7 +779,9 @@ if (!API_KEY && missing.length) {
 }
 
 if (!missing.length) {
-  console.log(`${PROVIDER_NAME} dual-voice audio cache is complete for ${posts.length} articles.`);
+  console.log(PROVIDER === 'bundled'
+    ? `Bundled mixed audio cache is complete for ${posts.length} articles: 1 Studio Cedar + ${BUNDLED_BY_ARTICLE.size} Azure Hamed, 0 synthesis requests and no API key required.`
+    : `${PROVIDER_NAME} dual-voice audio cache is complete for ${posts.length} articles.`);
   process.exit(0);
 }
 

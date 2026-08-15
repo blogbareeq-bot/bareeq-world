@@ -172,6 +172,7 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
 
 {
   const generatedArticleId = 'لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء';
+  const productionProvider = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'bundled';
   const html = await readFile(path.join(root, 'posts', generatedArticleId, 'index.html'), 'utf8');
   const dom = createDom(html, 390);
   const listenButton = dom.window.document.querySelector('[data-reading-mode="listen"]');
@@ -179,14 +180,21 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
     dom.window.eval(audioCoreScript);
     dom.window.eval(articleScript);
     const voiceSelect = dom.window.document.querySelector('[data-audio-voice]');
+    const voiceField = dom.window.document.querySelector('[data-audio-voice-field]');
     const articleAudio = dom.window.document.querySelector('[data-article-audio]');
-    if (voiceSelect?.disabled || voiceSelect?.options.length !== 2 || voiceSelect?.value !== 'cedar' || !articleAudio?.src.includes('cedar-part-')) failures.push('generated dual-voice player does not initialize with Cedar and Marin');
-    if (articleAudio) Object.defineProperty(articleAudio, 'currentTime', { value: 2.5, writable: true, configurable: true });
-    if (voiceSelect) {
-      voiceSelect.value = 'marin';
-      voiceSelect.dispatchEvent(new dom.window.Event('change', { bubbles: true }));
-      if (!articleAudio?.src.includes('marin-part-')) failures.push('switching to Marin does not change the generated MP3 source');
-      if (dom.window.localStorage.getItem('bareeq-audio-voice-v1:openai') !== 'marin') failures.push('selected Marin voice is not saved in localStorage');
+    if (productionProvider === 'bundled') {
+      if (!voiceSelect?.disabled || voiceSelect?.options.length !== 1 || voiceSelect?.value !== 'hamed' || !voiceField?.hidden || !articleAudio?.src.includes('/releases/azure-hamed-live-20260815/part-001-7701cd5f.mp3')) failures.push('bundled production player does not initialize with the single approved Hamed release');
+    } else {
+      const [firstVoice, secondVoice] = productionProvider === 'azure' ? ['hamed', 'zariyah'] : ['cedar', 'marin'];
+      if (voiceSelect?.disabled || voiceSelect?.options.length !== 2 || voiceSelect?.value !== firstVoice || !articleAudio?.src.includes(`${firstVoice}-part-`)) failures.push(`generated dual-voice player does not initialize with ${firstVoice} and ${secondVoice}`);
+      if (articleAudio) Object.defineProperty(articleAudio, 'currentTime', { value: 2.5, writable: true, configurable: true });
+      if (voiceSelect) {
+        voiceSelect.value = secondVoice;
+        voiceSelect.dispatchEvent(new dom.window.Event('change', { bubbles: true }));
+        if (!articleAudio?.src.includes(`${secondVoice}-part-`)) failures.push(`switching to ${secondVoice} does not change the generated MP3 source`);
+        const preferenceProvider = productionProvider === 'azure' ? 'microsoft-azure-ai-speech' : 'openai';
+        if (dom.window.localStorage.getItem(`bareeq-audio-voice-v1:${preferenceProvider}`) !== secondVoice) failures.push(`selected ${secondVoice} voice is not saved in localStorage`);
+      }
     }
   }
   dom.window.close();
@@ -219,4 +227,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Interaction audit passed: header/search, menus, keyboard, drawer, theme, ticker, footer, analytics, article progress, Studio Cedar synchronization/seek, 30-day resume expiry, optional Cedar/Marin switching, filters, and search.');
+console.log('Interaction audit passed: header/search, menus, keyboard, drawer, theme, ticker, footer, analytics, article progress, Studio Cedar synchronization/seek, bundled Hamed or explicit dual-voice mode, 30-day resume expiry, filters, and search.');

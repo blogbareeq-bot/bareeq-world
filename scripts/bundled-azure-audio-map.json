@@ -1,0 +1,274 @@
+{
+  "version": 1,
+  "schema": "bareeq.bundled-azure.lock.v1",
+  "releaseId": "azure-hamed-live-20260815",
+  "capturedAt": "2026-08-15T07:04:00.000Z",
+  "sourceOrigin": "https://bareeqworld.com",
+  "bundleRoot": "audio-releases/azure-hamed-live-20260815/articles",
+  "articles": [
+    {
+      "articleId": "altadakhom-explained-simply",
+      "audioKey": "3fe4cd044730c91d",
+      "legacySourceHash": "40c245832c323d70dab5119f73e4bb8224842be70680a462bd1d00831faef009",
+      "sourceSnapshotSha256": "a417c9ff02fcc9eb3363c7002cd7c51f7d67f8eee94c45d683db26e409152537",
+      "sourceManifestSha256": "4da29f0794421301fe7711f606c9a4252e3c64ecc8cf9d81a3f33e09bc05131b",
+      "parts": [
+        {
+          "file": "part-001-40c24583.mp3",
+          "bytes": 3811104,
+          "durationSeconds": 317.592,
+          "sha256": "06fdf07f0b7fd66a852ebfc40d805be0a747f17630d10178c03a2cb92e97ebb1"
+        },
+        {
+          "file": "part-002-40c24583.mp3",
+          "bytes": 3873312,
+          "durationSeconds": 322.776,
+          "sha256": "559814891c2e1e349ec4dacc638e1e3fee162021ec3ddebec61351c6eb4a8bd5"
+        },
+        {
+          "file": "part-003-40c24583.mp3",
+          "bytes": 2716128,
+          "durationSeconds": 226.344,
+          "sha256": "d7a73e3c16ad7b825e20e2b2f86590b2297db1cacd8ae6385d0a44fa544a76f8"
+        }
+      ]
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "audioKey": "43993d7a722d81d4",
+      "legacySourceHash": "29e29cc7484aad5127b9fb381fb852af18ae1ac86e35c55b54ee585e828659e3",
+      "sourceSnapshotSha256": "d8a96a453e4827bea3d8dc209dacd4155c426adf63c20032e33bf44493b9f8c0",
+      "sourceManifestSha256": "0a14e35630f888f49db98bf7e87ffaa2f3c50dc96ad37a2380653c513b1eacb8",
+      "parts": [
+        {
+          "file": "part-001-29e29cc7.mp3",
+          "bytes": 3953952,
+          "durationSeconds": 329.496,
+          "sha256": "52b1d4d4f1531c78f32ad06183f994d900e30aa7fb5a023127046439e2fa54dd"
+        },
+        {
+          "file": "part-002-29e29cc7.mp3",
+          "bytes": 1214208,
+          "durationSeconds": 101.184,
+          "sha256": "07153f85b8fbf0647decc1006f3f6803d62b08bb522fdd5775dc99b3aa41895c"
+        }
+      ]
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "audioKey": "45d512425faa533a",
+      "legacySourceHash": "7701cd5f1533b1ba89e12ad487297aeadd533a5d55c54c8dfe00c4c28b4a12c3",
+      "sourceSnapshotSha256": "37f95c1232968f0a86e57d5bec81fbd4e375a2167a4191a55b60b0a911604155",
+      "sourceManifestSha256": "cd61433234130679223f25d0c50e2fb2624d810f848627f3d3f693ebe7b907e7",
+      "parts": [
+        {
+          "file": "part-001-7701cd5f.mp3",
+          "bytes": 3824928,
+          "durationSeconds": 318.744,
+          "sha256": "ff5aaa1739adf4df6799ed73a30fc3df42bd6b91c0fc9e38ce787bfe488f965b"
+        },
+        {
+          "file": "part-002-7701cd5f.mp3",
+          "bytes": 3769920,
+          "durationSeconds": 314.16,
+          "sha256": "31f54c4ec0d08d8097615efec3b8a75b5854500d147cd3720744d2d88b176081"
+        },
+        {
+          "file": "part-003-7701cd5f.mp3",
+          "bytes": 3818016,
+          "durationSeconds": 318.168,
+          "sha256": "2fc829129d83a7216dbfab3c4e5b4ec42ca3fe5dcea85bb0761ea2d1fbe43fca"
+        },
+        {
+          "file": "part-004-7701cd5f.mp3",
+          "bytes": 439488,
+          "durationSeconds": 36.624,
+          "sha256": "3d7789fc1ef126f16b8f82cd1ca302c7c2487498442e2debfb74ca47251111b4"
+        }
+      ]
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "audioKey": "4d194dd1e6a739a8",
+      "legacySourceHash": "e1b4caaee9a3600dfc1e148e2d39ed55a3234ad206278854c326f6ca90e7182d",
+      "sourceSnapshotSha256": "436d72ab9e2c77b6f748534d8e601bf2a8ca31d9733775bff57bb67507034e80",
+      "sourceManifestSha256": "5ad0d43fb6ecd2dfe6946607f23d0e5be1ae4bf596c9615e6477ef2836bd5ee1",
+      "parts": [
+        {
+          "file": "part-001-e1b4caae.mp3",
+          "bytes": 3381696,
+          "durationSeconds": 281.808,
+          "sha256": "f861c03a8018e59048c82e4104a9d0f6834357833b57ad3b1b811d4097d1a5f3"
+        }
+      ]
+    },
+    {
+      "articleId": "ai-agents-future-now",
+      "audioKey": "84f9f6b53f7ce503",
+      "legacySourceHash": "db53e9991ee65ab29daaf53eb7fc6865ceade03eb2142cbb9648336bea5e8b49",
+      "sourceSnapshotSha256": "f98f1ab869b1ed16aa84e38901fd8ba74b6cc4c6cda67a55411a911a8ed317bb",
+      "sourceManifestSha256": "b112d6eefe62f44517e03c80fc2bddaf5876aeda9838908ec2d6d642f2567a5f",
+      "parts": [
+        {
+          "file": "part-001-db53e999.mp3",
+          "bytes": 4023648,
+          "durationSeconds": 335.304,
+          "sha256": "754e1c13714daa8b64cd2047b49648ddc24e451b2dd202d8940df966075f4d5c"
+        },
+        {
+          "file": "part-002-db53e999.mp3",
+          "bytes": 3948480,
+          "durationSeconds": 329.04,
+          "sha256": "2ee3bd32ff791beec3006605f75b013464e2dc16b764fbbe88f3ced7f77ae443"
+        },
+        {
+          "file": "part-003-db53e999.mp3",
+          "bytes": 3990240,
+          "durationSeconds": 332.52,
+          "sha256": "fa0ce3bc77db5b9c68cd5e0f03db78be04df78269aec56e6352aa7bedaf24f72"
+        },
+        {
+          "file": "part-004-db53e999.mp3",
+          "bytes": 732960,
+          "durationSeconds": 61.08,
+          "sha256": "e29b26dd97717cebe1e1f4b98b494ac2820b3b705bcf73f5f245dd76f5cd2012"
+        }
+      ]
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "audioKey": "8f0fcef1d803164a",
+      "legacySourceHash": "dc1a29d5734dc4dd0399ca0603b8f1a0f7457f535f9cfafa2b33e5790f8db746",
+      "sourceSnapshotSha256": "3ac4b5018590a34fbf0e4f7a46e353d40d716024b01371fe8242c7ffa7ba0316",
+      "sourceManifestSha256": "9718bc8040d4f25fa17af0d3bfe0df071a57c72d25220479deeedda4db84e66c",
+      "parts": [
+        {
+          "file": "part-001-dc1a29d5.mp3",
+          "bytes": 3883104,
+          "durationSeconds": 323.592,
+          "sha256": "4adaff95252b7a3b61b548827f539aa0ed163d65408d6efb9cdb5209fe42f6c4"
+        },
+        {
+          "file": "part-002-dc1a29d5.mp3",
+          "bytes": 3698208,
+          "durationSeconds": 308.184,
+          "sha256": "5f68976fdc7704661aa4116976b673cf4016f18aacfc6e696e94c5d8e4d33091"
+        },
+        {
+          "file": "part-003-dc1a29d5.mp3",
+          "bytes": 3801600,
+          "durationSeconds": 316.8,
+          "sha256": "8fa343c13352dcbbdf151f7f8c717e1fda9ca455c03765a02ec4d328b071b686"
+        },
+        {
+          "file": "part-004-dc1a29d5.mp3",
+          "bytes": 3587328,
+          "durationSeconds": 298.944,
+          "sha256": "5cad6927ecc2b13e1bfdc5324d6b00e4a2413d611ed0f40315b4f01117daad72"
+        },
+        {
+          "file": "part-005-dc1a29d5.mp3",
+          "bytes": 3670272,
+          "durationSeconds": 305.856,
+          "sha256": "d4b2cbc0665828eb7be8ea9777c95c29bfac4de1a365dc43afe8e02633a908f9"
+        },
+        {
+          "file": "part-006-dc1a29d5.mp3",
+          "bytes": 2261376,
+          "durationSeconds": 188.448,
+          "sha256": "915b0d1f15e2fc5ab75324c9b7bf0021273c443763dc1cc08c516d2995cb3762"
+        }
+      ]
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "audioKey": "9d04080d1962a365",
+      "legacySourceHash": "afad18f86ff6a6614ab537b7bb1fb97386cc4c3fd04cee04e8e077dd108eb2a3",
+      "sourceSnapshotSha256": "4398017adccd75a0d6600fcbacb3074edac6debe8d9575142d03e3e3389369e7",
+      "sourceManifestSha256": "aebb0ae7e362a899f3b48fe171c64750ddff5fb33c9a8775b36274bad02bda27",
+      "parts": [
+        {
+          "file": "part-001-afad18f8.mp3",
+          "bytes": 3907008,
+          "durationSeconds": 325.584,
+          "sha256": "c880dcbb23206e15922c47081cacfa75c9f1708e7925b24d0a2d752768ad5ece"
+        },
+        {
+          "file": "part-002-afad18f8.mp3",
+          "bytes": 3429792,
+          "durationSeconds": 285.816,
+          "sha256": "1624fab9702eed785d8e9c954f1b8a504508cec15f2ae74360e123025072b4b6"
+        }
+      ]
+    },
+    {
+      "articleId": "language-soft-power-politics",
+      "audioKey": "b19e29e785a22c73",
+      "legacySourceHash": "dab8d65cec3647fb4518ef75681cf2891808af8cb8abb29f76f23d03f76a9641",
+      "sourceSnapshotSha256": "cabaf5869df8871990989bb806d93d66b96fc535b1ffa9106c2749ee210f1c61",
+      "sourceManifestSha256": "fc846fa56b798b4b803219ddb2597fedd99b782360137d8dab40e19821dd01ab",
+      "parts": [
+        {
+          "file": "part-001-dab8d65c.mp3",
+          "bytes": 3688416,
+          "durationSeconds": 307.368,
+          "sha256": "8fc2e60f2d961ba02274ad77dded15a8834a9e2c33b0b69ff7e599219ff13428"
+        },
+        {
+          "file": "part-002-dab8d65c.mp3",
+          "bytes": 3856608,
+          "durationSeconds": 321.384,
+          "sha256": "fc822612b4ae19a156e9064d4cee06ed17e4a243bf03928bc1f93783c26bc64e"
+        },
+        {
+          "file": "part-003-dab8d65c.mp3",
+          "bytes": 3789216,
+          "durationSeconds": 315.768,
+          "sha256": "775a5a36f7a670b9f58ac92373812c03e5bf325ee91476602e2fedb0fbd36ba0"
+        },
+        {
+          "file": "part-004-dab8d65c.mp3",
+          "bytes": 1774944,
+          "durationSeconds": 147.912,
+          "sha256": "c3addf1f31a48f5ce5f59c32e7e6a9adc21900d2089f76f7d38b5a11b409c854"
+        }
+      ]
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "audioKey": "cf933330ca485220",
+      "legacySourceHash": "c3e26df090a6367d6915b0c8274514ae6d64225459f65e04c96ca8fe5ad21319",
+      "sourceSnapshotSha256": "875e64d7c4dca4ab9b25b3a9423cd59ccf8e2b7bd010a74597c45ce46ce4f18c",
+      "sourceManifestSha256": "061cd12a4c3d60613e5d4bc8b5f52bf5193084a72a470062ebcfea020e471aea",
+      "parts": [
+        {
+          "file": "part-001-c3e26df0.mp3",
+          "bytes": 3672000,
+          "durationSeconds": 306,
+          "sha256": "4fd983642bf991a0b517f4a5d74a2071be5a7349ff005b4404e99d710c9bf80a"
+        }
+      ]
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "audioKey": "d15e87706b55a08d",
+      "legacySourceHash": "8d139cd8b6a0e839a25bb0aa2b7a6f53647b7f2ee76beb544fe01232b2631b06",
+      "sourceSnapshotSha256": "d80d9d1531e64369466346df72a7414e465ae9d6119adfe0e50fa2a81f00116f",
+      "sourceManifestSha256": "b780d3c5c4163451c04e3f12bb18449e9e1822487310f9272da9173d6590ea00",
+      "parts": [
+        {
+          "file": "part-001-8d139cd8.mp3",
+          "bytes": 3863232,
+          "durationSeconds": 321.936,
+          "sha256": "ec32ef48fc18ed3ce70589eac5dcbbbdaff83d8e3a04a353224a3e3f76d2bbc6"
+        },
+        {
+          "file": "part-002-8d139cd8.mp3",
+          "bytes": 711648,
+          "durationSeconds": 59.304,
+          "sha256": "250a37ca79ed139ff400adaf3d669da2e1c5d6fb6a119caefbd0adb0ec06951e"
+        }
+      ]
+    }
+  ]
+}
