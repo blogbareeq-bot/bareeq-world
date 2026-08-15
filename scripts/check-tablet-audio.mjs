@@ -12,7 +12,7 @@ const requireAll = (name, text, needles) => {
 };
 
 requireAll('ReadingModes.astro', component, [
-  'data-audio-manifest-inline', 'preload="none"', 'playsinline', 'data-audio-native-fallback'
+  'data-audio-manifest-inline', 'preload="none"', 'playsinline', 'data-audio-native-fallback', 'data-audio-seek'
 ]);
 requireAll('[id].astro', page, [
   "readFile(manifestPath, 'utf8')", 'audioManifestData={audioManifestData}'

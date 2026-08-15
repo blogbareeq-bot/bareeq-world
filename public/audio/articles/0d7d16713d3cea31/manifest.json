@@ -1,0 +1,204 @@
+{
+  "version": 4,
+  "importerVersion": 1,
+  "syncVersion": 1,
+  "provider": "OpenAI",
+  "model": "gpt-4o-mini-tts-2025-12-15",
+  "language": "ar",
+  "outputFormat": "mp3",
+  "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+  "title": "عادات ثقافية من حول العالم: حين يصبح الاختلاف إثراءً",
+  "sourceHash": "24ab2ec66540a5cbe56cac28a79013485a69f1897209f41a042523aea93ff467",
+  "defaultVoice": "cedar",
+  "voices": [
+    {
+      "id": "cedar",
+      "label": "سيدر (Cedar)",
+      "description": "الصوت الأساسي المعتمد",
+      "providerVoice": "cedar",
+      "totalDurationSeconds": 281.088
+    }
+  ],
+  "syncMethod": "studio-block-timestamps",
+  "disclosure": "الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.",
+  "importedRelease": {
+    "schema": "bareeq.audio.v1",
+    "studioVersion": "3.0.0",
+    "studioArticleId": "cultural-habits-world",
+    "releaseId": "20260815T050435Z-73ce11f5",
+    "previousReleaseId": "",
+    "generatedAt": "2026-08-15T05:04:48.687789Z",
+    "targetBareeqVersion": "V4.16.0",
+    "textSha256": "7f3385f7da4bce0ec32790867ede73c7d3fcc46c3133e37f94d1a57184a34d1e",
+    "manifestSha256": "2c0c093b275beb871f4fbabfe71155e7cc9dc7834f7158af1e08035f9f15d9e4"
+  },
+  "rollback": {
+    "previous_release_id": "",
+    "fallback_provider": "azure",
+    "fallback_voices": [
+      "ar-SA-HamedNeural",
+      "ar-SA-ZariyahNeural"
+    ]
+  },
+  "parts": [
+    {
+      "sync": [
+        {
+          "id": "b0001",
+          "type": "paragraph",
+          "ordinal": 0,
+          "start": 0,
+          "end": 0.033128415
+        },
+        {
+          "id": "b0002",
+          "type": "paragraph",
+          "ordinal": 1,
+          "start": 0.033128415,
+          "end": 0.114839481
+        },
+        {
+          "id": "b0003",
+          "type": "h2",
+          "ordinal": 2,
+          "start": 0.114839481,
+          "end": 0.130720628
+        },
+        {
+          "id": "b0004",
+          "type": "paragraph",
+          "ordinal": 3,
+          "start": 0.130720628,
+          "end": 0.205430328
+        },
+        {
+          "id": "b0005",
+          "type": "paragraph",
+          "ordinal": 4,
+          "start": 0.205430328,
+          "end": 0.285519126
+        },
+        {
+          "id": "b0006",
+          "type": "h2",
+          "ordinal": 5,
+          "start": 0.285519126,
+          "end": 0.303193306
+        },
+        {
+          "id": "b0007",
+          "type": "paragraph",
+          "ordinal": 6,
+          "start": 0.303193306,
+          "end": 0.403346995
+        },
+        {
+          "id": "b0008",
+          "type": "paragraph",
+          "ordinal": 7,
+          "start": 0.403346995,
+          "end": 0.474385246
+        },
+        {
+          "id": "b0009",
+          "type": "h2",
+          "ordinal": 8,
+          "start": 0.474385246,
+          "end": 0.491461749
+        },
+        {
+          "id": "b0010",
+          "type": "paragraph",
+          "ordinal": 9,
+          "start": 0.491461749,
+          "end": 0.566598361
+        },
+        {
+          "id": "b0011",
+          "type": "paragraph",
+          "ordinal": 10,
+          "start": 0.566598361,
+          "end": 0.632086749
+        },
+        {
+          "id": "b0012",
+          "type": "h2",
+          "ordinal": 11,
+          "start": 0.632086749,
+          "end": 0.652407787
+        },
+        {
+          "id": "b0013",
+          "type": "paragraph",
+          "ordinal": 12,
+          "start": 0.652407787,
+          "end": 0.741547131
+        },
+        {
+          "id": "b0014",
+          "type": "paragraph",
+          "ordinal": 13,
+          "start": 0.741547131,
+          "end": 0.802937158
+        },
+        {
+          "id": "b0015",
+          "type": "h2",
+          "ordinal": 14,
+          "start": 0.802937158,
+          "end": 0.81489071
+        },
+        {
+          "id": "b0016",
+          "type": "paragraph",
+          "ordinal": 15,
+          "start": 0.81489071,
+          "end": 0.890198087
+        },
+        {
+          "id": "b0017",
+          "type": "paragraph",
+          "ordinal": 16,
+          "start": 0.890198087,
+          "end": 0.915129781
+        },
+        {
+          "id": "b0018",
+          "type": "list-item",
+          "ordinal": 17,
+          "start": 0.915129781,
+          "end": 0.926229508
+        },
+        {
+          "id": "b0019",
+          "type": "list-item",
+          "ordinal": 18,
+          "start": 0.926229508,
+          "end": 0.944074454
+        },
+        {
+          "id": "b0020",
+          "type": "list-item",
+          "ordinal": 19,
+          "start": 0.944074454,
+          "end": 0.96704235
+        },
+        {
+          "id": "b0021",
+          "type": "paragraph",
+          "ordinal": 20,
+          "start": 0.96704235,
+          "end": 1
+        }
+      ],
+      "audio": {
+        "cedar": {
+          "src": "/audio/articles/0d7d16713d3cea31/releases/20260815T050435Z-73ce11f5/cedar-article-4559471560ee.mp3",
+          "bytes": 3373676,
+          "durationSeconds": 281.088,
+          "sha256": "4559471560ee251783a7d9101a3c6218d809c19c2f0e5d4957ecec87ca638544"
+        }
+      }
+    }
+  ]
+}

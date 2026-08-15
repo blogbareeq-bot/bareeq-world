@@ -7,13 +7,14 @@ interface Props {
 }
 const { summary, readingMinutes, audioManifest, audioManifestData = null } = Astro.props;
 const inlineManifest = audioManifestData ? JSON.stringify(audioManifestData).replace(/</g, '\\u003c') : '';
+const hasAudio = Boolean(audioManifestData);
 ---
 <section class="reading-modes" data-reading-modes data-audio-manifest={audioManifest} aria-labelledby="reading-modes-title">
   <div class="reading-modes__intro">
     <span class="reading-modes__spark" aria-hidden="true">✦</span>
     <div>
       <h2 id="reading-modes-title">اقرأ بالطريقة التي تناسبك</h2>
-      <p>النص كاملًا، قراءة صوتية عالية الجودة مع تتبّع الفقرة، أو خلاصة مركّزة — اختر ما يناسب وقتك.</p>
+      <p>النص كاملًا، واستماع متزامن يحفظ موضعك، أو خلاصة مركّزة — اختر ما يناسب وقتك.</p>
     </div>
   </div>
 
@@ -21,8 +22,8 @@ const inlineManifest = audioManifestData ? JSON.stringify(audioManifestData).rep
     <button id="reading-tab-read" class="reading-mode is-active" type="button" role="tab" tabindex="0" aria-selected="true" data-reading-mode="read" aria-controls="article-content">
       <span class="reading-mode__icon" aria-hidden="true">📖</span><span><b>قراءة</b><small>النص الكامل · {readingMinutes} د</small></span>
     </button>
-    <button id="reading-tab-listen" class="reading-mode" type="button" role="tab" tabindex="-1" aria-selected="false" data-reading-mode="listen" aria-controls="reading-listen-panel">
-      <span class="reading-mode__icon" aria-hidden="true">🎧</span><span><b>استماع</b><small data-listen-label>صوت عربي مع تتبّع النص</small></span>
+    <button id="reading-tab-listen" class="reading-mode" type="button" role="tab" tabindex="-1" aria-selected="false" data-reading-mode="listen" aria-controls="reading-listen-panel" disabled={!hasAudio} aria-disabled={String(!hasAudio)} title={!hasAudio ? 'التسجيل الصوتي لهذا المقال قيد الإعداد' : undefined}>
+      <span class="reading-mode__icon" aria-hidden="true">🎧</span><span><b>استماع</b><small data-listen-label>{hasAudio ? 'صوت متزامن مع النص' : 'قيد الإعداد'}</small></span>
     </button>
     <button id="reading-tab-summary" class="reading-mode" type="button" role="tab" tabindex="-1" aria-selected="false" data-reading-mode="summary" aria-controls="reading-summary-panel">
       <span class="reading-mode__icon" aria-hidden="true">✨</span><span><b>الخلاصة</b><small>الفكرة في أقل من دقيقة</small></span>
@@ -36,11 +37,16 @@ const inlineManifest = audioManifestData ? JSON.stringify(audioManifestData).rep
       <button class="audio-play" type="button" data-audio-play aria-label="بدء الاستماع" disabled><span aria-hidden="true">▶</span><span data-audio-play-label>ابدأ الاستماع</span></button>
       <button class="audio-stop" type="button" data-audio-stop aria-label="إيقاف القراءة الصوتية وإعادتها إلى البداية" disabled><span aria-hidden="true">■</span><span>إيقاف</span></button>
       <div class="audio-status" aria-live="polite"><span class="audio-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span data-audio-status>جارٍ تهيئة القراءة الصوتية</span></div>
-      <label class="audio-speed">السرعة <select data-audio-rate aria-label="سرعة القراءة"><option value="0.85">0.85×</option><option value="1" selected>1×</option><option value="1.15">1.15×</option><option value="1.3">1.3×</option><option value="1.5">1.5×</option></select></label>
+      <label class="audio-voice" data-audio-voice-field>الصوت <select data-audio-voice aria-label="اختيار صوت القراءة" disabled><option value="">جارٍ التحميل…</option></select></label>
+      <label class="audio-speed">السرعة <select data-audio-rate aria-label="سرعة القراءة"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
     </div>
     <button class="audio-native-fallback" type="button" data-audio-native-fallback hidden>استخدام مشغّل الجهاز</button>
-    <div class="audio-progress" aria-live="polite"><span data-audio-part></span><span data-audio-time></span></div>
-    <p class="audio-note">قراءة مولّدة مسبقًا عبر Azure AI Speech بصوت عربي سعودي. يُظلَّل المقطع المقروء تلقائيًا، مع تمرير ذكي يحترم تصفحك اليدوي.</p>
+    <label class="audio-seek">
+      <span class="visually-hidden">موضع الاستماع</span>
+      <input type="range" min="0" max="1000" step="1" value="0" data-audio-seek aria-label="التقديم أو الرجوع داخل المقال" aria-valuetext="0:00" disabled />
+    </label>
+    <div class="audio-progress" aria-live="polite"><span data-audio-current-voice>الصوت الافتراضي</span><span data-audio-time></span></div>
+    <p class="audio-note"><strong>تنبيه:</strong> الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا. يعمل تتبّع الفقرة تلقائيًا، ويحفظ المشغّل اختيار الصوت وموضع الاستماع لمدة 30 يومًا على هذا الجهاز والمتصفح.</p>
   </div>
 
   <div id="reading-summary-panel" class="reading-modes__panel reading-modes__panel--summary" data-summary-panel role="tabpanel" aria-labelledby="reading-tab-summary" hidden>

@@ -99,8 +99,8 @@
   });
 
 
-  // Reading modes: full text, pre-generated Azure AI Speech audio, editorial summary,
-  // synchronized paragraph tracking, and a native-controls fallback for tablet browsers.
+  // Reading modes: full text, one or more pre-generated voices, editorial summary,
+  // synchronized paragraph tracking, saved progress, and a native-controls tablet fallback.
   const modes = document.querySelector('[data-reading-modes]');
   if (modes && articleContent) {
     const modeButtons = [...modes.querySelectorAll('[data-reading-mode]')];
@@ -111,13 +111,18 @@
     const nativeFallbackButton = modes.querySelector('[data-audio-native-fallback]');
     const playLabel = modes.querySelector('[data-audio-play-label]');
     const audioStatus = modes.querySelector('[data-audio-status]');
+    const voiceSelect = modes.querySelector('[data-audio-voice]');
+    const voiceField = modes.querySelector('[data-audio-voice-field]');
     const rateSelect = modes.querySelector('[data-audio-rate]');
-    const audioPart = modes.querySelector('[data-audio-part]');
+    const seekInput = modes.querySelector('[data-audio-seek]');
+    const listenLabel = modes.querySelector('[data-listen-label]');
+    const currentVoice = modes.querySelector('[data-audio-current-voice]');
     const audioTime = modes.querySelector('[data-audio-time]');
     const audio = modes.querySelector('[data-article-audio]');
     const inlineManifestNode = modes.querySelector('[data-audio-manifest-inline]');
     const summaryRead = modes.querySelector('[data-summary-read]');
     const manifestUrl = modes.dataset.audioManifest;
+    const audioCore = window.BareeqAudioCore;
     const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
     const MANIFEST_TIMEOUT_MS = 9000;
     const PLAY_START_TIMEOUT_MS = 18000;
@@ -129,9 +134,56 @@
     let finished = false;
     let activeMode = 'read';
     let activeSyncId = '';
+    let activeVoiceId = '';
+    let pendingSeek = null;
+    let lastProgressSaveAt = 0;
     let userNavigatingUntil = 0;
     let programmaticScroll = false;
     const syncTargets = new Map();
+
+    const storageGet = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
+    const storageSet = (key, value) => { try { localStorage.setItem(key, value); } catch { /* private/restricted storage */ } };
+    const storageRemove = (key) => { try { localStorage.removeItem(key); } catch { /* private/restricted storage */ } };
+    const voiceEntries = () => Array.isArray(manifest?.voices) && manifest.voices.length
+      ? manifest.voices
+      : manifest ? [{ id: 'legacy', label: manifest.voice || 'الصوت العربي', providerVoice: manifest.voice || 'legacy' }] : [];
+    const activeVoiceEntry = () => voiceEntries().find((voice) => voice.id === activeVoiceId) || voiceEntries()[0] || null;
+    const voicePreferenceKey = () => `bareeq-audio-voice-v1:${String(manifest?.provider || 'default').toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+    const progressStorageKey = () => manifest?.articleId ? `bareeq-audio-progress-v1:${manifest.articleId}` : '';
+    const partAsset = (part, voiceId = activeVoiceId) => part?.audio?.[voiceId] || (typeof part?.src === 'string' ? part : null);
+    const partDuration = (part, voiceId = activeVoiceId) => Number(partAsset(part, voiceId)?.durationSeconds || 0);
+    const totalVoiceDuration = (voiceId = activeVoiceId) => {
+      const declared = Number(voiceEntries().find((voice) => voice.id === voiceId)?.totalDurationSeconds || 0);
+      return declared > 0 ? declared : (manifest?.parts || []).reduce((sum, part) => sum + partDuration(part, voiceId), 0);
+    };
+    const elapsedArticleSeconds = () => {
+      if (!audio || !manifest) return 0;
+      const previous = manifest.parts.slice(0, partIndex).reduce((sum, part) => sum + partDuration(part), 0);
+      const expected = partDuration(manifest.parts[partIndex]);
+      const ratio = Number.isFinite(audio.duration) && audio.duration > 0 ? Math.max(0, Math.min(1, audio.currentTime / audio.duration)) : 0;
+      return previous + (expected > 0 ? expected * ratio : audio.currentTime);
+    };
+    const readSavedProgress = () => {
+      const key = progressStorageKey();
+      if (!key) return null;
+      try {
+        const saved = JSON.parse(storageGet(key) || 'null');
+        if (!audioCore?.isSavedProgressValid(saved, manifest?.parts?.length || 0)) { storageRemove(key); return null; }
+        return saved;
+      } catch { storageRemove(key); return null; }
+    };
+    const saveProgress = ({ force = false } = {}) => {
+      const key = progressStorageKey();
+      if (!key || !audio || !manifest || finished || (partIndex === 0 && audio.currentTime <= 0.05 && audio.paused)) return;
+      const now = Date.now();
+      if (!force && now - lastProgressSaveAt < 4000) return;
+      lastProgressSaveAt = now;
+      storageSet(key, JSON.stringify({ voiceId: activeVoiceId, partIndex, time: Number(audio.currentTime.toFixed(2)), updatedAt: now }));
+    };
+    const clearSavedProgress = () => {
+      const key = progressStorageKey();
+      if (key) storageRemove(key);
+    };
 
     const normalizeSyncText = (value) => (value || '')
       .normalize('NFKD')
@@ -162,7 +214,7 @@
       const entries = [];
       const seen = new Set();
       manifest?.parts?.forEach((part) => part.sync?.forEach((entry) => {
-        if (entry?.id && entry?.match && !seen.has(entry.id)) {
+        if (entry?.id && (entry?.match || Number.isInteger(entry?.ordinal)) && !seen.has(entry.id)) {
           seen.add(entry.id);
           entries.push(entry);
         }
@@ -172,6 +224,13 @@
         .map((element) => ({ element, text: normalizeSyncText(element.textContent) }));
       let cursor = 0;
       for (const entry of entries) {
+        if (Number.isInteger(entry.ordinal) && entry.ordinal >= 0 && entry.ordinal < blocks.length) {
+          const target = blocks[entry.ordinal].element;
+          target.dataset.audioSyncId = entry.id;
+          syncTargets.set(entry.id, target);
+          cursor = Math.max(cursor, entry.ordinal + 1);
+          continue;
+        }
         const hint = normalizeSyncText(entry.match);
         let bestIndex = -1;
         let bestScore = 0;
@@ -280,21 +339,23 @@
     });
     summaryRead?.addEventListener('click', () => setMode('read'));
 
-    const formatClock = (seconds) => {
-      if (!Number.isFinite(seconds) || seconds < 0) return '';
-      const mins = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${mins}:${String(secs).padStart(2, '0')}`;
-    };
-    const updatePartStatus = () => {
-      if (!manifest || !audioPart) return;
-      audioPart.textContent = manifest.parts.length > 1 ? `المقطع ${partIndex + 1} من ${manifest.parts.length}` : 'المقال كاملًا';
+    const formatClock = (seconds) => audioCore?.formatClock(seconds) || '';
+    const updateVoiceLabel = () => {
+      const voice = activeVoiceEntry();
+      if (currentVoice) currentVoice.textContent = voice ? `الصوت: ${voice.label}` : 'الصوت الافتراضي';
     };
     const updateTime = () => {
       if (!audio || !audioTime) return;
-      const current = formatClock(audio.currentTime);
-      const duration = formatClock(audio.duration);
-      audioTime.textContent = duration ? `${current} / ${duration}` : current;
+      const elapsedSeconds = elapsedArticleSeconds();
+      const durationSeconds = totalVoiceDuration();
+      const elapsed = formatClock(elapsedSeconds);
+      const duration = formatClock(durationSeconds);
+      audioTime.textContent = duration ? `${elapsed || '0:00'} / ${duration}` : (elapsed || '0:00');
+      if (seekInput) {
+        const ratio = durationSeconds > 0 ? Math.max(0, Math.min(1, elapsedSeconds / durationSeconds)) : 0;
+        seekInput.value = String(Math.round(ratio * 1000));
+        seekInput.setAttribute('aria-valuetext', duration ? `${elapsed || '0:00'} من ${duration}` : (elapsed || '0:00'));
+      }
     };
     const clearPlayStartTimer = () => {
       if (playStartTimer) clearTimeout(playStartTimer);
@@ -315,14 +376,16 @@
     };
     const setPart = (index) => {
       if (!audio || !manifest?.parts?.[index]) return false;
+      const asset = partAsset(manifest.parts[index]);
+      if (!asset?.src) return false;
       clearPlayStartTimer();
       partIndex = index;
       finished = false;
-      audio.src = manifest.parts[index].src;
+      audio.src = asset.src;
       audio.playbackRate = Number(rateSelect?.value || 1);
       // Do not call load() here. On iPadOS/Android tablets the first play must remain
       // directly tied to the user's tap; audio.play() will load the same-origin MP3 itself.
-      updatePartStatus();
+      updateVoiceLabel();
       updateTime();
       updateStopAvailability();
       return true;
@@ -368,9 +431,11 @@
       if (!audio || !manifest) return;
       awaitingPlaybackStart = false;
       clearPlayStartTimer();
-      audio.pause();
+      if (!audio.paused) audio.pause();
       finished = false;
       clearActiveSync();
+      clearSavedProgress();
+      pendingSeek = null;
       if (partIndex !== 0) setPart(0);
       else {
         try { audio.currentTime = 0; } catch { /* metadata can still be loading */ }
@@ -383,17 +448,68 @@
       updateStopAvailability();
     };
 
-    const isValidManifest = (data) => Boolean(data && Array.isArray(data.parts) && data.parts.length && data.parts.every((part) => typeof part?.src === 'string' && part.src.endsWith('.mp3') && Array.isArray(part.sync)));
+    const isValidManifest = (data) => {
+      if (!data || !Array.isArray(data.parts) || !data.parts.length || !data.parts.every((part) => Array.isArray(part?.sync))) return false;
+      if (Array.isArray(data.voices) && data.voices.length) {
+        const ids = data.voices.map((voice) => voice?.id).filter(Boolean);
+        return ids.length === data.voices.length && data.parts.every((part) => ids.every((id) => typeof part?.audio?.[id]?.src === 'string' && part.audio[id].src.endsWith('.mp3') && Number(part.audio[id].durationSeconds) > 0));
+      }
+      return data.parts.every((part) => typeof part?.src === 'string' && part.src.endsWith('.mp3'));
+    };
+    const setupVoicePicker = () => {
+      const voices = voiceEntries();
+      const preferred = storageGet(voicePreferenceKey());
+      activeVoiceId = voices.some((voice) => voice.id === preferred) ? preferred : (manifest.defaultVoice || voices[0]?.id || 'legacy');
+      if (voiceSelect) {
+        voiceSelect.replaceChildren(...voices.map((voice) => {
+          const option = document.createElement('option');
+          option.value = voice.id;
+          option.textContent = voice.description ? `${voice.label} — ${voice.description}` : voice.label;
+          return option;
+        }));
+        voiceSelect.value = activeVoiceId;
+        voiceSelect.disabled = voices.length < 2;
+      }
+      if (voiceField) voiceField.hidden = voices.length < 2;
+      if (listenLabel) listenLabel.textContent = voices.length > 1
+        ? `${voices.length} أصوات مع تتبّع النص`
+        : `${voices[0]?.label || 'صوت عربي'} مع تتبّع النص`;
+      updateVoiceLabel();
+    };
+    const switchVoice = (voiceId) => {
+      if (!audio || !manifest || voiceId === activeVoiceId || !voiceEntries().some((voice) => voice.id === voiceId)) return;
+      const wasPlaying = !audio.paused;
+      const ratio = Number.isFinite(audio.duration) && audio.duration > 0 ? Math.max(0, Math.min(1, audio.currentTime / audio.duration)) : 0;
+      saveProgress({ force: true });
+      if (wasPlaying) audio.pause();
+      activeVoiceId = voiceId;
+      storageSet(voicePreferenceKey(), voiceId);
+      // Persist the new choice immediately. This covers switching while paused and
+      // leaving the page before the new source emits its first timeupdate event.
+      saveProgress({ force: true });
+      pendingSeek = { ratio };
+      if (!setPart(partIndex)) return;
+      if (audioStatus) audioStatus.textContent = `تم اختيار ${activeVoiceEntry()?.label || 'الصوت'}`;
+      if (wasPlaying) requestPlay({ automatic: false });
+    };
     const applyManifest = (data) => {
       if (!isValidManifest(data) || !audio || !playButton) return false;
       manifest = data;
+      setupVoicePicker();
       buildSyncTargets();
-      setPart(0);
+      const saved = readSavedProgress();
+      if (saved && voiceEntries().some((voice) => voice.id === saved.voiceId)) {
+        activeVoiceId = saved.voiceId;
+        if (voiceSelect) voiceSelect.value = activeVoiceId;
+      }
+      pendingSeek = saved ? { seconds: saved.time } : null;
+      setPart(saved?.partIndex || 0);
       playButton.disabled = false;
       if (stopButton) stopButton.disabled = true;
-      if (playLabel) playLabel.textContent = 'ابدأ الاستماع';
-      playButton.setAttribute('aria-label', 'بدء الاستماع');
-      if (audioStatus) audioStatus.textContent = syncTargets.size ? 'القراءة الصوتية جاهزة مع تتبّع النص' : 'القراءة الصوتية جاهزة';
+      if (seekInput) seekInput.disabled = false;
+      if (playLabel) playLabel.textContent = saved ? 'متابعة الاستماع' : 'ابدأ الاستماع';
+      playButton.setAttribute('aria-label', saved ? 'متابعة الاستماع من الموضع المحفوظ' : 'بدء الاستماع');
+      if (audioStatus) audioStatus.textContent = saved ? 'جاهز للمتابعة من موضعك المحفوظ' : 'جاهز للاستماع';
       return true;
     };
 
@@ -455,6 +571,7 @@
       else audio.pause();
     });
     stopButton?.addEventListener('click', stopAudio);
+    voiceSelect?.addEventListener('change', () => switchVoice(voiceSelect.value));
     nativeFallbackButton?.addEventListener('click', () => {
       if (!audio || !manifest) return;
       modes.classList.add('use-native-audio');
@@ -468,13 +585,42 @@
     rateSelect?.addEventListener('change', () => {
       if (audio) audio.playbackRate = Number(rateSelect.value || 1);
     });
+    seekInput?.addEventListener('input', () => {
+      const duration = totalVoiceDuration();
+      const preview = duration * (Number(seekInput.value) / 1000);
+      seekInput.setAttribute('aria-valuetext', `${formatClock(preview)} من ${formatClock(duration)}`);
+    });
+    seekInput?.addEventListener('change', () => {
+      if (!audio || !manifest) return;
+      const wasPlaying = !audio.paused;
+      if (wasPlaying) audio.pause();
+      const targetArticleSeconds = totalVoiceDuration() * (Number(seekInput.value) / 1000);
+      const resolvedSeek = audioCore?.resolveArticleSeek(manifest.parts.map((part) => partDuration(part)), targetArticleSeconds) || { partIndex: 0, seconds: targetArticleSeconds };
+      const targetPart = resolvedSeek.partIndex;
+      const remaining = resolvedSeek.seconds;
+      if (targetPart !== partIndex) {
+        pendingSeek = { seconds: Math.max(0, remaining) };
+        setPart(targetPart);
+      } else if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        const expected = partDuration(manifest.parts[targetPart]);
+        const localRatio = expected > 0 ? Math.max(0, Math.min(1, remaining / expected)) : 0;
+        try { audio.currentTime = Math.min(audio.duration - 0.05, audio.duration * localRatio); } catch { /* metadata may still be settling */ }
+      } else {
+        pendingSeek = { seconds: Math.max(0, remaining) };
+      }
+      finished = false;
+      updateTime();
+      syncTextToAudio();
+      saveProgress({ force: true });
+      if (wasPlaying) requestPlay({ automatic: false });
+    });
     audio?.addEventListener('loadstart', () => {
       if (!audioStatus || modes.classList.contains('is-speaking')) return;
-      audioStatus.textContent = 'جارٍ تحميل المقطع الصوتي';
+      audioStatus.textContent = 'جارٍ تحميل الصوت';
     });
     audio?.addEventListener('playing', () => {
       markPlaybackStarted();
-      if (audioStatus) audioStatus.textContent = 'جارٍ تشغيل القراءة الصوتية';
+      if (audioStatus) audioStatus.textContent = `يعمل — ${activeVoiceEntry()?.label || 'الصوت المختار'}`;
     });
     audio?.addEventListener('play', () => {
       finished = false;
@@ -486,12 +632,18 @@
       awaitingPlaybackStart = false;
       clearPlayStartTimer();
       if (audio.ended) return;
+      saveProgress({ force: true });
       setPlayingUi(false);
       updateStopAvailability();
       if (audioStatus && !finished && !modes.classList.contains('use-native-audio')) audioStatus.textContent = 'متوقف مؤقتًا';
     });
     audio?.addEventListener('loadedmetadata', () => {
-      updatePartStatus();
+      if (pendingSeek && Number.isFinite(audio.duration) && audio.duration > 0) {
+        const desired = Number.isFinite(pendingSeek.seconds) ? pendingSeek.seconds : audio.duration * Number(pendingSeek.ratio || 0);
+        try { audio.currentTime = Math.max(0, Math.min(desired, Math.max(0, audio.duration - 0.05))); } catch { /* metadata may still be settling */ }
+        pendingSeek = null;
+      }
+      updateVoiceLabel();
       updateTime();
       updateStopAvailability();
       syncTextToAudio();
@@ -500,6 +652,7 @@
       updateTime();
       updateStopAvailability();
       syncTextToAudio();
+      saveProgress();
     });
     audio?.addEventListener('ended', () => {
       awaitingPlaybackStart = false;
@@ -507,10 +660,12 @@
       if (!manifest) return;
       if (partIndex + 1 < manifest.parts.length) {
         setPart(partIndex + 1);
+        saveProgress({ force: true });
         requestPlay({ automatic: true });
         return;
       }
       finished = true;
+      clearSavedProgress();
       modes.classList.remove('is-speaking');
       if (playLabel) playLabel.textContent = 'استمع من البداية';
       if (playButton) playButton.setAttribute('aria-label', 'إعادة تشغيل القراءة الصوتية');
@@ -524,18 +679,21 @@
       modes.classList.remove('is-speaking');
       if (playLabel) playLabel.textContent = 'إعادة المحاولة';
       exposeNativeFallback('تعذر تشغيل هذا المقطع. تحقق من الاتصال ثم أعد المحاولة أو استخدم مشغّل الجهاز');
+      saveProgress({ force: true });
       updateStopAvailability();
     });
     addEventListener('pagehide', () => {
       awaitingPlaybackStart = false;
       clearPlayStartTimer();
-      audio?.pause();
+      saveProgress({ force: true });
+      if (audio && !audio.paused) audio.pause();
     });
 
     // Production builds embed the tiny manifest in HTML, eliminating the manifest fetch
     // that could remain pending on some tablets. Network fetch remains a resilient dev fallback.
     const embeddedManifest = readInlineManifest();
-    if (!applyManifest(embeddedManifest)) void prepareAudio();
+    const listenButton = modes.querySelector('[data-reading-mode="listen"]');
+    if (!applyManifest(embeddedManifest) && !listenButton?.disabled) void prepareAudio();
   }
 
 })();

@@ -82,4 +82,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(`- ${failure}`));
   process.exit(1);
 }
-console.log(`Arabic Speech QA passed: ${live.length}/${live.length} articles locked to reviewed text hashes; ${totalChecks} contextual pronunciation checks verified before Azure synthesis.`);
+console.log(`Arabic Speech QA passed: ${live.length}/${live.length} articles locked to reviewed text hashes; ${totalChecks} contextual pronunciation checks verified before Studio import or synthesis.`);

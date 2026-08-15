@@ -1,0 +1,423 @@
+{
+  "schema": "bareeq.audio.v1",
+  "version": "3.0.0",
+  "target_bareeq_version": "V4.16.0",
+  "article": {
+    "id": "cultural-habits-world",
+    "path_id": "cultural-habits-world",
+    "title": "عادات ثقافية من حول العالم: حين يصبح الاختلاف إثراءً",
+    "block_count": 21,
+    "text_sha256": "7f3385f7da4bce0ec32790867ede73c7d3fcc46c3133e37f94d1a57184a34d1e"
+  },
+  "release_id": "20260815T050435Z-73ce11f5",
+  "previous_release_id": "",
+  "generated_at": "2026-08-15T05:04:48.687789Z",
+  "provider": "openai",
+  "model": "gpt-4o-mini-tts-2025-12-15",
+  "default_voice": "cedar",
+  "voices": {
+    "cedar": {
+      "label": "Cedar",
+      "audio": "voices/cedar/article.mp3",
+      "duration_seconds": 281.088,
+      "sha256": "4559471560ee251783a7d9101a3c6218d809c19c2f0e5d4957ecec87ca638544",
+      "codec": "mp3",
+      "sample_rate_hz": 48000,
+      "bitrate_bps": 96017,
+      "channels": 1,
+      "blocks": [
+        {
+          "id": "block-001",
+          "start_seconds": 0.0,
+          "end_seconds": 9.312
+        },
+        {
+          "id": "block-002",
+          "start_seconds": 9.312,
+          "end_seconds": 32.28
+        },
+        {
+          "id": "block-003",
+          "start_seconds": 32.28,
+          "end_seconds": 36.744
+        },
+        {
+          "id": "block-004",
+          "start_seconds": 36.744,
+          "end_seconds": 57.744
+        },
+        {
+          "id": "block-005",
+          "start_seconds": 57.744,
+          "end_seconds": 80.256
+        },
+        {
+          "id": "block-006",
+          "start_seconds": 80.256,
+          "end_seconds": 85.224
+        },
+        {
+          "id": "block-007",
+          "start_seconds": 85.224,
+          "end_seconds": 113.376
+        },
+        {
+          "id": "block-008",
+          "start_seconds": 113.376,
+          "end_seconds": 133.344
+        },
+        {
+          "id": "block-009",
+          "start_seconds": 133.344,
+          "end_seconds": 138.144
+        },
+        {
+          "id": "block-010",
+          "start_seconds": 138.144,
+          "end_seconds": 159.264
+        },
+        {
+          "id": "block-011",
+          "start_seconds": 159.264,
+          "end_seconds": 177.672
+        },
+        {
+          "id": "block-012",
+          "start_seconds": 177.672,
+          "end_seconds": 183.384
+        },
+        {
+          "id": "block-013",
+          "start_seconds": 183.384,
+          "end_seconds": 208.44
+        },
+        {
+          "id": "block-014",
+          "start_seconds": 208.44,
+          "end_seconds": 225.696
+        },
+        {
+          "id": "block-015",
+          "start_seconds": 225.696,
+          "end_seconds": 229.056
+        },
+        {
+          "id": "block-016",
+          "start_seconds": 229.056,
+          "end_seconds": 250.224
+        },
+        {
+          "id": "block-017",
+          "start_seconds": 250.224,
+          "end_seconds": 257.232
+        },
+        {
+          "id": "block-018",
+          "start_seconds": 257.232,
+          "end_seconds": 260.352
+        },
+        {
+          "id": "block-019",
+          "start_seconds": 260.352,
+          "end_seconds": 265.368
+        },
+        {
+          "id": "block-020",
+          "start_seconds": 265.368,
+          "end_seconds": 271.824
+        },
+        {
+          "id": "block-021",
+          "start_seconds": 271.824,
+          "end_seconds": 281.088
+        }
+      ],
+      "parts": [
+        {
+          "block_id": "block-001",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0001.mp3",
+          "duration_seconds": 9.312,
+          "sha256": "ab20cc369ef7f40a5fe58d598d25e69d76f5da67ed2bf89cdda03036d0b61b7e",
+          "text_sha256": "44cc76d974c428488cf04aa21ff022fba24f39ec285c45c709b1289a03c0c5ad",
+          "cache_key": "bd1c2fe5297b4ff787e9ec4285b6dbcfd248eb7944796cc69ad7221b2bfce18d",
+          "from_cache": true,
+          "start_seconds": 0.0,
+          "end_seconds": 9.312
+        },
+        {
+          "block_id": "block-002",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0002.mp3",
+          "duration_seconds": 22.968,
+          "sha256": "6425ee2ac9698b15345c37ce2a674e2a30c5cbbe4295d3e9e72c1b0b9ec856a8",
+          "text_sha256": "bdb9b7f5fa2edc8ee053131d0e429557e9148c17ce867f385598833a30107600",
+          "cache_key": "f6862f4d5cd90f7a05bb985c4cb4d5e86116e1ab4ff3b56facff0cbb3d9881b1",
+          "from_cache": true,
+          "start_seconds": 9.312,
+          "end_seconds": 32.28
+        },
+        {
+          "block_id": "block-003",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0003.mp3",
+          "duration_seconds": 4.464,
+          "sha256": "cbb8d1e61e668038b5568517ccc57274cd15ef4f30c865998e8dc8c80ff4366e",
+          "text_sha256": "3b6ac51fa8491b3e8ebb1b534a61952891fc44ab1946e01b00256a5bc78dea79",
+          "cache_key": "281e58297af2f5f98055b4285f921854fbe61e3e90a4e56cbe4dfedfe0f6b00b",
+          "from_cache": true,
+          "start_seconds": 32.28,
+          "end_seconds": 36.744
+        },
+        {
+          "block_id": "block-004",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0004.mp3",
+          "duration_seconds": 21.0,
+          "sha256": "4530c355580df808bfdd121f06037c9d58d9280b02dd4fea974e84e1ee6e6636",
+          "text_sha256": "de3eab4d2ebb61072f0eeca505838c756a0e80c50b4e391a1da23464ea74d678",
+          "cache_key": "ae65102d3c2e9da1a905070d89b8c4ae9811b5f7c7663e9c7465edc380d632a1",
+          "from_cache": true,
+          "start_seconds": 36.744,
+          "end_seconds": 57.744
+        },
+        {
+          "block_id": "block-005",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0005.mp3",
+          "duration_seconds": 22.512,
+          "sha256": "84d1251bed64e6cdd80694873aa92aa457a01662c8940de2b51629e5ce67be07",
+          "text_sha256": "48c1b33e5a490d593f9a7afff02fdc828ce95299f69d669aa8b87610910dfef5",
+          "cache_key": "11d13636651feacd682e366a4402042c50bab2641622c8971689a72277f7f3ed",
+          "from_cache": true,
+          "start_seconds": 57.744,
+          "end_seconds": 80.256
+        },
+        {
+          "block_id": "block-006",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0006.mp3",
+          "duration_seconds": 4.968,
+          "sha256": "7b1ff5105474a496c32c9f8dc8a214674a6fd13372c6d1fd620a118d94422773",
+          "text_sha256": "fb802d4ba01cc6ce8a0fcd15e299c60b5275d25fce977f6d0023241fff93a844",
+          "cache_key": "06671f2e3fe86873eb73de0a2bf6462e5cf05139450393dc037df07d1ac8885e",
+          "from_cache": true,
+          "start_seconds": 80.256,
+          "end_seconds": 85.224
+        },
+        {
+          "block_id": "block-007",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0007.mp3",
+          "duration_seconds": 28.152,
+          "sha256": "9540c48d8fdff159b1f0453e35cff7f8c87b01bd91d4f05f62cda5a61b59499e",
+          "text_sha256": "2f9a47bec2b9e5cce661c62cb60eeb3679b1ea686f61cd8e6451ec66ed06beac",
+          "cache_key": "4d4114404ffad82a671f7d4dcfcfe04e095286cc30bd548dd4941bd1e5a52c65",
+          "from_cache": true,
+          "start_seconds": 85.224,
+          "end_seconds": 113.376
+        },
+        {
+          "block_id": "block-008",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0008.mp3",
+          "duration_seconds": 19.968,
+          "sha256": "5dd5b16bf4c4e19e53abc20e594154ab895d4873c28fc9bbfde29b35b652413e",
+          "text_sha256": "3049397b1f4e630e02036fd261c098e4ff47434fa7223476c0cae8d587795065",
+          "cache_key": "7b322951766be6dc64d384ea6c11ade79d03c69c7e031feba86f6d037a55e184",
+          "from_cache": true,
+          "start_seconds": 113.376,
+          "end_seconds": 133.344
+        },
+        {
+          "block_id": "block-009",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0009.mp3",
+          "duration_seconds": 4.8,
+          "sha256": "a65aa20bd3c480cac714dab3518b65ad779fe1f1f0af4c419da7b66ca1f9fdd6",
+          "text_sha256": "8eddf32e2ce255945183f5b07f987167ea72b4c40e167f2d1fce54af32223181",
+          "cache_key": "b5ebd82dbfd5598f89d4eee337078899d8d5aaf1371a902be28f8f9fec1f0806",
+          "from_cache": true,
+          "start_seconds": 133.344,
+          "end_seconds": 138.144
+        },
+        {
+          "block_id": "block-010",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0010.mp3",
+          "duration_seconds": 21.12,
+          "sha256": "59e7a69d23edec2d86ceee87ddafea938c0999fc056f85b5962a88aace44c511",
+          "text_sha256": "f7899bc84664442f3c301743fd9afe84efd2ded99e0aaa2a59816c5c48619a22",
+          "cache_key": "4d226d11ffb085d6ab1d413c023ae0c430a90f51593f30b17e9fda5d2a472361",
+          "from_cache": true,
+          "start_seconds": 138.144,
+          "end_seconds": 159.264
+        },
+        {
+          "block_id": "block-011",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0011.mp3",
+          "duration_seconds": 18.408,
+          "sha256": "f18d2e939980689363407b8d935c78d4651af61893901027be68fa47fadd0f95",
+          "text_sha256": "192ccefcdc96bac4b4bd4714e9aaea4064cba118d5119e32bbcd282ffaaa82fe",
+          "cache_key": "50466424a82ea5c3070b27411ddbf0204d03cfe76bb9a307e4d63078b56aa29d",
+          "from_cache": true,
+          "start_seconds": 159.264,
+          "end_seconds": 177.672
+        },
+        {
+          "block_id": "block-012",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0012.mp3",
+          "duration_seconds": 5.712,
+          "sha256": "ada8002d00d1942e79cb0360ff2802a58ecd325bf356dfd35724a56ebd88c2a6",
+          "text_sha256": "7367ba8658108138a9ad6b50ca0682d536b5c9183f6653d7d87d0aa3444db3d4",
+          "cache_key": "7a1713947a4d1dd1dbdbdf8fdec5ccd4b39dc502d8525ed69333d12f970d23dc",
+          "from_cache": true,
+          "start_seconds": 177.672,
+          "end_seconds": 183.384
+        },
+        {
+          "block_id": "block-013",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0013.mp3",
+          "duration_seconds": 25.056,
+          "sha256": "0033e67d55970f6d0c86c2df61778cda02010f05ff77be3e3efa12811729147a",
+          "text_sha256": "8d84b31c558600ca838d2c4513fc273064677177b22c0bf4d72c00c48f641e01",
+          "cache_key": "0269764dc06d9a4936c42af51e2b76b4bc4764ff92db0dc52c578022febdac1c",
+          "from_cache": true,
+          "start_seconds": 183.384,
+          "end_seconds": 208.44
+        },
+        {
+          "block_id": "block-014",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0014.mp3",
+          "duration_seconds": 17.256,
+          "sha256": "3aa08051bff09f84630b4138b4744b405000fdc357fec8871f76107d073f2b85",
+          "text_sha256": "3f4b0b4bde3e06c479755bcc273845dc7f3220e6ff0c2fead7746390187ec63c",
+          "cache_key": "f27a896b777402394c896b441df85f37c953667a1a9399d41a73b2b8fc089158",
+          "from_cache": true,
+          "start_seconds": 208.44,
+          "end_seconds": 225.696
+        },
+        {
+          "block_id": "block-015",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0015.mp3",
+          "duration_seconds": 3.36,
+          "sha256": "4d2c0889416698988b75970fbd8b628d104a42db5d88fad60d0e5df1922aff47",
+          "text_sha256": "241487644c14471abe1d16ea0c307627aa63371e0cc00d4f838fbe0cec2d28e5",
+          "cache_key": "a3aa53749b96fd67f67ef0a140aedbc0e5b2644639b45ee8b722ac756d7850a1",
+          "from_cache": true,
+          "start_seconds": 225.696,
+          "end_seconds": 229.056
+        },
+        {
+          "block_id": "block-016",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0016.mp3",
+          "duration_seconds": 21.168,
+          "sha256": "30eb9242dec2c67ce5ed6627bc96b23b94414e872885beee203c5bf5c71fbe9e",
+          "text_sha256": "3aa12065982ff4fad61cdcd0e04605cb28bde8e92e25b88c67bdd37382292b70",
+          "cache_key": "8efb649439d2064d0c847fb983fae277be067825c6453397dfe357b23731865f",
+          "from_cache": true,
+          "start_seconds": 229.056,
+          "end_seconds": 250.224
+        },
+        {
+          "block_id": "block-017",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0017.mp3",
+          "duration_seconds": 7.008,
+          "sha256": "ac98e816c7e1d5a156b464c2a1b7784a617675b4023d35dbd0420c40af769dc0",
+          "text_sha256": "a6af5c1419d7fdc2af613c56eb5c03f4bbb9d5ae2d80857916dc7263235b6e46",
+          "cache_key": "f6afb9679c5c0dd61cbdc2ccf36195f467bc6a5f8b2c2867e3fc55106d5cb89f",
+          "from_cache": true,
+          "start_seconds": 250.224,
+          "end_seconds": 257.232
+        },
+        {
+          "block_id": "block-018",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0018.mp3",
+          "duration_seconds": 3.12,
+          "sha256": "4f410c441babdaacd2857fdc473674f368c1fb182e9aa7eb734c0f27387c1943",
+          "text_sha256": "48f50564c8801db3e0fb7be98d3e18b433764dc2b796b040bd01e9c23e6a7f40",
+          "cache_key": "fa59ae7bd804e3a280f0d4d4baf9ef907e546880fbb82a9aec69cc394e409441",
+          "from_cache": true,
+          "start_seconds": 257.232,
+          "end_seconds": 260.352
+        },
+        {
+          "block_id": "block-019",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0019.mp3",
+          "duration_seconds": 5.016,
+          "sha256": "cabf80e56e249ad32ad4e140fad73b3431d409baeffdeaccc150128cc31c1376",
+          "text_sha256": "d764b6f09cf7a279f34a1a3005a926125f39593e18deed691f4549d7e28f8942",
+          "cache_key": "f1e93e5b7dbb51669266bbb0aac9abf19ac92a487d3fa0ff00f11f463e4be0e9",
+          "from_cache": true,
+          "start_seconds": 260.352,
+          "end_seconds": 265.368
+        },
+        {
+          "block_id": "block-020",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0020.mp3",
+          "duration_seconds": 6.456,
+          "sha256": "8da783628b2ea954063bfabd9b16150f14231dd2e6b2d1bb355cb22c801f5c24",
+          "text_sha256": "d905ae3452fc7a11c9be7de367ede1ba6c21469321336065823455b720be2046",
+          "cache_key": "b46bd26d3638d48ab26e5b1f0e6c77b03ed888807ec0738d4cda80511a92b8b1",
+          "from_cache": true,
+          "start_seconds": 265.368,
+          "end_seconds": 271.824
+        },
+        {
+          "block_id": "block-021",
+          "chunk_index": 1,
+          "url": "voices/cedar/parts/part_0021.mp3",
+          "duration_seconds": 9.264,
+          "sha256": "e29522a3bded7310cd7ba7adcf90c025cca2f248e5f334d0348287f53584e25d",
+          "text_sha256": "dc33ba2f19ad71b778efe1be539ce51f07147b56464eb27ff19fc2faf21d5d04",
+          "cache_key": "f86fbad74002bf24bd3e8c621846c0ca0988e07f3c0e2484a12967f66332e128",
+          "from_cache": true,
+          "start_seconds": 271.824,
+          "end_seconds": 281.088
+        }
+      ]
+    }
+  },
+  "disclosure_ar": "هذا الصوت مولّد بالذكاء الاصطناعي.",
+  "player": {
+    "position_retention_days": 30,
+    "remember_voice": true,
+    "native_audio_fallback": true,
+    "playback_rates": [
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      2.0
+    ],
+    "autoplay": false,
+    "sync_level": "block"
+  },
+  "build": {
+    "estimated_cost_usd": 0.0,
+    "actual_cost_usd": 0.0,
+    "paid_calls": 0,
+    "cache_hits": 21,
+    "parts": 21,
+    "warn_threshold_usd": 0.1,
+    "hard_threshold_usd": 0.5
+  },
+  "rollback": {
+    "previous_release_id": "",
+    "fallback_provider": "azure",
+    "fallback_voices": [
+      "ar-SA-HamedNeural",
+      "ar-SA-ZariyahNeural"
+    ]
+  }
+}

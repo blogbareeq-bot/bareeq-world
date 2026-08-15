@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "pricingReviewedAt": "2026-08-12",
+  "budget": {
+    "maxUsd": 2,
+    "maxCharacters": 12000,
+    "warningThresholds": [0.7, 0.85, 0.95],
+    "assumptions": {
+      "arabicCharactersPerSecond": 11,
+      "arabicCharactersPerTextToken": 2,
+      "openAiAudioTokensPerSecond": 50
+    }
+  },
+  "commonStyle": "اقرأ بالعربية الفصحى الطبيعية بصوت معرفي بشري هادئ، مع وضوح كامل ووقفات تخدم المعنى وإيقاع مريح لمقال طويل، ومن دون مبالغة تمثيلية أو نبرة إعلانية.",
+  "caseStyles": {
+    "literary-warmth": "اقرأ بالعربية الفصحى الطبيعية بنبرة أدبية دافئة وتأملية، مع تنغيم رقيق ووقفات تخدم المعنى، ومن دون حزن مصطنع أو تمثيل زائد.",
+    "technical-bilingual": "اقرأ بالعربية الفصحى الطبيعية بنبرة تقنية واضحة وحديثة، وانطق المصطلحات الإنجليزية بسلاسة من دون كسر إيقاع الجملة العربية.",
+    "numbers-economy": "اقرأ بالعربية الفصحى الطبيعية بنبرة تعليمية هادئة، مع إبراز الأرقام والنسب والعملات بوضوح ووقفات قصيرة مناسبة.",
+    "arabic-homographs": "اقرأ بالعربية الفصحى الطبيعية بعناية لغوية عالية، والتزم بالحركات المكتوبة وصيغ المخاطبة، مع إيقاع غير متكلف.",
+    "documentary-science": "اقرأ بالعربية الفصحى الطبيعية بنبرة وثائقية فضولية وواثقة، واضحة وهادئة، من دون تفخيم مسرحي.",
+    "culture-proper-names": "اقرأ بالعربية الفصحى الطبيعية بنبرة معرفية ودودة، وانطق أسماء الدول والمنظمات والسنوات بعناية ومن دون إبطاء مبالغ.",
+    "default": "اقرأ بالعربية الفصحى الطبيعية بصوت معرفي هادئ وإيقاع مريح، مع وقف واضح ومن دون مبالغة تمثيلية."
+  },
+  "candidates": [
+    {
+      "id": "openai-cedar",
+      "enabled": true,
+      "provider": "openai",
+      "model": "gpt-4o-mini-tts-2025-12-15",
+      "voice": "cedar",
+      "language": "ar",
+      "role": "Controllable general-purpose narrator",
+      "options": { "speed": 1 }
+    },
+    {
+      "id": "elevenlabs-multilingual-v2",
+      "enabled": true,
+      "provider": "elevenlabs",
+      "model": "eleven_multilingual_v2",
+      "voiceEnv": "ELEVENLABS_VOICE_ID",
+      "language": "ar",
+      "role": "Stable long-form quality candidate",
+      "options": { "stability": 0.52, "similarityBoost": 0.75, "style": 0.08, "speakerBoost": true, "speed": 1 }
+    },
+    {
+      "id": "elevenlabs-v3",
+      "enabled": true,
+      "provider": "elevenlabs",
+      "model": "eleven_v3",
+      "voiceEnv": "ELEVENLABS_VOICE_ID",
+      "language": "ar",
+      "role": "Expressive model on the same ElevenLabs voice",
+      "options": { "stability": 0.56, "similarityBoost": 0.75, "style": 0.08, "speakerBoost": true, "speed": 1 }
+    },
+    {
+      "id": "google-gemini-2-5-charon",
+      "enabled": true,
+      "provider": "google",
+      "model": "gemini-2.5-flash-tts",
+      "voice": "Charon",
+      "language": "ar-001",
+      "role": "Prompt-controlled generative narrator",
+      "options": { "region": "global" }
+    },
+    {
+      "id": "munsit-faseeh",
+      "enabled": true,
+      "provider": "munsit",
+      "model": "faseeh-v1-preview",
+      "voiceEnv": "MUNSIT_VOICE_ID",
+      "voiceDefault": "ar-najdi-male-2",
+      "language": "ar",
+      "role": "Arabic-first MENA candidate",
+      "options": { "stability": 0.55, "speed": 1, "dialect": "fusha" }
+    }
+  ]
+}

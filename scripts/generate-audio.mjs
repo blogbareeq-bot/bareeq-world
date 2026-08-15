@@ -1,34 +1,68 @@
 import { createHash } from 'node:crypto';
 import { access, mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { mp3DurationSeconds } from './mp3-duration.mjs';
 
 const ROOT = process.cwd();
 const POSTS_DIR = path.join(ROOT, 'src', 'content', 'posts');
 const AUDIO_ROOT = path.join(ROOT, 'public', 'audio', 'articles');
-const API_KEY = process.env.AZURE_SPEECH_KEY?.trim();
+const PROVIDER = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'openai';
+if (!['openai', 'azure'].includes(PROVIDER)) throw new Error('BAREEQ_TTS_PROVIDER must be openai or azure.');
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY?.trim();
+const AZURE_API_KEY = process.env.AZURE_SPEECH_KEY?.trim();
 const REGION = process.env.AZURE_SPEECH_REGION?.trim().toLowerCase() || 'eastus';
 const RESOURCE_ENDPOINT = process.env.AZURE_SPEECH_ENDPOINT?.trim().replace(/\/$/, '') || `https://${REGION}.api.cognitive.microsoft.com`;
-const LANGUAGE = 'ar-SA';
-const DEFAULT_VOICE = process.env.AZURE_SPEECH_VOICE?.trim() || 'ar-SA-HamedNeural';
+const OPENAI_MODEL = 'gpt-4o-mini-tts-2025-12-15';
+const OPENAI_OFFICIAL_ENDPOINT = 'https://api.openai.com/v1/audio/speech';
+const OPENAI_STYLE = 'اقرأ بالعربية الفصحى الطبيعية بصوت معرفي بشري هادئ، مع وضوح كامل ووقفات تخدم المعنى وإيقاع مريح لمقال طويل، ومن دون مبالغة تمثيلية أو نبرة إعلانية.';
+const CONTRACT_TEST = process.env.BAREEQ_TTS_CONTRACT_TEST === '1';
+const contractEndpoint = process.env.OPENAI_TTS_ENDPOINT?.trim();
+if (contractEndpoint && !CONTRACT_TEST) throw new Error('OPENAI_TTS_ENDPOINT is restricted to the explicit local contract test.');
+if (contractEndpoint) {
+  const parsed = new URL(contractEndpoint);
+  if (parsed.protocol !== 'http:' || !['127.0.0.1', 'localhost', '::1'].includes(parsed.hostname)) throw new Error('The contract-test OpenAI endpoint must be local HTTP.');
+}
+const OPENAI_ENDPOINT = contractEndpoint || OPENAI_OFFICIAL_ENDPOINT;
+const LANGUAGE = PROVIDER === 'openai' ? 'ar' : 'ar-SA';
 const SYNTHESIS_RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';
-const OUTPUT_FORMAT = 'audio-48khz-96kbitrate-mono-mp3';
+const OUTPUT_FORMAT = PROVIDER === 'openai' ? 'mp3' : 'audio-48khz-96kbitrate-mono-mp3';
+const MODEL = PROVIDER === 'openai' ? OPENAI_MODEL : 'Neural TTS';
+const PROVIDER_NAME = PROVIDER === 'openai' ? 'OpenAI' : 'Microsoft Azure AI Speech';
+const VOICES = PROVIDER === 'openai'
+  ? [
+      { id: 'cedar', label: 'سيدر (Cedar)', providerVoice: 'cedar', description: 'هادئ وواضح' },
+      { id: 'marin', label: 'مارين (Marin)', providerVoice: 'marin', description: 'دافئ وطبيعي' },
+    ]
+  : [
+      { id: 'hamed', label: 'حامد', providerVoice: 'ar-SA-HamedNeural', description: 'صوت سعودي رجالي' },
+      { id: 'zariyah', label: 'زارية', providerVoice: 'ar-SA-ZariyahNeural', description: 'صوت سعودي نسائي' },
+    ];
 const PLAN_ONLY = process.argv.includes('--plan');
 const SYNC_PLAN_ONLY = process.argv.includes('--sync-plan');
 const SPEECH_QA_JSON = process.argv.includes('--speech-qa-json') || process.argv.some((arg) => arg.startsWith('--speech-qa-output='));
 const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-output='))?.slice('--speech-qa-output='.length) || '';
-const MAX_REQUEST_BYTES = 6000; // smaller parts keep Azure responses compact and resilient on CI/mobile-oriented builds.
-const MIN_SYNTHESIS_INTERVAL_MS = Number(process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200'); // F0 allows 20 synthesis transactions per rolling 60 seconds.
-const GENERATOR_VERSION = 5;
+const ALLOW_PARTIAL = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
+const MAX_REQUEST_BYTES = PROVIDER === 'openai' ? 4800 : 6000; // OpenAI's model accepts 2,000 input tokens; Arabic parts stay conservatively below that bound.
+const MIN_SYNTHESIS_INTERVAL_MS = Number(PROVIDER === 'openai' ? (process.env.OPENAI_TTS_MIN_INTERVAL_MS || '200') : (process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200'));
+const GENERATOR_VERSION = 6;
 const AZURE_FREE_MONTHLY_CHARS = Number(process.env.AZURE_SPEECH_FREE_MONTHLY_CHARS || '500000');
 const BUILD_WARNING_CHARS = Number(process.env.AZURE_SPEECH_BUILD_WARNING_CHARS || '400000');
 const BUILD_HARD_LIMIT_CHARS = Number(process.env.AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS || '450000');
+const OPENAI_BUILD_WARNING_USD = Number(process.env.OPENAI_TTS_BUILD_WARNING_USD || '8');
+const OPENAI_BUILD_HARD_LIMIT_USD = Number(process.env.OPENAI_TTS_BUILD_HARD_LIMIT_USD || '12');
+const OPENAI_ARABIC_CHARS_PER_SECOND = Number(process.env.OPENAI_TTS_ARABIC_CHARS_PER_SECOND || '11');
+const OPENAI_ARABIC_CHARS_PER_TEXT_TOKEN = Number(process.env.OPENAI_TTS_ARABIC_CHARS_PER_TEXT_TOKEN || '2');
+const OPENAI_AUDIO_TOKENS_PER_SECOND = Number(process.env.OPENAI_TTS_AUDIO_TOKENS_PER_SECOND || '50');
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.12.0';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.16.0';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
 const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
 const SPEECH_REVIEW_VERSION = Number(SPEECH_OVERRIDES.reviewVersion || 1);
+const STUDIO_MAP_FILE = path.join(ROOT, 'scripts', 'studio-audio-map.json');
+const STUDIO_MAP = JSON.parse(await readFile(STUDIO_MAP_FILE, 'utf8'));
+const STUDIO_ARTICLE_IDS = new Set(Object.values(STUDIO_MAP.imports || {}).map((item) => item?.articleId).filter(Boolean));
 
 const encoder = new TextEncoder();
 const byteLength = (value) => encoder.encode(value).byteLength;
@@ -36,6 +70,9 @@ const exists = async (file) => { try { await access(file); return true; } catch 
 const sha = (value) => createHash('sha256').update(value).digest('hex');
 const audioKeyFor = (id) => sha(id).slice(0, 16);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const writeStdout = (value) => new Promise((resolve, reject) => {
+  process.stdout.write(value, (error) => error ? reject(error) : resolve());
+});
 let lastSynthesisAt = 0;
 
 function parsePost(source, filename) {
@@ -296,7 +333,7 @@ function escapeXml(text) {
   return text.replace(/[<>&"']/g, (char) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' }[char]));
 }
 
-const MAX_FETCH_RETRIES = Number(process.env.AZURE_SPEECH_MAX_RETRIES || '5');
+const MAX_FETCH_RETRIES = Number(process.env.BAREEQ_TTS_MAX_RETRIES || process.env.AZURE_SPEECH_MAX_RETRIES || '5');
 
 function retryDelay(attempt, response = null) {
   const retryAfter = response ? Number(response.headers.get('retry-after')) : NaN;
@@ -321,15 +358,15 @@ async function request(url, options = {}, attempt = 0) {
     const body = await response.text().catch(() => '');
     if ((response.status === 429 || response.status >= 500) && attempt < MAX_FETCH_RETRIES) {
       const wait = retryDelay(attempt, response);
-      console.warn(`Azure request HTTP ${response.status}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
+      console.warn(`${PROVIDER_NAME} request HTTP ${response.status}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
       await sleep(wait);
       return request(url, options, attempt + 1);
     }
-    throw new Error(`Azure Speech request failed (${response.status}): ${body.slice(0, 700)}`);
+    throw new Error(`${PROVIDER_NAME} request failed (${response.status}): ${body.slice(0, 700)}`);
   } catch (error) {
     if (attempt < MAX_FETCH_RETRIES && isRetryableTransportError(error)) {
       const wait = retryDelay(attempt);
-      console.warn(`Azure request transport error ${transportCode(error) || error.name}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
+      console.warn(`${PROVIDER_NAME} request transport error ${transportCode(error) || error.name}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
       await sleep(wait);
       return request(url, options, attempt + 1);
     }
@@ -349,7 +386,7 @@ async function requestBinary(url, options = {}, { attempt = 0, throttle = false,
         await sleep(wait);
         return requestBinary(url, options, { attempt: attempt + 1, throttle, label });
       }
-      throw new Error(`Azure Speech request failed (${response.status}): ${body.slice(0, 700)}`);
+      throw new Error(`${label} failed (${response.status}): ${body.slice(0, 700)}`);
     }
     const bytes = Buffer.from(await response.arrayBuffer());
     if (bytes.length < 100) throw new Error(`${label}: response is unexpectedly small (${bytes.length} bytes).`);
@@ -382,15 +419,15 @@ function getAzureUrls() {
   };
 }
 
-async function resolveVoice(apiKey) {
+async function resolveAzureVoices(apiKey) {
   const { voices } = getAzureUrls();
   const response = await request(voices, { headers: { 'Ocp-Apim-Subscription-Key': apiKey, 'User-Agent': USER_AGENT } });
   const data = await response.json();
   const candidates = Array.isArray(data) ? data.filter((voice) => voice?.Locale === LANGUAGE && typeof voice?.ShortName === 'string') : [];
   if (!candidates.length) throw new Error(`Azure Speech returned no ${LANGUAGE} voices for region ${REGION}.`);
-  return candidates.find((voice) => voice.ShortName === DEFAULT_VOICE)?.ShortName
-    || candidates.find((voice) => voice.ShortName === 'ar-SA-HamedNeural')?.ShortName
-    || candidates[0].ShortName;
+  const available = new Set(candidates.map((voice) => voice.ShortName));
+  for (const voice of VOICES) if (!available.has(voice.providerVoice)) throw new Error(`Azure Speech voice ${voice.providerVoice} is unavailable in ${REGION}.`);
+  return VOICES;
 }
 
 async function throttleSynthesis() {
@@ -399,7 +436,7 @@ async function throttleSynthesis() {
   lastSynthesisAt = Date.now();
 }
 
-async function synthesize(apiKey, voice, part) {
+async function synthesizeAzure(apiKey, voice, part) {
   const { synthesize } = getAzureUrls();
   const paragraphs = part.items.map((item) => {
     const body = `<prosody rate="${escapeXml(SYNTHESIS_RATE)}">${escapeXml(item.text)}</prosody>`;
@@ -421,6 +458,32 @@ async function synthesize(apiKey, voice, part) {
   }, { throttle: true, label: 'Azure synthesis' });
 }
 
+async function synthesizeOpenAI(apiKey, voice, part) {
+  return requestBinary(OPENAI_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      Accept: 'audio/mpeg',
+      'User-Agent': USER_AGENT,
+    },
+    body: JSON.stringify({
+      model: OPENAI_MODEL,
+      voice: voice.providerVoice,
+      input: part.text,
+      instructions: OPENAI_STYLE,
+      response_format: 'mp3',
+      speed: 1,
+    }),
+  }, { throttle: true, label: 'OpenAI speech synthesis' });
+}
+
+async function synthesizeVoice(apiKey, voice, part) {
+  return PROVIDER === 'openai'
+    ? synthesizeOpenAI(apiKey, voice, part)
+    : synthesizeAzure(apiKey, voice.providerVoice, part);
+}
+
 async function loadPosts() {
   const files = (await readdir(POSTS_DIR)).filter((name) => name.endsWith('.md')).sort();
   const posts = [];
@@ -439,17 +502,91 @@ async function loadPosts() {
   return posts;
 }
 
-async function hasCompleteCache(post, hash) {
+function providerFingerprint(post) {
+  return sha(JSON.stringify({
+    generatorVersion: GENERATOR_VERSION,
+    speechOverridesVersion: SPEECH_OVERRIDES_VERSION,
+    provider: PROVIDER,
+    model: MODEL,
+    region: PROVIDER === 'azure' ? REGION : undefined,
+    language: LANGUAGE,
+    voices: VOICES.map(({ id, providerVoice }) => ({ id, providerVoice })),
+    style: PROVIDER === 'openai' ? OPENAI_STYLE : undefined,
+    rate: PROVIDER === 'azure' ? SYNTHESIS_RATE : 1,
+    outputFormat: OUTPUT_FORMAT,
+    text: post.spokenText,
+    sync: post.audioParts.map((part) => part.sync),
+  }));
+}
+
+function importedManifestAssets(manifest, post) {
+  if (PROVIDER !== 'openai' || manifest.version !== 4 || manifest.importerVersion !== 1 || manifest.articleId !== post.id || manifest.provider !== 'OpenAI' || manifest.model !== OPENAI_MODEL || manifest.language !== 'ar' || manifest.outputFormat !== 'mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'studio-block-timestamps') return null;
+  if (!manifest.importedRelease || manifest.importedRelease.targetBareeqVersion !== 'V4.16.0' || !/^[a-z0-9][a-z0-9._-]*$/i.test(manifest.importedRelease.releaseId || '')) return null;
+  if (manifest.contractTest || !Array.isArray(manifest.voices) || !manifest.voices.length || !Array.isArray(manifest.parts) || manifest.parts.length !== 1) return null;
+  if (!manifest.voices.some((voice) => voice?.id === manifest.defaultVoice)) return null;
+
+  const sync = manifest.parts[0]?.sync;
+  if (!Array.isArray(sync) || !sync.length) return null;
+  const seenIds = new Set();
+  const sourceSnapshot = [];
+  let previousStart = -1;
+  for (const entry of sync) {
+    if (!entry || typeof entry.id !== 'string' || seenIds.has(entry.id) || !Number.isInteger(entry.ordinal) || entry.ordinal < 0 || entry.ordinal >= post.segments.length) return null;
+    const segment = post.segments[entry.ordinal];
+    if (segment.id !== entry.id || segment.type !== entry.type || !(entry.start >= 0 && entry.end <= 1 && entry.start < entry.end) || entry.start < previousStart) return null;
+    seenIds.add(entry.id);
+    previousStart = entry.start;
+    sourceSnapshot.push({ id: segment.id, type: segment.type, visibleText: segment.visibleText });
+  }
+  if (sha(JSON.stringify(sourceSnapshot)) !== manifest.sourceHash) return null;
+
+  const assets = [];
+  const paths = new Set();
+  for (const voice of manifest.voices) {
+    if (!voice?.id || !voice.providerVoice || typeof voice.label !== 'string' || !(voice.totalDurationSeconds > 0)) return null;
+    const asset = manifest.parts[0].audio?.[voice.id];
+    const prefix = `/audio/articles/${post.key}/releases/${manifest.importedRelease.releaseId}/`;
+    if (typeof asset?.src !== 'string' || !asset.src.startsWith(prefix) || !asset.src.endsWith('.mp3') || !(asset.bytes >= 100) || !(asset.durationSeconds > 0) || paths.has(asset.src)) return null;
+    paths.add(asset.src);
+    assets.push(asset);
+  }
+  return assets;
+}
+
+function manifestAssets(manifest, post) {
+  const imported = importedManifestAssets(manifest, post);
+  if (imported) return imported;
+  if (manifest.version !== 3 || manifest.sourceHash !== post.sourceHash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== PROVIDER_NAME || manifest.model !== MODEL || manifest.language !== LANGUAGE || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') return null;
+  if (Boolean(manifest.contractTest) !== CONTRACT_TEST || !Array.isArray(manifest.voices) || manifest.voices.length !== VOICES.length || !Array.isArray(manifest.parts) || !manifest.parts.length) return null;
+  if (manifest.defaultVoice !== VOICES[0].id) return null;
+  for (let index = 0; index < VOICES.length; index += 1) {
+    const expected = VOICES[index];
+    const actual = manifest.voices[index];
+    if (actual?.id !== expected.id || actual?.providerVoice !== expected.providerVoice || typeof actual?.label !== 'string' || !(actual?.totalDurationSeconds > 0)) return null;
+  }
+  const assets = [];
+  const paths = new Set();
+  for (const part of manifest.parts) {
+    if (!Array.isArray(part?.sync) || !part.audio || typeof part.audio !== 'object') return null;
+    for (const voice of VOICES) {
+      const asset = part.audio[voice.id];
+      if (typeof asset?.src !== 'string' || !asset.src.startsWith(`/audio/articles/${post.key}/`) || !asset.src.endsWith('.mp3') || !(asset.bytes >= 100) || !(asset.durationSeconds > 0) || paths.has(asset.src)) return null;
+      paths.add(asset.src);
+      assets.push(asset);
+    }
+  }
+  return assets;
+}
+
+async function hasCompleteCache(post) {
   const dir = path.join(AUDIO_ROOT, post.key);
   const manifestPath = path.join(dir, 'manifest.json');
   if (!await exists(manifestPath)) return false;
   try {
     const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
-    if (manifest.sourceHash !== hash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.language !== LANGUAGE || manifest.syncVersion !== 1 || !Array.isArray(manifest.parts) || !manifest.parts.length) return false;
-    if (!manifest.parts.every((part) => Array.isArray(part.sync))) return false;
-    for (const part of manifest.parts) {
-      if (!await exists(path.join(ROOT, 'public', part.src.replace(/^\//, '')))) return false;
-    }
+    const assets = manifestAssets(manifest, post);
+    if (!assets) return false;
+    for (const asset of assets) if (!await exists(path.join(ROOT, 'public', asset.src.replace(/^\//, '')))) return false;
     return true;
   } catch { return false; }
 }
@@ -462,18 +599,20 @@ async function restoreFromProduction(post) {
   if (!response.ok) return false;
   let manifest;
   try { manifest = await response.json(); } catch { return false; }
-  if (manifest.sourceHash !== post.sourceHash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.language !== LANGUAGE || manifest.syncVersion !== 1 || !Array.isArray(manifest.parts) || !manifest.parts.length) return false;
-  if (!manifest.parts.every((part) => Array.isArray(part.sync))) return false;
-  if (!manifest.parts.every((part) => typeof part?.src === 'string' && part.src.startsWith(`/audio/articles/${post.key}/`) && part.src.endsWith('.mp3'))) return false;
+  if (manifest?.contractTest) return false;
+  const assets = manifestAssets(manifest, post);
+  if (!assets) return false;
 
   const finalDir = path.join(AUDIO_ROOT, post.key);
   const tempDir = `${finalDir}.restore-${process.pid}`;
   await rm(tempDir, { recursive: true, force: true });
   await mkdir(tempDir, { recursive: true });
   try {
-    for (const part of manifest.parts) {
-      const bytes = await requestBinary(`${CACHE_ORIGIN}${part.src}`, { headers: { 'User-Agent': USER_AGENT } }, { label: 'Production audio cache download' });
-      await writeFile(path.join(tempDir, path.basename(part.src)), bytes);
+    for (const asset of assets) {
+      const bytes = await requestBinary(`${CACHE_ORIGIN}${asset.src}`, { headers: { 'User-Agent': USER_AGENT } }, { label: 'Production audio cache download' });
+      const duration = mp3DurationSeconds(bytes);
+      if (Math.abs(duration - asset.durationSeconds) > 2) throw new Error(`Cached MP3 duration mismatch: ${asset.src}`);
+      await writeFile(path.join(tempDir, path.basename(asset.src)), bytes);
     }
     await writeFile(path.join(tempDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
     await rm(finalDir, { recursive: true, force: true });
@@ -485,13 +624,27 @@ async function restoreFromProduction(post) {
   }
 }
 
+function estimateOpenAiCost(characters, requestCount) {
+  const promptCharacters = characters + OPENAI_STYLE.length * requestCount;
+  const textTokens = Math.ceil(promptCharacters / Math.max(1, OPENAI_ARABIC_CHARS_PER_TEXT_TOKEN));
+  const seconds = characters / Math.max(1, OPENAI_ARABIC_CHARS_PER_SECOND);
+  const audioTokens = Math.ceil(seconds * Math.max(1, OPENAI_AUDIO_TOKENS_PER_SECOND));
+  return {
+    usd: textTokens * 0.6 / 1_000_000 + audioTokens * 12 / 1_000_000,
+    estimatedSeconds: seconds,
+    textTokens,
+    audioTokens,
+  };
+}
+
 const posts = await loadPosts();
-const totalChars = posts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
-const totalBytes = posts.reduce((sum, post) => sum + byteLength(post.spokenText), 0);
-const totalRequests = posts.reduce((sum, post) => sum + post.audioParts.length, 0);
+const sourceChars = posts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
+const sourceBytes = posts.reduce((sum, post) => sum + byteLength(post.spokenText), 0);
+const sourceRequests = posts.reduce((sum, post) => sum + post.audioParts.length, 0);
 
 if (SYNC_PLAN_ONLY) {
-  console.log(JSON.stringify(posts.map((post) => ({ id: post.id, segments: post.segments.map(({ id, type, match }) => ({ id, type, matchLength: match.length })), parts: post.audioParts.map((part) => ({ sync: part.sync.map(({ id, start, end }) => ({ id, start, end })) })) })), null, 2));
+  const payload = JSON.stringify(posts.map((post) => ({ id: post.id, segments: post.segments.map(({ id, type, match }) => ({ id, type, matchLength: match.length })), parts: post.audioParts.map((part) => ({ sync: part.sync.map(({ id, start, end }) => ({ id, start, end })) })) })), null, 2) + '\n';
+  await writeStdout(payload);
   process.exit(0);
 }
 
@@ -503,104 +656,137 @@ if (SPEECH_QA_JSON) {
     spokenText: post.spokenText
   })), null, 2) + '\n';
   if (SPEECH_QA_OUTPUT) await writeFile(path.resolve(ROOT, SPEECH_QA_OUTPUT), payload);
-  else console.log(payload.trimEnd());
+  else await writeStdout(payload);
   process.exit(0);
 }
 
 if (PLAN_ONLY) {
-  console.log(`Azure AI Speech audio plan: ${posts.length} articles, ${totalRequests} synthesis request(s), ${totalChars} characters, ${totalBytes} UTF-8 bytes.`);
-  for (const post of posts) console.log(`- ${post.id}: ${post.audioParts.length} part(s), ${post.segments.length} sync block(s), ${[...post.spokenText].length} chars`);
+  const generationPosts = PROVIDER === 'openai' ? posts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id)) : posts;
+  const generationRequests = generationPosts.reduce((sum, post) => sum + post.audioParts.length, 0);
+  const generationChars = generationPosts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
+  console.log(`${PROVIDER_NAME} audio plan: ${posts.length} articles, ${generationRequests * VOICES.length} synthesis request(s), ${generationChars * VOICES.length} billable character(s), ${sourceBytes} source UTF-8 bytes.`);
+  console.log(`Voices: ${VOICES.map((voice) => `${voice.label} [${voice.providerVoice}]`).join(' + ')}.`);
+  for (const post of posts) {
+    const imported = PROVIDER === 'openai' && STUDIO_ARTICLE_IDS.has(post.id);
+    console.log(imported
+      ? `- ${post.id}: approved Bareeq Voice Studio release (Cedar), no synthesis request`
+      : `- ${post.id}: ${post.audioParts.length} part(s) × ${VOICES.length} voices, ${post.segments.length} sync block(s), ${[...post.spokenText].length} source chars`);
+  }
   process.exit(0);
 }
 
 await mkdir(AUDIO_ROOT, { recursive: true });
-const prepared = posts.map((post) => ({
-  ...post,
-  sourceHash: sha(JSON.stringify({ generatorVersion: GENERATOR_VERSION, speechOverridesVersion: SPEECH_OVERRIDES_VERSION, provider: 'azure', region: REGION, language: LANGUAGE, voice: DEFAULT_VOICE, rate: SYNTHESIS_RATE, outputFormat: OUTPUT_FORMAT, text: post.spokenText, sync: post.audioParts.map((part) => part.sync) })),
-}));
+const prepared = posts.map((post) => ({ ...post, sourceHash: providerFingerprint(post) }));
 
 let missing = [];
-for (const post of prepared) if (!await hasCompleteCache(post, post.sourceHash)) missing.push(post);
+for (const post of prepared) if (!await hasCompleteCache(post)) missing.push(post);
 
-if (missing.length) {
+if (missing.length && !CONTRACT_TEST && !ALLOW_PARTIAL) {
   const stillMissing = [];
   for (const post of missing) {
-    if (await restoreFromProduction(post)) console.log(`↺ ${post.id}: restored unchanged Azure audio from production cache.`);
+    if (await restoreFromProduction(post)) console.log(`↺ ${post.id}: restored unchanged ${PROVIDER_NAME} dual-voice audio from production cache.`);
     else stillMissing.push(post);
   }
   missing = stillMissing;
 }
 
-const missingChars = missing.reduce((sum, post) => sum + [...post.spokenText].length, 0);
-const missingRequests = missing.reduce((sum, post) => sum + post.audioParts.length, 0);
-const percent = AZURE_FREE_MONTHLY_CHARS > 0 ? (missingChars / AZURE_FREE_MONTHLY_CHARS) * 100 : 0;
-console.log(`Azure Speech cost guard: this build needs ${missingChars.toLocaleString('en-US')} new synthesis character(s) across ${missingRequests} request(s), about ${percent.toFixed(1)}% of the configured ${AZURE_FREE_MONTHLY_CHARS.toLocaleString('en-US')} monthly allowance.`);
-console.log('Note: this is a per-build estimate, not Azure account monthly usage. Unchanged published audio is restored and does not consume new synthesis characters.');
-if (BUILD_WARNING_CHARS > 0 && missingChars >= BUILD_WARNING_CHARS) {
-  console.warn(`⚠ Azure Speech usage warning: this build will synthesize ${missingChars.toLocaleString('en-US')} characters (warning threshold: ${BUILD_WARNING_CHARS.toLocaleString('en-US')}).`);
-}
-if (BUILD_HARD_LIMIT_CHARS > 0 && missingChars > BUILD_HARD_LIMIT_CHARS) {
-  throw new Error(`Azure Speech safety stop: this build would synthesize ${missingChars.toLocaleString('en-US')} characters, above the configured hard limit of ${BUILD_HARD_LIMIT_CHARS.toLocaleString('en-US')}. Raise AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS deliberately if this is expected.`);
+const missingSourceChars = missing.reduce((sum, post) => sum + [...post.spokenText].length, 0);
+const missingChars = missingSourceChars * VOICES.length;
+const missingRequests = missing.reduce((sum, post) => sum + post.audioParts.length, 0) * VOICES.length;
+
+if (PROVIDER === 'openai') {
+  const estimate = estimateOpenAiCost(missingChars, missingRequests);
+  console.log(`OpenAI TTS cost guard: this build needs ${missingRequests} new request(s), ${missingChars.toLocaleString('en-US')} billable character(s), and an estimated $${estimate.usd.toFixed(2)} for Cedar + Marin.`);
+  console.log('Note: this is a conservative per-build estimate, not the OpenAI account bill. Unchanged published audio is restored without new synthesis.');
+  if (OPENAI_BUILD_WARNING_USD > 0 && estimate.usd >= OPENAI_BUILD_WARNING_USD) console.warn(`⚠ OpenAI TTS usage warning: estimated $${estimate.usd.toFixed(2)} (warning threshold: $${OPENAI_BUILD_WARNING_USD.toFixed(2)}).`);
+  if (OPENAI_BUILD_HARD_LIMIT_USD > 0 && estimate.usd > OPENAI_BUILD_HARD_LIMIT_USD) throw new Error(`OpenAI TTS safety stop: estimated $${estimate.usd.toFixed(2)} exceeds the configured $${OPENAI_BUILD_HARD_LIMIT_USD.toFixed(2)} hard limit. Raise OPENAI_TTS_BUILD_HARD_LIMIT_USD deliberately if this full regeneration is expected.`);
+} else {
+  const percent = AZURE_FREE_MONTHLY_CHARS > 0 ? (missingChars / AZURE_FREE_MONTHLY_CHARS) * 100 : 0;
+  console.log(`Azure Speech cost guard: this build needs ${missingChars.toLocaleString('en-US')} new synthesis character(s) across ${missingRequests} request(s), about ${percent.toFixed(1)}% of the configured ${AZURE_FREE_MONTHLY_CHARS.toLocaleString('en-US')} monthly allowance.`);
+  console.log('Note: this is a per-build estimate, not Azure account monthly usage. Unchanged published audio is restored without new synthesis.');
+  if (BUILD_WARNING_CHARS > 0 && missingChars >= BUILD_WARNING_CHARS) console.warn(`⚠ Azure Speech usage warning: this build will synthesize ${missingChars.toLocaleString('en-US')} characters (warning threshold: ${BUILD_WARNING_CHARS.toLocaleString('en-US')}).`);
+  if (BUILD_HARD_LIMIT_CHARS > 0 && missingChars > BUILD_HARD_LIMIT_CHARS) throw new Error(`Azure Speech safety stop: this build would synthesize ${missingChars.toLocaleString('en-US')} characters, above the configured hard limit of ${BUILD_HARD_LIMIT_CHARS.toLocaleString('en-US')}. Raise AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS deliberately if this is expected.`);
 }
 
+const API_KEY = PROVIDER === 'openai' ? OPENAI_API_KEY : AZURE_API_KEY;
 if (!API_KEY && missing.length) {
-  throw new Error(`AZURE_SPEECH_KEY is required to generate Azure Speech audio for ${missing.length} new or changed article(s). Existing unchanged audio is restored automatically from ${CACHE_ORIGIN}. Add AZURE_SPEECH_KEY as a Production Secret in Cloudflare Pages. AZURE_SPEECH_REGION and AZURE_SPEECH_ENDPOINT are optional overrides; eastus defaults are built in.`);
+  if (ALLOW_PARTIAL) {
+    console.warn(`⚠ Offline pilot mode: preserving ${posts.length - missing.length} verified audio article(s) and skipping ${missing.length} unavailable article(s). This mode is for local release verification only.`);
+    process.exit(0);
+  }
+  if (PROVIDER === 'openai') throw new Error(`OPENAI_API_KEY is required to generate Cedar and Marin for ${missing.length} new or changed article(s). Existing unchanged OpenAI audio is restored automatically from ${CACHE_ORIGIN}. Add OPENAI_API_KEY as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
+  throw new Error(`AZURE_SPEECH_KEY is required to generate Hamed and Zariyah for ${missing.length} new or changed article(s). Add it as an encrypted Production Secret in Cloudflare Pages, or redeploy the previous release for an immediate rollback.`);
 }
 
 if (!missing.length) {
-  console.log(`Azure AI Speech audio cache is complete for ${posts.length} articles.`);
+  console.log(`${PROVIDER_NAME} dual-voice audio cache is complete for ${posts.length} articles.`);
   process.exit(0);
 }
 
-const voice = await resolveVoice(API_KEY);
-console.log(`Generating Azure AI Speech (${LANGUAGE}) with ${voice} in ${REGION} for ${missing.length} article(s).`);
+const resolvedVoices = PROVIDER === 'azure' ? await resolveAzureVoices(API_KEY) : VOICES;
+console.log(`Generating ${PROVIDER_NAME} ${MODEL} (${LANGUAGE}) with ${resolvedVoices.map((voice) => voice.providerVoice).join(' + ')} for ${missing.length} article(s).`);
 
 for (const post of missing) {
   const finalDir = path.join(AUDIO_ROOT, post.key);
   const tempDir = `${finalDir}.tmp-${process.pid}`;
   await rm(tempDir, { recursive: true, force: true });
   await mkdir(tempDir, { recursive: true });
-  const parts = [];
+  const parts = post.audioParts.map((audioPart) => ({ characters: [...audioPart.text].length, sync: audioPart.sync, audio: {} }));
+  const manifestVoices = [];
   try {
-    for (let index = 0; index < post.audioParts.length; index += 1) {
-      const audioPart = post.audioParts[index];
-      const filename = `part-${String(index + 1).padStart(3, '0')}-${post.sourceHash.slice(0, 8)}.mp3`;
-      const audio = await synthesize(API_KEY, voice, audioPart);
-      if (audio.length < 100) throw new Error(`${post.id}: generated MP3 ${filename} is unexpectedly small.`);
-      await writeFile(path.join(tempDir, filename), audio);
-      parts.push({
-        src: `/audio/articles/${post.key}/${filename}`,
-        characters: [...audioPart.text].length,
-        bytes: audio.length,
-        sync: audioPart.sync,
+    for (const voice of resolvedVoices) {
+      let totalDurationSeconds = 0;
+      for (let index = 0; index < post.audioParts.length; index += 1) {
+        const audioPart = post.audioParts[index];
+        const filename = `${voice.id}-part-${String(index + 1).padStart(3, '0')}-${post.sourceHash.slice(0, 8)}.mp3`;
+        const audio = await synthesizeVoice(API_KEY, voice, audioPart);
+        if (audio.length < 100) throw new Error(`${post.id}: generated MP3 ${filename} is unexpectedly small.`);
+        const durationSeconds = mp3DurationSeconds(audio);
+        await writeFile(path.join(tempDir, filename), audio);
+        parts[index].audio[voice.id] = {
+          src: `/audio/articles/${post.key}/${filename}`,
+          bytes: audio.length,
+          durationSeconds,
+        };
+        totalDurationSeconds += durationSeconds;
+      }
+      manifestVoices.push({
+        id: voice.id,
+        label: voice.label,
+        description: voice.description,
+        providerVoice: voice.providerVoice,
+        totalDurationSeconds: Number(totalDurationSeconds.toFixed(3)),
       });
     }
     const manifest = {
-      version: 2,
+      version: 3,
       generatorVersion: GENERATOR_VERSION,
       syncVersion: 1,
       speechOverridesVersion: SPEECH_OVERRIDES_VERSION,
       speechReviewVersion: SPEECH_REVIEW_VERSION,
-      provider: 'Microsoft Azure AI Speech',
-      model: 'Neural TTS',
+      provider: PROVIDER_NAME,
+      model: MODEL,
       language: LANGUAGE,
-      voice,
-      region: REGION,
       outputFormat: OUTPUT_FORMAT,
       articleId: post.id,
       title: post.title,
       sourceHash: post.sourceHash,
+      defaultVoice: resolvedVoices[0].id,
+      voices: manifestVoices,
       syncMethod: 'paragraph-weighted',
+      disclosure: 'الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.',
+      ...(PROVIDER === 'azure' ? { region: REGION, synthesisRate: SYNTHESIS_RATE } : { styleInstructions: OPENAI_STYLE }),
+      ...(CONTRACT_TEST ? { contractTest: true } : {}),
       parts,
     };
     await writeFile(path.join(tempDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
     await rm(finalDir, { recursive: true, force: true });
     await rename(tempDir, finalDir);
-    console.log(`✓ ${post.id}: ${parts.length} MP3 part(s)`);
+    console.log(`✓ ${post.id}: ${parts.length} synchronized part(s) × ${resolvedVoices.length} voices`);
   } catch (error) {
     await rm(tempDir, { recursive: true, force: true });
     throw error;
   }
 }
 
-console.log(`Azure AI Speech audio ready: ${posts.length} article(s).`);
+console.log(`${PROVIDER_NAME} audio ready: ${posts.length} article(s); approved Studio releases were preserved and generated articles include ${VOICES.length} listening choices.`);

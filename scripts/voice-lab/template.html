@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>مختبر بريق الصوتي — مقارنة عمياء</title>
+  <style>
+    :root{color-scheme:light;--navy:#112b3c;--navy-2:#193f53;--teal:#167d79;--teal-soft:#e6f4f1;--gold:#c99945;--ink:#17232b;--muted:#60717b;--line:#dce5e7;--paper:#fbfcfb;--surface:#fff;--danger:#a4473f;--shadow:0 18px 50px rgba(17,43,60,.10)}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#eef5f3 0,#fbfcfb 310px);color:var(--ink);font-family:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;line-height:1.7}
+    button,input,textarea{font:inherit}.shell{width:min(1180px,calc(100% - 32px));margin-inline:auto}.hero{padding:48px 0 36px;color:#fff;background:radial-gradient(circle at 20% 20%,rgba(22,125,121,.52),transparent 34%),linear-gradient(135deg,var(--navy),var(--navy-2))}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}.brand-mark{display:grid;place-items:center;width:44px;height:44px;border:1px solid rgba(255,255,255,.28);border-radius:14px;color:#f5d38e;font-size:24px}.brand b{font-size:20px}.brand span{display:block;color:#cbdadd;font-size:13px}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:32px;align-items:end}.eyebrow{color:#f2cf89;font-weight:800;letter-spacing:.08em}.hero h1{max-width:780px;margin:8px 0 14px;font-size:clamp(30px,5vw,56px);line-height:1.18}.hero p{max-width:760px;margin:0;color:#dbe7e8;font-size:18px}.privacy-card{padding:22px;border:1px solid rgba(255,255,255,.16);border-radius:20px;background:rgba(255,255,255,.07);backdrop-filter:blur(10px)}.privacy-card b{display:block;margin-bottom:6px;color:#fff}.privacy-card p{font-size:14px}
+    .toolbar{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);background:rgba(251,252,251,.94);backdrop-filter:blur(12px)}.toolbar-inner{display:flex;align-items:center;gap:16px;min-height:72px}.progress-wrap{flex:1}.progress-head{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted)}progress{display:block;width:100%;height:8px;margin-top:7px;border:0;border-radius:99px;overflow:hidden;background:#dfe9e8}progress::-webkit-progress-bar{background:#dfe9e8}progress::-webkit-progress-value{background:linear-gradient(90deg,var(--teal),#38a59c)}progress::-moz-progress-bar{background:var(--teal)}
+    .toolbar button,.export{min-height:44px;padding:9px 15px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy);font-weight:800;cursor:pointer}.export{border-color:var(--teal);background:var(--teal);color:#fff}.toolbar button:hover,.export:hover{transform:translateY(-1px)}
+    main{padding:34px 0 70px}.notice{display:none;margin-bottom:20px;padding:16px 18px;border:1px solid #e9c98b;border-radius:14px;background:#fff7e8;color:#654b1c}.notice.is-visible{display:block}
+    .lab-layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:26px;align-items:start}.case-nav{position:sticky;top:94px;display:grid;gap:9px}.case-nav button{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--muted);text-align:right;cursor:pointer}.case-nav button[aria-current="step"]{border-color:var(--teal);background:var(--teal-soft);color:var(--navy);font-weight:800}.case-nav small{display:block;color:inherit;opacity:.8}
+    .case-card{overflow:hidden;border:1px solid var(--line);border-radius:24px;background:var(--surface);box-shadow:var(--shadow)}.case-head{padding:28px 30px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#fff,#f2f8f6)}.case-count{color:var(--teal);font-size:13px;font-weight:900}.case-head h2{margin:5px 0 6px;color:var(--navy);font-size:clamp(24px,3vw,34px)}.case-head p{margin:0;color:var(--muted)}.script{margin-top:20px;padding:18px 20px;border-right:4px solid var(--gold);border-radius:12px;background:#fff;color:#273840;font-size:17px}.script b{display:block;margin-bottom:5px;color:var(--navy);font-size:13px}
+    .voices{display:grid;gap:18px;padding:24px}.voice{padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff}.voice-top{display:flex;align-items:center;justify-content:space-between;gap:16px}.voice-code{display:flex;align-items:center;gap:11px;color:var(--navy);font-size:20px;font-weight:900}.voice-badge{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff}.voice audio{width:min(100%,500px);height:42px}.criteria{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:10px;margin-top:18px}.criterion{padding:12px;border-radius:13px;background:#f6f9f8}.criterion-label{min-height:43px;color:#334952;font-size:13px;font-weight:800}.criterion-label span{display:block;color:var(--muted);font-size:11px;font-weight:500}.scale{display:flex;gap:4px;margin-top:8px}.scale input{position:absolute;opacity:0;pointer-events:none}.scale label{display:grid;place-items:center;width:30px;height:30px;border:1px solid #cfdcdc;border-radius:8px;background:#fff;color:var(--muted);font-size:12px;cursor:pointer}.scale input:focus-visible+label{outline:3px solid rgba(22,125,121,.25)}.scale input:checked+label{border-color:var(--teal);background:var(--teal);color:#fff;font-weight:900}.notes{width:100%;min-height:68px;margin-top:14px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;resize:vertical}.notes:focus{outline:3px solid rgba(22,125,121,.16);border-color:var(--teal)}
+    .winner{margin:0 24px 24px;padding:18px 20px;border:1px solid #d7e7e3;border-radius:16px;background:var(--teal-soft)}.winner strong{display:block;margin-bottom:10px;color:var(--navy)}.winner-options{display:flex;flex-wrap:wrap;gap:9px}.winner label{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid #bfd8d3;border-radius:10px;background:#fff;cursor:pointer}.case-actions{display:flex;justify-content:space-between;gap:12px;padding:0 24px 26px}.case-actions button{min-height:46px;padding:10px 18px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy);font-weight:900;cursor:pointer}.case-actions .next{border-color:var(--navy);background:var(--navy);color:#fff}.footer-note{margin-top:24px;color:var(--muted);font-size:13px;text-align:center}
+    @media(max-width:980px){.hero-grid,.lab-layout{grid-template-columns:1fr}.case-nav{position:static;display:flex;overflow-x:auto;padding-bottom:5px}.case-nav button{min-width:190px}.criteria{grid-template-columns:repeat(2,minmax(0,1fr))}.voice-top{align-items:flex-start;flex-direction:column}.voice audio{width:100%}}
+    @media(max-width:640px){.shell{width:min(100% - 20px,1180px)}.hero{padding-top:28px}.privacy-card{display:none}.toolbar-inner{flex-wrap:wrap;padding:10px 0}.progress-wrap{flex-basis:100%;order:-1}.toolbar button,.export{flex:1}.case-head{padding:22px 18px}.voices{padding:14px}.voice{padding:16px}.criteria{grid-template-columns:1fr}.criterion-label{min-height:auto}.scale label{width:38px;height:36px}.winner{margin:0 14px 16px}.case-actions{padding:0 14px 18px}.case-nav button{min-width:160px}.script{font-size:16px}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="shell">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span><div><b>عالم بريق</b><span>نافذتك إلى المعرفة</span></div></div>
+      <div class="hero-grid">
+        <div><span class="eyebrow">BAREEQ VOICE LAB</span><h1>استمع إلى الصوت، لا إلى اسم الشركة</h1><p>مقارنة عمياء على نصوص حقيقية من بريق. قيّم الطبيعية والنطق والإيقاع والتعبير وراحة الاستماع، ثم اختر الأفضل في كل حالة.</p></div>
+        <div class="privacy-card"><b>مختبر محلي غير منشور</b><p>لا تُرسل التقييمات إلى أي خادم، ولا تتضمن هذه الصفحة أسماء المحركات أو الأصوات. تحفظ النتائج على جهازك حتى تصدّرها بنفسك.</p></div>
+      </div>
+    </div>
+  </header>
+  <div class="toolbar">
+    <div class="shell toolbar-inner">
+      <div class="progress-wrap"><div class="progress-head"><span>تقدم التقييم</span><span id="progress-text">0%</span></div><progress id="progress" max="100" value="0">0%</progress></div>
+      <button id="reset" type="button">مسح التقييم</button>
+      <button id="export" class="export" type="button">تصدير النتائج</button>
+    </div>
+  </div>
+  <main class="shell">
+    <div id="candidate-notice" class="notice" role="status"></div>
+    <div class="lab-layout">
+      <nav id="case-nav" class="case-nav" aria-label="حالات الاختبار"></nav>
+      <section id="case-root" aria-live="polite"></section>
+    </div>
+    <p class="footer-note">الدرجة 1 تعني ضعيف، والدرجة 5 تعني ممتاز. يفضّل استخدام السماعات والاستماع مرتين كحد أقصى قبل التقييم.</p>
+  </main>
+  <script>
+    const LAB = __LAB_DATA_JSON__;
+    const STORAGE_KEY = 'bareeq-voice-lab:' + LAB.labId;
+    let activeCase = 0;
+    let state = loadState();
+
+    function escapeHtml(value) {
+      return String(value == null ? '' : value).replace(/[&<>"']/g, function (char) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char];
+      });
+    }
+    function emptyState() {
+      return {schemaVersion:1,labId:LAB.labId,startedAt:new Date().toISOString(),updatedAt:new Date().toISOString(),ratings:{},winners:{}};
+    }
+    function loadState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return parsed && parsed.labId === LAB.labId ? parsed : emptyState();
+      } catch (_) { return emptyState(); }
+    }
+    function saveState() {
+      state.updatedAt = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateProgress();
+    }
+    function ratingFor(caseId, code) {
+      state.ratings[caseId] = state.ratings[caseId] || {};
+      state.ratings[caseId][code] = state.ratings[caseId][code] || {scores:{},notes:''};
+      return state.ratings[caseId][code];
+    }
+    function isComplete(caseId, code) {
+      const rating = state.ratings[caseId] && state.ratings[caseId][code];
+      return Boolean(rating && LAB.criteria.every(function (criterion) { return Number(rating.scores[criterion.id]) >= 1; }));
+    }
+    function completion() {
+      let complete = 0;
+      let total = 0;
+      LAB.cases.forEach(function (testCase) {
+        testCase.voices.forEach(function (voice) { total += 1; if (isComplete(testCase.id, voice.code)) complete += 1; });
+      });
+      return {complete:complete,total:total,percent:total ? Math.round(complete / total * 100) : 0};
+    }
+    function updateProgress() {
+      const result = completion();
+      document.getElementById('progress').value = result.percent;
+      document.getElementById('progress').textContent = result.percent + '%';
+      document.getElementById('progress-text').textContent = result.percent + '% · ' + result.complete + ' من ' + result.total;
+      renderNavigation();
+    }
+    function renderNavigation() {
+      document.getElementById('case-nav').innerHTML = LAB.cases.map(function (testCase, index) {
+        const done = testCase.voices.filter(function (voice) { return isComplete(testCase.id, voice.code); }).length;
+        return '<button type="button" data-case-index="' + index + '"' + (index === activeCase ? ' aria-current="step"' : '') + '><span>' + escapeHtml(testCase.label) + '</span><small>' + done + ' من ' + testCase.voices.length + ' أصوات</small></button>';
+      }).join('');
+    }
+    function scaleMarkup(testCase, voice, criterion, selected) {
+      let values = '';
+      for (let score = 1; score <= 5; score += 1) {
+        const id = testCase.id + '-' + voice.code + '-' + criterion.id + '-' + score;
+        values += '<input id="' + id + '" type="radio" name="' + testCase.id + '-' + voice.code + '-' + criterion.id + '" value="' + score + '" data-score data-case="' + testCase.id + '" data-voice="' + voice.code + '" data-criterion="' + criterion.id + '"' + (Number(selected) === score ? ' checked' : '') + '><label for="' + id + '">' + score + '</label>';
+      }
+      return '<div class="criterion"><div class="criterion-label">' + escapeHtml(criterion.label) + '<span>' + escapeHtml(criterion.hint) + '</span></div><div class="scale" role="radiogroup" aria-label="' + escapeHtml(criterion.label) + '">' + values + '</div></div>';
+    }
+    function renderCase() {
+      const testCase = LAB.cases[activeCase];
+      const voiceMarkup = testCase.voices.map(function (voice) {
+        const rating = ratingFor(testCase.id, voice.code);
+        const criteria = LAB.criteria.map(function (criterion) { return scaleMarkup(testCase, voice, criterion, rating.scores[criterion.id]); }).join('');
+        return '<article class="voice"><div class="voice-top"><div class="voice-code"><span class="voice-badge" aria-hidden="true">' + escapeHtml(voice.shortCode) + '</span><span>' + escapeHtml(voice.code) + '</span></div><audio controls preload="metadata" src="' + escapeHtml(voice.src) + '" aria-label="تشغيل ' + escapeHtml(voice.code) + '"></audio></div><div class="criteria">' + criteria + '</div><textarea class="notes" data-notes data-case="' + testCase.id + '" data-voice="' + voice.code + '" aria-label="ملاحظات على ' + escapeHtml(voice.code) + '" placeholder="دوّن كلمة خاطئة، وقفة غريبة، أو أي ملاحظة نوعية…">' + escapeHtml(rating.notes) + '</textarea></article>';
+      }).join('');
+      const winner = state.winners[testCase.id] || '';
+      const winnerOptions = testCase.voices.map(function (voice) {
+        const id = 'winner-' + testCase.id + '-' + voice.code;
+        return '<label for="' + id + '"><input id="' + id + '" type="radio" name="winner-' + testCase.id + '" value="' + voice.code + '" data-winner data-case="' + testCase.id + '"' + (winner === voice.code ? ' checked' : '') + '>' + escapeHtml(voice.code) + '</label>';
+      }).join('');
+      document.getElementById('case-root').innerHTML = '<article class="case-card"><header class="case-head"><span class="case-count">الحالة ' + (activeCase + 1) + ' من ' + LAB.cases.length + '</span><h2>' + escapeHtml(testCase.label) + '</h2><p>' + escapeHtml(testCase.focus) + '</p><div class="script"><b>النص المرسل إلى جميع المحركات</b>' + escapeHtml(testCase.spokenText) + '</div></header><div class="voices">' + voiceMarkup + '</div><div class="winner"><strong>أي صوت هو الأفضل لهذه الحالة؟</strong><div class="winner-options">' + winnerOptions + '</div></div><div class="case-actions"><button type="button" data-prev' + (activeCase === 0 ? ' disabled' : '') + '>السابق</button><button class="next" type="button" data-next>' + (activeCase === LAB.cases.length - 1 ? 'مراجعة النتائج' : 'الحالة التالية') + '</button></div></article>';
+    }
+    function render() {
+      renderNavigation();
+      renderCase();
+      const notice = document.getElementById('candidate-notice');
+      if (LAB.candidateCount < 2) {
+        notice.textContent = 'اكتمل اختبار خط الأساس التقني، لكن المقارنة العمياء تحتاج صوتين على الأقل. أضف ملفات المرشحين ثم أعد بناء المختبر.';
+        notice.classList.add('is-visible');
+      } else { notice.classList.remove('is-visible'); }
+      updateProgress();
+    }
+    document.addEventListener('click', function (event) {
+      const caseButton = event.target.closest('[data-case-index]');
+      if (caseButton) { activeCase = Number(caseButton.dataset.caseIndex); render(); scrollTo({top:document.querySelector('main').offsetTop - 76,behavior:'smooth'}); return; }
+      if (event.target.closest('[data-prev]') && activeCase > 0) { activeCase -= 1; render(); return; }
+      if (event.target.closest('[data-next]')) { if (activeCase < LAB.cases.length - 1) activeCase += 1; render(); return; }
+      if (event.target.closest('#reset')) {
+        if (confirm('هل تريد مسح جميع الدرجات والملاحظات؟')) { state = emptyState(); saveState(); render(); }
+      }
+      if (event.target.closest('#export')) {
+        const payload = Object.assign({}, state, {exportedAt:new Date().toISOString(),completion:completion(),userAgent:navigator.userAgent});
+        const blob = new Blob([JSON.stringify(payload,null,2) + '\n'], {type:'application/json'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'bareeq-voice-lab-results-' + new Date().toISOString().slice(0,10) + '.json';
+        link.click();
+        setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
+      }
+    });
+    document.addEventListener('change', function (event) {
+      if (event.target.matches('[data-score]')) {
+        ratingFor(event.target.dataset.case, event.target.dataset.voice).scores[event.target.dataset.criterion] = Number(event.target.value);
+        saveState();
+      }
+      if (event.target.matches('[data-winner]')) { state.winners[event.target.dataset.case] = event.target.value; saveState(); }
+    });
+    document.addEventListener('input', function (event) {
+      if (event.target.matches('[data-notes]')) { ratingFor(event.target.dataset.case, event.target.dataset.voice).notes = event.target.value; saveState(); }
+    });
+    render();
+  </script>
+</body>
+</html>

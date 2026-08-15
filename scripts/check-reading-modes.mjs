@@ -11,7 +11,7 @@ const required = async (file, needles) => {
 
 await required('src/components/ReadingModes.astro', [
   'اقرأ بالطريقة التي تناسبك', 'data-reading-mode="read"', 'data-reading-mode="listen"',
-  'data-reading-mode="summary"', 'data-audio-play', 'data-audio-stop', 'data-audio-rate', 'data-summary-panel',
+  'data-reading-mode="summary"', 'data-audio-play', 'data-audio-stop', 'data-audio-rate', 'data-audio-seek', 'data-summary-panel',
   'data-article-audio', 'data-audio-manifest={audioManifest}', 'tabindex="-1"'
 ]);
 await required('src/pages/posts/[id].astro', [
