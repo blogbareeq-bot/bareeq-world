@@ -28,6 +28,8 @@ if (client.includes('speechSynthesis') || client.includes('SpeechSynthesisUttera
   throw new Error('Browser speech synthesis must not be used as the primary/fallback reader in v4.9.0.');
 }
 requireAll('generate-audio.mjs', generator, [
+  'GEMINI_API_KEY', 'https://generativelanguage.googleapis.com/v1beta/interactions', 'gemini-3.1-flash-tts-preview',
+  "providerVoice: 'Sadaltager'", "'x-goog-api-key': apiKey", "response_format: { type: 'audio' }", 'GEMINI_STYLE', 'encodeGeminiPcmToMp3',
   'BAREEQ_TTS_PROVIDER', 'OPENAI_API_KEY', 'https://api.openai.com/v1/audio/speech', 'gpt-4o-mini-tts-2025-12-15',
   "providerVoice: 'cedar'", "providerVoice: 'marin'", 'Authorization: `Bearer ${apiKey}`', "response_format: 'mp3'", 'OPENAI_STYLE', 'studio-audio-map.json', 'studio-block-timestamps',
   'AZURE_SPEECH_KEY', 'ar-SA-HamedNeural', 'ar-SA-ZariyahNeural', 'Ocp-Apim-Subscription-Key',
@@ -38,4 +40,4 @@ requireAll('global.css', styles, ['.audio-play{min-height:44px', '.audio-stop{mi
 if (!pkg.scripts?.build?.includes('node scripts/import-studio-audio.mjs') || !pkg.scripts?.build?.includes('node scripts/generate-audio.mjs') || !pkg.scripts?.build?.includes('check-audio-sync.mjs')) {
   throw new Error('Build does not import/generate/validate synchronized production audio.');
 }
-console.log('Studio Cedar + optional OpenAI Cedar/Marin + Azure rollback + synchronized mobile/tablet HTMLAudio audit passed.');
+console.log('Gemini Sadaltager + Studio Cedar/Hamed rollback + optional OpenAI/Azure + synchronized mobile/tablet HTMLAudio audit passed.');

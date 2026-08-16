@@ -18,7 +18,11 @@ const requireAll = (name, text, needles) => {
 };
 
 requireAll('generate-audio.mjs', generator, [
-  "|| 'bundled'", "['bundled', 'openai', 'azure']", 'https://api.openai.com/v1/audio/speech',
+  "|| 'bundled'", "['bundled', 'gemini', 'openai', 'azure']", 'https://generativelanguage.googleapis.com/v1beta/interactions',
+  "GEMINI_MODEL = 'gemini-3.1-flash-tts-preview'", "providerVoice: 'Sadaltager'", 'GEMINI_STYLE',
+  "response_format: { type: 'audio' }", "speech_config: [{ voice: voice.providerVoice }]", 'encodeGeminiPcmToMp3',
+  "'-f', 's16le'", "'-ar', '24000'", "'-b:a', '96k'", 'Gemini TTS free-tier plan',
+  'https://api.openai.com/v1/audio/speech',
   "OPENAI_MODEL = 'gpt-4o-mini-tts-2025-12-15'", "providerVoice: 'cedar'", "providerVoice: 'marin'",
   "providerVoice: 'ar-SA-HamedNeural'", "providerVoice: 'ar-SA-ZariyahNeural'", 'OPENAI_STYLE',
   "response_format: 'mp3'", 'OpenAI TTS cost guard', 'OpenAI TTS safety stop', 'manifestAssets',
@@ -54,6 +58,7 @@ requireAll('article.js', client, [
 ]);
 requireAll('global.css', styles, ['.audio-voice', '.audio-seek', '.audio-voice select,.audio-speed select{min-height:44px', '@media(max-width:680px)']);
 requireAll('.env.example', envExample, [
+  'BAREEQ_TTS_PROVIDER=gemini', 'GEMINI_API_KEY=', 'GEMINI_TTS_MIN_INTERVAL_MS=6500', 'GEMINI_TTS_MAX_REQUEST_BYTES=2400',
   'BAREEQ_TTS_PROVIDER=bundled', 'OPENAI_API_KEY=', 'OPENAI_TTS_BUILD_WARNING_USD=8', 'OPENAI_TTS_BUILD_HARD_LIMIT_USD=12',
   'AZURE_SPEECH_KEY=', 'Hamed + Zariyah',
 ]);
@@ -64,13 +69,15 @@ if (component.includes('صوتان للاختيار') || component.includes('ص�
 const plan = (provider) => execFileSync(process.execPath, ['scripts/generate-audio.mjs', '--plan'], {
   encoding: 'utf8',
   maxBuffer: 4 * 1024 * 1024,
-  env: { ...process.env, BAREEQ_TTS_PROVIDER: provider, OPENAI_TTS_ENDPOINT: '', BAREEQ_TTS_CONTRACT_TEST: '' },
+  env: { ...process.env, BAREEQ_TTS_PROVIDER: provider, GEMINI_TTS_ENDPOINT: '', OPENAI_TTS_ENDPOINT: '', BAREEQ_TTS_CONTRACT_TEST: '' },
 });
 const bundledPlan = plan('bundled');
 for (const token of ['Bundled mixed audio plan: 11 articles', '0 synthesis request(s)', '0 billable character(s)', 'approved Bareeq Voice Studio release (Cedar)', 'approved bundled Azure Hamed release']) if (!bundledPlan.includes(token)) throw new Error(`Bundled production plan is missing ${token}`);
+const geminiPlan = plan('gemini');
+for (const token of ['Google Gemini API audio plan: 11 articles', '70 synthesis request(s)', 'Sadaltager', 'سادالتاجر']) if (!geminiPlan.includes(token)) throw new Error(`Gemini production plan is missing ${token}`);
 const openAiPlan = plan('openai');
 for (const token of ['OpenAI audio plan: 11 articles', '72 synthesis request(s)', 'approved Bareeq Voice Studio release (Cedar)', 'Cedar', 'Marin']) if (!openAiPlan.includes(token)) throw new Error(`OpenAI optional-upgrade plan is missing ${token}`);
 const azurePlan = plan('azure');
 for (const token of ['Microsoft Azure AI Speech audio plan: 11 articles', '60 synthesis request(s)', 'حامد', 'زارية']) if (!azurePlan.includes(token)) throw new Error(`Azure regeneration plan is missing ${token}`);
 
-console.log('Production voice source audit passed: zero-cost bundled Cedar + Hamed is the default, all 29 Azure files are locked, optional OpenAI/Azure regeneration stays explicit, and seek + exact 30-day progress safeguards remain intact.');
+console.log('Production voice source audit passed: Gemini 3.1 Flash TTS + Sadaltager is configured for the V4.17 deployment, the locked Cedar/Hamed rollback remains intact, and seek + exact 30-day progress safeguards remain unchanged.');

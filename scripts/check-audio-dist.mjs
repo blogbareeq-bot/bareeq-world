@@ -8,11 +8,13 @@ const postDir = path.join(root, 'src', 'content', 'posts');
 const auditPublicAudio = process.env.BAREEQ_AUDIO_AUDIT_PUBLIC === '1';
 const dist = path.join(root, auditPublicAudio ? 'public' : 'dist');
 const provider = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'bundled';
-if (!['bundled', 'openai', 'azure'].includes(provider)) throw new Error('BAREEQ_TTS_PROVIDER must be bundled, openai, or azure.');
+if (!['bundled', 'gemini', 'openai', 'azure'].includes(provider)) throw new Error('BAREEQ_TTS_PROVIDER must be bundled, gemini, openai, or azure.');
 const allowPartial = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
 const expected = provider === 'azure'
   ? { name: 'Microsoft Azure AI Speech', model: 'Neural TTS', language: 'ar-SA', format: 'audio-48khz-96kbitrate-mono-mp3', voices: [['hamed', 'ar-SA-HamedNeural'], ['zariyah', 'ar-SA-ZariyahNeural']] }
-  : provider === 'openai' ? { name: 'OpenAI', model: 'gpt-4o-mini-tts-2025-12-15', language: 'ar', format: 'mp3', voices: [['cedar', 'cedar'], ['marin', 'marin']] } : null;
+  : provider === 'gemini'
+    ? { name: 'Google Gemini API', model: 'gemini-3.1-flash-tts-preview', language: 'ar', format: 'audio-48khz-96kbitrate-mono-mp3', voices: [['sadaltager', 'Sadaltager']] }
+    : provider === 'openai' ? { name: 'OpenAI', model: 'gpt-4o-mini-tts-2025-12-15', language: 'ar', format: 'mp3', voices: [['cedar', 'cedar'], ['marin', 'marin']] } : null;
 const studioMap = JSON.parse(await readFile(path.join(root, 'scripts', 'studio-audio-map.json'), 'utf8'));
 const requiredStudioArticles = new Set(['bundled', 'openai'].includes(provider) ? Object.values(studioMap.imports || {}).map((item) => item.articleId) : []);
 const bundledMap = JSON.parse(await readFile(path.join(root, 'scripts', 'bundled-azure-audio-map.json'), 'utf8'));
@@ -58,9 +60,9 @@ for (const name of posts) {
     bundledArticles += 1;
   } else {
     if (!expected) throw new Error(`${id}: zero-cost bundled mode may not contain generated audio.`);
-    if (manifest.version !== 3 || manifest.generatorVersion !== 6 || manifest.provider !== expected.name || manifest.model !== expected.model || manifest.language !== expected.language || manifest.outputFormat !== expected.format || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') throw new Error(`${id}: generated audio metadata does not match ${expected.name}.`);
+    if (manifest.version !== 3 || manifest.generatorVersion !== 7 || manifest.provider !== expected.name || manifest.model !== expected.model || manifest.language !== expected.language || manifest.outputFormat !== expected.format || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') throw new Error(`${id}: generated audio metadata does not match ${expected.name}.`);
     if (Boolean(manifest.contractTest) !== (process.env.BAREEQ_TTS_CONTRACT_TEST === '1')) throw new Error(`${id}: contract-test audio escaped its explicit test boundary.`);
-    if (manifest.defaultVoice !== expected.voices[0][0] || !Array.isArray(manifest.voices) || manifest.voices.length !== 2) throw new Error(`${id}: generated audio requires exactly two ordered listening choices.`);
+    if (manifest.defaultVoice !== expected.voices[0][0] || !Array.isArray(manifest.voices) || manifest.voices.length !== expected.voices.length) throw new Error(`${id}: generated audio requires exactly ${expected.voices.length} ordered listening choice(s).`);
     expected.voices.forEach(([voiceId, providerVoice], index) => {
       const voice = manifest.voices[index];
       if (voice?.id !== voiceId || voice?.providerVoice !== providerVoice || typeof voice?.label !== 'string' || !(voice.totalDurationSeconds > 0)) throw new Error(`${id}: invalid generated voice metadata for ${voiceId}.`);
@@ -131,8 +133,8 @@ async function collect(dir) {
   }
 }
 await collect(dist);
-const secretNames = ['OPENAI_API_KEY', 'AZURE_SPEECH_KEY'];
-const secrets = [process.env.OPENAI_API_KEY?.trim(), process.env.AZURE_SPEECH_KEY?.trim()].filter((value) => value?.length >= 12);
+const secretNames = ['GEMINI_API_KEY', 'OPENAI_API_KEY', 'AZURE_SPEECH_KEY'];
+const secrets = [process.env.GEMINI_API_KEY?.trim(), process.env.OPENAI_API_KEY?.trim(), process.env.AZURE_SPEECH_KEY?.trim()].filter((value) => value?.length >= 12);
 for (const file of textFiles) {
   const text = await readFile(file, 'utf8').catch(() => '');
   for (const name of secretNames) if (text.includes(name)) throw new Error(`Secret variable name leaked into production output: ${path.relative(dist, file)}`);
