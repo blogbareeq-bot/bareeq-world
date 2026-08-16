@@ -2,8 +2,11 @@ import { createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { access, mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
+
+let ffmpegInstaller = null;
+try { ffmpegInstaller = (await import('@ffmpeg-installer/ffmpeg')).default; }
+catch (error) { if (error?.code !== 'ERR_MODULE_NOT_FOUND') throw error; }
 
 const ROOT = process.cwd();
 const POSTS_DIR = path.join(ROOT, 'src', 'content', 'posts');
@@ -17,6 +20,7 @@ const REGION = process.env.AZURE_SPEECH_REGION?.trim().toLowerCase() || 'eastus'
 const RESOURCE_ENDPOINT = process.env.AZURE_SPEECH_ENDPOINT?.trim().replace(/\/$/, '') || `https://${REGION}.api.cognitive.microsoft.com`;
 const GEMINI_MODEL = 'gemini-3.1-flash-tts-preview';
 const GEMINI_OFFICIAL_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/interactions';
+const GEMINI_API_REVISION = '2026-05-20';
 const GEMINI_STYLE = `### TASK
 Synthesize the Arabic transcript below as speech. Speak only the text under TRANSCRIPT, exactly as written. Do not read these directions or labels aloud, and do not add commentary.
 
@@ -79,7 +83,7 @@ const OPENAI_AUDIO_TOKENS_PER_SECOND = Number(process.env.OPENAI_TTS_AUDIO_TOKEN
 const FFMPEG_PATH = process.env.FFMPEG_PATH?.trim() || ffmpegInstaller?.path || 'ffmpeg';
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.17.0';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.17.1';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
 const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
@@ -553,12 +557,35 @@ function encodeGeminiPcmToMp3(pcm) {
   });
 }
 
+function extractGeminiAudio(payload) {
+  const stepContent = Array.isArray(payload?.steps)
+    ? payload.steps.flatMap((step) => Array.isArray(step?.content) ? step.content : [])
+    : [];
+  const legacyContent = Array.isArray(payload?.outputs)
+    ? payload.outputs.flatMap((output) => Array.isArray(output?.content) ? output.content : [output])
+    : [];
+  return [...stepContent, ...legacyContent].find((block) => block?.type === 'audio' && typeof block?.data === 'string')
+    || payload?.output_audio
+    || payload?.outputAudio
+    || null;
+}
+
+function describeGeminiResponse(payload) {
+  const status = typeof payload?.status === 'string' ? payload.status : 'unknown';
+  const stepTypes = Array.isArray(payload?.steps) ? payload.steps.map((step) => step?.type || 'unknown').join(',') : 'none';
+  const contentTypes = Array.isArray(payload?.steps)
+    ? payload.steps.flatMap((step) => Array.isArray(step?.content) ? step.content.map((block) => block?.type || 'unknown') : []).join(',')
+    : 'none';
+  return `status=${status}; steps=${stepTypes || 'none'}; content=${contentTypes || 'none'}`;
+}
+
 async function synthesizeGemini(apiKey, voice, part, context) {
   await throttleSynthesis();
   const response = await request(GEMINI_ENDPOINT, {
     method: 'POST',
     headers: {
       'x-goog-api-key': apiKey,
+      'Api-Revision': GEMINI_API_REVISION,
       'Content-Type': 'application/json',
       Accept: 'application/json',
       'User-Agent': USER_AGENT,
@@ -575,9 +602,16 @@ async function synthesizeGemini(apiKey, voice, part, context) {
   let payload;
   try { payload = await response.json(); }
   catch (error) { throw new Error(`Gemini speech synthesis returned invalid JSON: ${error.message}`); }
-  const outputAudio = payload?.output_audio || payload?.outputAudio;
+  const outputAudio = extractGeminiAudio(payload);
   const encoded = typeof outputAudio?.data === 'string' ? outputAudio.data.replace(/\s+/g, '') : '';
-  if (!encoded || !/^[A-Za-z0-9+/]+={0,2}$/.test(encoded)) throw new Error('Gemini speech synthesis response has no valid output_audio.data.');
+  if (!encoded || !/^[A-Za-z0-9+/]+={0,2}$/.test(encoded)) {
+    throw new Error(`Gemini speech synthesis response has no valid REST audio content (${describeGeminiResponse(payload)}).`);
+  }
+  const mimeType = String(outputAudio?.mime_type || outputAudio?.mimeType || '').toLowerCase();
+  if (mimeType && !mimeType.includes('l16') && !mimeType.includes('pcm')) throw new Error(`Gemini speech synthesis returned unsupported audio MIME type ${mimeType}.`);
+  const sampleRate = Number(outputAudio?.sample_rate || outputAudio?.sampleRate || 24000);
+  const channels = Number(outputAudio?.channels || 1);
+  if (sampleRate !== 24000 || channels !== 1) throw new Error(`Gemini speech synthesis returned unsupported PCM layout (${sampleRate} Hz, ${channels} channel(s)).`);
   const pcm = Buffer.from(encoded, 'base64');
   if (pcm.length < 100 || pcm.length % 2 !== 0) throw new Error(`Gemini speech synthesis returned invalid 16-bit PCM (${pcm.length} bytes).`);
   return encodeGeminiPcmToMp3(pcm);

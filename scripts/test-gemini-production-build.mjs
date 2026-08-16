@@ -19,6 +19,7 @@ const server = createServer((request, response) => {
   request.on('end', () => {
     try {
       if (request.headers['x-goog-api-key'] !== contractKey) throw new Error('Gemini x-goog-api-key header is incorrect.');
+      if (request.headers['api-revision'] !== '2026-05-20') throw new Error('Gemini REST schema revision header is missing or incorrect.');
       const body = JSON.parse(Buffer.concat(chunks).toString('utf8'));
       if (body.model !== 'gemini-3.1-flash-tts-preview') throw new Error(`Unexpected model ${body.model}`);
       if (body.response_format?.type !== 'audio') throw new Error('Gemini audio response contract is missing.');
@@ -27,10 +28,18 @@ const server = createServer((request, response) => {
       if (typeof body.input !== 'string' || !body.input.includes('### TRANSCRIPT') || !body.input.includes('normal conversational volume') || !body.input.includes('never a whisper') || !/[\u0600-\u06ff]/.test(body.input)) throw new Error('Bareeq Arabic performance prompt/transcript is incomplete.');
       calls.push(body);
       const payload = JSON.stringify({
-        output_audio: {
-          data: pcm.toString('base64'),
-          mime_type: 'audio/pcm;rate=24000',
-        },
+        id: `int_contract_${calls.length}`,
+        status: 'completed',
+        steps: [{
+          type: 'model_output',
+          content: [{
+            type: 'audio',
+            data: pcm.toString('base64'),
+            mime_type: 'audio/l16',
+            sample_rate: 24000,
+            channels: 1,
+          }],
+        }],
       });
       response.writeHead(200, { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) });
       response.end(payload);
@@ -90,5 +99,5 @@ if (exitCode !== 0) process.exit(exitCode);
 if (calls.length !== expectedCalls) throw new Error(`Expected ${expectedCalls} authenticated Gemini requests, received ${calls.length}.`);
 
 console.log(AUDIO_ONLY
-  ? `Offline Gemini audio contract passed: ${calls.length} authenticated Sadaltager requests, PCM-to-MP3 encoding, synchronization, integrity, and secret-leakage audits.`
-  : `Offline Gemini production contract passed: ${calls.length} authenticated Sadaltager requests followed by the complete release build and audits.`);
+  ? `Offline Gemini REST audio contract passed: ${calls.length} authenticated Sadaltager requests, steps/model_output parsing, PCM-to-MP3 encoding, synchronization, integrity, and secret-leakage audits.`
+  : `Offline Gemini REST production contract passed: ${calls.length} authenticated Sadaltager requests with the post-May-2026 steps schema followed by the complete release build and audits.`);

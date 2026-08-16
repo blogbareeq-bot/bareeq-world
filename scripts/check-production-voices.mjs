@@ -80,4 +80,4 @@ for (const token of ['OpenAI audio plan: 11 articles', '72 synthesis request(s)'
 const azurePlan = plan('azure');
 for (const token of ['Microsoft Azure AI Speech audio plan: 11 articles', '60 synthesis request(s)', 'حامد', 'زارية']) if (!azurePlan.includes(token)) throw new Error(`Azure regeneration plan is missing ${token}`);
 
-console.log('Production voice source audit passed: Gemini 3.1 Flash TTS + Sadaltager is configured for the V4.17 deployment, the locked Cedar/Hamed rollback remains intact, and seek + exact 30-day progress safeguards remain unchanged.');
+console.log('Production voice source audit passed: Gemini 3.1 Flash TTS + Sadaltager is configured for the V4.17.1 deployment, the locked Cedar/Hamed rollback remains intact, and seek + exact 30-day progress safeguards remain unchanged.');
