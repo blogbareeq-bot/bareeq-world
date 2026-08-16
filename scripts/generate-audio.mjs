@@ -21,6 +21,7 @@ const RESOURCE_ENDPOINT = process.env.AZURE_SPEECH_ENDPOINT?.trim().replace(/\/$
 const GEMINI_MODEL = 'gemini-3.1-flash-tts-preview';
 const GEMINI_OFFICIAL_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/interactions';
 const GEMINI_API_REVISION = '2026-05-20';
+const GEMINI_PILOT_ARTICLE_ID = 'عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء';
 const GEMINI_STYLE = `### TASK
 Synthesize the Arabic transcript below as speech. Speak only the text under TRANSCRIPT, exactly as written. Do not read these directions or labels aloud, and do not add commentary.
 
@@ -71,7 +72,7 @@ const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-
 const ALLOW_PARTIAL = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
 const MAX_REQUEST_BYTES = PROVIDER === 'gemini' ? Number(process.env.GEMINI_TTS_MAX_REQUEST_BYTES || '2400') : PROVIDER === 'azure' ? 6000 : 4800;
 const MIN_SYNTHESIS_INTERVAL_MS = Number(PROVIDER === 'gemini' ? (process.env.GEMINI_TTS_MIN_INTERVAL_MS || '6500') : PROVIDER === 'openai' ? (process.env.OPENAI_TTS_MIN_INTERVAL_MS || '200') : PROVIDER === 'azure' ? (process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200') : '0');
-const GENERATOR_VERSION = 7;
+const GENERATOR_VERSION = 8;
 const AZURE_FREE_MONTHLY_CHARS = Number(process.env.AZURE_SPEECH_FREE_MONTHLY_CHARS || '500000');
 const BUILD_WARNING_CHARS = Number(process.env.AZURE_SPEECH_BUILD_WARNING_CHARS || '400000');
 const BUILD_HARD_LIMIT_CHARS = Number(process.env.AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS || '450000');
@@ -83,7 +84,7 @@ const OPENAI_AUDIO_TOKENS_PER_SECOND = Number(process.env.OPENAI_TTS_AUDIO_TOKEN
 const FFMPEG_PATH = process.env.FFMPEG_PATH?.trim() || ffmpegInstaller?.path || 'ffmpeg';
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.17.1';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.17.2';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
 const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
@@ -822,6 +823,15 @@ function estimateOpenAiCost(characters, requestCount) {
 }
 
 const posts = await loadPosts();
+const geminiPilotPosts = posts.filter((post) => post.id === GEMINI_PILOT_ARTICLE_ID);
+if (PROVIDER === 'gemini' && geminiPilotPosts.length !== 1) {
+  throw new Error(`Gemini one-article pilot safety stop: expected exactly one published article with id ${GEMINI_PILOT_ARTICLE_ID}, found ${geminiPilotPosts.length}.`);
+}
+const synthesisPosts = PROVIDER === 'gemini'
+  ? geminiPilotPosts
+  : PROVIDER === 'openai'
+    ? posts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id))
+    : posts;
 const sourceChars = posts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
 const sourceBytes = posts.reduce((sum, post) => sum + byteLength(post.spokenText), 0);
 const sourceRequests = posts.reduce((sum, post) => sum + post.audioParts.length, 0);
@@ -855,23 +865,27 @@ if (PLAN_ONLY) {
     }
     process.exit(0);
   }
-  const generationPosts = PROVIDER === 'openai' ? posts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id)) : posts;
-  const generationRequests = generationPosts.reduce((sum, post) => sum + post.audioParts.length, 0);
-  const generationChars = generationPosts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
+  const generationRequests = synthesisPosts.reduce((sum, post) => sum + post.audioParts.length, 0);
+  const generationChars = synthesisPosts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
   const characterLabel = PROVIDER === 'gemini' ? 'source character(s)' : 'billable character(s)';
-  console.log(`${PROVIDER_NAME} audio plan: ${posts.length} articles, ${generationRequests * VOICES.length} synthesis request(s), ${generationChars * VOICES.length} ${characterLabel}, ${sourceBytes} source UTF-8 bytes.`);
+  console.log(PROVIDER === 'gemini'
+    ? `${PROVIDER_NAME} one-article pilot audio plan: ${posts.length} articles total, 1 Sadaltager pilot article, ${generationRequests * VOICES.length} synthesis request(s), ${generationChars * VOICES.length} ${characterLabel}, and 10 bundled Azure Hamed fallback articles.`
+    : `${PROVIDER_NAME} audio plan: ${posts.length} articles, ${generationRequests * VOICES.length} synthesis request(s), ${generationChars * VOICES.length} ${characterLabel}, ${sourceBytes} source UTF-8 bytes.`);
   console.log(`Voices: ${VOICES.map((voice) => `${voice.label} [${voice.providerVoice}]`).join(' + ')}.`);
   for (const post of posts) {
     const imported = PROVIDER === 'openai' && STUDIO_ARTICLE_IDS.has(post.id);
+    const geminiFallback = PROVIDER === 'gemini' && post.id !== GEMINI_PILOT_ARTICLE_ID;
     console.log(imported
       ? `- ${post.id}: approved Bareeq Voice Studio release (Cedar), no synthesis request`
-      : `- ${post.id}: ${post.audioParts.length} part(s) × ${VOICES.length} voices, ${post.segments.length} sync block(s), ${[...post.spokenText].length} source chars`);
+      : geminiFallback
+        ? `- ${post.id}: approved bundled Azure Hamed fallback, no synthesis request`
+        : `- ${post.id}: ${post.audioParts.length} part(s) × ${VOICES.length} voices, ${post.segments.length} sync block(s), ${[...post.spokenText].length} source chars`);
   }
   process.exit(0);
 }
 
 await mkdir(AUDIO_ROOT, { recursive: true });
-const prepared = posts.map((post) => ({ ...post, sourceHash: providerFingerprint(post) }));
+const prepared = synthesisPosts.map((post) => ({ ...post, sourceHash: providerFingerprint(post) }));
 
 let missing = [];
 for (const post of prepared) if (!await hasCompleteCache(post)) missing.push(post);
@@ -911,7 +925,7 @@ if (PROVIDER === 'bundled' && missing.length) {
 const API_KEY = PROVIDER === 'gemini' ? GEMINI_API_KEY : PROVIDER === 'openai' ? OPENAI_API_KEY : PROVIDER === 'azure' ? AZURE_API_KEY : '';
 if (!API_KEY && missing.length) {
   if (ALLOW_PARTIAL) {
-    console.warn(`⚠ Offline pilot mode: preserving ${posts.length - missing.length} verified audio article(s) and skipping ${missing.length} unavailable article(s). This mode is for local release verification only.`);
+    console.warn(`⚠ Offline pilot mode: preserving imported fallback audio and skipping ${missing.length} unavailable synthesis article(s). This mode is for local release verification only.`);
     process.exit(0);
   }
   if (PROVIDER === 'gemini') throw new Error(`GEMINI_API_KEY is required to generate Sadaltager for ${missing.length} new or changed article(s). Existing unchanged Gemini audio is restored automatically from ${CACHE_ORIGIN}. Create the key in Google AI Studio and add it as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
@@ -922,7 +936,9 @@ if (!API_KEY && missing.length) {
 if (!missing.length) {
   console.log(PROVIDER === 'bundled'
     ? `Bundled mixed audio cache is complete for ${posts.length} articles: 1 Studio Cedar + ${BUNDLED_BY_ARTICLE.size} Azure Hamed, 0 synthesis requests and no API key required.`
-    : `${PROVIDER_NAME} audio cache is complete for ${posts.length} articles with ${VOICES.length} approved listening voice(s).`);
+    : PROVIDER === 'gemini'
+      ? `Gemini one-article pilot cache is complete: 1 Sadaltager article + ${BUNDLED_BY_ARTICLE.size} bundled Azure Hamed fallback articles.`
+      : `${PROVIDER_NAME} audio cache is complete for ${posts.length} articles with ${VOICES.length} approved listening voice(s).`);
   process.exit(0);
 }
 
@@ -1001,4 +1017,6 @@ for (const post of missing) {
   }
 }
 
-console.log(`${PROVIDER_NAME} audio ready: ${posts.length} article(s), ${VOICES.length} approved listening voice(s), synchronized paragraphs, and static cached MP3 output.`);
+console.log(PROVIDER === 'gemini'
+  ? `Gemini one-article pilot audio ready: 1 Sadaltager article + ${BUNDLED_BY_ARTICLE.size} bundled Azure Hamed fallback articles, synchronized paragraphs, and static cached MP3 output.`
+  : `${PROVIDER_NAME} audio ready: ${posts.length} article(s), ${VOICES.length} approved listening voice(s), synchronized paragraphs, and static cached MP3 output.`);

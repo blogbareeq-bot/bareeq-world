@@ -83,7 +83,9 @@ if (!expectedCalls) throw new Error('Could not resolve the Gemini contract reque
 try {
   await rm(path.join(ROOT, 'public', 'audio'), { recursive: true, force: true });
   if (AUDIO_ONLY) {
-    exitCode = await runChild(process.execPath, ['scripts/generate-audio.mjs']);
+    exitCode = await runChild(process.execPath, ['scripts/import-bundled-azure-audio.mjs']);
+    if (exitCode === 0) exitCode = await runChild(process.execPath, ['scripts/import-studio-audio.mjs']);
+    if (exitCode === 0) exitCode = await runChild(process.execPath, ['scripts/generate-audio.mjs']);
     if (exitCode === 0) exitCode = await runChild(process.execPath, ['scripts/check-audio-dist.mjs'], { ...contractEnv, BAREEQ_AUDIO_AUDIT_PUBLIC: '1' });
   } else {
     const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
@@ -99,5 +101,5 @@ if (exitCode !== 0) process.exit(exitCode);
 if (calls.length !== expectedCalls) throw new Error(`Expected ${expectedCalls} authenticated Gemini requests, received ${calls.length}.`);
 
 console.log(AUDIO_ONLY
-  ? `Offline Gemini REST audio contract passed: ${calls.length} authenticated Sadaltager requests, steps/model_output parsing, PCM-to-MP3 encoding, synchronization, integrity, and secret-leakage audits.`
-  : `Offline Gemini REST production contract passed: ${calls.length} authenticated Sadaltager requests with the post-May-2026 steps schema followed by the complete release build and audits.`);
+  ? `Offline Gemini one-article pilot contract passed: ${calls.length} authenticated Sadaltager requests, 10 bundled Hamed fallback articles, steps/model_output parsing, PCM-to-MP3 encoding, synchronization, integrity, and secret-leakage audits.`
+  : `Offline Gemini one-article pilot production contract passed: ${calls.length} authenticated Sadaltager requests with the post-May-2026 steps schema followed by the complete mixed-audio release build and audits.`);

@@ -19,13 +19,16 @@ const studioMap = JSON.parse(await readFile(path.join(root, 'scripts', 'studio-a
 const requiredStudioArticles = new Set(['bundled', 'openai'].includes(provider) ? Object.values(studioMap.imports || {}).map((item) => item.articleId) : []);
 const bundledMap = JSON.parse(await readFile(path.join(root, 'scripts', 'bundled-azure-audio-map.json'), 'utf8'));
 const bundledByArticle = new Map((bundledMap.articles || []).map((item) => [item.articleId, item]));
-const requiredBundledArticles = new Set(provider === 'bundled' ? bundledByArticle.keys() : []);
+const requiredBundledArticles = new Set(['bundled', 'gemini'].includes(provider) ? bundledByArticle.keys() : []);
+const geminiPilotArticleId = 'عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء';
+const requiredGeminiArticles = new Set(provider === 'gemini' ? [geminiPilotArticleId] : []);
 const posts = (await readdir(postDir)).filter((name) => name.endsWith('.md')).sort();
 let totalParts = 0;
 let totalFiles = 0;
 let checkedArticles = 0;
 let importedArticles = 0;
 let bundledArticles = 0;
+let generatedArticles = 0;
 
 const hex256 = /^[a-f0-9]{64}$/;
 const sha = (value) => createHash('sha256').update(value).digest('hex');
@@ -53,20 +56,22 @@ for (const name of posts) {
     importedArticles += 1;
   } else if (bundled) {
     const config = bundledByArticle.get(id);
-    if (provider !== 'bundled' || !config || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.language !== 'ar-SA' || manifest.outputFormat !== 'audio-48khz-96kbitrate-mono-mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted-legacy') throw new Error(`${id}: bundled Azure metadata is invalid.`);
+    if (!['bundled', 'gemini'].includes(provider) || !config || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.language !== 'ar-SA' || manifest.outputFormat !== 'audio-48khz-96kbitrate-mono-mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted-legacy') throw new Error(`${id}: bundled Azure metadata is invalid.`);
     if (manifest.contractTest || manifest.sourceHash !== config.sourceSnapshotSha256 || manifest.bundledRelease?.schema !== 'bareeq.bundled-azure.v1' || manifest.bundledRelease?.releaseId !== bundledMap.releaseId || manifest.bundledRelease?.sourceManifestSha256 !== config.sourceManifestSha256 || manifest.bundledRelease?.legacySourceHash !== config.legacySourceHash) throw new Error(`${id}: bundled Azure provenance is incomplete or changed.`);
     if (manifest.defaultVoice !== 'hamed' || !Array.isArray(manifest.voices) || manifest.voices.length !== 1 || manifest.voices[0]?.id !== 'hamed' || manifest.voices[0]?.providerVoice !== 'ar-SA-HamedNeural' || !(manifest.voices[0]?.totalDurationSeconds > 0)) throw new Error(`${id}: bundled Azure article must contain exactly the approved Hamed voice.`);
     if (!requiredBundledArticles.has(id) || !Array.isArray(manifest.parts) || manifest.parts.length !== config.parts.length) throw new Error(`${id}: unapproved or incomplete bundled Azure article appeared in production output.`);
     bundledArticles += 1;
   } else {
     if (!expected) throw new Error(`${id}: zero-cost bundled mode may not contain generated audio.`);
-    if (manifest.version !== 3 || manifest.generatorVersion !== 7 || manifest.provider !== expected.name || manifest.model !== expected.model || manifest.language !== expected.language || manifest.outputFormat !== expected.format || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') throw new Error(`${id}: generated audio metadata does not match ${expected.name}.`);
+    if (provider === 'gemini' && !requiredGeminiArticles.has(id)) throw new Error(`${id}: generated Gemini audio escaped the one-article pilot boundary.`);
+    if (manifest.version !== 3 || manifest.generatorVersion !== 8 || manifest.provider !== expected.name || manifest.model !== expected.model || manifest.language !== expected.language || manifest.outputFormat !== expected.format || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') throw new Error(`${id}: generated audio metadata does not match ${expected.name}.`);
     if (Boolean(manifest.contractTest) !== (process.env.BAREEQ_TTS_CONTRACT_TEST === '1')) throw new Error(`${id}: contract-test audio escaped its explicit test boundary.`);
     if (manifest.defaultVoice !== expected.voices[0][0] || !Array.isArray(manifest.voices) || manifest.voices.length !== expected.voices.length) throw new Error(`${id}: generated audio requires exactly ${expected.voices.length} ordered listening choice(s).`);
     expected.voices.forEach(([voiceId, providerVoice], index) => {
       const voice = manifest.voices[index];
       if (voice?.id !== voiceId || voice?.providerVoice !== providerVoice || typeof voice?.label !== 'string' || !(voice.totalDurationSeconds > 0)) throw new Error(`${id}: invalid generated voice metadata for ${voiceId}.`);
     });
+    generatedArticles += 1;
   }
 
   if (manifest.disclosure !== 'الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.') throw new Error(`${id}: AI-voice disclosure is missing.`);
@@ -120,7 +125,8 @@ for (const name of posts) {
 }
 
 if (['bundled', 'openai'].includes(provider) && importedArticles !== requiredStudioArticles.size) throw new Error(`Expected ${requiredStudioArticles.size} approved Studio import(s), found ${importedArticles}.`);
-if (provider === 'bundled' && bundledArticles !== requiredBundledArticles.size) throw new Error(`Expected ${requiredBundledArticles.size} approved bundled Azure article(s), found ${bundledArticles}.`);
+if (['bundled', 'gemini'].includes(provider) && bundledArticles !== requiredBundledArticles.size) throw new Error(`Expected ${requiredBundledArticles.size} approved bundled Azure article(s), found ${bundledArticles}.`);
+if (provider === 'gemini' && generatedArticles !== requiredGeminiArticles.size) throw new Error(`Expected ${requiredGeminiArticles.size} Gemini pilot article(s), found ${generatedArticles}.`);
 if (!checkedArticles) throw new Error('No production audio article was audited.');
 if (!allowPartial && checkedArticles !== posts.length) throw new Error(`Expected audio for all ${posts.length} articles, audited ${checkedArticles}.`);
 
@@ -141,4 +147,4 @@ for (const file of textFiles) {
   for (const secret of secrets) if (text.includes(secret)) throw new Error(`Speech API key leaked into production output: ${path.relative(dist, file)}`);
 }
 
-console.log(`Production audio audit passed${auditPublicAudio ? ' at the pre-build public stage' : ''}: ${checkedArticles} article(s), ${importedArticles} approved Studio import(s), ${bundledArticles} bundled Azure Hamed article(s), ${totalParts} synchronized track(s), ${totalFiles} timed MP3 file(s), no text/key leakage.`);
+console.log(`Production audio audit passed${auditPublicAudio ? ' at the pre-build public stage' : ''}: ${checkedArticles} article(s), ${generatedArticles} generated provider article(s), ${importedArticles} approved Studio import(s), ${bundledArticles} bundled Azure Hamed article(s), ${totalParts} synchronized track(s), ${totalFiles} timed MP3 file(s), no text/key leakage.`);
