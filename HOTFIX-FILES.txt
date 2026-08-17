@@ -1,14 +1,2 @@
-.env.example
-HOTFIX-INSTRUCTIONS.md
-HOTFIX-FILES.txt
-README.md
-package.json
-package-lock.json
-docs/دليل-النشر-والرجوع-v4.17.2.md
-docs/تقرير-اختبار-v4.17.2.md
-scripts/generate-audio.mjs
-scripts/check-audio-dist.mjs
-scripts/check-launch-readiness.mjs
-scripts/check-production-voices.mjs
+scripts/check-interactions.mjs
 scripts/check-v4172-release.mjs
-scripts/test-gemini-production-build.mjs
