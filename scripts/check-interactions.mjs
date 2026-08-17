@@ -4,6 +4,7 @@ import path from 'node:path';
 
 const root = path.resolve('dist');
 const failures = [];
+const productionProvider = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'bundled';
 const astroScripts = (await readdir(path.join(root, '_astro'))).filter((name) => name.endsWith('.js'));
 const baseScriptName = astroScripts.find((name) => name.startsWith('BaseLayout'));
 if (!baseScriptName) throw new Error('Base layout browser script was not generated.');
@@ -33,6 +34,12 @@ function createDom(html, width) {
   };
   window.eval(baseScript);
   return dom;
+}
+
+function inlineAudioManifest(document) {
+  const raw = document.querySelector('[data-audio-manifest-inline]')?.textContent;
+  if (!raw) throw new Error('Article HTML is missing its inline audio manifest.');
+  return JSON.parse(raw);
 }
 
 const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
@@ -99,11 +106,23 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
 }
 
 {
-  const importedArticleId = 'عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء';
-  const articleDirectory = path.join(root, 'posts', importedArticleId);
+  const pilotArticleId = 'عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء';
+  const articleDirectory = path.join(root, 'posts', pilotArticleId);
   const html = await readFile(path.join(articleDirectory, 'index.html'), 'utf8');
   const dom = createDom(html, 390);
   const { window } = dom;
+  const manifest = inlineAudioManifest(window.document);
+  const voices = Array.isArray(manifest.voices) ? manifest.voices : [];
+  const defaultVoice = manifest.defaultVoice;
+  const defaultVoiceEntry = voices.find((voice) => voice.id === defaultVoice);
+  const partDurations = manifest.parts.map((part) => Number(part.audio?.[defaultVoice]?.durationSeconds || 0));
+  const totalDuration = Number(defaultVoiceEntry?.totalDurationSeconds || partDurations.reduce((sum, duration) => sum + duration, 0));
+  const firstAsset = manifest.parts[0]?.audio?.[defaultVoice];
+  const firstDuration = Number(firstAsset?.durationSeconds || 0);
+  const expectedSyncBlocks = manifest.parts.reduce((sum, part) => sum + (Array.isArray(part.sync) ? part.sync.length : 0), 0);
+  if (!defaultVoice || !voices.length || !firstAsset?.src || !(firstDuration > 0) || !(totalDuration > 0) || partDurations.some((duration) => !(duration > 0))) {
+    throw new Error('Pilot article manifest is incomplete or has invalid voice durations.');
+  }
   const analyticsEvents = [];
   window.__bareeqAnalyticsLoaded = true;
   window.gtag = (...args) => analyticsEvents.push(args);
@@ -113,7 +132,7 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
   window.scrollY = 1200;
   const articleAudio = window.document.querySelector('[data-article-audio]');
   if (articleAudio) {
-    Object.defineProperty(articleAudio, 'duration', { value: 281.088, configurable: true });
+    Object.defineProperty(articleAudio, 'duration', { value: firstDuration, configurable: true });
     Object.defineProperty(articleAudio, 'currentTime', { value: 0, writable: true, configurable: true });
   }
   window.eval(audioCoreScript);
@@ -121,20 +140,30 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
   const voiceSelect = window.document.querySelector('[data-audio-voice]');
   const voiceField = window.document.querySelector('[data-audio-voice-field]');
   const seek = window.document.querySelector('[data-audio-seek]');
-  if (!voiceSelect?.disabled || voiceSelect?.options.length !== 1 || voiceSelect?.value !== 'cedar' || !voiceField?.hidden || !articleAudio?.src.includes('/releases/20260815T050435Z-73ce11f5/cedar-article-')) failures.push('approved Studio player does not initialize with the single Cedar production release');
-  if (seek?.disabled || window.document.querySelectorAll('[data-audio-sync-id]').length !== 21) failures.push('Studio player seek/synchronization controls are not ready for all 21 blocks');
+  const singleVoice = voices.length === 1;
+  if (voiceSelect?.disabled !== singleVoice || voiceSelect?.options.length !== voices.length || voiceSelect?.value !== defaultVoice || voiceField?.hidden !== singleVoice || !articleAudio?.src.endsWith(firstAsset.src)) failures.push(`pilot player does not initialize from its ${defaultVoice} production manifest`);
+  if (seek?.disabled || window.document.querySelectorAll('[data-audio-sync-id]').length !== expectedSyncBlocks) failures.push(`pilot player seek/synchronization controls are not ready for all ${expectedSyncBlocks} manifest blocks`);
   if (articleAudio) {
-    articleAudio.currentTime = 28.5;
+    articleAudio.currentTime = firstDuration * 0.1;
     articleAudio.dispatchEvent(new window.Event('timeupdate'));
-    if (!(Number(seek?.value) > 90) || !window.document.querySelector('[data-audio-current="true"]')) failures.push('Studio timeline does not update seek progress and the active text block');
+    const expectedSeekValue = Math.round((articleAudio.currentTime / totalDuration) * 1000);
+    if (Math.abs(Number(seek?.value) - expectedSeekValue) > 2 || !window.document.querySelector('[data-audio-current="true"]')) failures.push('pilot timeline does not update seek progress and the active text block');
   }
   if (seek && articleAudio) {
     seek.value = '500';
     seek.dispatchEvent(new window.Event('change', { bubbles: true }));
-    if (Math.abs(articleAudio.currentTime - 140.544) > 1) failures.push(`seeking to 50% did not move to the expected article time: ${articleAudio.currentTime}`);
+    const resolved = window.BareeqAudioCore.resolveArticleSeek(partDurations, totalDuration * 0.5);
+    const targetAsset = manifest.parts[resolved.partIndex]?.audio?.[defaultVoice];
+    const targetDuration = Number(targetAsset?.durationSeconds || 0);
+    if (!articleAudio.src.endsWith(targetAsset.src)) failures.push(`seeking to 50% did not switch to manifest part ${resolved.partIndex + 1}`);
+    Object.defineProperty(articleAudio, 'duration', { value: targetDuration, configurable: true });
+    articleAudio.dispatchEvent(new window.Event('loadedmetadata'));
     articleAudio.dispatchEvent(new window.Event('timeupdate'));
-    const saved = JSON.parse(window.localStorage.getItem(`bareeq-audio-progress-v1:${importedArticleId}`) || 'null');
-    if (saved?.voiceId !== 'cedar' || Math.abs(saved?.time - articleAudio.currentTime) > 0.1) failures.push('Cedar listening position is not saved with the selected voice');
+    articleAudio.dispatchEvent(new window.Event('pause'));
+    const expectedTime = Math.max(0, Math.min(resolved.seconds, targetDuration - 0.05));
+    if (Math.abs(articleAudio.currentTime - expectedTime) > 0.1) failures.push(`seeking to 50% did not move to the expected local manifest time: ${articleAudio.currentTime}`);
+    const saved = JSON.parse(window.localStorage.getItem(`bareeq-audio-progress-v1:${pilotArticleId}`) || 'null');
+    if (saved?.voiceId !== defaultVoice || saved?.partIndex !== resolved.partIndex || Math.abs(saved?.time - articleAudio.currentTime) > 0.1) failures.push(`${defaultVoice} listening position is not saved with its manifest part`);
   }
   const progress = Number(window.document.querySelector('[data-reading-progress]')?.getAttribute('aria-valuenow'));
   if (!(progress > 0 && progress <= 100)) failures.push(`article progress is invalid: ${progress}`);
@@ -146,33 +175,33 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
   tocToggle?.click();
   if (tocToggle?.getAttribute('aria-expanded') !== 'true' || !window.document.querySelector('[data-article-toc]')?.classList.contains('is-open')) failures.push('mobile article TOC does not open');
   window.document.querySelector('[data-audio-stop]')?.click();
-  if (window.localStorage.getItem(`bareeq-audio-progress-v1:${importedArticleId}`)) failures.push('explicit audio stop does not clear saved listening progress');
+  if (window.localStorage.getItem(`bareeq-audio-progress-v1:${pilotArticleId}`)) failures.push('explicit audio stop does not clear saved listening progress');
   dom.window.close();
 
   const resumeDom = createDom(html, 390);
   const resumeAudio = resumeDom.window.document.querySelector('[data-article-audio]');
+  const resumeTime = Math.min(42.25, firstDuration * 0.5);
   if (resumeAudio) {
-    Object.defineProperty(resumeAudio, 'duration', { value: 281.088, configurable: true });
+    Object.defineProperty(resumeAudio, 'duration', { value: firstDuration, configurable: true });
     Object.defineProperty(resumeAudio, 'currentTime', { value: 0, writable: true, configurable: true });
   }
-  resumeDom.window.localStorage.setItem(`bareeq-audio-progress-v1:${importedArticleId}`, JSON.stringify({ voiceId: 'cedar', partIndex: 0, time: 42.25, updatedAt: Date.now() }));
+  resumeDom.window.localStorage.setItem(`bareeq-audio-progress-v1:${pilotArticleId}`, JSON.stringify({ voiceId: defaultVoice, partIndex: 0, time: resumeTime, updatedAt: Date.now() }));
   resumeDom.window.eval(audioCoreScript);
   resumeDom.window.eval(articleScript);
   resumeAudio?.dispatchEvent(new resumeDom.window.Event('loadedmetadata'));
-  if (resumeDom.window.document.querySelector('[data-audio-voice]')?.value !== 'cedar' || Math.abs((resumeAudio?.currentTime || 0) - 42.25) > 0.1 || resumeDom.window.document.querySelector('[data-audio-play-label]')?.textContent !== 'متابعة الاستماع') failures.push('saved Cedar choice and listening position are not restored on a new page session');
+  if (resumeDom.window.document.querySelector('[data-audio-voice]')?.value !== defaultVoice || Math.abs((resumeAudio?.currentTime || 0) - resumeTime) > 0.1 || resumeDom.window.document.querySelector('[data-audio-play-label]')?.textContent !== 'متابعة الاستماع') failures.push(`saved ${defaultVoice} choice and listening position are not restored on a new page session`);
   resumeDom.window.close();
 
   const expiredDom = createDom(html, 390);
-  expiredDom.window.localStorage.setItem(`bareeq-audio-progress-v1:${importedArticleId}`, JSON.stringify({ voiceId: 'cedar', partIndex: 0, time: 88, updatedAt: Date.now() - 31 * 24 * 60 * 60 * 1000 }));
+  expiredDom.window.localStorage.setItem(`bareeq-audio-progress-v1:${pilotArticleId}`, JSON.stringify({ voiceId: defaultVoice, partIndex: 0, time: Math.min(88, firstDuration * 0.75), updatedAt: Date.now() - 31 * 24 * 60 * 60 * 1000 }));
   expiredDom.window.eval(audioCoreScript);
   expiredDom.window.eval(articleScript);
-  if (expiredDom.window.localStorage.getItem(`bareeq-audio-progress-v1:${importedArticleId}`) || expiredDom.window.document.querySelector('[data-audio-play-label]')?.textContent !== 'ابدأ الاستماع') failures.push('listening progress older than 30 days is not expired and removed');
+  if (expiredDom.window.localStorage.getItem(`bareeq-audio-progress-v1:${pilotArticleId}`) || expiredDom.window.document.querySelector('[data-audio-play-label]')?.textContent !== 'ابدأ الاستماع') failures.push('listening progress older than 30 days is not expired and removed');
   expiredDom.window.close();
 }
 
 {
   const generatedArticleId = 'لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء';
-  const productionProvider = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'bundled';
   const html = await readFile(path.join(root, 'posts', generatedArticleId, 'index.html'), 'utf8');
   const dom = createDom(html, 390);
   const listenButton = dom.window.document.querySelector('[data-reading-mode="listen"]');
@@ -182,7 +211,7 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
     const voiceSelect = dom.window.document.querySelector('[data-audio-voice]');
     const voiceField = dom.window.document.querySelector('[data-audio-voice-field]');
     const articleAudio = dom.window.document.querySelector('[data-article-audio]');
-    if (productionProvider === 'bundled') {
+    if (['bundled', 'gemini'].includes(productionProvider)) {
       if (!voiceSelect?.disabled || voiceSelect?.options.length !== 1 || voiceSelect?.value !== 'hamed' || !voiceField?.hidden || !articleAudio?.src.includes('/releases/azure-hamed-live-20260815/part-001-7701cd5f.mp3')) failures.push('bundled production player does not initialize with the single approved Hamed release');
     } else {
       const [firstVoice, secondVoice] = productionProvider === 'azure' ? ['hamed', 'zariyah'] : ['cedar', 'marin'];
@@ -227,4 +256,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Interaction audit passed: header/search, menus, keyboard, drawer, theme, ticker, footer, analytics, article progress, Studio Cedar synchronization/seek, bundled Hamed or explicit dual-voice mode, 30-day resume expiry, filters, and search.');
+console.log('Interaction audit passed: header/search, menus, keyboard, drawer, theme, ticker, footer, analytics, article progress, manifest-driven pilot synchronization/seek, bundled Hamed or explicit dual-voice mode, 30-day resume expiry, filters, and search.');

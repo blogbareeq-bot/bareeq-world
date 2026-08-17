@@ -10,7 +10,7 @@ const requireAll = (name, text, tokens) => {
   for (const token of tokens) if (!text.includes(token)) failures.push(`${name}: missing ${token}`);
 };
 
-const [pkgText, lockText, bundledImporter, studioImporter, studioMappingText, component, audioCore, client, generator, audioAudit, geminiContract, css, homeIntro, categoryStrip, header, postPage, postsLib, baseLayout, middleware, notFound, envExample, voiceLabEnv, readme, testReport, deployGuide, packageLockText] = await Promise.all([
+const [pkgText, lockText, bundledImporter, studioImporter, studioMappingText, component, audioCore, client, interactionAudit, generator, audioAudit, geminiContract, css, homeIntro, categoryStrip, header, postPage, postsLib, baseLayout, middleware, notFound, envExample, voiceLabEnv, readme, testReport, deployGuide, packageLockText] = await Promise.all([
   read('package.json'),
   read('scripts/bundled-azure-audio-map.json'),
   read('scripts/import-bundled-azure-audio.mjs'),
@@ -19,6 +19,7 @@ const [pkgText, lockText, bundledImporter, studioImporter, studioMappingText, co
   read('src/components/ReadingModes.astro'),
   read('public/scripts/audio-core.js'),
   read('public/scripts/article.js'),
+  read('scripts/check-interactions.mjs'),
   read('scripts/generate-audio.mjs'),
   read('scripts/check-audio-dist.mjs'),
   read('scripts/test-gemini-production-build.mjs'),
@@ -117,6 +118,10 @@ requireAll('article client', client, [
   'smartScrollTo', 'nativeFallbackButton', 'audio.playbackRate',
 ]);
 if (client.includes('speechSynthesis') || client.includes('audio.load()')) failures.push('reader reintroduced browser TTS or tablet-unsafe audio.load().');
+requireAll('mixed-audio interaction audit', interactionAudit, [
+  'inlineAudioManifest', 'manifest.defaultVoice', 'resolveArticleSeek(partDurations, totalDuration * 0.5)',
+  "['bundled', 'gemini'].includes(productionProvider)", 'manifest-driven pilot synchronization/seek',
+]);
 
 const mobile900 = css.match(/@media \(max-width:900px\) \{([\s\S]*?)\n\}/)?.[1] || '';
 if (!mobile900.includes('flex-wrap:wrap') || !mobile900.includes('flex:1 1 104px') || !mobile900.includes('.category-mobile-link{display:flex') || mobile900.includes('overflow-x:auto')) failures.push('five-category mobile navigation is not visibly wrapped without horizontal scrolling.');
