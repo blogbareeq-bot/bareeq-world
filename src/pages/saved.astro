@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getPublishedPosts } from '../lib/posts';
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="محفوظات القراءة" description="مقالات حفظتها للعودة إليها لاحقًا على هذا الجهاز." canonicalPath="/saved/" latestPosts={posts.slice(0, 6)}>
+  <main class="shell section-gap saved-reading-page">
+    <div class="section-heading"><div><span class="eyebrow">قائمتك الخاصة</span><h1>محفوظات القراءة</h1><p>تُحفظ هذه القائمة محليًا على جهازك فقط، دون إنشاء حساب أو إرسال بيانات إلى بريق.</p></div></div>
+    <p data-saved-empty>لم تحفظ أي مقال بعد. افتح أي مقال واختر «حفظ للقراءة لاحقًا».</p>
+    <div class="archive-grid">
+      {posts.map((post) => <div data-saved-card data-post-id={post.id} hidden><PostCard post={post} /></div>)}
+    </div>
+  </main>
+  <script is:inline src="/scripts/reading-list.js"></script>
+</BaseLayout>

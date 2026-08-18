@@ -1,0 +1,11 @@
+import { execFileSync } from 'node:child_process';
+import { readFile } from 'node:fs/promises';
+const generator = await readFile('scripts/generate-audio.mjs','utf8');
+const must = ["GEMINI_MODEL = 'gemini-3.1-flash-tts-preview'", "providerVoice: 'Sadaltager'", "providerVoice: 'ar-SA-HamedNeural'", 'restoreFromProduction', 'GEMINI_REQUEST_HARD_LIMIT', 'GEMINI_SYNTHESIS_BUDGET_MS', 'BAREEQ_TTS_INCLUDE_IDS', 'BAREEQ_AZURE_HAMED_ONLY'];
+for (const token of must) if (!generator.includes(token)) throw new Error(`V4.19 audio safeguard missing: ${token}`);
+const plan = (provider) => execFileSync(process.execPath,['scripts/generate-audio.mjs','--plan'],{encoding:'utf8',maxBuffer:4*1024*1024,env:{...process.env,BAREEQ_TTS_PROVIDER:provider,BAREEQ_TTS_INCLUDE_IDS:'',GEMINI_TTS_ENDPOINT:'',OPENAI_TTS_ENDPOINT:'',BAREEQ_TTS_CONTRACT_TEST:''}});
+const gemini=plan('gemini');
+for (const t of ['Google Gemini API full Sadaltager rollout plan: 12 articles total','Sadaltager']) if(!gemini.includes(t)) throw new Error(`Gemini V4.19 plan missing ${t}`);
+const azure=plan('azure');
+for (const t of ['Microsoft Azure AI Speech audio plan: 12 articles','Hamed','Zariyah']) if(!azure.includes(t)) throw new Error(`Azure V4.19 plan missing ${t}`);
+console.log('V4.19.0 production voice audit passed: 12 live articles, targeted Azure fail-closed regeneration for changed content, and progressive Sadaltager cache reuse are enabled.');

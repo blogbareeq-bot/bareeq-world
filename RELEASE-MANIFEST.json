@@ -1,0 +1,21 @@
+{
+  "release": "Bareeq V4.19.0 — Editorial Recovery & Hybrid Audio",
+  "mode": "direct-copy-replace",
+  "baselineVersion": "4.18.2",
+  "baselineCommit": "f2693d8a8097a30a52d8178dbcb8300c7703abd8",
+  "changedArticleIds": [
+    "intuition-first-impression-decisions-signature",
+    "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+    "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+    "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+    "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+    "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+    "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون"
+  ],
+  "audioPolicy": {
+    "changedArticles": "Azure Hamed first, fail-closed",
+    "upgrade": "Gemini Sadaltager progressive",
+    "staleFallbackImports": "skipped for changed IDs"
+  },
+  "localNodeRequired": false
+}

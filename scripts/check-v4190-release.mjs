@@ -1,0 +1,11 @@
+import { readFile, access } from 'node:fs/promises';
+const pkg=JSON.parse(await readFile('package.json','utf8'));
+if(pkg.version!=='4.19.0') throw new Error(`Expected package 4.19.0, got ${pkg.version}`);
+const redirects=await readFile('public/_redirects','utf8');
+for(const t of ['altadakhom-explained-simply','language-soft-power-politics']) if(!redirects.includes(t)) throw new Error(`Missing redirect target ${t}`);
+for(const p of ['public/.well-known/security.txt','public/llms.txt','public/scripts/reading-list.js','src/pages/saved.astro','src/content/posts/intuition-first-impression-decisions-signature.md','public/images/posts/intuition-first-impression-decisions.webp','assets/thumbnails-source/intuition-first-impression-decisions.webp']) await access(p);
+const intuition=await readFile('src/content/posts/intuition-first-impression-decisions-signature.md','utf8');
+if(!/^draft:\s*false$/m.test(intuition)) throw new Error('Intuition article must be published in V4.19.0.');
+const gen=await readFile('scripts/generate-audio.mjs','utf8');
+if(!gen.includes('BAREEQ_TTS_INCLUDE_IDS')) throw new Error('Targeted hybrid audio generation is not installed.');
+console.log('V4.19.0 release gate passed.');

@@ -1,0 +1,5 @@
+Contact: https://bareeqworld.com/contact/
+Expires: 2027-02-18T00:00:00.000Z
+Preferred-Languages: ar, en
+Canonical: https://bareeqworld.com/.well-known/security.txt
+Policy: https://bareeqworld.com/privacy/
