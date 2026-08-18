@@ -114,4 +114,22 @@ review.articles['intuition-first-impression-decisions-signature'].checks = [{fro
 review.articles['اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا'].checks = [{from:'كنت',to:'كُنْتَ'}];
 await writeFile(reviewPath, JSON.stringify(review, null, 2) + '\n');
 
+
+// V4.19 inherits the mature launch-readiness audit from V4.18.2.
+// Refresh only the two assertions whose source contract deliberately changed:
+// package version and related-post fallback for a still-small article library.
+await patchFile('scripts/check-launch-readiness.mjs', (source) => {
+  const oldVersion = "if (pkg.version !== '4.18.2') failures.push(`Expected package version 4.18.2, got ${pkg.version}`);";
+  const newVersion = "if (pkg.version !== '4.19.0') failures.push(`Expected package version 4.19.0, got ${pkg.version}`);";
+  if (source.includes(oldVersion)) source = source.replace(oldVersion, newVersion);
+  else if (!source.includes(newVersion)) throw new Error('V4.19: launch-readiness package-version anchor missing.');
+
+  const oldRelated = "if (!postsLib.includes('const relatedByIntent = sameSeries || sharedTags > 0;')) failures.push('Related-post scoring still permits category-only recommendations.');";
+  const newRelated = "if (!postsLib.includes('const primary = ranked') || !postsLib.includes('sameSeries || sharedTags > 0') || !postsLib.includes('ranked.filter(x=>x.sameCategory)')) failures.push('V4.19 related-post scoring must prioritize intent matches before same-category fallback.');";
+  if (source.includes(oldRelated)) source = source.replace(oldRelated, newRelated);
+  else if (!source.includes(newRelated)) throw new Error('V4.19: launch-readiness related-post anchor missing.');
+
+  return source;
+});
+
 console.log(`V4.19.0 preparation passed: ${changed.length} changed/new article(s), stale fallback imports excluded, Hamed-first hybrid audio enabled.`);

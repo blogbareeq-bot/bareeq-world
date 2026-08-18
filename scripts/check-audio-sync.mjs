@@ -10,7 +10,7 @@ const overrides = JSON.parse(await readFile('scripts/speech-overrides.json', 'ut
 for (const needle of ['extractSpeechSegments', 'buildAudioParts', 'syncMethod: \'paragraph-weighted\'', 'speech-overrides.json', '<p>${body}', 'sync: audioPart.sync']) {
   if (!generator.includes(needle)) throw new Error(`Audio generator is missing synchronization safeguard: ${needle}`);
 }
-for (const needle of ['buildSyncTargets', 'Number.isInteger(entry.ordinal)', 'syncTextToAudio', 'is-audio-active', 'smartScrollTo', 'data-audio-current', "audio?.addEventListener('timeupdate'", 'stopAudio', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'readInlineManifest', 'nativeFallbackButton', 'PLAY_START_TIMEOUT_MS', 'switchVoice', 'saveProgress', "seekInput?.addEventListener('change')"]) {
+for (const needle of ['buildSyncTargets', 'Number.isInteger(entry.ordinal)', 'syncTextToAudio', 'is-audio-active', 'smartScrollTo', 'data-audio-current', "audio?.addEventListener('timeupdate'", 'stopAudio', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'readInlineManifest', 'nativeFallbackButton', 'PLAY_START_TIMEOUT_MS', 'switchVoice', 'saveProgress', "seekInput?.addEventListener('change',", "seekInput?.addEventListener('input',"]) {
   if (!client.includes(needle)) throw new Error(`Article client is missing synchronized-reading behavior: ${needle}`);
 }
 for (const needle of ['data-audio-stop', 'data-audio-voice', 'data-audio-seek', 'تتبّع الفقرة', 'tabindex="-1"']) {
