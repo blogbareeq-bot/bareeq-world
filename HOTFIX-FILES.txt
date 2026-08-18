@@ -1,2 +1,0 @@
-scripts/check-interactions.mjs
-scripts/check-v4172-release.mjs

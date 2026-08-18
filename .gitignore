@@ -7,3 +7,8 @@ dist/
 !.env.voice-lab.example
 .DS_Store
 .voice-lab/
+# Local upgrade/rollback artifacts (never commit)
+.bareeq-backup-*/
+apply-v*.mjs
+APPLY-V*.cmd
+RUN-ONE-SHOT-WINDOWS.cmd

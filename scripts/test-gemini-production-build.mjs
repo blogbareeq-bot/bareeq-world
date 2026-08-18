@@ -101,5 +101,5 @@ if (exitCode !== 0) process.exit(exitCode);
 if (calls.length !== expectedCalls) throw new Error(`Expected ${expectedCalls} authenticated Gemini requests, received ${calls.length}.`);
 
 console.log(AUDIO_ONLY
-  ? `Offline Gemini one-article pilot contract passed: ${calls.length} authenticated Sadaltager requests, 10 bundled Hamed fallback articles, steps/model_output parsing, PCM-to-MP3 encoding, synchronization, integrity, and secret-leakage audits.`
-  : `Offline Gemini one-article pilot production contract passed: ${calls.length} authenticated Sadaltager requests with the post-May-2026 steps schema followed by the complete mixed-audio release build and audits.`);
+  ? `Offline Gemini full-rollout contract passed: ${calls.length} authenticated Sadaltager requests across all published articles, steps/model_output parsing, PCM-to-MP3 encoding, synchronization, integrity, and secret-leakage audits.`
+  : `Offline Gemini full-rollout production contract passed: ${calls.length} authenticated Sadaltager requests with the post-May-2026 steps schema followed by the complete production build and audits.`);

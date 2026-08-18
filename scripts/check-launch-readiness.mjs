@@ -21,7 +21,7 @@ const [pkgText, home, intro, postPage, postsLib, sitemap, seriesPage, siteConfig
 ]);
 
 const pkg = JSON.parse(pkgText);
-if (pkg.version !== '4.17.2') failures.push(`Expected package version 4.17.2, got ${pkg.version}`);
+if (pkg.version !== '4.18.2') failures.push(`Expected package version 4.18.2, got ${pkg.version}`);
 
 // Homepage identity/heading hierarchy.
 if (!/<h1\b[^>]*>عالم بريق — نافذتك إلى المعرفة<\/h1>/u.test(intro)) failures.push('Homepage identity H1 is missing or does not use the canonical brand promise.');

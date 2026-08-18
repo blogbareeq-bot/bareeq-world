@@ -21,7 +21,6 @@ const RESOURCE_ENDPOINT = process.env.AZURE_SPEECH_ENDPOINT?.trim().replace(/\/$
 const GEMINI_MODEL = 'gemini-3.1-flash-tts-preview';
 const GEMINI_OFFICIAL_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/interactions';
 const GEMINI_API_REVISION = '2026-05-20';
-const GEMINI_PILOT_ARTICLE_ID = 'عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء';
 const GEMINI_STYLE = `### TASK
 Synthesize the Arabic transcript below as speech. Speak only the text under TRANSCRIPT, exactly as written. Do not read these directions or labels aloud, and do not add commentary.
 
@@ -71,7 +70,7 @@ const SPEECH_QA_JSON = process.argv.includes('--speech-qa-json') || process.argv
 const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-output='))?.slice('--speech-qa-output='.length) || '';
 const ALLOW_PARTIAL = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
 const MAX_REQUEST_BYTES = PROVIDER === 'gemini' ? Number(process.env.GEMINI_TTS_MAX_REQUEST_BYTES || '2400') : PROVIDER === 'azure' ? 6000 : 4800;
-const MIN_SYNTHESIS_INTERVAL_MS = Number(PROVIDER === 'gemini' ? (process.env.GEMINI_TTS_MIN_INTERVAL_MS || '6500') : PROVIDER === 'openai' ? (process.env.OPENAI_TTS_MIN_INTERVAL_MS || '200') : PROVIDER === 'azure' ? (process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200') : '0');
+const MIN_SYNTHESIS_INTERVAL_MS = Number(PROVIDER === 'gemini' ? (process.env.GEMINI_TTS_MIN_INTERVAL_MS || '9000') : PROVIDER === 'openai' ? (process.env.OPENAI_TTS_MIN_INTERVAL_MS || '200') : PROVIDER === 'azure' ? (process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200') : '0');
 const GENERATOR_VERSION = 8;
 const AZURE_FREE_MONTHLY_CHARS = Number(process.env.AZURE_SPEECH_FREE_MONTHLY_CHARS || '500000');
 const BUILD_WARNING_CHARS = Number(process.env.AZURE_SPEECH_BUILD_WARNING_CHARS || '400000');
@@ -84,7 +83,7 @@ const OPENAI_AUDIO_TOKENS_PER_SECOND = Number(process.env.OPENAI_TTS_AUDIO_TOKEN
 const FFMPEG_PATH = process.env.FFMPEG_PATH?.trim() || ffmpegInstaller?.path || 'ffmpeg';
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.17.2';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.18.2';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
 const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
@@ -365,12 +364,26 @@ function escapeXml(text) {
   return text.replace(/[<>&"']/g, (char) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' }[char]));
 }
 
-const MAX_FETCH_RETRIES = Number(process.env.BAREEQ_TTS_MAX_RETRIES || process.env.AZURE_SPEECH_MAX_RETRIES || '5');
+const MAX_FETCH_RETRIES = Number(process.env.BAREEQ_TTS_MAX_RETRIES || process.env.AZURE_SPEECH_MAX_RETRIES || '8');
+const GEMINI_REQUEST_HARD_LIMIT = Number(process.env.BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD || '80');
+const GEMINI_SYNTHESIS_BUDGET_MS = Number(process.env.BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS || '780000');
+if (!Number.isFinite(MAX_FETCH_RETRIES) || MAX_FETCH_RETRIES < 0) throw new Error('BAREEQ_TTS_MAX_RETRIES must be zero or a positive number.');
+if (!Number.isFinite(GEMINI_REQUEST_HARD_LIMIT) || GEMINI_REQUEST_HARD_LIMIT < 1) throw new Error('BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD must be a positive number.');
+if (!Number.isFinite(GEMINI_SYNTHESIS_BUDGET_MS) || GEMINI_SYNTHESIS_BUDGET_MS < 60000) throw new Error('BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS must be at least 60000ms.');
 
-function retryDelay(attempt, response = null) {
-  const retryAfter = response ? Number(response.headers.get('retry-after')) : NaN;
-  if (Number.isFinite(retryAfter) && retryAfter > 0) return retryAfter * 1000;
-  return Math.min(30000, 1500 * (2 ** attempt));
+function retryDelay(attempt, response = null, body = '') {
+  const retryAfterRaw = response?.headers?.get?.('retry-after')?.trim() || '';
+  const retryAfterSeconds = Number.parseFloat(retryAfterRaw);
+  if (Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0) return Math.ceil(retryAfterSeconds * 1000) + 500;
+  if (retryAfterRaw) {
+    const retryAt = Date.parse(retryAfterRaw);
+    if (Number.isFinite(retryAt) && retryAt > Date.now()) return Math.min(90000, retryAt - Date.now() + 500);
+  }
+  const bodyRetry = String(body).match(/["']retryDelay["']\s*:\s*["']([0-9.]+)s["']/i);
+  if (bodyRetry) return Math.ceil(Number(bodyRetry[1]) * 1000) + 500;
+  const exponential = Math.min(60000, 4000 * (2 ** attempt));
+  const jitter = Math.floor(Math.random() * 1500);
+  return exponential + jitter;
 }
 
 function transportCode(error) {
@@ -389,12 +402,15 @@ async function request(url, options = {}, attempt = 0) {
     if (response.ok) return response;
     const body = await response.text().catch(() => '');
     if ((response.status === 429 || response.status >= 500) && attempt < MAX_FETCH_RETRIES) {
-      const wait = retryDelay(attempt, response);
+      const wait = retryDelay(attempt, response, body);
       console.warn(`${PROVIDER_NAME} request HTTP ${response.status}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
       await sleep(wait);
       return request(url, options, attempt + 1);
     }
-    throw new Error(`${PROVIDER_NAME} request failed (${response.status}): ${body.slice(0, 700)}`);
+    const error = new Error(`${PROVIDER_NAME} request failed (${response.status}): ${body.slice(0, 700)}`);
+    error.httpStatus = response.status;
+    error.responseBody = body;
+    throw error;
   } catch (error) {
     if (attempt < MAX_FETCH_RETRIES && isRetryableTransportError(error)) {
       const wait = retryDelay(attempt);
@@ -413,7 +429,7 @@ async function requestBinary(url, options = {}, { attempt = 0, throttle = false,
     if (!response.ok) {
       const body = await response.text().catch(() => '');
       if ((response.status === 429 || response.status >= 500) && attempt < MAX_FETCH_RETRIES) {
-        const wait = retryDelay(attempt, response);
+        const wait = retryDelay(attempt, response, body);
         console.warn(`${label} HTTP ${response.status}; retry ${attempt + 1}/${MAX_FETCH_RETRIES} in ${wait}ms.`);
         await sleep(wait);
         return requestBinary(url, options, { attempt: attempt + 1, throttle, label });
@@ -823,12 +839,8 @@ function estimateOpenAiCost(characters, requestCount) {
 }
 
 const posts = await loadPosts();
-const geminiPilotPosts = posts.filter((post) => post.id === GEMINI_PILOT_ARTICLE_ID);
-if (PROVIDER === 'gemini' && geminiPilotPosts.length !== 1) {
-  throw new Error(`Gemini one-article pilot safety stop: expected exactly one published article with id ${GEMINI_PILOT_ARTICLE_ID}, found ${geminiPilotPosts.length}.`);
-}
 const synthesisPosts = PROVIDER === 'gemini'
-  ? geminiPilotPosts
+  ? posts
   : PROVIDER === 'openai'
     ? posts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id))
     : posts;
@@ -869,17 +881,14 @@ if (PLAN_ONLY) {
   const generationChars = synthesisPosts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
   const characterLabel = PROVIDER === 'gemini' ? 'source character(s)' : 'billable character(s)';
   console.log(PROVIDER === 'gemini'
-    ? `${PROVIDER_NAME} one-article pilot audio plan: ${posts.length} articles total, 1 Sadaltager pilot article, ${generationRequests * VOICES.length} synthesis request(s), ${generationChars * VOICES.length} ${characterLabel}, and 10 bundled Azure Hamed fallback articles.`
+    ? `${PROVIDER_NAME} full Sadaltager rollout plan: ${posts.length} articles total, ${generationRequests} synthesis request(s), ${generationChars} ${characterLabel}; unchanged Sadaltager audio is restored from production before any new synthesis.`
     : `${PROVIDER_NAME} audio plan: ${posts.length} articles, ${generationRequests * VOICES.length} synthesis request(s), ${generationChars * VOICES.length} ${characterLabel}, ${sourceBytes} source UTF-8 bytes.`);
   console.log(`Voices: ${VOICES.map((voice) => `${voice.label} [${voice.providerVoice}]`).join(' + ')}.`);
   for (const post of posts) {
     const imported = PROVIDER === 'openai' && STUDIO_ARTICLE_IDS.has(post.id);
-    const geminiFallback = PROVIDER === 'gemini' && post.id !== GEMINI_PILOT_ARTICLE_ID;
     console.log(imported
       ? `- ${post.id}: approved Bareeq Voice Studio release (Cedar), no synthesis request`
-      : geminiFallback
-        ? `- ${post.id}: approved bundled Azure Hamed fallback, no synthesis request`
-        : `- ${post.id}: ${post.audioParts.length} part(s) × ${VOICES.length} voices, ${post.segments.length} sync block(s), ${[...post.spokenText].length} source chars`);
+      : `- ${post.id}: ${post.audioParts.length} part(s) × ${VOICES.length} voice(s), ${post.segments.length} sync block(s), ${[...post.spokenText].length} source chars`);
   }
   process.exit(0);
 }
@@ -893,7 +902,7 @@ for (const post of prepared) if (!await hasCompleteCache(post)) missing.push(pos
 if (missing.length && PROVIDER !== 'bundled' && !CONTRACT_TEST && !ALLOW_PARTIAL) {
   const stillMissing = [];
   for (const post of missing) {
-    if (await restoreFromProduction(post)) console.log(`↺ ${post.id}: restored unchanged ${PROVIDER_NAME} dual-voice audio from production cache.`);
+    if (await restoreFromProduction(post)) console.log(`↺ ${post.id}: restored unchanged ${PROVIDER === 'gemini' ? 'Sadaltager' : PROVIDER_NAME} audio from production cache.`);
     else stillMissing.push(post);
   }
   missing = stillMissing;
@@ -912,8 +921,9 @@ if (PROVIDER === 'bundled' && missing.length) {
   if (OPENAI_BUILD_WARNING_USD > 0 && estimate.usd >= OPENAI_BUILD_WARNING_USD) console.warn(`⚠ OpenAI TTS usage warning: estimated $${estimate.usd.toFixed(2)} (warning threshold: $${OPENAI_BUILD_WARNING_USD.toFixed(2)}).`);
   if (OPENAI_BUILD_HARD_LIMIT_USD > 0 && estimate.usd > OPENAI_BUILD_HARD_LIMIT_USD) throw new Error(`OpenAI TTS safety stop: estimated $${estimate.usd.toFixed(2)} exceeds the configured $${OPENAI_BUILD_HARD_LIMIT_USD.toFixed(2)} hard limit. Raise OPENAI_TTS_BUILD_HARD_LIMIT_USD deliberately if this full regeneration is expected.`);
 } else if (PROVIDER === 'gemini') {
-  console.log(`Gemini TTS free-tier plan: this build needs ${missingRequests} new request(s) and ${missingChars.toLocaleString('en-US')} source character(s) for Sadaltager.`);
-  console.log('The current Gemini 3.1 Flash TTS Preview free tier lists input and audio output as free of charge; account rate limits still apply, so requests are throttled and retried.');
+  console.log(`Gemini TTS rollout: this build needs ${missingRequests} new request(s) and ${missingChars.toLocaleString('en-US')} source character(s) for Sadaltager.`);
+  console.log(`Gemini pacing: one request at a time, minimum ${MIN_SYNTHESIS_INTERVAL_MS}ms between request starts, up to ${MAX_FETCH_RETRIES} retries with Retry-After/exponential backoff, and a ${Math.round(GEMINI_SYNTHESIS_BUDGET_MS / 60000)}-minute synthesis budget.`);
+  if (missingRequests > GEMINI_REQUEST_HARD_LIMIT) throw new Error(`Gemini safety stop: ${missingRequests} new request(s) exceed BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD=${GEMINI_REQUEST_HARD_LIMIT}. Review --plan before deliberately raising the cap.`);
 } else if (PROVIDER === 'azure') {
   const percent = AZURE_FREE_MONTHLY_CHARS > 0 ? (missingChars / AZURE_FREE_MONTHLY_CHARS) * 100 : 0;
   console.log(`Azure Speech cost guard: this build needs ${missingChars.toLocaleString('en-US')} new synthesis character(s) across ${missingRequests} request(s), about ${percent.toFixed(1)}% of the configured ${AZURE_FREE_MONTHLY_CHARS.toLocaleString('en-US')} monthly allowance.`);
@@ -937,7 +947,7 @@ if (!missing.length) {
   console.log(PROVIDER === 'bundled'
     ? `Bundled mixed audio cache is complete for ${posts.length} articles: 1 Studio Cedar + ${BUNDLED_BY_ARTICLE.size} Azure Hamed, 0 synthesis requests and no API key required.`
     : PROVIDER === 'gemini'
-      ? `Gemini one-article pilot cache is complete: 1 Sadaltager article + ${BUNDLED_BY_ARTICLE.size} bundled Azure Hamed fallback articles.`
+      ? `Gemini Sadaltager cache is complete for all ${posts.length} article(s): 0 new synthesis requests required.`
       : `${PROVIDER_NAME} audio cache is complete for ${posts.length} articles with ${VOICES.length} approved listening voice(s).`);
   process.exit(0);
 }
@@ -945,7 +955,17 @@ if (!missing.length) {
 const resolvedVoices = PROVIDER === 'azure' ? await resolveAzureVoices(API_KEY) : VOICES;
 console.log(`Generating ${PROVIDER_NAME} ${MODEL} (${LANGUAGE}) with ${resolvedVoices.map((voice) => voice.providerVoice).join(' + ')} for ${missing.length} article(s).`);
 
+const synthesisStartedAt = Date.now();
+const geminiBudgetExceeded = () => PROVIDER === 'gemini' && Date.now() - synthesisStartedAt >= GEMINI_SYNTHESIS_BUDGET_MS;
+let generatedThisBuild = 0;
+let deferredReason = '';
+
 for (const post of missing) {
+  if (geminiBudgetExceeded()) {
+    deferredReason = 'build-time budget';
+    console.warn(`⚠ Gemini synthesis budget reached before ${post.id}; remaining articles keep their approved fallback audio for this deployment.`);
+    break;
+  }
   const finalDir = path.join(AUDIO_ROOT, post.key);
   const tempDir = `${finalDir}.tmp-${process.pid}`;
   await rm(tempDir, { recursive: true, force: true });
@@ -956,6 +976,11 @@ for (const post of missing) {
     for (const voice of resolvedVoices) {
       let totalDurationSeconds = 0;
       for (let index = 0; index < post.audioParts.length; index += 1) {
+        if (geminiBudgetExceeded()) {
+          const budgetError = new Error('Gemini synthesis budget reached during article generation.');
+          budgetError.code = 'BAREEQ_GEMINI_BUDGET';
+          throw budgetError;
+        }
         const audioPart = post.audioParts[index];
         const filename = `${voice.id}-part-${String(index + 1).padStart(3, '0')}-${post.sourceHash.slice(0, 8)}.mp3`;
         const audio = await synthesizeVoice(API_KEY, voice, audioPart, {
@@ -1010,13 +1035,22 @@ for (const post of missing) {
     await writeFile(path.join(tempDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
     await rm(finalDir, { recursive: true, force: true });
     await rename(tempDir, finalDir);
-    console.log(`✓ ${post.id}: ${parts.length} synchronized part(s) × ${resolvedVoices.length} voices`);
+    generatedThisBuild += 1;
+    console.log(`✓ ${post.id}: ${parts.length} synchronized part(s) × ${resolvedVoices.length} voice(s)`);
   } catch (error) {
     await rm(tempDir, { recursive: true, force: true });
+    if (PROVIDER === 'gemini' && (error?.httpStatus === 429 || error?.code === 'BAREEQ_GEMINI_BUDGET')) {
+      deferredReason = error?.httpStatus === 429 ? 'persistent HTTP 429' : 'build-time budget';
+      console.warn(`⚠ Gemini progressive rollout paused at ${post.id}: ${deferredReason}.`);
+      console.warn('⚠ Safe progressive fallback: completed Sadaltager articles remain publishable; this and later articles retain approved Cedar/Hamed fallback audio and will be retried on a later deployment.');
+      break;
+    }
     throw error;
   }
 }
 
 console.log(PROVIDER === 'gemini'
-  ? `Gemini one-article pilot audio ready: 1 Sadaltager article + ${BUNDLED_BY_ARTICLE.size} bundled Azure Hamed fallback articles, synchronized paragraphs, and static cached MP3 output.`
+  ? (deferredReason
+      ? `Gemini progressive rollout safely paused (${deferredReason}): ${generatedThisBuild} new Sadaltager article(s) completed in this build; remaining articles retain approved fallback audio.`
+      : `Gemini full Sadaltager rollout ready: ${posts.length} article(s), synchronized paragraphs, static cached MP3 output, and production-cache reuse enabled.`)
   : `${PROVIDER_NAME} audio ready: ${posts.length} article(s), ${VOICES.length} approved listening voice(s), synchronized paragraphs, and static cached MP3 output.`);

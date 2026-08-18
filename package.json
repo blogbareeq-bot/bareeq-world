@@ -1,13 +1,13 @@
 {
   "name": "bareeq-world",
-  "version": "4.17.2",
+  "version": "4.18.2",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "start": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "generate:images": "node scripts/generate-images.mjs",
-    "build": "node scripts/clean-dist.mjs && node --check functions/_middleware.js && node --check public/scripts/analytics-consent.js && node --check public/scripts/audio-core.js && node --check public/scripts/article.js && node --check scripts/import-bundled-azure-audio.mjs && node --check scripts/import-studio-audio.mjs && node --check scripts/generate-audio.mjs && node --check scripts/mp3-duration.mjs && node --check scripts/check-production-voices.mjs && node --check scripts/check-audio-state.mjs && node --check scripts/check-v4172-release.mjs && node --check scripts/test-openai-production-build.mjs && node --check scripts/test-gemini-production-build.mjs && node --check scripts/voice-lab/env.mjs && node --check scripts/voice-lab/providers.mjs && node --check scripts/voice-lab/generate-candidates.mjs && node --check scripts/voice-lab/list-voices.mjs && node --check scripts/voice-lab/extract-baseline.mjs && node --check scripts/voice-lab/build.mjs && node --check scripts/voice-lab/serve.mjs && node --check scripts/voice-lab/check.mjs && node --check scripts/voice-lab/reveal.mjs && node scripts/voice-lab/check-connectors.mjs && node scripts/voice-lab/generate-candidates.mjs && node scripts/check-production-voices.mjs && node scripts/check-audio-state.mjs && node scripts/check-middleware.mjs && node scripts/check-reading-modes.mjs && node scripts/check-audio-mobile.mjs && node scripts/check-audio-sync.mjs && node scripts/check-tablet-audio.mjs && node scripts/check-arabic-speech.mjs && node scripts/check-mobile-nav-cost.mjs && node scripts/check-launch-readiness.mjs && node scripts/check-v4172-release.mjs && node scripts/generate-images.mjs && node scripts/import-bundled-azure-audio.mjs && node scripts/import-studio-audio.mjs && node scripts/generate-audio.mjs && ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/check-audio-dist.mjs && node scripts/check-dist.mjs && node scripts/check-responsive-css.mjs && node scripts/check-contrast.mjs && node scripts/check-interactions.mjs",
+    "build": "node scripts/clean-dist.mjs && node --check functions/_middleware.js && node --check public/scripts/analytics-consent.js && node --check public/scripts/audio-core.js && node --check public/scripts/article.js && node --check scripts/import-bundled-azure-audio.mjs && node --check scripts/import-studio-audio.mjs && node --check scripts/generate-audio.mjs && node --check scripts/mp3-duration.mjs && node --check scripts/check-production-voices.mjs && node --check scripts/check-audio-state.mjs && node --check scripts/check-v4172-release.mjs && node --check scripts/check-v4182-release.mjs && node --check scripts/test-openai-production-build.mjs && node --check scripts/test-gemini-production-build.mjs && node --check scripts/voice-lab/env.mjs && node --check scripts/voice-lab/providers.mjs && node --check scripts/voice-lab/generate-candidates.mjs && node --check scripts/voice-lab/list-voices.mjs && node --check scripts/voice-lab/extract-baseline.mjs && node --check scripts/voice-lab/build.mjs && node --check scripts/voice-lab/serve.mjs && node --check scripts/voice-lab/check.mjs && node --check scripts/voice-lab/reveal.mjs && node scripts/voice-lab/check-connectors.mjs && node scripts/voice-lab/generate-candidates.mjs && node scripts/check-production-voices.mjs && node scripts/check-audio-state.mjs && node scripts/check-middleware.mjs && node scripts/check-reading-modes.mjs && node scripts/check-audio-mobile.mjs && node scripts/check-audio-sync.mjs && node scripts/check-tablet-audio.mjs && node scripts/check-arabic-speech.mjs && node scripts/check-mobile-nav-cost.mjs && node scripts/check-launch-readiness.mjs && node scripts/check-v4182-release.mjs && node scripts/generate-images.mjs && node scripts/import-bundled-azure-audio.mjs && node scripts/import-studio-audio.mjs && node scripts/generate-audio.mjs && ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/check-audio-dist.mjs && node scripts/check-dist.mjs && node scripts/check-responsive-css.mjs && node scripts/check-contrast.mjs && node scripts/check-interactions.mjs",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "astro": "astro",
     "audit:dist": "node scripts/check-middleware.mjs && node scripts/check-dist.mjs && node scripts/check-responsive-css.mjs && node scripts/check-contrast.mjs && node scripts/check-interactions.mjs",
@@ -28,7 +28,9 @@
     "voice:lab:check": "node scripts/voice-lab/check.mjs",
     "voice:lab:serve": "node scripts/voice-lab/serve.mjs",
     "voice:lab:reveal": "node scripts/voice-lab/reveal.mjs",
-    "voice:lab": "npm run generate:audio && npm run voice:lab:baseline && npm run voice:lab:build && npm run voice:lab:check"
+    "voice:lab": "npm run generate:audio && npm run voice:lab:baseline && npm run voice:lab:build && npm run voice:lab:check",
+    "audit:v4182": "node scripts/check-v4182-release.mjs",
+    "plan:audio:gemini:all": "BAREEQ_TTS_PROVIDER=gemini node scripts/generate-audio.mjs --plan"
   },
   "dependencies": {
     "@fontsource/cairo": "5.3.0",

@@ -16,12 +16,10 @@ const expected = provider === 'azure'
     ? { name: 'Google Gemini API', model: 'gemini-3.1-flash-tts-preview', language: 'ar', format: 'audio-48khz-96kbitrate-mono-mp3', voices: [['sadaltager', 'Sadaltager']] }
     : provider === 'openai' ? { name: 'OpenAI', model: 'gpt-4o-mini-tts-2025-12-15', language: 'ar', format: 'mp3', voices: [['cedar', 'cedar'], ['marin', 'marin']] } : null;
 const studioMap = JSON.parse(await readFile(path.join(root, 'scripts', 'studio-audio-map.json'), 'utf8'));
-const requiredStudioArticles = new Set(['bundled', 'openai'].includes(provider) ? Object.values(studioMap.imports || {}).map((item) => item.articleId) : []);
+const requiredStudioArticles = new Set(['bundled', 'openai', 'gemini'].includes(provider) ? Object.values(studioMap.imports || {}).map((item) => item.articleId) : []);
 const bundledMap = JSON.parse(await readFile(path.join(root, 'scripts', 'bundled-azure-audio-map.json'), 'utf8'));
 const bundledByArticle = new Map((bundledMap.articles || []).map((item) => [item.articleId, item]));
 const requiredBundledArticles = new Set(['bundled', 'gemini'].includes(provider) ? bundledByArticle.keys() : []);
-const geminiPilotArticleId = 'عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء';
-const requiredGeminiArticles = new Set(provider === 'gemini' ? [geminiPilotArticleId] : []);
 const posts = (await readdir(postDir)).filter((name) => name.endsWith('.md')).sort();
 let totalParts = 0;
 let totalFiles = 0;
@@ -49,7 +47,7 @@ for (const name of posts) {
   const imported = manifest.version === 4 && manifest.importerVersion === 1;
   const bundled = manifest.version === 5 && manifest.importerVersion === 1;
   if (imported) {
-    if (!['bundled', 'openai'].includes(provider) || manifest.provider !== 'OpenAI' || manifest.model !== 'gpt-4o-mini-tts-2025-12-15' || manifest.language !== 'ar' || manifest.outputFormat !== 'mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'studio-block-timestamps') throw new Error(`${id}: imported Studio metadata is invalid.`);
+    if (!['bundled', 'openai', 'gemini'].includes(provider) || manifest.provider !== 'OpenAI' || manifest.model !== 'gpt-4o-mini-tts-2025-12-15' || manifest.language !== 'ar' || manifest.outputFormat !== 'mp3' || manifest.syncVersion !== 1 || manifest.syncMethod !== 'studio-block-timestamps') throw new Error(`${id}: imported Studio metadata is invalid.`);
     if (manifest.contractTest || manifest.importedRelease?.targetBareeqVersion !== 'V4.16.0' || !manifest.importedRelease?.releaseId || !hex256.test(manifest.importedRelease?.manifestSha256 || '') || !hex256.test(manifest.importedRelease?.textSha256 || '')) throw new Error(`${id}: imported release provenance is incomplete.`);
     if (manifest.defaultVoice !== 'cedar' || !Array.isArray(manifest.voices) || manifest.voices.length !== 1 || manifest.voices[0]?.id !== 'cedar' || manifest.voices[0]?.providerVoice !== 'cedar' || !(manifest.voices[0]?.totalDurationSeconds > 0)) throw new Error(`${id}: approved Studio pilot must contain the single Cedar voice.`);
     if (!requiredStudioArticles.has(id)) throw new Error(`${id}: unapproved Studio import appeared in production output.`);
@@ -63,7 +61,7 @@ for (const name of posts) {
     bundledArticles += 1;
   } else {
     if (!expected) throw new Error(`${id}: zero-cost bundled mode may not contain generated audio.`);
-    if (provider === 'gemini' && !requiredGeminiArticles.has(id)) throw new Error(`${id}: generated Gemini audio escaped the one-article pilot boundary.`);
+    // Gemini production may generate Sadaltager for any published article in V4.18.2.
     if (manifest.version !== 3 || manifest.generatorVersion !== 8 || manifest.provider !== expected.name || manifest.model !== expected.model || manifest.language !== expected.language || manifest.outputFormat !== expected.format || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') throw new Error(`${id}: generated audio metadata does not match ${expected.name}.`);
     if (Boolean(manifest.contractTest) !== (process.env.BAREEQ_TTS_CONTRACT_TEST === '1')) throw new Error(`${id}: contract-test audio escaped its explicit test boundary.`);
     if (manifest.defaultVoice !== expected.voices[0][0] || !Array.isArray(manifest.voices) || manifest.voices.length !== expected.voices.length) throw new Error(`${id}: generated audio requires exactly ${expected.voices.length} ordered listening choice(s).`);
@@ -125,8 +123,12 @@ for (const name of posts) {
 }
 
 if (['bundled', 'openai'].includes(provider) && importedArticles !== requiredStudioArticles.size) throw new Error(`Expected ${requiredStudioArticles.size} approved Studio import(s), found ${importedArticles}.`);
-if (['bundled', 'gemini'].includes(provider) && bundledArticles !== requiredBundledArticles.size) throw new Error(`Expected ${requiredBundledArticles.size} approved bundled Azure article(s), found ${bundledArticles}.`);
-if (provider === 'gemini' && generatedArticles !== requiredGeminiArticles.size) throw new Error(`Expected ${requiredGeminiArticles.size} Gemini pilot article(s), found ${generatedArticles}.`);
+if (provider === 'bundled' && bundledArticles !== requiredBundledArticles.size) throw new Error(`Expected ${requiredBundledArticles.size} approved bundled Azure article(s), found ${bundledArticles}.`);
+if (provider === 'gemini') {
+  const progressiveCoverage = generatedArticles + importedArticles + bundledArticles;
+  if (progressiveCoverage !== posts.length) throw new Error(`Gemini progressive rollout coverage is incomplete: expected ${posts.length} article(s), found ${progressiveCoverage}.`);
+  if (!generatedArticles) console.warn('⚠ Gemini rollout is currently using approved Cedar/Hamed fallback for all articles; a later deployment can continue Sadaltager generation.');
+}
 if (!checkedArticles) throw new Error('No production audio article was audited.');
 if (!allowPartial && checkedArticles !== posts.length) throw new Error(`Expected audio for all ${posts.length} articles, audited ${checkedArticles}.`);
 
