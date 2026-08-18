@@ -24,7 +24,36 @@ await patchFile('public/_redirects', (source) => {
 await patchFile('src/lib/posts.ts', (source) => {
   if (source.includes('const primary = ranked')) return source;
   const oldFn = /export function getRelatedPosts\([\s\S]*?\n}\n\nexport function absoluteUrl/;
-  const newFn = `export function getRelatedPosts(post: Post, posts: Post[], limit = 3): Post[] {\n  const ranked = posts\n    .filter((candidate) => candidate.id !== post.id)\n    .map((candidate) => {\n      const sharedTags = candidate.data.tags.filter((tag) => post.data.tags.includes(tag)).length;\n      const sameSeries = Boolean(post.data.seriesSlug && candidate.data.seriesSlug === post.data.seriesSlug);\n      const sameCategory = candidate.data.categorySlug === post.data.categorySlug;\n      const intentScore = (sameSeries ? 8 : 0) + (sharedTags * 3) + (sameCategory ? 1 : 0);\n      return { candidate, sharedTags, sameSeries, sameCategory, intentScore };\n    });\n  const primary = ranked\n    .filter(({ sharedTags, sameSeries }) => sameSeries || sharedTags > 0)\n    .sort((a,b) => b.intentScore-a.intentScore || b.candidate.data.publishedAt.valueOf()-a.candidate.data.publishedAt.valueOf());\n  const selected = primary.map(({candidate})=>candidate);\n  if (selected.length < limit) {\n    for (const { candidate } of ranked.filter(x=>x.sameCategory).sort((a,b)=>b.candidate.data.publishedAt.valueOf()-a.candidate.data.publishedAt.valueOf())) {\n      if (!selected.some(x=>x.id===candidate.id)) selected.push(candidate);\n      if (selected.length>=limit) break;\n    }\n  }\n  if (selected.length < limit) {\n    for (const { candidate } of ranked.sort((a,b)=>b.candidate.data.publishedAt.valueOf()-a.candidate.data.publishedAt.valueOf())) {\n      if (!selected.some(x=>x.id===candidate.id)) selected.push(candidate);\n      if (selected.length>=limit) break;\n    }\n  }\n  return selected.slice(0,limit);\n}\n\nexport function absoluteUrl`;
+  const newFn = `export function getRelatedPosts(post: Post, posts: Post[], limit = 3): Post[] {
+  const ranked = posts
+    .filter((candidate) => candidate.id !== post.id)
+    .map((candidate) => {
+      const sharedTags = candidate.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
+      const sameSeries = Boolean(post.data.seriesSlug && candidate.data.seriesSlug === post.data.seriesSlug);
+      const sameCategory = candidate.data.categorySlug === post.data.categorySlug;
+      const intentScore = (sameSeries ? 8 : 0) + (sharedTags * 3) + (sameCategory ? 1 : 0);
+      return { candidate, sharedTags, sameSeries, sameCategory, intentScore };
+    });
+  const primary = ranked
+    .filter(({ sharedTags, sameSeries }) => sameSeries || sharedTags > 0)
+    .sort((a,b) => b.intentScore-a.intentScore || b.candidate.data.publishedAt.valueOf()-a.candidate.data.publishedAt.valueOf());
+  const selected = primary.map(({candidate})=>candidate);
+  if (selected.length < limit) {
+    for (const { candidate } of ranked.filter(x=>x.sameCategory).sort((a,b)=>b.candidate.data.publishedAt.valueOf()-a.candidate.data.publishedAt.valueOf())) {
+      if (!selected.some(x=>x.id===candidate.id)) selected.push(candidate);
+      if (selected.length>=limit) break;
+    }
+  }
+  if (selected.length < limit) {
+    for (const { candidate } of ranked.sort((a,b)=>b.candidate.data.publishedAt.valueOf()-a.candidate.data.publishedAt.valueOf())) {
+      if (!selected.some(x=>x.id===candidate.id)) selected.push(candidate);
+      if (selected.length>=limit) break;
+    }
+  }
+  return selected.slice(0,limit);
+}
+
+export function absoluteUrl`;
   if (!oldFn.test(source)) throw new Error('V4.19: getRelatedPosts patch anchor missing.');
   return source.replace(oldFn, newFn);
 });
@@ -32,7 +61,10 @@ await patchFile('src/lib/posts.ts', (source) => {
 await patchFile('src/components/Header.astro', (source) => {
   if (source.includes('data-reading-list-count')) return source;
   const needle = '<div class="header-actions">';
-  const add = `<div class="header-actions">\n        <a class="icon-button reading-list-link" href="/saved/" aria-label="محفوظات القراءة" title="محفوظات القراءة">\n          <span aria-hidden="true">🔖</span><span class="reading-list-count" data-reading-list-count hidden>0</span>\n        </a>`;
+  const add = `<div class="header-actions">
+        <a class="icon-button reading-list-link" href="/saved/" aria-label="محفوظات القراءة" title="محفوظات القراءة">
+          <span aria-hidden="true">🔖</span><span class="reading-list-count" data-reading-list-count hidden>0</span>
+        </a>`;
   if (!source.includes(needle)) throw new Error('V4.19: Header patch anchor missing.');
   return source.replace(needle, add);
 });
@@ -40,14 +72,16 @@ await patchFile('src/components/Header.astro', (source) => {
 await patchFile('src/pages/posts/[id].astro', (source) => {
   if (!source.includes('data-save-post')) {
     const anchor = '<div class="share-box">';
-    const add = `<button class="save-reading-button" type="button" data-save-post data-post-id={post.id} aria-pressed="false"><span aria-hidden="true">🔖</span> <span data-save-label>حفظ للقراءة لاحقًا</span></button>\n      <div class="share-box">`;
+    const add = `<button class="save-reading-button" type="button" data-save-post data-post-id={post.id} aria-pressed="false"><span aria-hidden="true">🔖</span> <span data-save-label>حفظ للقراءة لاحقًا</span></button>
+      <div class="share-box">`;
     if (!source.includes(anchor)) throw new Error('V4.19: Article save-button anchor missing.');
     source = source.replace(anchor, add);
   }
   if (!source.includes('/scripts/reading-list.js')) {
     const anchor = '<script is:inline src="/scripts/article.js"></script>';
     if (!source.includes(anchor)) throw new Error('V4.19: Article script anchor missing.');
-    source = source.replace(anchor, `${anchor}\n  <script is:inline src="/scripts/reading-list.js"></script>`);
+    source = source.replace(anchor, `${anchor}
+  <script is:inline src="/scripts/reading-list.js"></script>`);
   }
   return source;
 });
@@ -55,8 +89,21 @@ await patchFile('src/pages/posts/[id].astro', (source) => {
 await patchFile('scripts/generate-audio.mjs', (source) => {
   source = source.replace("const USER_AGENT = 'Bareeq-Audio-Builder/4.18.2';", "const USER_AGENT = 'Bareeq-Audio-Builder/4.19.0';");
   if (!source.includes('BAREEQ_TTS_INCLUDE_IDS')) {
-    const old = `const posts = await loadPosts();\nconst synthesisPosts = PROVIDER === 'gemini'\n  ? posts\n  : PROVIDER === 'openai'\n    ? posts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id))\n    : posts;`;
-    const repl = `const posts = await loadPosts();\nconst INCLUDE_IDS = new Set((process.env.BAREEQ_TTS_INCLUDE_IDS || '').split(',').map((value) => value.trim()).filter(Boolean));\nconst providerPosts = INCLUDE_IDS.size ? posts.filter((post) => INCLUDE_IDS.has(post.id)) : posts;\nif (INCLUDE_IDS.size && providerPosts.length !== INCLUDE_IDS.size) throw new Error('BAREEQ_TTS_INCLUDE_IDS contains unknown or draft article id(s).');\nconst synthesisPosts = PROVIDER === 'gemini'\n  ? providerPosts\n  : PROVIDER === 'openai'\n    ? providerPosts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id))\n    : providerPosts;`;
+    const old = `const posts = await loadPosts();
+const synthesisPosts = PROVIDER === 'gemini'
+  ? posts
+  : PROVIDER === 'openai'
+    ? posts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id))
+    : posts;`;
+    const repl = `const posts = await loadPosts();
+const INCLUDE_IDS = new Set((process.env.BAREEQ_TTS_INCLUDE_IDS || '').split(',').map((value) => value.trim()).filter(Boolean));
+const providerPosts = INCLUDE_IDS.size ? posts.filter((post) => INCLUDE_IDS.has(post.id)) : posts;
+if (INCLUDE_IDS.size && providerPosts.length !== INCLUDE_IDS.size) throw new Error('BAREEQ_TTS_INCLUDE_IDS contains unknown or draft article id(s).');
+const synthesisPosts = PROVIDER === 'gemini'
+  ? providerPosts
+  : PROVIDER === 'openai'
+    ? providerPosts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id))
+    : providerPosts;`;
     if (!source.includes(old)) throw new Error('V4.19: audio selector patch anchor missing.');
     source = source.replace(old, repl);
   }
@@ -71,12 +118,12 @@ await patchFile('scripts/generate-audio.mjs', (source) => {
 
 await patchFile('scripts/import-bundled-azure-audio.mjs', (source) => {
   if (!source.includes('BAREEQ_BUNDLED_SKIP_IDS')) {
-    const anchor = "const BUNDLED"; // marker only to force failure on a radically different file
     if (!source.includes("const ROOT = process.cwd();")) throw new Error('V4.19: bundled importer base marker missing.');
     source = source.replace("const ROOT = process.cwd();", "const ROOT = process.cwd();\nconst SKIP_IDS = new Set((process.env.BAREEQ_BUNDLED_SKIP_IDS || '').split(',').map((value) => value.trim()).filter(Boolean));");
     const loop = "for (const config of lock.articles) {";
     if (!source.includes(loop)) throw new Error('V4.19: bundled importer loop anchor missing.');
-    source = source.replace(loop, `${loop}\n  if (SKIP_IDS.has(config.articleId)) { console.log(\`↷ ${'${config.articleId}'}: skipped stale bundled Hamed; V4.19 will regenerate matching Hamed.\`); continue; }`);
+    source = source.replace(loop, `${loop}
+  if (SKIP_IDS.has(config.articleId)) { console.log(\`↷ \${config.articleId}: skipped stale bundled Hamed; V4.19 will regenerate matching Hamed.\`); continue; }`);
   }
   return source;
 });
@@ -87,7 +134,8 @@ await patchFile('scripts/import-studio-audio.mjs', (source) => {
     source = source.replace("const ROOT = process.cwd();", "const ROOT = process.cwd();\nconst SKIP_IDS = new Set((process.env.BAREEQ_STUDIO_SKIP_IDS || '').split(',').map((value) => value.trim()).filter(Boolean));");
     const loop = "for (const [studioPathId, config] of Object.entries(mapping.imports)) {";
     if (!source.includes(loop)) throw new Error('V4.19: studio importer loop anchor missing.');
-    source = source.replace(loop, `${loop}\n  if (SKIP_IDS.has(config.articleId)) { console.log(\`↷ ${'${config.articleId}'}: skipped stale Studio fallback; V4.19 will regenerate matching Hamed.\`); continue; }`);
+    source = source.replace(loop, `${loop}
+  if (SKIP_IDS.has(config.articleId)) { console.log(\`↷ \${config.articleId}: skipped stale Studio fallback; V4.19 will regenerate matching Hamed.\`); continue; }`);
     source = source.replace("assert(importedCount > 0 || !(await exists(RELEASES_ROOT)), 'No approved Studio audio release was imported.');", "assert(importedCount > 0 || SKIP_IDS.size > 0 || !(await exists(RELEASES_ROOT)), 'No approved Studio audio release was imported.');");
   }
   return source;
@@ -98,6 +146,12 @@ const ov = JSON.parse(await readFile(ovPath, 'utf8'));
 ov.articles ||= {};
 ov.articles['intuition-first-impression-decisions-signature'] = [{from:'عرفت',to:'عَرَفْتَ'},{from:'كنت',to:'كُنْتَ'},{from:'شعرت',to:'شَعَرْتَ'}];
 ov.articles['اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا'] = [{from:'كنت',to:'كُنْتَ'}];
+
+const passionId = 'لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون';
+ov.articles[passionId] = Array.isArray(ov.articles[passionId]) ? ov.articles[passionId] : [];
+if (!ov.articles[passionId].some((item) => item?.from === 'إذا كنت حائرًا')) {
+  ov.articles[passionId].push({ from: 'إذا كنت حائرًا', to: 'إذا كُنْتَ حائرًا' });
+}
 await writeFile(ovPath, JSON.stringify(ov, null, 2) + '\n');
 
 const reviewPath = 'scripts/speech-review.json';
@@ -108,16 +162,20 @@ for (const id of changed) {
   if (!m) throw new Error(`V4.19: invalid post ${id}`);
   const body = m[1].replace(/\r\n/g, '\n').trim();
   const previous = review.articles[id] || {};
-  review.articles[id] = { bodyHash: sha(body), checks: Array.isArray(previous.checks) ? previous.checks : [] };
+  const currentChecks = Array.isArray(previous.checks)
+    ? previous.checks.filter((check) => typeof check?.from === 'string' && body.includes(check.from))
+    : [];
+  review.articles[id] = { bodyHash: sha(body), checks: currentChecks };
 }
 review.articles['intuition-first-impression-decisions-signature'].checks = [{from:'عرفت',to:'عَرَفْتَ'},{from:'كنت',to:'كُنْتَ'},{from:'شعرت',to:'شَعَرْتَ'}];
 review.articles['اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا'].checks = [{from:'كنت',to:'كُنْتَ'}];
+
+const passionReview = review.articles[passionId];
+if (passionReview && !passionReview.checks.some((check) => check?.from === 'إذا كنت حائرًا')) {
+  passionReview.checks.push({ from: 'إذا كنت حائرًا', to: 'إذا كُنْتَ حائرًا' });
+}
 await writeFile(reviewPath, JSON.stringify(review, null, 2) + '\n');
 
-
-// V4.19 inherits the mature launch-readiness audit from V4.18.2.
-// Refresh only the two assertions whose source contract deliberately changed:
-// package version and related-post fallback for a still-small article library.
 await patchFile('scripts/check-launch-readiness.mjs', (source) => {
   const oldVersion = "if (pkg.version !== '4.18.2') failures.push(`Expected package version 4.18.2, got ${pkg.version}`);";
   const newVersion = "if (pkg.version !== '4.19.0') failures.push(`Expected package version 4.19.0, got ${pkg.version}`);";
