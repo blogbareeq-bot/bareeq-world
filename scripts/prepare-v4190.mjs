@@ -13,9 +13,10 @@ async function patchFile(file, mutate) {
 }
 
 await patchFile('public/_redirects', (source) => {
+  source = source.replace(/ 301!/g, ' 301');
   const rules = [
-    '/posts/%D8%A7%D9%84%D8%AA%D8%B6%D8%AE%D9%85-%D8%A7%D9%84%D9%85%D8%A7%D9%84%D9%8A-%D8%A8%D8%A8%D8%B3%D8%A7%D8%B7%D8%A9/ /posts/altadakhom-explained-simply/ 301!',
-    '/posts/%D8%A7%D9%84%D9%84%D8%BA%D8%A9-%D9%86%D9%81%D9%88%D8%B0-%D8%AC%D9%8A%D9%88%D8%B3%D9%8A%D8%A7%D8%B3%D9%8A/ /posts/language-soft-power-politics/ 301!'
+    '/posts/%D8%A7%D9%84%D8%AA%D8%B6%D8%AE%D9%85-%D8%A7%D9%84%D9%85%D8%A7%D9%84%D9%8A-%D8%A8%D8%A8%D8%B3%D8%A7%D8%B7%D8%A9/ /posts/altadakhom-explained-simply/ 301',
+    '/posts/%D8%A7%D9%84%D9%84%D8%BA%D8%A9-%D9%86%D9%81%D9%88%D8%B0-%D8%AC%D9%8A%D9%88%D8%B3%D9%8A%D8%A7%D8%B3%D9%8A/ /posts/language-soft-power-politics/ 301'
   ];
   for (const rule of rules) if (!source.includes(rule)) source = `# V4.19.0 canonical post redirects\n${rule}\n${source}`;
   return source;
