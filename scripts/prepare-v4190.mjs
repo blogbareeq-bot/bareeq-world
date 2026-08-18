@@ -149,9 +149,8 @@ ov.articles['اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-�
 
 const passionId = 'لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون';
 ov.articles[passionId] = Array.isArray(ov.articles[passionId]) ? ov.articles[passionId] : [];
-if (!ov.articles[passionId].some((item) => item?.from === 'إذا كنت حائرًا')) {
-  ov.articles[passionId].push({ from: 'إذا كنت حائرًا', to: 'إذا كُنْتَ حائرًا' });
-}
+ov.articles[passionId] = ov.articles[passionId].filter((item) => item?.from !== 'إذا كنت حائرًا' && item?.from !== 'كنت');
+ov.articles[passionId].push({ from: 'كنت', to: 'كُنْتَ' });
 await writeFile(ovPath, JSON.stringify(ov, null, 2) + '\n');
 
 const reviewPath = 'scripts/speech-review.json';
@@ -171,8 +170,9 @@ review.articles['intuition-first-impression-decisions-signature'].checks = [{fro
 review.articles['اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا'].checks = [{from:'كنت',to:'كُنْتَ'}];
 
 const passionReview = review.articles[passionId];
-if (passionReview && !passionReview.checks.some((check) => check?.from === 'إذا كنت حائرًا')) {
-  passionReview.checks.push({ from: 'إذا كنت حائرًا', to: 'إذا كُنْتَ حائرًا' });
+if (passionReview) {
+  passionReview.checks = passionReview.checks.filter((check) => check?.from !== 'إذا كنت حائرًا' && check?.from !== 'كنت');
+  passionReview.checks.push({ from: 'كنت', to: 'كُنْتَ' });
 }
 await writeFile(reviewPath, JSON.stringify(review, null, 2) + '\n');
 
