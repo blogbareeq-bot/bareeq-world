@@ -141,6 +141,50 @@ await patchFile('scripts/import-studio-audio.mjs', (source) => {
   return source;
 });
 
+
+// V4.19 Hotfix 6: final production-content audit fixes.
+// Add contextual internal links without changing the reader-visible/spoken wording,
+// and fix the Saved Reading page heading hierarchy + meta-description length.
+const contextualLinks = [
+  {
+    file: 'src/content/posts/intuition-first-impression-decisions-signature.md',
+    plain: 'أخطاء منتظمة',
+    linked: '[أخطاء منتظمة](/posts/اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا/)'
+  },
+  {
+    file: 'src/content/posts/اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا.md',
+    plain: 'التحيز المعرفي',
+    linked: '[التحيز المعرفي](/posts/intuition-first-impression-decisions-signature/)'
+  },
+  {
+    file: 'src/content/posts/كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار.md',
+    plain: 'القرار الجيد',
+    linked: '[القرار الجيد](/posts/intuition-first-impression-decisions-signature/)'
+  }
+];
+
+for (const item of contextualLinks) {
+  await patchFile(item.file, (source) => {
+    if (source.includes(item.linked)) return source;
+    if (!source.includes(item.plain)) throw new Error(`V4.19 Hotfix 6: contextual-link anchor missing in ${item.file}: ${item.plain}`);
+    return source.replace(item.plain, item.linked);
+  });
+}
+
+await patchFile('src/pages/saved.astro', (source) => {
+  const oldDescription = 'description="مقالات حفظتها للعودة إليها لاحقًا على هذا الجهاز."';
+  const newDescription = 'description="محفوظات القراءة في بريق: احتفظ بالمقالات التي تريد العودة إليها لاحقًا على هذا الجهاز بسهولة وخصوصية."';
+  if (source.includes(oldDescription)) source = source.replace(oldDescription, newDescription);
+  else if (!source.includes(newDescription)) throw new Error('V4.19 Hotfix 6: saved-page description anchor missing.');
+
+  const oldCard = '<PostCard post={post} />';
+  const newCard = '<PostCard post={post} headingLevel="h2" />';
+  if (source.includes(oldCard)) source = source.replace(oldCard, newCard);
+  else if (!source.includes(newCard)) throw new Error('V4.19 Hotfix 6: saved-page PostCard heading anchor missing.');
+
+  return source;
+});
+
 const ovPath = 'scripts/speech-overrides.json';
 const ov = JSON.parse(await readFile(ovPath, 'utf8'));
 ov.articles ||= {};
