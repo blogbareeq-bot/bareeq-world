@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 
 const generator = await readFile('scripts/generate-audio.mjs', 'utf8');
 const client = await readFile('public/scripts/article.js', 'utf8');
@@ -10,7 +10,7 @@ const overrides = JSON.parse(await readFile('scripts/speech-overrides.json', 'ut
 for (const needle of ['extractSpeechSegments', 'buildAudioParts', 'syncMethod: \'paragraph-weighted\'', 'speech-overrides.json', '<p>${body}', 'sync: audioPart.sync']) {
   if (!generator.includes(needle)) throw new Error(`Audio generator is missing synchronization safeguard: ${needle}`);
 }
-for (const needle of ['buildSyncTargets', 'Number.isInteger(entry.ordinal)', 'syncTextToAudio', 'is-audio-active', 'smartScrollTo', 'data-audio-current', "audio?.addEventListener('timeupdate'", 'stopAudio', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'readInlineManifest', 'nativeFallbackButton', 'PLAY_START_TIMEOUT_MS', 'switchVoice', 'saveProgress', "seekInput?.addEventListener('change'"]) {
+for (const needle of ['buildSyncTargets', 'Number.isInteger(entry.ordinal)', 'syncTextToAudio', 'is-audio-active', 'smartScrollTo', 'data-audio-current', "audio?.addEventListener('timeupdate'", 'stopAudio', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'readInlineManifest', 'nativeFallbackButton', 'PLAY_START_TIMEOUT_MS', 'switchVoice', 'saveProgress', "seekInput?.addEventListener('change')"]) {
   if (!client.includes(needle)) throw new Error(`Article client is missing synchronized-reading behavior: ${needle}`);
 }
 for (const needle of ['data-audio-stop', 'data-audio-voice', 'data-audio-seek', 'تتبّع الفقرة', 'tabindex="-1"']) {
@@ -23,9 +23,20 @@ if (!Array.isArray(overrides.global) || !overrides.global.length || typeof overr
   throw new Error('speech-overrides.json must define global and per-article pronunciation corrections.');
 }
 
+const postFiles = (await readdir('src/content/posts')).filter((name) => name.endsWith('.md')).sort();
+let expectedPublishedArticles = 0;
+for (const name of postFiles) {
+  const source = await readFile(`src/content/posts/${name}`, 'utf8');
+  if (!/^draft:\s*true\s*$/mi.test(source)) expectedPublishedArticles += 1;
+}
+if (!expectedPublishedArticles) throw new Error('No published articles were found for synchronized-audio validation.');
+
 const raw = execFileSync(process.execPath, ['scripts/generate-audio.mjs', '--sync-plan'], { encoding: 'utf8', maxBuffer: 2 * 1024 * 1024 });
 const plan = JSON.parse(raw);
-if (!Array.isArray(plan) || plan.length !== 11) throw new Error(`Expected 11 synchronized article plans, received ${plan?.length ?? 'invalid'}.`);
+if (!Array.isArray(plan) || plan.length !== expectedPublishedArticles) {
+  throw new Error(`Expected ${expectedPublishedArticles} synchronized article plans from the published content set, received ${plan?.length ?? 'invalid'}.`);
+}
+
 let totalSegments = 0;
 let totalParts = 0;
 for (const post of plan) {
