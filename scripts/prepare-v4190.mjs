@@ -190,4 +190,90 @@ await patchFile('scripts/check-launch-readiness.mjs', (source) => {
   return source;
 });
 
+
+// V4.19 Hotfix 5: publishing must not fail merely because the remaining
+// Sadaltager rollout is larger than the per-build Gemini request ceiling.
+// Hamed has already been generated fail-closed for changed/new articles.
+// Preserve any Sadaltager restored from production, then defer new Gemini work.
+await patchFile('scripts/generate-audio.mjs', (source) => {
+  const hardStop = "if (missingRequests > GEMINI_REQUEST_HARD_LIMIT) throw new Error(`Gemini safety stop: ${missingRequests} new request(s) exceed BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD=${GEMINI_REQUEST_HARD_LIMIT}. Review --plan before deliberately raising the cap.`);";
+  const safeDefer = "if (missingRequests > GEMINI_REQUEST_HARD_LIMIT) { console.warn(`⚠ Gemini progressive rollout deferred: ${missingRequests} new request(s) exceed the ${GEMINI_REQUEST_HARD_LIMIT}-request per-build ceiling.`); console.warn('⚠ Safe fallback: matching Hamed/Cedar audio already present in this build remains publishable; unchanged Sadaltager restored from production is preserved.'); process.exit(0); }";
+  if (source.includes(hardStop)) return source.replace(hardStop, safeDefer);
+  if (!source.includes('Gemini progressive rollout deferred: ${missingRequests}')) {
+    throw new Error('V4.19 Hotfix 5: Gemini request-cap anchor missing.');
+  }
+  return source;
+});
+
+// The production audio audit must recognize freshly generated Azure Hamed as
+// an approved progressive fallback while the global rollout mode is Gemini.
+// Validation remains strict: version/model/language/format/voice metadata must
+// match the V4.19 Hamed contract exactly.
+await patchFile('scripts/check-audio-dist.mjs', (source) => {
+  if (!source.includes('let generatedAzureFallbackArticles = 0;')) {
+    const counterAnchor = 'let generatedArticles = 0;';
+    if (!source.includes(counterAnchor)) throw new Error('V4.19 Hotfix 5: audio-audit counter anchor missing.');
+    source = source.replace(counterAnchor, `${counterAnchor}\nlet generatedAzureFallbackArticles = 0;`);
+  }
+
+  if (!source.includes("const generatedAzureFallback = provider === 'gemini'")) {
+    const oldBlock = `  } else {
+    if (!expected) throw new Error(\`\${id}: zero-cost bundled mode may not contain generated audio.\`);
+    // Gemini production may generate Sadaltager for any published article in V4.18.2.
+    if (manifest.version !== 3 || manifest.generatorVersion !== 8 || manifest.provider !== expected.name || manifest.model !== expected.model || manifest.language !== expected.language || manifest.outputFormat !== expected.format || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') throw new Error(\`\${id}: generated audio metadata does not match \${expected.name}.\`);
+    if (Boolean(manifest.contractTest) !== (process.env.BAREEQ_TTS_CONTRACT_TEST === '1')) throw new Error(\`\${id}: contract-test audio escaped its explicit test boundary.\`);
+    if (manifest.defaultVoice !== expected.voices[0][0] || !Array.isArray(manifest.voices) || manifest.voices.length !== expected.voices.length) throw new Error(\`\${id}: generated audio requires exactly \${expected.voices.length} ordered listening choice(s).\`);
+    expected.voices.forEach(([voiceId, providerVoice], index) => {
+      const voice = manifest.voices[index];
+      if (voice?.id !== voiceId || voice?.providerVoice !== providerVoice || typeof voice?.label !== 'string' || !(voice.totalDurationSeconds > 0)) throw new Error(\`\${id}: invalid generated voice metadata for \${voiceId}.\`);
+    });
+    generatedArticles += 1;
+  }`;
+
+    const newBlock = `  } else {
+    const generatedAzureFallback = provider === 'gemini'
+      && manifest.version === 3
+      && manifest.generatorVersion === 8
+      && manifest.provider === 'Microsoft Azure AI Speech'
+      && manifest.model === 'Neural TTS'
+      && manifest.language === 'ar-SA'
+      && manifest.outputFormat === 'audio-48khz-96kbitrate-mono-mp3'
+      && manifest.syncVersion === 1
+      && manifest.syncMethod === 'paragraph-weighted';
+
+    if (generatedAzureFallback) {
+      if (manifest.contractTest) throw new Error(\`\${id}: contract-test Azure fallback escaped its explicit test boundary.\`);
+      if (manifest.defaultVoice !== 'hamed' || !Array.isArray(manifest.voices) || manifest.voices.length !== 1) throw new Error(\`\${id}: V4.19 Azure fallback must contain exactly one Hamed voice.\`);
+      const voice = manifest.voices[0];
+      if (voice?.id !== 'hamed' || voice?.providerVoice !== 'ar-SA-HamedNeural' || typeof voice?.label !== 'string' || !(voice.totalDurationSeconds > 0)) throw new Error(\`\${id}: invalid generated Azure Hamed fallback metadata.\`);
+      generatedAzureFallbackArticles += 1;
+    } else {
+      if (!expected) throw new Error(\`\${id}: zero-cost bundled mode may not contain generated audio.\`);
+      if (manifest.version !== 3 || manifest.generatorVersion !== 8 || manifest.provider !== expected.name || manifest.model !== expected.model || manifest.language !== expected.language || manifest.outputFormat !== expected.format || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') throw new Error(\`\${id}: generated audio metadata does not match \${expected.name}.\`);
+      if (Boolean(manifest.contractTest) !== (process.env.BAREEQ_TTS_CONTRACT_TEST === '1')) throw new Error(\`\${id}: contract-test audio escaped its explicit test boundary.\`);
+      if (manifest.defaultVoice !== expected.voices[0][0] || !Array.isArray(manifest.voices) || manifest.voices.length !== expected.voices.length) throw new Error(\`\${id}: generated audio requires exactly \${expected.voices.length} ordered listening choice(s).\`);
+      expected.voices.forEach(([voiceId, providerVoice], index) => {
+        const voice = manifest.voices[index];
+        if (voice?.id !== voiceId || voice?.providerVoice !== providerVoice || typeof voice?.label !== 'string' || !(voice.totalDurationSeconds > 0)) throw new Error(\`\${id}: invalid generated voice metadata for \${voiceId}.\`);
+      });
+      generatedArticles += 1;
+    }
+  }`;
+
+    if (!source.includes(oldBlock)) throw new Error('V4.19 Hotfix 5: generated-audio audit block anchor missing.');
+    source = source.replace(oldBlock, newBlock);
+  }
+
+  const oldCoverage = 'const progressiveCoverage = generatedArticles + importedArticles + bundledArticles;';
+  const newCoverage = 'const progressiveCoverage = generatedArticles + generatedAzureFallbackArticles + importedArticles + bundledArticles;';
+  if (source.includes(oldCoverage)) source = source.replace(oldCoverage, newCoverage);
+  else if (!source.includes(newCoverage)) throw new Error('V4.19 Hotfix 5: progressive coverage anchor missing.');
+
+  const oldSummary = '`${checkedArticles} article(s), ${generatedArticles} generated provider article(s), ${importedArticles} approved Studio import(s), ${bundledArticles} bundled Azure Hamed article(s), ${totalParts} synchronized track(s), ${totalFiles} timed MP3 file(s), no text/key leakage.`';
+  const newSummary = '`${checkedArticles} article(s), ${generatedArticles} generated provider article(s), ${generatedAzureFallbackArticles} generated Azure Hamed fallback article(s), ${importedArticles} approved Studio import(s), ${bundledArticles} bundled Azure Hamed article(s), ${totalParts} synchronized track(s), ${totalFiles} timed MP3 file(s), no text/key leakage.`';
+  if (source.includes(oldSummary)) source = source.replace(oldSummary, newSummary);
+
+  return source;
+});
+
 console.log(`V4.19.0 preparation passed: ${changed.length} changed/new article(s), stale fallback imports excluded, Hamed-first hybrid audio enabled.`);
