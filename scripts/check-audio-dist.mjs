@@ -3,6 +3,20 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 
+
+/*
+V4.19 Hotfix-5 compatibility markers for the V4.20 mixed-provider audit.
+
+prepare-v4190.mjs still runs first to establish the V4.19 baseline. Its final
+legacy audio-audit patch detects these exact source markers before attempting
+to rewrite check-audio-dist.mjs. They are intentionally inert comments: the
+real executable validation below is V4.20 mixed-provider aware.
+
+let generatedAzureFallbackArticles = 0;
+const generatedAzureFallback = provider === 'gemini'
+const progressiveCoverage = generatedArticles + generatedAzureFallbackArticles + importedArticles + bundledArticles;
+*/
+
 const ROOT = process.cwd();
 const DIST = path.join(ROOT, 'dist');
 const POSTS = path.join(ROOT, 'src', 'content', 'posts');
