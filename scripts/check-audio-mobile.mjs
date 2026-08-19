@@ -37,7 +37,38 @@ requireAll('generate-audio.mjs', generator, [
   'speech-overrides.json', 'sync: audioPart.sync', "syncMethod: 'paragraph-weighted'", "version: 3"
 ]);
 requireAll('global.css', styles, ['.audio-play{min-height:44px', '.audio-stop{min-height:44px', '.audio-voice select,.audio-speed select{min-height:44px']);
-if (!pkg.scripts?.build?.includes('node scripts/import-studio-audio.mjs') || !pkg.scripts?.build?.includes('node scripts/generate-audio.mjs') || !pkg.scripts?.build?.includes('check-audio-sync.mjs')) {
+
+const build = pkg.scripts?.build || '';
+const syncValidationPresent = build.includes('node scripts/check-audio-sync.mjs');
+const legacyAudioPipeline =
+  build.includes('node scripts/import-studio-audio.mjs') &&
+  build.includes('node scripts/generate-audio.mjs');
+const v4200OrchestratedPipeline = build.includes('node scripts/run-v4200-audio.mjs');
+
+if (!syncValidationPresent || (!legacyAudioPipeline && !v4200OrchestratedPipeline)) {
   throw new Error('Build does not import/generate/validate synchronized production audio.');
 }
-console.log('Gemini Sadaltager + Studio Cedar/Hamed rollback + optional OpenAI/Azure + synchronized mobile/tablet HTMLAudio audit passed.');
+
+if (v4200OrchestratedPipeline) {
+  const orchestrator = await readFile('scripts/run-v4200-audio.mjs', 'utf8');
+  requireAll('run-v4200-audio.mjs', orchestrator, [
+    "const OLD_CHANGED = [",
+    "const NEW_ARTICLE = 'ai-as-coworker-future-of-human-work'",
+    "const EXISTING_SADALTAGER = 'ai-agents-future-now'",
+    "runStrict('scripts/import-bundled-azure-audio.mjs'",
+    "runStrict('scripts/import-studio-audio.mjs'",
+    "runStrict('scripts/generate-audio.mjs'",
+    "BAREEQ_TTS_CACHE_ONLY: '1'",
+    "BAREEQ_TTS_PROVIDER: 'gemini'",
+    "BAREEQ_TTS_PROVIDER: 'azure'",
+    "BAREEQ_AZURE_HAMED_ONLY: '1'",
+    'hasCompleteVoice(NEW_ARTICLE',
+    'Coworker article audio ready with Gemini Sadaltager; Azure fallback was not called.',
+    'Falling back to Azure Hamed for this article only.',
+    'old audio is cache-only; coworker uses cache → Gemini Sadaltager → Azure Hamed fallback.'
+  ]);
+}
+
+console.log(v4200OrchestratedPipeline
+  ? 'V4.20 synchronized mobile/tablet HTMLAudio audit passed: orchestrated cache-only old audio + coworker Gemini→Azure fallback recognized.'
+  : 'Gemini Sadaltager + Studio Cedar/Hamed rollback + optional OpenAI/Azure + synchronized mobile/tablet HTMLAudio audit passed.');
