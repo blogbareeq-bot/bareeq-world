@@ -1,24 +1,39 @@
-# Bareeq V4.19.0 — REPLACE PACKAGE
+# Bareeq V4.20.0 — FINAL REPLACE PATCH
 
-هذه هي حزمة الاستبدال المباشر فوق V4.18.2 الحالية.
+هذه **حزمة Patch/Replace** فوق النسخة الحالية الناجحة في Cloudflare عند commit:
+`77306a99b8483f8c9656d2b4b9d409e94c26da30`
 
-## طريقة الاستخدام
-1. لا تحذف مجلد bareeq-world القديم.
-2. افتح هذا المجلد بعد فك الضغط.
-3. حدّد جميع الملفات والمجلدات الموجودة داخله.
-4. Copy.
-5. افتح: C:\Users\ahalabi\Documents\GitHub\bareeq-world
-6. Paste.
-7. اختر Replace the files in the destination عند ظهور رسالة الاستبدال.
-8. افتح GitHub Desktop وتأكد من ظهور التغييرات ثم Commit + Push.
-9. Cloudflare ينفذ prepare-v4190 تلقائيًا داخل بيئة البناء؛ لا تحتاج Node محليًا.
+لا تحذف مجلد المشروع، ولا تستبدل المستودع كاملًا.
 
-## حماية الصوت
-- المقالات الجديدة/المعدلة: Hamed/Azure أولًا من النص الجديد نفسه.
-- يتم تخطي Hamed/Cedar القديم للمقالات التي تغير نصها حتى لا يحدث تعارض.
-- بعد اكتمال Hamed المطابق، يحاول Gemini استعادة/توليد Sadaltager تدريجيًا.
-- إذا تعذر AZURE_SPEECH_KEY أو فشل Hamed للمقالات المتغيرة، يفشل البناء قبل النشر.
-- GENERATOR_VERSION لا يتغير، لذلك تظل كاشات Sadaltager الصالحة للمقالات غير المعدلة قابلة لإعادة الاستخدام.
+## طريقة التطبيق
+1. فك ضغط الحزمة.
+2. افتح مجلد `BAREEQ_V4.20.0_FINAL`.
+3. انسخ **كل محتوياته**.
+4. الصقها داخل مجلد المشروع الحالي `bareeq-world`.
+5. اختر **Replace files in the destination** عند الطلب.
+6. افتح GitHub Desktop وتأكد من ظهور الملفات المعدلة/الجديدة فقط.
+7. نفّذ Commit ثم Push مرة واحدة.
+8. اترك Cloudflare يبدأ Deployment تلقائيًا؛ لا تضغط Redeploy عدة مرات.
 
-Baseline: V4.18.2 / f2693d8a8097a30a52d8178dbcb8300c7703abd8
-Changed/new article IDs: 7
+## سياسة الصوت في V4.20.0
+
+### المقالات القديمة
+- المقالات السبعة التي تغيرت في V4.19: **Production Cache فقط**.
+- لا يُسمح بإعادة توليد Azure لها في هذا الإصدار.
+- تم إصلاح توافق استعادة manifests ذات Hamed-only التي نتجت في V4.19.
+- مقال `ai-agents-future-now` ذو Sadaltager: استعادة Gemini من Production Cache فقط.
+
+### المقال الجديد «الزميل»
+الترتيب الإلزامي:
+
+`Production Cache → Gemini Sadaltager → Azure Hamed fallback → Safety Stop`
+
+- Gemini يستهدف المقال الجديد فقط.
+- إذا وجد Gemini تسجيلًا مطابقًا في Production Cache يعاد استخدامه بلا API.
+- إذا لم يوجد، يحاول Sadaltager.
+- إذا فشل Gemini أو توقف بسبب 429/الحصة/المفتاح/الميزانية/الاستجابة، ينتقل تلقائيًا إلى Azure Hamed **للمقال الجديد وحده**.
+- Azure يحاول كاش الإنتاج أولًا قبل أي توليد جديد.
+- إذا فشل الاثنان، يفشل البناء ولا ينشر مقالًا بلا صوت متوافق.
+
+## الإصدار
+Bareeq V4.20.0 — Coworker Article & Safe Gemini→Azure Fallback

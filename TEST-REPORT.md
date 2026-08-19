@@ -1,39 +1,50 @@
-# تقرير اختبار Bareeq V4.18.2 — Full Sadaltager Rollout
+# Bareeq V4.20.0 — Test Report
 
-## النتيجة
+## Baseline
+- Source baseline: commit `77306a99b8483f8c9656d2b4b9d409e94c26da30`.
+- The user-provided Cloudflare log for that baseline completed build, audits, asset upload, and deployment successfully.
 
-تم بناء V4.18.2 من **نسخة المشروع الكاملة المرفوعة من المستخدم**، وليس من Patch. الحزمة النهائية تحتفظ بالصور وملفات Hamed/Cedar والـ11 مقالًا وجميع ملفات الموقع، مع تحويل مسار Gemini إلى Sadaltager الواحد لجميع المقالات.
+## V4.20.0 package tests executed locally
+- `node --check` — PASS for all four V4.20.0 scripts.
+- V4.20 preparation patch fixture — PASS.
+  - article body lock verified.
+  - speech-review registration verified.
+  - Hamed-only manifest compatibility patch applied.
+  - cache-only guard applied.
+  - Azure Hamed-only request/cost accounting patch applied.
+- Release-gate fixture with 13 live posts — PASS.
+- Audio orchestrator mock, Gemini success path — PASS.
+  - Gemini complete => Azure fallback not called.
+- Audio orchestrator mock, Gemini unavailable/deferred path — PASS.
+  - no complete Gemini manifest => Azure Hamed fallback called for coworker article only.
+- Production voice audit mock — PASS.
+- Coworker cover: 1600×900 WebP — verified.
+- Thumbnail source matches the cover basename — verified.
+- Coworker article contains no currently locked high-risk Arabic homographs requiring a new contextual pronunciation override.
+- ZIP integrity — verified after packaging.
 
-## اختبارات ناجحة فعليًا
+## Audio safety policy verified
+Existing audio:
+- Seven V4.19 changed articles: production-cache restore only.
+- `ai-agents-future-now` Sadaltager: production-cache restore only.
+- No old article is passed to a synthesis fallback in the V4.20 runner.
 
-- **JavaScript syntax:** نجاح `node --check` على 43 ملف JavaScript/MJS.
-- **JSON integrity:** نجاح قراءة 22 ملف JSON.
-- **خطة Gemini:** 11 مقالًا، 70 طلبًا، 80,664 حرفًا مصدريًا، وصوت Sadaltager واحد فقط.
-- **تدقيقات المصدر:** نجاح Production Voice، Audio State، Middleware، Reading Modes، Mobile Audio، Sync، Tablet، Arabic Speech QA، Mobile/Cost، Launch Readiness، وV4.18.2 Release Audit.
-- **مخزون النص المتزامن:** 11 مقالًا، 38 جزءًا منطقيًا قبل التوليد، و778 كتلة نصية متزامنة.
-- **اختبار عقد Gemini الكامل بدون اتصال مدفوع:** نجاح 70/70 طلب Sadaltager محليًا مع بنية `steps → model_output → audio` وتحويل PCM إلى MP3، ثم نجاح تدقيق 11 manifest و70 ملف MP3 مولدًا في الاختبار.
-- **اختبار 429 المستمر:** بعد استنفاد Retry، لم ينهدم البناء الصوتي؛ بقيت 11 مقالة على Cedar/Hamed المعتمد ونجح تدقيق الحالة.
-- **اختبار 429 بعد اكتمال مقال:** تم نشر مقال واحد اختباريًا بـSadaltager مع إبقاء 10 مقالات على fallback، ونجح تدقيق الحالة المختلطة.
-- **اختبار سقف الطلبات:** ضبط السقف على 69 أوقف خطة 70 طلبًا قبل أي اتصال، كما هو مقصود.
-- **اختبار Production Cache:** تمت محاكاة موقع إنتاج محلي يحوي 11 تسجيل Sadaltager؛ استعاد النظام التسجيلات الـ11 وبلغ **0 طلب توليد جديد** ثم اجتاز تدقيق الصوت.
-- **اختبار الرجوع المقفل:** استيراد 10 مقالات Hamed = 29 MP3 / 93,092,832 بايت، ثم Cedar للمقال الثقافي، ونجح تدقيق 11 مقالًا بالكامل.
-- **حماية الواجهة:** بقي حفظ موضع الاستماع 30 يومًا، seek، sync، إخفاء محدد الصوت عند وجود صوت واحد، وعدم استخدام `speechSynthesis` أو `audio.load()` غير الآمن للتابلت.
+Coworker article:
+1. Gemini provider checks production cache automatically.
+2. If no matching cache exists, Gemini Sadaltager is attempted.
+3. A complete Gemini manifest + MP3 set is required to count as success.
+4. If Gemini does not complete atomically, Azure Hamed is attempted for the coworker article only.
+5. Azure checks production cache before live synthesis.
+6. If both providers fail to leave complete audio, the build fails closed.
 
-## 429 / Cloudflare
+Estimated article partition using the production splitting rules:
+- Gemini (2400-byte request target): 10 parts / about 11.6k spoken source characters.
+- Azure Hamed fallback (6000-byte target): 4 parts / about 11.6k spoken source characters.
 
-- طلب واحد في كل مرة.
-- حد أدنى افتراضي 9000ms بين بدايات الطلبات.
-- 8 محاولات Retry افتراضيًا.
-- احترام `Retry-After` بما في ذلك القيم الكسرية، وقراءة `retryDelay` من Google، ثم Exponential Backoff + Jitter.
-- سقف 80 طلبًا جديدًا في البناء.
-- ميزانية توليد 780,000ms (13 دقيقة) لترك هامش لبقية بناء Cloudflare.
-- عند 429 مستمر أو انتهاء الميزانية: ما اكتمل يبقى Sadaltager، والباقي يحافظ على Cedar/Hamed حتى نشر لاحق.
+## Not consumed during package testing
+- No real Gemini request was sent.
+- No real Azure synthesis request was sent.
+- No Cloudflare deployment was triggered by package creation.
 
-## ما لم يُستخدم أثناء الاختبار
-
-- **لم يُستخدم مفتاح Gemini حقيقي** ولم تُستهلك الحصة المجانية أثناء إعداد الحزمة.
-- لم يُعد تشغيل `astro build` محليًا في هذا الـsandbox لأن `node_modules` غير مرفقة بالمشروع وبيئة الاختبار الحالية لا تسمح بتثبيت حزم npm. بقيت سلسلة البناء و`package-lock.json` كما هي، وسيجري Cloudflare التثبيت والبناء الفعلي بعد Push. تم تعويض ذلك بتشغيل جميع بوابات المصدر والصوت التي لا تحتاج حزم npm، بالإضافة إلى عقد Gemini الكامل واختبارات 429 والكاش.
-
-## الحكم
-
-الحزمة جاهزة **لاستبدال المصدر ورفعه إلى GitHub**. اختبار القبول النهائي للبيئة الإنتاجية هو نجاح أول Cloudflare Deployment باستخدام `GEMINI_API_KEY` المخزن كـProduction Secret؛ وإذا حدّت Google التوليد بـ429 فتصميم V4.18.2 يسمح بنشر الحالة الآمنة واستكمال الناقص في نشر لاحق بدل خسارة ما اكتمل.
+## Production acceptance
+The final acceptance test is the first Cloudflare build after one Push. Do not manually queue duplicate deployments. Review the build log before any additional redeploy.

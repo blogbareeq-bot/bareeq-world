@@ -1,21 +1,28 @@
 {
-  "release": "Bareeq V4.19.0 — Editorial Recovery & Hybrid Audio",
-  "mode": "direct-copy-replace",
-  "baselineVersion": "4.18.2",
-  "baselineCommit": "f2693d8a8097a30a52d8178dbcb8300c7703abd8",
-  "changedArticleIds": [
-    "intuition-first-impression-decisions-signature",
-    "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
-    "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
-    "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
-    "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
-    "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
-    "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون"
-  ],
+  "release": "Bareeq V4.20.0 — Coworker Article & Safe Gemini→Azure Fallback",
+  "version": "4.20.0",
+  "mode": "patch-replace-over-current-repository",
+  "baselineCommit": "77306a99b8483f8c9656d2b4b9d409e94c26da30",
+  "expectedLiveArticles": 13,
+  "newArticleId": "ai-as-coworker-future-of-human-work",
   "audioPolicy": {
-    "changedArticles": "Azure Hamed first, fail-closed",
-    "upgrade": "Gemini Sadaltager progressive",
-    "staleFallbackImports": "skipped for changed IDs"
+    "existingChangedArticles": "production-cache-only",
+    "existingSadaltagerArticle": "production-cache-only",
+    "coworker": [
+      "production-provider-cache",
+      "gemini-sadaltager",
+      "azure-hamed-fallback",
+      "fail-closed"
+    ],
+    "azureFallbackScope": "ai-as-coworker-future-of-human-work only"
   },
-  "localNodeRequired": false
+  "analytics": {
+    "measurementId": "G-N3NQMF7RHN",
+    "policy": "preserve existing consent-aware loader; do not duplicate gtag"
+  },
+  "estimatedCoworkerAudioPlan": {
+    "geminiParts": 10,
+    "azureHamedParts": 4,
+    "spokenCharactersApprox": 11600
+  }
 }
