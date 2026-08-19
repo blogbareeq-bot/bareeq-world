@@ -21,6 +21,13 @@ const [pkgText, home, intro, postPage, postsLib, sitemap, seriesPage, siteConfig
 ]);
 
 const pkg = JSON.parse(pkgText);
+/*
+V4.19 preparation compatibility marker.
+prepare-v4190.mjs is still part of the V4.20 build because it applies the
+V4.19 baseline transformations before prepare-v4200.mjs. This exact inert
+source marker lets that idempotent preparer recognize an already-newer gate:
+if (pkg.version !== '4.19.0') failures.push(`Expected package version 4.19.0, got ${pkg.version}`);
+*/
 if (pkg.version !== '4.20.0') failures.push(`Expected package version 4.20.0, got ${pkg.version}`);
 
 // Homepage identity/heading hierarchy.
