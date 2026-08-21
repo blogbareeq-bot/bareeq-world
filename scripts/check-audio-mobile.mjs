@@ -46,8 +46,9 @@ const legacyAudioPipeline =
   build.includes('node scripts/generate-audio.mjs');
 const v4200OrchestratedPipeline = build.includes('node scripts/run-v4200-audio.mjs');
 const v4210OrchestratedPipeline = build.includes('node scripts/run-v4210-audio.mjs');
+const v4211OrchestratedPipeline = build.includes('node scripts/run-v4211-audio.mjs');
 
-if (!syncValidationPresent || (!legacyAudioPipeline && !v4200OrchestratedPipeline && !v4210OrchestratedPipeline)) {
+if (!syncValidationPresent || (!legacyAudioPipeline && !v4200OrchestratedPipeline && !v4210OrchestratedPipeline && !v4211OrchestratedPipeline)) {
   throw new Error('Build does not import/generate/validate synchronized production audio.');
 }
 
@@ -84,8 +85,25 @@ if (v4210OrchestratedPipeline) {
   ]);
 }
 
-console.log(v4210OrchestratedPipeline
-  ? 'V4.21 synchronized mobile/tablet HTMLAudio audit passed: lazy manifest, direct seek-to-text, inactive Cloud TTS gate, 11 pending + 2 retained boundary recognized.'
+if (v4211OrchestratedPipeline) {
+  const orchestrator = await readFile('scripts/run-v4211-audio.mjs', 'utf8');
+  requireAll('run-v4211-audio.mjs', orchestrator, [
+    "process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1'",
+    'BAREEQ_GEMINI_FREE_ROLLOUT',
+    'BAREEQ_GEMINI_FREE_ARTICLES_PER_BUILD',
+    "BAREEQ_TTS_CACHE_ALLOW_MISSING: '1'",
+    'BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD',
+    "BAREEQ_TTS_PROVIDER: 'gemini'",
+    "BAREEQ_TTS_PROVIDER: 'google-cloud'",
+    'PENDING_CLOUD.join',
+    'exactly one unresolved article atomically',
+  ]);
+}
+
+console.log(v4211OrchestratedPipeline
+  ? 'V4.21.1 synchronized mobile/tablet HTMLAudio audit passed: lazy manifest, one-article Gemini free-tier progression, paid Cloud lock, and 11 pending + 2 retained boundary recognized.'
+  : v4210OrchestratedPipeline
+    ? 'V4.21 synchronized mobile/tablet HTMLAudio audit passed: lazy manifest, direct seek-to-text, inactive Cloud TTS gate, 11 pending + 2 retained boundary recognized.'
   : v4200OrchestratedPipeline
     ? 'V4.20 synchronized mobile/tablet HTMLAudio audit passed: orchestrated cache-only old audio + coworker Gemini→Azure fallback recognized.'
     : 'Gemini Sadaltager + Studio Cedar/Hamed rollback + optional OpenAI/Azure + synchronized mobile/tablet HTMLAudio audit passed.');

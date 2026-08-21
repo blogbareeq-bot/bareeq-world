@@ -38,7 +38,8 @@ const allowedSync = new Set(['paragraph-weighted', 'paragraph-weighted-legacy', 
 const cloudActivated = process.env.BAREEQ_CLOUD_TTS_ACTIVATE === '1';
 
 const pkg = JSON.parse(await readFile(path.join(ROOT, 'package.json'), 'utf8'));
-if (!['4.20.0', '4.21.0'].includes(pkg.version)) throw new Error(`Audio-dist audit expected package 4.20.0 baseline or 4.21.0 successor, got ${pkg.version}.`);
+if (!['4.20.0', '4.21.0', '4.21.1'].includes(pkg.version)) throw new Error(`Audio-dist audit expected package 4.20.0 baseline or supported 4.21.x successor, got ${pkg.version}.`);
+const freeGeminiRollout = pkg.version === '4.21.1' && process.env.BAREEQ_GEMINI_FREE_ROLLOUT !== '0';
 
 const postFiles = (await readdir(POSTS)).filter((name) => name.endsWith('.md')).sort();
 const published = [];
@@ -134,7 +135,7 @@ for (const id of published) {
   if (id === EXISTING_SADALTAGER && providerKind !== 'Gemini Sadaltager') {
     throw new Error(`${id}: existing Sadaltager production cache was not preserved.`);
   }
-  if (!cloudActivated && OLD_HAMED_CACHE_ONLY.has(id) && providerKind !== 'Generated Hamed') {
+  if (!cloudActivated && OLD_HAMED_CACHE_ONLY.has(id) && providerKind !== 'Generated Hamed' && !(freeGeminiRollout && providerKind === 'Gemini Sadaltager')) {
     throw new Error(`${id}: protected V4.19 article is no longer the Hamed-only production cache.`);
   }
   if (id === NEW_ARTICLE && !['Gemini Sadaltager', 'Generated Hamed'].includes(providerKind)) {
@@ -219,6 +220,17 @@ async function collect(dir) {
 }
 await collect(DIST);
 
+for (const relative of ['about/index.html', 'contact/index.html', 'terms/index.html']) {
+  const html = await readFile(path.join(DIST, relative), 'utf8');
+  if (!html.includes('<!--email_off-->') || !html.includes('<!--/email_off-->') || !html.includes('mailto:blogbareeq@gmail.com')) {
+    throw new Error(`${relative}: Cloudflare email-obfuscation exclusion or confirmed mailto link is missing from built HTML.`);
+  }
+}
+for (const file of textFiles) {
+  const text = await readFile(file, 'utf8').catch(() => '');
+  if (text.includes('/cdn-cgi/l/email-protection')) throw new Error(`Cloudflare email-protection 404 path leaked into ${path.relative(DIST, file)}.`);
+}
+
 const secretNames = ['GEMINI_API_KEY', 'OPENAI_API_KEY', 'AZURE_SPEECH_KEY', 'GOOGLE_SERVICE_ACCOUNT_JSON', 'GOOGLE_CLOUD_ACCESS_TOKEN'];
 const secrets = [process.env.GEMINI_API_KEY?.trim(), process.env.OPENAI_API_KEY?.trim(), process.env.AZURE_SPEECH_KEY?.trim(), process.env.GOOGLE_SERVICE_ACCOUNT_JSON?.trim(), process.env.GOOGLE_CLOUD_ACCESS_TOKEN?.trim()]
   .filter((value) => value?.length >= 12);
@@ -229,4 +241,4 @@ for (const file of textFiles) {
 }
 
 const summary = [...providerCounts.entries()].map(([name, count]) => `${name}=${count}`).join(', ');
-console.log(`V4.21 mixed production audio audit passed: 13/13 articles, ${totalParts} synchronized parts, ${totalFiles} verified MP3 files; ${summary}; lazy provider metadata and no secret leakage.`);
+console.log(`V4.21.1 mixed production audio audit passed: 13/13 articles, ${totalParts} synchronized parts, ${totalFiles} verified MP3 files; ${summary}; lazy provider metadata and no secret leakage.`);

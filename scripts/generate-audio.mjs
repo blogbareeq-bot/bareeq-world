@@ -87,6 +87,8 @@ const SPEECH_QA_JSON = process.argv.includes('--speech-qa-json') || process.argv
 const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-output='))?.slice('--speech-qa-output='.length) || '';
 const ALLOW_PARTIAL = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
 const CACHE_ONLY = process.env.BAREEQ_TTS_CACHE_ONLY === '1';
+const CACHE_ALLOW_MISSING = process.env.BAREEQ_TTS_CACHE_ALLOW_MISSING === '1';
+const MAX_MISSING_ARTICLES_PER_BUILD = Number(process.env.BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD || '0');
 const MAX_REQUEST_BYTES = PROVIDER === 'gemini' ? Number(process.env.GEMINI_TTS_MAX_REQUEST_BYTES || '2400') : PROVIDER === 'google-cloud' ? Number(process.env.GOOGLE_CLOUD_TTS_MAX_REQUEST_BYTES || '3200') : PROVIDER === 'azure' ? 6000 : 4800;
 const MIN_SYNTHESIS_INTERVAL_MS = Number(PROVIDER === 'gemini' ? (process.env.GEMINI_TTS_MIN_INTERVAL_MS || '9000') : PROVIDER === 'google-cloud' ? (process.env.GOOGLE_CLOUD_TTS_MIN_INTERVAL_MS || '500') : PROVIDER === 'openai' ? (process.env.OPENAI_TTS_MIN_INTERVAL_MS || '200') : PROVIDER === 'azure' ? (process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200') : '0');
 const GENERATOR_VERSION = 8;
@@ -106,7 +108,7 @@ const OPENAI_AUDIO_TOKENS_PER_SECOND = Number(process.env.OPENAI_TTS_AUDIO_TOKEN
 const FFMPEG_PATH = process.env.FFMPEG_PATH?.trim() || ffmpegInstaller?.path || 'ffmpeg';
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.21.0';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.21.1';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
 const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
@@ -393,6 +395,8 @@ const GEMINI_SYNTHESIS_BUDGET_MS = Number(process.env.BAREEQ_GEMINI_SYNTHESIS_BU
 if (!Number.isFinite(MAX_FETCH_RETRIES) || MAX_FETCH_RETRIES < 0) throw new Error('BAREEQ_TTS_MAX_RETRIES must be zero or a positive number.');
 if (!Number.isFinite(GEMINI_REQUEST_HARD_LIMIT) || GEMINI_REQUEST_HARD_LIMIT < 1) throw new Error('BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD must be a positive number.');
 if (!Number.isFinite(GEMINI_SYNTHESIS_BUDGET_MS) || GEMINI_SYNTHESIS_BUDGET_MS < 60000) throw new Error('BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS must be at least 60000ms.');
+if (!Number.isInteger(MAX_MISSING_ARTICLES_PER_BUILD) || MAX_MISSING_ARTICLES_PER_BUILD < 0) throw new Error('BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD must be zero or a positive integer.');
+if (CACHE_ALLOW_MISSING && !CACHE_ONLY) throw new Error('BAREEQ_TTS_CACHE_ALLOW_MISSING=1 is valid only with BAREEQ_TTS_CACHE_ONLY=1.');
 if (PROVIDER === 'google-cloud' && (!Number.isFinite(MAX_REQUEST_BYTES) || MAX_REQUEST_BYTES < 1000 || MAX_REQUEST_BYTES > 4000)) throw new Error('GOOGLE_CLOUD_TTS_MAX_REQUEST_BYTES must be between 1000 and 4000.');
 if (!Number.isFinite(CLOUD_TTS_REQUEST_HARD_LIMIT) || CLOUD_TTS_REQUEST_HARD_LIMIT < 1) throw new Error('BAREEQ_CLOUD_TTS_MAX_REQUESTS_PER_BUILD must be a positive number.');
 if (!Number.isFinite(CLOUD_TTS_CHARACTER_HARD_LIMIT) || CLOUD_TTS_CHARACTER_HARD_LIMIT < 1) throw new Error('BAREEQ_CLOUD_TTS_MAX_CHARS_PER_BUILD must be a positive number.');
@@ -967,9 +971,23 @@ if (missing.length && PROVIDER !== 'bundled' && !CONTRACT_TEST && !ALLOW_PARTIAL
 }
 
 if (CACHE_ONLY) {
-  if (missing.length) throw new Error(`Cache-only production restore failed for ${missing.length} article(s): ${missing.map((post) => post.id).join(', ')}. No synthesis API was called for these articles.`);
+  if (missing.length && !CACHE_ALLOW_MISSING) throw new Error(`Cache-only production restore failed for ${missing.length} article(s): ${missing.map((post) => post.id).join(', ')}. No synthesis API was called for these articles.`);
+  if (missing.length) {
+    console.log(`Partial cache-only restore completed: ${synthesisPosts.length - missing.length} compatible article(s) restored/preserved and ${missing.length} article(s) left on their approved fallback. No synthesis API was called.`);
+    process.exit(0);
+  }
   console.log(`Cache-only production restore passed for ${synthesisPosts.length} article(s); 0 synthesis requests.`);
   process.exit(0);
+}
+
+const unresolvedBeforeArticleCap = missing.length;
+if (PROVIDER === 'gemini' && MAX_MISSING_ARTICLES_PER_BUILD > 0 && missing.length > 1) {
+  missing.sort((left, right) => left.audioParts.length - right.audioParts.length || left.id.localeCompare(right.id, 'ar'));
+  console.log(`Progressive article priority: shortest unresolved transcript first (${missing[0].id}, ${missing[0].audioParts.length} part(s)).`);
+}
+if (MAX_MISSING_ARTICLES_PER_BUILD > 0 && missing.length > MAX_MISSING_ARTICLES_PER_BUILD) {
+  missing = missing.slice(0, MAX_MISSING_ARTICLES_PER_BUILD);
+  console.log(`Progressive article cap: selected ${missing.length} of ${unresolvedBeforeArticleCap} unresolved article(s) for this build; the remainder keep their approved fallback audio.`);
 }
 
 const missingSourceChars = missing.reduce((sum, post) => sum + [...post.spokenText].length, 0);
@@ -1143,5 +1161,7 @@ for (const post of missing) {
 console.log(PROVIDER === 'gemini'
   ? (deferredReason
       ? `Gemini progressive rollout safely paused (${deferredReason}): ${generatedThisBuild} new Sadaltager article(s) completed in this build; remaining articles retain approved fallback audio.`
-      : `Gemini full Sadaltager rollout ready: ${posts.length} article(s), synchronized paragraphs, static cached MP3 output, and production-cache reuse enabled.`)
+      : unresolvedBeforeArticleCap > missing.length
+        ? `Gemini free-tier step complete: ${generatedThisBuild} Sadaltager article(s) completed atomically; ${Math.max(0, unresolvedBeforeArticleCap - generatedThisBuild)} unresolved article(s) remain on approved fallback audio for later deployments.`
+        : `Gemini full Sadaltager rollout ready: ${posts.length} article(s), synchronized paragraphs, static cached MP3 output, and production-cache reuse enabled.`)
   : `${PROVIDER_NAME} audio ready: ${posts.length} article(s), ${VOICES.length} approved listening voice(s), synchronized paragraphs, and static cached MP3 output.`);

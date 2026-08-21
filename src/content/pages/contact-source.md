@@ -28,7 +28,7 @@ updatedAt: "2026-08-09T12:00:00.000Z"
 
 يمكنك مراسلتنا عبر البريد الإلكتروني الرسمي للمدونة:
 
-**blogbareeq@gmail.com**
+<!--email_off--><a href="mailto:blogbareeq@gmail.com"><strong>blogbareeq@gmail.com</strong></a><!--/email_off-->
 
 يفضّل كتابة عنوان واضح للرسالة، مثل:
 

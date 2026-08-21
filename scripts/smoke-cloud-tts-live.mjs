@@ -20,7 +20,7 @@ const { url, options } = buildCloudTtsRequest({
   projectId,
   prompt: CLOUD_TTS_STYLE,
   text: 'مرحبًا بك في عالم بريق. هذه عيّنة قصيرة للتحقق من وضوح الصوت العربي واتساق نبرة الراوي.',
-  userAgent: 'Bareeq-Cloud-TTS-Smoke/4.21.0',
+  userAgent: 'Bareeq-Cloud-TTS-Smoke/4.21.1',
 });
 const response = await fetch(url, options);
 let payload;

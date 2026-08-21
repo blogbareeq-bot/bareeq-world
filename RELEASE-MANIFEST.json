@@ -1,40 +1,73 @@
 {
-  "release": "Bareeq V4.21.0 — Audio UX & Pre-CNTXT Cloud TTS Readiness",
-  "version": "4.21.0",
+  "release": "Bareeq V4.21.1 — Design One & Progressive Gemini Free-Tier Audio",
+  "version": "4.21.1",
   "mode": "full-source-replace-over-current-repository",
-  "sourcePackage": "bareeq-world-main(4).zip",
-  "sourcePackageSha256": "2525516b659511baab0f78cf1f52d1863769de0aab3859d278abdb1086e956ff",
+  "sourcePackage": "Bareeq-V4.21.0-FINAL.zip",
+  "sourcePackageSha256": "239903f6c0833a54c63f4149edc97772deaa1c5abf96266e6fe8b385424f0ecd",
   "expectedLiveArticles": 13,
-  "audioUi": {
-    "manifestLoading": "on-listen-selection",
-    "publicProviderVoiceMetadata": "hidden",
-    "seekBehavior": "highlight-and-scroll-to-matching-text-on-mobile-and-desktop",
-    "savedProgressDays": 30
+  "headerDesign": {
+    "approvedConcept": 1,
+    "implementation": "native-responsive-components-not-concept-image",
+    "desktop": "white high-clarity logo panel with navy and teal wave navigation",
+    "tablet": "compressed native navigation and logo",
+    "mobile": "simplified header without decorative waves",
+    "preservedFeatures": [
+      "main navigation",
+      "reading list",
+      "search",
+      "theme toggle",
+      "latest-articles ticker",
+      "category navigation"
+    ]
   },
-  "cloudTts": {
+  "geminiFreeRollout": {
+    "status": "enabled-by-default-when-key-is-present",
+    "secret": "GEMINI_API_KEY",
+    "pauseFlag": "BAREEQ_GEMINI_FREE_ROLLOUT=0",
+    "articlesPerBuild": 1,
+    "priority": "shortest-unresolved-article-first",
+    "atomicArticlePublication": true,
+    "persistent429Behavior": "publish-approved-fallback-and-retry-on-later-deployment",
+    "missingKeyBehavior": "zero-synthesis-requests-and-publish-approved-fallback",
+    "pendingArticlesAtRelease": 11,
+    "retainedGeminiArticlesAtRelease": 2,
+    "fullBacklogPlanRequests": 81,
+    "fullBacklogSourceCharacters": 95441,
+    "realApiRequestsDuringPackagePreparation": 0
+  },
+  "paidCloudTts": {
     "status": "prepared-not-activated",
     "activationFlag": "BAREEQ_CLOUD_TTS_ACTIVATE=1",
     "defaultActivationValue": 0,
     "project": "bareeq-tts",
-    "api": "Cloud Text-to-Speech",
-    "model": "gemini-2.5-flash-tts",
-    "voice": "Sadaltager",
-    "language": "ar-EG",
-    "output": "MP3",
-    "pendingArticles": 11,
-    "retainedGeminiArticles": 2,
-    "paidRequestsDuringPackagePreparation": 0
+    "pendingDependency": "CNTXT billing and explicit live smoke-test approval"
   },
-  "azureUsageGuard": {
-    "cumulativeLedgerVariable": "AZURE_SPEECH_MONTHLY_USED_CHARS",
-    "defaultWarningCharacters": 400000,
-    "defaultMonthlyAllowanceCharacters": 500000
+  "claudeAudit": {
+    "adopted": [
+      "Cloudflare email-obfuscation exclusion boundaries",
+      "local reading-list and audio-position privacy disclosure"
+    ],
+    "alreadyImplemented": [
+      "reading-list save buttons, count, and saved page"
+    ],
+    "deferredUntilExactConfiguration": [
+      "ads.txt publisher record",
+      "domain email replacement",
+      "newsletter provider",
+      "AdSense slots"
+    ],
+    "deferredEditorialWork": [
+      "expanding short articles",
+      "H3 TOC changes",
+      "new infographics"
+    ]
   },
   "contentPolicy": {
     "publishedArticlesChanged": 0,
+    "publishedArticles": 13,
     "pausedExperimentalKnowledgeLayers": "remain-disabled",
     "email": "blogbareeq@gmail.com",
-    "emailReason": "keep verified working address until a replacement is explicitly confirmed"
+    "emailReason": "keep verified working address until an exact replacement is confirmed"
   },
   "analytics": {
     "measurementId": "G-N3NQMF7RHN",

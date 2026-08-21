@@ -68,7 +68,7 @@ updatedAt: "2026-08-09T12:00:00.000Z"
 للتواصل معنا:
 
 **البريد الإلكتروني:**  
-**blogbareeq@gmail.com**
+<!--email_off--><a href="mailto:blogbareeq@gmail.com"><strong>blogbareeq@gmail.com</strong></a><!--/email_off-->
 
 شكرًا لوجودك في «بريق»، ونتمنى أن تجد في كل زيارة فكرة تستحق التأمل، ومعرفة تضيف إلى يومك بريقًا جديدًا.
 

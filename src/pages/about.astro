@@ -13,7 +13,7 @@ const page = await getEntry('pages', 'about');
     <aside class="identity-card">
       <img src={site.logo} alt={`الشعار الرسمي لمدونة ${site.brand}`} width="180" height="180" loading="eager" decoding="async" />
       <p><strong>إدارة المحتوى:</strong> <a href="/team/">فريق بريق</a></p>
-      <p><strong>البريد:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></p>
+      <p><strong>البريد:</strong> <!--email_off--><a href={`mailto:${site.email}`}>{site.email}</a><!--/email_off--></p>
     </aside>
     {page && <ContentPage page={page} />}
   </div>

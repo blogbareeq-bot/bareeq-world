@@ -60,7 +60,7 @@ try {
     projectId: 'bareeq-tts',
     text: 'هذا اختبار تعاقدي محلي لا يرسل أي طلب مدفوع.',
     prompt: CLOUD_TTS_STYLE,
-    userAgent: 'Bareeq-Cloud-TTS-Contract/4.21.0',
+    userAgent: 'Bareeq-Cloud-TTS-Contract/4.21.1',
   });
   const response = await fetch(url, options);
   const audio = extractCloudTtsMp3(await response.json());
