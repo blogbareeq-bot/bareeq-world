@@ -1,7 +1,7 @@
 import { access, readFile, readdir } from 'node:fs/promises';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (pkg.version !== '4.20.0') throw new Error(`Expected package 4.20.0, got ${pkg.version}`);
+if (!['4.20.0', '4.21.0'].includes(pkg.version)) throw new Error(`Expected package 4.20.0 baseline or 4.21.0 successor, got ${pkg.version}`);
 
 for (const p of [
   'src/content/posts/ai-as-coworker-future-of-human-work.md',

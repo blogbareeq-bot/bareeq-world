@@ -12,16 +12,17 @@ const requireAll = (name, text, needles) => {
 };
 
 requireAll('ReadingModes.astro', component, [
-  'data-audio-manifest-inline', 'preload="none"', 'playsinline', 'data-audio-native-fallback', 'data-audio-seek'
+  'data-audio-manifest={audioManifest}', 'preload="none"', 'playsinline', 'data-audio-native-fallback', 'data-audio-seek'
 ]);
 requireAll('[id].astro', page, [
-  "readFile(manifestPath, 'utf8')", 'audioManifestData={audioManifestData}'
+  "import { access } from 'node:fs/promises'", 'await access(manifestPath)', 'hasAudio={hasAudio}'
 ]);
 requireAll('article.js', client, [
-  'MANIFEST_TIMEOUT_MS = 9000', 'PLAY_START_TIMEOUT_MS = 18000', 'readInlineManifest', 'fetchManifestAttempt',
+  'MANIFEST_TIMEOUT_MS = 9000', 'PLAY_START_TIMEOUT_MS = 18000', 'fetchManifestAttempt',
   'AbortController', 'awaitingPlaybackStart', 'requestPlay({ automatic: false })', 'nativeFallbackButton', "audio.controls = true",
   "audio.preload = 'metadata'", 'Do not call load() here', "audio?.addEventListener('playing'"
 ]);
+if (component.includes('data-audio-manifest-inline') || client.includes('readInlineManifest')) throw new Error('Tablet path must lazy-load the audio manifest only after Listen is selected.');
 if (client.includes('audio.load()')) throw new Error('Tablet path must not call audio.load() before first user-initiated play.');
 requireAll('global.css', styles, [
   '@media (min-width:681px) and (max-width:1180px)', '.audio-status{grid-column:1/-1;grid-row:2',
@@ -34,4 +35,4 @@ requireAll('home page', home, [
 if (home.includes('posts.find((post) => post.data.featured)')) throw new Error('Home hero still prefers a pinned/featured post instead of the newest article.');
 requireAll('_headers', headers, ['https://static.cloudflareinsights.com', 'https://cloudflareinsights.com']);
 
-console.log('Tablet audio/home freshness audit passed: inline manifest, gesture-safe HTMLAudio, native fallback, tablet layout, strong tracking highlight, latest-article hero, and Cloudflare beacon CSP.');
+console.log('Tablet audio/home freshness audit passed: lazy manifest, gesture-safe HTMLAudio, native fallback, tablet layout, strong tracking highlight, latest-article hero, and Cloudflare beacon CSP.');

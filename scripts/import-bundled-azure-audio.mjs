@@ -5,6 +5,7 @@ import path from 'node:path';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 
 const ROOT = process.cwd();
+const SKIP_IDS = new Set((process.env.BAREEQ_BUNDLED_SKIP_IDS || '').split(',').map((value) => value.trim()).filter(Boolean));
 const LOCK_FILE = path.join(ROOT, 'scripts', 'bundled-azure-audio-map.json');
 const AUDIO_ROOT = path.join(ROOT, 'public', 'audio', 'articles');
 const HEX_256 = /^[a-f0-9]{64}$/;
@@ -53,6 +54,7 @@ let importedParts = 0;
 let importedBytes = 0;
 
 for (const config of lock.articles) {
+  if (SKIP_IDS.has(config.articleId)) { console.log(`↷ ${config.articleId}: skipped stale bundled Hamed; V4.19 will regenerate matching Hamed.`); continue; }
   assert(typeof config.articleId === 'string' && config.articleId && !seenArticleIds.has(config.articleId), 'Bundled Azure article ids must be present and unique.');
   assert(SAFE_ID.test(config.audioKey || '') && !seenAudioKeys.has(config.audioKey), `${config.articleId}: audio key is unsafe or repeated.`);
   assert(config.audioKey === audioKeyFor(config.articleId), `${config.articleId}: audio key does not match the article id.`);

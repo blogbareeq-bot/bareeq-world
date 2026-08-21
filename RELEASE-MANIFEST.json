@@ -1,28 +1,43 @@
 {
-  "release": "Bareeq V4.20.0 — Coworker Article & Safe Gemini→Azure Fallback",
-  "version": "4.20.0",
-  "mode": "patch-replace-over-current-repository",
-  "baselineCommit": "77306a99b8483f8c9656d2b4b9d409e94c26da30",
+  "release": "Bareeq V4.21.0 — Audio UX & Pre-CNTXT Cloud TTS Readiness",
+  "version": "4.21.0",
+  "mode": "full-source-replace-over-current-repository",
+  "sourcePackage": "bareeq-world-main(4).zip",
+  "sourcePackageSha256": "2525516b659511baab0f78cf1f52d1863769de0aab3859d278abdb1086e956ff",
   "expectedLiveArticles": 13,
-  "newArticleId": "ai-as-coworker-future-of-human-work",
-  "audioPolicy": {
-    "existingChangedArticles": "production-cache-only",
-    "existingSadaltagerArticle": "production-cache-only",
-    "coworker": [
-      "production-provider-cache",
-      "gemini-sadaltager",
-      "azure-hamed-fallback",
-      "fail-closed"
-    ],
-    "azureFallbackScope": "ai-as-coworker-future-of-human-work only"
+  "audioUi": {
+    "manifestLoading": "on-listen-selection",
+    "publicProviderVoiceMetadata": "hidden",
+    "seekBehavior": "highlight-and-scroll-to-matching-text-on-mobile-and-desktop",
+    "savedProgressDays": 30
+  },
+  "cloudTts": {
+    "status": "prepared-not-activated",
+    "activationFlag": "BAREEQ_CLOUD_TTS_ACTIVATE=1",
+    "defaultActivationValue": 0,
+    "project": "bareeq-tts",
+    "api": "Cloud Text-to-Speech",
+    "model": "gemini-2.5-flash-tts",
+    "voice": "Sadaltager",
+    "language": "ar-EG",
+    "output": "MP3",
+    "pendingArticles": 11,
+    "retainedGeminiArticles": 2,
+    "paidRequestsDuringPackagePreparation": 0
+  },
+  "azureUsageGuard": {
+    "cumulativeLedgerVariable": "AZURE_SPEECH_MONTHLY_USED_CHARS",
+    "defaultWarningCharacters": 400000,
+    "defaultMonthlyAllowanceCharacters": 500000
+  },
+  "contentPolicy": {
+    "publishedArticlesChanged": 0,
+    "pausedExperimentalKnowledgeLayers": "remain-disabled",
+    "email": "blogbareeq@gmail.com",
+    "emailReason": "keep verified working address until a replacement is explicitly confirmed"
   },
   "analytics": {
     "measurementId": "G-N3NQMF7RHN",
     "policy": "preserve existing consent-aware loader; do not duplicate gtag"
-  },
-  "estimatedCoworkerAudioPlan": {
-    "geminiParts": 10,
-    "azureHamedParts": 4,
-    "spokenCharactersApprox": 11600
   }
 }

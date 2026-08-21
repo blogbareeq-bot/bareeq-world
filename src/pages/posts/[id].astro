@@ -7,7 +7,7 @@ import { formatDate, formatReadingMinutes, getPublishedPosts, absoluteUrl, postW
 import { site } from '../../config/site';
 import { responsiveImage, socialImage } from '../../lib/images';
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { access } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 export async function getStaticPaths() {
@@ -26,13 +26,14 @@ const readingMinutes = postReadingMinutes(post);
 const articlePath = `/posts/${post.id}/`;
 const audioKey = createHash('sha256').update(post.id).digest('hex').slice(0, 16);
 const audioManifest = `/audio/articles/${audioKey}/manifest.json`;
-let audioManifestData: Record<string, unknown> | null = null;
+let hasAudio = false;
 try {
   const manifestPath = resolve(process.cwd(), 'public', 'audio', 'articles', audioKey, 'manifest.json');
-  audioManifestData = JSON.parse(await readFile(manifestPath, 'utf8')) as Record<string, unknown>;
+  await access(manifestPath);
+  hasAudio = true;
 } catch {
-  // Development can run before audio generation. The client keeps a network fallback.
-  audioManifestData = null;
+  // Development can run before audio generation. The listen tab remains unavailable.
+  hasAudio = false;
 }
 const articleUrl = absoluteUrl(articlePath, Astro.site?.toString());
 const shareText = encodeURIComponent(post.data.title);
@@ -125,7 +126,7 @@ const articleSchema = {
       </figure>
     )}
 
-    <ReadingModes summary={post.data.quickSummary ?? post.data.description} readingMinutes={readingMinutes} audioManifest={audioManifest} audioManifestData={audioManifestData} />
+    <ReadingModes summary={post.data.quickSummary ?? post.data.description} readingMinutes={readingMinutes} audioManifest={audioManifest} hasAudio={hasAudio} />
 
     <div class:list={['article-layout', { 'has-toc': toc.length > 0 }]}> 
       {toc.length > 0 && (
@@ -142,6 +143,7 @@ const articleSchema = {
 
     <footer class="article-footer">
       {post.data.tags.length > 0 && <nav class="tag-list" aria-label="وسوم المقال">{post.data.tags.map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</nav>}
+      <button class="save-reading-button" type="button" data-save-post data-post-id={post.id} aria-pressed="false"><span aria-hidden="true">🔖</span> <span data-save-label>حفظ للقراءة لاحقًا</span></button>
       <div class="share-box">
         <strong>شارك الفكرة</strong>
         <div>
@@ -170,4 +172,5 @@ const articleSchema = {
 
   <script is:inline src="/scripts/audio-core.js"></script>
   <script is:inline src="/scripts/article.js"></script>
+  <script is:inline src="/scripts/reading-list.js"></script>
 </BaseLayout>

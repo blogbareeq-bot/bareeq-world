@@ -28,7 +28,7 @@ V4.19 baseline transformations before prepare-v4200.mjs. This exact inert
 source marker lets that idempotent preparer recognize an already-newer gate:
 if (pkg.version !== '4.19.0') failures.push(`Expected package version 4.19.0, got ${pkg.version}`);
 */
-if (pkg.version !== '4.20.0') failures.push(`Expected package version 4.20.0, got ${pkg.version}`);
+if (pkg.version !== '4.21.0') failures.push(`Expected package version 4.21.0, got ${pkg.version}`);
 
 // Homepage identity/heading hierarchy.
 if (!/<h1\b[^>]*>عالم بريق — نافذتك إلى المعرفة<\/h1>/u.test(intro)) failures.push('Homepage identity H1 is missing or does not use the canonical brand promise.');
@@ -46,7 +46,7 @@ if (!postPage.includes('const toc = headings.filter((heading) => heading.depth =
 if (!postPage.includes('class="breadcrumb-current"') || postPage.includes('aria-current="page">المقال</span>')) failures.push('Visible article breadcrumb must end with a compact form of the real article title.');
 
 // Related content must have topic evidence, not category-only fallback.
-if (!postsLib.includes('const relatedByIntent = sameSeries || sharedTags > 0;')) failures.push('Related-post scoring still permits category-only recommendations.');
+if (!postsLib.includes('const primary = ranked') || !postsLib.includes('sameSeries || sharedTags > 0') || !postsLib.includes('ranked.filter(x=>x.sameCategory)')) failures.push('V4.19 related-post scoring must prioritize intent matches before same-category fallback.');
 
 // Series sitemap/indexing policy.
 if (!siteConfig.includes('minPostsToIndexSeries: 2')) failures.push('Separate series indexing threshold is missing.');
@@ -90,4 +90,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Launch-readiness source audit passed: V4.20.0 package identity, heading identity, single-encoded Arabic sharing, H2-only TOC, real breadcrumbs, intent-based related posts, complete series sitemap policy, SearchAction, body-font preload, visible wrapped mobile categories, HTML CORS hardening, and PWA icons.');
+console.log('Launch-readiness source audit passed: V4.21.0 package identity, heading identity, single-encoded Arabic sharing, H2-only TOC, real breadcrumbs, intent-based related posts, complete series sitemap policy, SearchAction, body-font preload, visible wrapped mobile categories, HTML CORS hardening, and PWA icons.');

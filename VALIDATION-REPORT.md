@@ -1,21 +1,32 @@
-# V4.19.0 Replacement Package Validation
+# Bareeq V4.21.0 — Replacement Package Validation
 
-- Package mode: direct copy + replace over V4.18.2.
-- Baseline commit: `f2693d8a8097a30a52d8178dbcb8300c7703abd8`.
-- Local Node.js: **not required** for the user workflow.
-- Cloudflare build preparation: automatic via `scripts/prepare-v4190.mjs`.
-- Changed/new live articles: **7**.
-- Intuition cover + thumbnail source: **1600×900**.
-- Stale bundled Azure/Studio fallbacks for changed article IDs: explicitly skipped before regeneration.
-- Hamed regeneration: targeted to changed IDs only.
-- Gemini: progressive full-library Sadaltager upgrade with production cache reuse.
-- Fail-closed: Azure/Hamed generation failure stops deployment before Astro publish.
-- `prepare-v4190.mjs`: Node syntax check **PASS**.
-- `reading-list.js`: Node syntax check **PASS**.
-- Installer compatibility fixture: all expected V4.18.2 patch anchors applied successfully **PASS**.
-- ZIP integrity: **PASS** (`unzip -t`, no errors).
-- Static package validation errors: **0**.
+Validation date: 2026-08-20
 
-## Important production gate
+- Package mode: full source replacement over the current repository.
+- Source baseline: verified V4.20.0 package supplied by the user.
+- Target version: V4.21.0.
+- Published articles: 13; content changes: 0.
+- Stable visual system: preserved.
+- Mobile categories: wrapped and visible without horizontal scrolling; verified from 320 px upward.
+- Initial article HTML: no audio manifest payload and no provider/voice metadata.
+- Listen selection: lazily fetches the article audio manifest.
+- Seek behavior: synchronized highlight plus forced paragraph scrolling on mobile and desktop.
+- Current-source Gemini cache: 2 compatible Sadaltager articles retained.
+- Cloud TTS pending set: 11 articles, 61 planned requests, 95,441 planned characters.
+- Cloud TTS activation: fail-closed and disabled by default.
+- Paid synthesis during preparation and validation: 0 requests.
+- Safe full build: PASS.
+- Astro output: 57 pages.
+- Audio output: 13/13 articles, 53 synchronized MP3 parts.
+- Static distribution, responsive layout, contrast, interaction, Arabic speech, and secret-leak checks: PASS.
 
-A complete production build cannot be executed in this environment because the encrypted Azure/Gemini secrets and the full binary/audio repository are only present in the actual deployment environment. The build is intentionally fail-closed: Cloudflare must complete the Azure Hamed generation for all changed/new articles before it can publish V4.19.0.
+## Required pre-activation sequence
+
+1. Link CNTXT billing and confirm the Cloud Text-to-Speech API and IAM permission.
+2. Add one supported authentication method to the deployment secrets.
+3. Keep `BAREEQ_CLOUD_TTS_ACTIVATE=0` and run `npm run smoke:audio:cloud:live` once.
+4. Confirm the smoke MP3 and request accounting.
+5. Set `BAREEQ_CLOUD_TTS_ACTIVATE=1` for the rollout build.
+6. Review the rollout totals and final audio audit before publishing.
+
+The V4.21.0 source package is ready for repository replacement and deployment while the paid Google Cloud generation path remains inactive.

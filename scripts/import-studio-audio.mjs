@@ -5,6 +5,7 @@ import path from 'node:path';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 
 const ROOT = process.cwd();
+const SKIP_IDS = new Set((process.env.BAREEQ_STUDIO_SKIP_IDS || '').split(',').map((value) => value.trim()).filter(Boolean));
 const RELEASES_ROOT = path.join(ROOT, 'audio-releases');
 const AUDIO_ROOT = path.join(ROOT, 'public', 'audio', 'articles');
 const MAP_FILE = path.join(ROOT, 'scripts', 'studio-audio-map.json');
@@ -58,6 +59,7 @@ await mkdir(AUDIO_ROOT, { recursive: true });
 let importedCount = 0;
 
 for (const [studioPathId, config] of Object.entries(mapping.imports)) {
+  if (SKIP_IDS.has(config.articleId)) { console.log(`↷ ${config.articleId}: skipped stale Studio fallback; V4.19 will regenerate matching Hamed.`); continue; }
   assert(SAFE_ID.test(studioPathId), `Unsafe Studio path id: ${studioPathId}`);
   assert(typeof config.articleId === 'string' && config.articleId, `${studioPathId}: articleId is missing.`);
   assert(Array.isArray(config.segmentIds) && config.segmentIds.length, `${studioPathId}: segmentIds are missing.`);
@@ -226,5 +228,5 @@ for (const [studioPathId, config] of Object.entries(mapping.imports)) {
   console.log(`✓ ${studioPathId}: imported ${voice.label} release ${studio.release_id}, ${selected.length} synchronized blocks, ${fullAudio.durationSeconds.toFixed(3)} seconds`);
 }
 
-assert(importedCount > 0 || !(await exists(RELEASES_ROOT)), 'No approved Studio audio release was imported.');
+assert(importedCount > 0 || SKIP_IDS.size > 0 || !(await exists(RELEASES_ROOT)), 'No approved Studio audio release was imported.');
 console.log(`Bareeq Voice Studio import passed: ${importedCount} atomic production release(s), no API calls.`);

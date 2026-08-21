@@ -1,50 +1,75 @@
-# Bareeq V4.20.0 — Test Report
+# Bareeq V4.21.0 — Test Report
+
+Validation date: 2026-08-20
 
 ## Baseline
-- Source baseline: commit `77306a99b8483f8c9656d2b4b9d409e94c26da30`.
-- The user-provided Cloudflare log for that baseline completed build, audits, asset upload, and deployment successfully.
 
-## V4.20.0 package tests executed locally
-- `node --check` — PASS for all four V4.20.0 scripts.
-- V4.20 preparation patch fixture — PASS.
-  - article body lock verified.
-  - speech-review registration verified.
-  - Hamed-only manifest compatibility patch applied.
-  - cache-only guard applied.
-  - Azure Hamed-only request/cost accounting patch applied.
-- Release-gate fixture with 13 live posts — PASS.
-- Audio orchestrator mock, Gemini success path — PASS.
-  - Gemini complete => Azure fallback not called.
-- Audio orchestrator mock, Gemini unavailable/deferred path — PASS.
-  - no complete Gemini manifest => Azure Hamed fallback called for coworker article only.
-- Production voice audit mock — PASS.
-- Coworker cover: 1600×900 WebP — verified.
-- Thumbnail source matches the cover basename — verified.
-- Coworker article contains no currently locked high-risk Arabic homographs requiring a new contextual pronunciation override.
-- ZIP integrity — verified after packaging.
+- Input package: `bareeq-world-main(4).zip`.
+- Input SHA-256: `2525516b659511baab0f78cf1f52d1863769de0aab3859d278abdb1086e956ff`.
+- Input ZIP integrity: PASS.
+- Stable baseline version: V4.20.0.
+- Published content retained: 13 articles; no article body changed by V4.21.0.
 
-## Audio safety policy verified
-Existing audio:
-- Seven V4.19 changed articles: production-cache restore only.
-- `ai-agents-future-now` Sadaltager: production-cache restore only.
-- No old article is passed to a synthesis fallback in the V4.20 runner.
+## V4.21.0 checks
 
-Coworker article:
-1. Gemini provider checks production cache automatically.
-2. If no matching cache exists, Gemini Sadaltager is attempted.
-3. A complete Gemini manifest + MP3 set is required to count as success.
-4. If Gemini does not complete atomically, Azure Hamed is attempted for the coworker article only.
-5. Azure checks production cache before live synthesis.
-6. If both providers fail to leave complete audio, the build fails closed.
+- `npm ci --ignore-scripts`: PASS (252 packages installed).
+- JavaScript syntax checks: PASS for all added and modified runtime, rollout, smoke, and audit scripts.
+- `npm run audit:v4210`: PASS.
+  - V4.19.0, V4.20.0, and V4.21.0 preparation fixtures passed.
+  - Google Cloud TTS offline contract test passed with mock transport only.
+  - Audio UI seek tests passed at 390 px and 1440 px.
+  - V4.21.0 release gate passed.
+- `npm run plan:audio:cloud:pending`: PASS.
+  - 11 pending articles.
+  - 61 planned synthesis requests.
+  - 95,441 planned billable characters.
+  - 0 API requests during planning.
+- `npm run audit:audio`: PASS.
+  - 13/13 articles covered.
+  - 51 source-audit audio parts and 1,094 synchronized reading blocks verified.
+  - Arabic speech QA passed for 13/13 articles and 44 pronunciation checks.
+  - Mobile and tablet behavior checks passed.
 
-Estimated article partition using the production splitting rules:
-- Gemini (2400-byte request target): 10 parts / about 11.6k spoken source characters.
-- Azure Hamed fallback (6000-byte target): 4 parts / about 11.6k spoken source characters.
+## Full production-equivalent safe build
 
-## Not consumed during package testing
-- No real Gemini request was sent.
+Executed with all live provider credentials removed from the process environment and with `BAREEQ_CLOUD_TTS_ACTIVATE=0`.
+
+- Preparation and source gates: PASS.
+- Google Cloud TTS paid requests: 0.
+- Production-cache restore: PASS.
+- Astro static build: PASS (57 pages).
+- Final audio distribution: PASS.
+  - 13/13 articles.
+  - 53 synchronized parts.
+  - 53 verified MP3 files.
+  - 2 current-source Gemini Sadaltager articles retained.
+  - 4 bundled Hamed articles retained.
+  - 7 generated Hamed articles retained.
+- Distribution checks: PASS for 57 HTML files.
+- Responsive layout: PASS from 320 px through wide desktop.
+- WCAG AA contrast: PASS for 22 tested combinations.
+- Interaction checks: PASS.
+- Secret-leak checks: PASS.
+
+## V4.21.0 behavior verified
+
+- Audio manifests are fetched only after the reader selects Listen.
+- Provider and voice metadata are not embedded in the initial article HTML and are not exposed below the player.
+- Seeking highlights and scrolls to the matching paragraph on mobile and desktop, including while paused and across part changes.
+- Existing elapsed/total time, controls, AI disclosure, and 30-day saved progress remain intact.
+- The Google Cloud TTS path is fail-closed and remains disabled unless `BAREEQ_CLOUD_TTS_ACTIVATE=1` is explicitly supplied.
+- Default Google Cloud target: `gemini-2.5-flash-tts`, Sadaltager, `ar-EG`, MP3 at 24 kHz.
+- Azure cumulative usage warning is available through `AZURE_SPEECH_MONTHLY_USED_CHARS`, with 400,000 warning and 500,000 allowance defaults.
+- Experimental knowledge layers remain disabled.
+- Contact address remains `blogbareeq@gmail.com` until an exact replacement is confirmed.
+
+## Not consumed or triggered
+
+- No real Google Cloud TTS request was sent.
+- No real Gemini Developer API request was sent.
 - No real Azure synthesis request was sent.
-- No Cloudflare deployment was triggered by package creation.
+- No deployment was triggered while preparing or validating the package.
 
-## Production acceptance
-The final acceptance test is the first Cloudflare build after one Push. Do not manually queue duplicate deployments. Review the build log before any additional redeploy.
+## Activation boundary
+
+Keep `BAREEQ_CLOUD_TTS_ACTIVATE=0` until CNTXT billing and the required Google Cloud permissions are confirmed. Run the one-request live smoke test first; only then set the activation flag to `1` for the planned 11-article rollout.

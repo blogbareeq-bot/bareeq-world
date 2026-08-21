@@ -50,24 +50,32 @@ export function postReadingMinutes(post: Post): number {
 }
 
 export function getRelatedPosts(post: Post, posts: Post[], limit = 3): Post[] {
-  return posts
+  const ranked = posts
     .filter((candidate) => candidate.id !== post.id)
     .map((candidate) => {
       const sharedTags = candidate.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
       const sameSeries = Boolean(post.data.seriesSlug && candidate.data.seriesSlug === post.data.seriesSlug);
       const sameCategory = candidate.data.categorySlug === post.data.categorySlug;
-      // Category alone is too broad for a meaningful recommendation (e.g. economy vs space).
-      // Require a shared series or at least one shared tag; category only breaks close ties.
-      const relatedByIntent = sameSeries || sharedTags > 0;
-      const score = relatedByIntent
-        ? (sameSeries ? 8 : 0) + (sharedTags * 3) + (sameCategory ? 1 : 0)
-        : 0;
-      return { candidate, score };
-    })
-    .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score || b.candidate.data.publishedAt.valueOf() - a.candidate.data.publishedAt.valueOf())
-    .slice(0, limit)
-    .map(({ candidate }) => candidate);
+      const intentScore = (sameSeries ? 8 : 0) + (sharedTags * 3) + (sameCategory ? 1 : 0);
+      return { candidate, sharedTags, sameSeries, sameCategory, intentScore };
+    });
+  const primary = ranked
+    .filter(({ sharedTags, sameSeries }) => sameSeries || sharedTags > 0)
+    .sort((a,b) => b.intentScore-a.intentScore || b.candidate.data.publishedAt.valueOf()-a.candidate.data.publishedAt.valueOf());
+  const selected = primary.map(({candidate})=>candidate);
+  if (selected.length < limit) {
+    for (const { candidate } of ranked.filter(x=>x.sameCategory).sort((a,b)=>b.candidate.data.publishedAt.valueOf()-a.candidate.data.publishedAt.valueOf())) {
+      if (!selected.some(x=>x.id===candidate.id)) selected.push(candidate);
+      if (selected.length>=limit) break;
+    }
+  }
+  if (selected.length < limit) {
+    for (const { candidate } of ranked.sort((a,b)=>b.candidate.data.publishedAt.valueOf()-a.candidate.data.publishedAt.valueOf())) {
+      if (!selected.some(x=>x.id===candidate.id)) selected.push(candidate);
+      if (selected.length>=limit) break;
+    }
+  }
+  return selected.slice(0,limit);
 }
 
 export function absoluteUrl(path: string, siteUrl = 'https://bareeqworld.com'): string {

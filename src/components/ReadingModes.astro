@@ -3,11 +3,9 @@ interface Props {
   summary: string;
   readingMinutes: number;
   audioManifest: string;
-  audioManifestData?: Record<string, unknown> | null;
+  hasAudio?: boolean;
 }
-const { summary, readingMinutes, audioManifest, audioManifestData = null } = Astro.props;
-const inlineManifest = audioManifestData ? JSON.stringify(audioManifestData).replace(/</g, '\\u003c') : '';
-const hasAudio = Boolean(audioManifestData);
+const { summary, readingMinutes, audioManifest, hasAudio = false } = Astro.props;
 ---
 <section class="reading-modes" data-reading-modes data-audio-manifest={audioManifest} aria-labelledby="reading-modes-title">
   <div class="reading-modes__intro">
@@ -31,7 +29,6 @@ const hasAudio = Boolean(audioManifestData);
   </div>
 
   <div id="reading-listen-panel" class="reading-modes__panel reading-modes__panel--listen" data-listen-panel role="tabpanel" aria-labelledby="reading-tab-listen" hidden>
-    {inlineManifest && <script type="application/json" data-audio-manifest-inline set:html={inlineManifest}></script>}
     <audio data-article-audio preload="none" playsinline aria-label="القراءة الصوتية للمقال"></audio>
     <div class="audio-control-row">
       <button class="audio-play" type="button" data-audio-play aria-label="بدء الاستماع" disabled><span aria-hidden="true">▶</span><span data-audio-play-label>ابدأ الاستماع</span></button>
@@ -45,7 +42,7 @@ const hasAudio = Boolean(audioManifestData);
       <span class="visually-hidden">موضع الاستماع</span>
       <input type="range" min="0" max="1000" step="1" value="0" data-audio-seek aria-label="التقديم أو الرجوع داخل المقال" aria-valuetext="0:00" disabled />
     </label>
-    <div class="audio-progress" aria-live="polite"><span data-audio-current-voice>الصوت الافتراضي</span><span data-audio-time></span></div>
+    <div class="audio-progress" aria-live="polite"><span data-audio-time></span></div>
     <p class="audio-note"><strong>تنبيه:</strong> الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا. يعمل تتبّع الفقرة تلقائيًا، ويحفظ المشغّل اختيار الصوت وموضع الاستماع لمدة 30 يومًا على هذا الجهاز والمتصفح.</p>
   </div>
 

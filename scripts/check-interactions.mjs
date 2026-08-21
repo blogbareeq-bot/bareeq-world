@@ -4,7 +4,6 @@ import path from 'node:path';
 
 const root = path.resolve('dist');
 const failures = [];
-const productionProvider = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'bundled';
 const astroScripts = (await readdir(path.join(root, '_astro'))).filter((name) => name.endsWith('.js'));
 const baseScriptName = astroScripts.find((name) => name.startsWith('BaseLayout'));
 if (!baseScriptName) throw new Error('Base layout browser script was not generated.');
@@ -22,6 +21,7 @@ function createDom(html, width) {
   Object.defineProperty(window, 'innerHeight', { value: 844, configurable: true });
   Object.defineProperty(window, 'scrollY', { value: 0, writable: true, configurable: true });
   window.scrollTo = (options) => { window.scrollY = typeof options === 'object' ? options.top ?? 0 : 0; };
+  window.HTMLElement.prototype.scrollIntoView = function scrollIntoView() {};
   window.requestAnimationFrame = (callback) => { callback(Date.now()); return 1; };
   window.cancelAnimationFrame = () => {};
   window.matchMedia = (query) => {
@@ -36,10 +36,25 @@ function createDom(html, width) {
   return dom;
 }
 
-function inlineAudioManifest(document) {
-  const raw = document.querySelector('[data-audio-manifest-inline]')?.textContent;
-  if (!raw) throw new Error('Article HTML is missing its inline audio manifest.');
-  return JSON.parse(raw);
+async function loadAudioManifest(document) {
+  const manifestPath = document.querySelector('[data-reading-modes]')?.dataset.audioManifest;
+  if (!manifestPath?.startsWith('/audio/articles/') || !manifestPath.endsWith('/manifest.json')) throw new Error('Article HTML is missing its lazy audio manifest URL.');
+  if (document.querySelector('[data-audio-manifest-inline]')) throw new Error('Article HTML still embeds private provider/voice manifest data.');
+  return JSON.parse(await readFile(path.join(root, manifestPath.replace(/^\//, '')), 'utf8'));
+}
+
+async function initializeLazyAudio(dom, manifest) {
+  let fetchCount = 0;
+  dom.window.fetch = async () => {
+    fetchCount += 1;
+    return { ok: true, json: async () => structuredClone(manifest) };
+  };
+  dom.window.eval(audioCoreScript);
+  dom.window.eval(articleScript);
+  if (fetchCount !== 0) failures.push('audio manifest fetched before Listen was selected');
+  dom.window.document.querySelector('[data-reading-mode="listen"]')?.click();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  if (fetchCount !== 1) failures.push(`audio manifest lazy fetch count is ${fetchCount}, expected 1`);
 }
 
 const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
@@ -111,7 +126,7 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
   const html = await readFile(path.join(articleDirectory, 'index.html'), 'utf8');
   const dom = createDom(html, 390);
   const { window } = dom;
-  const manifest = inlineAudioManifest(window.document);
+  const manifest = await loadAudioManifest(window.document);
   const voices = Array.isArray(manifest.voices) ? manifest.voices : [];
   const defaultVoice = manifest.defaultVoice;
   const defaultVoiceEntry = voices.find((voice) => voice.id === defaultVoice);
@@ -135,8 +150,7 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
     Object.defineProperty(articleAudio, 'duration', { value: firstDuration, configurable: true });
     Object.defineProperty(articleAudio, 'currentTime', { value: 0, writable: true, configurable: true });
   }
-  window.eval(audioCoreScript);
-  window.eval(articleScript);
+  await initializeLazyAudio(dom, manifest);
   const voiceSelect = window.document.querySelector('[data-audio-voice]');
   const voiceField = window.document.querySelector('[data-audio-voice-field]');
   const seek = window.document.querySelector('[data-audio-seek]');
@@ -186,16 +200,14 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
     Object.defineProperty(resumeAudio, 'currentTime', { value: 0, writable: true, configurable: true });
   }
   resumeDom.window.localStorage.setItem(`bareeq-audio-progress-v1:${referenceArticleId}`, JSON.stringify({ voiceId: defaultVoice, partIndex: 0, time: resumeTime, updatedAt: Date.now() }));
-  resumeDom.window.eval(audioCoreScript);
-  resumeDom.window.eval(articleScript);
+  await initializeLazyAudio(resumeDom, manifest);
   resumeAudio?.dispatchEvent(new resumeDom.window.Event('loadedmetadata'));
   if (resumeDom.window.document.querySelector('[data-audio-voice]')?.value !== defaultVoice || Math.abs((resumeAudio?.currentTime || 0) - resumeTime) > 0.1 || resumeDom.window.document.querySelector('[data-audio-play-label]')?.textContent !== 'متابعة الاستماع') failures.push(`saved ${defaultVoice} choice and listening position are not restored on a new page session`);
   resumeDom.window.close();
 
   const expiredDom = createDom(html, 390);
   expiredDom.window.localStorage.setItem(`bareeq-audio-progress-v1:${referenceArticleId}`, JSON.stringify({ voiceId: defaultVoice, partIndex: 0, time: Math.min(88, firstDuration * 0.75), updatedAt: Date.now() - 31 * 24 * 60 * 60 * 1000 }));
-  expiredDom.window.eval(audioCoreScript);
-  expiredDom.window.eval(articleScript);
+  await initializeLazyAudio(expiredDom, manifest);
   if (expiredDom.window.localStorage.getItem(`bareeq-audio-progress-v1:${referenceArticleId}`) || expiredDom.window.document.querySelector('[data-audio-play-label]')?.textContent !== 'ابدأ الاستماع') failures.push('listening progress older than 30 days is not expired and removed');
   expiredDom.window.close();
 }
@@ -206,27 +218,26 @@ const homeHtml = await readFile(path.join(root, 'index.html'), 'utf8');
   const dom = createDom(html, 390);
   const listenButton = dom.window.document.querySelector('[data-reading-mode="listen"]');
   if (!listenButton?.disabled) {
-    dom.window.eval(audioCoreScript);
-    dom.window.eval(articleScript);
+    const manifest = await loadAudioManifest(dom.window.document);
+    await initializeLazyAudio(dom, manifest);
     const voiceSelect = dom.window.document.querySelector('[data-audio-voice]');
     const voiceField = dom.window.document.querySelector('[data-audio-voice-field]');
     const articleAudio = dom.window.document.querySelector('[data-article-audio]');
-    if (productionProvider === 'bundled') {
+    if (manifest.provider === 'Microsoft Azure AI Speech' && manifest.defaultVoice === 'hamed' && manifest.parts?.[0]?.audio?.hamed?.src?.includes('/releases/')) {
       if (!voiceSelect?.disabled || voiceSelect?.options.length !== 1 || voiceSelect?.value !== 'hamed' || !voiceField?.hidden || !articleAudio?.src.includes('/releases/azure-hamed-live-20260815/part-001-7701cd5f.mp3')) failures.push('bundled production player does not initialize with the single approved Hamed release');
-    } else if (productionProvider === 'gemini') {
-      const manifest = inlineAudioManifest(dom.window.document);
+    } else if (manifest.provider === 'Google Gemini API' || manifest.provider === 'Google Cloud Text-to-Speech') {
       const activeVoice = manifest.defaultVoice;
       const activeAsset = manifest.parts?.[0]?.audio?.[activeVoice];
       if (!['sadaltager', 'hamed'].includes(activeVoice) || !voiceSelect?.disabled || voiceSelect?.options.length !== 1 || voiceSelect?.value !== activeVoice || !voiceField?.hidden || !activeAsset?.src || !articleAudio?.src.endsWith(activeAsset.src)) failures.push('Gemini progressive player must initialize from either Sadaltager or the approved single-voice Hamed fallback manifest');
     } else {
-      const [firstVoice, secondVoice] = productionProvider === 'azure' ? ['hamed', 'zariyah'] : ['cedar', 'marin'];
+      const [firstVoice, secondVoice] = manifest.provider === 'Microsoft Azure AI Speech' ? ['hamed', 'zariyah'] : ['cedar', 'marin'];
       if (voiceSelect?.disabled || voiceSelect?.options.length !== 2 || voiceSelect?.value !== firstVoice || !articleAudio?.src.includes(`${firstVoice}-part-`)) failures.push(`generated dual-voice player does not initialize with ${firstVoice} and ${secondVoice}`);
       if (articleAudio) Object.defineProperty(articleAudio, 'currentTime', { value: 2.5, writable: true, configurable: true });
       if (voiceSelect) {
         voiceSelect.value = secondVoice;
         voiceSelect.dispatchEvent(new dom.window.Event('change', { bubbles: true }));
         if (!articleAudio?.src.includes(`${secondVoice}-part-`)) failures.push(`switching to ${secondVoice} does not change the generated MP3 source`);
-        const preferenceProvider = productionProvider === 'azure' ? 'microsoft-azure-ai-speech' : 'openai';
+        const preferenceProvider = manifest.provider === 'Microsoft Azure AI Speech' ? 'microsoft-azure-ai-speech' : 'openai';
         if (dom.window.localStorage.getItem(`bareeq-audio-voice-v1:${preferenceProvider}`) !== secondVoice) failures.push(`selected ${secondVoice} voice is not saved in localStorage`);
       }
     }

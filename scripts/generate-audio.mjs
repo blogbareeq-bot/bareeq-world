@@ -3,6 +3,18 @@ import { spawn } from 'node:child_process';
 import { access, mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
+import {
+  CLOUD_TTS_AUDIO_ENCODING,
+  CLOUD_TTS_LANGUAGE,
+  CLOUD_TTS_MODEL,
+  CLOUD_TTS_STYLE,
+  CLOUD_TTS_VOICE,
+  assertCloudTtsActivation,
+  buildCloudTtsRequest,
+  extractCloudTtsMp3,
+  getCloudTtsAccessToken,
+  hasCloudTtsCredentials,
+} from './cloud-tts.mjs';
 
 let ffmpegInstaller = null;
 try { ffmpegInstaller = (await import('@ffmpeg-installer/ffmpeg')).default; }
@@ -12,10 +24,11 @@ const ROOT = process.cwd();
 const POSTS_DIR = path.join(ROOT, 'src', 'content', 'posts');
 const AUDIO_ROOT = path.join(ROOT, 'public', 'audio', 'articles');
 const PROVIDER = process.env.BAREEQ_TTS_PROVIDER?.trim().toLowerCase() || 'bundled';
-if (!['bundled', 'gemini', 'openai', 'azure'].includes(PROVIDER)) throw new Error('BAREEQ_TTS_PROVIDER must be bundled, gemini, openai, or azure.');
+if (!['bundled', 'gemini', 'google-cloud', 'openai', 'azure'].includes(PROVIDER)) throw new Error('BAREEQ_TTS_PROVIDER must be bundled, gemini, google-cloud, openai, or azure.');
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY?.trim();
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY?.trim();
 const AZURE_API_KEY = process.env.AZURE_SPEECH_KEY?.trim();
+const GOOGLE_CLOUD_PROJECT = process.env.GOOGLE_CLOUD_PROJECT?.trim() || 'bareeq-tts';
 const REGION = process.env.AZURE_SPEECH_REGION?.trim().toLowerCase() || 'eastus';
 const RESOURCE_ENDPOINT = process.env.AZURE_SPEECH_ENDPOINT?.trim().replace(/\/$/, '') || `https://${REGION}.api.cognitive.microsoft.com`;
 const GEMINI_MODEL = 'gemini-3.1-flash-tts-preview';
@@ -46,14 +59,18 @@ for (const contractEndpoint of [openAiContractEndpoint, geminiContractEndpoint].
 }
 const OPENAI_ENDPOINT = openAiContractEndpoint || OPENAI_OFFICIAL_ENDPOINT;
 const GEMINI_ENDPOINT = geminiContractEndpoint || GEMINI_OFFICIAL_ENDPOINT;
-const LANGUAGE = PROVIDER === 'azure' ? 'ar-SA' : 'ar';
+const LANGUAGE = PROVIDER === 'azure' ? 'ar-SA' : PROVIDER === 'google-cloud' ? CLOUD_TTS_LANGUAGE : 'ar';
 const SYNTHESIS_RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';
-const OUTPUT_FORMAT = PROVIDER === 'openai' ? 'mp3' : ['gemini', 'azure'].includes(PROVIDER) ? 'audio-48khz-96kbitrate-mono-mp3' : 'mixed-mp3';
-const MODEL = PROVIDER === 'gemini' ? GEMINI_MODEL : PROVIDER === 'openai' ? OPENAI_MODEL : PROVIDER === 'azure' ? 'Neural TTS' : 'Approved offline releases';
-const PROVIDER_NAME = PROVIDER === 'gemini' ? 'Google Gemini API' : PROVIDER === 'openai' ? 'OpenAI' : PROVIDER === 'azure' ? 'Microsoft Azure AI Speech' : 'Bundled Cedar + Azure Hamed';
+const OUTPUT_FORMAT = ['openai', 'google-cloud'].includes(PROVIDER) ? 'mp3' : ['gemini', 'azure'].includes(PROVIDER) ? 'audio-48khz-96kbitrate-mono-mp3' : 'mixed-mp3';
+const MODEL = PROVIDER === 'gemini' ? GEMINI_MODEL : PROVIDER === 'google-cloud' ? CLOUD_TTS_MODEL : PROVIDER === 'openai' ? OPENAI_MODEL : PROVIDER === 'azure' ? 'Neural TTS' : 'Approved offline releases';
+const PROVIDER_NAME = PROVIDER === 'gemini' ? 'Google Gemini API' : PROVIDER === 'google-cloud' ? 'Google Cloud Text-to-Speech' : PROVIDER === 'openai' ? 'OpenAI' : PROVIDER === 'azure' ? 'Microsoft Azure AI Speech' : 'Bundled Cedar + Azure Hamed';
 const VOICES = PROVIDER === 'gemini'
   ? [
       { id: 'sadaltager', label: 'سادالتاجر (Sadaltager)', providerVoice: 'Sadaltager', description: 'معرفي طبيعي مناسب لمقالات بريق' },
+    ]
+  : PROVIDER === 'google-cloud'
+  ? [
+      { id: 'sadaltager', label: 'سادالتاجر', providerVoice: CLOUD_TTS_VOICE, description: 'صوت معرفي عربي متزامن مع النص' },
     ]
   : PROVIDER === 'openai'
   ? [
@@ -69,12 +86,18 @@ const SYNC_PLAN_ONLY = process.argv.includes('--sync-plan');
 const SPEECH_QA_JSON = process.argv.includes('--speech-qa-json') || process.argv.some((arg) => arg.startsWith('--speech-qa-output='));
 const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-output='))?.slice('--speech-qa-output='.length) || '';
 const ALLOW_PARTIAL = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
-const MAX_REQUEST_BYTES = PROVIDER === 'gemini' ? Number(process.env.GEMINI_TTS_MAX_REQUEST_BYTES || '2400') : PROVIDER === 'azure' ? 6000 : 4800;
-const MIN_SYNTHESIS_INTERVAL_MS = Number(PROVIDER === 'gemini' ? (process.env.GEMINI_TTS_MIN_INTERVAL_MS || '9000') : PROVIDER === 'openai' ? (process.env.OPENAI_TTS_MIN_INTERVAL_MS || '200') : PROVIDER === 'azure' ? (process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200') : '0');
+const CACHE_ONLY = process.env.BAREEQ_TTS_CACHE_ONLY === '1';
+const MAX_REQUEST_BYTES = PROVIDER === 'gemini' ? Number(process.env.GEMINI_TTS_MAX_REQUEST_BYTES || '2400') : PROVIDER === 'google-cloud' ? Number(process.env.GOOGLE_CLOUD_TTS_MAX_REQUEST_BYTES || '3200') : PROVIDER === 'azure' ? 6000 : 4800;
+const MIN_SYNTHESIS_INTERVAL_MS = Number(PROVIDER === 'gemini' ? (process.env.GEMINI_TTS_MIN_INTERVAL_MS || '9000') : PROVIDER === 'google-cloud' ? (process.env.GOOGLE_CLOUD_TTS_MIN_INTERVAL_MS || '500') : PROVIDER === 'openai' ? (process.env.OPENAI_TTS_MIN_INTERVAL_MS || '200') : PROVIDER === 'azure' ? (process.env.AZURE_SPEECH_MIN_INTERVAL_MS || '3200') : '0');
 const GENERATOR_VERSION = 8;
+const CLOUD_TTS_INTEGRATION_VERSION = 1;
 const AZURE_FREE_MONTHLY_CHARS = Number(process.env.AZURE_SPEECH_FREE_MONTHLY_CHARS || '500000');
 const BUILD_WARNING_CHARS = Number(process.env.AZURE_SPEECH_BUILD_WARNING_CHARS || '400000');
 const BUILD_HARD_LIMIT_CHARS = Number(process.env.AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS || '450000');
+const AZURE_MONTHLY_USED_CHARS = process.env.AZURE_SPEECH_MONTHLY_USED_CHARS?.trim() === '' || process.env.AZURE_SPEECH_MONTHLY_USED_CHARS == null ? null : Number(process.env.AZURE_SPEECH_MONTHLY_USED_CHARS);
+const AZURE_MONTHLY_WARNING_CHARS = Number(process.env.AZURE_SPEECH_MONTHLY_WARNING_CHARS || '400000');
+const CLOUD_TTS_REQUEST_HARD_LIMIT = Number(process.env.BAREEQ_CLOUD_TTS_MAX_REQUESTS_PER_BUILD || '100');
+const CLOUD_TTS_CHARACTER_HARD_LIMIT = Number(process.env.BAREEQ_CLOUD_TTS_MAX_CHARS_PER_BUILD || '120000');
 const OPENAI_BUILD_WARNING_USD = Number(process.env.OPENAI_TTS_BUILD_WARNING_USD || '8');
 const OPENAI_BUILD_HARD_LIMIT_USD = Number(process.env.OPENAI_TTS_BUILD_HARD_LIMIT_USD || '12');
 const OPENAI_ARABIC_CHARS_PER_SECOND = Number(process.env.OPENAI_TTS_ARABIC_CHARS_PER_SECOND || '11');
@@ -83,7 +106,7 @@ const OPENAI_AUDIO_TOKENS_PER_SECOND = Number(process.env.OPENAI_TTS_AUDIO_TOKEN
 const FFMPEG_PATH = process.env.FFMPEG_PATH?.trim() || ffmpegInstaller?.path || 'ffmpeg';
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
 const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
-const USER_AGENT = 'Bareeq-Audio-Builder/4.18.2';
+const USER_AGENT = 'Bareeq-Audio-Builder/4.21.0';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
 const SPEECH_OVERRIDES_VERSION = Number(SPEECH_OVERRIDES.version || 1);
@@ -370,6 +393,10 @@ const GEMINI_SYNTHESIS_BUDGET_MS = Number(process.env.BAREEQ_GEMINI_SYNTHESIS_BU
 if (!Number.isFinite(MAX_FETCH_RETRIES) || MAX_FETCH_RETRIES < 0) throw new Error('BAREEQ_TTS_MAX_RETRIES must be zero or a positive number.');
 if (!Number.isFinite(GEMINI_REQUEST_HARD_LIMIT) || GEMINI_REQUEST_HARD_LIMIT < 1) throw new Error('BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD must be a positive number.');
 if (!Number.isFinite(GEMINI_SYNTHESIS_BUDGET_MS) || GEMINI_SYNTHESIS_BUDGET_MS < 60000) throw new Error('BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS must be at least 60000ms.');
+if (PROVIDER === 'google-cloud' && (!Number.isFinite(MAX_REQUEST_BYTES) || MAX_REQUEST_BYTES < 1000 || MAX_REQUEST_BYTES > 4000)) throw new Error('GOOGLE_CLOUD_TTS_MAX_REQUEST_BYTES must be between 1000 and 4000.');
+if (!Number.isFinite(CLOUD_TTS_REQUEST_HARD_LIMIT) || CLOUD_TTS_REQUEST_HARD_LIMIT < 1) throw new Error('BAREEQ_CLOUD_TTS_MAX_REQUESTS_PER_BUILD must be a positive number.');
+if (!Number.isFinite(CLOUD_TTS_CHARACTER_HARD_LIMIT) || CLOUD_TTS_CHARACTER_HARD_LIMIT < 1) throw new Error('BAREEQ_CLOUD_TTS_MAX_CHARS_PER_BUILD must be a positive number.');
+if (AZURE_MONTHLY_USED_CHARS !== null && (!Number.isFinite(AZURE_MONTHLY_USED_CHARS) || AZURE_MONTHLY_USED_CHARS < 0)) throw new Error('AZURE_SPEECH_MONTHLY_USED_CHARS must be zero or a positive number when provided.');
 
 function retryDelay(attempt, response = null, body = '') {
   const retryAfterRaw = response?.headers?.get?.('retry-after')?.trim() || '';
@@ -634,8 +661,30 @@ async function synthesizeGemini(apiKey, voice, part, context) {
   return encodeGeminiPcmToMp3(pcm);
 }
 
+async function synthesizeGoogleCloud(voice, part) {
+  assertCloudTtsActivation(process.env, CONTRACT_TEST);
+  await throttleSynthesis();
+  const accessToken = await getCloudTtsAccessToken(process.env);
+  const { url, options } = buildCloudTtsRequest({
+    env: process.env,
+    contractTest: CONTRACT_TEST,
+    accessToken,
+    projectId: GOOGLE_CLOUD_PROJECT,
+    text: part.text,
+    prompt: CLOUD_TTS_STYLE,
+    userAgent: USER_AGENT,
+  });
+  const response = await request(url, options);
+  let payload;
+  try { payload = await response.json(); }
+  catch (error) { throw new Error(`Google Cloud TTS returned invalid JSON: ${error.message}`); }
+  if (voice.providerVoice !== CLOUD_TTS_VOICE) throw new Error(`Unexpected Google Cloud TTS voice: ${voice.providerVoice}`);
+  return extractCloudTtsMp3(payload);
+}
+
 async function synthesizeVoice(apiKey, voice, part, context) {
   if (PROVIDER === 'gemini') return synthesizeGemini(apiKey, voice, part, context);
+  if (PROVIDER === 'google-cloud') return synthesizeGoogleCloud(voice, part);
   if (PROVIDER === 'openai') return synthesizeOpenAI(apiKey, voice, part);
   return synthesizeAzure(apiKey, voice.providerVoice, part);
 }
@@ -661,13 +710,14 @@ async function loadPosts() {
 function providerFingerprint(post) {
   return sha(JSON.stringify({
     generatorVersion: GENERATOR_VERSION,
+    cloudTtsIntegrationVersion: PROVIDER === 'google-cloud' ? CLOUD_TTS_INTEGRATION_VERSION : undefined,
     speechOverridesVersion: SPEECH_OVERRIDES_VERSION,
     provider: PROVIDER,
     model: MODEL,
-    region: PROVIDER === 'azure' ? REGION : undefined,
+    region: PROVIDER === 'azure' ? REGION : PROVIDER === 'google-cloud' ? (process.env.GOOGLE_CLOUD_TTS_REGION?.trim().toLowerCase() || 'global') : undefined,
     language: LANGUAGE,
     voices: VOICES.map(({ id, providerVoice }) => ({ id, providerVoice })),
-    style: PROVIDER === 'gemini' ? GEMINI_STYLE : PROVIDER === 'openai' ? OPENAI_STYLE : undefined,
+    style: PROVIDER === 'gemini' ? GEMINI_STYLE : PROVIDER === 'google-cloud' ? CLOUD_TTS_STYLE : PROVIDER === 'openai' ? OPENAI_STYLE : undefined,
     rate: PROVIDER === 'azure' ? SYNTHESIS_RATE : 1,
     outputFormat: OUTPUT_FORMAT,
     text: post.spokenText,
@@ -752,16 +802,19 @@ function importedManifestAssets(manifest, post) {
 }
 
 function manifestAssets(manifest, post) {
+  const effectiveManifestVoices = PROVIDER === 'azure' && process.env.BAREEQ_AZURE_HAMED_ONLY === '1'
+    ? VOICES.filter((voice) => voice.id === 'hamed')
+    : VOICES;
   const imported = importedManifestAssets(manifest, post);
   if (imported) return imported;
   const bundled = bundledManifestAssets(manifest, post);
   if (bundled) return bundled;
   if (PROVIDER === 'bundled') return null;
   if (manifest.version !== 3 || manifest.sourceHash !== post.sourceHash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== PROVIDER_NAME || manifest.model !== MODEL || manifest.language !== LANGUAGE || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') return null;
-  if (Boolean(manifest.contractTest) !== CONTRACT_TEST || !Array.isArray(manifest.voices) || manifest.voices.length !== VOICES.length || !Array.isArray(manifest.parts) || !manifest.parts.length) return null;
-  if (manifest.defaultVoice !== VOICES[0].id) return null;
-  for (let index = 0; index < VOICES.length; index += 1) {
-    const expected = VOICES[index];
+  if (Boolean(manifest.contractTest) !== CONTRACT_TEST || !Array.isArray(manifest.voices) || manifest.voices.length !== effectiveManifestVoices.length || !Array.isArray(manifest.parts) || !manifest.parts.length) return null;
+  if (manifest.defaultVoice !== effectiveManifestVoices[0].id) return null;
+  for (let index = 0; index < effectiveManifestVoices.length; index += 1) {
+    const expected = effectiveManifestVoices[index];
     const actual = manifest.voices[index];
     if (actual?.id !== expected.id || actual?.providerVoice !== expected.providerVoice || typeof actual?.label !== 'string' || !(actual?.totalDurationSeconds > 0)) return null;
   }
@@ -769,7 +822,7 @@ function manifestAssets(manifest, post) {
   const paths = new Set();
   for (const part of manifest.parts) {
     if (!Array.isArray(part?.sync) || !part.audio || typeof part.audio !== 'object') return null;
-    for (const voice of VOICES) {
+    for (const voice of effectiveManifestVoices) {
       const asset = part.audio[voice.id];
       if (typeof asset?.src !== 'string' || !asset.src.startsWith(`/audio/articles/${post.key}/`) || !asset.src.endsWith('.mp3') || !(asset.bytes >= 100) || !(asset.durationSeconds > 0) || paths.has(asset.src)) return null;
       paths.add(asset.src);
@@ -839,11 +892,14 @@ function estimateOpenAiCost(characters, requestCount) {
 }
 
 const posts = await loadPosts();
+const INCLUDE_IDS = new Set((process.env.BAREEQ_TTS_INCLUDE_IDS || '').split(',').map((value) => value.trim()).filter(Boolean));
+const providerPosts = INCLUDE_IDS.size ? posts.filter((post) => INCLUDE_IDS.has(post.id)) : posts;
+if (INCLUDE_IDS.size && providerPosts.length !== INCLUDE_IDS.size) throw new Error('BAREEQ_TTS_INCLUDE_IDS contains unknown or draft article id(s).');
 const synthesisPosts = PROVIDER === 'gemini'
-  ? posts
+  ? providerPosts
   : PROVIDER === 'openai'
-    ? posts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id))
-    : posts;
+    ? providerPosts.filter((post) => !STUDIO_ARTICLE_IDS.has(post.id))
+    : providerPosts;
 const sourceChars = posts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
 const sourceBytes = posts.reduce((sum, post) => sum + byteLength(post.spokenText), 0);
 const sourceRequests = posts.reduce((sum, post) => sum + post.audioParts.length, 0);
@@ -881,10 +937,12 @@ if (PLAN_ONLY) {
   const generationChars = synthesisPosts.reduce((sum, post) => sum + [...post.spokenText].length, 0);
   const characterLabel = PROVIDER === 'gemini' ? 'source character(s)' : 'billable character(s)';
   console.log(PROVIDER === 'gemini'
-    ? `${PROVIDER_NAME} full Sadaltager rollout plan: ${posts.length} articles total, ${generationRequests} synthesis request(s), ${generationChars} ${characterLabel}; unchanged Sadaltager audio is restored from production before any new synthesis.`
-    : `${PROVIDER_NAME} audio plan: ${posts.length} articles, ${generationRequests * VOICES.length} synthesis request(s), ${generationChars * VOICES.length} ${characterLabel}, ${sourceBytes} source UTF-8 bytes.`);
+    ? `${PROVIDER_NAME} full Sadaltager rollout plan: ${providerPosts.length} selected article(s), ${generationRequests} synthesis request(s), ${generationChars} ${characterLabel}; unchanged Sadaltager audio is restored from production before any new synthesis.`
+    : PROVIDER === 'google-cloud'
+      ? `${PROVIDER_NAME} pre-activation plan: ${providerPosts.length} selected article(s), ${generationRequests} synthesis request(s), ${generationChars} ${characterLabel}, model ${CLOUD_TTS_MODEL}, voice ${CLOUD_TTS_VOICE}, locale ${CLOUD_TTS_LANGUAGE}. Planning sends 0 API requests.`
+      : `${PROVIDER_NAME} audio plan: ${providerPosts.length} selected article(s), ${generationRequests * VOICES.length} synthesis request(s), ${generationChars * VOICES.length} ${characterLabel}, ${sourceBytes} source UTF-8 bytes.`);
   console.log(`Voices: ${VOICES.map((voice) => `${voice.label} [${voice.providerVoice}]`).join(' + ')}.`);
-  for (const post of posts) {
+  for (const post of providerPosts) {
     const imported = PROVIDER === 'openai' && STUDIO_ARTICLE_IDS.has(post.id);
     console.log(imported
       ? `- ${post.id}: approved Bareeq Voice Studio release (Cedar), no synthesis request`
@@ -908,9 +966,16 @@ if (missing.length && PROVIDER !== 'bundled' && !CONTRACT_TEST && !ALLOW_PARTIAL
   missing = stillMissing;
 }
 
+if (CACHE_ONLY) {
+  if (missing.length) throw new Error(`Cache-only production restore failed for ${missing.length} article(s): ${missing.map((post) => post.id).join(', ')}. No synthesis API was called for these articles.`);
+  console.log(`Cache-only production restore passed for ${synthesisPosts.length} article(s); 0 synthesis requests.`);
+  process.exit(0);
+}
+
 const missingSourceChars = missing.reduce((sum, post) => sum + [...post.spokenText].length, 0);
-const missingChars = missingSourceChars * VOICES.length;
-const missingRequests = missing.reduce((sum, post) => sum + post.audioParts.length, 0) * VOICES.length;
+const effectiveVoiceCount = PROVIDER === 'azure' && process.env.BAREEQ_AZURE_HAMED_ONLY === '1' ? 1 : VOICES.length;
+const missingChars = missingSourceChars * effectiveVoiceCount;
+const missingRequests = missing.reduce((sum, post) => sum + post.audioParts.length, 0) * effectiveVoiceCount;
 
 if (PROVIDER === 'bundled' && missing.length) {
   throw new Error(`Bundled production audio is missing or no longer matches ${missing.length} article(s): ${missing.map((post) => post.id).join(', ')}. This zero-cost build never calls a synthesis API. Restore the approved audio-releases bundle or deliberately regenerate and re-lock the affected recording(s).`);
@@ -923,17 +988,37 @@ if (PROVIDER === 'bundled' && missing.length) {
 } else if (PROVIDER === 'gemini') {
   console.log(`Gemini TTS rollout: this build needs ${missingRequests} new request(s) and ${missingChars.toLocaleString('en-US')} source character(s) for Sadaltager.`);
   console.log(`Gemini pacing: one request at a time, minimum ${MIN_SYNTHESIS_INTERVAL_MS}ms between request starts, up to ${MAX_FETCH_RETRIES} retries with Retry-After/exponential backoff, and a ${Math.round(GEMINI_SYNTHESIS_BUDGET_MS / 60000)}-minute synthesis budget.`);
-  if (missingRequests > GEMINI_REQUEST_HARD_LIMIT) throw new Error(`Gemini safety stop: ${missingRequests} new request(s) exceed BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD=${GEMINI_REQUEST_HARD_LIMIT}. Review --plan before deliberately raising the cap.`);
+  if (missingRequests > GEMINI_REQUEST_HARD_LIMIT) { console.warn(`⚠ Gemini progressive rollout deferred: ${missingRequests} new request(s) exceed the ${GEMINI_REQUEST_HARD_LIMIT}-request per-build ceiling.`); console.warn('⚠ Safe fallback: matching Hamed/Cedar audio already present in this build remains publishable; unchanged Sadaltager restored from production is preserved.'); process.exit(0); }
+} else if (PROVIDER === 'google-cloud') {
+  console.log(`Google Cloud TTS safety gate: ${missingRequests} new request(s), ${missingChars.toLocaleString('en-US')} billable character(s), ${CLOUD_TTS_MODEL}, ${CLOUD_TTS_VOICE}, ${CLOUD_TTS_LANGUAGE}, direct ${CLOUD_TTS_AUDIO_ENCODING}.`);
+  if (missingRequests > CLOUD_TTS_REQUEST_HARD_LIMIT) throw new Error(`Google Cloud TTS safety stop: ${missingRequests} requests exceed BAREEQ_CLOUD_TTS_MAX_REQUESTS_PER_BUILD=${CLOUD_TTS_REQUEST_HARD_LIMIT}.`);
+  if (missingChars > CLOUD_TTS_CHARACTER_HARD_LIMIT) throw new Error(`Google Cloud TTS safety stop: ${missingChars} characters exceed BAREEQ_CLOUD_TTS_MAX_CHARS_PER_BUILD=${CLOUD_TTS_CHARACTER_HARD_LIMIT}.`);
+  assertCloudTtsActivation(process.env, CONTRACT_TEST);
 } else if (PROVIDER === 'azure') {
   const percent = AZURE_FREE_MONTHLY_CHARS > 0 ? (missingChars / AZURE_FREE_MONTHLY_CHARS) * 100 : 0;
   console.log(`Azure Speech cost guard: this build needs ${missingChars.toLocaleString('en-US')} new synthesis character(s) across ${missingRequests} request(s), about ${percent.toFixed(1)}% of the configured ${AZURE_FREE_MONTHLY_CHARS.toLocaleString('en-US')} monthly allowance.`);
   console.log('Note: this is a per-build estimate, not Azure account monthly usage. Unchanged published audio is restored without new synthesis.');
   if (BUILD_WARNING_CHARS > 0 && missingChars >= BUILD_WARNING_CHARS) console.warn(`⚠ Azure Speech usage warning: this build will synthesize ${missingChars.toLocaleString('en-US')} characters (warning threshold: ${BUILD_WARNING_CHARS.toLocaleString('en-US')}).`);
   if (BUILD_HARD_LIMIT_CHARS > 0 && missingChars > BUILD_HARD_LIMIT_CHARS) throw new Error(`Azure Speech safety stop: this build would synthesize ${missingChars.toLocaleString('en-US')} characters, above the configured hard limit of ${BUILD_HARD_LIMIT_CHARS.toLocaleString('en-US')}. Raise AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS deliberately if this is expected.`);
+  if (AZURE_MONTHLY_USED_CHARS !== null) {
+    const projected = AZURE_MONTHLY_USED_CHARS + missingChars;
+    console.log(`Azure monthly ledger: ${AZURE_MONTHLY_USED_CHARS.toLocaleString('en-US')} already recorded + ${missingChars.toLocaleString('en-US')} planned = ${projected.toLocaleString('en-US')} projected character(s).`);
+    if (AZURE_MONTHLY_WARNING_CHARS > 0 && projected >= AZURE_MONTHLY_WARNING_CHARS) console.warn(`⚠ Azure monthly allowance warning: projected usage is ${projected.toLocaleString('en-US')} characters (warning threshold: ${AZURE_MONTHLY_WARNING_CHARS.toLocaleString('en-US')}).`);
+    if (AZURE_FREE_MONTHLY_CHARS > 0 && projected > AZURE_FREE_MONTHLY_CHARS) throw new Error(`Azure monthly allowance safety stop: projected usage ${projected.toLocaleString('en-US')} exceeds ${AZURE_FREE_MONTHLY_CHARS.toLocaleString('en-US')}. Update AZURE_SPEECH_MONTHLY_USED_CHARS from the Azure portal before retrying.`);
+  } else {
+    console.warn('⚠ Azure monthly ledger is unavailable. Set AZURE_SPEECH_MONTHLY_USED_CHARS from the Azure portal to enable cumulative allowance alerts before synthesis.');
+  }
 }
 
 const API_KEY = PROVIDER === 'gemini' ? GEMINI_API_KEY : PROVIDER === 'openai' ? OPENAI_API_KEY : PROVIDER === 'azure' ? AZURE_API_KEY : '';
-if (!API_KEY && missing.length) {
+if (PROVIDER === 'google-cloud' && missing.length && !hasCloudTtsCredentials(process.env)) {
+  if (ALLOW_PARTIAL) {
+    console.warn(`⚠ Offline verification mode: skipping ${missing.length} Google Cloud TTS article(s); no paid request was sent.`);
+    process.exit(0);
+  }
+  throw new Error('Google Cloud TTS credentials are required after activation. Add GOOGLE_SERVICE_ACCOUNT_JSON as an encrypted Production Secret; no Cloud TTS request was sent.');
+}
+if (PROVIDER !== 'google-cloud' && !API_KEY && missing.length) {
   if (ALLOW_PARTIAL) {
     console.warn(`⚠ Offline pilot mode: preserving imported fallback audio and skipping ${missing.length} unavailable synthesis article(s). This mode is for local release verification only.`);
     process.exit(0);
@@ -948,11 +1033,15 @@ if (!missing.length) {
     ? `Bundled mixed audio cache is complete for ${posts.length} articles: 1 Studio Cedar + ${BUNDLED_BY_ARTICLE.size} Azure Hamed, 0 synthesis requests and no API key required.`
     : PROVIDER === 'gemini'
       ? `Gemini Sadaltager cache is complete for all ${posts.length} article(s): 0 new synthesis requests required.`
+      : PROVIDER === 'google-cloud'
+        ? `Google Cloud TTS cache is complete for ${synthesisPosts.length} selected article(s): 0 paid synthesis requests required.`
       : `${PROVIDER_NAME} audio cache is complete for ${posts.length} articles with ${VOICES.length} approved listening voice(s).`);
   process.exit(0);
 }
 
-const resolvedVoices = PROVIDER === 'azure' ? await resolveAzureVoices(API_KEY) : VOICES;
+const resolvedVoices = PROVIDER === 'azure'
+  ? (process.env.BAREEQ_AZURE_HAMED_ONLY === '1' ? (await resolveAzureVoices(API_KEY)).filter((voice) => voice.id === 'hamed') : await resolveAzureVoices(API_KEY))
+  : VOICES;
 console.log(`Generating ${PROVIDER_NAME} ${MODEL} (${LANGUAGE}) with ${resolvedVoices.map((voice) => voice.providerVoice).join(' + ')} for ${missing.length} article(s).`);
 
 const synthesisStartedAt = Date.now();
@@ -1028,7 +1117,9 @@ for (const post of missing) {
         ? { region: REGION, synthesisRate: SYNTHESIS_RATE }
         : PROVIDER === 'gemini'
           ? { performanceInstructions: GEMINI_STYLE, sourceAudioFormat: 'pcm-s16le-24000hz-mono', encodingTool: 'ffmpeg-libmp3lame' }
-          : { styleInstructions: OPENAI_STYLE }),
+          : PROVIDER === 'google-cloud'
+            ? { performanceInstructions: CLOUD_TTS_STYLE, cloudTtsIntegrationVersion: CLOUD_TTS_INTEGRATION_VERSION, region: process.env.GOOGLE_CLOUD_TTS_REGION?.trim().toLowerCase() || 'global', directAudioEncoding: CLOUD_TTS_AUDIO_ENCODING }
+            : { styleInstructions: OPENAI_STYLE }),
       ...(CONTRACT_TEST ? { contractTest: true } : {}),
       parts,
     };
