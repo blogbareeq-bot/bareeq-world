@@ -124,7 +124,7 @@ bdi,[dir='ltr'],code{unicode-bidi:isolate}
 [data-theme='dark'] .sun-icon{display:none}
 [data-theme='dark'] .moon-icon{display:block}
 .mobile-menu-button{display:none}
-.header-reading-list,.header-theme-toggle{display:none}
+.header-reading-list,.header-theme-toggle{display:inline-grid}
 .ticker{overflow:hidden;color:var(--navy-900);border-bottom:1px solid #d6e0e9;background:#f8fafc}
 .ticker-inner{min-height:44px;display:flex;align-items:center;gap:14px;overflow:hidden}
 .ticker-label{flex:0 0 auto;padding:5px 13px;color:#fff;border-radius:var(--pill);background:var(--navy-900);font-size:.76rem;font-weight:700;box-shadow:0 3px 10px rgba(6,24,45,.12)}
@@ -768,7 +768,6 @@ bdi,[dir='ltr'],code{unicode-bidi:isolate}
 
 @media (min-width:1101px){
   .site-header.header-design-one .main-header>.brand-logo{width:270px}
-  .site-header.header-design-one .header-search-link{transform:translateX(38px)}
 }
 
 .ticker,.category-strip{
