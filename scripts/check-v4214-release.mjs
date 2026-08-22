@@ -46,6 +46,6 @@ if (Math.abs(phone.geometry.tickerInner.width - 288) > 2 || Math.abs(phone.geome
   throw new Error(`390px ticker/category geometry drifted: ${JSON.stringify(phone.geometry)}.`);
 }
 const wide = metrics.results.find((item) => item.width === 1890);
-if (Math.abs(wide.geometry.siteHeader.width - 1440) > 2) throw new Error(`Desktop header cap drifted: ${wide.geometry.siteHeader.width}px.`);
+if (wide.geometry.siteHeader.width < 1880) throw new Error(`Desktop header must span the viewport, got ${wide.geometry.siteHeader.width}px.`);
 
-console.log('V4.21.4 release gate passed: seven real-browser viewports, zero overflow/errors, exact 390px geometry, 1440px desktop cap, and moving mobile ticker are verified.');
+console.log('V4.21.4 release gate passed: seven real-browser viewports, zero overflow/errors, exact 390px geometry, full-bleed desktop header, and moving mobile ticker are verified.');

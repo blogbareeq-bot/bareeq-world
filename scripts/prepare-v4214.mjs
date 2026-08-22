@@ -24,7 +24,7 @@ requireAll('global.css', css, [
   'V4.21.4 — مطابقة بصرية للتصميم الأول المعتمد',
   "url('/images/header-design-one-desktop.svg')",
   "url('/images/header-design-one-mobile.svg')",
-  'width:min(1440px,calc(100% - 16px))',
+  '.site-header.header-design-one{\n  width:100%;\n  max-width:none;',
   'height:112px',
   'width:min(288px,calc(100% - 28px))',
   '@keyframes mobileTickerLabel',

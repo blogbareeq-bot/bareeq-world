@@ -22,7 +22,7 @@ const compactTickerTitle = (title: string, max = 42) => {
 };
 ---
 <header class="site-header sticky-header header-design-one" data-sticky-header data-header-design="one">
-  <div class="main-header shell-full">
+  <div class="main-header">
       <Logo />
       <nav class="desktop-nav" aria-label="التنقل الرئيسي">
         <a class:list={[{ active: isActive('/') }]} aria-current={isActive('/') ? 'page' : undefined} href="/">الرئيسية</a>
@@ -52,7 +52,7 @@ const compactTickerTitle = (title: string, max = 42) => {
 
 {latestPosts.length > 0 && (
     <div class="ticker" aria-label="أحدث المقالات" data-ticker>
-      <div class="shell-wide ticker-inner">
+      <div class="ticker-inner">
         <span class="ticker-label"><span class="ticker-label-full">أحدث المقالات</span><span class="ticker-label-mobile">جديد</span></span>
         <div class="ticker-viewport">
           <div class="ticker-track" data-ticker-track>

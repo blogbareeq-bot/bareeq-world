@@ -727,12 +727,13 @@ bdi,[dir='ltr'],code{unicode-bidi:isolate}
 
 /* V4.21.4 — مطابقة بصرية للتصميم الأول المعتمد */
 .site-header.header-design-one{
-  width:min(1440px,calc(100% - 16px));
-  margin:10px auto 0;
+  width:100%;
+  max-width:none;
+  margin:0;
   overflow:hidden;
-  border:1px solid #d6e0e9;
-  border-bottom:0;
-  border-radius:14px 14px 0 0;
+  border:0;
+  border-bottom:1px solid #d6e0e9;
+  border-radius:0;
   background:#fff;
 }
 .site-header.header-design-one .main-header{
@@ -741,7 +742,7 @@ bdi,[dir='ltr'],code{unicode-bidi:isolate}
   height:118px;
   min-height:118px;
   margin:0;
-  padding:8px 22px;
+  padding:8px clamp(16px,2.4vw,36px);
   overflow:hidden;
   background:#fff;
 }
@@ -771,12 +772,13 @@ bdi,[dir='ltr'],code{unicode-bidi:isolate}
 }
 
 .ticker,.category-strip{
-  width:min(1440px,calc(100% - 16px));
-  margin-inline:auto;
-  border-inline:1px solid #d6e0e9;
+  width:100%;
+  max-width:none;
+  margin-inline:0;
+  border-inline:0;
 }
 .ticker{position:relative;border-bottom:1px solid #d6e0e9}
-.ticker .ticker-inner{width:calc(100% - 40px);max-width:1360px;margin-inline:auto}
+.ticker .ticker-inner{width:calc(100% - 40px);max-width:none;margin-inline:auto}
 .ticker .ticker-toggle{
   position:absolute;
   width:1px;
@@ -793,10 +795,10 @@ bdi,[dir='ltr'],code{unicode-bidi:isolate}
 .category-strip{
   position:relative;
   top:auto;
-  margin-bottom:10px;
+  margin-bottom:0;
   padding:24px 0 20px;
   border-bottom:1px solid #d6e0e9;
-  border-radius:0 0 14px 14px;
+  border-radius:0;
   background:#fff;
 }
 .category-strip .category-strip-inner{width:calc(100% - 64px);max-width:1280px}
