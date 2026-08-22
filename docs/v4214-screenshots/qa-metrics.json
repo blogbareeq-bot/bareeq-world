@@ -1,6 +1,8 @@
 {
-  "generatedAt": "2026-08-22T03:09:46.249Z",
-  "chromium": "/workspace/scratch/537b55f605ae/browser-tmp/chromium",
+  "generatedAt": "2026-08-22T11:13:49.855Z",
+  "chromium": "/tmp/chromium",
+  "browserVersion": "HeadlessChrome/138.0.7204.0",
+  "origin": "http://127.0.0.1:38377",
   "results": [
     {
       "width": 320,
@@ -11,30 +13,41 @@
           "x": 12,
           "y": 8,
           "width": 296,
-          "height": 113
+          "height": 114,
+          "visible": true
         },
         "mainHeader": {
           "x": 13,
           "y": 9,
           "width": 294,
-          "height": 112
+          "height": 112,
+          "visible": true
         },
         "tickerInner": {
-          "x": 27,
-          "y": 131,
-          "width": 266,
-          "height": 38
+          "x": 76,
+          "y": 135,
+          "width": 220,
+          "height": 38,
+          "visible": false
+        },
+        "tickerToggle": {
+          "x": 24,
+          "y": 132,
+          "width": 44,
+          "height": 44,
+          "visible": true
         },
         "categoryInner": {
-          "x": 25,
-          "y": 188,
-          "width": 270,
-          "height": 142.13
+          "x": 24,
+          "y": 195,
+          "width": 272,
+          "height": 142.13,
+          "visible": true
         }
       },
-      "tickerStart": 30.1,
-      "tickerLater": 90.91,
-      "tickerDelta": 60.81,
+      "tickerStart": 13.05,
+      "tickerLater": 43.51,
+      "tickerDelta": 30.46,
       "menu": null,
       "pauseResume": null
     },
@@ -47,30 +60,41 @@
           "x": 12,
           "y": 8,
           "width": 336,
-          "height": 113
+          "height": 114,
+          "visible": true
         },
         "mainHeader": {
           "x": 13,
           "y": 9,
           "width": 334,
-          "height": 112
+          "height": 112,
+          "visible": true
         },
         "tickerInner": {
-          "x": 36,
-          "y": 131,
-          "width": 288,
-          "height": 38
+          "x": 76,
+          "y": 135,
+          "width": 260,
+          "height": 38,
+          "visible": false
+        },
+        "tickerToggle": {
+          "x": 24,
+          "y": 132,
+          "width": 44,
+          "height": 44,
+          "visible": true
         },
         "categoryInner": {
-          "x": 25,
-          "y": 188,
-          "width": 310,
-          "height": 138
+          "x": 24,
+          "y": 195,
+          "width": 312,
+          "height": 138,
+          "visible": true
         }
       },
-      "tickerStart": 28.7,
-      "tickerLater": 90.3,
-      "tickerDelta": 61.6,
+      "tickerStart": 35.7,
+      "tickerLater": 73.5,
+      "tickerDelta": 37.8,
       "menu": null,
       "pauseResume": null
     },
@@ -83,30 +107,41 @@
           "x": 12,
           "y": 8,
           "width": 366,
-          "height": 113
+          "height": 114,
+          "visible": true
         },
         "mainHeader": {
           "x": 13,
           "y": 9,
           "width": 364,
-          "height": 112
+          "height": 112,
+          "visible": true
         },
         "tickerInner": {
-          "x": 51,
-          "y": 131,
+          "x": 77,
+          "y": 135,
           "width": 288,
-          "height": 38
+          "height": 38,
+          "visible": false
+        },
+        "tickerToggle": {
+          "x": 25,
+          "y": 132,
+          "width": 44,
+          "height": 44,
+          "visible": true
         },
         "categoryInner": {
-          "x": 25,
-          "y": 188,
-          "width": 340,
-          "height": 138
+          "x": 24,
+          "y": 195,
+          "width": 342,
+          "height": 138,
+          "visible": true
         }
       },
-      "tickerStart": 28,
-      "tickerLater": 89.59,
-      "tickerDelta": 61.59,
+      "tickerStart": 34.99,
+      "tickerLater": 72.79,
+      "tickerDelta": 37.8,
       "menu": {
         "opened": true,
         "closed": true
@@ -117,6 +152,53 @@
       }
     },
     {
+      "width": 430,
+      "pageScrollWidth": 430,
+      "browserErrors": [],
+      "geometry": {
+        "siteHeader": {
+          "x": 12,
+          "y": 8,
+          "width": 406,
+          "height": 114,
+          "visible": true
+        },
+        "mainHeader": {
+          "x": 13,
+          "y": 9,
+          "width": 404,
+          "height": 112,
+          "visible": true
+        },
+        "tickerInner": {
+          "x": 97,
+          "y": 135,
+          "width": 288,
+          "height": 38,
+          "visible": false
+        },
+        "tickerToggle": {
+          "x": 45,
+          "y": 132,
+          "width": 44,
+          "height": 44,
+          "visible": true
+        },
+        "categoryInner": {
+          "x": 24,
+          "y": 195,
+          "width": 382,
+          "height": 138,
+          "visible": true
+        }
+      },
+      "tickerStart": 34.31,
+      "tickerLater": 72.1,
+      "tickerDelta": 37.79,
+      "menu": null,
+      "pauseResume": null
+    },
+    {
       "width": 768,
       "pageScrollWidth": 768,
       "browserErrors": [],
@@ -125,25 +207,36 @@
           "x": 12,
           "y": 8,
           "width": 744,
-          "height": 113
+          "height": 114,
+          "visible": true
         },
         "mainHeader": {
           "x": 13,
           "y": 9,
           "width": 742,
-          "height": 112
+          "height": 112,
+          "visible": true
         },
         "tickerInner": {
-          "x": 25,
-          "y": 121,
-          "width": 718,
-          "height": 44
+          "x": 70,
+          "y": 122,
+          "width": 676,
+          "height": 44,
+          "visible": true
+        },
+        "tickerToggle": {
+          "x": 20,
+          "y": 122,
+          "width": 44,
+          "height": 44,
+          "visible": true
         },
         "categoryInner": {
-          "x": 25,
-          "y": 190,
-          "width": 718,
-          "height": 66
+          "x": 24,
+          "y": 191,
+          "width": 720,
+          "height": 66,
+          "visible": true
         }
       },
       "tickerStart": 0,
@@ -158,28 +251,39 @@
       "browserErrors": [],
       "geometry": {
         "siteHeader": {
-          "x": 8,
-          "y": 10,
-          "width": 1008,
-          "height": 101
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 101,
+          "visible": true
         },
         "mainHeader": {
-          "x": 9,
-          "y": 11,
-          "width": 1006,
-          "height": 100
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 100,
+          "visible": true
         },
         "tickerInner": {
-          "x": 29,
-          "y": 111,
-          "width": 966,
-          "height": 44
+          "x": 58,
+          "y": 101,
+          "width": 950,
+          "height": 44,
+          "visible": true
+        },
+        "tickerToggle": {
+          "x": 8,
+          "y": 101,
+          "width": 44,
+          "height": 44,
+          "visible": true
         },
         "categoryInner": {
-          "x": 25,
-          "y": 180,
-          "width": 974,
-          "height": 66
+          "x": 16,
+          "y": 170,
+          "width": 992,
+          "height": 66,
+          "visible": true
         }
       },
       "tickerStart": 0,
@@ -194,28 +298,39 @@
       "browserErrors": [],
       "geometry": {
         "siteHeader": {
-          "x": 8,
-          "y": 10,
-          "width": 1424,
-          "height": 119
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 119,
+          "visible": true
         },
         "mainHeader": {
-          "x": 9,
-          "y": 11,
-          "width": 1422,
-          "height": 118
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 118,
+          "visible": true
         },
         "tickerInner": {
-          "x": 40,
-          "y": 129,
-          "width": 1360,
-          "height": 44
+          "x": 58,
+          "y": 119,
+          "width": 1366,
+          "height": 44,
+          "visible": true
+        },
+        "tickerToggle": {
+          "x": 8,
+          "y": 119,
+          "width": 44,
+          "height": 44,
+          "visible": true
         },
         "categoryInner": {
           "x": 80,
-          "y": 198,
+          "y": 188,
           "width": 1280,
-          "height": 66
+          "height": 66,
+          "visible": true
         }
       },
       "tickerStart": 0,
@@ -230,28 +345,39 @@
       "browserErrors": [],
       "geometry": {
         "siteHeader": {
-          "x": 225,
-          "y": 10,
-          "width": 1440,
-          "height": 119
+          "x": 0,
+          "y": 0,
+          "width": 1890,
+          "height": 119,
+          "visible": true
         },
         "mainHeader": {
-          "x": 226,
-          "y": 11,
-          "width": 1438,
-          "height": 118
+          "x": 0,
+          "y": 0,
+          "width": 1890,
+          "height": 118,
+          "visible": true
         },
         "tickerInner": {
-          "x": 265,
-          "y": 129,
-          "width": 1360,
-          "height": 44
+          "x": 58,
+          "y": 119,
+          "width": 1816,
+          "height": 44,
+          "visible": true
+        },
+        "tickerToggle": {
+          "x": 8,
+          "y": 119,
+          "width": 44,
+          "height": 44,
+          "visible": true
         },
         "categoryInner": {
           "x": 305,
-          "y": 198,
+          "y": 188,
           "width": 1280,
-          "height": 66
+          "height": 66,
+          "visible": true
         }
       },
       "tickerStart": 0,
