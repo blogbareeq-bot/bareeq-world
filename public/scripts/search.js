@@ -13,7 +13,7 @@
     if (input.value.trim()) url.searchParams.set('q', input.value.trim()); else url.searchParams.delete('q');
     history.replaceState(null, '', url);
     if (!query) { count.textContent = 'ابدأ بالكتابة لعرض النتائج.'; return; }
-    const matched = data.filter((item) => normalize(`${item.title} ${item.description} ${item.category} ${(item.tags || []).join(' ')}`).includes(query));
+    const matched = data.filter((item) => normalize(`${item.title} ${item.description} ${item.excerpt || ''} ${item.category} ${(item.tags || []).join(' ')}`).includes(query));
     count.textContent = matched.length ? `${new Intl.NumberFormat('ar-SA').format(matched.length)} نتيجة` : 'لم نجد نتيجة مطابقة. جرّب كلمة أقصر أو تصفح الأقسام.';
     matched.forEach((item) => {
       const link = document.createElement('a');

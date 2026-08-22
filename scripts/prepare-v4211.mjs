@@ -14,7 +14,10 @@ const readinessBefore = await readFile(readinessPath, 'utf8');
 const readinessAfter = readinessBefore
   .replace("if (pkg.version !== '4.21.0') failures.push(`Expected package version 4.21.0, got ${pkg.version}`);", "if (pkg.version !== '4.21.1') failures.push(`Expected package version 4.21.1, got ${pkg.version}`);")
   .replace('Launch-readiness source audit passed: V4.21.0 package identity', 'Launch-readiness source audit passed: V4.21.1 package identity');
-if (!readinessAfter.includes("if (pkg.version !== '4.21.1') failures.push(`Expected package version 4.21.1, got ${pkg.version}`);")) throw new Error('V4.21.1: launch-readiness version gate is missing.');
+if (
+  !readinessAfter.includes("if (pkg.version !== '4.21.1') failures.push(`Expected package version 4.21.1, got ${pkg.version}`);")
+  && !readinessAfter.includes("if (!['4.21.1', '4.21.2'].includes(pkg.version)) failures.push(`Expected package version 4.21.1 or 4.21.2, got ${pkg.version}`);")
+) throw new Error('V4.21.1: launch-readiness version gate is missing.');
 if (readinessAfter !== readinessBefore) await writeFile(readinessPath, readinessAfter);
 
 const [runner, generator, footer, about, contact, privacy, site] = await Promise.all([

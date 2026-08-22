@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { series, signaturePosts, type CategorySlug } from '../config/site';
 
 export type Post = CollectionEntry<'posts'>;
 
@@ -93,4 +94,39 @@ export function escapeXml(value: string): string {
 
 export function uniqueTags(posts: Post[]): string[] {
   return [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) => a.localeCompare(b, 'ar'));
+}
+
+export function getSignaturePost(posts: Post[], categorySlug: CategorySlug): Post | undefined {
+  const signatureId = signaturePosts[categorySlug];
+  return posts.find((post) => post.id === signatureId) ?? posts.find((post) => post.data.categorySlug === categorySlug);
+}
+
+export function getSeriesMeta(slug?: string) {
+  return series.find((item) => item.slug === slug);
+}
+
+export function getSeriesEntries(slug: string, posts: Post[]): Post[] {
+  const meta = getSeriesMeta(slug);
+  const inSeries = posts.filter((post) => post.data.seriesSlug === slug);
+  const order = meta?.order ?? [];
+  return [...inSeries].sort((a, b) => {
+    const aIndex = order.indexOf(a.id as (typeof order)[number]);
+    const bIndex = order.indexOf(b.id as (typeof order)[number]);
+    if (aIndex === -1 && bIndex === -1) return a.data.publishedAt.valueOf() - b.data.publishedAt.valueOf();
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+    return aIndex - bIndex;
+  });
+}
+
+export function postSearchExcerpt(post: Post, max = 420): string {
+  const text = post.body
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/!\[[^\]]*]\([^)]+\)/g, ' ')
+    .replace(/\[([^\]]+)]\([^)]+\)/g, '$1')
+    .replace(/https?:\/\/\S+/g, ' ')
+    .replace(/<[^>]+>|[`*_>#\[\]()|~!-]/g, ' ')
+    .replace(/\s+/gu, ' ')
+    .trim();
+  return text.slice(0, max);
 }

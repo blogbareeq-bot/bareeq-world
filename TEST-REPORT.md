@@ -1,84 +1,67 @@
-# Bareeq V4.21.1 — Test Report
+# Bareeq V4.21.2 — Test Report
 
-Validation date: 2026-08-21
+تاريخ التحقق: 2026-08-21 (UTC)
 
-## Baseline
+## النتيجة
 
-- Input package: `Bareeq-V4.21.0-FINAL.zip`.
-- Input SHA-256: `239903f6c0833a54c63f4149edc97772deaa1c5abf96266e6fe8b385424f0ecd`.
-- Input ZIP integrity: PASS.
-- Stable baseline version: V4.21.0.
-- Published content retained: 13 articles; article-body changes in V4.21.1: 0.
+**PASS — مرشح الإصدار صالح تقنيًا للنشر بعد تحديث فرع GitHub وتشغيل معاينة Cloudflare.**
 
-## Source and contract checks
+## ثوابت الإصدار
 
-- `npm ci --ignore-scripts`: PASS (252 packages installed).
-- JSON and JavaScript syntax: PASS.
-- `npm run audit:v4211`: PASS.
-  - V4.19.0, V4.20.0, V4.21.0, and V4.21.1 preparation gates passed.
-  - Google Cloud TTS offline contract passed; paid requests: 0.
-  - Gemini free-tier contract passed against a local mock.
-  - Exactly one article per build and shortest-first selection verified.
-  - Persistent 429 returned success while preserving fallback and leaving no partial directory.
-  - Audio UI tests passed at 390px and 1440px.
-  - Design-one source gate passed for desktop, tablet, mobile, search, theme, reading list, ticker, and categories.
-  - V4.21.0 compatibility and V4.21.1 release gates passed.
+- الأساس: V4.21.1 `6a98911628765568ecc540f47f10bc6c288ffeff`.
+- المقالات المنشورة: 13؛ تغييرات متون المقالات: 0.
+- H1 الرئيسية: `عالم بريق — نافذتك إلى المعرفة`.
+- الهيدر: التصميم الأول فقط (`data-header-design="one"`).
+- طلبات TTS/API الخارجية أثناء البناء: 0.
+- `BAREEQ_CLOUD_TTS_ACTIVATE`: غير مفعّل افتراضيًا.
 
-## Backlog plan
+## البناء والبوابات
 
-- `npm run plan:audio:gemini:pending`: PASS.
-- Pending articles: 11.
-- Complete-backlog parts/requests: 81.
-- Complete-backlog source characters: 95,441.
-- API requests during planning: 0.
-- Initial shortest unresolved article: 4 parts.
+| الفحص | النتيجة |
+| --- | --- |
+| `npm run build` | PASS — 56 صفحة |
+| بوابات V4.20.0 / V4.21.0 / V4.21.1 / V4.21.2 | PASS |
+| `check-header-design-v4211.mjs` | PASS — التصميم الأول مقفول |
+| `check-audio-dist.mjs` | PASS — 13/13، 61 جزءًا، 61 MP3 |
+| `check-dist.mjs` | PASS — 56 ملف HTML |
+| `check-responsive-css.mjs` | PASS |
+| `check-contrast.mjs` | PASS — 22 تركيبة WCAG AA |
+| `check-interactions.mjs` | PASS |
+| `check-mobile-ticker-motion.mjs` | PASS — 320/360/390/430px |
 
-## Full production-equivalent safe build
+توزيع الصوت المتحقق: 5 مقالات Gemini Sadaltager، و4 Hamed مضمّنة، و4 Hamed مولّدة محليًا. لم تتسرّب مجلدات `.restore-*` إلى المصدر المنشور أو `dist`.
 
-Executed with all live speech credentials removed, `BAREEQ_GEMINI_FREE_ROLLOUT=0`, and `BAREEQ_CLOUD_TTS_ACTIVATE=0`.
+## اختبار Chromium الحقيقي
 
-- Preparation, syntax, and source gates: PASS.
-- Real Gemini, Google Cloud, Azure, and OpenAI synthesis requests: 0.
-- Production-cache restore: PASS.
-- Astro static build: PASS (57 pages).
-- Final audio distribution: PASS.
-  - 13/13 articles.
-  - 53 synchronized parts.
-  - 53 verified MP3 files.
-  - Gemini Sadaltager: 2 articles.
-  - Bundled Hamed: 4 articles.
-  - Generated Hamed: 7 articles.
-- Distribution checks: PASS for 57 HTML files.
-- Responsive CSS checks: PASS from 320px through wide desktop.
-- WCAG AA contrast: PASS for 22 combinations.
-- Interaction checks: PASS.
-- Secret-leak checks: PASS.
-- Cloudflare email exclusion comments present in final HTML: PASS.
-- `/cdn-cgi/l/email-protection` links in final output: 0.
+استُخدم Chromium `140.0.7339.16` على نسخة `dist` المبنية.
 
-## Missing-key production branch
+| العرض | الهيدر الأول | الحركة | overflow أفقي | أخطاء المتصفح |
+| ---: | :---: | :---: | :---: | :---: |
+| 320 | PASS | PASS | 0px | 0 |
+| 360 | PASS | PASS | 0px | 0 |
+| 390 | PASS | PASS | 0px | 0 |
+| 430 | PASS | PASS | 0px | 0 |
+| 768 | PASS | PASS | 0px | 0 |
+| 1024 | PASS | PASS | 0px | 0 |
+| 1440 | PASS | PASS | 0px | 0 |
 
-The V4.21.1 runner was executed with free rollout enabled by default and without `GEMINI_API_KEY`.
+كما نجح ما يلي:
 
-- Result: PASS.
-- Synthesis requests: 0.
-- All 13 fallback/retained audio manifests remained complete.
-- Explicit missing-key safe message emitted.
+- تغيّر موضع الشريط فعليًا مع الزمن على مقاسات الجوال الأربعة.
+- زر الإيقاف ثبّت الموضع، ثم استؤنفت الحركة عند تشغيله.
+- المجموعتان متطابقتان، والنسخة الثانية مخفية عن التقنيات المساعدة.
+- وضع `prefers-reduced-motion: reduce` أوقف الحركة وأبقى التمرير اليدوي.
+- سطح المكتب واللوحي استمرا في الحركة عبر CSS.
+- صفحة المقال لا تحتوي `bareeq-addition` ولا بطاقة `series-path` داخل مسار القراءة، وبها H1 واحد.
 
-## Behavior verified
+اللقطات الحقيقية محفوظة في `docs/v4212-screenshots/`، ومنها زوج 390px بفاصل 1.2 ثانية يثبت الانتقال بصريًا.
 
-- Completed Sadaltager audio is restored before any synthesis.
-- Only the shortest unresolved article is selected and only one article can be attempted per build.
-- A new article directory replaces fallback only after every MP3 and manifest is complete.
-- Persistent 429 or build-time budget preserves fallback and allows deployment to continue.
-- Paid Cloud TTS remains fail-closed unless `BAREEQ_CLOUD_TTS_ACTIVATE=1` is deliberately set.
-- The design-one header uses the native logo and components; it does not embed the supplied concept PNG.
-- Desktop uses the white logo panel and navy/teal wave; mobile removes the decorative wave to prevent crowding.
-- Email remains `blogbareeq@gmail.com` until an exact working domain address is confirmed.
-- Empty/placeholder `ads.txt`, newsletter integration, ad slots, and editorial expansions were not added.
+## تحقق المحتوى والتوافق
 
-## Not consumed or triggered
+- إضافات كلود النافعة محفوظة: مقالات التوقيع، صفحات السلاسل، مقتطف البحث، `noindex` للمحفوظات، الخلاصات المصححة، وصياغات الرئيسية و«عن بريق».
+- وسم الذكاء الاصطناعي موحّد، وتحويل 301 من مسار الوسم القديم موجود في `public/_redirects`.
+- لا طبقات معرفية متداخلة داخل المقال، ولا تغيير في متون المقالات الـ13.
 
-- No real speech-provider request was sent.
-- No paid Cloud service was activated.
-- No deployment or external repository write was triggered while preparing the package.
+## تحقق تشغيلي بعد الدفع
+
+الاختبار الوحيد الذي يعتمد على البيئة الخارجية هو فتح معاينة Cloudflare والتأكد من أن تحويل الوسم القديم يعيد 301؛ لم يُنفّذ بعد لأن الفرع المحلي لم يُدفع.

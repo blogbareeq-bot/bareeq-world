@@ -229,13 +229,88 @@ const baseSchema = [
           if (tickerToggle) tickerToggle.textContent = paused ? '▶' : 'Ⅱ';
           try { localStorage.setItem('bareeq-ticker-paused', paused ? '1' : '0'); } catch {}
         };
+        let syncTickerPlayback = () => {};
         let tickerPaused = false;
         try { tickerPaused = localStorage.getItem('bareeq-ticker-paused') === '1'; } catch {}
         setTickerPaused(tickerPaused);
         tickerToggle?.addEventListener('click', () => {
           tickerPaused = !ticker?.classList.contains('is-paused');
           setTickerPaused(tickerPaused);
+          syncTickerPlayback();
         });
+
+        const tickerTrack = ticker?.querySelector('[data-ticker-track]');
+        const tickerPrimary = tickerTrack?.querySelector('[data-ticker-primary]');
+        if (ticker instanceof HTMLElement && tickerTrack instanceof HTMLElement && tickerPrimary instanceof HTMLElement) {
+          const mobileTickerQuery = matchMedia('(max-width: 700px)');
+          const reduceTickerMotion = matchMedia('(prefers-reduced-motion: reduce)');
+          const tickerSpeed = 42;
+          let tickerOffset = 0;
+          let tickerLoopWidth = 0;
+          let tickerLastStamp = null;
+          let tickerFrame = 0;
+
+          const measureTicker = () => {
+            tickerLoopWidth = tickerPrimary.getBoundingClientRect().width;
+          };
+          const paintTicker = () => {
+            tickerTrack.style.transform = `translateX(${tickerOffset}px)`;
+            tickerTrack.dataset.tickerOffset = tickerOffset.toFixed(2);
+          };
+          const stopTicker = () => {
+            if (tickerFrame) cancelAnimationFrame(tickerFrame);
+            tickerFrame = 0;
+            tickerLastStamp = null;
+          };
+          const resetTicker = () => {
+            tickerOffset = 0;
+            tickerLastStamp = null;
+            tickerTrack.style.transform = '';
+            tickerTrack.dataset.tickerOffset = '0';
+          };
+          const stepMobileTicker = (now) => {
+            const stamp = Number(now) || 0;
+            if (tickerLastStamp == null) tickerLastStamp = stamp;
+            const delta = Math.min(48, Math.max(0, stamp - tickerLastStamp));
+            tickerLastStamp = stamp;
+            if (!ticker.classList.contains('is-paused')) {
+              if (!(tickerLoopWidth > 0)) measureTicker();
+              if (tickerLoopWidth > 0) {
+                tickerOffset = (tickerOffset + tickerSpeed * (delta / 1000)) % tickerLoopWidth;
+                paintTicker();
+              }
+            }
+            tickerFrame = requestAnimationFrame(stepMobileTicker);
+          };
+          syncTickerPlayback = () => {
+            const shouldRun = mobileTickerQuery.matches
+              && !reduceTickerMotion.matches
+              && !ticker.classList.contains('is-paused')
+              && !document.hidden;
+            if (!shouldRun) {
+              stopTicker();
+              return;
+            }
+            if (!(tickerLoopWidth > 0)) measureTicker();
+            if (!tickerFrame) tickerFrame = requestAnimationFrame(stepMobileTicker);
+          };
+          const syncTickerMode = () => {
+            stopTicker();
+            const manual = reduceTickerMotion.matches;
+            ticker.classList.toggle('is-manual', manual);
+            resetTicker();
+            if (mobileTickerQuery.matches && !manual) measureTicker();
+            syncTickerPlayback();
+          };
+
+          mobileTickerQuery.addEventListener?.('change', syncTickerMode);
+          reduceTickerMotion.addEventListener?.('change', syncTickerMode);
+          addEventListener('resize', syncTickerMode, { passive: true });
+          addEventListener('orientationchange', syncTickerMode, { passive: true });
+          document.addEventListener('visibilitychange', syncTickerMode);
+          document.fonts?.ready?.then(syncTickerMode).catch(() => {});
+          syncTickerMode();
+        }
 
         const drawer = document.querySelector('[data-mobile-drawer]');
         const panel = drawer?.querySelector('.drawer-panel');

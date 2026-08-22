@@ -22,8 +22,19 @@ function createDom(html, width) {
   Object.defineProperty(window, 'scrollY', { value: 0, writable: true, configurable: true });
   window.scrollTo = (options) => { window.scrollY = typeof options === 'object' ? options.top ?? 0 : 0; };
   window.HTMLElement.prototype.scrollIntoView = function scrollIntoView() {};
-  window.requestAnimationFrame = (callback) => { callback(Date.now()); return 1; };
-  window.cancelAnimationFrame = () => {};
+  const rafQueue = new Map();
+  let rafId = 0;
+  window.requestAnimationFrame = (callback) => {
+    const id = ++rafId;
+    rafQueue.set(id, callback);
+    return id;
+  };
+  window.cancelAnimationFrame = (id) => { rafQueue.delete(id); };
+  window.__bareeqFlushRaf = (now = Date.now()) => {
+    const pending = [...rafQueue.entries()];
+    rafQueue.clear();
+    pending.forEach(([, callback]) => callback(now));
+  };
   window.matchMedia = (query) => {
     const max = query.match(/max-width:\s*(\d+)px/)?.[1];
     const min = query.match(/min-width:\s*(\d+)px/)?.[1];

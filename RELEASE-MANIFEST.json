@@ -1,76 +1,83 @@
 {
-  "release": "Bareeq V4.21.1 — Design One & Progressive Gemini Free-Tier Audio",
-  "version": "4.21.1",
-  "mode": "full-source-replace-over-current-repository",
-  "sourcePackage": "Bareeq-V4.21.0-FINAL.zip",
-  "sourcePackageSha256": "239903f6c0833a54c63f4149edc97772deaa1c5abf96266e6fe8b385424f0ecd",
-  "expectedLiveArticles": 13,
-  "headerDesign": {
-    "approvedConcept": 1,
-    "implementation": "native-responsive-components-not-concept-image",
-    "desktop": "white high-clarity logo panel with navy and teal wave navigation",
-    "tablet": "compressed native navigation and logo",
-    "mobile": "simplified header without decorative waves",
-    "preservedFeatures": [
-      "main navigation",
-      "reading list",
-      "search",
-      "theme toggle",
-      "latest-articles ticker",
-      "category navigation"
+  "release": "Bareeq V4.21.2 — Approved Header & Mobile Article Ticker Fix",
+  "version": "4.21.2",
+  "status": "local-release-candidate-passed-awaiting-authorized-pr-update",
+  "package": "Bareeq-V4.21.2-FINAL.zip",
+  "bundleContents": [
+    "tracked source tree",
+    "verified static dist output"
+  ],
+  "baseline": {
+    "version": "4.21.1",
+    "commit": "6a98911628765568ecc540f47f10bc6c288ffeff"
+  },
+  "branch": "arena/01a02617-bareeq-world",
+  "selectiveMerge": {
+    "kept": [
+      "approved design-one header",
+      "home and about copy refinements",
+      "category signature posts",
+      "series archive order and editorial promises",
+      "content-derived search excerpts",
+      "saved-page noindex and semantic fix",
+      "three corrected quick summaries",
+      "AI tag consolidation with legacy redirect",
+      "V4.21.2 release gates"
+    ],
+    "removed": [
+      "bareeqAddition article layer",
+      "article-end series-path card",
+      "synthetic screenshot generator"
     ]
   },
-  "geminiFreeRollout": {
-    "status": "enabled-by-default-when-key-is-present",
-    "secret": "GEMINI_API_KEY",
-    "pauseFlag": "BAREEQ_GEMINI_FREE_ROLLOUT=0",
-    "articlesPerBuild": 1,
-    "priority": "shortest-unresolved-article-first",
-    "atomicArticlePublication": true,
-    "persistent429Behavior": "publish-approved-fallback-and-retry-on-later-deployment",
-    "missingKeyBehavior": "zero-synthesis-requests-and-publish-approved-fallback",
-    "pendingArticlesAtRelease": 11,
-    "retainedGeminiArticlesAtRelease": 2,
-    "fullBacklogPlanRequests": 81,
-    "fullBacklogSourceCharacters": 95441,
-    "realApiRequestsDuringPackagePreparation": 0
+  "headerDesign": {
+    "approvedConcept": 1,
+    "rejectedConcepts": [2, 3],
+    "implementation": "native-responsive-components",
+    "readingListIcon": "font-independent-svg"
+  },
+  "mobileTicker": {
+    "autoMoveOnPhones": true,
+    "loop": "two-equal-title-sets-measured-by-primary-width",
+    "mobileEngine": "requestAnimationFrame",
+    "desktopEngine": "CSS animation",
+    "pauseControl": "verified",
+    "reducedMotion": "stop-auto-keep-manual-scroll",
+    "clonedCopy": "aria-hidden",
+    "motionTest": "scripts/check-mobile-ticker-motion.mjs"
+  },
+  "contentPolicy": {
+    "publishedArticles": 13,
+    "publishedArticleBodiesChanged": 0,
+    "homeH1": "عالم بريق — نافذتك إلى المعرفة",
+    "intrusiveArticleLayers": "disabled",
+    "email": "blogbareeq@gmail.com"
+  },
+  "audio": {
+    "publishedArticles": 13,
+    "synchronizedParts": 61,
+    "verifiedMp3Files": 61,
+    "externalApiRequestsDuringPreparation": 0,
+    "temporaryRestoreDirectories": 0
   },
   "paidCloudTts": {
     "status": "prepared-not-activated",
     "activationFlag": "BAREEQ_CLOUD_TTS_ACTIVATE=1",
-    "defaultActivationValue": 0,
-    "project": "bareeq-tts",
-    "pendingDependency": "CNTXT billing and explicit live smoke-test approval"
+    "defaultActivationValue": 0
   },
-  "claudeAudit": {
-    "adopted": [
-      "Cloudflare email-obfuscation exclusion boundaries",
-      "local reading-list and audio-position privacy disclosure"
-    ],
-    "alreadyImplemented": [
-      "reading-list save buttons, count, and saved page"
-    ],
-    "deferredUntilExactConfiguration": [
-      "ads.txt publisher record",
-      "domain email replacement",
-      "newsletter provider",
-      "AdSense slots"
-    ],
-    "deferredEditorialWork": [
-      "expanding short articles",
-      "H3 TOC changes",
-      "new infographics"
-    ]
+  "verification": {
+    "astroPages": 56,
+    "htmlFiles": 56,
+    "sourceGates": "pass",
+    "distAudits": "pass",
+    "audioDist": "pass",
+    "browser": "Chromium 140.0.7339.16",
+    "viewports": [320, 360, 390, 430, 768, 1024, 1440],
+    "mobileTickerMotion": "pass",
+    "pauseControl": "pass",
+    "reducedMotion": "pass",
+    "horizontalOverflow": 0,
+    "browserErrors": 0
   },
-  "contentPolicy": {
-    "publishedArticlesChanged": 0,
-    "publishedArticles": 13,
-    "pausedExperimentalKnowledgeLayers": "remain-disabled",
-    "email": "blogbareeq@gmail.com",
-    "emailReason": "keep verified working address until an exact replacement is confirmed"
-  },
-  "analytics": {
-    "measurementId": "G-N3NQMF7RHN",
-    "policy": "preserve existing consent-aware loader; do not duplicate gtag"
-  }
+  "postDeployCheck": "Verify the legacy AI tag path returns HTTP 301 on Cloudflare preview."
 }

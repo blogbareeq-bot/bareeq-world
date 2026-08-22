@@ -32,7 +32,8 @@ const compactTickerTitle = (title: string, max = 42) => {
       </nav>
       <div class="header-actions">
         <a class="icon-button reading-list-link" href="/saved/" aria-label="محفوظات القراءة" title="محفوظات القراءة">
-          <span aria-hidden="true">🔖</span><span class="reading-list-count" data-reading-list-count hidden>0</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-3.8L6 21Z"/></svg>
+          <span class="reading-list-count" data-reading-list-count hidden>0</span>
         </a>
         <a class="header-search-link" href="/search/" aria-label="البحث في بريق">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
@@ -55,9 +56,11 @@ const compactTickerTitle = (title: string, max = 42) => {
         <span class="ticker-label"><span class="ticker-label-full">أحدث المقالات</span><span class="ticker-label-mobile">جديد</span></span>
         <div class="ticker-viewport">
           <div class="ticker-track" data-ticker-track>
-            {latestPosts.map((post) => <a href={`/posts/${post.id}/`} aria-label={post.data.title}><span class="ticker-title-full">{post.data.title}</span><span class="ticker-title-mobile">{compactTickerTitle(post.data.title)}</span></a>)}
-            <span class="ticker-copy" aria-hidden="true">
-              {latestPosts.map((post) => <a tabindex="-1" href={`/posts/${post.id}/`}>{post.data.title}</a>)}
+            <span class="ticker-set ticker-primary" data-ticker-primary>
+              {latestPosts.map((post) => <a href={`/posts/${post.id}/`} aria-label={post.data.title}><span class="ticker-title-full">{post.data.title}</span><span class="ticker-title-mobile">{compactTickerTitle(post.data.title)}</span></a>)}
+            </span>
+            <span class="ticker-set ticker-copy" aria-hidden="true">
+              {latestPosts.map((post) => <a tabindex="-1" href={`/posts/${post.id}/`}><span class="ticker-title-full">{post.data.title}</span><span class="ticker-title-mobile">{compactTickerTitle(post.data.title)}</span></a>)}
             </span>
           </div>
         </div>

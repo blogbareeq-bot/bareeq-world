@@ -8,7 +8,7 @@ seriesSlug: "technology-simply"
 featured: true
 draft: false
 author: "فريق بريق"
-tags: ["ذكاء اصطناعي", "أتمتة"]
+tags: ["الذكاء الاصطناعي", "أتمتة"]
 image: "/images/posts/ai-agents-future-now.webp"
 imageAlt: "عقدة رقمية مركزية تنسق البريد والتقويم والبحث والتقارير خلف بوابة موافقة بشرية"
 imageWidth: 1600

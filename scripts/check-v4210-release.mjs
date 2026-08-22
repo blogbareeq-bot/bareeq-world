@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { PENDING_CLOUD, RETAINED_GEMINI } from './cloud-tts-rollout.mjs';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.0', '4.21.1'].includes(pkg.version)) throw new Error(`Expected package 4.21.0 baseline or 4.21.1 patch successor, got ${pkg.version}`);
+if (!['4.21.0', '4.21.1', '4.21.2'].includes(pkg.version)) throw new Error(`Expected package 4.21.0 baseline or 4.21.1/4.21.2 successor, got ${pkg.version}`);
 
 const [component, page, client, styles, generator, cloud, runner, envExample, guide, site] = await Promise.all([
   readFile('src/components/ReadingModes.astro', 'utf8'),

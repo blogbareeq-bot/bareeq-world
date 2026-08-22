@@ -54,10 +54,59 @@ export const archivePolicy = {
 } as const;
 
 export const series = [
-  { slug: 'mind-and-decisions', title: 'العقل والقرارات', description: 'مقالات لفهم طريقة التفكير، والمغالطات، وبناء الوعي والاختيارات الأفضل.' },
-  { slug: 'technology-simply', title: 'التقنية ببساطة', description: 'شرح واضح لما يحدث خلف الشاشات، من الإنترنت والذكاء الاصطناعي إلى الفضاء.' },
-  { slug: 'windows-to-world', title: 'نوافذ إلى العالم', description: 'ثقافات وعادات وتجارب موثقة توسّع زاوية النظر إلى البشر والمجتمعات، وتضع الاختلاف في سياقه الإنساني.' },
-  { slug: 'books-for-life', title: 'كتب للحياة', description: 'قراءات نقدية وعملية تربط أفكار الكتب بالصحة والعمل والحياة اليومية، وتوضح ما يمكن تطبيقه منها بوعي وتوازن.' }
+  {
+    slug: 'mind-and-decisions',
+    title: 'العقل والقرارات',
+    description: 'مقالات لفهم طريقة التفكير والمغالطات وبناء الوعي، واختيار القرارات اليومية بهدوء أوضح.',
+    promise: 'بعد هذا المسار تفرّق بين الحجة المعيبة والحدس الخبير، وتعرف كيف تثبّت نفسك قبل القرار الصعب.',
+    order: [
+      'اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا',
+      'كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار',
+      'intuition-first-impression-decisions-signature'
+    ]
+  },
+  {
+    slug: 'technology-simply',
+    title: 'التقنية ببساطة',
+    description: 'شرح واضح لما يحدث خلف الشاشات، من الإنترنت والذكاء الاصطناعي إلى الفضاء.',
+    promise: 'بعد هذا المسار تفهم كيف تتوقع الأنظمة الاحتمالات، ولماذا يبقى الجسم في المدار، وأين تنتقل مسؤولية الإنسان أمام الوكيل الذكي.',
+    order: [
+      'كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه',
+      'لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء',
+      'ai-agents-future-now',
+      'ai-as-coworker-future-of-human-work'
+    ]
+  },
+  {
+    slug: 'windows-to-world',
+    title: 'نوافذ إلى العالم',
+    description: 'ثقافات وعادات وتجارب موثقة توسّع زاوية النظر إلى البشر والمجتمعات، وتضع الاختلاف في سياقه الإنساني.',
+    promise: 'بعد هذا المسار تقرأ العادة واللغة داخل سياقهما، لا كغرابة جاهزة أو هيمنة بلا حد.',
+    order: [
+      'عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء',
+      'language-soft-power-politics'
+    ]
+  },
+  {
+    slug: 'books-for-life',
+    title: 'كتب للحياة',
+    description: 'قراءات نقدية وعملية تربط أفكار الكتب بالصحة والعمل والحياة اليومية، وتوضح ما يمكن تطبيقه منها بوعي وتوازن.',
+    promise: 'بعد هذا المسار تقرأ الكتاب بوصفه تجربة قابلة للبناء، لا ملخصًا يغني عن الأصل ولا وصفة واحدة للجميع.',
+    order: [
+      'لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون',
+      'اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا',
+      'اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع'
+    ]
+  }
 ] as const;
 
+export const signaturePosts = {
+  'atyaf-al-aql': 'intuition-first-impression-decisions-signature',
+  'bareeq-books': 'اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع',
+  'window-on-world': 'language-soft-power-politics',
+  'future-now': 'ai-as-coworker-future-of-human-work',
+  simply: 'altadakhom-explained-simply'
+} as const satisfies Record<CategorySlug, string>;
+
 export type CategorySlug = (typeof categories)[number]['slug'];
+export type SeriesSlug = (typeof series)[number]['slug'];

@@ -119,8 +119,20 @@ if (resolvedDeclaration('.category-strip-inner', 'max-width', 1440) !== '1360px'
 if (resolvedDeclaration('.header-search-link span', 'display', 1024) !== 'none') {
   failures.push({ width: 1024, label: 'اختصار البحث إلى أيقونة على الأجهزة المتوسطة', actual: resolvedDeclaration('.header-search-link span', 'display', 1024) });
 }
-if (resolvedDeclaration('.ticker-track>a', 'display', 390) !== 'none' || resolvedDeclaration('.ticker-track>a:first-child', 'display', 390) !== 'block') {
-  failures.push({ width: 390, label: 'عنوان أحدث واحد فقط على الجوال', actual: `${resolvedDeclaration('.ticker-track>a', 'display', 390)}/${resolvedDeclaration('.ticker-track>a:first-child', 'display', 390)}` });
+if (resolvedDeclaration('.ticker-track', 'display', 390) !== 'flex' || resolvedDeclaration('.ticker-track', 'animation', 390) !== 'none') {
+  failures.push({ width: 390, label: 'مسار تيكَر أفقي مستمر على الجوال', actual: `${resolvedDeclaration('.ticker-track', 'display', 390)}/${resolvedDeclaration('.ticker-track', 'animation', 390)}` });
+}
+if (resolvedDeclaration('.ticker-set', 'display', 390) !== 'flex' || resolvedDeclaration('.ticker-set', 'gap', 390) !== '28px' || resolvedDeclaration('.ticker-set', 'padding-inline-end', 390) !== '28px') {
+  failures.push({ width: 390, label: 'مجموعتا التيكَر متطابقتان لحلقة بلا قفزة', actual: `${resolvedDeclaration('.ticker-set', 'display', 390)}/${resolvedDeclaration('.ticker-set', 'gap', 390)}/${resolvedDeclaration('.ticker-set', 'padding-inline-end', 390)}` });
+}
+if (resolvedDeclaration('.ticker-set>a', 'display', 390) !== 'inline-flex') {
+  failures.push({ width: 390, label: 'عناوين التيكَر ظاهرة جنبًا إلى جنب', actual: resolvedDeclaration('.ticker-set>a', 'display', 390) });
+}
+if (resolvedDeclaration('.ticker-viewport', 'overflow', 390) !== 'hidden') {
+  failures.push({ width: 390, label: 'نافذة التيكَر تقطع العرض دون تمرير الصفحة', actual: resolvedDeclaration('.ticker-viewport', 'overflow', 390) });
+}
+if (resolvedDeclaration('.ticker.is-manual .ticker-viewport', 'overflow-x', 390) !== 'auto') {
+  failures.push({ width: 390, label: 'تمرير يدوي عند تقليل الحركة', actual: resolvedDeclaration('.ticker.is-manual .ticker-viewport', 'overflow-x', 390) });
 }
 if (resolvedDeclaration('.category-strip-inner', 'display', 768) !== 'flex' || resolvedDeclaration('.category-strip-inner', 'flex-wrap', 768) !== 'wrap' || resolvedDeclaration('.category-strip-inner', 'overflow', 768) !== 'visible') {
   failures.push({ width: 768, label: 'أقسام ملتفة بلا تمرير أفقي', actual: `${resolvedDeclaration('.category-strip-inner', 'display', 768)}/${resolvedDeclaration('.category-strip-inner', 'flex-wrap', 768)}/${resolvedDeclaration('.category-strip-inner', 'overflow', 768)}` });
@@ -172,4 +184,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Responsive CSS passed: redesigned header/search/ticker, adaptive non-sticky category bar without horizontal scrolling and minifier-safe flex semantics, compact mobile headline, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and balanced footer layout from 320px through wide desktop.');
+console.log('Responsive CSS passed: design-one header, continuously moving mobile article ticker without page-level overflow, adaptive non-sticky category bar, compact mobile headline, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and balanced footer layout from 320px through wide desktop.');

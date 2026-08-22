@@ -13,3 +13,5 @@ dist/
 apply-v*.mjs
 APPLY-V*.cmd
 RUN-ONE-SHOT-WINDOWS.cmd
+Bareeq-*.zip
+public/audio/

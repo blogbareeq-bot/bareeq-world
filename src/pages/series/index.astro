@@ -8,10 +8,10 @@ const visibleSeries = series
   .filter(({ count }) => count >= archivePolicy.minPostsToShowSeries);
 ---
 <BaseLayout title="سلاسل بريق" description="مسارات قراءة مترابطة تجمع مقالات عالم بريق بحسب الفكرة والموضوع، وتساعدك على متابعة المعرفة بترتيب واضح." canonicalPath="/series/" latestPosts={posts.slice(0,6)}>
-  <section class="page-hero compact shell"><span class="eyebrow">رحلات معرفية</span><h1>سلاسل بريق</h1><p>اختر مسارًا واقرأ مجموعة مترابطة من المقالات بدل التنقل العشوائي.</p></section>
+  <section class="page-hero compact shell"><span class="eyebrow">رحلات معرفية</span><h1>سلاسل بريق</h1><p>اختر مسارًا واقرأ مجموعة مترابطة من المقالات بترتيب مقصود، بدل التنقل العشوائي.</p></section>
   <section class="shell section-gap"><div class="series-grid series-grid-large">
     {visibleSeries.map(({ item, count }) => {
-      return <a class="series-card" href={`/series/${item.slug}/`}><span>{formatArticleCount(count)} · مسار قيد البناء</span><h2>{item.title}</h2><p>{item.description}</p><strong>استكشف المسار ←</strong></a>;
+      return <a class="series-card" href={`/series/${item.slug}/`}><span>{formatArticleCount(count)} · مسار قراءة</span><h2>{item.title}</h2><p>{item.promise}</p><strong>ابدأ المسار ←</strong></a>;
     })}
   </div></section>
 </BaseLayout>

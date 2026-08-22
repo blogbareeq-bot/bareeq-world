@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { readdirSync, rmSync } from 'node:fs';
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -21,6 +22,22 @@ const ALL_ARTICLES = [...RETAINED_GEMINI, ...PENDING_CLOUD];
 const sha = (value) => createHash('sha256').update(value).digest('hex');
 const audioKeyFor = (id) => sha(id).slice(0, 16);
 
+function cleanTemporaryAudioRestores() {
+  const articleRoot = path.resolve('public', 'audio', 'articles');
+  let entries = [];
+  try { entries = readdirSync(articleRoot, { withFileTypes: true }); }
+  catch (error) {
+    if (error?.code !== 'ENOENT') throw error;
+    return;
+  }
+  for (const entry of entries) {
+    if (!entry.isDirectory() || !/\.restore-\d+$/.test(entry.name)) continue;
+    const directory = path.join(articleRoot, entry.name);
+    if (path.dirname(directory) !== articleRoot) throw new Error(`Refusing to clean an unexpected audio path: ${directory}`);
+    rmSync(directory, { recursive: true, force: true });
+  }
+}
+
 function runStrict(script, args = [], env = {}) {
   const result = spawnSync(NODE, [script, ...args], {
     stdio: 'inherit',
@@ -28,6 +45,7 @@ function runStrict(script, args = [], env = {}) {
   });
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`${script} exited with status ${result.status ?? 'unknown'}`);
+  cleanTemporaryAudioRestores();
 }
 
 async function readCompleteManifest(articleId) {

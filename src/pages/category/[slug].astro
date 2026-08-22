@@ -1,12 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { getPublishedPosts, formatArticleCount } from '../../lib/posts';
+import { getPublishedPosts, formatArticleCount, formatDate, getSignaturePost } from '../../lib/posts';
 import { categories, site } from '../../config/site';
 import CategoryIcon from '../../components/CategoryIcon.astro';
 export function getStaticPaths() { return categories.map((category) => ({ params: { slug: category.slug }, props: { category } })); }
 const { category } = Astro.props;
 const posts = (await getPublishedPosts()).filter((post) => post.data.categorySlug === category.slug);
+const signature = getSignaturePost(await getPublishedPosts(), category.slug);
+const rest = posts.filter((post) => post.id !== signature?.id);
+const latestInCategory = posts[0];
 const breadcrumb = { '@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
   {'@type':'ListItem',position:1,name:'الرئيسية',item:site.url},
   {'@type':'ListItem',position:2,name:category.name,item:new URL(`/category/${category.slug}/`,site.url).toString()}
@@ -18,6 +21,7 @@ const breadcrumb = { '@context':'https://schema.org','@type':'BreadcrumbList',it
     <span class="category-hero-icon"><CategoryIcon name={category.icon} /></span>
     <div><span class="eyebrow">أقسام بريق</span><h1>{category.name}</h1><p>{category.short}</p></div>
     <strong>{formatArticleCount(posts.length)}</strong>
+    {latestInCategory && <p class="category-updated">آخر تحديث في هذا الباب: {formatDate(latestInCategory.data.publishedAt)}</p>}
   </section>
   <section class:list={['category-introduction', 'shell', 'category-theme', `category-theme--${category.slug}`]} aria-labelledby="category-introduction-title">
     <div>
@@ -29,7 +33,18 @@ const breadcrumb = { '@context':'https://schema.org','@type':'BreadcrumbList',it
       {category.topics.map((topic) => <li>{topic}</li>)}
     </ul>
   </section>
+  {signature && (
+    <section class="shell section-gap category-signature" aria-labelledby="category-signature-title">
+      <div class="section-heading"><div><span class="eyebrow">مقال التوقيع</span><h2 id="category-signature-title">ابدأ من هنا في هذا الباب</h2></div></div>
+      <div class="category-signature-card"><PostCard post={signature} headingLevel="h3" /></div>
+    </section>
+  )}
   <section class="shell section-gap">
-    {posts.length ? <div class="archive-grid">{posts.map((post) => <PostCard post={post} headingLevel="h2" />)}</div> : <div class="empty-state"><h2>لا توجد مقالات بعد</h2><p>سيُضاف المحتوى إلى هذا القسم قريبًا.</p></div>}
+    {rest.length ? (
+      <>
+        <div class="section-heading"><div><span class="eyebrow">بقية الباب</span><h2>مقالات أخرى في {category.name}</h2></div></div>
+        <div class="archive-grid">{rest.map((post) => <PostCard post={post} headingLevel="h3" />)}</div>
+      </>
+    ) : !signature ? <div class="empty-state"><h2>لا توجد مقالات بعد</h2><p>سيُضاف المحتوى إلى هذا القسم قريبًا.</p></div> : null}
   </section>
 </BaseLayout>
