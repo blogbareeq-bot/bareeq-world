@@ -1,8 +1,8 @@
 {
-  "release": "Bareeq V4.21.2 — Approved Header & Mobile Article Ticker Fix",
-  "version": "4.21.2",
-  "status": "local-release-candidate-passed-awaiting-authorized-pr-update",
-  "package": "Bareeq-V4.21.2-FINAL.zip",
+  "release": "Bareeq V4.21.3 — Approved Header Rebuild & Mobile Article Ticker Fix",
+  "version": "4.21.3",
+  "status": "verified-release-candidate",
+  "package": "Bareeq-V4.21.3-FINAL.zip",
   "bundleContents": [
     "tracked source tree",
     "verified static dist output"
@@ -14,7 +14,7 @@
   "branch": "arena/01a02617-bareeq-world",
   "selectiveMerge": {
     "kept": [
-      "approved design-one header",
+      "approved design-one header rebuilt from the visual reference",
       "home and about copy refinements",
       "category signature posts",
       "series archive order and editorial promises",
@@ -22,7 +22,9 @@
       "saved-page noindex and semantic fix",
       "three corrected quick summaries",
       "AI tag consolidation with legacy redirect",
-      "V4.21.2 release gates"
+      "V4.21.2 editorial release gates",
+      "V4.21.3 visual header release gates",
+      "refined Arabic listening summary: استمع إلى النص"
     ],
     "removed": [
       "bareeqAddition article layer",
@@ -34,7 +36,11 @@
     "approvedConcept": 1,
     "rejectedConcepts": [2, 3],
     "implementation": "native-responsive-components",
-    "readingListIcon": "font-independent-svg"
+    "desktop": "white logo panel plus navy-teal wave and separate category cards",
+    "mobile": "navy-teal field plus curved white logo panel and two-column category cards",
+    "readingListAndThemeAccess": "mobile drawer and footer",
+    "readingListIcon": "font-independent-svg",
+    "visualRegressionViewports": [320, 360, 390, 430, 768, 1024, 1440]
   },
   "mobileTicker": {
     "autoMoveOnPhones": true,
@@ -55,8 +61,8 @@
   },
   "audio": {
     "publishedArticles": 13,
-    "synchronizedParts": 61,
-    "verifiedMp3Files": 61,
+    "synchronizedParts": 64,
+    "verifiedMp3Files": 64,
     "externalApiRequestsDuringPreparation": 0,
     "temporaryRestoreDirectories": 0
   },
@@ -69,6 +75,7 @@
     "astroPages": 56,
     "htmlFiles": 56,
     "sourceGates": "pass",
+    "visualReferenceGate": "pass",
     "distAudits": "pass",
     "audioDist": "pass",
     "browser": "Chromium 140.0.7339.16",

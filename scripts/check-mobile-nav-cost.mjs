@@ -5,10 +5,12 @@ const audio = await readFile(new URL('./generate-audio.mjs', import.meta.url), '
 const env = await readFile(new URL('../.env.example', import.meta.url), 'utf8');
 const failures = [];
 const mobile900 = css.match(/@media \(max-width:900px\) \{([\s\S]*?)\n\}/)?.[1] || '';
-if (!mobile900.includes('display:flex') || !mobile900.includes('flex-wrap:wrap') || !mobile900.includes('flex:1 1 104px')) failures.push('Mobile category strip is not using adaptive wrapped flex navigation.');
-if (!mobile900.includes('.category-strip{position:relative;top:auto}')) failures.push('Category strip must stop being sticky at tablet/mobile widths.');
+const mobile700 = css.match(/@media \(max-width:700px\) \{([\s\S]*?)\n\}/)?.[1] || '';
+if (!mobile900.includes('.category-strip-inner{display:grid') || !mobile900.includes('grid-template-columns:repeat(5,minmax(0,1fr))') || !mobile900.includes('overflow:visible')) failures.push('Tablet category strip is not using the approved five-card grid.');
+if (!mobile900.includes('.category-strip{position:relative;top:auto;')) failures.push('Category strip must stop being sticky at tablet/mobile widths.');
 if (mobile900.includes('overflow-x:auto')) failures.push('Mobile category strip still requires horizontal scrolling.');
 if (!mobile900.includes('.category-mobile-link{display:flex') || !mobile900.includes('white-space:normal')) failures.push('Mobile category links are not actually visible/wrappable at <=900px.');
+if (!mobile700.includes('grid-template-columns:repeat(2,minmax(0,1fr))') || !mobile700.includes('.category-nav-item:last-child{grid-column:1/-1}')) failures.push('Phone category strip must use two columns with the final approved card spanning the full row.');
 if (!header.includes('ticker-label-mobile') || !header.includes('ticker-title-mobile') || !header.includes('compactTickerTitle')) failures.push('Compact mobile ticker labels/titles are missing.');
 for (const token of ['AZURE_SPEECH_FREE_MONTHLY_CHARS','AZURE_SPEECH_BUILD_WARNING_CHARS','AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS','Azure Speech cost guard','Azure Speech safety stop']) if (!audio.includes(token)) failures.push(`Audio cost guard missing: ${token}`);
 for (const token of ['AZURE_SPEECH_FREE_MONTHLY_CHARS=500000','AZURE_SPEECH_BUILD_WARNING_CHARS=400000','AZURE_SPEECH_BUILD_HARD_LIMIT_CHARS=450000']) if (!env.includes(token)) failures.push(`.env.example missing ${token}`);
@@ -17,4 +19,4 @@ for (const token of ['OPENAI_TTS_BUILD_WARNING_USD=8','OPENAI_TTS_BUILD_HARD_LIM
 for (const token of ['GEMINI_API_KEY','GEMINI_TTS_MIN_INTERVAL_MS','GEMINI_TTS_MAX_REQUEST_BYTES','GEMINI_REQUEST_HARD_LIMIT','GEMINI_SYNTHESIS_BUDGET_MS','retryDelay','Gemini TTS rollout']) if (!audio.includes(token)) failures.push(`Gemini audio safeguard missing: ${token}`);
 for (const token of ['BAREEQ_TTS_PROVIDER=gemini','GEMINI_API_KEY=','GEMINI_TTS_MIN_INTERVAL_MS=9000','GEMINI_TTS_MAX_REQUEST_BYTES=2400','BAREEQ_TTS_MAX_RETRIES=8','BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD=80','BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS=780000']) if (!env.includes(token)) failures.push(`.env.example missing ${token}`);
 if (failures.length) { console.error(failures.join('\n')); process.exit(1); }
-console.log('Mobile category navigation, compact ticker, Gemini progressive pacing, and OpenAI/Azure speech cost guards audit passed.');
+console.log('Approved tablet/phone category cards, compact ticker, Gemini progressive pacing, and OpenAI/Azure speech cost guards audit passed.');

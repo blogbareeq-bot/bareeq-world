@@ -134,12 +134,12 @@ if (resolvedDeclaration('.ticker-viewport', 'overflow', 390) !== 'hidden') {
 if (resolvedDeclaration('.ticker.is-manual .ticker-viewport', 'overflow-x', 390) !== 'auto') {
   failures.push({ width: 390, label: 'تمرير يدوي عند تقليل الحركة', actual: resolvedDeclaration('.ticker.is-manual .ticker-viewport', 'overflow-x', 390) });
 }
-if (resolvedDeclaration('.category-strip-inner', 'display', 768) !== 'flex' || resolvedDeclaration('.category-strip-inner', 'flex-wrap', 768) !== 'wrap' || resolvedDeclaration('.category-strip-inner', 'overflow', 768) !== 'visible') {
-  failures.push({ width: 768, label: 'أقسام ملتفة بلا تمرير أفقي', actual: `${resolvedDeclaration('.category-strip-inner', 'display', 768)}/${resolvedDeclaration('.category-strip-inner', 'flex-wrap', 768)}/${resolvedDeclaration('.category-strip-inner', 'overflow', 768)}` });
+if (resolvedDeclaration('.category-strip-inner', 'display', 768) !== 'grid' || !resolvedDeclaration('.category-strip-inner', 'grid-template-columns', 768)?.includes('repeat(5') || resolvedDeclaration('.category-strip-inner', 'overflow', 768) !== 'visible') {
+  failures.push({ width: 768, label: 'خمس بطاقات أقسام مستقلة بلا تمرير أفقي', actual: `${resolvedDeclaration('.category-strip-inner', 'display', 768)}/${resolvedDeclaration('.category-strip-inner', 'grid-template-columns', 768)}/${resolvedDeclaration('.category-strip-inner', 'overflow', 768)}` });
 }
-const categoryFlex390 = resolvedDeclaration('.category-nav-item', 'flex', 390);
-if (!flexBasisMatches(categoryFlex390, '104px')) {
-  failures.push({ width: 390, label: 'توزيع Adaptive متوازن للأقسام', actual: categoryFlex390 });
+const categoryGrid390 = resolvedDeclaration('.category-strip-inner', 'grid-template-columns', 390);
+if (!categoryGrid390?.includes('repeat(2') || resolvedDeclaration('.category-nav-item:last-child', 'grid-column', 390) !== '1/-1') {
+  failures.push({ width: 390, label: 'عمودان وبطاقة أخيرة بعرض كامل للأقسام', actual: `${categoryGrid390}/${resolvedDeclaration('.category-nav-item:last-child', 'grid-column', 390)}` });
 }
 if (resolvedDeclaration('.category-strip', 'position', 390) !== 'relative' || resolvedDeclaration('.category-strip', 'top', 390) !== 'auto') {
   failures.push({ width: 390, label: 'شريط أقسام غير لاصق على الجوال', actual: `${resolvedDeclaration('.category-strip', 'position', 390)}/${resolvedDeclaration('.category-strip', 'top', 390)}` });
@@ -184,4 +184,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Responsive CSS passed: design-one header, continuously moving mobile article ticker without page-level overflow, adaptive non-sticky category bar, compact mobile headline, mobile home/category layouts, visible overflow diagnostics, 44px footer targets, and balanced footer layout from 320px through wide desktop.');
+console.log('Responsive CSS passed: reference design-one header, continuously moving mobile article ticker without page-level overflow, five tablet category cards, two-column mobile category cards with a full-width final card, compact mobile headline, 44px footer targets, and balanced layouts from 320px through wide desktop.');

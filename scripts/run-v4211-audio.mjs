@@ -38,6 +38,11 @@ function cleanTemporaryAudioRestores() {
   }
 }
 
+// A failed or interrupted cache restore must never be copied into the static
+// site. The exit hook is synchronous, so it also covers deliberate early exits
+// (for example when the Gemini key is intentionally absent).
+process.on('exit', cleanTemporaryAudioRestores);
+
 function runStrict(script, args = [], env = {}) {
   const result = spawnSync(NODE, [script, ...args], {
     stdio: 'inherit',

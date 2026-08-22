@@ -1,8 +1,9 @@
 import { readFile } from 'node:fs/promises';
 
-const [header, logo, css] = await Promise.all([
+const [header, logo, layout, css] = await Promise.all([
   readFile('src/components/Header.astro', 'utf8'),
   readFile('src/components/Logo.astro', 'utf8'),
+  readFile('src/layouts/BaseLayout.astro', 'utf8'),
   readFile('src/styles/global.css', 'utf8'),
 ]);
 
@@ -17,10 +18,16 @@ requireAll('Header', header, [
   '<Logo />',
   'aria-label="التنقل الرئيسي"',
   'class="header-search-link"',
-  'data-theme-toggle',
-  'data-reading-list-count',
+  'header-reading-list',
+  'header-theme-toggle',
+  'drawer-utilities',
   'data-ticker',
   '<CategoryStrip posts={allPosts} />',
+]);
+if ((header.match(/data-theme-toggle/g) || []).length < 2) failures.push('Header: desktop and drawer theme controls are both required.');
+requireAll('Theme controller', layout, [
+  "const themeToggles = [...document.querySelectorAll('[data-theme-toggle]')]",
+  'themeToggles.forEach((themeToggle)',
 ]);
 requireAll('Logo', logo, [
   'class="brand-mark"',
@@ -28,39 +35,46 @@ requireAll('Logo', logo, [
   '{site.tagline}',
   'aria-label={`${site.name} — الرئيسية`}',
 ]);
-requireAll('Desktop design-one CSS', css, [
-  'التصميم الأول المعتمد',
-  '.main-header::after{z-index:0;right:clamp(255px,20vw,390px)',
-  '.main-header::before{z-index:1;right:clamp(270px,21vw,410px)',
-  'background:linear-gradient(115deg,#0a2342 0%,#0b4260 58%,#075675 100%)',
-  '.main-header>.brand-logo{width:clamp(240px,19vw,360px)',
-  '.main-header>.brand-logo .brand-mark{width:58px;height:58px',
-  '.desktop-nav a{position:relative;min-height:48px',
-  'color:#e7eef5',
-  '.ticker{overflow:hidden;color:var(--navy-900);border-bottom:1px solid #d6e0e9;background:#f8fafc}',
-  '.category-strip{position:sticky;top:104px',
+requireAll('Desktop reference CSS', css, [
+  'التصميم الأول المرجعي',
+  '.main-header{position:relative;isolation:isolate;min-height:118px',
+  '.main-header::after{z-index:0;right:clamp(286px,21.5vw,410px)',
+  '.main-header::before{z-index:1;right:clamp(304px,22.7vw,434px)',
+  'background:linear-gradient(112deg,#071d39 0%,#0a3857 58%,#087277 100%)',
+  '.main-header>.brand-logo{width:clamp(284px,22vw,410px)',
+  '.main-header>.brand-logo .brand-mark{width:68px;height:68px',
+  '.category-strip-inner{max-width:1360px;min-height:66px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))',
+  '.category-nav-trigger,.category-mobile-link{width:100%;min-height:66px',
 ]);
 
-const tablet = css.match(/@media \(min-width:801px\) and \(max-width:1100px\) \{([\s\S]*?)\n\}/)?.[1] || '';
-requireAll('Tablet design-one CSS', tablet, [
-  '.main-header>.brand-logo{width:190px',
-  '.desktop-nav a{padding-inline:9px',
-]);
 const mobile = css.match(/@media \(max-width:800px\) \{([\s\S]*?)\n\}/)?.[1] || '';
-requireAll('Mobile design-one CSS', mobile, [
+requireAll('Mobile reference CSS', mobile, [
   '.desktop-nav{display:none}',
   '.mobile-menu-button{display:inline-grid}',
-  '.main-header::before,.main-header::after{display:none}',
-  '.main-header>.brand-logo{width:auto',
-  '.main-header .icon-button,.main-header .header-search-link{color:var(--text-muted)}',
+  'background:linear-gradient(112deg,#071d39 0%,#0a3857 58%,#087277 100%)',
+  '.main-header::before,.main-header::after{display:block',
+  '.main-header::after{z-index:0;right:-14px;width:62%',
+  '.main-header::before{z-index:1;right:-14px;width:58%;background:#fff',
+  '.main-header>.brand-logo{width:58%;min-height:92px',
+  '.header-reading-list,.header-theme-toggle{display:none}',
+  'color:#fff;border:1px solid rgba(213,230,239,.72)',
+]);
+if (mobile.includes('.main-header::before,.main-header::after{display:none}')) failures.push('Mobile reference CSS still deletes the approved navy/teal wave.');
+
+const compact = css.match(/@media \(max-width:700px\) \{([\s\S]*?)\n\}/)?.[1] || '';
+requireAll('Compact reference CSS', compact, [
+  '.category-strip-inner{width:calc(100% - 24px);min-height:0;grid-template-columns:repeat(2,minmax(0,1fr))',
+  '.category-nav-item:last-child{grid-column:1/-1}',
+  '.ticker-label-full,.ticker-title-mobile{display:inline}',
+  '.ticker-label-mobile,.ticker-title-full{display:none}',
 ]);
 
-if (/7fdc29cf|\.png["']/.test(header)) failures.push('Header embeds the concept screenshot instead of the native responsive logo/components.');
+if (/7fdc29cf|\.png["']/.test(header)) failures.push('Header embeds a concept screenshot instead of native responsive components.');
 
 if (failures.length) {
-  console.error(`V4.21.1 header design audit found ${failures.length} failure(s):`);
+  console.error(`Header reference audit found ${failures.length} failure(s):`);
   failures.forEach((failure) => console.error(`- ${failure}`));
   process.exit(1);
 }
 
-console.log('V4.21.1 design-one header audit passed: native high-clarity logo panel, navy/teal wave, accessible navigation/search/actions, light ticker, floating categories, tablet compression, and simplified mobile fallback.');
+console.log('Header reference audit passed: approved desktop wave/logo panel, mobile navy wave, accessible utilities, moving ticker, and separate category cards are present.');

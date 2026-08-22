@@ -7,7 +7,7 @@ const posts = await getPublishedPosts();
 const starters = categories.map((category) => getSignaturePost(posts, category.slug)).filter(Boolean);
 ---
 <BaseLayout title="ابدأ من هنا" description="دليل واضح للزائر الجديد لاكتشاف عالم بريق وأقسامه الخمسة، واختيار أول مقال ومسار قراءة مناسب لاهتمامه." canonicalPath="/start-here/" latestPosts={posts.slice(0,6)}>
-  <section class="page-hero shell"><span class="eyebrow">مرحبًا بك</span><h1>ابدأ من هنا</h1><p>بريق منصة معرفية عربية تجمع العقل والكتب والثقافة والتقنية وتبسيط المفاهيم. اختر الباب الأقرب إلى فضولك، ثم اقرأ بعمق أو استمع مع النص أو اخرج بالخلاصة.</p></section>
+  <section class="page-hero shell"><span class="eyebrow">مرحبًا بك</span><h1>ابدأ من هنا</h1><p>بريق منصة معرفية عربية تجمع العقل والكتب والثقافة والتقنية وتبسيط المفاهيم. اختر الباب الأقرب إلى فضولك، ثم اقرأ بعمق أو استمع إلى النص أو اخرج بالخلاصة.</p></section>
   <section class="shell start-steps section-gap">
     <article><span>1</span><h2>اختر قسمًا</h2><p>كل باب يبدأ بمقال توقيع ثابت، لا بأحدث نشر فقط، حتى تعرف صوت بريق في ذلك المسار.</p></article>
     <article><span>2</span><h2>اقرأ أو استمع أو لخّص</h2><p>داخل المقال ثلاث طرق: النص الكامل، واستماع متزامن يحفظ موضعك، وخلاصة مركّزة لأقل من دقيقة.</p></article>

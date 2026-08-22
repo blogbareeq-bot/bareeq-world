@@ -1,17 +1,17 @@
-# Bareeq V4.21.1 — FULL SOURCE REPLACE
+# Bareeq V4.21.3 — FULL SOURCE REPLACE
 
-هذه حزمة مصدر كاملة مبنية على آخر إصدار مستقر. تحتوي التصميم الأول المعتمد ومسار Gemini المجاني التدريجي، ولا تحتوي مفتاح API أو تسجيلًا جديدًا مأخوذًا من حسابك.
+هذه حزمة مصدر كاملة مصححة. تحتوي التنفيذ الفعلي للتصميم الأول المعتمد على سطح المكتب والجوال، وتحافظ على حركة شريط المقالات ومسار Gemini المجاني التدريجي، ولا تحتوي مفتاح API أو تسجيلًا جديدًا مأخوذًا من حسابك.
 
 لا تحذف مجلد المستودع ولا مجلد `.git`.
 
 ## طريقة التطبيق
 
 1. فك ضغط الحزمة.
-2. افتح مجلد `bareeq-world-main` داخلها.
-3. انسخ **كل محتوياته**.
+2. افتح مجلد الحزمة المفكوك.
+3. انسخ **كل محتوياته** من الجذر.
 4. الصقها داخل مجلد المشروع الحالي `bareeq-world`.
 5. اختر **Replace files in the destination** عند الطلب؛ لا تحذف الملفات غير المعروضة يدويًا ولا تستبدل مجلد المستودع نفسه.
-6. افتح GitHub Desktop وتأكد من أن الإصدار الظاهر في `package.json` هو `4.21.1`.
+6. افتح GitHub Desktop وتأكد من أن الإصدار الظاهر في `package.json` هو `4.21.3`.
 7. نفّذ Commit ثم Push مرة واحدة.
 8. اترك Cloudflare يبدأ Deployment تلقائيًا، ولا تشغّل عدة عمليات Redeploy متزامنة.
 
@@ -35,12 +35,12 @@
 
 Summary:
 
-`feat: release V4.21.1 progressive Gemini audio and design-one header`
+`fix: release V4.21.3 rebuild approved design-one header`
 
 Description:
 
-`Release Bareeq V4.21.1 with the approved design-one header, a shortest-first one-article Gemini free-tier rollout, atomic 429-safe fallback preservation, protected Cloudflare email links, and updated local-storage privacy disclosure. Paid Cloud TTS remains locked pending CNTXT.`
+`Release Bareeq V4.21.3 with the rebuilt approved design-one header on desktop and mobile, separate responsive category cards, the verified moving mobile article ticker, the refined Arabic listening summary, preserved Claude improvements, and unchanged article bodies.`
 
 ## الإصدار
 
-Bareeq V4.21.1 — Design One & Progressive Gemini Free-Tier Audio
+Bareeq V4.21.3 — Approved Header Rebuild & Mobile Ticker

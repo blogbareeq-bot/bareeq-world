@@ -137,15 +137,17 @@ const baseSchema = [
     <script>
       (() => {
         const root = document.documentElement;
-        const themeToggle = document.querySelector('[data-theme-toggle]');
-        const syncThemeButton = () => themeToggle?.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
+        const themeToggles = [...document.querySelectorAll('[data-theme-toggle]')];
+        const syncThemeButton = () => themeToggles.forEach((button) => button.setAttribute('aria-pressed', String(root.dataset.theme === 'dark')));
         syncThemeButton();
-        themeToggle?.addEventListener('click', () => {
-          const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-          root.dataset.theme = next;
-          try { localStorage.setItem('bareeq-theme', next); } catch {}
-          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', next === 'dark' ? '#071421' : '#FAF9F6');
-          syncThemeButton();
+        themeToggles.forEach((themeToggle) => {
+          themeToggle.addEventListener('click', () => {
+            const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+            root.dataset.theme = next;
+            try { localStorage.setItem('bareeq-theme', next); } catch {}
+            document.querySelector('meta[name="theme-color"]')?.setAttribute('content', next === 'dark' ? '#071421' : '#FAF9F6');
+            syncThemeButton();
+          });
         });
 
         const stickyHeader = document.querySelector('[data-sticky-header]');

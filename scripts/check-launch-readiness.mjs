@@ -28,7 +28,7 @@ V4.19 baseline transformations before prepare-v4200.mjs. This exact inert
 source marker lets that idempotent preparer recognize an already-newer gate:
 if (pkg.version !== '4.19.0') failures.push(`Expected package version 4.19.0, got ${pkg.version}`);
 */
-if (!['4.21.1', '4.21.2'].includes(pkg.version)) failures.push(`Expected package version 4.21.1 or 4.21.2, got ${pkg.version}`);
+if (!['4.21.1', '4.21.2', '4.21.3'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.3, got ${pkg.version}`);
 
 // Homepage identity/heading hierarchy.
 if (!/<h1\b[^>]*>عالم بريق — نافذتك إلى المعرفة<\/h1>/u.test(intro)) failures.push('Homepage identity H1 is missing or does not use the canonical brand promise.');
@@ -61,10 +61,12 @@ if (!baseLayout.includes('ibmBodyFont') || !baseLayout.includes('href={ibmBodyFo
 
 // Responsive launch fixes.
 const mobile900 = css.match(/@media \(max-width:900px\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
+const mobile700 = css.match(/@media \(max-width:700px\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
 const mobile420 = css.match(/@media \(max-width:420px\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
 const mobile800 = css.match(/@media \(max-width:800px\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
-if (!mobile900.includes('.category-strip{position:relative;top:auto}')) failures.push('Category strip remains sticky on tablet/mobile.');
-if (!mobile900.includes('flex-wrap:wrap') || mobile900.includes('overflow-x:auto')) failures.push('Category navigation is not a wrapped non-scrolling layout at <=900px.');
+if (!mobile900.includes('.category-strip{position:relative;top:auto;')) failures.push('Category strip remains sticky on tablet/mobile.');
+if (!mobile900.includes('.category-strip-inner{display:grid') || !mobile900.includes('grid-template-columns:repeat(5,minmax(0,1fr))') || mobile900.includes('overflow-x:auto')) failures.push('Category navigation is not the approved five-card non-scrolling layout at <=900px.');
+if (!mobile700.includes('grid-template-columns:repeat(2,minmax(0,1fr))') || !mobile700.includes('.category-nav-item:last-child{grid-column:1/-1}')) failures.push('Phone category navigation is not the approved two-column layout with the final full-width card.');
 if (!mobile900.includes('.category-mobile-link{display:flex')) failures.push('Category mobile links are hidden at <=900px.');
 if (!mobile800.includes('.desktop-nav{display:none}')) failures.push('Desktop navigation breakpoint was not moved to <=800px.');
 if (css.match(/@media \(max-width:1000px\) \{([\s\S]*?)\n\}/)?.[1]?.includes('.desktop-nav{display:none}')) failures.push('Desktop nav still disappears prematurely at <=1000px.');
@@ -90,4 +92,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Launch-readiness source audit passed: V4.21.2 package identity, heading identity, single-encoded Arabic sharing, H2-only TOC, real breadcrumbs, intent-based related posts, complete series sitemap policy, SearchAction, body-font preload, visible wrapped mobile categories, HTML CORS hardening, and PWA icons.');
+console.log('Launch-readiness source audit passed: V4.21.3 package identity, heading identity, single-encoded Arabic sharing, H2-only TOC, real breadcrumbs, intent-based related posts, complete series sitemap policy, SearchAction, body-font preload, visible wrapped mobile categories, HTML CORS hardening, and PWA icons.');
