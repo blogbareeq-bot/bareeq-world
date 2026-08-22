@@ -26,7 +26,8 @@ requireAll('global.css', css, [
   "url('/images/header-design-one-mobile.svg')",
   '.site-header.header-design-one{\n  width:100%;\n  max-width:none;',
   'height:112px',
-  'width:min(288px,calc(100% - 28px))',
+  'width:min(288px,calc(100% - 52px))',
+  '.ticker .ticker-toggle{\n  position:static;',
   '@keyframes mobileTickerLabel',
   'max-width:1280px',
 ]);

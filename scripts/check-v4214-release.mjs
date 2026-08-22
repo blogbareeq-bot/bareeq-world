@@ -25,13 +25,20 @@ for (const token of ['320', '360', '390', '768', '1024', '1440', '1890', 'PASS']
   if (!reportText.includes(token)) throw new Error(`Visual report is missing token: ${token}`);
 }
 
-const expectedWidths = [320, 360, 390, 768, 1024, 1440, 1890];
+const expectedWidths = [320, 360, 390, 430, 768, 1024, 1440, 1890];
 if (!Array.isArray(metrics.results) || metrics.results.map((item) => item.width).join(',') !== expectedWidths.join(',')) {
-  throw new Error('QA metrics must contain the seven approved viewport widths in order.');
+  throw new Error('QA metrics must contain the eight approved viewport widths in order.');
+}
+if (!metrics.chromium || !metrics.browserVersion) {
+  throw new Error('QA metrics must record the real Chromium path and browser version.');
 }
 for (const item of metrics.results) {
   if (item.pageScrollWidth > item.width) throw new Error(`Horizontal overflow at ${item.width}px: ${item.pageScrollWidth}px.`);
   if (item.browserErrors?.length) throw new Error(`Browser errors at ${item.width}px: ${item.browserErrors.join(' | ')}`);
+  const toggle = item.geometry?.tickerToggle;
+  if (!toggle || toggle.width < 40 || toggle.height < 40 || toggle.visible === false) {
+    throw new Error(`Ticker pause/play must be a visible 44px-class control at ${item.width}px: ${JSON.stringify(toggle)}.`);
+  }
   await access(`docs/v4214-screenshots/header-visual-${item.width}.png`);
 }
 for (const width of [320, 360, 390]) {
@@ -48,4 +55,4 @@ if (Math.abs(phone.geometry.tickerInner.width - 288) > 2 || Math.abs(phone.geome
 const wide = metrics.results.find((item) => item.width === 1890);
 if (wide.geometry.siteHeader.width < 1880) throw new Error(`Desktop header must span the viewport, got ${wide.geometry.siteHeader.width}px.`);
 
-console.log('V4.21.4 release gate passed: seven real-browser viewports, zero overflow/errors, exact 390px geometry, full-bleed desktop header, and moving mobile ticker are verified.');
+console.log('V4.21.4 release gate passed: eight real-browser viewports, visible ticker pause/play, zero overflow/errors, exact 390px geometry, full-bleed desktop header, and moving mobile ticker are verified.');
