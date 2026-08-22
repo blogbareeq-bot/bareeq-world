@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 118" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="navy" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#061b34"/>
+      <stop offset="0.58" stop-color="#082b4a"/>
+      <stop offset="1" stop-color="#08777a"/>
+    </linearGradient>
+    <pattern id="grain" width="34" height="34" patternUnits="userSpaceOnUse" patternTransform="rotate(24)">
+      <path d="M0 1h34" stroke="#ffffff" stroke-opacity=".055" stroke-width=".7"/>
+    </pattern>
+  </defs>
+  <rect width="1440" height="118" fill="#ffffff"/>
+  <path d="M0 0h1138c-26 15-40 42-53 69-14 29-36 42-78 47-258 15-500-7-724-3-111 2-198 11-283 5V0Z" fill="#55a9b3"/>
+  <path d="M0 0h1120c-25 14-37 40-49 65-14 28-35 39-75 44-253 14-493-7-713-3-111 2-198 11-283 12V0Z" fill="url(#navy)"/>
+  <path d="M0 0h1120c-25 14-37 40-49 65-14 28-35 39-75 44-253 14-493-7-713-3-111 2-198 11-283 12V0Z" fill="url(#grain)"/>
+</svg>

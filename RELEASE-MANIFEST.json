@@ -1,90 +1,64 @@
 {
-  "release": "Bareeq V4.21.3 — Approved Header Rebuild & Mobile Article Ticker Fix",
-  "version": "4.21.3",
+  "release": "Bareeq V4.21.4 — Design-One Visual Parity",
+  "version": "4.21.4",
   "status": "verified-release-candidate",
-  "package": "Bareeq-V4.21.3-FINAL.zip",
-  "bundleContents": [
-    "tracked source tree",
-    "verified static dist output"
-  ],
+  "package": "Bareeq-V4.21.4-UPDATE.zip",
   "baseline": {
-    "version": "4.21.1",
-    "commit": "6a98911628765568ecc540f47f10bc6c288ffeff"
+    "version": "4.21.3",
+    "commit": "dedd965b0d5d124e554b421292002b3912274b0f"
   },
-  "branch": "arena/01a02617-bareeq-world",
-  "selectiveMerge": {
-    "kept": [
-      "approved design-one header rebuilt from the visual reference",
-      "home and about copy refinements",
-      "category signature posts",
-      "series archive order and editorial promises",
-      "content-derived search excerpts",
-      "saved-page noindex and semantic fix",
-      "three corrected quick summaries",
-      "AI tag consolidation with legacy redirect",
-      "V4.21.2 editorial release gates",
-      "V4.21.3 visual header release gates",
-      "refined Arabic listening summary: استمع إلى النص"
-    ],
-    "removed": [
-      "bareeqAddition article layer",
-      "article-end series-path card",
-      "synthetic screenshot generator"
-    ]
-  },
+  "preservedClaudeWork": [
+    "editorial navigation and category signatures",
+    "series ordering and promises",
+    "content-derived search excerpts",
+    "saved-page noindex and semantic fix",
+    "corrected quick summaries",
+    "AI-tag consolidation and redirect",
+    "progressive Gemini audio safeguards",
+    "unchanged published article bodies"
+  ],
   "headerDesign": {
     "approvedConcept": 1,
-    "rejectedConcepts": [2, 3],
-    "implementation": "native-responsive-components",
-    "desktop": "white logo panel plus navy-teal wave and separate category cards",
-    "mobile": "navy-teal field plus curved white logo panel and two-column category cards",
-    "readingListAndThemeAccess": "mobile drawer and footer",
-    "readingListIcon": "font-independent-svg",
-    "visualRegressionViewports": [320, 360, 390, 430, 768, 1024, 1440]
+    "implementation": "responsive components plus dedicated desktop/mobile SVG waves",
+    "desktopMaxWidth": 1440,
+    "desktopHeight": 118,
+    "mobileHeight": 112,
+    "mobileTickerWidthAt390": 288,
+    "mobileCategoryWidthAt390": 340,
+    "categoryDesktopMaxWidth": 1280
   },
   "mobileTicker": {
     "autoMoveOnPhones": true,
-    "loop": "two-equal-title-sets-measured-by-primary-width",
-    "mobileEngine": "requestAnimationFrame",
-    "desktopEngine": "CSS animation",
-    "pauseControl": "verified",
-    "reducedMotion": "stop-auto-keep-manual-scroll",
-    "clonedCopy": "aria-hidden",
-    "motionTest": "scripts/check-mobile-ticker-motion.mjs"
+    "loop": "two equal title sets measured by the primary set",
+    "engine": "requestAnimationFrame",
+    "introLabel": "animated reveal into live article titles",
+    "pauseResume": "verified",
+    "reducedMotion": "manual horizontal scroll",
+    "cloneAccessibility": "aria-hidden"
   },
   "contentPolicy": {
     "publishedArticles": 13,
     "publishedArticleBodiesChanged": 0,
-    "homeH1": "عالم بريق — نافذتك إلى المعرفة",
-    "intrusiveArticleLayers": "disabled",
-    "email": "blogbareeq@gmail.com"
+    "listeningPhrase": "استمع إلى النص"
   },
-  "audio": {
-    "publishedArticles": 13,
-    "synchronizedParts": 64,
-    "verifiedMp3Files": 64,
-    "externalApiRequestsDuringPreparation": 0,
-    "temporaryRestoreDirectories": 0
+  "verification": {
+    "astroPages": 56,
+    "browser": "Chromium 149.0.7827.0",
+    "viewports": [320, 360, 390, 768, 1024, 1440, 1890],
+    "horizontalOverflow": 0,
+    "browserErrors": 0,
+    "mobileTickerMotion": "pass",
+    "mobileMenu": "pass",
+    "pauseResume": "pass"
   },
   "paidCloudTts": {
     "status": "prepared-not-activated",
     "activationFlag": "BAREEQ_CLOUD_TTS_ACTIVATE=1",
     "defaultActivationValue": 0
   },
-  "verification": {
-    "astroPages": 56,
-    "htmlFiles": 56,
-    "sourceGates": "pass",
-    "visualReferenceGate": "pass",
-    "distAudits": "pass",
-    "audioDist": "pass",
-    "browser": "Chromium 140.0.7339.16",
-    "viewports": [320, 360, 390, 430, 768, 1024, 1440],
-    "mobileTickerMotion": "pass",
-    "pauseControl": "pass",
-    "reducedMotion": "pass",
-    "horizontalOverflow": 0,
-    "browserErrors": 0
-  },
-  "postDeployCheck": "Verify the legacy AI tag path returns HTTP 301 on Cloudflare preview."
+  "postDeployChecks": [
+    "confirm Cloudflare deployment is successful",
+    "verify the homepage header at 390px and 1440px",
+    "verify the legacy AI tag path returns HTTP 301"
+  ]
 }

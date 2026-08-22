@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { PENDING_CLOUD, RETAINED_GEMINI } from './cloud-tts-rollout.mjs';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.1', '4.21.2', '4.21.3'].includes(pkg.version)) throw new Error(`Expected package 4.21.1, 4.21.2, or 4.21.3, got ${pkg.version}.`);
+if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4'].includes(pkg.version)) throw new Error(`Expected package 4.21.1 through 4.21.4, got ${pkg.version}.`);
 if (PENDING_CLOUD.length !== 11 || RETAINED_GEMINI.length !== 2 || new Set([...PENDING_CLOUD, ...RETAINED_GEMINI]).size !== 13) throw new Error('V4.21.1 must keep the exact 11 pending + 2 retained article boundary.');
 
 const [runner, generator, envExample, privacy, footer, about, contact, site, mobileAudit, distAudit] = await Promise.all([

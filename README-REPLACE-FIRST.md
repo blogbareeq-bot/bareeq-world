@@ -1,17 +1,17 @@
-# Bareeq V4.21.3 — FULL SOURCE REPLACE
+# Bareeq V4.21.4 — UPDATE OR FULL SOURCE
 
-هذه حزمة مصدر كاملة مصححة. تحتوي التنفيذ الفعلي للتصميم الأول المعتمد على سطح المكتب والجوال، وتحافظ على حركة شريط المقالات ومسار Gemini المجاني التدريجي، ولا تحتوي مفتاح API أو تسجيلًا جديدًا مأخوذًا من حسابك.
+يتوفر الإصدار بصيغتين: حزمة `UPDATE` صغيرة تضم الملفات التي تغيّرت فقط، وحزمة `SOURCE` كاملة للمصدر. كلتاهما تحتويان التنفيذ الفعلي للتصميم الأول المعتمد على سطح المكتب والجوال، وتحافظان على حركة شريط المقالات ومسار Gemini المجاني التدريجي، ولا تحتويان مفتاح API أو تسجيلًا جديدًا مأخوذًا من حسابك.
 
 لا تحذف مجلد المستودع ولا مجلد `.git`.
 
 ## طريقة التطبيق
 
-1. فك ضغط الحزمة.
-2. افتح مجلد الحزمة المفكوك.
-3. انسخ **كل محتوياته** من الجذر.
-4. الصقها داخل مجلد المشروع الحالي `bareeq-world`.
+1. استخدم حزمة `UPDATE` فوق مشروعك الحالي؛ استخدم `SOURCE` فقط إذا أردت نسخة مصدر كاملة جديدة.
+2. فك ضغط الحزمة وافتح مجلدها.
+3. انسخ **كل محتويات الحزمة** من الجذر.
+4. عند استخدام `UPDATE`، الصقها داخل مجلد المشروع الحالي `bareeq-world`.
 5. اختر **Replace files in the destination** عند الطلب؛ لا تحذف الملفات غير المعروضة يدويًا ولا تستبدل مجلد المستودع نفسه.
-6. افتح GitHub Desktop وتأكد من أن الإصدار الظاهر في `package.json` هو `4.21.3`.
+6. افتح GitHub Desktop وتأكد من أن الإصدار الظاهر في `package.json` هو `4.21.4`.
 7. نفّذ Commit ثم Push مرة واحدة.
 8. اترك Cloudflare يبدأ Deployment تلقائيًا، ولا تشغّل عدة عمليات Redeploy متزامنة.
 
@@ -35,12 +35,12 @@
 
 Summary:
 
-`fix: release V4.21.3 rebuild approved design-one header`
+`fix: release V4.21.4 design-one visual parity`
 
 Description:
 
-`Release Bareeq V4.21.3 with the rebuilt approved design-one header on desktop and mobile, separate responsive category cards, the verified moving mobile article ticker, the refined Arabic listening summary, preserved Claude improvements, and unchanged article bodies.`
+`Release Bareeq V4.21.4 with exact design-one framing and SVG waves on desktop and mobile, the verified moving mobile article ticker, corrected responsive category geometry, preserved Claude improvements, and unchanged article bodies.`
 
 ## الإصدار
 
-Bareeq V4.21.3 — Approved Header Rebuild & Mobile Ticker
+Bareeq V4.21.4 — Design-One Visual Parity & Mobile Ticker

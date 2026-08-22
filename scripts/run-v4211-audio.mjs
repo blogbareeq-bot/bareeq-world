@@ -149,10 +149,12 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
 
   if (!freeRolloutEnabled) {
     console.log('V4.21.1 Gemini free-tier rollout is paused by BAREEQ_GEMINI_FREE_ROLLOUT=0; 0 synthesis requests were sent.');
+    cleanTemporaryAudioRestores();
     process.exit(0);
   }
   if (!process.env.GEMINI_API_KEY?.trim()) {
     console.log('V4.21.1 Gemini free-tier rollout is ready but GEMINI_API_KEY is absent; approved fallback audio is published with 0 synthesis requests.');
+    cleanTemporaryAudioRestores();
     process.exit(0);
   }
 
@@ -169,6 +171,7 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
   await assertCompleteBaseline('post-Gemini rollout');
   const geminiCoverage = await countGeminiCoverage();
   console.log(`V4.21.1 free-tier deployment ready: ${geminiCoverage}/13 article(s) currently use Gemini Sadaltager; remaining articles keep approved Hamed/Cedar audio until a later daily deployment.`);
+  cleanTemporaryAudioRestores();
   process.exit(0);
 }
 
@@ -211,3 +214,4 @@ for (const articleId of PENDING_CLOUD) {
 }
 
 console.log(`V4.21.1 Cloud TTS activation complete: ${PENDING_CLOUD.length} pending article(s) generated/restored with Gemini 2.5 Flash TTS, while ${RETAINED_GEMINI.length} existing Sadaltager article(s) were retained from production cache.`);
+cleanTemporaryAudioRestores();

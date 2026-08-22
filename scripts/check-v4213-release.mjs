@@ -11,8 +11,8 @@ const [pkgText, lockText, header, layout, footer, css, report] = await Promise.a
 ]);
 const pkg = JSON.parse(pkgText);
 const lock = JSON.parse(lockText);
-if (pkg.version !== '4.21.3' || lock.version !== '4.21.3' || lock.packages?.['']?.version !== '4.21.3') {
-  throw new Error('package.json and package-lock.json must both identify V4.21.3.');
+if (!['4.21.3', '4.21.4'].includes(pkg.version) || lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) {
+  throw new Error('package.json and package-lock.json must identify V4.21.3 or its V4.21.4 visual-parity successor.');
 }
 
 const requireAll = (label, source, tokens) => {
