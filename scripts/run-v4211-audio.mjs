@@ -170,7 +170,7 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
 
   await assertCompleteBaseline('post-Gemini rollout');
   const geminiCoverage = await countGeminiCoverage();
-  console.log(`V4.21.1 free-tier deployment ready: ${geminiCoverage}/13 article(s) currently use Gemini Sadaltager; remaining articles keep approved Hamed/Cedar audio until a later daily deployment.`);
+  console.log(`V4.21.1 free-tier deployment ready: ${geminiCoverage}/${ALL_ARTICLES.length} article(s) currently use Gemini Sadaltager; remaining articles keep approved Hamed/Cedar audio until a later daily deployment.`);
   cleanTemporaryAudioRestores();
   process.exit(0);
 }

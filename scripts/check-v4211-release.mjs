@@ -66,7 +66,7 @@ if (published !== 13) throw new Error(`V4.21.1 expected 13 published articles, f
 const plan = spawnSync(process.execPath, ['scripts/plan-v4211-gemini-free-rollout.mjs'], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
 if (plan.error) throw plan.error;
 if (plan.status !== 0) throw new Error(`Pending Gemini plan failed:\n${plan.stdout || ''}${plan.stderr || ''}`);
-if (!plan.stdout.includes('11 selected article(s)') || !plan.stdout.includes('0 API requests')) throw new Error('Pending Gemini plan did not prove 11 selected articles and zero planning requests.');
+if (!plan.stdout.includes(`${PENDING_CLOUD.length} selected article(s)`) || !plan.stdout.includes('0 API requests')) throw new Error(`Pending Gemini plan did not prove ${PENDING_CLOUD.length} selected articles and zero planning requests.`);
 
 const build = pkg.scripts?.build || '';
 for (const token of ['prepare-v4211.mjs', 'test-gemini-free-rollout-v4211.mjs', 'check-header-design-v4211.mjs', 'check-v4211-release.mjs', 'run-v4211-audio.mjs']) {

@@ -73,7 +73,7 @@ const plan = execFileSync(process.execPath, ['scripts/generate-audio.mjs', '--pl
     GOOGLE_APPLICATION_CREDENTIALS: '',
   },
 });
-if (!plan.includes('pre-activation plan: 11 selected article(s)') || !plan.includes('Planning sends 0 API requests') || !plan.includes('gemini-2.5-flash-tts') || !plan.includes('Sadaltager') || !plan.includes('ar-EG')) throw new Error('Cloud TTS pre-activation plan is incomplete or not zero-request.');
+if (!plan.includes(`pre-activation plan: ${PENDING_CLOUD.length} selected article(s)`) || !plan.includes('Planning sends 0 API requests') || !plan.includes('gemini-2.5-flash-tts') || !plan.includes('Sadaltager') || !plan.includes('ar-EG')) throw new Error('Cloud TTS pre-activation plan is incomplete or not zero-request.');
 
 const inactive = spawnSync(process.execPath, ['scripts/generate-audio.mjs'], {
   encoding: 'utf8',
