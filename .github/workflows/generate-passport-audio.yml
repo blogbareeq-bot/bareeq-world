@@ -208,3 +208,39 @@ jobs:
           git diff --cached --quiet && { echo 'No new audio files to commit.'; exit 1; }
           git commit -m 'feat: add Sadaltager audio for passport article'
           git push origin HEAD:arena/01a02d6f-bareeq-world
+
+      - name: Record audio attempt diagnostic
+        if: always()
+        shell: bash
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_CLOUD_ACCESS_TOKEN: ${{ secrets.GOOGLE_CLOUD_ACCESS_TOKEN }}
+        run: |
+          if [ -f public/audio/articles/34e34b6f4633d928/manifest.json ]; then
+            result='audio_present'
+          elif [ -z "$GEMINI_API_KEY" ] && [ -z "$GOOGLE_SERVICE_ACCOUNT_JSON" ] && [ -z "$GOOGLE_CLOUD_ACCESS_TOKEN" ]; then
+            result='no_tts_credentials_in_github'
+          else
+            result='generation_failed_or_quota'
+          fi
+          RESULT="$result" python - <<'PY'
+          from pathlib import Path
+          import json, os
+          Path('docs/editorial/passport-audio-attempt.json').write_text(
+              json.dumps({
+                  'articleId': 'why-some-passports-are-stronger',
+                  'audioKey': '34e34b6f4633d928',
+                  'result': os.environ['RESULT'],
+                  'note': 'Diagnostic only; no secret values are recorded.'
+              }, ensure_ascii=False, indent=2) + '\n',
+              encoding='utf-8'
+          )
+          PY
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add docs/editorial/passport-audio-attempt.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore: record passport audio attempt'
+            git push origin HEAD:arena/01a02d6f-bareeq-world
+          fi
