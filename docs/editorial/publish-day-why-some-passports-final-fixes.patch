@@ -11,7 +11,7 @@ diff --git a/scripts/speech-review.json b/scripts/speech-review.json
 diff --git a/scripts/check-production-voices-v4200.mjs b/scripts/check-production-voices-v4200.mjs
 --- a/scripts/check-production-voices-v4200.mjs
 +++ b/scripts/check-production-voices-v4200.mjs
-@@ -37,5 +37,5 @@
+@@ -37,3 +37,3 @@
  const azure = plan('azure', coworker, { BAREEQ_AZURE_HAMED_ONLY: '1' });
  if (!azure.includes('Hamed') || !azure.includes(coworker)) throw new Error('Coworker Azure fallback plan is not targeted correctly.');
 -console.log('V4.20.0 production voice audit passed: 13 live articles, old audio cache-only, coworker cache → Gemini Sadaltager → Azure Hamed fallback.');
@@ -19,7 +19,7 @@ diff --git a/scripts/check-production-voices-v4200.mjs b/scripts/check-productio
 diff --git a/scripts/check-audio-mobile.mjs b/scripts/check-audio-mobile.mjs
 --- a/scripts/check-audio-mobile.mjs
 +++ b/scripts/check-audio-mobile.mjs
-@@ -103,8 +103,8 @@
+@@ -101,7 +101,7 @@
  }
  
  console.log(v4211OrchestratedPipeline
