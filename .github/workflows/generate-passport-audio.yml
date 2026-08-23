@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Apply final editorial fixes and refresh bodyHash docs
+      - name: Verify final editorial lock and refresh bodyHash docs
         shell: bash
         run: |
           python - <<'PY'
@@ -44,12 +44,12 @@ jobs:
           old_saudi = 'وماذا عن الجواز السعودي؟ يحتل المرتبة الرابعة والخمسين عالميًا في أحدث بيانات المؤشر المتاحة عند إعداد هذا المقال في أغسطس 2026، بوصول ميسر إلى نحو تسعين وجهة.'
           new_saudi = 'وماذا عن الجواز السعودي؟ في أحدث بيانات هينلي المتاحة عند إعداد هذا المقال في أغسطس 2026، يأتي الجواز السعودي في منتصف الخمسينيات عالميًا، مع وصول ميسر إلى نحو تسعين وجهة.'
 
-          if old_evisa not in text:
-              raise SystemExit('Expected e-Visa sentence was not found; refusing blind edit.')
-          if old_saudi not in text:
-              raise SystemExit('Expected Saudi sentence was not found; refusing blind edit.')
-
-          text = text.replace(old_evisa, new_evisa, 1).replace(old_saudi, new_saudi, 1)
+          if old_evisa in text:
+              text = text.replace(old_evisa, new_evisa, 1)
+          if old_saudi in text:
+              text = text.replace(old_saudi, new_saudi, 1)
+          if new_evisa not in text or new_saudi not in text:
+              raise SystemExit('Final editorial sentences are not in the expected state.')
           article.write_text(text, encoding='utf-8')
 
           m = re.match(r'^---\s*\n[\s\S]*?\n---\s*\n?([\s\S]*)$', text)
@@ -63,7 +63,11 @@ jobs:
 
           checklist = Path('docs/editorial/publish-checklist-why-some-passports-are-stronger.md')
           c = checklist.read_text(encoding='utf-8')
-          c = c.replace('bbcd9107509e3a5a4bf259e4261b520221c5b45f4878deb1a68048f4358f11cb', body_hash)
+          for previous in [
+              'bbcd9107509e3a5a4bf259e4261b520221c5b45f4878deb1a68048f4358f11cb',
+              '391e0327e0e3b3aea8a159649910e9d053a67d1610bebeb91fce9bb7bd550790',
+          ]:
+              c = c.replace(previous, body_hash)
           c = c.replace('السعودية: المرتبة 54 في أحدث البيانات المتاحة عند إعداد المقال، مع صياغة «نحو تسعين وجهة» لتجنب تثبيت رقم متغير بين واجهات هينلي الشهرية.',
                         'السعودية: صيغت النتيجة على أنها «في منتصف الخمسينيات عالميًا» و«نحو تسعين وجهة» لأن واجهات هينلي الحالية لا تعرض المرتبة/العدد باتساق كامل؛ راجع الصفحة الحية قبل النشر الفعلي.')
           checklist.write_text(c, encoding='utf-8')
@@ -76,7 +80,7 @@ jobs:
           print(f'Final article bodyHash: {body_hash}')
           PY
 
-      - name: Commit final text lock
+      - name: Commit final text lock if needed
         shell: bash
         run: |
           git config user.name 'bareeq-release-bot'
@@ -89,13 +93,23 @@ jobs:
             git push origin HEAD:arena/01a02d6f-bareeq-world
           fi
 
-      - name: Generate targeted Gemini audio
+      - name: Generate targeted Sadaltager audio
         shell: bash
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_CLOUD_ACCESS_TOKEN: ${{ secrets.GOOGLE_CLOUD_ACCESS_TOKEN }}
+          GOOGLE_CLOUD_PROJECT: bareeq-tts
         run: |
-          if [ -z "$GEMINI_API_KEY" ]; then
-            echo '::error::Repository secret GEMINI_API_KEY is not configured.'
+          provider=''
+          if [ -n "$GEMINI_API_KEY" ]; then
+            provider='gemini'
+            echo 'Using Google Gemini API Sadaltager.'
+          elif [ -n "$GOOGLE_SERVICE_ACCOUNT_JSON" ] || [ -n "$GOOGLE_CLOUD_ACCESS_TOKEN" ]; then
+            provider='google-cloud'
+            echo 'Using Google Cloud Text-to-Speech Gemini 2.5 Flash + Sadaltager.'
+          else
+            echo '::error::No Gemini or Google Cloud TTS credential is configured in GitHub secrets.'
             exit 2
           fi
 
@@ -109,11 +123,20 @@ jobs:
           PY
 
           set +e
-          BAREEQ_TTS_PROVIDER=gemini \
-          BAREEQ_TTS_INCLUDE_IDS=why-some-passports-are-stronger \
-          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD=1 \
-          node scripts/generate-audio.mjs
-          status=$?
+          if [ "$provider" = 'gemini' ]; then
+            BAREEQ_TTS_PROVIDER=gemini \
+            BAREEQ_TTS_INCLUDE_IDS=why-some-passports-are-stronger \
+            BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD=1 \
+            node scripts/generate-audio.mjs
+            status=$?
+          else
+            BAREEQ_TTS_PROVIDER=google-cloud \
+            BAREEQ_CLOUD_TTS_ACTIVATE=1 \
+            BAREEQ_TTS_INCLUDE_IDS=why-some-passports-are-stronger \
+            BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD=1 \
+            node scripts/generate-audio.mjs
+            status=$?
+          fi
           set -e
 
           python - <<'PY'
@@ -142,15 +165,24 @@ jobs:
           const root = path.join('public', 'audio', 'articles', key);
           const manifest = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
           if (manifest.articleId !== id) throw new Error('articleId mismatch');
-          if (manifest.provider !== 'Google Gemini API') throw new Error(`Unexpected provider: ${manifest.provider}`);
-          if (manifest.model !== 'gemini-3.1-flash-tts-preview') throw new Error(`Unexpected model: ${manifest.model}`);
-          if (manifest.language !== 'ar') throw new Error(`Unexpected language: ${manifest.language}`);
+          const geminiOk = manifest.provider === 'Google Gemini API'
+            && manifest.model === 'gemini-3.1-flash-tts-preview'
+            && manifest.language === 'ar';
+          const cloudOk = manifest.provider === 'Google Cloud Text-to-Speech'
+            && manifest.model === 'gemini-2.5-flash-tts'
+            && manifest.language === 'ar-EG';
+          if (!geminiOk && !cloudOk) throw new Error(`Unexpected provider/model/language: ${manifest.provider} / ${manifest.model} / ${manifest.language}`);
           if (manifest.defaultVoice !== 'sadaltager') throw new Error(`Unexpected voice: ${manifest.defaultVoice}`);
           if (!Array.isArray(manifest.parts) || !manifest.parts.length) throw new Error('No audio parts');
 
           let files = 0;
+          const syncIds = new Set();
           for (const part of manifest.parts) {
             if (!Array.isArray(part.sync) || !part.sync.length) throw new Error('Missing sync entries');
+            for (const entry of part.sync) {
+              if (!entry?.id || syncIds.has(entry.id)) throw new Error(`Invalid or duplicate sync id: ${entry?.id}`);
+              syncIds.add(entry.id);
+            }
             const asset = part.audio?.sadaltager;
             if (!asset?.src) throw new Error('Missing Sadaltager MP3 asset');
             const local = path.join('public', asset.src.replace(/^\//, ''));
@@ -162,7 +194,7 @@ jobs:
             if (!(asset.durationSeconds > 0) || Math.abs(duration - asset.durationSeconds) > 0.1) throw new Error(`Duration mismatch: ${asset.src}`);
             files += 1;
           }
-          console.log(`Validated ${manifest.parts.length} synchronized part(s), ${files} MP3 file(s).`);
+          console.log(`Validated ${manifest.parts.length} synchronized part(s), ${files} MP3 file(s), provider ${manifest.provider}.`);
           NODE
 
       - name: Ensure article stayed draft before release gate
