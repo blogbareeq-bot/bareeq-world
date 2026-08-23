@@ -1,0 +1,160 @@
+name: Generate passport article audio
+
+on:
+  push:
+    branches:
+      - arena/01a02d6f-bareeq-world
+    paths:
+      - .github/workflows/generate-passport-audio.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: passport-audio-generation
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          ref: arena/01a02d6f-bareeq-world
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify locked article state
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, re
+
+          path = Path('src/content/posts/why-some-passports-are-stronger.md')
+          text = path.read_text(encoding='utf-8')
+          if not re.search(r'^draft:\s*true\s*$', text, re.M):
+              raise SystemExit('Article must be draft:true before isolated audio generation.')
+          m = re.match(r'^---\s*\n[\s\S]*?\n---\s*\n?([\s\S]*)$', text)
+          if not m:
+              raise SystemExit('Could not parse article frontmatter/body.')
+          body = m.group(1).replace('\r\n', '\n').strip()
+          actual = hashlib.sha256(body.encode('utf-8')).hexdigest()
+          expected = '2b2999dba95bff5e6bfb8ff16d2848fa3b677ffe8f595a5b6166ca15ebf7d4c1'
+          if actual != expected:
+              raise SystemExit(f'bodyHash mismatch: {actual} != {expected}')
+          print(f'Locked bodyHash verified: {actual}')
+          PY
+
+      - name: Generate targeted Gemini Sadaltager audio
+        shell: bash
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo '::error::GEMINI_API_KEY repository secret is unavailable.'
+            exit 2
+          fi
+
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('src/content/posts/why-some-passports-are-stronger.md')
+          s = p.read_text(encoding='utf-8')
+          if 'draft: true' not in s:
+              raise SystemExit('Expected draft:true before temporary local toggle.')
+          p.write_text(s.replace('draft: true', 'draft: false', 1), encoding='utf-8')
+          PY
+
+          restore_draft() {
+            python - <<'PY'
+          from pathlib import Path
+          p = Path('src/content/posts/why-some-passports-are-stronger.md')
+          s = p.read_text(encoding='utf-8')
+          if 'draft: false' in s:
+              p.write_text(s.replace('draft: false', 'draft: true', 1), encoding='utf-8')
+          PY
+          }
+          trap restore_draft EXIT
+
+          BAREEQ_TTS_PROVIDER=gemini \
+          BAREEQ_TTS_INCLUDE_IDS=why-some-passports-are-stronger \
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD=1 \
+          node scripts/generate-audio.mjs
+
+          restore_draft
+          trap - EXIT
+
+      - name: Validate manifest and MP3 assets
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile, stat } from 'node:fs/promises';
+          import path from 'node:path';
+          import { mp3DurationSeconds } from './scripts/mp3-duration.mjs';
+
+          const articleId = 'why-some-passports-are-stronger';
+          const audioKey = '34e34b6f4633d928';
+          const root = path.join('public', 'audio', 'articles', audioKey);
+          const manifest = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
+
+          if (manifest.articleId !== articleId) throw new Error(`articleId mismatch: ${manifest.articleId}`);
+          if (manifest.provider !== 'Google Gemini API') throw new Error(`Unexpected provider: ${manifest.provider}`);
+          if (manifest.model !== 'gemini-3.1-flash-tts-preview') throw new Error(`Unexpected model: ${manifest.model}`);
+          if (manifest.language !== 'ar') throw new Error(`Unexpected language: ${manifest.language}`);
+          if (manifest.defaultVoice !== 'sadaltager') throw new Error(`Unexpected defaultVoice: ${manifest.defaultVoice}`);
+          if (!Array.isArray(manifest.parts) || manifest.parts.length !== 11) throw new Error(`Expected 11 parts, got ${manifest.parts?.length}`);
+
+          const syncIds = new Set();
+          let mp3Count = 0;
+          let totalDuration = 0;
+          for (const part of manifest.parts) {
+            if (!Array.isArray(part.sync)) throw new Error('Missing sync array.');
+            for (const entry of part.sync) {
+              if (!entry?.id || syncIds.has(entry.id)) throw new Error(`Invalid or duplicate sync id: ${entry?.id}`);
+              syncIds.add(entry.id);
+            }
+            const asset = part.audio?.sadaltager;
+            if (!asset?.src) throw new Error('Missing Sadaltager asset.');
+            const local = path.join('public', asset.src.replace(/^\//, ''));
+            const info = await stat(local);
+            if (!info.isFile() || info.size !== asset.bytes || info.size < 100) throw new Error(`Byte-size mismatch: ${asset.src}`);
+            const bytes = await readFile(local);
+            if (asset.sha256 && createHash('sha256').update(bytes).digest('hex') !== asset.sha256) throw new Error(`SHA-256 mismatch: ${asset.src}`);
+            const measured = mp3DurationSeconds(bytes);
+            if (!(asset.durationSeconds > 0) || Math.abs(measured - asset.durationSeconds) > 0.1) throw new Error(`Duration mismatch: ${asset.src}`);
+            mp3Count += 1;
+            totalDuration += asset.durationSeconds;
+          }
+
+          if (syncIds.size !== 81) throw new Error(`Expected 81 sync blocks, got ${syncIds.size}`);
+          console.log(`Audio validated: ${manifest.parts.length} parts, ${mp3Count} MP3s, ${syncIds.size} sync blocks, ${totalDuration.toFixed(2)} seconds.`);
+          NODE
+
+      - name: Confirm article remains draft
+        run: grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
+
+      - name: Commit generated audio to branch
+        shell: bash
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add public/audio/articles/34e34b6f4633d928/
+          if git diff --cached --quiet; then
+            echo '::error::No generated audio files were produced.'
+            exit 1
+          fi
+          git commit -m 'feat: add Sadaltager audio for passport article'
+          git push origin HEAD:arena/01a02d6f-bareeq-world
