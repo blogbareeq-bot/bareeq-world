@@ -51,6 +51,6 @@ for (const [name, source] of [['Footer.astro', footer], ['about.astro', about], 
 for (const token of ['محفوظات القراءة', 'موضع الاستماع', '30 يومًا', 'لا يرسلها الموقع']) {
   if (!privacy.includes(token)) throw new Error(`V4.21.1: privacy disclosure missing: ${token}`);
 }
-if (!site.includes("email: 'blogbareeq@gmail.com'")) throw new Error('V4.21.1: unconfirmed domain email was inserted.');
+if (!site.includes("email: 'info@bareeqworld.com'")) throw new Error('V4.21.1: the confirmed domain mailbox info@bareeqworld.com must stay in site config.');
 
 console.log('V4.21.1 preparation passed: one-article Gemini free-tier progression, atomic fallback preservation, paid Cloud lock, Cloudflare email-link protection, and local-storage privacy disclosure are present.');

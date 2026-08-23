@@ -126,6 +126,6 @@ updatedAt: "2026-08-08T12:00:00.000Z"
 للاستفسار عن شروط الاستخدام، أو حقوق المحتوى، أو تقديم بلاغ متعلق بالملكية الفكرية، يرجى التواصل عبر:
 
 **البريد الإلكتروني:**  
-<!--email_off--><a href="mailto:blogbareeq@gmail.com"><strong>blogbareeq@gmail.com</strong></a><!--/email_off-->
+<!--email_off--><a href="mailto:info@bareeqworld.com"><strong>info@bareeqworld.com</strong></a><!--/email_off-->
 
 **آخر تحديث: 8 أغسطس 2026**

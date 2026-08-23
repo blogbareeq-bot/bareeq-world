@@ -227,7 +227,7 @@ await collect(DIST);
 
 for (const relative of ['about/index.html', 'contact/index.html', 'terms/index.html']) {
   const html = await readFile(path.join(DIST, relative), 'utf8');
-  if (!html.includes('<!--email_off-->') || !html.includes('<!--/email_off-->') || !html.includes('mailto:blogbareeq@gmail.com')) {
+  if (!html.includes('<!--email_off-->') || !html.includes('<!--/email_off-->') || !html.includes('mailto:info@bareeqworld.com')) {
     throw new Error(`${relative}: Cloudflare email-obfuscation exclusion or confirmed mailto link is missing from built HTML.`);
   }
 }

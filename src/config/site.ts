@@ -4,7 +4,7 @@ export const site = {
   tagline: 'نافذتك إلى المعرفة',
   description: 'منصة عربية معرفية تقدّم أفكارًا موثوقة وممتعة بأسلوب واضح وهادئ، في العقل والكتب والثقافة والتقنية وتبسيط المفاهيم.',
   url: 'https://bareeqworld.com',
-  email: 'blogbareeq@gmail.com',
+  email: 'info@bareeqworld.com',
   logo: '/images/apple-touch-icon.png',
   originalLogo: '/images/apple-touch-icon.png',
   socialImage: '/images/bareeq-social-card.jpg',
