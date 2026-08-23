@@ -46,7 +46,7 @@ if (PENDING_CLOUD.length !== 11 || RETAINED_GEMINI.length !== 2 || new Set([...P
 
 requireAll('.env.example', envExample, ['GOOGLE_CLOUD_PROJECT=bareeq-tts', 'BAREEQ_CLOUD_TTS_ACTIVATE=0', 'GOOGLE_SERVICE_ACCOUNT_JSON=', 'AZURE_SPEECH_MONTHLY_USED_CHARS=']);
 requireAll('Cloud TTS guide', guide, ['CNTXT', 'لا تفعّل', 'roles/aiplatform.user', 'gemini-2.5-flash-tts', 'ar-EG', 'Sadaltager']);
-if (!site.includes("email: 'blogbareeq@gmail.com'")) throw new Error('Unconfirmed domain email was inserted; keep the verified working address until the user confirms a replacement.');
+if (!site.includes("email: 'info@bareeqworld.com'")) throw new Error('Unconfirmed email address found; the confirmed domain mailbox info@bareeqworld.com must stay in site config.');
 
 const postFiles = (await readdir('src/content/posts')).filter((name) => name.endsWith('.md'));
 let published = 0;

@@ -51,7 +51,7 @@ requireAll('privacy.md', privacy, ['محفوظات القراءة', 'موضع ا
 for (const [label, source] of [['Footer.astro', footer], ['about.astro', about], ['contact.astro', contact]]) {
   requireAll(label, source, ['<!--email_off-->', '<!--/email_off-->']);
 }
-if (!site.includes("email: 'blogbareeq@gmail.com'")) throw new Error('Unconfirmed domain email was inserted into V4.21.1.');
+if (!site.includes("email: 'info@bareeqworld.com'")) throw new Error('The confirmed domain mailbox info@bareeqworld.com must stay in site config for V4.21.1.');
 requireAll('check-audio-mobile.mjs', mobileAudit, ['v4211OrchestratedPipeline', 'one-article Gemini free-tier progression']);
 requireAll('check-audio-dist.mjs', distAudit, ['freeGeminiRollout', "providerKind === 'Gemini Sadaltager'"]);
 
