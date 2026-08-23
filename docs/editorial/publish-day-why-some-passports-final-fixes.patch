@@ -1,26 +1,31 @@
 diff --git a/scripts/speech-review.json b/scripts/speech-review.json
 --- a/scripts/speech-review.json
 +++ b/scripts/speech-review.json
-@@
+@@ -260,5 +260,5 @@
+     },
+     "why-some-passports-are-stronger": {
 -      "bodyHash": "391e0327e0e3b3aea8a159649910e9d053a67d1610bebeb91fce9bb7bd550790",
 +      "bodyHash": "bbcd9107509e3a5a4bf259e4261b520221c5b45f4878deb1a68048f4358f11cb",
        "checks": [
          {
-           "from": "ETA",
 diff --git a/scripts/check-production-voices-v4200.mjs b/scripts/check-production-voices-v4200.mjs
 --- a/scripts/check-production-voices-v4200.mjs
 +++ b/scripts/check-production-voices-v4200.mjs
-@@
+@@ -37,5 +37,5 @@
+ const azure = plan('azure', coworker, { BAREEQ_AZURE_HAMED_ONLY: '1' });
+ if (!azure.includes('Hamed') || !azure.includes(coworker)) throw new Error('Coworker Azure fallback plan is not targeted correctly.');
 -console.log('V4.20.0 production voice audit passed: 13 live articles, old audio cache-only, coworker cache → Gemini Sadaltager → Azure Hamed fallback.');
 +console.log('V4.20.0 production voice audit passed: 14 live articles, old audio cache-only, coworker cache → Gemini Sadaltager → Azure Hamed fallback.');
 diff --git a/scripts/check-audio-mobile.mjs b/scripts/check-audio-mobile.mjs
 --- a/scripts/check-audio-mobile.mjs
 +++ b/scripts/check-audio-mobile.mjs
-@@
+@@ -103,8 +103,8 @@
+ }
+ 
  console.log(v4211OrchestratedPipeline
 -  ? 'V4.21.1 synchronized mobile/tablet HTMLAudio audit passed: lazy manifest, one-article Gemini free-tier progression, paid Cloud lock, and 11 pending + 2 retained boundary recognized.'
 +  ? 'V4.21.1 synchronized mobile/tablet HTMLAudio audit passed: lazy manifest, one-article Gemini free-tier progression, paid Cloud lock, and 12 pending + 2 retained boundary recognized.'
    : v4210OrchestratedPipeline
 -    ? 'V4.21 synchronized mobile/tablet HTMLAudio audit passed: lazy manifest, direct seek-to-text, inactive Cloud TTS gate, 11 pending + 2 retained boundary recognized.'
 +    ? 'V4.21 synchronized mobile/tablet HTMLAudio audit passed: lazy manifest, direct seek-to-text, inactive Cloud TTS gate, 12 pending + 2 retained boundary recognized.'
-     : v4200OrchestratedPipeline
+   : v4200OrchestratedPipeline
