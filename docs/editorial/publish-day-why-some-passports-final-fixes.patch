@@ -5,7 +5,7 @@ diff --git a/scripts/speech-review.json b/scripts/speech-review.json
      },
      "why-some-passports-are-stronger": {
 -      "bodyHash": "391e0327e0e3b3aea8a159649910e9d053a67d1610bebeb91fce9bb7bd550790",
-+      "bodyHash": "bbcd9107509e3a5a4bf259e4261b520221c5b45f4878deb1a68048f4358f11cb",
++      "bodyHash": "2b2999dba95bff5e6bfb8ff16d2848fa3b677ffe8f595a5b6166ca15ebf7d4c1",
        "checks": [
          {
 diff --git a/scripts/check-production-voices-v4200.mjs b/scripts/check-production-voices-v4200.mjs
