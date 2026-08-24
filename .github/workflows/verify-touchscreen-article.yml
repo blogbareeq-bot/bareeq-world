@@ -6,13 +6,23 @@ on:
       - content/how-touchscreens-work
     paths:
       - .github/workflows/verify-touchscreen-article.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - src/content/posts/how-touchscreens-work.md
+      - public/images/posts/how-touchscreens-work.webp
+      - assets/thumbnails-source/how-touchscreens-work.webp
+      - docs/editorial/how-touchscreens-work.*
+      - scripts/apply-touchscreen-production.mjs
+      - .github/workflows/verify-touchscreen-article.yml
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: verify-touchscreen-article-${{ github.ref_name }}
+  group: verify-touchscreen-article-${{ github.event.pull_request.number || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -24,7 +34,7 @@ jobs:
       - name: Checkout article branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
           fetch-depth: 0
 
       - name: Set up Node
@@ -87,7 +97,7 @@ jobs:
           BAREEQ_CLOUD_TTS_ACTIVATE: "0"
         run: npm run build
 
-      - name: Record successful prepublication validation
+      - name: Build validation report
         shell: bash
         run: |
           git restore .
@@ -115,12 +125,18 @@ jobs:
             syncBlocks: plan.syncBlocks,
             arabicSpeechQA: 'passed',
             productionBuildWithDraftArticle: 'passed',
-            temporaryAudio: 'pending Azure Hamed or later Gemini Sadaltager',
+            temporaryAudio: 'pending Azure Hamed or later Gemini Sadaltager'
           };
           await writeFile('docs/editorial/how-touchscreens-work.validation.json', `${JSON.stringify(report, null, 2)}\n`);
           NODE
+
+      - name: Commit successful validation marker on branch pushes only
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
           git config user.name 'bareeq-release-bot'
           git config user.email 'actions@users.noreply.github.com'
           git add docs/editorial/how-touchscreens-work.validation.json
+          git diff --cached --quiet && exit 0
           git commit -m 'test: validate touchscreen article prepublication package'
           git push origin HEAD:${{ github.ref_name }}
