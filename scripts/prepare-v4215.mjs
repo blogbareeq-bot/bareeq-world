@@ -104,8 +104,11 @@ if (/إنفوجرافيك|infographic/i.test([header, layout, intro, startHere].
 }
 
 const isDraft = /^draft:\s*true\s*$/mi.test(article);
-if (!isDraft) {
-  await access(path.join('public', 'audio', 'articles', EXPECTED_AUDIO_KEY, 'manifest.json'));
+let manifestExists = true;
+try { await access(path.join('public', 'audio', 'articles', EXPECTED_AUDIO_KEY, 'manifest.json')); }
+catch { manifestExists = false; }
+if (!isDraft && !manifestExists) {
+  console.log('V4.21.5 passport audio is pending; the guarded production audio stage will restore Gemini or generate temporary Azure Hamed later in this build.');
 }
 
 const articleRoot = path.resolve('public', 'audio', 'articles');
@@ -119,4 +122,4 @@ for (const entry of entries) {
   await rm(target, { recursive: true, force: true });
 }
 
-console.log(`V4.21.5 preparation passed: V4.21.4 UX preserved, infographic deferred, passport bodyHash/speech review locked, dependency metadata aligned, article ${isDraft ? 'remains draft' : 'has production audio'}, and temporary audio output is clean.`);
+console.log(`V4.21.5 preparation passed: V4.21.4 UX preserved, infographic deferred, passport bodyHash/speech review locked, dependency metadata aligned, article ${isDraft ? 'remains draft' : manifestExists ? 'has production audio' : 'is queued for guarded production audio'}, and temporary audio output is clean.`);
