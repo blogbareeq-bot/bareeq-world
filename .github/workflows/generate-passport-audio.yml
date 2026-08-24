@@ -1,4 +1,4 @@
-name: Generate passport article audio
+name: Resume passport Gemini audio (select preserved arena branch)
 
 on:
   workflow_dispatch:
@@ -16,10 +16,18 @@ jobs:
     timeout-minutes: 40
 
     steps:
-      - name: Checkout V4.21.5 release candidate
+      - name: Require the preserved checkpoint branch
+        shell: bash
+        run: |
+          if [ "$GITHUB_REF_NAME" != "arena/01a03318-bareeq-world" ]; then
+            echo "::error::Select arena/01a03318-bareeq-world when dispatching this workflow so the saved 5/11 Gemini checkpoint parts are reusable."
+            exit 2
+          fi
+
+      - name: Checkout selected checkpoint branch
         uses: actions/checkout@v4
         with:
-          ref: release/v4.21.5-rc
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
 
       - name: Set up Node
@@ -166,4 +174,4 @@ jobs:
           git add public/audio/articles/34e34b6f4633d928/
           git diff --cached --quiet && { echo "::error::No completed audio files to commit."; exit 1; }
           git commit -m 'feat: add resumable Sadaltager audio for passport article'
-          git push origin HEAD:release/v4.21.5-rc
+          git push origin HEAD:${{ github.ref_name }}
