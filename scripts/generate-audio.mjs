@@ -85,6 +85,7 @@ const PLAN_ONLY = process.argv.includes('--plan');
 const SYNC_PLAN_ONLY = process.argv.includes('--sync-plan');
 const SPEECH_QA_JSON = process.argv.includes('--speech-qa-json') || process.argv.some((arg) => arg.startsWith('--speech-qa-output='));
 const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-output='))?.slice('--speech-qa-output='.length) || '';
+const PARTS_EXPORT = process.argv.find((arg) => arg.startsWith('--parts-export='))?.slice('--parts-export='.length) || '';
 const ALLOW_PARTIAL = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
 const CACHE_ONLY = process.env.BAREEQ_TTS_CACHE_ONLY === '1';
 const CACHE_ALLOW_MISSING = process.env.BAREEQ_TTS_CACHE_ALLOW_MISSING === '1';
@@ -957,6 +958,21 @@ if (PLAN_ONLY) {
 
 await mkdir(AUDIO_ROOT, { recursive: true });
 const prepared = synthesisPosts.map((post) => ({ ...post, sourceHash: providerFingerprint(post) }));
+
+if (PARTS_EXPORT) {
+  const payload = prepared.map(({ id, title, key, sourceHash, audioParts }) => ({
+    id,
+    title,
+    key,
+    sourceHash,
+    parts: audioParts.map(({ text, sync }) => ({
+      text,
+      sync: sync.map(({ id: syncId, start, end }) => ({ id: syncId, start, end })),
+    })),
+  }));
+  await writeFile(path.resolve(ROOT, PARTS_EXPORT), JSON.stringify(payload, null, 2) + '\n');
+  process.exit(0);
+}
 
 let missing = [];
 for (const post of prepared) if (!await hasCompleteCache(post)) missing.push(post);
