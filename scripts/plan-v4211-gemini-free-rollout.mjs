@@ -19,7 +19,7 @@ if (result.status !== 0) {
 
 const output = result.stdout || '';
 if (!output.includes(`Sadaltager rollout plan: ${PENDING_CLOUD.length} selected article(s)`)) {
-  throw new Error('V4.21.1 pending Gemini plan did not select the exact 11-article backlog.');
+  throw new Error(`V4.21.1 pending Gemini plan did not select the exact ${PENDING_CLOUD.length}-article backlog.`);
 }
 
 process.stdout.write(output);

@@ -26,7 +26,7 @@ const readinessAfter = readinessBefore.replace(
 if (!readinessAfter.includes("if (pkg.version !== '4.21.0') failures.push(`Expected package version 4.21.0, got ${pkg.version}`);")
   && !readinessAfter.includes("if (pkg.version !== '4.21.1') failures.push(`Expected package version 4.21.1, got ${pkg.version}`);")
   && !readinessAfter.includes("if (!['4.21.1', '4.21.2'].includes(pkg.version)) failures.push(`Expected package version 4.21.1 or 4.21.2, got ${pkg.version}`);")
-  && !readinessAfter.includes("if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.4, got ${pkg.version}`);")) throw new Error('V4.21: launch-readiness version gate or patch successor is missing.');
+  && !readinessAfter.includes("if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.5, got ${pkg.version}`);")) throw new Error('V4.21: launch-readiness version gate or patch successor is missing.');
 if (readinessAfter !== readinessBefore) await writeFile(readinessPath, readinessAfter);
 
 if (component.includes('data-audio-manifest-inline') || component.includes('data-audio-current-voice')) throw new Error('V4.21: eager audio metadata remains in ReadingModes.astro.');

@@ -1,0 +1,177 @@
+name: Resume passport Gemini audio (select preserved arena branch)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: v4215-passport-audio
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Require the preserved checkpoint branch
+        shell: bash
+        run: |
+          if [ "$GITHUB_REF_NAME" != "arena/01a03318-bareeq-world" ]; then
+            echo "::error::Select arena/01a03318-bareeq-world when dispatching this workflow so the saved 5/11 Gemini checkpoint parts are reusable."
+            exit 2
+          fi
+
+      - name: Checkout selected checkpoint branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify secret and locked article
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::GEMINI_API_KEY repository secret is unavailable."
+            exit 2
+          fi
+          node scripts/prepare-v4215.mjs
+          grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
+          echo "Secret available; V4.21.5 article lock verified."
+
+      - name: Prepare resumable Gemini generator
+        run: npm run audio:gemini:resume:prepare
+
+      - name: Define checkpoint cache identity
+        id: checkpoint
+        shell: bash
+        run: |
+          base="v4215-passport-audio-${{ hashFiles('src/content/posts/why-some-passports-are-stronger.md', 'scripts/speech-overrides.json', 'scripts/generate-audio.mjs', 'scripts/prepare-v4215-gemini-resume.mjs') }}"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "key=$base-${{ github.run_id }}-${{ github.run_attempt }}" >> "$GITHUB_OUTPUT"
+
+      - name: Restore latest audio checkpoint
+        uses: actions/cache/restore@v4
+        with:
+          path: .bareeq-audio-checkpoints
+          key: ${{ steps.checkpoint.outputs.key }}
+          restore-keys: |
+            ${{ steps.checkpoint.outputs.base }}-
+
+      - name: Generate or resume Gemini Sadaltager audio
+        id: generate
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: why-some-passports-are-stronger
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: "1"
+          BAREEQ_GEMINI_RESUME: "1"
+        shell: bash
+        run: |
+          set -e
+          sed -i '0,/^draft: true$/s//draft: false/' src/content/posts/why-some-passports-are-stronger.md
+          set +e
+          node scripts/.v4215-generate-audio.mjs
+          status=$?
+          set -e
+          git checkout -- src/content/posts/why-some-passports-are-stronger.md
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
+
+      - name: Save newest audio checkpoint
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .bareeq-audio-checkpoints
+          key: ${{ steps.checkpoint.outputs.key }}
+
+      - name: Reject fatal synthesis errors
+        if: steps.generate.outputs.status != '0'
+        run: |
+          echo "::error::Gemini generator exited with fatal status ${{ steps.generate.outputs.status }}. Existing valid checkpoint parts were preserved, but this is not a quota-only pause."
+          exit 1
+
+      - name: Validate completed audio or report checkpoint progress
+        shell: bash
+        run: |
+          manifest='public/audio/articles/34e34b6f4633d928/manifest.json'
+          if [ ! -f "$manifest" ]; then
+            checkpoint_count=$(find .bareeq-audio-checkpoints -type f -name '*.mp3' 2>/dev/null | wc -l | tr -d ' ')
+            echo "::error::Audio is not complete yet. V4.21.5 preserved $checkpoint_count/11 MP3 checkpoint part(s). Re-run this workflow after Gemini quota is available; completed parts will be reused."
+            exit 75
+          fi
+
+          count=$(find public/audio/articles/34e34b6f4633d928 -maxdepth 1 -type f -name '*.mp3' | wc -l | tr -d ' ')
+          if [ "$count" -ne 11 ]; then
+            echo "::error::Expected 11 final MP3 files, found $count."
+            exit 1
+          fi
+
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile, stat } from 'node:fs/promises';
+          import path from 'node:path';
+          import { mp3DurationSeconds } from './scripts/mp3-duration.mjs';
+
+          const root = 'public/audio/articles/34e34b6f4633d928';
+          const manifest = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
+          if (manifest.articleId !== 'why-some-passports-are-stronger') throw new Error('articleId mismatch');
+          if (manifest.provider !== 'Google Gemini API') throw new Error(`provider mismatch: ${manifest.provider}`);
+          if (manifest.model !== 'gemini-3.1-flash-tts-preview') throw new Error(`model mismatch: ${manifest.model}`);
+          if (manifest.language !== 'ar') throw new Error(`language mismatch: ${manifest.language}`);
+          if (manifest.defaultVoice !== 'sadaltager') throw new Error(`voice mismatch: ${manifest.defaultVoice}`);
+          if (!Array.isArray(manifest.parts) || manifest.parts.length !== 11) throw new Error(`parts mismatch: ${manifest.parts?.length}`);
+
+          const syncIds = new Set();
+          let totalDuration = 0;
+          for (const part of manifest.parts) {
+            if (!Array.isArray(part.sync) || !part.sync.length) throw new Error('missing sync entries');
+            for (const entry of part.sync) {
+              if (!entry?.id || syncIds.has(entry.id)) throw new Error(`invalid/duplicate sync id: ${entry?.id}`);
+              syncIds.add(entry.id);
+            }
+            const asset = part.audio?.sadaltager;
+            if (!asset?.src) throw new Error('missing Sadaltager asset');
+            const local = path.join('public', asset.src.replace(/^\//, ''));
+            const info = await stat(local);
+            if (!info.isFile() || info.size !== asset.bytes || info.size < 100) throw new Error(`size mismatch: ${asset.src}`);
+            const bytes = await readFile(local);
+            if (asset.sha256 && createHash('sha256').update(bytes).digest('hex') !== asset.sha256) throw new Error(`SHA mismatch: ${asset.src}`);
+            const measured = mp3DurationSeconds(bytes);
+            if (!(asset.durationSeconds > 0) || Math.abs(measured - asset.durationSeconds) > 0.1) throw new Error(`duration mismatch: ${asset.src}`);
+            totalDuration += asset.durationSeconds;
+          }
+          if (syncIds.size !== 81) throw new Error(`sync count mismatch: ${syncIds.size}`);
+          console.log(`Validated 11 MP3s, 81 sync blocks, ${totalDuration.toFixed(2)} seconds.`);
+          NODE
+
+      - name: Run Arabic speech QA against the release article
+        shell: bash
+        run: |
+          sed -i '0,/^draft: true$/s//draft: false/' src/content/posts/why-some-passports-are-stronger.md
+          node scripts/check-arabic-speech.mjs
+          git checkout -- src/content/posts/why-some-passports-are-stronger.md
+          grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
+
+      - name: Commit completed audio only
+        shell: bash
+        run: |
+          git status --short
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add public/audio/articles/34e34b6f4633d928/
+          git diff --cached --quiet && { echo "::error::No completed audio files to commit."; exit 1; }
+          git commit -m 'feat: add resumable Sadaltager audio for passport article'
+          git push origin HEAD:${{ github.ref_name }}

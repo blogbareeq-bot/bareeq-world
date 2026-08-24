@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.3', '4.21.4'].includes(pkg.version)) throw new Error(`V4.21.3 preparation expected package 4.21.3 or its V4.21.4 visual-parity successor, got ${pkg.version}.`);
+if (!['4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`V4.21.3 preparation expected package 4.21.3 or a supported V4.21.4/V4.21.5 successor, got ${pkg.version}.`);
 
 const [header, layout, footer, css] = await Promise.all([
   readFile('src/components/Header.astro', 'utf8'),
