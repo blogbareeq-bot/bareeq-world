@@ -77,8 +77,8 @@ replaceOnce(
     throw error;
   }`,
 `  } catch (error) {
-    const resumableGeminiPause = PROVIDER === 'gemini' && RESUME_ENABLED && (error?.httpStatus === 429 || error?.code === 'BAREEQ_GEMINI_BUDGET');
-    if (!resumableGeminiPause) await rm(tempDir, { recursive: true, force: true });
+    const resumableGemini = PROVIDER === 'gemini' && RESUME_ENABLED;
+    if (!resumableGemini) await rm(tempDir, { recursive: true, force: true });
     if (PROVIDER === 'gemini' && (error?.httpStatus === 429 || error?.code === 'BAREEQ_GEMINI_BUDGET')) {
       deferredReason = error?.httpStatus === 429 ? 'persistent HTTP 429' : 'build-time budget';
       console.warn(\`⚠ Gemini progressive rollout paused at ${'${post.id}'}: ${'${deferredReason}'}.\`);
@@ -86,9 +86,10 @@ replaceOnce(
       else console.warn('⚠ Safe progressive fallback: completed Sadaltager articles remain publishable; this and later articles retain approved Cedar/Hamed fallback audio and will be retried on a later deployment.');
       break;
     }
+    if (resumableGemini) console.warn(\`⚠ V4.21.5 preserved previously validated checkpoint MP3 parts at ${'${tempDir}'} before surfacing the fatal error.\`);
     throw error;
   }`,
-  '429 checkpoint preservation',
+  'checkpoint preservation',
 );
 
 await writeFile(TARGET, source, 'utf8');
