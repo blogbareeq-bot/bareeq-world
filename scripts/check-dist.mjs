@@ -239,14 +239,16 @@ for (const categoryPath of ['/category/atyaf-al-aql/', '/category/bareeq-books/'
 const redirectRules = await readFile(path.join(root, '_redirects'), 'utf8');
 const postSourceRoot = path.resolve('src', 'content', 'posts');
 const postSourceFiles = (await readdir(postSourceRoot)).filter((file) => /\.(?:md|mdx)$/i.test(file));
-if (generatedPostPages.length !== postSourceFiles.length) failures.push(`posts -> expected ${postSourceFiles.length} generated article pages, found ${generatedPostPages.length}`);
+let publishedPostSourceCount = 0;
 for (const name of postSourceFiles) {
   const source = await readFile(path.join(postSourceRoot, name), 'utf8');
+  if (!/^draft:\s*true\s*$/mi.test(source)) publishedPostSourceCount += 1;
   const legacyPath = source.match(/^legacyPath:\s*["']([^"']+)["']/m)?.[1];
   if (legacyPath && !redirectRules.split(/\r?\n/).some((line) => line.trim().startsWith(`${legacyPath} `))) {
     failures.push(`_redirects -> missing Blogger legacy path ${legacyPath}`);
   }
 }
+if (generatedPostPages.length !== publishedPostSourceCount) failures.push(`posts -> expected ${publishedPostSourceCount} generated published article pages, found ${generatedPostPages.length}`);
 if (!/^\/feeds\/posts\/default\s+\/rss\.xml\s+301\s*$/m.test(redirectRules)) failures.push('_redirects -> missing Blogger feed redirect');
 if (!/^\/2026\/07\/blog-post\.html\s+\/start-here\/\s+301\s*$/m.test(redirectRules)) failures.push('_redirects -> retired Blogger welcome URL must point to /start-here/');
 if (!/^\/posts\/مرحبا-بك-في-بريق-حيث-تبدا-رحلتك-نحو-المعرفه-ببساطه\/\s+\/start-here\/\s+301\s*$/m.test(redirectRules)) failures.push('_redirects -> retired welcome article URL must point to /start-here/');
