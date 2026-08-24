@@ -2,7 +2,7 @@ import { readFile, readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (pkg.version !== '4.21.4') throw new Error(`V4.21.4 preparation expected package 4.21.4, got ${pkg.version}.`);
+if (!['4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`V4.21.4 preparation expected package 4.21.4 or V4.21.5 successor, got ${pkg.version}.`);
 
 const [header, layout, css, intro, startHere, desktopWave, mobileWave] = await Promise.all([
   readFile('src/components/Header.astro', 'utf8'),
@@ -40,8 +40,6 @@ for (const [label, source] of [['HomeIntro.astro', intro], ['start-here.astro', 
   }
 }
 
-// Interrupted production-cache restores are disposable build artifacts. Remove
-// only the narrowly named temporary directories before Astro copies public/.
 const articleRoot = path.resolve('public', 'audio', 'articles');
 let entries = [];
 try { entries = await readdir(articleRoot, { withFileTypes: true }); }
@@ -55,4 +53,4 @@ for (const entry of entries) {
   await rm(target, { recursive: true, force: true });
 }
 
-console.log('V4.21.4 preparation passed: design-one SVG waves, framed responsive geometry, mobile ticker reveal, approved listening wording, and temporary-audio cleanup are locked.');
+console.log('V4.21.4 compatibility preparation passed under V4.21.5: design-one SVG waves, framed responsive geometry, mobile ticker reveal, approved listening wording, and temporary-audio cleanup are locked.');
