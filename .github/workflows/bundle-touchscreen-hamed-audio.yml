@@ -12,6 +12,17 @@ on:
       - scripts/speech-overrides.json
       - scripts/speech-review.json
       - src/content/posts/how-touchscreens-work.md
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/bundle-touchscreen-hamed-audio.yml
+      - scripts/generate-audio.mjs
+      - scripts/generate-edge-hamed-fallback.mjs
+      - scripts/mp3-duration.mjs
+      - scripts/speech-overrides.json
+      - scripts/speech-review.json
+      - src/content/posts/how-touchscreens-work.md
   workflow_dispatch:
 
 permissions:
@@ -23,6 +34,7 @@ concurrency:
 
 jobs:
   bundle:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
@@ -30,7 +42,7 @@ jobs:
       - name: Checkout audio branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
       - name: Set up Node
@@ -77,4 +89,4 @@ jobs:
           git add -f public/audio/articles/de93f3d9f91c8b8b/
           git diff --cached --quiet && { echo '::error::No verified touchscreen audio bundle to commit.'; exit 1; }
           git commit -m 'audio: bundle verified Hamed fallback for touchscreen article'
-          git push origin HEAD:${{ github.ref_name }}
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}
