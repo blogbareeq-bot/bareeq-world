@@ -22,21 +22,32 @@ function parsePost(source, filename) {
 const sha = (value) => createHash('sha256').update(value).digest('hex');
 
 const files = (await readdir(POSTS_DIR)).filter((name) => name.endsWith('.md')).sort();
-const live = [];
+const posts = [];
 for (const name of files) {
   const source = await readFile(path.join(POSTS_DIR, name), 'utf8');
   const post = parsePost(source, name);
-  if (post.draft) continue;
-  const id = name.replace(/\.md$/, '');
-  live.push({ id, ...post });
+  posts.push({ id: name.replace(/\.md$/, ''), ...post });
 }
+
+const live = posts.filter((post) => !post.draft);
+// A draft that already has a review lock is intentionally QAed before its
+// manual Gemini run. It remains absent from normal audio generation and from
+// the published set until a complete manifest is committed and the draft flag
+// is deliberately changed at publication time.
+const reviewLockedDrafts = posts.filter((post) => post.draft && review.articles?.[post.id]);
+const reviewedPosts = [...live, ...reviewLockedDrafts];
+const reviewLockedDraftIds = reviewLockedDrafts.map((post) => post.id);
 
 let speech;
 const speechPlanFile = path.join(os.tmpdir(), `bareeq-speech-qa-${process.pid}.json`);
 try {
   execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'generate-audio.mjs'), `--speech-qa-output=${speechPlanFile}`], {
     cwd: ROOT,
-    stdio: 'ignore'
+    stdio: 'ignore',
+    env: {
+      ...process.env,
+      ...(reviewLockedDraftIds.length ? { BAREEQ_SPEECH_QA_INCLUDE_DRAFT_IDS: reviewLockedDraftIds.join(',') } : {}),
+    },
   });
   speech = JSON.parse(await readFile(speechPlanFile, 'utf8'));
 } catch (error) {
@@ -46,11 +57,11 @@ try {
   await rm(speechPlanFile, { force: true }).catch(() => {});
 }
 const speechById = new Map(speech.map((article) => [article.id, article]));
-const liveIds = new Set(live.map((post) => post.id));
-for (const id of Object.keys(review.articles || {})) if (!liveIds.has(id)) failures.push(`${id}: orphan speech review entry.`);
+const reviewedIds = new Set(reviewedPosts.map((post) => post.id));
+for (const id of Object.keys(review.articles || {})) if (!reviewedIds.has(id)) failures.push(`${id}: orphan speech review entry.`);
 
 let totalChecks = 0;
-for (const post of live) {
+for (const post of reviewedPosts) {
   const item = review.articles?.[post.id];
   if (!item) { failures.push(`${post.id}: missing speech review entry.`); continue; }
   const currentHash = sha(post.body);
@@ -82,4 +93,4 @@ if (failures.length) {
   failures.forEach((failure) => console.error(`- ${failure}`));
   process.exit(1);
 }
-console.log(`Arabic Speech QA passed: ${live.length}/${live.length} articles locked to reviewed text hashes; ${totalChecks} contextual pronunciation checks verified before Studio import or synthesis.`);
+console.log(`Arabic Speech QA passed: ${live.length} live article(s) plus ${reviewLockedDrafts.length} review-locked draft(s) are tied to reviewed text hashes; ${totalChecks} contextual pronunciation checks verified before Studio import or synthesis.`);

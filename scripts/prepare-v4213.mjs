@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.3', '4.21.4'].includes(pkg.version)) throw new Error(`V4.21.3 preparation expected package 4.21.3 or its V4.21.4 visual-parity successor, got ${pkg.version}.`);
+if (!['4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`V4.21.3 preparation expected package 4.21.3 or its V4.21.4/V4.21.5 compatible successor, got ${pkg.version}.`);
 
 const [header, layout, footer, css] = await Promise.all([
   readFile('src/components/Header.astro', 'utf8'),
@@ -36,4 +36,4 @@ requireAll('global.css', css, [
 ]);
 if (css.includes('.main-header::before,.main-header::after{display:none}')) throw new Error('V4.21.3 must not hide the approved mobile wave.');
 
-console.log('V4.21.3 preparation passed: the approved first header is implemented natively on desktop and mobile, while the moving ticker and accessible utilities remain available.');
+console.log('V4.21.3 compatibility preparation passed under V4.21.5: the approved first header is implemented natively on desktop and mobile, while the moving ticker and accessible utilities remain available.');

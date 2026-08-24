@@ -85,6 +85,10 @@ const PLAN_ONLY = process.argv.includes('--plan');
 const SYNC_PLAN_ONLY = process.argv.includes('--sync-plan');
 const SPEECH_QA_JSON = process.argv.includes('--speech-qa-json') || process.argv.some((arg) => arg.startsWith('--speech-qa-output='));
 const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-output='))?.slice('--speech-qa-output='.length) || '';
+const SPEECH_QA_DRAFT_IDS = new Set((process.env.BAREEQ_SPEECH_QA_INCLUDE_DRAFT_IDS || '').split(',').map((id) => id.trim()).filter(Boolean));
+if (SPEECH_QA_DRAFT_IDS.size && !SPEECH_QA_JSON) {
+  throw new Error('BAREEQ_SPEECH_QA_INCLUDE_DRAFT_IDS is restricted to the no-synthesis speech QA plan.');
+}
 const ALLOW_PARTIAL = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
 const CACHE_ONLY = process.env.BAREEQ_TTS_CACHE_ONLY === '1';
 const CACHE_ALLOW_MISSING = process.env.BAREEQ_TTS_CACHE_ALLOW_MISSING === '1';
@@ -699,8 +703,10 @@ async function loadPosts() {
   for (const name of files) {
     const source = await readFile(path.join(POSTS_DIR, name), 'utf8');
     const post = parsePost(source, name);
-    if (post.draft) continue;
     const id = name.replace(/\.md$/, '');
+    // Review-locked drafts can enter only the no-synthesis QA plan. They never
+    // reach normal planning, cache restoration, or any TTS provider request.
+    if (post.draft && !(SPEECH_QA_JSON && SPEECH_QA_DRAFT_IDS.has(id))) continue;
     const segments = extractSpeechSegments(post.body, id);
     const audioParts = buildAudioParts(post.title, segments, id);
     const spokenText = joinSpeechPieces(audioParts.map((part) => ({ text: part.text })));

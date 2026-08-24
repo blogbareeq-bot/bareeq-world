@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.2', '4.21.3', '4.21.4'].includes(pkg.version)) throw new Error(`Expected package 4.21.2 through 4.21.4 successor, got ${pkg.version}.`);
+if (!['4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`Expected package 4.21.2 through 4.21.5 successor, got ${pkg.version}.`);
 
 const [site, postsLib, schema, startHere, article, searchPage, searchScript, saved, about, intro, header, layout, css, redirects, audioRunner, audioDist] = await Promise.all([
   readFile('src/config/site.ts', 'utf8'),
@@ -77,7 +77,7 @@ for (const file of postFiles) {
     throw new Error('AI tag split remains in the agents article.');
   }
 }
-if (published !== 13) throw new Error(`Expected 13 published articles, found ${published}.`);
+if (![13, 14].includes(published)) throw new Error(`V4.21.5 expects 13 RC or 14 published articles, found ${published}.`);
 
 const satellite = await readFile('src/content/posts/لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء.md', 'utf8');
 if (!satellite.includes('فيتحول السقوط إلى مدار')) throw new Error('Satellite summary was not corrected.');
@@ -90,4 +90,4 @@ if (!build.includes('node scripts/run-v4211-audio.mjs && ASTRO_TELEMETRY_DISABLE
   throw new Error('V4.21.1 audio runner is no longer the production audio step immediately before Astro build.');
 }
 
-console.log('V4.21.2 release gate passed: useful editorial refinements, locked design-one header, measurable mobile ticker motion, preserved tag redirect, corrected summaries, clean audio output, and paused article layers.');
+console.log(`V4.21.2 compatibility gate passed inside V4.21.5: ${published} articles, useful editorial refinements, locked design-one header, measurable mobile ticker motion, preserved tag redirect, corrected summaries, clean audio output, and paused article layers.`);

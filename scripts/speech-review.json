@@ -256,6 +256,43 @@
     "ai-as-coworker-future-of-human-work": {
       "bodyHash": "1687340cc19bc9c12981d13bdeb3025e2dd5010149844fe75d560824aaa2e3fb",
       "checks": []
+    },
+    "why-some-passports-are-stronger": {
+      "bodyHash": "2b2999dba95bff5e6bfb8ff16d2848fa3b677ffe8f595a5b6166ca15ebf7d4c1",
+      "checks": [
+        {
+          "from": "ETA",
+          "to": "إِي تِي إِيه"
+        },
+        {
+          "from": "e-Visa",
+          "to": "إِي فِيزَا"
+        },
+        {
+          "from": "Arton Capital",
+          "to": "أَرْتُون كَابِيتَال"
+        },
+        {
+          "from": "Passport Index",
+          "to": "بَاسْبُورْت إِنْدِكْس"
+        },
+        {
+          "from": "C-181/23",
+          "to": "سِي 181 شَرْطَة 23"
+        },
+        {
+          "from": "وقعت الدولتان اتفاقية",
+          "to": "وَقَّعَتِ الدولتان اتفاقية"
+        },
+        {
+          "from": "عد الآن إلى مشهد المطار",
+          "to": "عُدِ الآن إلى مشهد المطار"
+        },
+        {
+          "from": "يخل بالتزاماتها",
+          "to": "يُخِلُّ بالتزاماتها"
+        }
+      ]
     }
   }
 }

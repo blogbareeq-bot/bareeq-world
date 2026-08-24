@@ -104,6 +104,9 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
 
   runStrict('scripts/import-bundled-azure-audio.mjs', [], { BAREEQ_BUNDLED_SKIP_IDS: SKIP_STALE_FALLBACKS });
   runStrict('scripts/import-studio-audio.mjs', [], { BAREEQ_STUDIO_SKIP_IDS: SKIP_STALE_FALLBACKS });
+  // Immutable, verified Gemini recordings make the no-synthesis production
+  // build independent of a network restore from the currently deployed site.
+  runStrict('scripts/import-bundled-gemini-audio.mjs');
 
   // The two already-published Sadaltager articles are mandatory and cache-only.
   runStrict('scripts/generate-audio.mjs', [], {
@@ -170,7 +173,7 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
 
   await assertCompleteBaseline('post-Gemini rollout');
   const geminiCoverage = await countGeminiCoverage();
-  console.log(`V4.21.1 free-tier deployment ready: ${geminiCoverage}/13 article(s) currently use Gemini Sadaltager; remaining articles keep approved Hamed/Cedar audio until a later daily deployment.`);
+  console.log(`V4.21.1 free-tier deployment ready: ${geminiCoverage}/${ALL_ARTICLES.length} article(s) currently use Gemini Sadaltager; remaining articles keep approved Hamed/Cedar audio until a later daily deployment.`);
   cleanTemporaryAudioRestores();
   process.exit(0);
 }
@@ -178,6 +181,7 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
 console.log('V4.21.1 paid activation mode: preparing the approved baseline before deliberate Google Cloud TTS synthesis.');
 runStrict('scripts/import-bundled-azure-audio.mjs', [], { BAREEQ_BUNDLED_SKIP_IDS: SKIP_STALE_FALLBACKS });
 runStrict('scripts/import-studio-audio.mjs', [], { BAREEQ_STUDIO_SKIP_IDS: SKIP_STALE_FALLBACKS });
+runStrict('scripts/import-bundled-gemini-audio.mjs');
 
 runStrict('scripts/generate-audio.mjs', [], {
   BAREEQ_TTS_PROVIDER: 'gemini',

@@ -17,7 +17,7 @@ const readinessAfter = readinessBefore
 if (
   !readinessAfter.includes("if (pkg.version !== '4.21.1') failures.push(`Expected package version 4.21.1, got ${pkg.version}`);")
   && !readinessAfter.includes("if (!['4.21.1', '4.21.2'].includes(pkg.version)) failures.push(`Expected package version 4.21.1 or 4.21.2, got ${pkg.version}`);")
-  && !readinessAfter.includes("if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.4, got ${pkg.version}`);")
+  && !readinessAfter.includes("if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.5, got ${pkg.version}`);")
 ) throw new Error('V4.21.1: launch-readiness version gate is missing.');
 if (readinessAfter !== readinessBefore) await writeFile(readinessPath, readinessAfter);
 

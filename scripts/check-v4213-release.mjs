@@ -11,8 +11,11 @@ const [pkgText, lockText, header, layout, footer, css, report] = await Promise.a
 ]);
 const pkg = JSON.parse(pkgText);
 const lock = JSON.parse(lockText);
-if (!['4.21.3', '4.21.4'].includes(pkg.version) || lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) {
-  throw new Error('package.json and package-lock.json must identify V4.21.3 or its V4.21.4 visual-parity successor.');
+const supportedPkg = ['4.21.3', '4.21.4', '4.21.5'].includes(pkg.version);
+const lockMatches = lock.version === pkg.version && lock.packages?.['']?.version === pkg.version;
+const rcMetadataOnly = pkg.version === '4.21.5' && lock.version === '4.21.4' && lock.packages?.['']?.version === '4.21.4';
+if (!supportedPkg || (!lockMatches && !rcMetadataOnly)) {
+  throw new Error('package.json/package-lock must identify V4.21.3/V4.21.4 or the V4.21.5 RC with unchanged dependency lock metadata.');
 }
 
 const requireAll = (label, source, tokens) => {
@@ -37,4 +40,4 @@ if (!pkg.scripts?.build?.includes('prepare-v4213.mjs') || !pkg.scripts?.build?.i
   throw new Error('V4.21.3 build gates are not wired into the production build.');
 }
 
-console.log('V4.21.3 release gate passed: approved first header, real mobile wave, separate category cards, moving ticker, preserved utilities, and seven viewport screenshots are locked.');
+console.log('V4.21.3 compatibility gate passed inside V4.21.5: approved first header, real mobile wave, separate category cards, moving ticker, preserved utilities, and seven viewport screenshots are locked.');

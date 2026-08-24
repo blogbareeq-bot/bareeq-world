@@ -5,11 +5,11 @@ const readinessBefore = await readFile(readinessPath, 'utf8');
 const readinessAfter = readinessBefore
   .replace(
     "if (pkg.version !== '4.21.1') failures.push(`Expected package version 4.21.1, got ${pkg.version}`);",
-    "if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.4, got ${pkg.version}`);",
+    "if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.5, got ${pkg.version}`);",
   )
   .replace(
     "if (!['4.21.1', '4.21.2'].includes(pkg.version)) failures.push(`Expected package version 4.21.1 or 4.21.2, got ${pkg.version}`);",
-    "if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.4, got ${pkg.version}`);",
+    "if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.5, got ${pkg.version}`);",
   )
   .replace(
     'Launch-readiness source audit passed: V4.21.1 package identity',
@@ -21,13 +21,13 @@ const readinessAfter = readinessBefore
   )
   .replace(
     "if (!['4.21.1', '4.21.2', '4.21.3'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.3, got ${pkg.version}`);",
-    "if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.4, got ${pkg.version}`);",
+    "if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.5, got ${pkg.version}`);",
   )
   .replace(
     'Launch-readiness source audit passed: V4.21.3 package identity',
     'Launch-readiness source audit passed: V4.21.4 package identity',
   );
-if (!readinessAfter.includes("['4.21.1', '4.21.2', '4.21.3', '4.21.4'].includes(pkg.version)")) {
+if (!readinessAfter.includes("['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)")) {
   throw new Error('V4.21.2: launch-readiness version gate was not updated.');
 }
 if (readinessAfter !== readinessBefore) await writeFile(readinessPath, readinessAfter);
