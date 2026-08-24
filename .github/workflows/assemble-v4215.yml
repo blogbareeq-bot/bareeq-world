@@ -1,0 +1,63 @@
+name: Verify V4.21.5 release candidate
+
+on:
+  push:
+    branches:
+      - release/v4.21.5-rc
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-v4215-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout selected release branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify V4.21.5 release preparation is pure
+        run: node scripts/prepare-v4215.mjs
+
+      - name: Verify resumable Gemini generator transformation
+        run: |
+          node scripts/prepare-v4215-gemini-resume.mjs
+          node --check scripts/.v4215-generate-audio.mjs
+          rm -f scripts/.v4215-generate-audio.mjs
+
+      - name: Run full production build with synthesis disabled
+        env:
+          BAREEQ_GEMINI_FREE_ROLLOUT: "0"
+          BAREEQ_CLOUD_TTS_ACTIVATE: "0"
+        run: npm run build
+
+      - name: Confirm release candidate remains editorially unpublished
+        run: |
+          grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
+          node scripts/check-v4215-release.mjs
+
+      - name: Reject tracked source mutations
+        shell: bash
+        run: |
+          if ! git diff --exit-code; then
+            echo '::error::A verification build mutated tracked source files.'
+            exit 1
+          fi
