@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "schema": "bareeq.bundled-gemini.lock.v1",
+  "releaseId": "gemini-sadaltager-live-20260824",
+  "capturedAt": "2026-08-24T11:16:55.673Z",
+  "sourceOrigin": "https://bareeqworld.com",
+  "bundleRoot": "audio-releases/gemini-sadaltager-live-20260824/articles",
+  "articles": [
+    {
+      "articleId": "ai-agents-future-now",
+      "audioKey": "84f9f6b53f7ce503",
+      "sourceHash": "82c860e0e922246d8b3e3fac76b916a1c9f355f32fcf16d8b3cb9d151040310b",
+      "sourceManifestSha256": "852a09788d39a662b15c637f0c4c51b9bb448609f60b78438a1c8c9ae9de8021",
+      "parts": [
+        {
+          "file": "sadaltager-part-001-82c860e0.mp3",
+          "bytes": 1494189,
+          "durationSeconds": 124.512,
+          "sha256": "23ab0727855bd5ed58173cc79c86d5bb13ce6116ddbf41fbe6f0568d3c9f37d6"
+        },
+        {
+          "file": "sadaltager-part-002-82c860e0.mp3",
+          "bytes": 1579725,
+          "durationSeconds": 131.64,
+          "sha256": "d88bb445b0708025b42b6162147530fa6348b07b33b080be3f5d270b35e62ae7"
+        },
+        {
+          "file": "sadaltager-part-003-82c860e0.mp3",
+          "bytes": 1468269,
+          "durationSeconds": 122.352,
+          "sha256": "30f2bb6072d2f48eb45e78ed9995bd79fbaef924d11aeda63893511b2daab2f2"
+        },
+        {
+          "file": "sadaltager-part-004-82c860e0.mp3",
+          "bytes": 1299213,
+          "durationSeconds": 108.264,
+          "sha256": "647f4e56d09bffcb390fee463c775cbadfd03bda93c009b8c10305c27c050462"
+        },
+        {
+          "file": "sadaltager-part-005-82c860e0.mp3",
+          "bytes": 1519533,
+          "durationSeconds": 126.624,
+          "sha256": "97d1555d41a7433a2720e13810547df9e3cb0f5951ac10f101c11583aec01ba9"
+        },
+        {
+          "file": "sadaltager-part-006-82c860e0.mp3",
+          "bytes": 1456173,
+          "durationSeconds": 121.344,
+          "sha256": "9977cc359a1fa520b1f90d63a6b1699722a4bbbd9418c8da02d782c64da49c6a"
+        },
+        {
+          "file": "sadaltager-part-007-82c860e0.mp3",
+          "bytes": 1321965,
+          "durationSeconds": 110.16,
+          "sha256": "80ecd3959b0caeb8ad3b1de215de042d6fb72faca26eec3cee225e2e80b4b88d"
+        },
+        {
+          "file": "sadaltager-part-008-82c860e0.mp3",
+          "bytes": 1541709,
+          "durationSeconds": 128.472,
+          "sha256": "75653b7b536bb5a2f065a31428b49449883a4b3b1bab034ab703eef5803ede8a"
+        },
+        {
+          "file": "sadaltager-part-009-82c860e0.mp3",
+          "bytes": 556173,
+          "durationSeconds": 46.344,
+          "sha256": "fb6669bd48edef140026ee0a1e5c1a480ebfe6486ff6611f9b8205ad8425b058"
+        }
+      ]
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "audioKey": "263e3d148e6386a8",
+      "sourceHash": "d8fe8fe56ae6bcbbc31563a9d04ea7ca066ec70561b1db2f09f17d4b8c1ddf4e",
+      "sourceManifestSha256": "bc8ebe779be66ffd5da770473801d22c1d1a561f941f2de25ac71e8b29feacf1",
+      "parts": [
+        {
+          "file": "sadaltager-part-001-d8fe8fe5.mp3",
+          "bytes": 1481229,
+          "durationSeconds": 123.432,
+          "sha256": "cbf5e7843985df8dcfbfe62b74180a17a68944a076e52301efd813da5faf44f7"
+        },
+        {
+          "file": "sadaltager-part-002-d8fe8fe5.mp3",
+          "bytes": 1427373,
+          "durationSeconds": 118.944,
+          "sha256": "b0491f28a16a459d7098aa7f2c00e0df3448b640ca3e4e9f47a0aee52cb244d4"
+        },
+        {
+          "file": "sadaltager-part-003-d8fe8fe5.mp3",
+          "bytes": 1532493,
+          "durationSeconds": 127.704,
+          "sha256": "b8b422aaa957c64759838f44fbdbd63cdb06f2c914c3f4d06b8a251b8ee66ca9"
+        },
+        {
+          "file": "sadaltager-part-004-d8fe8fe5.mp3",
+          "bytes": 1520685,
+          "durationSeconds": 126.72,
+          "sha256": "bf26b9877edde883f35932c6bf0ebe2d8ab05f7b95a356c8d75cecd9e2f76431"
+        },
+        {
+          "file": "sadaltager-part-005-d8fe8fe5.mp3",
+          "bytes": 1504269,
+          "durationSeconds": 125.352,
+          "sha256": "7a674615edc5521fa49839007d2c4dd95934f2536918f04466e076b79a6c2d41"
+        },
+        {
+          "file": "sadaltager-part-006-d8fe8fe5.mp3",
+          "bytes": 1490733,
+          "durationSeconds": 124.224,
+          "sha256": "f9d4fd4381aafcfbb90f4c14a8f99e4e0f64df609bb13e2b5829c0d481b29477"
+        },
+        {
+          "file": "sadaltager-part-007-d8fe8fe5.mp3",
+          "bytes": 1400013,
+          "durationSeconds": 116.664,
+          "sha256": "07fc9e01208edafbd6d12215915ab2284e1dd7b1a39769c122f323c142ac2f28"
+        },
+        {
+          "file": "sadaltager-part-008-d8fe8fe5.mp3",
+          "bytes": 1503693,
+          "durationSeconds": 125.304,
+          "sha256": "8bb63509dbfc67af826cf9b8fb137a2298a95951ee4629c70d60636252cf6628"
+        },
+        {
+          "file": "sadaltager-part-009-d8fe8fe5.mp3",
+          "bytes": 1375245,
+          "durationSeconds": 114.6,
+          "sha256": "131af0d12fadf9791f6d592a885aeeec373e0612020e79d50cd6f24a47d6ea5f"
+        },
+        {
+          "file": "sadaltager-part-010-d8fe8fe5.mp3",
+          "bytes": 1281069,
+          "durationSeconds": 106.752,
+          "sha256": "4af438e42e7090304197bbf993804e49e47491a3df4745f594e20627124179e1"
+        }
+      ]
+    }
+  ]
+}
