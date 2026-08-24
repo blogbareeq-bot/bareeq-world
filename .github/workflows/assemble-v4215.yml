@@ -1,6 +1,11 @@
 name: Verify V4.21.5 release candidate
 
 on:
+  push:
+    branches:
+      - release/v4.21.5-rc
+    paths:
+      - .github/workflows/assemble-v4215.yml
   workflow_dispatch:
 
 permissions:
