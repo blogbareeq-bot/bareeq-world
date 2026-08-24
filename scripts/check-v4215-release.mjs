@@ -75,8 +75,21 @@ try { await access(manifestPath); } catch { manifestExists = false; }
 if (!isDraft && !manifestExists) throw new Error('Published passport article has no production audio manifest.');
 if (manifestExists) {
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
-  if (manifest.articleId !== ARTICLE_ID || manifest.provider !== 'Google Gemini API' || manifest.defaultVoice !== 'sadaltager') {
-    throw new Error('Passport production audio manifest is not the approved Gemini Sadaltager recording.');
+  const approvedGemini = manifest.articleId === ARTICLE_ID
+    && manifest.provider === 'Google Gemini API'
+    && manifest.model === 'gemini-3.1-flash-tts-preview'
+    && manifest.language === 'ar'
+    && manifest.defaultVoice === 'sadaltager';
+  const approvedTemporaryFallback = manifest.articleId === ARTICLE_ID
+    && manifest.provider === 'Microsoft Azure AI Speech'
+    && manifest.model === 'Neural TTS'
+    && manifest.language === 'ar-SA'
+    && manifest.defaultVoice === 'hamed'
+    && Array.isArray(manifest.voices)
+    && manifest.voices.length === 1
+    && manifest.voices[0]?.providerVoice === 'ar-SA-HamedNeural';
+  if (!approvedGemini && !approvedTemporaryFallback) {
+    throw new Error('Passport production audio must be Gemini Sadaltager or the approved temporary Azure Hamed fallback.');
   }
 }
 
@@ -87,4 +100,4 @@ for (const deferred of ['فكرة تبقى معك', 'بريق عملي', 'ميز
   if ([header, css].some((source) => source.includes(deferred))) throw new Error(`Paused layer returned: ${deferred}`);
 }
 
-console.log(`V4.21.5 release gate passed: package identity locked, V4.21.4 UX preserved, infographic deferred, ${live} live article(s), safe no-synthesis production build, resumable Gemini workflow, and passport audio publication guard are active.`);
+console.log(`V4.21.5 release gate passed: package identity locked, V4.21.4 UX preserved, infographic deferred, ${live} live article(s), safe no-synthesis production build, resumable Gemini workflow, temporary Azure fallback compatibility, and passport audio publication guard are active.`);

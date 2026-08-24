@@ -6,6 +6,13 @@ on:
       - release/v4.21.5-rc
     paths:
       - .github/workflows/assemble-v4215.yml
+      - scripts/prepare-v4210.mjs
+      - scripts/prepare-v4211.mjs
+      - scripts/prepare-v4212.mjs
+      - scripts/prepare-v4213.mjs
+      - scripts/check-launch-readiness.mjs
+      - scripts/check-audio-dist.mjs
+      - scripts/check-v4215-release.mjs
   workflow_dispatch:
 
 permissions:
