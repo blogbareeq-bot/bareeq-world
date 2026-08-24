@@ -127,7 +127,7 @@ jobs:
           const match = article.match(/^---\s*\n[\s\S]*?\n---\s*\n?([\s\S]*)$/);
           if (!match) throw new Error('Article parse failed after build.');
           const bodyHash = createHash('sha256').update(match[1].trim()).digest('hex');
-          if (bodyHash !== 'ee0b9101dc6d37f9df4173aad732a993e884ecc1c2f062bba8ce3766f70c1208') throw new Error(`bodyHash drifted: ${bodyHash}`);
+          if (bodyHash !== '06072389348ff82fd251858c1fe85376f16a56a604cbcde4d47b0228ef2cbd81') throw new Error(`bodyHash drifted: ${bodyHash}`);
           const plan = JSON.parse(await readFile('/tmp/touchscreen-plan.json', 'utf8'));
           const draft = /^draft:\s*true\s*$/mi.test(article);
           const report = {

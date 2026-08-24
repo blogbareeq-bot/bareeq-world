@@ -3,8 +3,8 @@
 **Article ID:** `how-touchscreens-work`  
 **التصنيف:** `ببساطة…` / `simply`  
 **السلسلة:** `technology-simply`  
-**الحالة:** `draft: true`  
-**bodyHash المعتمد وفق خوارزمية `check-arabic-speech.mjs`:** `ee0b9101dc6d37f9df4173aad732a993e884ecc1c2f062bba8ce3766f70c1208`  
+**الحالة:** `draft: false`  
+**bodyHash المعتمد وفق خوارزمية `check-arabic-speech.mjs`:** `06072389348ff82fd251858c1fe85376f16a56a604cbcde4d47b0228ef2cbd81`  
 **Audio key:** `de93f3d9f91c8b8b`
 
 ## 1) قفل النص
