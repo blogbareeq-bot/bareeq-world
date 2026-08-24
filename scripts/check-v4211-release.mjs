@@ -3,8 +3,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import { PENDING_CLOUD, RETAINED_GEMINI } from './cloud-tts-rollout.mjs';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4'].includes(pkg.version)) throw new Error(`Expected package 4.21.1 through 4.21.4, got ${pkg.version}.`);
-if (PENDING_CLOUD.length !== 11 || RETAINED_GEMINI.length !== 2 || new Set([...PENDING_CLOUD, ...RETAINED_GEMINI]).size !== 13) throw new Error('V4.21.1 must keep the exact 11 pending + 2 retained article boundary.');
+if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`Expected package 4.21.1 through 4.21.5, got ${pkg.version}.`);
+if (![11, 12].includes(PENDING_CLOUD.length) || RETAINED_GEMINI.length !== 2 || new Set([...PENDING_CLOUD, ...RETAINED_GEMINI]).size !== PENDING_CLOUD.length + RETAINED_GEMINI.length) throw new Error('V4.21.5 must keep the 11/12 pending + 2 retained article boundary.');
 
 const [runner, generator, envExample, privacy, footer, about, contact, site, mobileAudit, distAudit] = await Promise.all([
   readFile('scripts/run-v4211-audio.mjs', 'utf8'),
@@ -61,7 +61,7 @@ for (const file of postFiles) {
   const source = await readFile(`src/content/posts/${file}`, 'utf8');
   if (!/^draft:\s*true\s*$/mi.test(source)) published += 1;
 }
-if (published !== 13) throw new Error(`V4.21.1 expected 13 published articles, found ${published}.`);
+if (![13, 14].includes(published)) throw new Error(`V4.21.5 expected 13 RC or 14 published articles, found ${published}.`);
 
 const plan = spawnSync(process.execPath, ['scripts/plan-v4211-gemini-free-rollout.mjs'], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
 if (plan.error) throw plan.error;
@@ -73,5 +73,8 @@ for (const token of ['prepare-v4211.mjs', 'test-gemini-free-rollout-v4211.mjs', 
   if (!build.includes(token)) throw new Error(`Build pipeline is missing ${token}.`);
 }
 if (!build.includes('node scripts/run-v4211-audio.mjs && ASTRO_TELEMETRY_DISABLED=1 astro build')) throw new Error('V4.21.1 runner is not the production audio step immediately before Astro build.');
+if (pkg.version === '4.21.5' && !build.includes('BAREEQ_GEMINI_FREE_ROLLOUT=0 BAREEQ_CLOUD_TTS_ACTIVATE=0 node scripts/run-v4211-audio.mjs')) {
+  throw new Error('V4.21.5 normal build must disable synthesis and use the separate resumable workflow.');
+}
 
-console.log('V4.21.1 release gate passed: 13 articles, 11+2 boundary, one unresolved Gemini article per deployment, atomic 429-safe fallback, paid Cloud lock, protected email links, and local-storage privacy disclosure.');
+console.log(`V4.21.1 compatibility gate passed inside V4.21.5: ${published} articles, ${PENDING_CLOUD.length}+${RETAINED_GEMINI.length} boundary, private/lazy audio metadata, protected email links, local-storage privacy disclosure, and synthesis disabled in the normal production build.`);
