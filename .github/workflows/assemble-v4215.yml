@@ -12,6 +12,7 @@ on:
       - scripts/prepare-v4213.mjs
       - scripts/check-launch-readiness.mjs
       - scripts/check-audio-dist.mjs
+      - scripts/check-arabic-speech.mjs
       - scripts/check-v4215-release.mjs
   workflow_dispatch:
 
