@@ -6,7 +6,7 @@ category: "نافذة على العالم"
 categorySlug: "window-on-world"
 seriesSlug: "windows-to-world"
 featured: false
-draft: true
+draft: false
 author: "فريق بريق"
 tags: ["سفر", "علاقات دولية"]
 image: "/images/posts/why-some-passports-are-stronger.webp"
