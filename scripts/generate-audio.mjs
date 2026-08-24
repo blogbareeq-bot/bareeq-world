@@ -965,10 +965,7 @@ if (PARTS_EXPORT) {
     title,
     key,
     sourceHash,
-    parts: audioParts.map(({ text, sync }) => ({
-      text,
-      sync: sync.map(({ id: syncId, start, end }) => ({ id: syncId, start, end })),
-    })),
+    parts: audioParts.map(({ text, sync }) => ({ text, sync })),
   }));
   await writeFile(path.resolve(ROOT, PARTS_EXPORT), JSON.stringify(payload, null, 2) + '\n');
   process.exit(0);

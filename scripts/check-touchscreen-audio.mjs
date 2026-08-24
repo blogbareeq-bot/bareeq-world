@@ -22,7 +22,10 @@ if (planResult.error) throw planResult.error;
 if (planResult.status !== 0) throw new Error(`Touchscreen sync plan failed: ${planResult.stderr || planResult.stdout}`);
 const planned = JSON.parse(planResult.stdout).find((item) => item.id === ARTICLE_ID);
 if (!planned) throw new Error('Touchscreen article is absent from the Azure sync plan.');
-if (JSON.stringify(planned.parts.map((part) => part.sync)) !== JSON.stringify(manifest.parts.map((part) => part.sync))) throw new Error('Touchscreen manifest synchronization differs from the locked Azure plan.');
+const normalizedManifestSync = manifest.parts.map((part) => ({
+  sync: part.sync.map(({ id, start, end }) => ({ id, start, end })),
+}));
+if (JSON.stringify(planned.parts) !== JSON.stringify(normalizedManifestSync)) throw new Error('Touchscreen manifest synchronization differs from the locked Azure plan.');
 
 const syncIds = new Set();
 let duration = 0;

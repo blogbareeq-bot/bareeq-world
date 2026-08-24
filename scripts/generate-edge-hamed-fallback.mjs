@@ -70,7 +70,7 @@ try {
     totalDurationSeconds += durationSeconds;
     parts.push({
       characters: [...source.text].length,
-      sync: source.sync.map(({ id, start, end }) => ({ id, start, end })),
+      sync: source.sync,
       audio: {
         hamed: {
           src: `/audio/articles/${AUDIO_KEY}/${filename}`,

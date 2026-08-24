@@ -8,6 +8,7 @@ on:
       - .github/workflows/bundle-touchscreen-hamed-audio.yml
       - scripts/generate-audio.mjs
       - scripts/generate-edge-hamed-fallback.mjs
+      - scripts/check-touchscreen-audio.mjs
       - scripts/mp3-duration.mjs
       - scripts/speech-overrides.json
       - scripts/speech-review.json
@@ -19,6 +20,7 @@ on:
       - .github/workflows/bundle-touchscreen-hamed-audio.yml
       - scripts/generate-audio.mjs
       - scripts/generate-edge-hamed-fallback.mjs
+      - scripts/check-touchscreen-audio.mjs
       - scripts/mp3-duration.mjs
       - scripts/speech-overrides.json
       - scripts/speech-review.json
