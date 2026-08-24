@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { PENDING_CLOUD, RETAINED_GEMINI } from './cloud-tts-rollout.mjs';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.0', '4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`Expected package 4.21.0 baseline or supported 4.21.x successor, got ${pkg.version}`);
+if (!['4.21.0', '4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5', '4.21.6'].includes(pkg.version)) throw new Error(`Expected package 4.21.0 baseline or supported 4.21.x successor, got ${pkg.version}`);
 
 const [component, page, client, styles, generator, cloud, runner, envExample, guide, site] = await Promise.all([
   readFile('src/components/ReadingModes.astro', 'utf8'),
@@ -42,7 +42,7 @@ requireAll('run-v4210-audio.mjs', runner, [
   "process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1'", "runStrict('scripts/run-v4200-audio.mjs')", "BAREEQ_TTS_PROVIDER: 'google-cloud'",
   "BAREEQ_TTS_CACHE_ONLY: '1'", 'V4.21.0 safety stop',
 ]);
-if (![11, 12].includes(PENDING_CLOUD.length) || RETAINED_GEMINI.length !== 2 || new Set([...PENDING_CLOUD, ...RETAINED_GEMINI]).size !== PENDING_CLOUD.length + RETAINED_GEMINI.length) throw new Error('Cloud TTS rollout boundary must be 11/12 pending + 2 retained Gemini articles.');
+if (![11, 12, 13].includes(PENDING_CLOUD.length) || RETAINED_GEMINI.length !== 2 || new Set([...PENDING_CLOUD, ...RETAINED_GEMINI]).size !== PENDING_CLOUD.length + RETAINED_GEMINI.length) throw new Error('Cloud TTS rollout boundary must be 11–13 pending + 2 retained Gemini articles.');
 
 requireAll('.env.example', envExample, ['GOOGLE_CLOUD_PROJECT=bareeq-tts', 'BAREEQ_CLOUD_TTS_ACTIVATE=0', 'GOOGLE_SERVICE_ACCOUNT_JSON=', 'AZURE_SPEECH_MONTHLY_USED_CHARS=']);
 requireAll('Cloud TTS guide', guide, ['CNTXT', 'لا تفعّل', 'roles/aiplatform.user', 'gemini-2.5-flash-tts', 'ar-EG', 'Sadaltager']);
@@ -56,7 +56,7 @@ for (const name of postFiles) {
   if (!/^draft:\s*true\s*$/mi.test(source)) published += 1;
   sourceBundle += source;
 }
-if (![13, 14].includes(published)) throw new Error(`V4.21.5 expects 13 RC or 14 published articles, got ${published}.`);
+if (![13, 14, 15].includes(published)) throw new Error(`V4.21.6 expects 13–15 published articles across supported release states, got ${published}.`);
 const uiSource = [component, page, client, await readFile('src/pages/index.astro', 'utf8')].join('\n');
 for (const paused of ['فكرة تبقى معك', 'بريق عملي', 'ميزان بريق', 'كيف استخدمنا المصادر؟']) if (uiSource.includes(paused)) throw new Error(`Paused experimental knowledge layer returned: ${paused}`);
 
@@ -92,4 +92,4 @@ if (inactive.status === 0 || !inactiveOutput.includes('prepared but not activate
 const build = pkg.scripts?.build || '';
 for (const token of ['prepare-v4210.mjs', 'test-cloud-tts-contract.mjs', 'test-audio-ui-v4210.mjs', 'check-v4210-release.mjs', 'run-v4210-audio.mjs']) if (!build.includes(token)) throw new Error(`Build pipeline is missing ${token}`);
 
-console.log(`V4.21.0 compatibility gate passed inside V4.21.5: ${published} articles, lazy/private audio metadata, mobile+desktop seek-to-text, ${PENDING_CLOUD.length}+${RETAINED_GEMINI.length} rollout boundary, explicit inactive gate, Cloud REST/auth/cost guards, Azure monthly warning, and paused experiments kept out.`);
+console.log(`V4.21.0 compatibility gate passed inside V4.21.6: ${published} articles, lazy/private audio metadata, mobile+desktop seek-to-text, ${PENDING_CLOUD.length}+${RETAINED_GEMINI.length} rollout boundary, explicit inactive gate, Cloud REST/auth/cost guards, Azure monthly warning, and paused experiments kept out.`);

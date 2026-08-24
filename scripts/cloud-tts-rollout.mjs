@@ -23,9 +23,18 @@ export const RELEASE_CANDIDATE_ARTICLE = 'why-some-passports-are-stronger';
 const candidateSource = await readFile(`src/content/posts/${RELEASE_CANDIDATE_ARTICLE}.md`, 'utf8');
 export const RELEASE_CANDIDATE_PUBLISHED = !/^draft:\s*true\s*$/mi.test(candidateSource);
 
+export const TOUCHSCREEN_RELEASE_ARTICLE = 'how-touchscreens-work';
+const touchscreenSource = await readFile(`src/content/posts/${TOUCHSCREEN_RELEASE_ARTICLE}.md`, 'utf8');
+export const TOUCHSCREEN_RELEASE_PUBLISHED = !/^draft:\s*true\s*$/mi.test(touchscreenSource);
+
+export const TEMPORARY_HAMED_ARTICLES = [
+  ...(RELEASE_CANDIDATE_PUBLISHED ? [RELEASE_CANDIDATE_ARTICLE] : []),
+  ...(TOUCHSCREEN_RELEASE_PUBLISHED ? [TOUCHSCREEN_RELEASE_ARTICLE] : []),
+];
+
 export const PENDING_CLOUD = [
   ...BASE_PENDING_CLOUD,
-  ...(RELEASE_CANDIDATE_PUBLISHED ? [RELEASE_CANDIDATE_ARTICLE] : []),
+  ...TEMPORARY_HAMED_ARTICLES,
 ];
 
 export const EXPECTED_PENDING_CLOUD = PENDING_CLOUD.length;
@@ -35,6 +44,6 @@ const unique = new Set([...RETAINED_GEMINI, ...PENDING_CLOUD]);
 if (unique.size !== EXPECTED_PUBLISHED_ARTICLES) {
   throw new Error('Cloud TTS rollout IDs must stay unique.');
 }
-if (![13, 14].includes(EXPECTED_PUBLISHED_ARTICLES)) {
-  throw new Error('V4.21.5 expects 13 live articles during RC or 14 after the passport article is published.');
+if (![13, 14, 15].includes(EXPECTED_PUBLISHED_ARTICLES)) {
+  throw new Error('V4.21.6 expects 13–15 live articles while the passport and touchscreen release candidates progress to publication.');
 }

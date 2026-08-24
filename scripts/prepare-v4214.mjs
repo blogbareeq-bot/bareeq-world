@@ -2,7 +2,7 @@ import { readFile, readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`V4.21.4 preparation expected package 4.21.4 or V4.21.5 successor, got ${pkg.version}.`);
+if (!['4.21.4', '4.21.5', '4.21.6'].includes(pkg.version)) throw new Error(`V4.21.4 preparation expected package 4.21.4 or a supported successor through V4.21.6, got ${pkg.version}.`);
 
 const [header, layout, css, intro, startHere, desktopWave, mobileWave] = await Promise.all([
   readFile('src/components/Header.astro', 'utf8'),
@@ -53,4 +53,4 @@ for (const entry of entries) {
   await rm(target, { recursive: true, force: true });
 }
 
-console.log('V4.21.4 compatibility preparation passed under V4.21.5: design-one SVG waves, framed responsive geometry, mobile ticker reveal, approved listening wording, and temporary-audio cleanup are locked.');
+console.log('V4.21.4 compatibility preparation passed under V4.21.6: design-one SVG waves, framed responsive geometry, mobile ticker reveal, approved listening wording, and temporary-audio cleanup are locked.');

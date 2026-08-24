@@ -1,0 +1,151 @@
+name: Generate touchscreen temporary legacy audio
+
+on:
+  push:
+    branches:
+      - content/how-touchscreens-work
+    paths:
+      - .github/workflows/generate-touchscreen-temp-audio.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: touchscreen-temp-audio-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout article branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify temporary legacy TTS secret and article lock
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+        run: |
+          if [ -z "$AZURE_SPEECH_KEY" ]; then
+            echo "::error::AZURE_SPEECH_KEY repository secret is unavailable."
+            exit 2
+          fi
+          grep -q '^draft: true$' src/content/posts/how-touchscreens-work.md
+          node scripts/apply-touchscreen-production.mjs
+          git checkout -- scripts/speech-overrides.json scripts/speech-review.json
+          echo "Legacy TTS secret available; touchscreen text lock verified."
+
+      - name: Plan Hamed-only synthesis without API usage
+        env:
+          BAREEQ_TTS_PROVIDER: azure
+          BAREEQ_AZURE_HAMED_ONLY: "1"
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+        shell: bash
+        run: |
+          node scripts/apply-touchscreen-production.mjs
+          sed -i '0,/^draft: true$/s//draft: false/' src/content/posts/how-touchscreens-work.md
+          node scripts/generate-audio.mjs --plan
+          git checkout -- src/content/posts/how-touchscreens-work.md scripts/speech-overrides.json scripts/speech-review.json
+
+      - name: Generate complete temporary Hamed audio
+        id: generate
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          BAREEQ_TTS_PROVIDER: azure
+          BAREEQ_AZURE_HAMED_ONLY: "1"
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: "1"
+        shell: bash
+        run: |
+          set -e
+          node scripts/apply-touchscreen-production.mjs
+          sed -i '0,/^draft: true$/s//draft: false/' src/content/posts/how-touchscreens-work.md
+          set +e
+          node scripts/generate-audio.mjs
+          status=$?
+          set -e
+          git checkout -- src/content/posts/how-touchscreens-work.md scripts/speech-overrides.json scripts/speech-review.json
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          grep -q '^draft: true$' src/content/posts/how-touchscreens-work.md
+          exit "$status"
+
+      - name: Validate complete temporary audio
+        if: steps.generate.outcome == 'success'
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile, stat } from 'node:fs/promises';
+          import path from 'node:path';
+          import { mp3DurationSeconds } from './scripts/mp3-duration.mjs';
+
+          const root = 'public/audio/articles/de93f3d9f91c8b8b';
+          const manifest = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
+          if (manifest.articleId !== 'how-touchscreens-work') throw new Error('articleId mismatch');
+          if (manifest.provider !== 'Microsoft Azure AI Speech') throw new Error(`provider mismatch: ${manifest.provider}`);
+          if (manifest.model !== 'Neural TTS') throw new Error(`model mismatch: ${manifest.model}`);
+          if (manifest.language !== 'ar-SA') throw new Error(`language mismatch: ${manifest.language}`);
+          if (manifest.defaultVoice !== 'hamed') throw new Error(`default voice mismatch: ${manifest.defaultVoice}`);
+          if (!Array.isArray(manifest.voices) || manifest.voices.length !== 1 || manifest.voices[0]?.id !== 'hamed' || manifest.voices[0]?.providerVoice !== 'ar-SA-HamedNeural') throw new Error('Hamed-only voice contract failed');
+          if (!Array.isArray(manifest.parts) || manifest.parts.length < 1) throw new Error('missing audio parts');
+
+          const syncIds = new Set();
+          let mp3Count = 0;
+          let totalDuration = 0;
+          for (const part of manifest.parts) {
+            if (!Array.isArray(part?.sync) || !part.sync.length) throw new Error('missing sync entries');
+            for (const entry of part.sync) {
+              if (!entry?.id || syncIds.has(entry.id)) throw new Error(`invalid/duplicate sync id: ${entry?.id}`);
+              syncIds.add(entry.id);
+            }
+            const asset = part.audio?.hamed;
+            if (!asset?.src) throw new Error('missing Hamed asset');
+            const local = path.join('public', asset.src.replace(/^\//, ''));
+            const info = await stat(local);
+            if (!info.isFile() || info.size !== asset.bytes || info.size < 100) throw new Error(`size mismatch: ${asset.src}`);
+            const bytes = await readFile(local);
+            if (asset.sha256 && createHash('sha256').update(bytes).digest('hex') !== asset.sha256) throw new Error(`SHA mismatch: ${asset.src}`);
+            const measured = mp3DurationSeconds(bytes);
+            if (!(asset.durationSeconds > 0) || Math.abs(measured - asset.durationSeconds) > 0.1) throw new Error(`duration mismatch: ${asset.src}`);
+            totalDuration += asset.durationSeconds;
+            mp3Count += 1;
+          }
+          console.log(`Temporary Hamed audio validated: ${mp3Count} MP3 part(s), ${syncIds.size} sync block(s), ${totalDuration.toFixed(2)} seconds.`);
+          NODE
+
+      - name: Run Arabic Speech QA on locked article
+        if: steps.generate.outcome == 'success'
+        shell: bash
+        run: |
+          node scripts/apply-touchscreen-production.mjs
+          sed -i '0,/^draft: true$/s//draft: false/' src/content/posts/how-touchscreens-work.md
+          node scripts/check-arabic-speech.mjs
+          git checkout -- src/content/posts/how-touchscreens-work.md scripts/speech-overrides.json scripts/speech-review.json
+          grep -q '^draft: true$' src/content/posts/how-touchscreens-work.md
+
+      - name: Commit completed temporary audio only
+        if: steps.generate.outcome == 'success'
+        shell: bash
+        run: |
+          git status --short
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -f public/audio/articles/de93f3d9f91c8b8b/
+          git diff --cached --quiet && { echo '::error::No completed touchscreen audio files to commit.'; exit 1; }
+          git commit -m 'audio: add temporary Hamed audio for touchscreen article'
+          git push origin HEAD:${{ github.ref_name }}
