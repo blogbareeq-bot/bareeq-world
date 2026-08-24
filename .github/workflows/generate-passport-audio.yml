@@ -1,6 +1,11 @@
 name: Generate passport article audio
 
 on:
+  push:
+    branches:
+      - arena/01a03318-bareeq-world
+    paths:
+      - .github/workflows/generate-passport-audio.yml
   workflow_dispatch:
 
 permissions:
@@ -129,7 +134,7 @@ jobs:
           const syncIds = new Set();
           let totalDuration = 0;
           for (const part of manifest.parts) {
-            if (!Array.isArray(part.sync) || !part.sync.length) throw new Error('missing sync entries');
+            if (!Array.isArray(part?.sync) || !part.sync.length) throw new Error('missing sync entries');
             for (const entry of part.sync) {
               if (!entry?.id || syncIds.has(entry.id)) throw new Error(`invalid/duplicate sync id: ${entry?.id}`);
               syncIds.add(entry.id);
