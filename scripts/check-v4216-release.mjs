@@ -3,7 +3,7 @@ import { access, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 
 const ARTICLE_ID = 'how-touchscreens-work';
-const BODY_HASH = 'ee0b9101dc6d37f9df4173aad732a993e884ecc1c2f062bba8ce3766f70c1208';
+const BODY_HASH = '06072389348ff82fd251858c1fe85376f16a56a604cbcde4d47b0228ef2cbd81';
 const AUDIO_KEY = 'de93f3d9f91c8b8b';
 
 const [pkgText, lockText, article, reviewText, overridesText, rolloutText, runnerText] = await Promise.all([
