@@ -46,12 +46,21 @@ jobs:
       - name: Prepare resumable Gemini generator
         run: npm run audio:gemini:resume:prepare
 
-      - name: Restore audio checkpoint
-        id: checkpoint-restore
+      - name: Define checkpoint cache identity
+        id: checkpoint
+        shell: bash
+        run: |
+          base="v4215-passport-audio-${{ hashFiles('src/content/posts/why-some-passports-are-stronger.md', 'scripts/speech-overrides.json', 'scripts/generate-audio.mjs', 'scripts/prepare-v4215-gemini-resume.mjs') }}"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "key=$base-${{ github.run_id }}-${{ github.run_attempt }}" >> "$GITHUB_OUTPUT"
+
+      - name: Restore latest audio checkpoint
         uses: actions/cache/restore@v4
         with:
           path: .bareeq-audio-checkpoints
-          key: v4215-passport-audio-${{ hashFiles('src/content/posts/why-some-passports-are-stronger.md', 'scripts/speech-overrides.json') }}
+          key: ${{ steps.checkpoint.outputs.key }}
+          restore-keys: |
+            ${{ steps.checkpoint.outputs.base }}-
 
       - name: Generate or resume Gemini Sadaltager audio
         id: generate
@@ -73,12 +82,18 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
           grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
 
-      - name: Save audio checkpoint
+      - name: Save newest audio checkpoint
         if: always()
         uses: actions/cache/save@v4
         with:
           path: .bareeq-audio-checkpoints
-          key: v4215-passport-audio-${{ hashFiles('src/content/posts/why-some-passports-are-stronger.md', 'scripts/speech-overrides.json') }}
+          key: ${{ steps.checkpoint.outputs.key }}
+
+      - name: Reject fatal synthesis errors
+        if: steps.generate.outputs.status != '0'
+        run: |
+          echo "::error::Gemini generator exited with fatal status ${{ steps.generate.outputs.status }}. Existing valid checkpoint parts were preserved, but this is not a quota-only pause."
+          exit 1
 
       - name: Validate completed audio or report checkpoint progress
         shell: bash
@@ -134,8 +149,13 @@ jobs:
           console.log(`Validated 11 MP3s, 81 sync blocks, ${totalDuration.toFixed(2)} seconds.`);
           NODE
 
-      - name: Run Arabic speech QA
-        run: node scripts/check-arabic-speech.mjs
+      - name: Run Arabic speech QA against the release article
+        shell: bash
+        run: |
+          sed -i '0,/^draft: true$/s//draft: false/' src/content/posts/why-some-passports-are-stronger.md
+          node scripts/check-arabic-speech.mjs
+          git checkout -- src/content/posts/why-some-passports-are-stronger.md
+          grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
 
       - name: Commit completed audio only
         shell: bash
