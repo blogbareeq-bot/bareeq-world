@@ -15,6 +15,8 @@ on:
       - scripts/check-arabic-speech.mjs
       - scripts/check-dist.mjs
       - scripts/check-v4215-release.mjs
+      - scripts/run-v4211-audio.mjs
+      - src/content/posts/why-some-passports-are-stronger.md
   workflow_dispatch:
 
 permissions:
@@ -54,16 +56,254 @@ jobs:
           node --check scripts/.v4215-generate-audio.mjs
           rm -f scripts/.v4215-generate-audio.mjs
 
-      - name: Run full production build with synthesis disabled
+      - name: Prepare an unpublished CI verification copy
+        run: |
+          if grep -q '^draft: false
+
+      - name: Reject unexpected source mutations
+        shell: bash
+        run: |
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(package-lock.json|scripts/speech-review.json|scripts/check-audio-dist.mjs|src/content/posts/why-some-passports-are-stronger.md) || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
+          git push origin HEAD:release/v4.21.5-rc
+ src/content/posts/why-some-passports-are-stronger.md; then
+            sed -i '0,/^draft: false$/s//draft: true/' src/content/posts/why-some-passports-are-stronger.md
+            echo 'Published source is being verified as an unpublished local copy; production will exercise the guarded Hamed stage.'
+          else
+            grep -q '^draft: true
+
+      - name: Reject unexpected source mutations
+        shell: bash
+        run: |
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(package-lock.json|scripts/speech-review.json|scripts/check-audio-dist.mjs)$' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
+          git push origin HEAD:release/v4.21.5-rc
+ src/content/posts/why-some-passports-are-stronger.md
+          fi
+
+      - name: Run full production-equivalent build without synthesis in CI
         env:
           BAREEQ_GEMINI_FREE_ROLLOUT: "0"
           BAREEQ_CLOUD_TTS_ACTIVATE: "0"
         run: npm run build
 
-      - name: Confirm release candidate remains unpublished
+      - name: Confirm the CI verification copy stayed unpublished
         run: |
-          grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
+          grep -q '^draft: true
+
+      - name: Reject unexpected source mutations
+        shell: bash
+        run: |
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(package-lock.json|scripts/speech-review.json|scripts/check-audio-dist.mjs)$' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
+          git push origin HEAD:release/v4.21.5-rc
+ src/content/posts/why-some-passports-are-stronger.md
           test ! -e public/audio/articles/34e34b6f4633d928/manifest.json
+          git show HEAD:src/content/posts/why-some-passports-are-stronger.md | grep -Eq '^draft: (true|false)
+
+      - name: Reject unexpected source mutations
+        shell: bash
+        run: |
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(package-lock.json|scripts/speech-review.json|scripts/check-audio-dist.mjs)$' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
+          git push origin HEAD:release/v4.21.5-rc
+
+
+      - name: Reject unexpected source mutations
+        shell: bash
+        run: |
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(package-lock.json|scripts/speech-review.json|scripts/check-audio-dist.mjs)$' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
+          git push origin HEAD:release/v4.21.5-rc
+ || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
+          git push origin HEAD:release/v4.21.5-rc
+ src/content/posts/why-some-passports-are-stronger.md; then
+            sed -i '0,/^draft: false$/s//draft: true/' src/content/posts/why-some-passports-are-stronger.md
+            echo 'Published source is being verified as an unpublished local copy; production will exercise the guarded Hamed stage.'
+          else
+            grep -q '^draft: true
+
+      - name: Reject unexpected source mutations
+        shell: bash
+        run: |
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(package-lock.json|scripts/speech-review.json|scripts/check-audio-dist.mjs)$' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
+          git push origin HEAD:release/v4.21.5-rc
+ src/content/posts/why-some-passports-are-stronger.md
+          fi
+
+      - name: Run full production-equivalent build without synthesis in CI
+        env:
+          BAREEQ_GEMINI_FREE_ROLLOUT: "0"
+          BAREEQ_CLOUD_TTS_ACTIVATE: "0"
+        run: npm run build
+
+      - name: Confirm the CI verification copy stayed unpublished
+        run: |
+          grep -q '^draft: true
+
+      - name: Reject unexpected source mutations
+        shell: bash
+        run: |
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(package-lock.json|scripts/speech-review.json|scripts/check-audio-dist.mjs)$' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
+          git push origin HEAD:release/v4.21.5-rc
+ src/content/posts/why-some-passports-are-stronger.md
+          test ! -e public/audio/articles/34e34b6f4633d928/manifest.json
+          git show HEAD:src/content/posts/why-some-passports-are-stronger.md | grep -Eq '^draft: (true|false)
+
+      - name: Reject unexpected source mutations
+        shell: bash
+        run: |
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(package-lock.json|scripts/speech-review.json|scripts/check-audio-dist.mjs)$' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
+          git push origin HEAD:release/v4.21.5-rc
+
 
       - name: Reject unexpected source mutations
         shell: bash
