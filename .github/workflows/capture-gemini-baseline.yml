@@ -1,6 +1,11 @@
 name: Capture approved Gemini audio baseline
 
 on:
+  push:
+    branches:
+      - arena/01a03318-bareeq-world
+    paths:
+      - .github/workflows/capture-gemini-baseline.yml
   workflow_dispatch:
 
 permissions:
