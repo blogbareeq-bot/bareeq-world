@@ -1,0 +1,67 @@
+name: Assemble V4.21.5 release candidate
+
+on:
+  push:
+    branches:
+      - release/v4.21.5-rc
+    paths:
+      - .github/workflows/assemble-v4215.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: assemble-v4215-rc
+  cancel-in-progress: false
+
+jobs:
+  assemble-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout release candidate
+        uses: actions/checkout@v4
+        with:
+          ref: release/v4.21.5-rc
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Assemble V4.21.5 files
+        run: node scripts/assemble-v4215.mjs
+
+      - name: Validate resumable generator transformation
+        run: |
+          node scripts/prepare-v4215-gemini-resume.mjs
+          node --check scripts/.v4215-generate-audio.mjs
+          rm -f scripts/.v4215-generate-audio.mjs
+
+      - name: Run full production build without synthesis
+        env:
+          BAREEQ_GEMINI_FREE_ROLLOUT: "0"
+          BAREEQ_CLOUD_TTS_ACTIVATE: "0"
+        run: npm run build
+
+      - name: Confirm release candidate stays unpublished
+        run: |
+          grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
+          test ! -e public/audio/articles/34e34b6f4633d928/manifest.json
+
+      - name: Commit verified V4.21.5 package
+        shell: bash
+        run: |
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --quiet && { echo 'No V4.21.5 assembly changes to commit.'; exit 1; }
+          git commit -m 'release: assemble V4.21.5 RC with resumable audio'
+          git push origin HEAD:release/v4.21.5-rc
