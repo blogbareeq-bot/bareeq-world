@@ -1,22 +1,17 @@
-name: Assemble V4.21.5 release candidate
+name: Verify V4.21.5 release candidate
 
 on:
-  push:
-    branches:
-      - release/v4.21.5-rc
-    paths:
-      - .github/workflows/assemble-v4215.yml
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: assemble-v4215-rc
+  group: verify-v4215-rc
   cancel-in-progress: false
 
 jobs:
-  assemble-and-build:
+  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -33,35 +28,48 @@ jobs:
           node-version-file: .node-version
           cache: npm
 
+      - name: Prepare V4.21.5 metadata before install
+        run: node scripts/prepare-v4215.mjs
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Assemble V4.21.5 files
-        run: node scripts/assemble-v4215.mjs
-
-      - name: Validate resumable generator transformation
+      - name: Verify resumable generator transformation
         run: |
           node scripts/prepare-v4215-gemini-resume.mjs
           node --check scripts/.v4215-generate-audio.mjs
           rm -f scripts/.v4215-generate-audio.mjs
 
-      - name: Run full production build without synthesis
+      - name: Run full production build with synthesis disabled
         env:
           BAREEQ_GEMINI_FREE_ROLLOUT: "0"
           BAREEQ_CLOUD_TTS_ACTIVATE: "0"
         run: npm run build
 
-      - name: Confirm release candidate stays unpublished
+      - name: Confirm release candidate remains unpublished
         run: |
           grep -q '^draft: true$' src/content/posts/why-some-passports-are-stronger.md
           test ! -e public/audio/articles/34e34b6f4633d928/manifest.json
 
-      - name: Commit verified V4.21.5 package
+      - name: Reject unexpected source mutations
+        shell: bash
+        run: |
+          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(package-lock.json|scripts/speech-review.json|scripts/check-audio-dist.mjs)$' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::Unexpected tracked changes after verified build:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit deterministic release metadata
         shell: bash
         run: |
           git config user.name 'bareeq-release-bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add -A
-          git diff --cached --quiet && { echo 'No V4.21.5 assembly changes to commit.'; exit 1; }
-          git commit -m 'release: assemble V4.21.5 RC with resumable audio'
+          git add package-lock.json scripts/speech-review.json scripts/check-audio-dist.mjs
+          if git diff --cached --quiet; then
+            echo 'Verified build produced no metadata changes to commit.'
+            exit 0
+          fi
+          git commit -m 'release: lock verified V4.21.5 RC metadata'
           git push origin HEAD:release/v4.21.5-rc
