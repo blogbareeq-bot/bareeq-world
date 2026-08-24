@@ -1,0 +1,126 @@
+name: Verify touchscreen article package
+
+on:
+  push:
+    branches:
+      - content/how-touchscreens-work
+    paths:
+      - .github/workflows/verify-touchscreen-article.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verify-touchscreen-article-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout article branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify locked article, speech plan, and Arabic QA
+        shell: bash
+        run: |
+          node scripts/apply-touchscreen-production.mjs
+          sed -i '0,/^draft: true$/s//draft: false/' src/content/posts/how-touchscreens-work.md
+          BAREEQ_TTS_PROVIDER=azure BAREEQ_AZURE_HAMED_ONLY=1 node scripts/generate-audio.mjs --sync-plan > /tmp/touchscreen-sync-all.json
+          node scripts/check-arabic-speech.mjs
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+          const all = JSON.parse(await readFile('/tmp/touchscreen-sync-all.json', 'utf8'));
+          const item = all.find((entry) => entry.id === 'how-touchscreens-work');
+          if (!item) throw new Error('Touchscreen article is missing from sync plan.');
+          const syncIds = new Set(item.parts.flatMap((part) => part.sync.map((entry) => entry.id)));
+          if (syncIds.size !== item.segments.length) throw new Error(`Sync coverage mismatch: ${syncIds.size}/${item.segments.length}`);
+          await writeFile('/tmp/touchscreen-plan.json', JSON.stringify({ parts: item.parts.length, syncBlocks: item.segments.length }, null, 2));
+          console.log(`Touchscreen speech plan: ${item.parts.length} part(s), ${item.segments.length} sync block(s).`);
+          NODE
+          git checkout -- src/content/posts/how-touchscreens-work.md scripts/speech-overrides.json scripts/speech-review.json
+          grep -q '^draft: true$' src/content/posts/how-touchscreens-work.md
+
+      - name: Generate and verify responsive article images
+        shell: bash
+        run: |
+          npm run generate:images
+          for p in \
+            public/images/generated/how-touchscreens-work-320.webp \
+            public/images/generated/how-touchscreens-work-640.webp \
+            public/images/generated/how-touchscreens-work-960.webp \
+            public/images/generated/how-touchscreens-work-1280.webp \
+            public/images/thumbnails/how-touchscreens-work-320.webp \
+            public/images/thumbnails/how-touchscreens-work-640.webp \
+            public/images/thumbnails/how-touchscreens-work-960.webp \
+            public/images/thumbnails/how-touchscreens-work-1280.webp \
+            public/images/social/how-touchscreens-work-social.jpg; do
+            test -s "$p" || { echo "::error::Missing generated image: $p"; exit 1; }
+          done
+          node --input-type=module <<'NODE'
+          import sharp from 'sharp';
+          const hero = await sharp('public/images/posts/how-touchscreens-work.webp').metadata();
+          if (hero.width !== 1600 || hero.height !== 900) throw new Error(`Hero must be 1600x900, got ${hero.width}x${hero.height}`);
+          const social = await sharp('public/images/social/how-touchscreens-work-social.jpg').metadata();
+          if (social.width !== 1200 || social.height !== 630) throw new Error(`Social card must be 1200x630, got ${social.width}x${social.height}`);
+          console.log('Touchscreen visual assets verified: 1600x900 hero, responsive derivatives, 1200x630 social card.');
+          NODE
+
+      - name: Run current production build with article still draft
+        env:
+          BAREEQ_GEMINI_FREE_ROLLOUT: "0"
+          BAREEQ_CLOUD_TTS_ACTIVATE: "0"
+        run: npm run build
+
+      - name: Record successful prepublication validation
+        shell: bash
+        run: |
+          git restore .
+          git clean -fd dist public/images/generated public/images/thumbnails public/images/social || true
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile, writeFile } from 'node:fs/promises';
+          const article = (await readFile('src/content/posts/how-touchscreens-work.md', 'utf8')).replace(/\r\n/g, '\n');
+          const match = article.match(/^---\s*\n[\s\S]*?\n---\s*\n?([\s\S]*)$/);
+          if (!match) throw new Error('Article parse failed after build.');
+          const bodyHash = createHash('sha256').update(match[1].trim()).digest('hex');
+          if (bodyHash !== 'ee0b9101dc6d37f9df4173aad732a993e884ecc1c2f062bba8ce3766f70c1208') throw new Error(`bodyHash drifted: ${bodyHash}`);
+          const plan = JSON.parse(await readFile('/tmp/touchscreen-plan.json', 'utf8'));
+          const report = {
+            articleId: 'how-touchscreens-work',
+            status: 'PREPUBLICATION_VALIDATED',
+            bodyHash,
+            audioKey: 'de93f3d9f91c8b8b',
+            draftLocked: true,
+            imageSource: 'public/images/posts/how-touchscreens-work.webp',
+            imageDimensions: '1600x900',
+            responsiveImageGeneration: 'passed',
+            socialCardGeneration: 'passed',
+            speechPlanParts: plan.parts,
+            syncBlocks: plan.syncBlocks,
+            arabicSpeechQA: 'passed',
+            productionBuildWithDraftArticle: 'passed',
+            temporaryAudio: 'pending Azure Hamed or later Gemini Sadaltager',
+          };
+          await writeFile('docs/editorial/how-touchscreens-work.validation.json', `${JSON.stringify(report, null, 2)}\n`);
+          NODE
+          git config user.name 'bareeq-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add docs/editorial/how-touchscreens-work.validation.json
+          git commit -m 'test: validate touchscreen article prepublication package'
+          git push origin HEAD:${{ github.ref_name }}
