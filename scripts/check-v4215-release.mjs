@@ -6,13 +6,14 @@ const ARTICLE_ID = 'why-some-passports-are-stronger';
 const ARTICLE_KEY = '34e34b6f4633d928';
 const BODY_HASH = '2b2999dba95bff5e6bfb8ff16d2848fa3b677ffe8f595a5b6166ca15ebf7d4c1';
 
-const [pkgText, lockText, article, reviewText, overridesText, rolloutText, workflow, header, css] = await Promise.all([
+const [pkgText, lockText, article, reviewText, overridesText, rolloutText, audioRunner, workflow, header, css] = await Promise.all([
   readFile('package.json', 'utf8'),
   readFile('package-lock.json', 'utf8'),
   readFile(`src/content/posts/${ARTICLE_ID}.md`, 'utf8'),
   readFile('scripts/speech-review.json', 'utf8'),
   readFile('scripts/speech-overrides.json', 'utf8'),
   readFile('scripts/cloud-tts-rollout.mjs', 'utf8'),
+  readFile('scripts/run-v4211-audio.mjs', 'utf8'),
   readFile('.github/workflows/generate-passport-audio.yml', 'utf8'),
   readFile('src/components/Header.astro', 'utf8'),
   readFile('src/styles/global.css', 'utf8'),
@@ -46,7 +47,10 @@ for (const token of ['prepare-v4215.mjs', 'check-v4215-release.mjs', 'run-v4211-
   if (!build.includes(token)) throw new Error(`V4.21.5 build pipeline is missing ${token}.`);
 }
 if (!build.includes('BAREEQ_GEMINI_FREE_ROLLOUT=0 BAREEQ_CLOUD_TTS_ACTIVATE=0 node scripts/run-v4211-audio.mjs')) {
-  throw new Error('Normal production build must restore approved audio only and must not synthesize Gemini/Cloud audio.');
+  throw new Error('Normal production build must keep Gemini free rollout and paid Google Cloud synthesis disabled.');
+}
+for (const token of ['RELEASE_CANDIDATE_PUBLISHED', 'BAREEQ_AZURE_HAMED_ONLY', "BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'", 'temporary Azure Hamed fallback']) {
+  if (!audioRunner.includes(token)) throw new Error(`V4.21.5 audio runner lost the guarded passport fallback token: ${token}`);
 }
 if (!pkg.scripts?.['audio:gemini:resume:prepare']?.includes('prepare-v4215-gemini-resume.mjs')) {
   throw new Error('V4.21.5 resumable Gemini preparation command is missing.');
@@ -100,4 +104,4 @@ for (const deferred of ['فكرة تبقى معك', 'بريق عملي', 'ميز
   if ([header, css].some((source) => source.includes(deferred))) throw new Error(`Paused layer returned: ${deferred}`);
 }
 
-console.log(`V4.21.5 release gate passed: package identity locked, V4.21.4 UX preserved, infographic deferred, ${live} live article(s), safe no-synthesis production build, resumable Gemini workflow, temporary Azure fallback compatibility, and passport audio publication guard are active.`);
+console.log(`V4.21.5 release gate passed: package identity locked, V4.21.4 UX preserved, infographic deferred, ${live} live article(s), Gemini/paid-Cloud synthesis disabled, one-article guarded Azure fallback, resumable Gemini workflow, temporary Azure fallback compatibility, and passport audio publication guard are active.`);
