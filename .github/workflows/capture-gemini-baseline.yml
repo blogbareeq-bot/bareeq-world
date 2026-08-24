@@ -1,0 +1,44 @@
+name: Capture approved Gemini audio baseline
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capture-gemini-baseline-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Capture and verify the approved Gemini recordings
+        run: |
+          node scripts/capture-bundled-gemini-audio.mjs
+          node scripts/import-bundled-gemini-audio.mjs
+
+      - name: Commit immutable baseline bundle
+        shell: bash
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/bundled-gemini-audio-map.json scripts/capture-bundled-gemini-audio.mjs scripts/import-bundled-gemini-audio.mjs
+          git add -f audio-releases/gemini-sadaltager-live-20260824/
+          git diff --cached --quiet && { echo 'Approved Gemini baseline is already current.'; exit 0; }
+          git commit -m 'audio: bundle approved Gemini Sadaltager baseline'
+          git push origin HEAD:${{ github.ref_name }}
