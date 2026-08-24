@@ -39,7 +39,7 @@ const cloudActivated = process.env.BAREEQ_CLOUD_TTS_ACTIVATE === '1';
 
 const pkg = JSON.parse(await readFile(path.join(ROOT, 'package.json'), 'utf8'));
 if (!['4.20.0', '4.21.0', '4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`Audio-dist audit expected package 4.20.0 baseline or supported 4.21.x successor, got ${pkg.version}.`);
-const freeGeminiRollout = ['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version) && process.env.BAREEQ_GEMINI_FREE_ROLLOUT !== '0';
+const freeGeminiRollout = ['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version);
 const audioArticleRoot = path.join(DIST, 'audio', 'articles');
 const temporaryAudioDirectories = (await readdir(audioArticleRoot, { withFileTypes: true }))
   .filter((entry) => entry.isDirectory() && /\.restore-\d+$/.test(entry.name))
