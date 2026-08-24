@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: verify-touchscreen-article-${{ github.event.pull_request.number || github.ref_name }}
@@ -49,8 +49,16 @@ jobs:
       - name: Verify locked article, speech plan, and Arabic QA
         shell: bash
         run: |
+          if grep -q '^draft: true$' src/content/posts/how-touchscreens-work.md; then
+            echo draft > /tmp/touchscreen-source-state
+          else
+            grep -q '^draft: false$' src/content/posts/how-touchscreens-work.md
+            echo published > /tmp/touchscreen-source-state
+          fi
           node scripts/apply-touchscreen-production.mjs
-          sed -i '0,/^draft: true$/s//draft: false/' src/content/posts/how-touchscreens-work.md
+          if [ "$(cat /tmp/touchscreen-source-state)" = draft ]; then
+            sed -i '0,/^draft: true$/s//draft: false/' src/content/posts/how-touchscreens-work.md
+          fi
           BAREEQ_TTS_PROVIDER=azure BAREEQ_AZURE_HAMED_ONLY=1 node scripts/generate-audio.mjs --sync-plan > /tmp/touchscreen-sync-all.json
           node scripts/check-arabic-speech.mjs
           node --input-type=module <<'NODE'
@@ -63,8 +71,12 @@ jobs:
           await writeFile('/tmp/touchscreen-plan.json', JSON.stringify({ parts: item.parts.length, syncBlocks: item.segments.length }, null, 2));
           console.log(`Touchscreen speech plan: ${item.parts.length} part(s), ${item.segments.length} sync block(s).`);
           NODE
-          git checkout -- src/content/posts/how-touchscreens-work.md scripts/speech-overrides.json scripts/speech-review.json
-          grep -q '^draft: true$' src/content/posts/how-touchscreens-work.md
+          git restore src/content/posts/how-touchscreens-work.md scripts/speech-overrides.json scripts/speech-review.json
+          if [ "$(cat /tmp/touchscreen-source-state)" = draft ]; then
+            grep -q '^draft: true$' src/content/posts/how-touchscreens-work.md
+          else
+            grep -q '^draft: false$' src/content/posts/how-touchscreens-work.md
+          fi
 
       - name: Generate and verify responsive article images
         shell: bash
@@ -91,32 +103,39 @@ jobs:
           console.log('Touchscreen visual assets verified: 1600x900 hero, responsive derivatives, 1200x630 social card.');
           NODE
 
-      - name: Run current production build with article still draft
+      - name: Run production build with article safely isolated as draft
         env:
           BAREEQ_GEMINI_FREE_ROLLOUT: "0"
           BAREEQ_CLOUD_TTS_ACTIVATE: "0"
-        run: npm run build
+        shell: bash
+        run: |
+          if grep -q '^draft: false$' src/content/posts/how-touchscreens-work.md; then
+            sed -i '0,/^draft: false$/s//draft: true/' src/content/posts/how-touchscreens-work.md
+          fi
+          npm run build
+          git restore src/content/posts/how-touchscreens-work.md
 
-      - name: Build validation report
+      - name: Print validation report
         shell: bash
         run: |
           git restore .
           git clean -fd dist public/images/generated public/images/thumbnails public/images/social || true
           node --input-type=module <<'NODE'
           import { createHash } from 'node:crypto';
-          import { readFile, writeFile } from 'node:fs/promises';
+          import { readFile } from 'node:fs/promises';
           const article = (await readFile('src/content/posts/how-touchscreens-work.md', 'utf8')).replace(/\r\n/g, '\n');
           const match = article.match(/^---\s*\n[\s\S]*?\n---\s*\n?([\s\S]*)$/);
           if (!match) throw new Error('Article parse failed after build.');
           const bodyHash = createHash('sha256').update(match[1].trim()).digest('hex');
           if (bodyHash !== 'ee0b9101dc6d37f9df4173aad732a993e884ecc1c2f062bba8ce3766f70c1208') throw new Error(`bodyHash drifted: ${bodyHash}`);
           const plan = JSON.parse(await readFile('/tmp/touchscreen-plan.json', 'utf8'));
+          const draft = /^draft:\s*true\s*$/mi.test(article);
           const report = {
             articleId: 'how-touchscreens-work',
-            status: 'PREPUBLICATION_VALIDATED',
+            status: draft ? 'PREPUBLICATION_VALIDATED' : 'PUBLICATION_SOURCE_VALIDATED',
             bodyHash,
             audioKey: 'de93f3d9f91c8b8b',
-            draftLocked: true,
+            draftLocked: draft,
             imageSource: 'public/images/posts/how-touchscreens-work.webp',
             imageDimensions: '1600x900',
             responsiveImageGeneration: 'passed',
@@ -124,19 +143,8 @@ jobs:
             speechPlanParts: plan.parts,
             syncBlocks: plan.syncBlocks,
             arabicSpeechQA: 'passed',
-            productionBuildWithDraftArticle: 'passed',
-            temporaryAudio: 'pending Azure Hamed or later Gemini Sadaltager'
+            productionBuildWithArticleSafelyIsolatedAsDraft: 'passed',
+            temporaryAudio: draft ? 'pending Azure Hamed or later Gemini Sadaltager' : 'queued for verified Azure Hamed generation in the Cloudflare production build'
           };
-          await writeFile('docs/editorial/how-touchscreens-work.validation.json', `${JSON.stringify(report, null, 2)}\n`);
+          console.log(JSON.stringify(report, null, 2));
           NODE
-
-      - name: Commit successful validation marker on branch pushes only
-        if: github.event_name != 'pull_request'
-        shell: bash
-        run: |
-          git config user.name 'bareeq-release-bot'
-          git config user.email 'actions@users.noreply.github.com'
-          git add docs/editorial/how-touchscreens-work.validation.json
-          git diff --cached --quiet && exit 0
-          git commit -m 'test: validate touchscreen article prepublication package'
-          git push origin HEAD:${{ github.ref_name }}

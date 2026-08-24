@@ -47,7 +47,7 @@ try {
 }
 const speechById = new Map(speech.map((article) => [article.id, article]));
 const liveIds = new Set(live.map((post) => post.id));
-const approvedPrepublicationReviews = new Set(['why-some-passports-are-stronger']);
+const approvedPrepublicationReviews = new Set(['why-some-passports-are-stronger', 'how-touchscreens-work']);
 for (const id of Object.keys(review.articles || {})) {
   if (!liveIds.has(id) && !approvedPrepublicationReviews.has(id)) failures.push(`${id}: orphan speech review entry.`);
 }

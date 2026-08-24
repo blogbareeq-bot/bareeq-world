@@ -1,7 +1,7 @@
 import { access, readFile, readdir } from 'node:fs/promises';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.20.0', '4.21.0', '4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`Expected package 4.20.0 baseline or supported patch successor, got ${pkg.version}`);
+if (!['4.20.0', '4.21.0', '4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5', '4.21.6'].includes(pkg.version)) throw new Error(`Expected package 4.20.0 baseline or supported patch successor, got ${pkg.version}`);
 
 for (const p of [
   'src/content/posts/ai-as-coworker-future-of-human-work.md',
@@ -23,7 +23,7 @@ for (const name of files) {
   const source = await readFile(`src/content/posts/${name}`, 'utf8');
   if (!/^draft:\s*true$/mi.test(source)) live += 1;
 }
-if (![13, 14].includes(live)) throw new Error(`V4.21.5 compatibility expects 13 or 14 live articles, got ${live}.`);
+if (![13, 14, 15].includes(live)) throw new Error(`V4.21.6 compatibility expects 13–15 live articles, got ${live}.`);
 
 const redirects = await readFile('public/_redirects', 'utf8');
 for (const target of ['altadakhom-explained-simply', 'language-soft-power-politics']) if (!redirects.includes(target)) throw new Error(`Missing canonical redirect target ${target}`);
@@ -52,4 +52,4 @@ if (runner.includes('BAREEQ_GEMINI_PILOT')) throw new Error('Legacy opt-in Gemin
 const build = pkg.scripts?.build || '';
 for (const token of ['prepare-v4200.mjs', 'check-v4200-release.mjs', 'check-production-voices-v4200.mjs', 'run-v4200-audio.mjs']) if (!build.includes(token)) throw new Error(`V4.20 build missing ${token}`);
 
-console.log(`V4.20.0 compatibility gate passed inside V4.21.5: ${live} live articles, coworker assets, SEO redirects, consent-aware Analytics, protected old audio, coworker cache → Gemini → Azure fallback.`);
+console.log(`V4.20.0 compatibility gate passed inside V4.21.6: ${live} live articles, coworker assets, SEO redirects, consent-aware Analytics, protected old audio, and cache → Gemini → Azure fallback.`);

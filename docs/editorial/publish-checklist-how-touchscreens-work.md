@@ -44,7 +44,9 @@
 - قواعد النطق الجاهزة: `docs/editorial/how-touchscreens-work.production.json`.
 - قبل التوليد تُدمج `speechOverrides` في `scripts/speech-overrides.json`.
 - قبل `draft:false` تُدمج `speechReview` في `scripts/speech-review.json` ويُسمح بالمراجعة قبل النشر إذا كان المقال سيولد وهو Draft.
-- الصوت المستهدف عند توفر الحصة: Google Gemini API / `gemini-3.1-flash-tts-preview` / Sadaltager / `ar`.
+- صوت النشر الحالي عند عدم توفر حصة Gemini: Microsoft Azure AI Speech / `ar-SA-HamedNeural` / `ar-SA`.
+- يبقى Gemini Sadaltager هدف الاستبدال اللاحق فقط؛ أي أجزاء مكتملة تُحفظ في Checkpoint ولا تُنشر جزئيًا.
+- لا يتوقف نشر المقال انتظارًا لتجدد الحصة: يُستخدم حامد مباشرة، ثم يُستبدل ذريًا بعد اكتمال Gemini كاملًا.
 - لا يُخلط مزودان داخل المقال نفسه.
 
 ## 5) بوابات ما قبل الصوت

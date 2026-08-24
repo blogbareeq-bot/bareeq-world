@@ -8,7 +8,7 @@ const EXPECTED_BODY_HASH = '2b2999dba95bff5e6bfb8ff16d2848fa3b677ffe8f595a5b6166
 const EXPECTED_AUDIO_KEY = '34e34b6f4633d928';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (pkg.version !== '4.21.5') throw new Error(`V4.21.5 preparation expected package 4.21.5, got ${pkg.version}.`);
+if (!['4.21.5', '4.21.6'].includes(pkg.version)) throw new Error(`V4.21.5 compatibility preparation expected package 4.21.5 or 4.21.6, got ${pkg.version}.`);
 
 async function patchFile(file, mutate) {
   const before = await readFile(file, 'utf8');
@@ -21,9 +21,9 @@ async function patchFile(file, mutate) {
 // Keep dependency graph unchanged but align package-lock release metadata.
 await patchFile('package-lock.json', (source) => {
   const lock = JSON.parse(source);
-  lock.version = '4.21.5';
+  lock.version = pkg.version;
   if (!lock.packages?.['']) throw new Error('V4.21.5 package-lock root metadata is missing.');
-  lock.packages[''].version = '4.21.5';
+  lock.packages[''].version = pkg.version;
   return JSON.stringify(lock, null, 2) + '\n';
 });
 
@@ -122,4 +122,4 @@ for (const entry of entries) {
   await rm(target, { recursive: true, force: true });
 }
 
-console.log(`V4.21.5 preparation passed: V4.21.4 UX preserved, infographic deferred, passport bodyHash/speech review locked, dependency metadata aligned, article ${isDraft ? 'remains draft' : manifestExists ? 'has production audio' : 'is queued for guarded production audio'}, and temporary audio output is clean.`);
+console.log(`V4.21.5 compatibility preparation passed under V${pkg.version}: V4.21.4 UX preserved, infographic deferred, passport bodyHash/speech review locked, dependency metadata aligned, article ${isDraft ? 'remains draft' : manifestExists ? 'has production audio' : 'is queued for guarded production audio'}, and temporary audio output is clean.`);

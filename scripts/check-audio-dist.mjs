@@ -38,8 +38,8 @@ const allowedSync = new Set(['paragraph-weighted', 'paragraph-weighted-legacy', 
 const cloudActivated = process.env.BAREEQ_CLOUD_TTS_ACTIVATE === '1';
 
 const pkg = JSON.parse(await readFile(path.join(ROOT, 'package.json'), 'utf8'));
-if (!['4.20.0', '4.21.0', '4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version)) throw new Error(`Audio-dist audit expected package 4.20.0 baseline or supported 4.21.x successor, got ${pkg.version}.`);
-const freeGeminiRollout = ['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5'].includes(pkg.version);
+if (!['4.20.0', '4.21.0', '4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5', '4.21.6'].includes(pkg.version)) throw new Error(`Audio-dist audit expected package 4.20.0 baseline or supported 4.21.x successor, got ${pkg.version}.`);
+const freeGeminiRollout = ['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5', '4.21.6'].includes(pkg.version);
 const audioArticleRoot = path.join(DIST, 'audio', 'articles');
 const temporaryAudioDirectories = (await readdir(audioArticleRoot, { withFileTypes: true }))
   .filter((entry) => entry.isDirectory() && /\.restore-\d+$/.test(entry.name))
@@ -52,7 +52,7 @@ for (const name of postFiles) {
   const source = await readFile(path.join(POSTS, name), 'utf8');
   if (!/^draft:\s*true\s*$/mi.test(source)) published.push(name.replace(/\.md$/, ''));
 }
-if (![13, 14].includes(published.length)) throw new Error(`V4.21.5 audio-dist audit expected 13 RC or 14 published articles, found ${published.length}.`);
+if (![13, 14, 15].includes(published.length)) throw new Error(`V4.21.6 audio-dist audit expected 13–15 published articles across supported release states, found ${published.length}.`);
 if (!published.includes(NEW_ARTICLE)) throw new Error('V4.20 coworker article is missing from the published set.');
 
 let checkedArticles = 0;
@@ -212,7 +212,7 @@ for (const id of published) {
   checkedArticles += 1;
 }
 
-if (checkedArticles !== published.length) throw new Error(`V4.21.5 audio-dist audit expected ${published.length} complete audio articles, checked ${checkedArticles}.`);
+if (checkedArticles !== published.length) throw new Error(`V4.21.6 audio-dist audit expected ${published.length} complete audio articles, checked ${checkedArticles}.`);
 if (cloudActivated && (providerCounts.get('Cloud TTS Sadaltager') !== PENDING_CLOUD.length || providerCounts.get('Gemini Sadaltager') !== RETAINED_GEMINI.length)) throw new Error(`Activated rollout must publish exactly ${PENDING_CLOUD.length} Cloud TTS + ${RETAINED_GEMINI.length} retained Gemini articles.`);
 
 const textFiles = [];
@@ -246,4 +246,4 @@ for (const file of textFiles) {
 }
 
 const summary = [...providerCounts.entries()].map(([name, count]) => `${name}=${count}`).join(', ');
-console.log(`V4.21.5 mixed production audio audit passed: ${checkedArticles}/${published.length} articles, ${totalParts} synchronized parts, ${totalFiles} verified MP3 files; ${summary}; lazy provider metadata and no secret leakage.`);
+console.log(`V4.21.6 mixed production audio audit passed: ${checkedArticles}/${published.length} articles, ${totalParts} synchronized parts, ${totalFiles} verified MP3 files; ${summary}; lazy provider metadata and no secret leakage.`);

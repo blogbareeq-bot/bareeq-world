@@ -3,7 +3,7 @@ import { readdirSync, rmSync } from 'node:fs';
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { PENDING_CLOUD, RELEASE_CANDIDATE_ARTICLE, RELEASE_CANDIDATE_PUBLISHED, RETAINED_GEMINI } from './cloud-tts-rollout.mjs';
+import { PENDING_CLOUD, RETAINED_GEMINI, TEMPORARY_HAMED_ARTICLES } from './cloud-tts-rollout.mjs';
 
 const NODE = process.execPath;
 const LEGACY_HAMED_CACHE = [
@@ -42,6 +42,9 @@ function cleanTemporaryAudioRestores() {
 // site. The exit hook is synchronous, so it also covers deliberate early exits
 // (for example when the Gemini key is intentionally absent).
 process.on('exit', cleanTemporaryAudioRestores);
+// A cancelled CI job cannot run its exit hook. Remove any orphaned atomic
+// restore directory before the next build starts so it cannot leak into dist.
+cleanTemporaryAudioRestores();
 
 function runStrict(script, args = [], env = {}) {
   const result = spawnSync(NODE, [script, ...args], {
@@ -145,33 +148,34 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
     });
   }
 
-  // V4.21.5 temporary publication policy:
-  // keep a complete Sadaltager recording when one exists; otherwise restore or
-  // synthesize Azure Hamed for the passport article only. This leaves the manual
-  // Gemini checkpoint branch free to resume and replace Hamed atomically later.
-  if (RELEASE_CANDIDATE_PUBLISHED && !await hasCompleteVoice(RELEASE_CANDIDATE_ARTICLE, {
-    provider: 'Google Gemini API',
-    model: 'gemini-3.1-flash-tts-preview',
-    language: 'ar',
-    voiceId: 'sadaltager',
-  })) {
-    console.warn(`⚠ V4.21.5 passport Sadaltager is incomplete. Restoring or generating the temporary Azure Hamed fallback for ${RELEASE_CANDIDATE_ARTICLE} only.`);
+  // V4.21.6 publication policy: a new article never waits for Gemini quota.
+  // Keep complete Sadaltager when available; otherwise restore or generate the
+  // approved Azure Hamed fallback immediately. Any Gemini checkpoint remains
+  // independent and can replace Hamed only after the full article is complete.
+  for (const articleId of TEMPORARY_HAMED_ARTICLES) {
+    if (await hasCompleteVoice(articleId, {
+      provider: 'Google Gemini API',
+      model: 'gemini-3.1-flash-tts-preview',
+      language: 'ar',
+      voiceId: 'sadaltager',
+    })) continue;
+    console.warn(`⚠ Gemini Sadaltager is unavailable or incomplete for ${articleId}. Restoring or generating the approved Azure Hamed fallback immediately.`);
     runStrict('scripts/generate-audio.mjs', [], {
       BAREEQ_TTS_PROVIDER: 'azure',
       BAREEQ_AZURE_HAMED_ONLY: '1',
       BAREEQ_TTS_CACHE_ONLY: '',
       BAREEQ_TTS_CACHE_ALLOW_MISSING: '',
-      BAREEQ_TTS_INCLUDE_IDS: RELEASE_CANDIDATE_ARTICLE,
+      BAREEQ_TTS_INCLUDE_IDS: articleId,
       BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1',
       BAREEQ_AUDIO_ALLOW_PARTIAL: '',
     });
-    if (!await hasCompleteVoice(RELEASE_CANDIDATE_ARTICLE, {
+    if (!await hasCompleteVoice(articleId, {
       provider: 'Microsoft Azure AI Speech',
       model: 'Neural TTS',
       language: 'ar-SA',
       voiceId: 'hamed',
-    })) throw new Error('V4.21.5 audio safety stop: the passport article has neither complete Sadaltager nor complete Hamed audio.');
-    console.log('✓ V4.21.5 passport article audio ready with the temporary Azure Hamed fallback.');
+    })) throw new Error(`V4.21.6 audio safety stop: ${articleId} has neither complete Sadaltager nor complete Hamed audio.`);
+    console.log(`✓ ${articleId}: production audio ready with the approved Azure Hamed fallback.`);
   }
 
   await assertCompleteBaseline('fallback baseline');

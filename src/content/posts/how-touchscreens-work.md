@@ -1,12 +1,12 @@
 ---
 title: "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟"
 description: "كيف تعرف شاشة هاتفك مكان إصبعك من دون زر أو ضغط ميكانيكي؟ رحلة مبسطة داخل شبكة الاستشعار السعوية التي تحول اللمسة إلى إحداثيات وأوامر رقمية."
-publishedAt: "2026-08-24T12:00:00.000Z"
+publishedAt: "2026-08-24T16:14:41.000Z"
 category: "ببساطة…"
 categorySlug: "simply"
 seriesSlug: "technology-simply"
 featured: false
-draft: true
+draft: false
 author: "فريق بريق"
 tags: ["تقنية", "فيزياء"]
 image: "/images/posts/how-touchscreens-work.webp"
