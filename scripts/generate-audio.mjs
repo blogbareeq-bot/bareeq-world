@@ -109,7 +109,12 @@ const OPENAI_ARABIC_CHARS_PER_TEXT_TOKEN = Number(process.env.OPENAI_TTS_ARABIC_
 const OPENAI_AUDIO_TOKENS_PER_SECOND = Number(process.env.OPENAI_TTS_AUDIO_TOKENS_PER_SECOND || '50');
 const FFMPEG_PATH = process.env.FFMPEG_PATH?.trim() || ffmpegInstaller?.path || 'ffmpeg';
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
-const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
+const configuredCacheOrigin = process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '');
+const CACHE_ORIGINS = configuredCacheOrigin
+  ? [configuredCacheOrigin]
+  : CONTRACT_TEST
+    ? []
+    : ['https://bareeqworld.com', 'https://bareeq-world.pages.dev'];
 const USER_AGENT = 'Bareeq-Audio-Builder/4.21.1';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
@@ -875,7 +880,7 @@ function manifestAssets(manifest, post) {
     if (!Array.isArray(part?.sync) || !part.audio || typeof part.audio !== 'object') return null;
     for (const voice of effectiveManifestVoices) {
       const asset = part.audio[voice.id];
-      if (typeof asset?.src !== 'string' || !asset.src.startsWith(`/audio/articles/${post.key}/`) || !asset.src.endsWith('.mp3') || !(asset.bytes >= 100) || !(asset.durationSeconds > 0) || paths.has(asset.src)) return null;
+      if (typeof asset?.src !== 'string' || !asset.src.startsWith(`/audio/articles/${post.key}/`) || !asset.src.endsWith('.mp3') || !(asset.bytes >= 100) || !(asset.durationSeconds > 0) || !/^[a-f0-9]{64}$/.test(asset.sha256 || '') || paths.has(asset.src)) return null;
       paths.add(asset.src);
       assets.push(asset);
     }
@@ -896,8 +901,8 @@ async function hasCompleteCache(post) {
   } catch { return false; }
 }
 
-async function restoreFromProduction(post) {
-  const manifestUrl = `${CACHE_ORIGIN}/audio/articles/${post.key}/manifest.json`;
+async function restoreFromProductionOrigin(post, cacheOrigin) {
+  const manifestUrl = `${cacheOrigin}/audio/articles/${post.key}/manifest.json`;
   let response;
   try { response = await fetch(manifestUrl, { headers: { 'User-Agent': USER_AGENT } }); }
   catch { return false; }
@@ -914,7 +919,9 @@ async function restoreFromProduction(post) {
   await mkdir(tempDir, { recursive: true });
   try {
     for (const asset of assets) {
-      const bytes = await requestBinary(`${CACHE_ORIGIN}${asset.src}`, { headers: { 'User-Agent': USER_AGENT } }, { label: 'Production audio cache download' });
+      const bytes = await requestBinary(`${cacheOrigin}${asset.src}`, { headers: { 'User-Agent': USER_AGENT } }, { label: 'Production audio cache download' });
+      if (bytes.length !== asset.bytes) throw new Error(`Cached MP3 byte-length mismatch: ${asset.src}`);
+      if (sha(bytes) !== asset.sha256) throw new Error(`Cached MP3 SHA-256 mismatch: ${asset.src}`);
       const duration = mp3DurationSeconds(bytes);
       if (Math.abs(duration - asset.durationSeconds) > 2) throw new Error(`Cached MP3 duration mismatch: ${asset.src}`);
       await writeFile(path.join(tempDir, path.basename(asset.src)), bytes);
@@ -927,6 +934,13 @@ async function restoreFromProduction(post) {
     await rm(tempDir, { recursive: true, force: true });
     return false;
   }
+}
+
+async function restoreFromProduction(post) {
+  for (const cacheOrigin of CACHE_ORIGINS) {
+    if (await restoreFromProductionOrigin(post, cacheOrigin)) return true;
+  }
+  return false;
 }
 
 function estimateOpenAiCost(characters, requestCount) {
@@ -1093,8 +1107,8 @@ if (PROVIDER !== 'google-cloud' && !API_KEY && missing.length) {
     console.warn(`⚠ Offline pilot mode: preserving imported fallback audio and skipping ${missing.length} unavailable synthesis article(s). This mode is for local release verification only.`);
     process.exit(0);
   }
-  if (PROVIDER === 'gemini') throw new Error(`GEMINI_API_KEY is required to generate Sadaltager for ${missing.length} new or changed article(s). Existing unchanged Gemini audio is restored automatically from ${CACHE_ORIGIN}. Create the key in Google AI Studio and add it as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
-  if (PROVIDER === 'openai') throw new Error(`OPENAI_API_KEY is required to generate Cedar and Marin for ${missing.length} new or changed article(s). Existing unchanged OpenAI audio is restored automatically from ${CACHE_ORIGIN}. Add OPENAI_API_KEY as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
+  if (PROVIDER === 'gemini') throw new Error(`GEMINI_API_KEY is required to generate Sadaltager for ${missing.length} new or changed article(s). Existing unchanged Gemini audio is restored automatically from ${CACHE_ORIGINS.join(' or ')}. Create the key in Google AI Studio and add it as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
+  if (PROVIDER === 'openai') throw new Error(`OPENAI_API_KEY is required to generate Cedar and Marin for ${missing.length} new or changed article(s). Existing unchanged OpenAI audio is restored automatically from ${CACHE_ORIGINS.join(' or ')}. Add OPENAI_API_KEY as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
   throw new Error(`AZURE_SPEECH_KEY is required to generate Hamed and Zariyah for ${missing.length} new or changed article(s). Add it as an encrypted Production Secret in Cloudflare Pages, or redeploy the previous release for an immediate rollback.`);
 }
 
