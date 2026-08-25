@@ -1,0 +1,188 @@
+name: Fahed Kuwait speech pilot
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fahed-kuwait-pilot-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  test-clip:
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'audio/fahed-pilot-v4220'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      ARTICLE_ID: how-touchscreens-work
+      VOICE_ID: fahed
+      AZURE_VOICE: ar-KW-FahedNeural
+      AZURE_LANGUAGE: ar-KW
+      OUTPUT_DIR: pilot/fahed
+      OUTPUT_MP3: pilot/fahed/how-touchscreens-work-test-clip.mp3
+      OUTPUT_META: pilot/fahed/how-touchscreens-work-test-clip.json
+      AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+      AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+
+    steps:
+      - name: Checkout pilot branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Verify reviewed Arabic Speech Scripts
+        run: |
+          node scripts/test-speech-script-quality-gate.mjs
+          node scripts/check-speech-scripts.mjs
+
+      - name: Verify touchscreen test-clip plan is still pending
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const article = JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json', 'utf8'));
+          const plan = JSON.parse(await readFile('scripts/speech-test-clips/how-touchscreens-work.json', 'utf8'));
+          if (article.articleId !== process.env.ARTICLE_ID) throw new Error('Speech Script articleId mismatch.');
+          if (!article.status?.includes('pronunciation-review-passed')) throw new Error(`Speech Script is not linguistically/pronunciation approved: ${article.status}`);
+          if (plan.articleId !== process.env.ARTICLE_ID) throw new Error('Test-clip articleId mismatch.');
+          if (plan.speechScriptHash !== 'dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0') throw new Error('Unexpected/stale pilot Speech Script hash.');
+          if (!Array.isArray(plan.selectedSegments) || plan.selectedSegments.length < 1) throw new Error('No test-clip segments selected.');
+          console.log(`Pilot plan ready: ${plan.selectedSegments.length} reviewed segment(s), expected ${plan.expectedDurationSeconds}s.`);
+          NODE
+
+      - name: Verify Azure Speech credential
+        run: |
+          if [ -z "$AZURE_SPEECH_KEY" ]; then
+            echo "::error::AZURE_SPEECH_KEY repository secret is unavailable. Add the key for the existing bareeq-speech Azure Speech resource as a GitHub Actions repository secret; do not paste it into source code."
+            exit 2
+          fi
+          echo "Azure Speech key is available to Actions. Region will default to eastus when AZURE_SPEECH_REGION is not set."
+
+      - name: Generate article-specific Fahed test clip
+        id: synthesize
+        run: |
+          mkdir -p "$OUTPUT_DIR"
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile, writeFile } from 'node:fs/promises';
+
+          const article = JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json', 'utf8'));
+          const plan = JSON.parse(await readFile('scripts/speech-test-clips/how-touchscreens-work.json', 'utf8'));
+          const byId = new Map(article.segments.map((segment) => [segment.segmentId, segment]));
+          const selected = plan.selectedSegments.map((item) => {
+            const segment = byId.get(item.segmentId);
+            if (!segment?.spokenText) throw new Error(`Selected segment is missing from reviewed Speech Script: ${item.segmentId}`);
+            return { ...item, type: segment.type, spokenText: segment.spokenText };
+          });
+
+          const escapeXml = (value) => String(value)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&apos;');
+
+          const paragraphs = selected.map((segment, index) => {
+            const before = index === 0 ? '' : '<break time="220ms"/>';
+            const after = segment.type === 'title' || /^h\d$/.test(segment.type) ? '<break time="320ms"/>' : '<break time="180ms"/>';
+            return `<p>${before}<prosody rate="0%">${escapeXml(segment.spokenText)}</prosody>${after}</p>`;
+          }).join('');
+
+          const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${process.env.AZURE_LANGUAGE}"><voice name="${process.env.AZURE_VOICE}">${paragraphs}</voice></speak>`;
+          const region = (process.env.AZURE_SPEECH_REGION || 'eastus').trim().toLowerCase();
+          const url = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`;
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Ocp-Apim-Subscription-Key': process.env.AZURE_SPEECH_KEY,
+              'Content-Type': 'application/ssml+xml',
+              'X-Microsoft-OutputFormat': 'audio-48khz-96kbitrate-mono-mp3',
+              'User-Agent': 'Bareeq-Fahed-Pilot/4.22.0',
+            },
+            body: ssml,
+          });
+          if (!response.ok) {
+            const detail = (await response.text()).slice(0, 1000);
+            throw new Error(`Azure Speech synthesis failed (${response.status} ${response.statusText}): ${detail}`);
+          }
+
+          const bytes = Buffer.from(await response.arrayBuffer());
+          if (bytes.length < 1000) throw new Error(`Azure returned an implausibly small MP3 (${bytes.length} bytes).`);
+          const sha256 = createHash('sha256').update(bytes).digest('hex');
+          await writeFile(process.env.OUTPUT_MP3, bytes);
+          const metadata = {
+            version: 1,
+            purpose: 'article-specific listening gate before full-article synthesis',
+            articleId: process.env.ARTICLE_ID,
+            voiceId: process.env.VOICE_ID,
+            provider: 'Microsoft Azure AI Speech',
+            providerVoice: process.env.AZURE_VOICE,
+            language: process.env.AZURE_LANGUAGE,
+            speechScriptHash: plan.speechScriptHash,
+            planHash: plan.planHash,
+            selectedSegments: selected.map(({ segmentId, type, challenges }) => ({ segmentId, type, challenges })),
+            outputFormat: 'audio-48khz-96kbitrate-mono-mp3',
+            synthesisRate: '0%',
+            bytes: bytes.length,
+            sha256,
+            generatedAt: new Date().toISOString(),
+            reviewStatus: 'awaiting-human-listening-review',
+          };
+          await writeFile(process.env.OUTPUT_META, `${JSON.stringify(metadata, null, 2)}\n`);
+          console.log(`Fahed test clip generated: ${bytes.length} bytes, SHA-256 ${sha256}.`);
+          NODE
+
+      - name: Validate generated pilot files
+        run: |
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile, stat } from 'node:fs/promises';
+          const meta = JSON.parse(await readFile(process.env.OUTPUT_META, 'utf8'));
+          const info = await stat(process.env.OUTPUT_MP3);
+          const bytes = await readFile(process.env.OUTPUT_MP3);
+          if (!info.isFile() || info.size < 1000) throw new Error('Pilot MP3 is missing or empty.');
+          if (meta.providerVoice !== 'ar-KW-FahedNeural' || meta.language !== 'ar-KW') throw new Error('Fahed Kuwait voice contract mismatch.');
+          if (meta.reviewStatus !== 'awaiting-human-listening-review') throw new Error('Pilot must remain unapproved until it is listened to.');
+          if (meta.bytes !== bytes.length) throw new Error('Pilot metadata byte count mismatch.');
+          if (meta.sha256 !== createHash('sha256').update(bytes).digest('hex')) throw new Error('Pilot SHA-256 mismatch.');
+          console.log(`Validated ${process.env.OUTPUT_MP3}: ${bytes.length} bytes.`);
+          NODE
+
+      - name: Upload listening-review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fahed-kuwait-touchscreen-test-clip
+          path: |
+            pilot/fahed/how-touchscreens-work-test-clip.mp3
+            pilot/fahed/how-touchscreens-work-test-clip.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Commit pilot clip to isolated branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -f "$OUTPUT_MP3" "$OUTPUT_META"
+          if git diff --cached --quiet; then
+            echo "Pilot files are already committed."
+            exit 0
+          fi
+          git commit -m 'audio: add Fahed Kuwait touchscreen listening pilot'
+          git push origin HEAD:${{ github.head_ref }}
+
+      - name: Stop before full synthesis
+        run: |
+          echo "Test clip created only. Full-article synthesis remains blocked until an actual listening review is recorded and the quality gate is explicitly approved."
