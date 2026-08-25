@@ -1,0 +1,21 @@
+{
+  "schema": "bareeq.gemini-pronunciation-sample.v1",
+  "articleId": "how-touchscreens-work",
+  "segmentId": "quote-7b1d6e9dad57",
+  "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+  "transcriptHash": "c6ed2afe935ca3c8437e4729622bcf83e3a846a0779b6ffcf0b0fa6799f00675",
+  "promptHash": "1ea44fb0698537a53c5945629546501ce9592f9f4c979cc6575b0be4e4f0b29c",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "voice": "Sadaltager",
+  "language": "ar",
+  "focusWord": "بِبَسَاطَة",
+  "rejectedReading": "بِبَسَاط",
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "bytes": 286029,
+  "durationSeconds": 23.832,
+  "sha256": "f35a025c9ed5ba1bbdf5d6a7dbc48b58a29c29be620c84b308dff70762f91684",
+  "generatedAt": "2026-08-25T15:36:22.351Z",
+  "listeningReview": "pending"
+}
