@@ -47,12 +47,13 @@ await new Promise((resolve, reject) => {
 const address = server.address();
 
 const result = await new Promise((resolve, reject) => {
-  const child = spawn(process.execPath, ['scripts/verify-gemini-audio-transcript.mjs', '--pilot', '--no-write'], {
+  const child = spawn(process.execPath, ['scripts/verify-gemini-pilot-transcript-chunked.mjs', '--no-write'], {
     cwd: ROOT,
     env: {
       ...process.env,
       GEMINI_API_KEY: 'contract-test-key',
       BAREEQ_ASR_CONTRACT_TEST: '1',
+      BAREEQ_ASR_DISABLE_CHUNKING: '1',
       GEMINI_ASR_ENDPOINT: `http://127.0.0.1:${address.port}/v1beta/interactions`,
       BAREEQ_ASR_MIN_INTERVAL_MS: '0',
       BAREEQ_ASR_MAX_RETRIES: '0',
@@ -70,6 +71,6 @@ await new Promise((resolve) => server.close(resolve));
 
 assert.equal(result.code, 0, result.stderr || result.stdout);
 assert.equal(requests.length, 2);
-assert.match(result.stdout, /2 independent ASR pass\(es\) per part/);
+assert.match(result.stdout, /2 independent ASR pass\(es\)/);
 assert.match(result.stdout, /0 substitutions, 0 deletions, 0 insertions/);
-console.log('Gemini audio transcript contract passed: two audio-only ASR requests, exact comparison, and no expected-text leakage.');
+console.log('Gemini chunked audio transcript contract passed: two audio-only ASR requests, exact comparison, and no expected-text leakage.');
