@@ -1,6 +1,9 @@
 name: Fahed Kuwait speech pilot
 
 on:
+  push:
+    branches:
+      - audio/fahed-pilot-v4220
   pull_request:
     branches:
       - main
@@ -16,7 +19,7 @@ concurrency:
 
 jobs:
   test-clip:
-    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'audio/fahed-pilot-v4220'
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'audio/fahed-pilot-v4220' || github.ref_name == 'audio/fahed-pilot-v4220'
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -62,7 +65,30 @@ jobs:
           console.log(`Pilot plan ready: ${plan.selectedSegments.length} reviewed segment(s), expected ${plan.expectedDurationSeconds}s.`);
           NODE
 
+      - name: Check for an already generated matching pilot
+        id: existing
+        run: |
+          node --input-type=module <<'NODE'
+          import { appendFile, readFile } from 'node:fs/promises';
+          import { existsSync } from 'node:fs';
+          let reusable = false;
+          if (existsSync(process.env.OUTPUT_MP3) && existsSync(process.env.OUTPUT_META)) {
+            try {
+              const plan = JSON.parse(await readFile('scripts/speech-test-clips/how-touchscreens-work.json', 'utf8'));
+              const meta = JSON.parse(await readFile(process.env.OUTPUT_META, 'utf8'));
+              reusable = meta.providerVoice === process.env.AZURE_VOICE
+                && meta.language === process.env.AZURE_LANGUAGE
+                && meta.speechScriptHash === plan.speechScriptHash
+                && meta.planHash === plan.planHash
+                && meta.reviewStatus === 'awaiting-human-listening-review';
+            } catch { reusable = false; }
+          }
+          await appendFile(process.env.GITHUB_OUTPUT, `reusable=${reusable}\n`);
+          console.log(reusable ? 'Matching pilot already exists; no Azure request will be sent.' : 'No matching pilot exists; one Azure request is required.');
+          NODE
+
       - name: Verify Azure Speech credential
+        if: steps.existing.outputs.reusable != 'true'
         run: |
           if [ -z "$AZURE_SPEECH_KEY" ]; then
             echo "::error::AZURE_SPEECH_KEY repository secret is unavailable. Add the key for the existing bareeq-speech Azure Speech resource as a GitHub Actions repository secret; do not paste it into source code."
@@ -71,6 +97,7 @@ jobs:
           echo "Azure Speech key is available to Actions. Region will default to eastus when AZURE_SPEECH_REGION is not set."
 
       - name: Generate article-specific Fahed test clip
+        if: steps.existing.outputs.reusable != 'true'
         id: synthesize
         run: |
           mkdir -p "$OUTPUT_DIR"
@@ -144,7 +171,7 @@ jobs:
           console.log(`Fahed test clip generated: ${bytes.length} bytes, SHA-256 ${sha256}.`);
           NODE
 
-      - name: Validate generated pilot files
+      - name: Validate pilot files
         run: |
           node --input-type=module <<'NODE'
           import { createHash } from 'node:crypto';
@@ -170,19 +197,24 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Commit pilot clip to isolated branch
-        if: github.event_name == 'pull_request'
+      - name: Commit newly generated pilot to isolated branch
+        if: steps.existing.outputs.reusable != 'true' && (github.event_name == 'pull_request' || github.event_name == 'push')
         run: |
           git config user.name 'bareeq-audio-bot'
           git config user.email 'actions@users.noreply.github.com'
           git add -f "$OUTPUT_MP3" "$OUTPUT_META"
           if git diff --cached --quiet; then
-            echo "Pilot files are already committed."
+            echo "No new pilot files to commit."
             exit 0
           fi
           git commit -m 'audio: add Fahed Kuwait touchscreen listening pilot'
-          git push origin HEAD:${{ github.head_ref }}
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            target='${{ github.head_ref }}'
+          else
+            target="$GITHUB_REF_NAME"
+          fi
+          git push origin HEAD:"$target"
 
       - name: Stop before full synthesis
         run: |
-          echo "Test clip created only. Full-article synthesis remains blocked until an actual listening review is recorded and the quality gate is explicitly approved."
+          echo "Test clip only. Full-article synthesis remains blocked until an actual listening review is recorded and the quality gate is explicitly approved."
