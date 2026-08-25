@@ -17,19 +17,35 @@ export function testBypassAllowed(env = process.env) {
 export function evaluateSynthesisReadiness(post) {
   const validation = post?.speechApproval?.validation;
   const plan = post?.speechApproval?.testClipPlan;
-  const audioEvidencePassed = plan?.audioReview?.status === 'passed'
+  const manualEvidencePassed = plan?.audioReview?.status === 'passed'
     && Boolean(plan.audioReview.evidence)
     && Boolean(plan.audioReview.reviewedBy)
     && Boolean(plan.audioReview.reviewedAt)
     && post?.speechApproval?.testClipEvidenceVerified === true;
+  const automated = plan?.automatedReview;
+  const automatedEvidencePassed = automated?.status === 'passed'
+    && automated?.method === 'blind-multi-engine-token-consensus-v1'
+    && Boolean(automated.reviewedAt)
+    && Boolean(automated.reviewer)
+    && typeof automated?.evidence?.file === 'string'
+    && /^[a-f0-9]{64}$/iu.test(automated?.evidence?.sha256 ?? '')
+    && /^[a-f0-9]{64}$/iu.test(automated?.evidence?.audioSha256 ?? '')
+    && automated?.evidence?.expectedWordCount === 160
+    && automated?.evidence?.wordErrorCount === 0
+    && automated?.evidence?.substitutions === 0
+    && automated?.evidence?.deletions === 0
+    && automated?.evidence?.insertions === 0
+    && automated?.evidence?.engineCount >= 4
+    && automated?.evidence?.minimumVotesPerToken >= 2;
+  const audioEvidencePassed = manualEvidencePassed || automatedEvidencePassed;
   const reasons = [];
   if (!validation?.approved) reasons.push('Speech Script is missing, stale, ambiguous, or not fully linguistically/pronunciation reviewed');
   if (!plan) reasons.push('test clip plan is missing');
   if (plan && plan.speechScriptHash !== post?.speechApproval?.script?.scriptHash) reasons.push('test clip plan targets a stale Speech Script hash');
   if (!plan?.testClipPassed) reasons.push('test clip is not passed');
-  if (!audioEvidencePassed) reasons.push('test clip has no actual listening-review evidence');
+  if (!audioEvidencePassed) reasons.push('test clip has neither verified manual listening evidence nor strict multi-engine automated evidence');
   if (!plan?.fullSynthesisAllowed) reasons.push('full synthesis is not explicitly allowed');
-  return { allowed: reasons.length === 0, reasons, audioEvidencePassed };
+  return { allowed: reasons.length === 0, reasons, audioEvidencePassed, manualEvidencePassed, automatedEvidencePassed };
 }
 
 export function assertSynthesisAllowed(posts, env = process.env) {
