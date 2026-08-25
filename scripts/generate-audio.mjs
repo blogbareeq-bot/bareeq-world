@@ -1004,7 +1004,8 @@ if (SPEECH_QA_JSON) {
     id: post.id,
     title: post.title,
     segments: post.segments.map(({ id, type, visibleText, spokenText }) => ({ id, type, visibleText, spokenText })),
-    spokenText: post.spokenText
+    spokenText: post.spokenText,
+    audioParts: post.audioParts.map(({ text, sync }) => ({ text, sync })),
   })), null, 2) + '\n';
   if (SPEECH_QA_OUTPUT) await writeFile(path.resolve(ROOT, SPEECH_QA_OUTPUT), payload);
   else await writeStdout(payload);

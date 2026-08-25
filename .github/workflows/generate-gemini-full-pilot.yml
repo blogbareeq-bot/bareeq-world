@@ -1,0 +1,151 @@
+name: Generate and verify full Gemini pilot article
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/generate-gemini-full-pilot.yml
+      - scripts/speech-test-clips/how-touchscreens-work.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemini-full-pilot-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  generate-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Check exact listening and transcript approval
+        id: approval
+        run: |
+          node scripts/check-speech-scripts.mjs
+          node --input-type=module <<'NODE'
+          import { appendFile, readFile } from 'node:fs/promises';
+          const plan = JSON.parse(await readFile('scripts/speech-test-clips/how-touchscreens-work.json', 'utf8'));
+          const approved = Boolean(
+            plan.testClipPassed
+            && plan.fullSynthesisAllowed
+            && plan.audioReview?.status === 'passed'
+            && plan.audioReview?.evidence?.wordErrorCount === 0
+            && plan.audioReview?.evidence?.automatedTranscriptReportSha256
+          );
+          await appendFile(process.env.GITHUB_OUTPUT, `approved=${approved}\n`, 'utf8');
+          console.log(approved
+            ? 'Manual listening and two-pass automated transcript evidence are approved.'
+            : 'Full Gemini synthesis remains blocked until both approvals pass.');
+          NODE
+
+      - name: Require encrypted Gemini credential
+        if: steps.approval.outputs.approved == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::GEMINI_API_KEY repository secret is unavailable."
+            exit 2
+          fi
+
+      - name: Plan exactly one full article without provider access
+        if: steps.approval.outputs.approved == 'true'
+        env:
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+        run: node scripts/generate-audio.mjs --plan
+
+      - name: Generate complete Sadaltager article atomically
+        if: steps.approval.outputs.approved == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: "1"
+          BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD: "20"
+          BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS: "1200000"
+          GEMINI_TTS_MIN_INTERVAL_MS: "9000"
+        run: node scripts/generate-audio.mjs
+
+      - name: Transcribe every MP3 twice and require zero word errors
+        if: steps.approval.outputs.approved == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_ASR_MIN_INTERVAL_MS: "2000"
+        run: node scripts/verify-gemini-audio-transcript.mjs --article=how-touchscreens-work
+
+      - name: Validate verified manifest and every MP3
+        if: steps.approval.outputs.approved == 'true'
+        run: |
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile, stat } from 'node:fs/promises';
+          import path from 'node:path';
+          import { mp3DurationSeconds } from './scripts/mp3-duration.mjs';
+
+          const root = 'public/audio/articles/de93f3d9f91c8b8b';
+          const manifest = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
+          if (manifest.articleId !== 'how-touchscreens-work' || manifest.provider !== 'Google Gemini API' || manifest.model !== 'gemini-3.1-flash-tts-preview') throw new Error('Gemini full-pilot manifest identity mismatch.');
+          if (manifest.language !== 'ar' || manifest.defaultVoice !== 'sadaltager') throw new Error('Gemini full-pilot locale/voice mismatch.');
+          if (manifest.voices?.length !== 1 || manifest.voices[0]?.providerVoice !== 'Sadaltager') throw new Error('Gemini full-pilot voice contract mismatch.');
+          const review = manifest.automatedTranscriptReview;
+          if (review?.status !== 'passed' || review.transcriptionPassesPerPart !== 2 || review.wordErrorCountAcrossAllPasses !== 0 || review.substitutions !== 0 || review.deletions !== 0 || review.insertions !== 0) throw new Error('Gemini full-pilot transcript gate did not pass at zero errors.');
+          let totalDuration = 0;
+          for (const part of manifest.parts ?? []) {
+            const asset = part.audio?.sadaltager;
+            if (!asset?.src || !(asset.bytes > 100) || !(asset.durationSeconds > 0)) throw new Error('Gemini full-pilot has an invalid part asset.');
+            const file = path.join('public', asset.src.replace(/^\//u, ''));
+            const info = await stat(file);
+            const bytes = await readFile(file);
+            if (info.size !== asset.bytes || createHash('sha256').update(bytes).digest('hex') !== asset.sha256) throw new Error(`Gemini full-pilot integrity mismatch: ${asset.src}`);
+            const measured = mp3DurationSeconds(bytes);
+            if (Math.abs(measured - asset.durationSeconds) > 0.1) throw new Error(`Gemini full-pilot duration mismatch: ${asset.src}`);
+            totalDuration += measured;
+          }
+          if (manifest.parts?.length !== 14) throw new Error(`Expected 14 synchronized Gemini parts, found ${manifest.parts?.length}.`);
+          if (!(totalDuration > 300)) throw new Error(`Gemini full-pilot is implausibly short: ${totalDuration.toFixed(2)}s.`);
+          console.log(`Verified full Gemini pilot: ${manifest.parts.length} MP3 parts, ${totalDuration.toFixed(2)} seconds, two ASR passes each, 0 word errors.`);
+          NODE
+
+      - name: Assemble the publishable review sample
+        if: steps.approval.outputs.approved == 'true'
+        run: node scripts/assemble-gemini-article-sample.mjs --article=how-touchscreens-work
+
+      - name: Preserve transcript report for diagnosis
+        if: always() && steps.approval.outputs.approved == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-full-transcript-report-${{ github.run_id }}
+          path: scripts/speech-transcript-evidence/how-touchscreens-work-gemini-full-v1.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Commit only the fully verified sample
+        if: steps.approval.outputs.approved == 'true'
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A public/audio/articles/de93f3d9f91c8b8b/ scripts/speech-transcript-evidence/how-touchscreens-work-gemini-full-v1.json
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-gemini-full-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-gemini-full-v1.json
+          git diff --cached --quiet && { echo 'Verified full Gemini sample is already current.'; exit 0; }
+          git commit -m 'audio: publish full Gemini pilot after exact transcript verification'
+          git push origin HEAD:${{ github.ref_name }}

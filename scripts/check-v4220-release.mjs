@@ -41,12 +41,21 @@ if (manifest?.defaultVoice === 'fahed') {
     throw new Error('V4.22.0 detected an incomplete or incompatible Fahed pilot manifest.');
   }
 }
+if (manifest?.articleId === 'how-touchscreens-work' && manifest?.defaultVoice === 'sadaltager') {
+  const review = manifest.automatedTranscriptReview;
+  if (manifest.provider !== 'Google Gemini API' || manifest.model !== 'gemini-3.1-flash-tts-preview' || manifest.language !== 'ar' || manifest.voices?.length !== 1 || manifest.voices[0]?.providerVoice !== 'Sadaltager') {
+    throw new Error('V4.22.0 detected an incomplete or incompatible Gemini pilot manifest.');
+  }
+  if (review?.status !== 'passed' || review.transcriptionModel !== 'gemini-3.7-flash' || review.transcriptionPassesPerPart !== 2 || review.wordErrorCountAcrossAllPasses !== 0 || review.substitutions !== 0 || review.deletions !== 0 || review.insertions !== 0) {
+    throw new Error('V4.22.0 refuses a Gemini touchscreen manifest without two independent, zero-error transcript passes.');
+  }
+}
 
 const build = pkg.scripts?.build || '';
 for (const token of ['prepare-v4220.mjs', 'check-v4220-release.mjs', 'test-azure-fahed.mjs', 'astro build']) if (!build.includes(token)) throw new Error(`V4.22.0 build pipeline is missing ${token}.`);
 
 const sensitivePatterns = [/AIza[0-9A-Za-z_-]{20,}/u, /sk-proj-[0-9A-Za-z_-]{20,}/u, /AZURE_SPEECH_KEY[ \t]*=[ \t]*[^\s"']{20,}/u];
-for (const file of ['.env.example', 'README.md', 'scripts/generate-audio.mjs', 'scripts/generate-fahed-test-clip.mjs']) {
+for (const file of ['.env.example', 'README.md', 'scripts/generate-audio.mjs', 'scripts/generate-fahed-test-clip.mjs', 'scripts/verify-gemini-audio-transcript.mjs']) {
   const source = await readFile(file, 'utf8');
   if (sensitivePatterns.some((pattern) => pattern.test(source))) throw new Error(`V4.22.0 secret scan failed: ${file}`);
 }

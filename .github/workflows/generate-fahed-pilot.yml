@@ -1,19 +1,6 @@
 name: Generate reviewed Fahed pilot clip
 
 on:
-  push:
-    branches:
-      - audio/fahed-v4220
-    paths:
-      - .github/workflows/generate-fahed-pilot.yml
-      - scripts/azure-speech-ssml.mjs
-      - scripts/generate-fahed-test-clip.mjs
-      - scripts/test-azure-fahed.mjs
-      - scripts/speech-script-core.mjs
-      - scripts/contextual-ambiguities.json
-      - scripts/speech-scripts/how-touchscreens-work.json
-      - scripts/speech-test-clips/how-touchscreens-work.json
-      - src/content/posts/how-touchscreens-work.md
   workflow_dispatch:
 
 permissions:

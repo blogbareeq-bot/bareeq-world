@@ -1,12 +1,6 @@
 name: Generate full Fahed pilot article
 
 on:
-  push:
-    branches:
-      - audio/fahed-v4220
-    paths:
-      - .github/workflows/generate-fahed-full-pilot.yml
-      - scripts/speech-test-clips/how-touchscreens-work.json
   workflow_dispatch:
 
 permissions:

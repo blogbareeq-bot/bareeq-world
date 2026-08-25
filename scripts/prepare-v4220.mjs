@@ -8,8 +8,14 @@ const files = Object.fromEntries(await Promise.all([
   'scripts/generate-fahed-test-clip.mjs',
   'scripts/apply-fahed-speech-review.mjs',
   'scripts/check-speech-scripts.mjs',
+  'scripts/arabic-transcript-match.mjs',
+  'scripts/verify-gemini-audio-transcript.mjs',
+  'scripts/approve-gemini-test-clip.mjs',
+  'scripts/assemble-gemini-article-sample.mjs',
   '.github/workflows/generate-fahed-pilot.yml',
   '.github/workflows/generate-fahed-full-pilot.yml',
+  '.github/workflows/verify-gemini-pilot-transcript.yml',
+  '.github/workflows/generate-gemini-full-pilot.yml',
   'docs/editorial/speech-script-inventory.json',
 ].map(async (file) => [file, await readFile(file, 'utf8')])));
 
@@ -35,6 +41,12 @@ requireAll('Fahed listening clip', files['scripts/generate-fahed-test-clip.mjs']
 requireAll('Fahed contextual review', files['scripts/apply-fahed-speech-review.mjs'], ['ARABIC_PHRASE_READINGS', 'FOREIGN_REPLACEMENTS', 'requireReviews: true']);
 requireAll('Fahed pilot workflow', files['.github/workflows/generate-fahed-pilot.yml'], ['AZURE_SPEECH_KEY', 'generate-fahed-test-clip.mjs', 'speech-test-evidence']);
 requireAll('Fahed full-pilot workflow', files['.github/workflows/generate-fahed-full-pilot.yml'], ['testClipPassed', 'fullSynthesisAllowed', 'BAREEQ_TTS_PROVIDER: azure-fahed', 'ar-KW-FahedNeural']);
-requireAll('V4.22.0 package scripts', JSON.stringify(pkg.scripts), ['prepare-v4220.mjs', 'check-v4220-release.mjs', 'plan:audio:fahed', 'test:audio:fahed']);
+requireAll('Arabic transcript matcher', files['scripts/arabic-transcript-match.mjs'], ['arabic-lexical-exact-v1', 'wordErrorCount', 'substitution', 'normalizeArabicTranscript']);
+requireAll('Gemini transcript verifier', files['scripts/verify-gemini-audio-transcript.mjs'], ['gemini-3.7-flash', 'transcriptionPassesPerPart', 'The transcription model received audio and instructions only', 'wordErrorCountAcrossAllPasses']);
+requireAll('Gemini approval gate', files['scripts/approve-gemini-test-clip.mjs'], ['automatedTranscriptReview', 'gemini-3.7-flash', 'wordErrorCountAcrossAllPasses']);
+requireAll('Gemini sample assembler', files['scripts/assemble-gemini-article-sample.mjs'], ['automatedTranscriptReview', 'wordErrorCount', 'ffmpeg concat']);
+requireAll('Gemini pilot transcript workflow', files['.github/workflows/verify-gemini-pilot-transcript.yml'], ['verify-gemini-audio-transcript.mjs --pilot', 'test-gemini-audio-transcript-contract.mjs', 'approve-gemini-test-clip.mjs']);
+requireAll('Gemini full-pilot workflow', files['.github/workflows/generate-gemini-full-pilot.yml'], ['BAREEQ_TTS_PROVIDER: gemini', 'verify-gemini-audio-transcript.mjs --article=how-touchscreens-work', '0 word errors']);
+requireAll('V4.22.0 package scripts', JSON.stringify(pkg.scripts), ['prepare-v4220.mjs', 'check-v4220-release.mjs', 'plan:audio:fahed', 'test:audio:fahed', 'test:audio:transcript']);
 
-console.log('V4.22.0 preparation passed: 15 reviewed Speech Scripts, isolated Azure Fahed provider, SSML number policy, official-endpoint credential guard, and two-stage listening/full-pilot workflows are locked.');
+console.log('V4.22.0 preparation passed: 15 reviewed Speech Scripts plus a two-pass, audio-only Gemini transcript gate that blocks publication on any word error.');

@@ -1,12 +1,6 @@
 name: Generate reviewed Gemini pilot clip
 
 on:
-  push:
-    branches:
-      - audio/fahed-v4220
-    paths:
-      - .github/workflows/generate-gemini-pilot.yml
-      - scripts/generate-gemini-pronunciation-sample.mjs
   workflow_dispatch:
 
 permissions:
