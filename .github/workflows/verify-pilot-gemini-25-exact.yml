@@ -1,0 +1,64 @@
+name: Verify pilot exact with Gemini 2.5
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-pilot-gemini-25-exact.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Lock exact regenerated pilot
+        run: |
+          node scripts/test-arabic-transcript-match.mjs
+          node - <<'NODE'
+          const fs=require('node:fs'),crypto=require('node:crypto');
+          const a=fs.readFileSync('scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3');
+          const sha=crypto.createHash('sha256').update(a).digest('hex');
+          if(sha!=='e04466b4824db92821488b1fd2ee848e3312fded968a89ff91fdb97f1b15550e') throw new Error(`Pilot SHA changed: ${sha}`);
+          NODE
+      - name: Require Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: test -n "$GEMINI_API_KEY"
+      - name: Build single-pass Gemini 2.5 verifier
+        run: |
+          cp scripts/verify-gemini-audio-transcript.mjs scripts/.verify-25.mjs
+          node - <<'NODE'
+          const fs=require('node:fs'); const p='scripts/.verify-25.mjs'; let s=fs.readFileSync(p,'utf8');
+          if((s.split("const MODEL = 'gemini-3.7-flash';").length-1)!==1) throw new Error('Model constant changed.');
+          if((s.split('const PASS_COUNT = 2;').length-1)!==1) throw new Error('Pass count constant changed.');
+          s=s.replace("const MODEL = 'gemini-3.7-flash';","const MODEL = 'gemini-2.5-flash';");
+          s=s.replace('const PASS_COUNT = 2;','const PASS_COUNT = 1;');
+          fs.writeFileSync(p,s);
+          NODE
+          node --check scripts/.verify-25.mjs
+      - name: Require exact 160 of 160 from full audio
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_ASR_MAX_RETRIES: '1'
+          BAREEQ_ASR_MIN_INTERVAL_MS: '0'
+        run: node scripts/.verify-25.mjs --pilot --no-write
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-25-exact-pilot-${{ github.run_id }}
+          path: scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          if-no-files-found: ignore
+          retention-days: 14
