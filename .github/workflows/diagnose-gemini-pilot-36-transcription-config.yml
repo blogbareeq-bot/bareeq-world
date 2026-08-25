@@ -26,10 +26,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
 
       - name: Extract disputed audio region without reference text
         run: |
-          ffmpeg -hide_banner -loglevel error \
+          FFMPEG_PATH="$(node -p "require('@ffmpeg-installer/ffmpeg').path")"
+          "$FFMPEG_PATH" -hide_banner -loglevel error \
             -ss 70.862 -to 100.080 \
             -i scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 \
             -map_metadata -1 -vn -ac 1 -ar 48000 -c:a libmp3lame -b:a 96k \
