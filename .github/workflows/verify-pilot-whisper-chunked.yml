@@ -1,0 +1,107 @@
+name: Verify pilot with chunked local Whisper
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-pilot-whisper-chunked.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        model: [large-v3-turbo, large-v3]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          npm ci
+          python -m pip install --upgrade pip
+          python -m pip install 'faster-whisper==1.2.0' 'requests>=2.32,<3'
+      - name: Lock exact pilot and extract silence-safe chunks
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs'), crypto=require('node:crypto');
+          const a=fs.readFileSync('scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3');
+          const sha=crypto.createHash('sha256').update(a).digest('hex');
+          if(sha!=='e04466b4824db92821488b1fd2ee848e3312fded968a89ff91fdb97f1b15550e') throw new Error(`Unexpected pilot SHA ${sha}`);
+          NODE
+          mkdir -p /tmp/bareeq-whisper
+          FFMPEG_PATH="$(node -p "require('@ffmpeg-installer/ffmpeg').path")"
+          "$FFMPEG_PATH" -hide_banner -loglevel error -ss 0 -to 29.298 -i scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 -vn -ac 1 -ar 16000 -c:a pcm_s16le /tmp/bareeq-whisper/1.wav
+          "$FFMPEG_PATH" -hide_banner -loglevel error -ss 29.298 -to 53.971 -i scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 -vn -ac 1 -ar 16000 -c:a pcm_s16le /tmp/bareeq-whisper/2.wav
+          "$FFMPEG_PATH" -hide_banner -loglevel error -ss 53.971 -to 83.173 -i scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 -vn -ac 1 -ar 16000 -c:a pcm_s16le /tmp/bareeq-whisper/3.wav
+          "$FFMPEG_PATH" -hide_banner -loglevel error -ss 83.173 -to 93.744 -i scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 -vn -ac 1 -ar 16000 -c:a pcm_s16le /tmp/bareeq-whisper/4.wav
+      - name: Transcribe chunks with audio only
+        env:
+          WHISPER_MODEL: ${{ matrix.model }}
+        run: |
+          cat > /tmp/bareeq-whisper/transcribe.py <<'PY'
+          import json, os
+          from faster_whisper import WhisperModel
+          model_name=os.environ['WHISPER_MODEL']
+          model=WhisperModel(model_name, device='cpu', compute_type='int8', cpu_threads=4)
+          out=[]
+          for i in range(1,5):
+              segments, info=model.transcribe(
+                  f'/tmp/bareeq-whisper/{i}.wav',
+                  language='ar', beam_size=5, best_of=5, temperature=0.0,
+                  condition_on_previous_text=False, word_timestamps=False,
+                  vad_filter=False,
+              )
+              text=' '.join(s.text.strip() for s in segments).strip()
+              print(f'CHUNK_{i}={text}')
+              out.append(text)
+          transcript=' '.join(out).strip()
+          with open('/tmp/bareeq-whisper/transcript.txt','w',encoding='utf-8') as f: f.write(transcript)
+          with open('/tmp/bareeq-whisper/meta.json','w',encoding='utf-8') as f: json.dump({'model':model_name,'chunks':out,'transcript':transcript},f,ensure_ascii=False,indent=2)
+          print('TRANSCRIPT_BEGIN')
+          print(transcript)
+          print('TRANSCRIPT_END')
+          PY
+          python /tmp/bareeq-whisper/transcribe.py
+      - name: Require exact 160-word match
+        env:
+          WHISPER_MODEL: ${{ matrix.model }}
+        run: |
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          import { compareArabicTranscripts } from './scripts/arabic-transcript-match.mjs';
+          const script=JSON.parse(fs.readFileSync('scripts/speech-scripts/how-touchscreens-work.json','utf8'));
+          const meta=JSON.parse(fs.readFileSync('scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json','utf8'));
+          const map=new Map(script.segments.map(x=>[x.segmentId,x]));
+          const expected=meta.selectedSegmentIds.map(id=>map.get(id).spokenText).join('\n\n');
+          const actual=fs.readFileSync('/tmp/bareeq-whisper/transcript.txt','utf8');
+          const c=compareArabicTranscripts(expected,actual);
+          const report={schema:'bareeq.local-whisper-verification.v1',audioSha256:meta.sha256,model:process.env.WHISPER_MODEL,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,exact:c.exact,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations,transcript:actual};
+          fs.writeFileSync('/tmp/bareeq-whisper/report.json',JSON.stringify(report,null,2));
+          console.log(JSON.stringify({model:report.model,expectedWordCount:report.expectedWordCount,actualWordCount:report.actualWordCount,wordErrorCount:report.wordErrorCount,differences:report.differences.slice(0,20)}));
+          if(!c.exact||c.expectedWordCount!==160||c.wordErrorCount!==0||c.substitutions!==0||c.deletions!==0||c.insertions!==0) process.exit(1);
+          console.log('LOCAL_WHISPER_EXACT_160_OF_160=PASS');
+          NODE
+      - name: Upload local ASR evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: whisper-${{ matrix.model }}-pilot-${{ github.run_id }}
+          path: |
+            /tmp/bareeq-whisper/meta.json
+            /tmp/bareeq-whisper/report.json
+          if-no-files-found: ignore
+          retention-days: 14
