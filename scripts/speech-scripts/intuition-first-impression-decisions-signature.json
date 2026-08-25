@@ -1,0 +1,1476 @@
+{
+  "version": 1,
+  "articleId": "intuition-first-impression-decisions-signature",
+  "sourceSnapshotHash": "12d20bdbfdfd602681e73b439fbbeb3261ad844702dc45ae94d4f8333e7552fe",
+  "sourceStructureHash": "b13e07d5b9125a0a0dc33d06997b6ebd3558e40295ba2ed5a58b80f4c4af6c26",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر والمراجع",
+    "segmentCount": 13,
+    "sourceHash": "237732ad2af60c963cefbc140cdbb6c3a2a473b7e5c0819f859bfbdecdb6ff55"
+  },
+  "segments": [
+    {
+      "segmentId": "title-b0d20196b889",
+      "type": "title",
+      "sourceHash": "b0d20196b889384f5f0a271783187af3b0644df405d795fe1d35b31319086186",
+      "sourceText": "هل الحدس ذكاء خفي أم اختصار مضلل؟ متى نثق بشعورنا الأول؟",
+      "spokenText": "هل الحدس ذكاء خفي أم اختصار مضلل؟ متى نثق بشعورنا الأول؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f4f68537be98",
+      "type": "paragraph",
+      "sourceHash": "f4f68537be986bf6dc824bb6e1c43da3ffe9366b186fff7e128474736ad92962",
+      "sourceText": "تدخل اجتماعًا لمناقشة عرض يبدو ممتازًا. الأرقام مقنعة، والحديث مرتب، ولا شيء واضحًا يبرر القلق. ومع ذلك، يمر في داخلك خاطر قصير:",
+      "spokenText": "تدخل اجتماعًا لمناقشة عرض يبدو ممتازًا. الأرقام مقنعة، والحديث مرتب، ولا شيء واضحًا يبرر القلق. ومع ذلك، يمر في داخلك خاطر قصير:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-29ccf8701a0b",
+      "type": "paragraph",
+      "sourceHash": "29ccf8701a0bccd9994a00690827b25787f0e3e9645a0bdc58e665ed64ebb098",
+      "sourceText": "هناك شيء لا يطمئنني.",
+      "spokenText": "هناك شيء لا يطمئنني.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bdab11351bb0",
+      "type": "paragraph",
+      "sourceHash": "bdab11351bb02a3189120776fad0c576ec78b7674ec9e09051b4dbcd75d8d3e5",
+      "sourceText": "وفي موقف آخر يحدث العكس. تقابل شخصًا للمرة الأولى فترتاح إليه، أو تظهر أمامك فرصة فتشعر، قبل أن تفرغ من تحليلها، بأنها تستحق أن تؤخذ بجدية.",
+      "spokenText": "وفي موقف آخر يحدث العكس. تقابل شخصًا للمرة الأولى فترتاح إليه، أو تظهر أمامك فرصة فتشعر، قبل أن تفرغ من تحليلها، بأنها تستحق أن تؤخذ بجدية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2139d64151db",
+      "type": "paragraph",
+      "sourceHash": "2139d64151dba0fc610d8bc1a342493f191bd40b873dcb27bd5353edb676133a",
+      "sourceText": "نسمي هذا الصوت أسماء كثيرة: الإحساس الداخلي، الفراسة، الشعور الأول. والاسم الأشهر هو الحدس.",
+      "spokenText": "نسمي هذا الصوت أسماء كثيرة: الإحساس الداخلي، الفراسة، الشعور الأول. والاسم الأشهر هو الحدس.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6df12fdfb36a",
+      "type": "paragraph",
+      "sourceHash": "6df12fdfb36a0876c7405adaa922594d2ccf4adfbb81c7bf3814911768afc499",
+      "sourceText": "المربك أن الشعور الذي أنقذك مرة من قرار سيئ قد يكون هو نفسه الذي يدفعك في مرة أخرى إلى رفض فرصة جيدة، أو إساءة الحكم على إنسان، أو ملاحقة فكرة لأن الحماس بدا لك يقينًا.",
+      "spokenText": "المربك أن الشعور الذي أنقذك مرة من قرار سيئ قد يكون هو نفسه الذي يدفعك في مرة أخرى إلى رفض فرصة جيدة، أو إساءة الحكم على إنسان، أو ملاحقة فكرة لأن الحماس بدا لك يقينًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c133cabbc15d",
+      "type": "paragraph",
+      "sourceHash": "c133cabbc15d7e9037ae5eda51b7f78902e21bc481f1640504aef83e860ab320",
+      "sourceText": "فهل الحدس شكل خفي من الذكاء، أم اختصار ذهني نثق به أكثر مما ينبغي؟",
+      "spokenText": "فهل الحدس شكل خفي من الذكاء، أم اختصار ذهني نثق به أكثر مما ينبغي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0e1e9d1a19a2",
+      "type": "paragraph",
+      "sourceHash": "0e1e9d1a19a2efbef8c17f1c17109d23b1c453aa04c3c55d446a59e7a592b4c5",
+      "sourceText": "الإجابة الأقرب إلى العلم: قد يكون هذا أو ذاك. والمهارة ليست في طاعته دائمًا ولا في إسكاتِه دائمًا، بل في معرفة المصدر الذي يتكلم منه.",
+      "spokenText": "الإجابة الأقرب إلى العلم: قد يكون هذا أو ذاك. والمهارة ليست في طاعته دائمًا ولا في إسكاتِه دائمًا، بل في معرفة المصدر الذي يتكلم منه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-9b098a0c72ed",
+      "type": "h2",
+      "sourceHash": "9b098a0c72edbc58519dadfdc0d5bf93c5b63a63419b64d46dc85e1c4372fe1d",
+      "sourceText": "ما الحدس؟ حكم سريع أم معرفة لا نرى خطواتها؟",
+      "spokenText": "ما الحدس؟ حكم سريع أم معرفة لا نرى خطواتها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d830d91f4990",
+      "type": "paragraph",
+      "sourceHash": "d830d91f4990af133cae62f84bd2e3b17e3f13d7092ab1ecc7bc4445723b680d",
+      "sourceText": "الحدس حكم أو اتجاه يظهر سريعًا في الوعي، من دون أن نستعرض بوضوح كل الخطوات التي قادت إليه. نشعر أن شيئًا صحيح أو مريب، مألوف أو غير مريح، ثم يأتي التفسير بعد ذلك.",
+      "spokenText": "الحدس حكم أو اتجاه يظهر سريعًا في الوعي، من دون أن نستعرض بوضوح كل الخطوات التي قادت إليه. نشعر أن شيئًا صحيح أو مريب، مألوف أو غير مريح، ثم يأتي التفسير بعد ذلك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2e7573cd887e",
+      "type": "paragraph",
+      "sourceHash": "2e7573cd887ee7f55cbd762a350bc0f59cc0a2a557f849ca93799aefb6cdc1fb",
+      "sourceText": "لكن غياب الشرح لا يعني أن العقل لم يعمل. فقد يكون قارن الموقف بأنماط مخزنة في الذاكرة، أو التقط فرقًا دقيقًا، أو استدعى خبرة سابقة، أو استخدم قاعدة ذهنية سريعة ثم أرسل النتيجة قبل أن يصوغ أسبابها.",
+      "spokenText": "لكن غياب الشرح لا يعني أن العقل لم يعمل. فقد يكون قارن الموقف بأنماط مخزنة في الذاكرة، أو التقط فرقًا دقيقًا، أو استدعى خبرة سابقة، أو استخدم قاعدة ذهنية سريعة ثم أرسل النتيجة قبل أن يصوغ أسبابها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8f0c641986ce",
+      "type": "paragraph",
+      "sourceHash": "8f0c641986ce0701610ef48f59434f1626004ae11dbc9adbc005f9988e053a3e",
+      "sourceText": "ولهذا لا ينبغي أن نتعامل مع «الحدس» كقدرة غامضة واحدة. ما نسميه شعورًا داخليًا قد يكون خبرة ناضجة، أو استجابة انفعالية، أو اختصارًا ذهنيًا، أو انطباعًا اجتماعيًا خاطفًا.",
+      "spokenText": "ولهذا لا ينبغي أن نتعامل مع «الحدس» كقدرة غامضة واحدة. ما نسميه شعورًا داخليًا قد يكون خبرة ناضجة، أو استجابة انفعالية، أو اختصارًا ذهنيًا، أو انطباعًا اجتماعيًا خاطفًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2c954cb67266",
+      "type": "paragraph",
+      "sourceHash": "2c954cb672665eca505a0f3873630cb2c9ae7187f234f6d3404cfbbf53769a6c",
+      "sourceText": "لذلك فإن السؤال الأهم ليس: هل أثق بحدسي؟ بل: من أين جاء هذا الحدس؟",
+      "spokenText": "لذلك فإن السؤال الأهم ليس: هل أثق بحدسي؟ بل: من أين جاء هذا الحدس؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-0e08312653c7",
+      "type": "h2",
+      "sourceHash": "0e08312653c7121d380a6844458d1a1a9d7508593f02f8705ce3cff9b6751712",
+      "sourceText": "حين تعرف قبل أن تعرف أنك تعرف: كيف تصنع الخبرة حدسًا؟",
+      "spokenText": "حين تعرف قبل أن تعرف أنك تعرف: كيف تصنع الخبرة حدسًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2f5db1a4c926",
+      "type": "paragraph",
+      "sourceHash": "2f5db1a4c926d37426bb88778700e93f91e7945dd1dbb17ca9058fbfe359db14",
+      "sourceText": "استمع إلى ثوانٍ قليلة من أغنية مألوفة. غالبًا لن تحلل اللحن نغمة نغمة؛ ستعرفها لأن عقلك التقى هذا النمط مرات كثيرة.",
+      "spokenText": "استمع إلى ثوانٍ قليلة من أغنية مألوفة. غالبًا لن تحلل اللحن نغمة نغمة؛ ستعرفها لأن عقلك التقى هذا النمط مرات كثيرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fbd5ec68a12a",
+      "type": "paragraph",
+      "sourceHash": "fbd5ec68a12af0def2534d12be5863b9c686857581df2dbeca0e01b7972dae28",
+      "sourceText": "شيء شبيه يحدث في بعض مجالات الخبرة. أظهرت دراسات كلاسيكية على لاعبي الشطرنج أن تفوق الخبير لا يقوم على ذاكرة عامة خارقة، بل على قدرته على رؤية تشكيلات ذات معنى داخل المجال الذي تدرب عليه؛ وعندما تصبح أوضاع القطع عشوائية، يتراجع جانب من هذا التفوق. [3]",
+      "spokenText": "شيء شبيه يحدث في بعض مجالات الخبرة. أظهرت دراسات كلاسيكية على لاعبي الشطرنج أن تفوق الخبير لا يقوم على ذاكرة عامة خارقة، بل على قدرته على رؤية تشكيلات ذات معنى داخل المجال الذي تدرب عليه؛ وعندما تصبح أوضاع القطع عشوائية، يتراجع جانب من هذا التفوق. [3]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ef430f8cf4e5",
+      "type": "paragraph",
+      "sourceHash": "ef430f8cf4e5c2e8c4eda113a5c09133ea77334c9250718fcfd0efa44ff6bb1d",
+      "sourceText": "وقد يلاحظ طبيب خبير علامة غير مألوفة قبل أن يستطيع شرح سبب قلقه كاملًا، كما قد يلتقط مراجع مالي علاقة بين أرقام تبدو عادية لغيره لأنها تشبه نمطًا سبق أن رآه.",
+      "spokenText": "وقد يلاحظ طبيب خبير علامة غير مألوفة قبل أن يستطيع شرح سبب قلقه كاملًا، كما قد يلتقط مراجع مالي علاقة بين أرقام تبدو عادية لغيره لأنها تشبه نمطًا سبق أن رآه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-03870cee68e1",
+      "type": "paragraph",
+      "sourceHash": "03870cee68e1538eb72fed1ff1bb960cf0125a115159d2ec6b5907367bcc6eed",
+      "sourceText": "هنا يصبح الحدس نوعًا من المعرفة المضغوطة: سنوات من التعلم والخطأ والتصحيح تصل إلى النتيجة قبل أن تصل إليها الكلمات.",
+      "spokenText": "هنا يصبح الحدس نوعًا من المعرفة المضغوطة: سنوات من التعلم والخطأ والتصحيح تصل إلى النتيجة قبل أن تصل إليها الكلمات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e0e0709b22b1",
+      "type": "paragraph",
+      "sourceHash": "e0e0709b22b137973197b28b13dc931d40fbfaa462e19c29288db12c7df6d6d6",
+      "sourceText": "لكن طول الخبرة وحده لا يكفي. ففي دراستهما عن شروط الخبرة الحدسية، خلص دانيال كانيمان وغاري كلاين إلى أن الحكم الحدسي يكون أكثر قابلية للثقة حين تتوافر بيئة فيها أنماط يمكن تعلمها، وممارسة كافية، وتغذية راجعة تسمح بتصحيح الأحكام. [1]",
+      "spokenText": "لكن طول الخبرة وحده لا يكفي. ففي دراستهما عن شروط الخبرة الحدسية، خلص دانيال كانيمان وغاري كلاين إلى أن الحكم الحدسي يكون أكثر قابلية للثقة حين تتوافر بيئة فيها أنماط يمكن تعلمها، وممارسة كافية، وتغذية راجعة تسمح بتصحيح الأحكام. [1]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-18fd7f398c44",
+      "type": "paragraph",
+      "sourceHash": "18fd7f398c4441bfdf00df3374297aed1fab6fc40f587c67171f18499d772390",
+      "sourceText": "إذا كانت البيئة شديدة العشوائية، أو كانت نتائج القرارات غامضة ومتأخرة، فقد تنمو الثقة أسرع من المهارة.",
+      "spokenText": "إذا كانت البيئة شديدة العشوائية، أو كانت نتائج القرارات غامضة ومتأخرة، فقد تنمو الثقة أسرع من المهارة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-d0aeb4ef1985",
+      "type": "h2",
+      "sourceHash": "d0aeb4ef198582eb43752ee726323e6c1c11c1e6b655285293643dd51801c46a",
+      "sourceText": "لماذا لا تنتقل الخبرة تلقائيًا من مجال إلى آخر؟",
+      "spokenText": "لماذا لا تنتقل الخبرة تلقائيًا من مجال إلى آخر؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-290662903071",
+      "type": "paragraph",
+      "sourceHash": "290662903071077025a01de97fe674175dd2ffef2f3896c7c1eee728d06f575a",
+      "sourceText": "يمكن أن تكون ممتازًا في قراءة موقف داخل عملك، ثم تصبح مبتدئًا خارجه. الجراح الخبير لا يتحول تلقائيًا إلى مستثمر بارع، ولاعب الشطرنج لا يستطيع أن يستنتج أمانة شخص من ملامح وجهه لأنه خبير في رؤية الأنماط.",
+      "spokenText": "يمكن أن تكون ممتازًا في قراءة موقف داخل عملك، ثم تصبح مبتدئًا خارجه. الجراح الخبير لا يتحول تلقائيًا إلى مستثمر بارع، ولاعب الشطرنج لا يستطيع أن يستنتج أمانة شخص من ملامح وجهه لأنه خبير في رؤية الأنماط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-91fa165f8919",
+      "type": "paragraph",
+      "sourceHash": "91fa165f8919aabcbe79c8dd8105b9c18a8421db7416b6e39c95b4ae73d82a91",
+      "sourceText": "الحدس المتخصص تكون قيمته أعلى عندما يشبه الموقف الجديد البيئة التي تكوّنت فيها الخبرة أصلًا. [6]",
+      "spokenText": "الحدس المتخصص تكون قيمته أعلى عندما يشبه الموقف الجديد البيئة التي تكوّنت فيها الخبرة أصلًا. [6]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1f49768316ca",
+      "type": "paragraph",
+      "sourceHash": "1f49768316ca0c5e130869f955f96e384b0b1018b8a972338071a105347b9bf4",
+      "sourceText": "لذلك لا يكفي أن تسأل: كم سنة من الخبرة لدي؟ السؤال الأدق: هل خبرتي ذات صلة بهذا القرار تحديدًا؟",
+      "spokenText": "لذلك لا يكفي أن تسأل: كم سنة من الخبرة لدي؟ السؤال الأدق: هل خبرتي ذات صلة بهذا القرار تحديدًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-c90f26ce28e7",
+      "type": "h2",
+      "sourceHash": "c90f26ce28e7be197b70f16f4d807da047eac979a034c4456e33c8fd4cef07f3",
+      "sourceText": "الاختصار الذهني ليس خطأ دائمًا",
+      "spokenText": "الاختصار الذهني ليس خطأ دائمًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-88a7e662dff1",
+      "type": "paragraph",
+      "sourceHash": "88a7e662dff1698cb401763d17ae6b7b2677afb8ea45ba000afe99cf7fe24a12",
+      "sourceText": "العقل مضطر إلى الاختصار. لو حللنا كل قرار يومي كما نحلل عقدًا تجاريًا، لما انتهينا من اختيار الإفطار قبل الظهر.",
+      "spokenText": "العقل مضطر إلى الاختصار. لو حللنا كل قرار يومي كما نحلل عقدًا تجاريًا، لما انتهينا من اختيار الإفطار قبل الظهر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f94b3cf64197",
+      "type": "paragraph",
+      "sourceHash": "f94b3cf64197efb45a430b42d68dba1b136e38590250a03d421bf18aaddc87ec",
+      "sourceText": "أظهر تفيرسكي وكانيمان أن البشر يستخدمون استدلالات سريعة تساعدهم على الحكم، لكنها قد تقود إلى أخطاء منتظمة؛ مثل المبالغة في وزن المعلومات اللافتة أو إهمال المعدلات الأساسية. [2]",
+      "spokenText": "أظهر تفيرسكي وكانيمان أن البشر يستخدمون استدلالات سريعة تساعدهم على الحكم، لكنها قد تقود إلى أخطاء منتظمة؛ مثل المبالغة في وزن المعلومات اللافتة أو إهمال المعدلات الأساسية. [2]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e28ee9a1d454",
+      "type": "paragraph",
+      "sourceHash": "e28ee9a1d454350741bfa31d25a0b488f227962891361ecaf61df71c76d7e4d5",
+      "sourceText": "لكن الاختصار ليس مرادفًا للخطأ. فقد راجع جيرد جيجيرينزر وولفغانغ غايسماير أبحاثًا تبين أن بعض القواعد البسيطة يمكن أن تكون فعالة عندما تتلاءم مع بنية البيئة، وأن تجاهل جزء من المعلومات قد يحسن الحكم في ظروف معينة بدل أن يفسده. [11]",
+      "spokenText": "لكن الاختصار ليس مرادفًا للخطأ. فقد راجع جيرد جيجيرينزر وولفغانغ غايسماير أبحاثًا تبين أن بعض القواعد البسيطة يمكن أن تكون فعالة عندما تتلاءم مع بنية البيئة، وأن تجاهل جزء من المعلومات قد يحسن الحكم في ظروف معينة بدل أن يفسده. [11]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-209fa7aa8a1a",
+      "type": "paragraph",
+      "sourceHash": "209fa7aa8a1addf8f039af6e7c8f4924084109550f800d60ae181962fa5aae23",
+      "sourceText": "إذن المشكلة ليست في أن العقل اختصر الطريق، بل في مدى ملاءمة الاختصار للطريق الذي أمامه.",
+      "spokenText": "إذن المشكلة ليست في أن العقل اختصر الطريق، بل في مدى ملاءمة الاختصار للطريق الذي أمامه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-553ad26d2d4e",
+      "type": "h2",
+      "sourceHash": "553ad26d2d4eece241ed15782af5fb78329a118c89118dba63c17216f930e88d",
+      "sourceText": "عندما يتكلم الخوف والرغبة بصوت الحدس",
+      "spokenText": "عندما يتكلم الخوف والرغبة بصوت الحدس",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-43c5ad9e5bd4",
+      "type": "paragraph",
+      "sourceHash": "43c5ad9e5bd4119a60ff898cfd286a00eb251261a75abbff6d08443d6faf4456",
+      "sourceText": "تتحمس لمشروع وتقول: «لا أعرف لماذا، لكنني أشعر أنه سينجح». قد يكون خلف ذلك نمط تعرفت إليه من خبرة سابقة. وقد تكون رغبتك في النجاح قد استعارت صوت الحدس.",
+      "spokenText": "تتحمس لمشروع وتقول: «لا أعرف لماذا، لكنني أشعر أنه سينجح». قد يكون خلف ذلك نمط تعرفت إليه من خبرة سابقة. وقد تكون رغبتك في النجاح قد استعارت صوت الحدس.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3066df1132de",
+      "type": "paragraph",
+      "sourceHash": "3066df1132de45008de7a72e1442e6d301218eb2befb756fcf3ebb028eeb70ac",
+      "sourceText": "والخوف يفعل الشيء نفسه. قد يبدو التردد في تغيير وظيفة كأنه تحذير حكيم، بينما يكون في حقيقته رهبة طبيعية من المجهول.",
+      "spokenText": "والخوف يفعل الشيء نفسه. قد يبدو التردد في تغيير وظيفة كأنه تحذير حكيم، بينما يكون في حقيقته رهبة طبيعية من المجهول.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-85e9f3c3f0b0",
+      "type": "paragraph",
+      "sourceHash": "85e9f3c3f0b0af8619e71ace50085f3cd1064186d0b6c9f85e02cb890bbdbb3f",
+      "sourceText": "المشكلة أن المشاعر لا تحمل بطاقات تعريف. لا توجد إشارة داخلية تقول: «هذا حدس خبير» أو «هذه رغبة متنكرة». ولهذا لا تكفي قوة الشعور للحكم على صحته.",
+      "spokenText": "المشكلة أن المشاعر لا تحمل بطاقات تعريف. لا توجد إشارة داخلية تقول: «هذا حدس خبير» أو «هذه رغبة متنكرة». ولهذا لا تكفي قوة الشعور للحكم على صحته.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-81b49208927a",
+      "type": "paragraph",
+      "sourceHash": "81b49208927a063af02a6eaa10cf9ca4cbb3a93059525e038475a9292be83f83",
+      "sourceText": "وتوضح أبحاث الثقة الزائدة أن إحساس الإنسان باليقين قد ينفصل عن جودة تقديره الفعلية. [10]",
+      "spokenText": "وتوضح أبحاث الثقة الزائدة أن إحساس الإنسان باليقين قد ينفصل عن جودة تقديره الفعلية. [10]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0c1ac0034413",
+      "type": "paragraph",
+      "sourceHash": "0c1ac00344136089b6f33558f64c9177629c3c1e17e7923151b97df878b26642",
+      "sourceText": "قولك «أنا متأكد» يصف حالتك النفسية؛ لا يثبت وحده أن تقديرك صحيح.",
+      "spokenText": "قولك «أنا متأكد» يصف حالتك النفسية؛ لا يثبت وحده أن تقديرك صحيح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-640d051bb189",
+      "type": "paragraph",
+      "sourceHash": "640d051bb189623b949bedbed7af9d0ae952845da01985ef082e41dbac5fa35d",
+      "sourceText": "ولا يعني ذلك أن التفكير البطيء هو الطريق الآمن دائمًا. فالسرعة ليست خطأ، والبطء ليس ضمانًا للصواب. كما أن الصورة الشائعة عن «تفكير سريع» و«تفكير بطيء» بوصفهما نظامين منفصلين تمامًا أبسط من النقاش العلمي الفعلي. [4][5]",
+      "spokenText": "ولا يعني ذلك أن التفكير البطيء هو الطريق الآمن دائمًا. فالسرعة ليست خطأ، والبطء ليس ضمانًا للصواب. كما أن الصورة الشائعة عن «تفكير سريع» و«تفكير بطيء» بوصفهما نظامين منفصلين تمامًا أبسط من النقاش العلمي الفعلي. [4][5]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-57c26d931450",
+      "type": "h2",
+      "sourceHash": "57c26d931450e045c39d212238104b2a3a4c7e5e040353ba021f402d466d4248",
+      "sourceText": "هل الجسد يعرف قبل العقل؟",
+      "spokenText": "هل الجسد يعرف قبل العقل؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d0978ee74494",
+      "type": "paragraph",
+      "sourceHash": "d0978ee744941db3f94d1b8e90516c1e7f14ccaf931f05220b3a2f9b65416135",
+      "sourceText": "أحيانًا لا يأتي الحدس في صورة فكرة، بل في صورة جسد: نبض يتسارع، أو معدة تنقبض، أو توتر يظهر فجأة.",
+      "spokenText": "أحيانًا لا يأتي الحدس في صورة فكرة، بل في صورة جسد: نبض يتسارع، أو معدة تنقبض، أو توتر يظهر فجأة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-41db7951a255",
+      "type": "paragraph",
+      "sourceHash": "41db7951a25524e9622567ec43cd5af11f10d069b086ba45e0bee2ee2c610d99",
+      "sourceText": "من أشهر الأطر التي حاولت تفسير دور هذه الإشارات «فرضية العلامات الجسدية» المرتبطة بأعمال أنطونيو داماسيو، والتي تقترح أن الاستجابات الجسدية والانفعالية قد تسهم في توجيه بعض القرارات. [7]",
+      "spokenText": "من أشهر الأطر التي حاولت تفسير دور هذه الإشارات «فرضية العلامات الجسدية» المرتبطة بأعمال أنطونيو داماسيو، والتي تقترح أن الاستجابات الجسدية والانفعالية قد تسهم في توجيه بعض القرارات. [7]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-75fafa5659a7",
+      "type": "paragraph",
+      "sourceHash": "75fafa5659a76825c5445c3de123e8bed76e27d8d6d763c79c53cc27afcc0c31",
+      "sourceText": "لكن الفرضية مؤثرة وليست كلمة نهائية؛ فقد ناقشت مراجعات نقدية تفسير بعض نتائجها وقوة الأدلة السببية عليها. [12]",
+      "spokenText": "لكن الفرضية مؤثرة وليست كلمة نهائية؛ فقد ناقشت مراجعات نقدية تفسير بعض نتائجها وقوة الأدلة السببية عليها. [12]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c484ec8fbec2",
+      "type": "paragraph",
+      "sourceHash": "c484ec8fbec23cd49eae8ac90596a73123175ae95474bdcee1255596237f526c",
+      "sourceText": "لهذا فإن عبارة «الجسد يعرف الحقيقة دائمًا» أوسع مما يسمح به الدليل. الإشارة الجسدية معلومة تستحق الانتباه، لا حكمًا نهائيًا.",
+      "spokenText": "لهذا فإن عبارة «الجسد يعرف الحقيقة دائمًا» أوسع مما يسمح به الدليل. الإشارة الجسدية معلومة تستحق الانتباه، لا حكمًا نهائيًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-44cb5f2b5f27",
+      "type": "h2",
+      "sourceHash": "44cb5f2b5f27c215b8e01f3d95059c6f7ee299c736198d5da7ac5086c0269f10",
+      "sourceText": "الانطباع الأول: إشارة يمكن فحصها، لا تعريفًا للإنسان",
+      "spokenText": "الانطباع الأول: إشارة يمكن فحصها، لا تعريفًا للإنسان",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-df4c6ece069e",
+      "type": "paragraph",
+      "sourceHash": "df4c6ece069e261da81c87800f0954d079628d677df3f3828eca3d760bf6ad5e",
+      "sourceText": "نكوّن انطباعات اجتماعية بسرعة، وقد تحمل مقتطفات قصيرة من السلوك بعض المعلومات في مهام محددة. [8] لكن الخطأ يبدأ عندما ننتقل من «لاحظت إشارة» إلى «عرفت الإنسان».",
+      "spokenText": "نكوّن انطباعات اجتماعية بسرعة، وقد تحمل مقتطفات قصيرة من السلوك بعض المعلومات في مهام محددة. [8] لكن الخطأ يبدأ عندما ننتقل من «لاحظت إشارة» إلى «عرفت الإنسان».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0c3a0ae89d2d",
+      "type": "paragraph",
+      "sourceHash": "0c3a0ae89d2dfe236ea11b0afbe2c93711d722465559cc05986bba6ebfcc7a0a",
+      "sourceText": "قد تلاحظ أن شخصًا تردد قبل الإجابة. هذه ملاحظة. أما أن تستنتج فورًا أنه كاذب، فهذه قصة أضافها العقل إلى الملاحظة.",
+      "spokenText": "قد تلاحظ أن شخصًا تردد قبل الإجابة. هذه ملاحظة. أما أن تستنتج فورًا أنه كاذب، فهذه قصة أضافها العقل إلى الملاحظة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d95e218e568d",
+      "type": "paragraph",
+      "sourceHash": "d95e218e568d5feae6d2f013023c8fe059fb6b76da580fb6d3bd661def15e27c",
+      "sourceText": "وتشير مراجعات واسعة إلى أن اتفاق الناس على انطباع معين من الوجه لا يعني بالضرورة أن هذا الانطباع دقيق في وصف الشخصية أو النيات. [9]",
+      "spokenText": "وتشير مراجعات واسعة إلى أن اتفاق الناس على انطباع معين من الوجه لا يعني بالضرورة أن هذا الانطباع دقيق في وصف الشخصية أو النيات. [9]",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a4d012b96e0a",
+      "type": "paragraph",
+      "sourceHash": "a4d012b96e0ae2d4be1aa43afa390c7bbd274ef8ff4e95ddf66747ad8cd61077",
+      "sourceText": "دع الحدس يلفت انتباهك إلى السلوك، لكن لا تسمح له بأن يختصر إنسانًا كاملًا في لحظة.",
+      "spokenText": "دع الحدس يلفت انتباهك إلى السلوك، لكن لا تسمح له بأن يختصر إنسانًا كاملًا في لحظة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-64ac81479eb1",
+      "type": "h2",
+      "sourceHash": "64ac81479eb1e30b7c51190f02e65d38093e2fb4a64c4fb32b76df0ee6fe8ad8",
+      "sourceText": "اجعل الحدس محققًا… لا قاضيًا",
+      "spokenText": "اجعل الحدس محققًا… لا قاضيًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-68864bfa9169",
+      "type": "paragraph",
+      "sourceHash": "68864bfa9169cc0d51ec0b6a11896608919ced59e62a650e40bbb27aad8e8aed",
+      "sourceText": "إذا قال لك: «هناك شيء غير طبيعي»، فلا تسكته. لكن لا تسلمه الحكم أيضًا. قل له: أرني أين أنظر.",
+      "spokenText": "إذا قال لك: «هناك شيء غير طبيعي»، فلا تسكته. لكن لا تسلمه الحكم أيضًا. قل له: أرني أين أنظر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fd9ad5d510f4",
+      "type": "paragraph",
+      "sourceHash": "fd9ad5d510f4d31caf8aa6e0c0c7fd8c98f173feaef8f7de15e4309244bc0fed",
+      "sourceText": "إذا شعرت بأن عرض عمل غير مريح، فابحث عن الإشارة: هل المسؤوليات غامضة؟ هل تغيرت الوعود؟ هل توجد مؤشرات فعلية إلى بيئة غير مستقرة؟ أم أن ما تشعر به خوف طبيعي من التغيير؟",
+      "spokenText": "إذا شعرت بأن عرض عمل غير مريح، فابحث عن الإشارة: هل المسؤوليات غامضة؟ هل تغيرت الوعود؟ هل توجد مؤشرات فعلية إلى بيئة غير مستقرة؟ أم أن ما تشعر به خوف طبيعي من التغيير؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c57b3f196b93",
+      "type": "paragraph",
+      "sourceHash": "c57b3f196b931c578fd55f905c06b2e6d4c806ba3f71480a1404a27ceb0f775a",
+      "sourceText": "وإذا لم ترتح لشخص، فاحترم حدودك، ثم حاول الانتقال من الشعور العام إلى السلوك المحدد الذي أثاره.",
+      "spokenText": "وإذا لم ترتح لشخص، فاحترم حدودك، ثم حاول الانتقال من الشعور العام إلى السلوك المحدد الذي أثاره.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4ad4507e316c",
+      "type": "paragraph",
+      "sourceHash": "4ad4507e316c3989801450859ddce289e624c7ec3af1d5e9a795f11386ea9ce3",
+      "sourceText": "بهذه الطريقة يتحول الحدس من حكم مغلق إلى فرضية قابلة للاختبار.",
+      "spokenText": "بهذه الطريقة يتحول الحدس من حكم مغلق إلى فرضية قابلة للاختبار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4a29bf64a633",
+      "type": "paragraph",
+      "sourceHash": "4a29bf64a63392f5a1799151c20cd1e21fa17215e2c4403ad016a943ac940c66",
+      "sourceText": "وعندما يكون الضغط نفسه هو المشكلة، يفيد الرجوع إلى مقال كيف تتعامل مع المواقف الصعبة؟ قبل حسم الخيار.",
+      "spokenText": "وعندما يكون الضغط نفسه هو المشكلة، يفيد الرجوع إلى مقال كيف تتعامل مع المواقف الصعبة؟ قبل حسم الخيار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-48dd0e01e8f0",
+      "type": "h3",
+      "sourceHash": "48dd0e01e8f0b2d5f5ae014ca2c7b7575af2b1ffbb9e4529cac9fce9b172ee30",
+      "sourceText": "اختبار بريق: خمس أسئلة قبل أن تقول «أشعر أن هذا هو الصحيح»",
+      "spokenText": "اختبار بريق: خمس أسئلة قبل أن تقول «أشعر أن هذا هو الصحيح»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-e90567a64f70",
+      "type": "list-item",
+      "sourceHash": "e90567a64f703210517cda46f7323c96262f83488aca263b1a174586a4f063fd",
+      "sourceText": "ما الذي أشعر به تحديدًا؟ وهل أستطيع تسمية الإشارة التي أثارته؟",
+      "spokenText": "ما الذي أشعر به تحديدًا؟ وهل أستطيع تسمية الإشارة التي أثارته؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-5800bbe813cd",
+      "type": "list-item",
+      "sourceHash": "5800bbe813cdb0ba1f588d2d74124b785e9e63439e7275812c54f9c12ed4e791",
+      "sourceText": "هل لدي خبرة حقيقية في هذا النوع من المواقف؟ أم أنني أخلط بين الخبرة والثقة؟",
+      "spokenText": "هل لدي خبرة حقيقية في هذا النوع من المواقف؟ أم أنني أخلط بين الخبرة والثقة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-c558335c6535",
+      "type": "list-item",
+      "sourceHash": "c558335c65351aa0b24a8d8d8ce7e90101239f6dac86ee23ac004dcdca6d20fa",
+      "sourceText": "هل تلقيت تغذية راجعة عن قرارات مشابهة؟ هل أعرف متى أصبت ومتى أخطأت؟",
+      "spokenText": "هل تلقيت تغذية راجعة عن قرارات مشابهة؟ هل أعرف متى أصبت ومتى أخطأت؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-3790d91fd860",
+      "type": "list-item",
+      "sourceHash": "3790d91fd860d1615094c2d069da36d644c99a253d5554b57c156bdb4b780a3d",
+      "sourceText": "ما التفسير البديل؟ وهل كنت سأفسر الإشارة بالطريقة نفسها لو كنت أتمنى نتيجة مختلفة؟",
+      "spokenText": "ما التفسير البديل؟ وهل كنت سأفسر الإشارة بالطريقة نفسها لو كنت أتمنى نتيجة مختلفة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-336d6129732f",
+      "type": "list-item",
+      "sourceHash": "336d6129732f9d2937e7f3a3ba604df3f0f9e8a1d9ca80b2953029e243fad27a",
+      "sourceText": "ما تكلفة الخطأ؟ كلما ارتفعت، ازدادت الحاجة إلى دليل مستقل.",
+      "spokenText": "ما تكلفة الخطأ؟ كلما ارتفعت، ازدادت الحاجة إلى دليل مستقل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-04fa78391f2c",
+      "type": "paragraph",
+      "sourceHash": "04fa78391f2cbcd7ce3433cf954b18b9130b0f30eb40d3182b03508c13d8f864",
+      "sourceText": "إذا لم تستطع تفسير الحدس فورًا، فلا يعني ذلك أنه خاطئ؛ فقد يكون الخبير التقط إشارة لم تصل بعد إلى وعيه الكامل. لكن القاعدة الآمنة هي:",
+      "spokenText": "إذا لم تستطع تفسير الحدس فورًا، فلا يعني ذلك أنه خاطئ؛ فقد يكون الخبير التقط إشارة لم تصل بعد إلى وعيه الكامل. لكن القاعدة الآمنة هي:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d06c49f9e661",
+      "type": "paragraph",
+      "sourceHash": "d06c49f9e661f656ace42c07b67ca110550b8e8a7aefc8197cb6037c386164a8",
+      "sourceText": "كلما قلّ تفسير الحدس وارتفعت تكلفة القرار، ارتفعت قيمة التحقق.",
+      "spokenText": "كلما قلّ تفسير الحدس وارتفعت تكلفة القرار، ارتفعت قيمة التحقق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dac65a47f029",
+      "type": "paragraph",
+      "sourceHash": "dac65a47f02970e285bf155c9230fb0fa993bb39263a5ddcb6357be8b3f33cdd",
+      "sourceText": "أما القرارات الصغيرة القابلة للتراجع فلا تحتاج إلى محكمة كاملة. جرّب المطعم، افتح الكتاب، واختبر الفكرة بمخاطرة محدودة.",
+      "spokenText": "أما القرارات الصغيرة القابلة للتراجع فلا تحتاج إلى محكمة كاملة. جرّب المطعم، افتح الكتاب، واختبر الفكرة بمخاطرة محدودة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-2172840da050",
+      "type": "h2",
+      "sourceHash": "2172840da0506da45997a937000b4066481e56ba0d5f7a63cfc896426432256b",
+      "sourceText": "هل يمكن تدريب الحدس؟",
+      "spokenText": "هل يمكن تدريب الحدس؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a63645dbc792",
+      "type": "paragraph",
+      "sourceHash": "a63645dbc792ad7cdf8607cbd2895d5d76ba0b005b376c3311179c4b3e38aef9",
+      "sourceText": "يمكن تحسين الحدس في المجالات التي توفر أنماطًا قابلة للتعلم وتغذية راجعة واضحة. ومن أبسط الوسائل أن تسجل توقعاتك قبل معرفة النتيجة.",
+      "spokenText": "يمكن تحسين الحدس في المجالات التي توفر أنماطًا قابلة للتعلم وتغذية راجعة واضحة. ومن أبسط الوسائل أن تسجل توقعاتك قبل معرفة النتيجة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-74adc3bc6a11",
+      "type": "paragraph",
+      "sourceHash": "74adc3bc6a1174699175e1d1f8d1ed037505ae20b91d7aee154913edd47c97f9",
+      "sourceText": "بدل أن تقول بعد أشهر: «كنت أعرف أن المشروع لن ينجح»، اكتب مسبقًا ما تتوقعه ولماذا، ثم عد إلى ما كتبت بعد أن تتضح النتيجة.",
+      "spokenText": "بدل أن تقول بعد أشهر: «كنت أعرف أن المشروع لن ينجح»، اكتب مسبقًا ما تتوقعه ولماذا، ثم عد إلى ما كتبت بعد أن تتضح النتيجة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-af94e5f90c09",
+      "type": "paragraph",
+      "sourceHash": "af94e5f90c093e8f1a3205dbf4c8cfd5db1c8b00815bca8effac81275a559ffb",
+      "sourceText": "هذه العادة تمنع الذاكرة من إعادة ترتيب الماضي بحيث نبدو لأنفسنا أكثر بصيرة مما كنا. ومع الوقت قد تكتشف أن حدسك قوي في نوع محدد من القرارات، أو أن «حدسك الذي لا يخطئ» كان يحصل على مساعدة من قسم المونتاج في الذاكرة.",
+      "spokenText": "هذه العادة تمنع الذاكرة من إعادة ترتيب الماضي بحيث نبدو لأنفسنا أكثر بصيرة مما كنا. ومع الوقت قد تكتشف أن حدسك قوي في نوع محدد من القرارات، أو أن «حدسك الذي لا يخطئ» كان يحصل على مساعدة من قسم المونتاج في الذاكرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3c1ad8e20496",
+      "type": "paragraph",
+      "sourceHash": "3c1ad8e2049642ae707df0cac58e5ae60ca0f119e523644d396197d80ef7f615",
+      "sourceText": "وفي الحالتين، أنت تتعلم.",
+      "spokenText": "وفي الحالتين، أنت تتعلم.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-731150070f04",
+      "type": "h2",
+      "sourceHash": "731150070f04aa3e5fa3764cc226c606d0434048cbc1bff2eda0109173d8cf7e",
+      "sourceText": "الخلاصة: متى نثق بالشعور الأول؟",
+      "spokenText": "الخلاصة: متى نثق بالشعور الأول؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6690d2d54773",
+      "type": "paragraph",
+      "sourceHash": "6690d2d547730e16f9001bdb919b6f7567d97955f89dd8a2270089ea09c8f4c7",
+      "sourceText": "الحدس ليس خصمًا للعقل، وليس طريقًا سريًا إلى الحقيقة.",
+      "spokenText": "الحدس ليس خصمًا للعقل، وليس طريقًا سريًا إلى الحقيقة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b89298bdaf6b",
+      "type": "paragraph",
+      "sourceHash": "b89298bdaf6bce0fc1f6b576e75d4113c6a400907a7ec6eb8881391154116855",
+      "sourceText": "في أفضل حالاته، هو خبرة تراكمت حتى أصبحت سريعة: عين تعلمت أين تنظر، وذاكرة تعرفت إلى النمط قبل أن تجد الكلمات التي تصفه.",
+      "spokenText": "في أفضل حالاته، هو خبرة تراكمت حتى أصبحت سريعة: عين تعلمت أين تنظر، وذاكرة تعرفت إلى النمط قبل أن تجد الكلمات التي تصفه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4ab7b228887b",
+      "type": "paragraph",
+      "sourceHash": "4ab7b228887ba4ef2a0321373647f41c563439c970ed1aa77d4f6064777cf765",
+      "sourceText": "وفي أسوأ حالاته، هو خوف أو رغبة أو انحياز يبدو من الداخل بالصوت نفسه تقريبًا.",
+      "spokenText": "وفي أسوأ حالاته، هو خوف أو رغبة أو انحياز يبدو من الداخل بالصوت نفسه تقريبًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9f63d5fe86fc",
+      "type": "paragraph",
+      "sourceHash": "9f63d5fe86fc88467774b02e34e11ca122230dd56fd51b43f2a01462b9b1f8a7",
+      "sourceText": "لذلك لا تحتاج إلى أن تصبح «شخصًا حدسيًا» أو «شخصًا منطقيًا». تحتاج إلى توزيع الأدوار جيدًا:",
+      "spokenText": "لذلك لا تحتاج إلى أن تصبح «شخصًا حدسيًا» أو «شخصًا منطقيًا». تحتاج إلى توزيع الأدوار جيدًا:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-72d199110396",
+      "type": "paragraph",
+      "sourceHash": "72d199110396af896aeed081c894086d43143cf23dbc8bd727470eb8742f9047",
+      "sourceText": "دع الحدس ينبهك، والتفكير يفحص الإشارة، والدليل يحسم عندما تكون العواقب كبيرة.",
+      "spokenText": "دع الحدس ينبهك، والتفكير يفحص الإشارة، والدليل يحسم عندما تكون العواقب كبيرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-718913c54297",
+      "type": "paragraph",
+      "sourceHash": "718913c54297462707667002543daa69d9d0bfce0a8eb493683bd82656cf94f5",
+      "sourceText": "وفي المرة القادمة التي يهمس فيها شيء داخلك: «لا أعرف لماذا، لكنني متأكد»، لا تسخر منه ولا تنحنِ له. اسأله فقط: ما الذي علّمك أن تشعر بهذا؟",
+      "spokenText": "وفي المرة القادمة التي يهمس فيها شيء داخلك: «لا أعرف لماذا، لكنني متأكد»، لا تسخر منه ولا تنحنِ له. اسأله فقط: ما الذي علّمك أن تشعر بهذا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-20604ff1c1b8",
+      "type": "paragraph",
+      "sourceHash": "20604ff1c1b84f01694c89e0cec02aacb874ac75298a85eaa1cf0b9d9b92c009",
+      "sourceText": "فالشعور الأول قد يكون ذكيًا على نحو مدهش، لكنه، مثل صاحبه، ليس معصومًا.",
+      "spokenText": "فالشعور الأول قد يكون ذكيًا على نحو مدهش، لكنه، مثل صاحبه، ليس معصومًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-10cfb406c4aa",
+      "type": "h2",
+      "sourceHash": "10cfb406c4aaf0e6fcf803455a44a5502931da9d6db39622501407b8bca3fc89",
+      "sourceText": "أسئلة شائعة",
+      "spokenText": "أسئلة شائعة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-9950f49cca77",
+      "type": "h3",
+      "sourceHash": "9950f49cca7719aedb398c304823054cb544b11e155a21eb52f7564312239685",
+      "sourceText": "هل الحدس فطري أم مكتسب؟",
+      "spokenText": "هل الحدس فطري أم مكتسب؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a671a2bd7184",
+      "type": "paragraph",
+      "sourceHash": "a671a2bd718457f4b8f9762e093c2af419369c4027b241e9fd5d3ae31580719e",
+      "sourceText": "الحدس ليس عملية واحدة. بعض الاستجابات السريعة يرتبط بآليات أساسية في الانتباه والانفعال والتعلم، بينما يعتمد الحدس المتخصص الدقيق بدرجة كبيرة على الخبرة المتكررة والتغذية الراجعة. لذلك لا يوجد «حدس عام» دقيق في كل المجالات.",
+      "spokenText": "الحدس ليس عملية واحدة. بعض الاستجابات السريعة يرتبط بآليات أساسية في الانتباه والانفعال والتعلم، بينما يعتمد الحدس المتخصص الدقيق بدرجة كبيرة على الخبرة المتكررة والتغذية الراجعة. لذلك لا يوجد «حدس عام» دقيق في كل المجالات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-2da174a2142b",
+      "type": "h3",
+      "sourceHash": "2da174a2142badb6ff911fef40e35303b450f5e529e9a4bccc67a5c6aeb29238",
+      "sourceText": "هل الشعور بعدم الارتياح يعني أن الشخص غير جدير بالثقة؟",
+      "spokenText": "هل الشعور بعدم الارتياح يعني أن الشخص غير جدير بالثقة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1b30fb56ada7",
+      "type": "paragraph",
+      "sourceHash": "1b30fb56ada73dd2cae74e0674ab19e80b2a0089e7fd546073df3dfedb2fe74b",
+      "sourceText": "لا. قد يكون الشعور التقط سلوكًا مهمًا، وقد يكون ناتجًا عن قلق أو تجربة سابقة أو صورة نمطية. احترم حدودك، ثم حاول الانتقال من الانطباع العام إلى السلوك القابل للملاحظة.",
+      "spokenText": "لا. قد يكون الشعور التقط سلوكًا مهمًا، وقد يكون ناتجًا عن قلق أو تجربة سابقة أو صورة نمطية. احترم حدودك، ثم حاول الانتقال من الانطباع العام إلى السلوك القابل للملاحظة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-cde2d1fb5b8d",
+      "type": "h3",
+      "sourceHash": "cde2d1fb5b8dca6a0ba53671531ca213573db5483f240c404dc5819248540647",
+      "sourceText": "هل أتبع الحدس في القرارات الصحية أو المالية؟",
+      "spokenText": "هل أتبع الحدس في القرارات الصحية أو المالية؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fb579609b2d4",
+      "type": "paragraph",
+      "sourceHash": "fb579609b2d4a8c818974e42f5952e0bc8db73bea147a4be4b864251e38d0d19",
+      "sourceText": "يمكن أن يكون الشعور سببًا لطرح سؤال أو طلب فحص إضافي، لكنه لا يحل محل البيانات أو التقييم المتخصص عندما تكون تكلفة الخطأ مرتفعة.",
+      "spokenText": "يمكن أن يكون الشعور سببًا لطرح سؤال أو طلب فحص إضافي، لكنه لا يحل محل البيانات أو التقييم المتخصص عندما تكون تكلفة الخطأ مرتفعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "71c6330107430e33829f0894ea3c7ab892c415f8495a98f8791d606b32a254f1",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

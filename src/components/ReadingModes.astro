@@ -20,7 +20,7 @@ const { summary, readingMinutes, audioManifest, hasAudio = false } = Astro.props
     <button id="reading-tab-read" class="reading-mode is-active" type="button" role="tab" tabindex="0" aria-selected="true" data-reading-mode="read" aria-controls="article-content">
       <span class="reading-mode__icon" aria-hidden="true">📖</span><span><b>قراءة</b><small>النص الكامل · {readingMinutes} د</small></span>
     </button>
-    <button id="reading-tab-listen" class="reading-mode" type="button" role="tab" tabindex="-1" aria-selected="false" data-reading-mode="listen" aria-controls="reading-listen-panel" disabled={!hasAudio} aria-disabled={String(!hasAudio)} title={!hasAudio ? 'التسجيل الصوتي لهذا المقال قيد الإعداد' : undefined}>
+    <button id="reading-tab-listen" class="reading-mode" type="button" role="tab" tabindex="-1" aria-selected="false" data-reading-mode="listen" aria-controls="reading-listen-panel" disabled={!hasAudio} aria-disabled={!hasAudio} title={!hasAudio ? 'التسجيل الصوتي لهذا المقال قيد الإعداد' : undefined}>
       <span class="reading-mode__icon" aria-hidden="true">🎧</span><span><b>استماع</b><small data-listen-label>{hasAudio ? 'صوت متزامن مع النص' : 'قيد الإعداد'}</small></span>
     </button>
     <button id="reading-tab-summary" class="reading-mode" type="button" role="tab" tabindex="-1" aria-selected="false" data-reading-mode="summary" aria-controls="reading-summary-panel">

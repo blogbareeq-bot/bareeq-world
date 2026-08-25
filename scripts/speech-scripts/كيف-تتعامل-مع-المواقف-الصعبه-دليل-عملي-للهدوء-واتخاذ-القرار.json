@@ -1,0 +1,1602 @@
+{
+  "version": 1,
+  "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+  "sourceSnapshotHash": "3c82f177f16bcb0489d17fa5fabc94bd6499cc99a06bcccafe8e6005ca3c221b",
+  "sourceStructureHash": "586789da2919f8f04840d81e6bb6a4761d4a33f28ef22a902b7ac2908fabae75",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر والقراءة الإضافية",
+    "segmentCount": 4,
+    "sourceHash": "3c26112c99b6f1e492ad6d75b1098fa280ade5fe8336ed62df1dea0e92582720"
+  },
+  "segments": [
+    {
+      "segmentId": "title-2cdc4e825cdc",
+      "type": "title",
+      "sourceHash": "2cdc4e825cdc529e88cd17f20f7e2eab24bab82fc7803dd567a8fa7b5d0b9a8c",
+      "sourceText": "كيف تتعامل مع المواقف الصعبة؟ إطار عملي للهدوء واتخاذ القرار",
+      "spokenText": "كيف تتعامل مع المواقف الصعبة؟ إطار عملي للهدوء واتخاذ القرار",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b73dcc2fc4c4",
+      "type": "paragraph",
+      "sourceHash": "b73dcc2fc4c49ca35c96cc49c8e8c2a169d8206b685adc226126eac72acce145",
+      "sourceText": "قد يبدأ الموقف الصعب بخبر لم تتوقعه، أو خلاف يشتد في دقائق، أو قرار يضغط عليك لأن أثره طويل. في تلك اللحظة يميل الذهن إلى طلب إجابة كاملة فورًا: ماذا أفعل؟ ماذا سيحدث؟ وكيف أضمن أنني لن أخطئ؟",
+      "spokenText": "قد يبدأ الموقف الصعب بخبر لم تتوقعه، أو خلاف يشتد في دقائق، أو قرار يضغط عليك لأن أثره طويل. في تلك اللحظة يميل الذهن إلى طلب إجابة كاملة فورًا: ماذا أفعل؟ ماذا سيحدث؟ وكيف أضمن أنني لن أخطئ؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-68f5c9fb5f8f",
+      "type": "paragraph",
+      "sourceHash": "68f5c9fb5f8fcb20d65153119530eaa4a814d8b8da5f2e636c38b94dfd37a25b",
+      "sourceText": "لكن كثيرًا من المواقف لا تمنحنا يقينًا كاملًا، والضغط نفسه قد يجعل التركيز أصعب. وتعرّف منظمة الصحة العالمية الضغط بأنه حالة من القلق أو التوتر النفسي تنشأ عن موقف صعب، وتشير إلى أن الناس يختلفون في استجابتهم له، وأن استمرار الأعراض وتأثيرها في الحياة اليومية قد يستدعي طلب المساعدة المهنية.",
+      "spokenText": "لكن كثيرًا من المواقف لا تمنحنا يقينًا كاملًا، والضغط نفسه قد يجعل التركيز أصعب. وتعرّف منظمة الصحة العالمية الضغط بأنه حالة من القلق أو التوتر النفسي تنشأ عن موقف صعب، وتشير إلى أن الناس يختلفون في استجابتهم له، وأن استمرار الأعراض وتأثيرها في الحياة اليومية قد يستدعي طلب المساعدة المهنية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-aceffc7ed486",
+      "type": "paragraph",
+      "sourceHash": "aceffc7ed486dbbd6e429d8e25bcb8d602192d6826c72c7957c45b9a6f596d6d",
+      "sourceText": "لذلك لا يقدم هذا المقال وصفة لكل أزمة، ولا بديلًا عن الرعاية النفسية أو الطبية أو القانونية عند الحاجة. ما يقدمه هو إطار لاتخاذ الخطوة التالية من دون أن تجعل الدقيقة الأولى تحكم بقية الطريق.",
+      "spokenText": "لذلك لا يقدم هذا المقال وصفة لكل أزمة، ولا بديلًا عن الرعاية النفسية أو الطبية أو القانونية عند الحاجة. ما يقدمه هو إطار لاتخاذ الخطوة التالية من دون أن تجعل الدقيقة الأولى تحكم بقية الطريق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-57a5c9aa34c7",
+      "type": "paragraph",
+      "sourceHash": "57a5c9aa34c7aec7bab290e630290bef809b4a0c19593c7150d01ac800be9c7e",
+      "sourceText": "الإطار يتكون من خمس حركات:",
+      "spokenText": "الإطار يتكون من خمس حركات:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9199ecb1f7aa",
+      "type": "paragraph",
+      "sourceHash": "9199ecb1f7aa12d92eb1a3ea1aad91aba896d2294fb52d22d72cf1244c8c5ab5",
+      "sourceText": "ثبّت نفسك → حدّد ما تعرفه → فرّق بين القابل وغير القابل للتحكم → اختر خطوة قابلة للمراجعة → اطلب المساندة عند الحاجة.",
+      "spokenText": "ثبّت نفسك → حدّد ما تعرفه → فرّق بين القابل وغير القابل للتحكم → اختر خطوة قابلة للمراجعة → اطلب المساندة عند الحاجة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-0b3ee5483b8e",
+      "type": "h2",
+      "sourceHash": "0b3ee5483b8ee70e0d5babe2d2af9c979b925b949606313c3bdbcbc36b449d9d",
+      "sourceText": "1. ثبّت نفسك قبل أن توسّع المشكلة",
+      "spokenText": "1. ثبّت نفسك قبل أن توسّع المشكلة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-14b494e41a73",
+      "type": "paragraph",
+      "sourceHash": "14b494e41a73d5c324c3ebb1eaa3448648169e6409b931027046dc79d5dfdb70",
+      "sourceText": "عندما يرتفع الضغط، قد يصبح الانتباه أضيق، وقد يصعب النوم أو التركيز أو الاسترخاء. لا يعني ذلك أن كل قرار تحت الضغط سيكون خاطئًا، لكنه سبب كافٍ لعدم تحويل أول اندفاع إلى قرار نهائي إذا كان الموقف يسمح بوقت قصير.",
+      "spokenText": "عندما يرتفع الضغط، قد يصبح الانتباه أضيق، وقد يصعب النوم أو التركيز أو الاسترخاء. لا يعني ذلك أن كل قرار تحت الضغط سيكون خاطئًا، لكنه سبب كافٍ لعدم تحويل أول اندفاع إلى قرار نهائي إذا كان الموقف يسمح بوقت قصير.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-02f1c02b2503",
+      "type": "paragraph",
+      "sourceHash": "02f1c02b25035e9ca7b360524cc3873a5aa2175198771e0eb7575ad3ee3608dd",
+      "sourceText": "التثبيت هنا لا يعني إجبار نفسك على «الهدوء» أو إنكار ما حدث. الفكرة هي إعادة مساحة صغيرة بين الحدث ورد الفعل.",
+      "spokenText": "التثبيت هنا لا يعني إجبار نفسك على «الهدوء» أو إنكار ما حدث. الفكرة هي إعادة مساحة صغيرة بين الحدث ورد الفعل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a9befd541bf4",
+      "type": "paragraph",
+      "sourceHash": "a9befd541bf4b8c03304bd3da97500fb4737f1375573f09be9875f379b3a1287",
+      "sourceText": "يمكن أن تبدأ بأشياء بسيطة وآمنة: ابتعد قليلًا عن النقاش إذا كان يزداد حدة، وجّه انتباهك إلى ما حولك، حافظ على روتين أساسي قدر الإمكان، أو تحدث مع شخص تثق به. تتضمن إرشادات منظمة الصحة العالمية لإدارة الضغط مهارات عملية مثل إعادة الانتباه إلى الحاضر، وتنظيم الروتين، والنوم، والحركة، والتواصل مع الآخرين.",
+      "spokenText": "يمكن أن تبدأ بأشياء بسيطة وآمنة: ابتعد قليلًا عن النقاش إذا كان يزداد حدة، وجّه انتباهك إلى ما حولك، حافظ على روتين أساسي قدر الإمكان، أو تحدث مع شخص تثق به. تتضمن إرشادات منظمة الصحة العالمية لإدارة الضغط مهارات عملية مثل إعادة الانتباه إلى الحاضر، وتنظيم الروتين، والنوم، والحركة، والتواصل مع الآخرين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-573aa4b166fe",
+      "type": "paragraph",
+      "sourceHash": "573aa4b166fe0dc913141acf22bc8556598c409065f79738d9efa7b308c25b40",
+      "sourceText": "وفي موقف لا يحتمل التأجيل — خطر مباشر، حالة طبية طارئة، أو التزام قانوني بموعد — لا تجعل «أحتاج إلى الهدوء» سببًا لتأخير الإجراء الضروري. الأولوية حينها للسلامة أو للخطوة الملزمة.",
+      "spokenText": "وفي موقف لا يحتمل التأجيل — خطر مباشر، حالة طبية طارئة، أو التزام قانوني بموعد — لا تجعل «أحتاج إلى الهدوء» سببًا لتأخير الإجراء الضروري. الأولوية حينها للسلامة أو للخطوة الملزمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1503f638baf1",
+      "type": "paragraph",
+      "sourceHash": "1503f638baf1f59b327b7f1cc3fa09d9dbd87f3e4800d9b5c74d6d4c24577e52",
+      "sourceText": "السؤال في هذه المرحلة: ما الذي يساعدني على استعادة قدر كافٍ من التركيز للخطوة التالية؟",
+      "spokenText": "السؤال في هذه المرحلة: ما الذي يساعدني على استعادة قدر كافٍ من التركيز للخطوة التالية؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-538e6d669a08",
+      "type": "h2",
+      "sourceHash": "538e6d669a0873f9b0a65869e3cfad64d847d093cc4a8cd49f1a4f22bd47198b",
+      "sourceText": "2. حدّد ما تعرفه، وافصل الحقيقة عن القصة",
+      "spokenText": "2. حدّد ما تعرفه، وافصل الحقيقة عن القصة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d0058b82e067",
+      "type": "paragraph",
+      "sourceHash": "d0058b82e0672e8c7fc207dd47acc2c4ab944900450e1f70086cf07a1f9c3c15",
+      "sourceText": "الأحداث الصعبة تأتي غالبًا مع فراغات في المعلومات، والذهن يكره الفراغ. لذلك قد يملؤه بتوقعات تبدو كأنها حقائق.",
+      "spokenText": "الأحداث الصعبة تأتي غالبًا مع فراغات في المعلومات، والذهن يكره الفراغ. لذلك قد يملؤه بتوقعات تبدو كأنها حقائق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ff09d7701e32",
+      "type": "paragraph",
+      "sourceHash": "ff09d7701e3250e8ce9e54522b0f8a796e4b6d3a3e6b125609fbd1726b49053c",
+      "sourceText": "افترض أن مديرك طلب لقاءً عاجلًا من دون تفاصيل. الحقيقة هي: هناك لقاء عاجل. أما «سيتم إنهاء عملي» فاحتمال، لا حقيقة. وقد يكون الاحتمال مهمًا ويستحق الاستعداد، لكن معاملته كواقع مكتمل يضيف عبئًا قبل وصول المعلومات.",
+      "spokenText": "افترض أن مديرك طلب لقاءً عاجلًا من دون تفاصيل. الحقيقة هي: هناك لقاء عاجل. أما «سيتم إنهاء عملي» فاحتمال، لا حقيقة. وقد يكون الاحتمال مهمًا ويستحق الاستعداد، لكن معاملته كواقع مكتمل يضيف عبئًا قبل وصول المعلومات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-572e74e3a079",
+      "type": "paragraph",
+      "sourceHash": "572e74e3a079f0a52aa93fc548d8879e8908ed88d4c50dde6df6d58efb267fd6",
+      "sourceText": "اكتب، ولو ذهنيًا، ثلاث خانات:",
+      "spokenText": "اكتب، ولو ذهنيًا، ثلاث خانات:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-69be7c8c21cf",
+      "type": "list-item",
+      "sourceHash": "69be7c8c21cf9808bafaad7ea202f10cf1c8e890b2f27e648e53f9501fcc2894",
+      "sourceText": "ما أعرفه: معلومات مؤكدة أو قابلة للتحقق.",
+      "spokenText": "ما أعرفه: معلومات مؤكدة أو قابلة للتحقق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-f9cb87bc3107",
+      "type": "list-item",
+      "sourceHash": "f9cb87bc310781b67d461e1d87ccd9c6f92e2862b7ddcea2c1348d59f23404d5",
+      "sourceText": "ما أرجحه: تفسير محتمل تدعمه بعض الإشارات.",
+      "spokenText": "ما أرجحه: تفسير محتمل تدعمه بعض الإشارات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-ebd8dad78947",
+      "type": "list-item",
+      "sourceHash": "ebd8dad789471fc2b921f77ff689c157152fd1917698b3c5e95bdb74bf27fc29",
+      "sourceText": "ما أخشاه: سيناريو ممكن لكنه غير مثبت.",
+      "spokenText": "ما أخشاه: سيناريو ممكن لكنه غير مثبت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9520430f36af",
+      "type": "paragraph",
+      "sourceHash": "9520430f36af863554a44a61bc273ab1eb09bf47a9e4f103388ec51678d9d681",
+      "sourceText": "هذا الفصل لا يلغي القلق، لكنه يمنع الخوف من ارتداء هيئة معلومة.",
+      "spokenText": "هذا الفصل لا يلغي القلق، لكنه يمنع الخوف من ارتداء هيئة معلومة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-23e3d12eddd6",
+      "type": "paragraph",
+      "sourceHash": "23e3d12eddd6621c6ee1af32e35260bb25516e481ad2949b33632a6a1e4f740f",
+      "sourceText": "وعندما تكون المعلومات متضاربة، حاول الرجوع إلى المصدر الأقرب للحدث: نص العقد بدل نقل شفهي، نتيجة الفحص بدل تعليق عابر، رسالة رسمية بدل إشاعة، أو سؤال مباشر بدل بناء سلسلة من الافتراضات.",
+      "spokenText": "وعندما تكون المعلومات متضاربة، حاول الرجوع إلى المصدر الأقرب للحدث: نص العقد بدل نقل شفهي، نتيجة الفحص بدل تعليق عابر، رسالة رسمية بدل إشاعة، أو سؤال مباشر بدل بناء سلسلة من الافتراضات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3013c619d38e",
+      "type": "paragraph",
+      "sourceHash": "3013c619d38e2b5e12920aa68f48d358fde701aba550cf35743ff33b5e3777fd",
+      "sourceText": "السؤال في هذه المرحلة: ما الحقيقة التي أملكها الآن، وما الذي ما زال مجرد تفسير؟",
+      "spokenText": "السؤال في هذه المرحلة: ما الحقيقة التي أملكها الآن، وما الذي ما زال مجرد تفسير؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-e930cdb98a48",
+      "type": "h2",
+      "sourceHash": "e930cdb98a48b8b19c7099d73c00dc77b8a6e84b6eb0228252c63da404356823",
+      "sourceText": "3. فرّق بين ما تستطيع التأثير فيه وما خرج من يدك",
+      "spokenText": "3. فرّق بين ما تستطيع التأثير فيه وما خرج من يدك",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-89a8b1c34918",
+      "type": "paragraph",
+      "sourceHash": "89a8b1c349180aa0882a1071d9400dec2f2270cd4ff0120736efcfaa50f1523a",
+      "sourceText": "الموقف الصعب يحتوي عادة على عناصر من النوعين. قد لا تستطيع تغيير قرار صدر، لكن تستطيع تحديد طريقة الرد. لا تستطيع التحكم في رأي كل شخص عنك، لكن تستطيع توثيق موقفك. لا تستطيع إعادة يوم مضى، لكن تستطيع تعديل ما ستفعله في اليوم التالي.",
+      "spokenText": "الموقف الصعب يحتوي عادة على عناصر من النوعين. قد لا تستطيع تغيير قرار صدر، لكن تستطيع تحديد طريقة الرد. لا تستطيع التحكم في رأي كل شخص عنك، لكن تستطيع توثيق موقفك. لا تستطيع إعادة يوم مضى، لكن تستطيع تعديل ما ستفعله في اليوم التالي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8373ba32d471",
+      "type": "paragraph",
+      "sourceHash": "8373ba32d4719aa5e733b3f3868dd953533913683a02dd4fb220628d6fc60a7a",
+      "sourceText": "المقصود ليس ترديد عبارة «لا تفكر فيما لا تستطيع تغييره»؛ فالإنسان يحتاج أحيانًا إلى وقت للحزن أو الاستيعاب. المقصود أن العمل يحتاج عنوانًا يقع داخل دائرة تأثيرك.",
+      "spokenText": "المقصود ليس ترديد عبارة «لا تفكر فيما لا تستطيع تغييره»؛ فالإنسان يحتاج أحيانًا إلى وقت للحزن أو الاستيعاب. المقصود أن العمل يحتاج عنوانًا يقع داخل دائرة تأثيرك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2d534aff1a5d",
+      "type": "paragraph",
+      "sourceHash": "2d534aff1a5dc730d3dd1145f16e1608f0325c96950e8710d99d2bf3cd7c0df2",
+      "sourceText": "قسّم الصورة إلى قائمتين:",
+      "spokenText": "قسّم الصورة إلى قائمتين:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-a7e3840a7c0b",
+      "type": "h3",
+      "sourceHash": "a7e3840a7c0b2eda74014a2daeeaaf875a71e6e941d8c68f109ee107d132108b",
+      "sourceText": "خارج سيطرتي الآن",
+      "spokenText": "خارج سيطرتي الآن",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-ddf822e39291",
+      "type": "list-item",
+      "sourceHash": "ddf822e392917819245fd74a4ddb0f9a59ef905b62d873cafd86eb7a7e9461a7",
+      "sourceText": "قرار شخص آخر بعد صدوره.",
+      "spokenText": "قرار شخص آخر بعد صدوره.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-d7be5e6904e4",
+      "type": "list-item",
+      "sourceHash": "d7be5e6904e414da3e1b4fa4d5087948651c4565abad3f772ca11ec94c591365",
+      "sourceText": "ما قيل بالفعل.",
+      "spokenText": "ما قيل بالفعل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-a2a0adc69430",
+      "type": "list-item",
+      "sourceHash": "a2a0adc69430e93ae2239b8772be431a7ee3ffcee5e344e5bec893c4a4443dab",
+      "sourceText": "نتيجة ماضية لا يمكن إرجاعها.",
+      "spokenText": "نتيجة ماضية لا يمكن إرجاعها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-a42c3151ef00",
+      "type": "list-item",
+      "sourceHash": "a42c3151ef00aacbac8c3ec3fc574f2ce3b4635901ebff6a56ef9a24f2107952",
+      "sourceText": "ظروف عامة لا أملك تغييرها منفردًا.",
+      "spokenText": "ظروف عامة لا أملك تغييرها منفردًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-a0e1b51f35de",
+      "type": "h3",
+      "sourceHash": "a0e1b51f35de68ce9684289e101593659d197edd625a5a4535ac8792dcb514b9",
+      "sourceText": "أستطيع التأثير فيه",
+      "spokenText": "أستطيع التأثير فيه",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7066714e2984",
+      "type": "list-item",
+      "sourceHash": "7066714e2984313279b64d83a5977b25a2efb26d00c4b0fc2b0c0b1f0944a38b",
+      "sourceText": "المعلومات التي أجمعها.",
+      "spokenText": "المعلومات التي أجمعها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-88a5c6f9d1a2",
+      "type": "list-item",
+      "sourceHash": "88a5c6f9d1a21dc953ec0550016a9b26e96227994e0a1b4ae6494e32c21843d7",
+      "sourceText": "الشخص الذي أتواصل معه.",
+      "spokenText": "الشخص الذي أتواصل معه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-4127c0562b5e",
+      "type": "list-item",
+      "sourceHash": "4127c0562b5e4ee8c54fdca0248fd44f8feb6dff77c88078e3454f967e738310",
+      "sourceText": "الحدود التي أضعها.",
+      "spokenText": "الحدود التي أضعها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-abb545694b6f",
+      "type": "list-item",
+      "sourceHash": "abb545694b6fa08ddde6c9ee1f2aa504f21233f48d1633cb7c993eb0f72c9e4b",
+      "sourceText": "الوثائق التي أحتفظ بها.",
+      "spokenText": "الوثائق التي أحتفظ بها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-6147f4d38c53",
+      "type": "list-item",
+      "sourceHash": "6147f4d38c536c90104bf1fd9d66939b701180df73ad0306f7712893224ddf92",
+      "sourceText": "الوقت الذي أخصصه للنوم أو الحركة أو الراحة.",
+      "spokenText": "الوقت الذي أخصصه للنوم أو الحركة أو الراحة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-c1fafd84f238",
+      "type": "list-item",
+      "sourceHash": "c1fafd84f23860f3bb46ba3f5c7427e569cd28e95f1726b72b87558e841b7911",
+      "sourceText": "الخطوة التي أتخذها اليوم.",
+      "spokenText": "الخطوة التي أتخذها اليوم.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-338eba8508c3",
+      "type": "paragraph",
+      "sourceHash": "338eba8508c3fe68e5ce662c52b53e6c14856c5d7415b10022396413992a7513",
+      "sourceText": "إذا لم تجد شيئًا في القائمة الثانية، صغّر السؤال أكثر. قد لا تستطيع «حل الأزمة»، لكن ربما تستطيع تحديد موعد، أو حفظ مستند، أو تأجيل رد، أو طلب رأي متخصص.",
+      "spokenText": "إذا لم تجد شيئًا في القائمة الثانية، صغّر السؤال أكثر. قد لا تستطيع «حل الأزمة»، لكن ربما تستطيع تحديد موعد، أو حفظ مستند، أو تأجيل رد، أو طلب رأي متخصص.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-962f77af88cf",
+      "type": "paragraph",
+      "sourceHash": "962f77af88cf9fa1084f249636adc9c8ce3f3b2ce769a24483cbfa038e2b9777",
+      "sourceText": "السؤال في هذه المرحلة: ما الجزء الصغير من المشكلة الذي يمر عبر يدي فعلًا؟",
+      "spokenText": "السؤال في هذه المرحلة: ما الجزء الصغير من المشكلة الذي يمر عبر يدي فعلًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-6a4708343c50",
+      "type": "h2",
+      "sourceHash": "6a4708343c5019c468c1339925fb9ed55069a3ef13999798c8c669c26cc36200",
+      "sourceText": "4. اختر الخطوة التالية القابلة للمراجعة",
+      "spokenText": "4. اختر الخطوة التالية القابلة للمراجعة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-296844926ec1",
+      "type": "paragraph",
+      "sourceHash": "296844926ec1ef749c244a8bb4b30cc56c3727bc453566037584555ba61d32fb",
+      "sourceText": "تحت الضغط ننجذب إلى القرارات الكبيرة لأنها تمنح إحساسًا بأننا استعدنا السيطرة. لكن القرار الأكبر ليس دائمًا القرار الأفضل.",
+      "spokenText": "تحت الضغط ننجذب إلى القرارات الكبيرة لأنها تمنح إحساسًا بأننا استعدنا السيطرة. لكن القرار الأكبر ليس دائمًا القرار الأفضل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f31ce5115d7b",
+      "type": "paragraph",
+      "sourceHash": "f31ce5115d7b72b67b12e1da22863d7d3c660d702f9f5923a2e724883faa9e40",
+      "sourceText": "إذا لم تكن كل المعلومات متاحة، ابحث عن خطوة تحقق ثلاثة شروط:",
+      "spokenText": "إذا لم تكن كل المعلومات متاحة، ابحث عن خطوة تحقق ثلاثة شروط:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7af645eefb9f",
+      "type": "list-item",
+      "sourceHash": "7af645eefb9f5a3737572d2b9ba46a2b05efd25e3b3bb3485cf70f067439eaa2",
+      "sourceText": "تقلل الغموض أو تحميك من خسارة واضحة.",
+      "spokenText": "تقلل الغموض أو تحميك من خسارة واضحة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-a19e41b0fe1d",
+      "type": "list-item",
+      "sourceHash": "a19e41b0fe1de8faa56ab0242c48a756fc97c046e96e7dd1ac7682dba6961f94",
+      "sourceText": "لا تغلق خيارات كثيرة بلا ضرورة.",
+      "spokenText": "لا تغلق خيارات كثيرة بلا ضرورة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-a8b310a2fa6b",
+      "type": "list-item",
+      "sourceHash": "a8b310a2fa6b1b93a877bfe606dfdea18ebef7a0e952ca1d383d1fc1a5e1379a",
+      "sourceText": "يمكن مراجعتها عندما تظهر معلومات جديدة.",
+      "spokenText": "يمكن مراجعتها عندما تظهر معلومات جديدة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-822ec73da5c0",
+      "type": "paragraph",
+      "sourceHash": "822ec73da5c0f767fcdaee1cf55bad989e336b1e7e0d1d5355906d97e614cc6d",
+      "sourceText": "مثلًا، في خلاف مهني، قد تكون الخطوة الأفضل توثيق الوقائع وطلب لقاء محدد بدل إرسال رسالة طويلة تحت الانفعال. وفي قرار مالي كبير، قد تكون الخطوة هي جمع العروض أو طلب رأي مستقل بدل الالتزام الفوري. وفي علاقة متوترة، قد يكون تأجيل نقاش حساس ساعات قليلة أفضل من محاولة حسم مستقبل العلاقة في ذروة الغضب.",
+      "spokenText": "مثلًا، في خلاف مهني، قد تكون الخطوة الأفضل توثيق الوقائع وطلب لقاء محدد بدل إرسال رسالة طويلة تحت الانفعال. وفي قرار مالي كبير، قد تكون الخطوة هي جمع العروض أو طلب رأي مستقل بدل الالتزام الفوري. وفي علاقة متوترة، قد يكون تأجيل نقاش حساس ساعات قليلة أفضل من محاولة حسم مستقبل العلاقة في ذروة الغضب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7da3655dec73",
+      "type": "paragraph",
+      "sourceHash": "7da3655dec731dad8fa4746d719a6e0f43bd398a599693673a0f8f45880f6e0d",
+      "sourceText": "هذا لا يعني الهروب من القرارات الصعبة. بعض القرارات لها موعد نهائي، وبعضها يتطلب حسمًا. الفكرة أن نميز بين ما يجب حسمه الآن وما يمكن اختباره أو مراجعته أولًا.",
+      "spokenText": "هذا لا يعني الهروب من القرارات الصعبة. بعض القرارات لها موعد نهائي، وبعضها يتطلب حسمًا. الفكرة أن نميز بين ما يجب حسمه الآن وما يمكن اختباره أو مراجعته أولًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-abe718b01d8c",
+      "type": "paragraph",
+      "sourceHash": "abe718b01d8c675a4bbc5fcaa59f821bb23d14e63a5babc711c4240a92fd97b0",
+      "sourceText": "ويفيد هنا سؤالان:",
+      "spokenText": "ويفيد هنا سؤالان:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-4fc97d1d334e",
+      "type": "list-item",
+      "sourceHash": "4fc97d1d334ef70fe8428e90d93df91d9413cc343e358ff4bf746b82c937bb12",
+      "sourceText": "ما تكلفة الانتظار؟",
+      "spokenText": "ما تكلفة الانتظار؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7aee7f6b022e",
+      "type": "list-item",
+      "sourceHash": "7aee7f6b022e1ea904580e56f4f1dd837dbbbe008081a40660861e7fec32bad8",
+      "sourceText": "وما تكلفة التصرف الآن إذا كان افتراضي خاطئًا؟",
+      "spokenText": "وما تكلفة التصرف الآن إذا كان افتراضي خاطئًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-51cc2916ada5",
+      "type": "paragraph",
+      "sourceHash": "51cc2916ada55097bbdc6064353363c181ef3d3d8489e431b0bfaeeb7cd7300a",
+      "sourceText": "عندما تكون تكلفة الخطأ مرتفعة، يرتفع وزن التحقق والاستشارة.",
+      "spokenText": "عندما تكون تكلفة الخطأ مرتفعة، يرتفع وزن التحقق والاستشارة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-c2639f7e4f23",
+      "type": "h2",
+      "sourceHash": "c2639f7e4f23125b00b42a93f2dddc6bee39c8206cce236d7a458c46bfa75901",
+      "sourceText": "5. اطلب المساندة عندما تصبح المشكلة أكبر من أداة واحدة",
+      "spokenText": "5. اطلب المساندة عندما تصبح المشكلة أكبر من أداة واحدة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-cdd7873368bb",
+      "type": "paragraph",
+      "sourceHash": "cdd7873368bb680e4c60a3bda5d8fcaeaa038b719f6b16b13764c711cd5a9a0d",
+      "sourceText": "الاستقلال لا يعني إدارة كل شيء وحدك. أحيانًا نحتاج معلومة من متخصص، وأحيانًا نحتاج شخصًا يساعدنا على ترتيب الأفكار، وأحيانًا نحتاج دعمًا مهنيًا لأن الضغط أصبح مستمرًا ويؤثر في النوم أو العمل أو الدراسة أو العلاقات.",
+      "spokenText": "الاستقلال لا يعني إدارة كل شيء وحدك. أحيانًا نحتاج معلومة من متخصص، وأحيانًا نحتاج شخصًا يساعدنا على ترتيب الأفكار، وأحيانًا نحتاج دعمًا مهنيًا لأن الضغط أصبح مستمرًا ويؤثر في النوم أو العمل أو الدراسة أو العلاقات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5e9548d5814b",
+      "type": "paragraph",
+      "sourceHash": "5e9548d5814b1f94e4445aa026f5c164f3bc676863f4c483e78e5d2ee1c729c3",
+      "sourceText": "تؤكد منظمة الصحة العالمية أن التواصل مع أشخاص موثوقين قد يساعد في التعامل مع الضغط، وأن من يجد صعوبة مستمرة في التكيف يمكنه طلب المساعدة من مقدم رعاية صحية موثوق.",
+      "spokenText": "تؤكد منظمة الصحة العالمية أن التواصل مع أشخاص موثوقين قد يساعد في التعامل مع الضغط، وأن من يجد صعوبة مستمرة في التكيف يمكنه طلب المساعدة من مقدم رعاية صحية موثوق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b967d88b03c6",
+      "type": "paragraph",
+      "sourceHash": "b967d88b03c685faa0ab9cd135a536b63dd2022c338abf9966d7582f00d5dfd2",
+      "sourceText": "اختر نوع المساندة بحسب المشكلة:",
+      "spokenText": "اختر نوع المساندة بحسب المشكلة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-1a8561854eb0",
+      "type": "list-item",
+      "sourceHash": "1a8561854eb0913f93b3596d5e9e5b339f6b79f1b044e8d612d19bd90514323b",
+      "sourceText": "معلومة: متخصص أو جهة رسمية.",
+      "spokenText": "معلومة: متخصص أو جهة رسمية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-c86730cfde6a",
+      "type": "list-item",
+      "sourceHash": "c86730cfde6ada7ccaa6aadb6217a2badb2d8845cc4527f7bc92b9695c772f34",
+      "sourceText": "قرار: شخص خبير لا يملك مصلحة في توجيهك إلى خيار بعينه.",
+      "spokenText": "قرار: شخص خبير لا يملك مصلحة في توجيهك إلى خيار بعينه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-2af9e89e3c6f",
+      "type": "list-item",
+      "sourceHash": "2af9e89e3c6f7f5e80d1054da06c7a4950ac6aa4d911b7f8c2c5aab6b84bbbd7",
+      "sourceText": "دعم إنساني: شخص يحسن الاستماع ولا يزيد التوتر.",
+      "spokenText": "دعم إنساني: شخص يحسن الاستماع ولا يزيد التوتر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-e47560508907",
+      "type": "list-item",
+      "sourceHash": "e47560508907cd717e35d068391b2b223a0ec3da4f9cb645c7fd4498149661d3",
+      "sourceText": "ضيق نفسي مستمر أو شديد: مختص صحي مؤهل.",
+      "spokenText": "ضيق نفسي مستمر أو شديد: مختص صحي مؤهل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8b4dcee3a594",
+      "type": "paragraph",
+      "sourceHash": "8b4dcee3a5947b7326687fb42ffe08ed922dde76ea8743d8e1f72d95b851be34",
+      "sourceText": "إذا كانت هناك أفكار عن إيذاء النفس أو خطر مباشر على شخص، فالموقف ليس مساحة لمقال أو تمرين ذاتي؛ يحتاج إلى مساعدة طارئة ومباشرة وفق الخدمات المتاحة في بلدك.",
+      "spokenText": "إذا كانت هناك أفكار عن إيذاء النفس أو خطر مباشر على شخص، فالموقف ليس مساحة لمقال أو تمرين ذاتي؛ يحتاج إلى مساعدة طارئة ومباشرة وفق الخدمات المتاحة في بلدك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6a39b002d27a",
+      "type": "paragraph",
+      "sourceHash": "6a39b002d27af5d407fc8ac9620ba4a9b8479eabdb8b2cda362ab120b8e25979",
+      "sourceText": "السؤال في هذه المرحلة: هل أحتاج إلى شجاعة أكبر، أم إلى معلومة أو دعم لا أملكه وحدي؟",
+      "spokenText": "السؤال في هذه المرحلة: هل أحتاج إلى شجاعة أكبر، أم إلى معلومة أو دعم لا أملكه وحدي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-208d56dec649",
+      "type": "h2",
+      "sourceHash": "208d56dec6494d8c60accd732bc114a53ab47de13d81f4818062587423c775c9",
+      "sourceText": "كيف يبدو الإطار في موقف واقعي؟",
+      "spokenText": "كيف يبدو الإطار في موقف واقعي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-97797e0e4229",
+      "type": "paragraph",
+      "sourceHash": "97797e0e42294846ec4989439c8868f5cde1d5d87b06faf8e85abfb082b128fc",
+      "sourceText": "لنفترض أنك تلقيت رسالة تفيد بأن مشروعًا تعمل عليه قد يتوقف، ولا توجد تفاصيل أخرى.",
+      "spokenText": "لنفترض أنك تلقيت رسالة تفيد بأن مشروعًا تعمل عليه قد يتوقف، ولا توجد تفاصيل أخرى.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9b4617a1fe99",
+      "type": "paragraph",
+      "sourceHash": "9b4617a1fe993366b35cd0ea4a97568fccd0536378ef7ffda024ce32aa1ff30a",
+      "sourceText": "ثبّت نفسك: لا ترسل عشر رسائل متتابعة وأنت مرتبك. امنح نفسك دقائق لترتيب ما يلزم ما دام لا يوجد إجراء عاجل.",
+      "spokenText": "ثبّت نفسك: لا ترسل عشر رسائل متتابعة وأنت مرتبك. امنح نفسك دقائق لترتيب ما يلزم ما دام لا يوجد إجراء عاجل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8299c83f29c0",
+      "type": "paragraph",
+      "sourceHash": "8299c83f29c0184b471120a439490b7be0dc8c3ca846c4d9ff01f2ee558044d6",
+      "sourceText": "حدّد ما تعرفه: الرسالة تقول إن المشروع «قد» يتوقف. لا تعرف القرار النهائي ولا السبب.",
+      "spokenText": "حدّد ما تعرفه: الرسالة تقول إن المشروع «قد» يتوقف. لا تعرف القرار النهائي ولا السبب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e6e235a48a09",
+      "type": "paragraph",
+      "sourceHash": "e6e235a48a095b4e0c64904bf84c0b8b4a75a665f114f578a910a749a9f0c602",
+      "sourceText": "فرّق بين القابل وغير القابل للتحكم: لا تملك قرار الإدارة، لكن تستطيع جمع مستنداتك، ومعرفة حالة المهام، وطلب توضيح رسمي.",
+      "spokenText": "فرّق بين القابل وغير القابل للتحكم: لا تملك قرار الإدارة، لكن تستطيع جمع مستنداتك، ومعرفة حالة المهام، وطلب توضيح رسمي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0e2a082175c8",
+      "type": "paragraph",
+      "sourceHash": "0e2a082175c8fb64ba5513cc35aadd3f2abf6aaae139a183847275dcba891e78",
+      "sourceText": "اختر خطوة قابلة للمراجعة: أرسل سؤالًا محددًا عن القرار والموعد المتوقع، وجهّز ملخصًا لحالة عملك. لا تتخذ قرار استقالة أو مواجهة قبل وصول معلومات إضافية ما لم توجد أسباب أخرى مستقلة.",
+      "spokenText": "اختر خطوة قابلة للمراجعة: أرسل سؤالًا محددًا عن القرار والموعد المتوقع، وجهّز ملخصًا لحالة عملك. لا تتخذ قرار استقالة أو مواجهة قبل وصول معلومات إضافية ما لم توجد أسباب أخرى مستقلة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-62ecb9f67c51",
+      "type": "paragraph",
+      "sourceHash": "62ecb9f67c514cc972d89bd09c8de9e3971fc3d9ffcf5c7bfbd8c5d4b7fa37c4",
+      "sourceText": "اطلب المساندة: إذا ظهرت آثار تعاقدية أو مالية، استشر الشخص المختص. وإذا استمر الضغط وأصبح يعطل حياتك، اطلب دعمًا صحيًا مناسبًا.",
+      "spokenText": "اطلب المساندة: إذا ظهرت آثار تعاقدية أو مالية، استشر الشخص المختص. وإذا استمر الضغط وأصبح يعطل حياتك، اطلب دعمًا صحيًا مناسبًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-50764bb2ed75",
+      "type": "paragraph",
+      "sourceHash": "50764bb2ed75f0d70d21528412a958b61c75e2ab2c88f6241b07320a3e0f7de1",
+      "sourceText": "لاحظ أن الإطار لم يحل المشكلة. وظيفته أن يمنع الغموض من قيادة كل حركة.",
+      "spokenText": "لاحظ أن الإطار لم يحل المشكلة. وظيفته أن يمنع الغموض من قيادة كل حركة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-f4374719b110",
+      "type": "h2",
+      "sourceHash": "f4374719b110a291b9818ebdf4c38ec857c7bfccb0aab67d6ab58cb65b136bfd",
+      "sourceText": "ثلاثة أخطاء تجعل الموقف أثقل",
+      "spokenText": "ثلاثة أخطاء تجعل الموقف أثقل",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-62ed1cc47827",
+      "type": "h3",
+      "sourceHash": "62ed1cc478272777c4fd0b6ec6530c3be85ed9e73234ebe75265ff5d836de277",
+      "sourceText": "محاولة حل المستقبل كله اليوم",
+      "spokenText": "محاولة حل المستقبل كله اليوم",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f101954db215",
+      "type": "paragraph",
+      "sourceHash": "f101954db215638102d1da4477fdfae7c3d4f9b3051b1f8062c883ade070945a",
+      "sourceText": "السؤال «كيف ستنتهي هذه القصة؟» قد لا يملك جوابًا الآن. استبدله مؤقتًا بـ«ما الخطوة التي تحسن موقفي خلال الساعات أو الأيام القليلة القادمة؟».",
+      "spokenText": "السؤال «كيف ستنتهي هذه القصة؟» قد لا يملك جوابًا الآن. استبدله مؤقتًا بـ«ما الخطوة التي تحسن موقفي خلال الساعات أو الأيام القليلة القادمة؟».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-2c9f1d721bae",
+      "type": "h3",
+      "sourceHash": "2c9f1d721baec4cbb473d6bd4d384f83862c6cdb299c5c0dcdd96992173ab7da",
+      "sourceText": "مساواة المشاعر بالحقائق",
+      "spokenText": "مساواة المشاعر بالحقائق",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6af74f7602fc",
+      "type": "paragraph",
+      "sourceHash": "6af74f7602fc59395a0f39e7d408aa061d7d1772a1755e5dd8354c0d21f9ddc8",
+      "sourceText": "الخوف حقيقي بوصفه تجربة، لكنه لا يثبت أن السيناريو المخيف سيقع. والغضب قد يشير إلى أن حدًا مهمًا تم تجاوزه، لكنه لا يحدد وحده أنسب رد.",
+      "spokenText": "الخوف حقيقي بوصفه تجربة، لكنه لا يثبت أن السيناريو المخيف سيقع. والغضب قد يشير إلى أن حدًا مهمًا تم تجاوزه، لكنه لا يحدد وحده أنسب رد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-16a5ba02499f",
+      "type": "h3",
+      "sourceHash": "16a5ba02499f14467ed70759b8568432e85f852060b6e7863c8f9e059e0566f9",
+      "sourceText": "طلب نصيحة من كل شخص",
+      "spokenText": "طلب نصيحة من كل شخص",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-72faedc69196",
+      "type": "paragraph",
+      "sourceHash": "72faedc69196a50474431cf6dded6c410e415d8b81ce7ad739155e7fd71b6952",
+      "sourceText": "كثرة الآراء لا تعني جودة القرار. اختر مصدرًا مناسبًا لكل نوع من الأسئلة، وميّز بين من يملك خبرة ومن يملك رأيًا فقط.",
+      "spokenText": "كثرة الآراء لا تعني جودة القرار. اختر مصدرًا مناسبًا لكل نوع من الأسئلة، وميّز بين من يملك خبرة ومن يملك رأيًا فقط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-3891b2564da5",
+      "type": "h2",
+      "sourceHash": "3891b2564da5c22a5459870ba4b3e5dd1a0a8b6a5e1e38066b0e6e50ff103017",
+      "sourceText": "بطاقة بريق للمواقف الصعبة",
+      "spokenText": "بطاقة بريق للمواقف الصعبة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8a4abf4de236",
+      "type": "paragraph",
+      "sourceHash": "8a4abf4de236e59b6f2007b20c1e6a448acba26e9bcd63ffa70f8c9d947ddfbd",
+      "sourceText": "عندما تضيق الصورة، اختصر الإطار في خمس جمل:",
+      "spokenText": "عندما تضيق الصورة، اختصر الإطار في خمس جمل:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-8ad78355d55d",
+      "type": "list-item",
+      "sourceHash": "8ad78355d55d539dd71aaa77e569be2f0960d343865ca2d3f7b5f1dfa73cb871",
+      "sourceText": "أحتاج أولًا إلى قدر كافٍ من الثبات، لا إلى شعور مثالي بالهدوء.",
+      "spokenText": "أحتاج أولًا إلى قدر كافٍ من الثبات، لا إلى شعور مثالي بالهدوء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-6b7023c02c2d",
+      "type": "list-item",
+      "sourceHash": "6b7023c02c2d6638817529bf70f1a04b3c5de0f3a74315de7167201f30155219",
+      "sourceText": "سأفصل ما أعرفه عما أخشاه أو أرجحه.",
+      "spokenText": "سأفصل ما أعرفه عما أخشاه أو أرجحه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-1a6cc3a26d3d",
+      "type": "list-item",
+      "sourceHash": "1a6cc3a26d3d4dd3f1103daaf56200ed9af315767800d60acece7a7674fec8ee",
+      "sourceText": "سأضع جهدي في الجزء الذي أستطيع التأثير فيه.",
+      "spokenText": "سأضع جهدي في الجزء الذي أستطيع التأثير فيه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-9f5c49999566",
+      "type": "list-item",
+      "sourceHash": "9f5c49999566edd11341d80cbcb9434f4846625927e81cc76538d34ed1418dc7",
+      "sourceText": "سأختار الخطوة التالية الأقل إغلاقًا للخيارات ما دام الوقت يسمح.",
+      "spokenText": "سأختار الخطوة التالية الأقل إغلاقًا للخيارات ما دام الوقت يسمح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-44e8a37b2c6f",
+      "type": "list-item",
+      "sourceHash": "44e8a37b2c6fef925e2b8a0f0bfd0e969933e9b36d71f72aee9cdcd8c701e0f9",
+      "sourceText": "سأطلب المساندة المناسبة إذا تجاوز الأمر ما أستطيع إدارته وحدي.",
+      "spokenText": "سأطلب المساندة المناسبة إذا تجاوز الأمر ما أستطيع إدارته وحدي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-6c78e10ed9e0",
+      "type": "h2",
+      "sourceHash": "6c78e10ed9e046c9524e768dc292009e18afc4281ac16a980dcbf3dea387222d",
+      "sourceText": "الخلاصة",
+      "spokenText": "الخلاصة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a6b0351b1d29",
+      "type": "paragraph",
+      "sourceHash": "a6b0351b1d2987af8b809056fe41b1884f860a7ba8738f737451b5bcdabae6d5",
+      "sourceText": "القوة في المواقف الصعبة ليست أن تملك الإجابة فورًا، ولا أن تمنع نفسك من الخوف أو الحزن. القوة العملية أبسط من ذلك: ألا تسمح للضغط بأن يخلط بين الحقيقة والتوقع، أو بين ما خرج من يدك وما زال في متناولك.",
+      "spokenText": "القوة في المواقف الصعبة ليست أن تملك الإجابة فورًا، ولا أن تمنع نفسك من الخوف أو الحزن. القوة العملية أبسط من ذلك: ألا تسمح للضغط بأن يخلط بين الحقيقة والتوقع، أو بين ما خرج من يدك وما زال في متناولك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0ae9c31671ff",
+      "type": "paragraph",
+      "sourceHash": "0ae9c31671ff4a44c8e891dcca97b58c4d9e7c47dd2b0ab79f2200cc1f8cc414",
+      "sourceText": "حين تصبح الصورة ثقيلة، لا تحاول حملها كلها دفعة واحدة. ثبّت نفسك بما يكفي، اعرف ما أمامك، اختر الجزء الذي تستطيع التأثير فيه، ثم نفّذ الخطوة التالية.",
+      "spokenText": "حين تصبح الصورة ثقيلة، لا تحاول حملها كلها دفعة واحدة. ثبّت نفسك بما يكفي، اعرف ما أمامك، اختر الجزء الذي تستطيع التأثير فيه، ثم نفّذ الخطوة التالية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5804b66e7c60",
+      "type": "paragraph",
+      "sourceHash": "5804b66e7c602d3b118e37420f2c4ae9699a975a86fc40c8926d4f88f6b2181e",
+      "sourceText": "فالقرار الجيد لا يحتاج دائمًا إلى يقين كامل؛ لكنه يحتاج إلى مساحة كافية كي لا يتخذ الخوف القرار بالنيابة عنك.",
+      "spokenText": "فالقرار الجيد لا يحتاج دائمًا إلى يقين كامل؛ لكنه يحتاج إلى مساحة كافية كي لا يتخذ الخوف القرار بالنيابة عنك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "9039f05700088c9146eff4b9d9d867d7dca0692465219319f180b80c112f9310",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

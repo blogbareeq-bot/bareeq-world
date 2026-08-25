@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+  "speechScriptHash": "2f213a916778b088296f7b04c81266626fbb85b67e7b3d1a31f7b0e7db93d0d2",
+  "status": "draft-needs-speech-review",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 60,
+  "selectedSegments": [
+    {
+      "segmentId": "paragraph-0b0d617c8539",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)",
+        "1 foreign term(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-12aa114b8f3c",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-cc2f9125c824",
+      "challenges": [
+        "1 foreign term(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-206fe5f04af9",
+      "challenges": [
+        "1 foreign term(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-9b0e22da8ba3",
+      "challenges": [
+        "1 foreign term(s)"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "69bd1b096435b655f32610d7658bbe9d49c864a47dce4eddd80f36aed59b142a"
+}

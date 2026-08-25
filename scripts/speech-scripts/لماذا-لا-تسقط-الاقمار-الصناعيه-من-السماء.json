@@ -1,0 +1,2160 @@
+{
+  "version": 1,
+  "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+  "sourceSnapshotHash": "87971b1e2a8f3a2e3042b256acd50cca177716e36f2c27e6e8500ecf1599760e",
+  "sourceStructureHash": "133ec4a24b0a540a5291d2a670963ea0d60fd4fa60ea0738a786914a3de5b8db",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر",
+    "segmentCount": 4,
+    "sourceHash": "ba8c35d9589f582e49da7c68c60600ea01209eb393889399ca6da49e0ab80c04"
+  },
+  "segments": [
+    {
+      "segmentId": "title-05476aeddfdb",
+      "type": "title",
+      "sourceHash": "05476aeddfdb89f1043399a9b9a3e7fd917f319b8883be0695aa0562443c7bf2",
+      "sourceText": "لماذا لا تسقط الأقمار الصناعية من السماء؟",
+      "spokenText": "لماذا لا تسقط الأقمار الصناعية من السماء؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e3175497e126",
+      "type": "paragraph",
+      "sourceHash": "e3175497e1266f46c5cba2947eceebc6f146b28ccf5fb6f717dae3814f6271ce",
+      "sourceText": "حين تنظر إلى السماء في ليلة صافية، قد تلمح نقطة مضيئة تتحرك بهدوء بين النجوم. إنها ليست نجمة خرجت عن مسارها، ولا طائرة تحلق على ارتفاع شاهق، بل ربما تكون قمرًا صناعيًا يزن مئات الكيلوجرامات، وقد يصل وزن بعض الأقمار والمركبات الفضائية إلى عدة أطنان.",
+      "spokenText": "حين تنظر إلى السماء في ليلة صافية، قد تلمح نقطة مضيئة تتحرك بهدوء بين النجوم. إنها ليست نجمة خرجت عن مسارها، ولا طائرة تحلق على ارتفاع شاهق، بل ربما تكون قمرًا صناعيًا يزن مئات الكيلوجرامات، وقد يصل وزن بعض الأقمار والمركبات الفضائية إلى عدة أطنان.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-95f637c5bf02",
+      "type": "paragraph",
+      "sourceHash": "95f637c5bf02cf5e5146816067e5d1810ac4a837d3bf98ec07cbfa13880b790e",
+      "sourceText": "فوق رؤوسنا الآن آلاف الأقمار الصناعية. بعضها ينقل إشارات الاتصالات والبث التلفزيوني، وبعضها يراقب الطقس، ويلتقط صور الأرض، ويتابع حرائق الغابات والعواصف، وبعضها يساعد هاتفك على تحديد موقعك عندما تستخدم الخرائط.",
+      "spokenText": "فوق رؤوسنا الآن آلاف الأقمار الصناعية. بعضها ينقل إشارات الاتصالات والبث التلفزيوني، وبعضها يراقب الطقس، ويلتقط صور الأرض، ويتابع حرائق الغابات والعواصف، وبعضها يساعد هاتفك على تحديد موقعك عندما تستخدم الخرائط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ab9cce472b29",
+      "type": "paragraph",
+      "sourceHash": "ab9cce472b29518b2597db0180bcfda63b04b0e3c606fe52ee632ba7b6e617a5",
+      "sourceText": "لكن كيف تبقى كل هذه الأجسام في السماء؟ لماذا لا تسحبها الجاذبية إلى الأسفل فتصطدم بالأرض؟",
+      "spokenText": "لكن كيف تبقى كل هذه الأجسام في السماء؟ لماذا لا تسحبها الجاذبية إلى الأسفل فتصطدم بالأرض؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ddf7a4b06767",
+      "type": "paragraph",
+      "sourceHash": "ddf7a4b067675cec2d69b1232c19dc85c3c332a5dc56019af52c2cbf37ea0b87",
+      "sourceText": "الإجابة المفاجئة هي:",
+      "spokenText": "الإجابة المفاجئة هي:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "quote-9c72630c2b61",
+      "type": "quote",
+      "sourceHash": "9c72630c2b61fb65c52d2322d93f09347a8b339f21adf10717e6beff60cf743d",
+      "sourceText": "الأقمار الصناعية تسقط بالفعل، لكنها تسقط بطريقة تجعلها تستمر في تفويت الأرض.",
+      "spokenText": "الأقمار الصناعية تسقط بالفعل، لكنها تسقط بطريقة تجعلها تستمر في تفويت الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b469c7838886",
+      "type": "paragraph",
+      "sourceHash": "b469c7838886ee8479201cbb77f4fba0d8062c052dcdfc585e4777fd69000d0d",
+      "sourceText": "وهذا السقوط المستمر حول الأرض هو ما نسميه المدار.",
+      "spokenText": "وهذا السقوط المستمر حول الأرض هو ما نسميه المدار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-09badee1e7fb",
+      "type": "h2",
+      "sourceHash": "09badee1e7fbe401e77469bbd82f879749af8e0c7065215cecb63b1be4ac1b50",
+      "sourceText": "خرافة انعدام الجاذبية في الفضاء",
+      "spokenText": "خرافة انعدام الجاذبية في الفضاء",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a5a86c512060",
+      "type": "paragraph",
+      "sourceHash": "a5a86c512060846f6da7ae4672221771910969b1af3f8f8bec693d39b3c236b5",
+      "sourceText": "من أكثر الأفكار انتشارًا أن الأقمار الصناعية ورواد الفضاء يطفون لأن الجاذبية غير موجودة في الفضاء.",
+      "spokenText": "من أكثر الأفكار انتشارًا أن الأقمار الصناعية ورواد الفضاء يطفون لأن الجاذبية غير موجودة في الفضاء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2d12b7c08e38",
+      "type": "paragraph",
+      "sourceHash": "2d12b7c08e3809cc6d2ff137a7fdf32204482e72d5cb9ceb20029f6aad9dd223",
+      "sourceText": "لكن هذا الاعتقاد غير صحيح.",
+      "spokenText": "لكن هذا الاعتقاد غير صحيح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-da480e555d1a",
+      "type": "paragraph",
+      "sourceHash": "da480e555d1a5027951a544d98d1bee147db34c64984c714601555efa04bbc8a",
+      "sourceText": "الجاذبية لا تتوقف فجأة عند مغادرة سطح الأرض، بل تمتد إلى مسافات بعيدة جدًا. وهي القوة نفسها التي تُبقي القمر الطبيعي في مداره حول الأرض، وتُبقي الأرض في مدارها حول الشمس.",
+      "spokenText": "الجاذبية لا تتوقف فجأة عند مغادرة سطح الأرض، بل تمتد إلى مسافات بعيدة جدًا. وهي القوة نفسها التي تُبقي القمر الطبيعي في مداره حول الأرض، وتُبقي الأرض في مدارها حول الشمس.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2b122b75878b",
+      "type": "paragraph",
+      "sourceHash": "2b122b75878bd279925f7d1070773ea5f1e4d264f58b787ac46a8870408a24de",
+      "sourceText": "حتى على ارتفاع يقارب 400 كيلومتر، حيث تدور محطة الفضاء الدولية، تظل الجاذبية قوية، وتبلغ قرابة 90% من قوتها عند سطح الأرض.",
+      "spokenText": "حتى على ارتفاع يقارب 400 كيلومتر، حيث تدور محطة الفضاء الدولية، تظل الجاذبية قوية، وتبلغ قرابة 90% من قوتها عند سطح الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3f5bab7fe993",
+      "type": "paragraph",
+      "sourceHash": "3f5bab7fe9933aa9f9ee97ab9691821707df2e8473d7bd5823ac648586741287",
+      "sourceText": "فلو وُضع جسم على ذلك الارتفاع دون أن يمتلك سرعة أفقية كافية، فسوف يبدأ في السقوط مباشرة نحو الأرض.",
+      "spokenText": "فلو وُضع جسم على ذلك الارتفاع دون أن يمتلك سرعة أفقية كافية، فسوف يبدأ في السقوط مباشرة نحو الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7cd106dd8bac",
+      "type": "paragraph",
+      "sourceHash": "7cd106dd8bacbd03a1eb2f26a4492a07b3250ca47f807e83002bf0409827ec19",
+      "sourceText": "إذن، الأقمار الصناعية لا تبقى في الفضاء لأنها بعيدة عن الجاذبية، بل لأنها تتحرك بسرعة هائلة في الاتجاه الصحيح.",
+      "spokenText": "إذن، الأقمار الصناعية لا تبقى في الفضاء لأنها بعيدة عن الجاذبية، بل لأنها تتحرك بسرعة هائلة في الاتجاه الصحيح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-751e1652d9db",
+      "type": "h2",
+      "sourceHash": "751e1652d9dbe3d02fda268f242314719f02610cc93fc775bbc69f21fce97107",
+      "sourceText": "السقوط الذي لا ينتهي",
+      "spokenText": "السقوط الذي لا ينتهي",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-07dddd625e1a",
+      "type": "paragraph",
+      "sourceHash": "07dddd625e1aa2cd3b04be517b168ef09cde3b78e5bcc485c8806bff400bff37",
+      "sourceText": "لفهم المدار، تخيل أنك تقف فوق جبل مرتفع وتحمل كرة في يدك.",
+      "spokenText": "لفهم المدار، تخيل أنك تقف فوق جبل مرتفع وتحمل كرة في يدك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7be12dced1ba",
+      "type": "paragraph",
+      "sourceHash": "7be12dced1ba3621398e855b9d39e8b75dace8a64fa8663fc8389186f9b71517",
+      "sourceText": "إذا تركت الكرة، ستسقط إلى أسفل بسبب الجاذبية.",
+      "spokenText": "إذا تركت الكرة، ستسقط إلى أسفل بسبب الجاذبية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9902f16d9036",
+      "type": "paragraph",
+      "sourceHash": "9902f16d9036b85afdb1155f838d7ecac79c68f7eabdde601705eef7ffad85ec",
+      "sourceText": "وإذا رميتها إلى الأمام، فإنها ستتحرك أفقيًا لمسافة قصيرة، وفي الوقت نفسه ستسحبها الجاذبية إلى الأرض، فينحني مسارها حتى تصطدم بالسطح.",
+      "spokenText": "وإذا رميتها إلى الأمام، فإنها ستتحرك أفقيًا لمسافة قصيرة، وفي الوقت نفسه ستسحبها الجاذبية إلى الأرض، فينحني مسارها حتى تصطدم بالسطح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5493e5d8968a",
+      "type": "paragraph",
+      "sourceHash": "5493e5d8968adf6b161b28e926fafabf5d7d56147d4ff27e2ba7f7f9d5f188e0",
+      "sourceText": "ولو رميتها بقوة أكبر، فستقطع مسافة أطول قبل أن تسقط.",
+      "spokenText": "ولو رميتها بقوة أكبر، فستقطع مسافة أطول قبل أن تسقط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-03b183030e13",
+      "type": "paragraph",
+      "sourceHash": "03b183030e13763442c1c053eaa45d209300c1520eb79502e9f3b9bf0cee8b3b",
+      "sourceText": "والآن تخيل أنك استطعت رميها بسرعة هائلة جدًا.",
+      "spokenText": "والآن تخيل أنك استطعت رميها بسرعة هائلة جدًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dd8cf5f7bb70",
+      "type": "paragraph",
+      "sourceHash": "dd8cf5f7bb70807114a91600d94dda7596bb4e679e674a3ff5e88ce0556d0dba",
+      "sourceText": "ستظل الجاذبية تسحب الكرة إلى الأسفل، لكن الأرض كروية، وسطحها ينحني بعيدًا عنها. فإذا كانت سرعة الكرة الأفقية مناسبة، فإنها ستسقط نحو الأرض بالقدر نفسه الذي ينحني فيه سطح الأرض من تحتها.",
+      "spokenText": "ستظل الجاذبية تسحب الكرة إلى الأسفل، لكن الأرض كروية، وسطحها ينحني بعيدًا عنها. فإذا كانت سرعة الكرة الأفقية مناسبة، فإنها ستسقط نحو الأرض بالقدر نفسه الذي ينحني فيه سطح الأرض من تحتها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8ff965116655",
+      "type": "paragraph",
+      "sourceHash": "8ff965116655ce2211594f93abd841076686d358d244d0aaf15121d2bcf73c53",
+      "sourceText": "وهكذا تستمر الكرة في السقوط، بينما تستمر الأرض في الابتعاد عن مسارها المنحني.",
+      "spokenText": "وهكذا تستمر الكرة في السقوط، بينما تستمر الأرض في الابتعاد عن مسارها المنحني.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-67f23f886748",
+      "type": "paragraph",
+      "sourceHash": "67f23f8867487cb9eaf5509bae2af29d3e6aa3b986f7d3767d48d7333c71edc7",
+      "sourceText": "لن تصطدم الكرة بالسطح، بل ستواصل الدوران حول الكوكب.",
+      "spokenText": "لن تصطدم الكرة بالسطح، بل ستواصل الدوران حول الكوكب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d3498fac777b",
+      "type": "paragraph",
+      "sourceHash": "d3498fac777ba4b2c4f1c0ea9f71f5b982f637ca37aab295ce16abebe258ef91",
+      "sourceText": "هذا بالضبط ما يحدث للقمر الصناعي.",
+      "spokenText": "هذا بالضبط ما يحدث للقمر الصناعي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-67b66ddec5d7",
+      "type": "paragraph",
+      "sourceHash": "67b66ddec5d792d10d2bdf7a3bf28a7a0f67a524aea8115c454599e3def8272b",
+      "sourceText": "فهو لا يطفو فوق الأرض، ولا يتحدى الجاذبية، بل يسقط باتجاهها طوال الوقت، غير أن سرعته الأفقية تجعله يواصل تفويت سطحها.",
+      "spokenText": "فهو لا يطفو فوق الأرض، ولا يتحدى الجاذبية، بل يسقط باتجاهها طوال الوقت، غير أن سرعته الأفقية تجعله يواصل تفويت سطحها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "quote-d7821182c8fb",
+      "type": "quote",
+      "sourceHash": "d7821182c8fbb9a0558c243e93ae7882a23fe51234e90915f78396cf41c590a9",
+      "sourceText": "المدار هو سقوط مستمر حول الأرض، وليس توقفًا عن السقوط.",
+      "spokenText": "المدار هو سقوط مستمر حول الأرض، وليس توقفًا عن السقوط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-a26bbd0c16ce",
+      "type": "h2",
+      "sourceHash": "a26bbd0c16cece5275597bf4aa2356f901a6211afb7ff9d49d1c7c6f7e2ed689",
+      "sourceText": "رقصة بين الجاذبية والسرعة",
+      "spokenText": "رقصة بين الجاذبية والسرعة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1ece49e00e6b",
+      "type": "paragraph",
+      "sourceHash": "1ece49e00e6b092c8836755ae04d9dd80ab7f62db7b60500136d5bb45e82f9b1",
+      "sourceText": "يحتاج كل قمر صناعي إلى سرعة محددة تتناسب مع ارتفاع مداره.",
+      "spokenText": "يحتاج كل قمر صناعي إلى سرعة محددة تتناسب مع ارتفاع مداره.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3ba02f9e34ab",
+      "type": "paragraph",
+      "sourceHash": "3ba02f9e34ab95b438fa1e8d64c827b38b906d9741e59995ec751b1bb010d7bb",
+      "sourceText": "الأقمار الموجودة في المدارات المنخفضة حول الأرض تتحرك بسرعات عالية جدًا. وتبلغ سرعة محطة الفضاء الدولية قرابة 28 ألف كيلومتر في الساعة.",
+      "spokenText": "الأقمار الموجودة في المدارات المنخفضة حول الأرض تتحرك بسرعات عالية جدًا. وتبلغ سرعة محطة الفضاء الدولية قرابة 28 ألف كيلومتر في الساعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a5f6f247a0bb",
+      "type": "paragraph",
+      "sourceHash": "a5f6f247a0bbdb680fb5ed5af0d7c85aabf7917c2e9c7d0e67880ae375600882",
+      "sourceText": "عند هذه السرعة يحدث توازن دقيق:",
+      "spokenText": "عند هذه السرعة يحدث توازن دقيق:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-e7b566fc4e9f",
+      "type": "list-item",
+      "sourceHash": "e7b566fc4e9f0239f102d705ed730c43a270d3b8a6d801883bc658d403d708a0",
+      "sourceText": "الجاذبية تسحب المحطة نحو مركز الأرض.",
+      "spokenText": "الجاذبية تسحب المحطة نحو مركز الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-07c873530afd",
+      "type": "list-item",
+      "sourceHash": "07c873530afdc9db89e4a58357d2ede3b35b9ad822173e95e78b2b3060ab5d15",
+      "sourceText": "سرعتها الأفقية تدفعها إلى الأمام.",
+      "spokenText": "سرعتها الأفقية تدفعها إلى الأمام.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-a678c42df276",
+      "type": "list-item",
+      "sourceHash": "a678c42df276221e56141a87852aac4bf3731a9fe1daf2fc70e5e820ac3e76dc",
+      "sourceText": "انحناء الأرض يمنعها من الاصطدام المباشر بالسطح.",
+      "spokenText": "انحناء الأرض يمنعها من الاصطدام المباشر بالسطح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-209095fd8077",
+      "type": "paragraph",
+      "sourceHash": "209095fd80777eafe0c7083e1ae4cd7eb7269b7ff00f6d39d66b44e1841cbc8b",
+      "sourceText": "النتيجة هي مدار مستقر تستمر فيه المحطة بالدوران حول الأرض مرة بعد مرة.",
+      "spokenText": "النتيجة هي مدار مستقر تستمر فيه المحطة بالدوران حول الأرض مرة بعد مرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-32c2fd392639",
+      "type": "paragraph",
+      "sourceHash": "32c2fd39263950c79021fa9351c61a52cc95945b612dc59742ac7cb7838a6c02",
+      "sourceText": "لكن هذا التوازن حساس.",
+      "spokenText": "لكن هذا التوازن حساس.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-cf88147ba39e",
+      "type": "paragraph",
+      "sourceHash": "cf88147ba39e80ee450bd229fc9548cfa0fabd2a70f5cf664abec666ef1fe341",
+      "sourceText": "إذا فقد القمر الصناعي جزءًا من سرعته، فقد ينخفض مداره تدريجيًا ويقترب من الغلاف الجوي، حيث تزداد مقاومة الهواء، وقد ينتهي به الأمر محترقًا أثناء العودة إلى الأرض.",
+      "spokenText": "إذا فقد القمر الصناعي جزءًا من سرعته، فقد ينخفض مداره تدريجيًا ويقترب من الغلاف الجوي، حيث تزداد مقاومة الهواء، وقد ينتهي به الأمر محترقًا أثناء العودة إلى الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7f00936fd799",
+      "type": "paragraph",
+      "sourceHash": "7f00936fd799397c1c04360cb162630d634c4d642e6ea0e7159c9c15c0ad4a45",
+      "sourceText": "أما إذا زادت سرعته، فقد ينتقل إلى مدار أعلى أو إلى مدار أكثر استطالة. ولا يغادر تأثير جاذبية الأرض نهائيًا إلا إذا بلغ سرعة كافية للإفلات منها.",
+      "spokenText": "أما إذا زادت سرعته، فقد ينتقل إلى مدار أعلى أو إلى مدار أكثر استطالة. ولا يغادر تأثير جاذبية الأرض نهائيًا إلا إذا بلغ سرعة كافية للإفلات منها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-28460878d770",
+      "type": "paragraph",
+      "sourceHash": "28460878d7708f0540b026b7a7349430d0c025c67a62efae11f13c7fb09e5f38",
+      "sourceText": "لذلك لا توجد سرعة واحدة مناسبة لكل الأقمار الصناعية؛ فكل مدار له سرعته وارتفاعه وظروفه الخاصة.",
+      "spokenText": "لذلك لا توجد سرعة واحدة مناسبة لكل الأقمار الصناعية؛ فكل مدار له سرعته وارتفاعه وظروفه الخاصة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-b84548037428",
+      "type": "h2",
+      "sourceHash": "b845480374281f5e6e326d62e47f174063ef15ef56175c6f4dda9b4c0879631e",
+      "sourceText": "لماذا تتحرك الأقمار الصناعية بسرعات مختلفة؟",
+      "spokenText": "لماذا تتحرك الأقمار الصناعية بسرعات مختلفة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c9dbb7c923be",
+      "type": "paragraph",
+      "sourceHash": "c9dbb7c923be24428242fdad0486162fc5870f46a7706c2c3c0e05a6bf7cb4a2",
+      "sourceText": "كلما كان القمر الصناعي قريبًا من الأرض، كانت قوة الجاذبية المؤثرة فيه أكبر، ولذلك يحتاج عادة إلى سرعة مدارية أعلى حتى يستمر في تفويت سطح الأرض.",
+      "spokenText": "كلما كان القمر الصناعي قريبًا من الأرض، كانت قوة الجاذبية المؤثرة فيه أكبر، ولذلك يحتاج عادة إلى سرعة مدارية أعلى حتى يستمر في تفويت سطح الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5d01bb5f8cfe",
+      "type": "paragraph",
+      "sourceHash": "5d01bb5f8cfef5563b8c427b029890ab8e76d503dd0d630fd12ae7e98a634a5d",
+      "sourceText": "أما الأقمار الموجودة في المدارات الأبعد، فتتحرك بسرعات أقل، وتستغرق وقتًا أطول لإكمال دورة واحدة.",
+      "spokenText": "أما الأقمار الموجودة في المدارات الأبعد، فتتحرك بسرعات أقل، وتستغرق وقتًا أطول لإكمال دورة واحدة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f042900a946c",
+      "type": "paragraph",
+      "sourceHash": "f042900a946ccc189784b49fafd8d06ef4c8da059f582b7a720f04b788ea5db4",
+      "sourceText": "ومن أشهر الأمثلة الأقمار الثابتة بالنسبة للأرض، التي تُستخدم في الاتصالات والبث التلفزيوني ومراقبة الطقس.",
+      "spokenText": "ومن أشهر الأمثلة الأقمار الثابتة بالنسبة للأرض، التي تُستخدم في الاتصالات والبث التلفزيوني ومراقبة الطقس.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d73052b3a3bd",
+      "type": "paragraph",
+      "sourceHash": "d73052b3a3bd0d0f3a3fb0cce808afe56d2348fc610e6d3752a3cda30bbf8075",
+      "sourceText": "تدور هذه الأقمار على ارتفاع يقارب 36 ألف كيلومتر فوق خط الاستواء، وتكمل دورة حول الأرض في مدة تساوي تقريبًا مدة دوران الأرض حول نفسها.",
+      "spokenText": "تدور هذه الأقمار على ارتفاع يقارب 36 ألف كيلومتر فوق خط الاستواء، وتكمل دورة حول الأرض في مدة تساوي تقريبًا مدة دوران الأرض حول نفسها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3bbd80b33a51",
+      "type": "paragraph",
+      "sourceHash": "3bbd80b33a51d3c1563a918b4e72298f4387714efca07e4b4f17365ae920a32a",
+      "sourceText": "ولهذا تبدو من سطح الأرض وكأنها ثابتة في مكان واحد في السماء، رغم أنها تتحرك في الحقيقة بسرعة كبيرة.",
+      "spokenText": "ولهذا تبدو من سطح الأرض وكأنها ثابتة في مكان واحد في السماء، رغم أنها تتحرك في الحقيقة بسرعة كبيرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-63949f558cf7",
+      "type": "paragraph",
+      "sourceHash": "63949f558cf70b180fb78ed7faf0781d8e093eeb5c6284922200ced59ff0a53b",
+      "sourceText": "هذه الخاصية مهمة جدًا للبث والاتصالات، لأنها تسمح بتوجيه طبق الاستقبال نحو نقطة ثابتة بدل أن يضطر إلى ملاحقة القمر أثناء حركته.",
+      "spokenText": "هذه الخاصية مهمة جدًا للبث والاتصالات، لأنها تسمح بتوجيه طبق الاستقبال نحو نقطة ثابتة بدل أن يضطر إلى ملاحقة القمر أثناء حركته.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-bc72bced949e",
+      "type": "h2",
+      "sourceHash": "bc72bced949e5908ebe8dd8b8ffdcf5c4ad1dabd9eef622fdb6a05d2336b8f44",
+      "sourceText": "لماذا لا تتوقف الأقمار عن الحركة؟",
+      "spokenText": "لماذا لا تتوقف الأقمار عن الحركة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fef759e3c47f",
+      "type": "paragraph",
+      "sourceHash": "fef759e3c47fc5a3f1805f4b50137ea8b5dd56ce6b7c821f1ec42f0ef5c243f9",
+      "sourceText": "على سطح الأرض، إذا دفعت كرة على الطريق فإنها تتباطأ ثم تتوقف.",
+      "spokenText": "على سطح الأرض، إذا دفعت كرة على الطريق فإنها تتباطأ ثم تتوقف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-98ebeb1ebf13",
+      "type": "paragraph",
+      "sourceHash": "98ebeb1ebf13e4ad753e661209f5b46ac9f7897a3a48663b7e9049a4103ea9aa",
+      "sourceText": "السبب ليس أن الأجسام تميل طبيعيًا إلى التوقف، بل لأن هناك قوى تعيق حركتها، مثل:",
+      "spokenText": "السبب ليس أن الأجسام تميل طبيعيًا إلى التوقف، بل لأن هناك قوى تعيق حركتها، مثل:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-34ae52cf3751",
+      "type": "list-item",
+      "sourceHash": "34ae52cf3751c4c32c297b2a2704e0d37ede65b0d7e0e17ebc30c0fab8129ca6",
+      "sourceText": "الاحتكاك مع الأرض.",
+      "spokenText": "الاحتكاك مع الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-f446d4efc7ed",
+      "type": "list-item",
+      "sourceHash": "f446d4efc7ed82028a3931ac37482bc2e9bdec0a0e8c3615c27abbdde4444054",
+      "sourceText": "مقاومة الهواء.",
+      "spokenText": "مقاومة الهواء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7b3d2b6f5a91",
+      "type": "list-item",
+      "sourceHash": "7b3d2b6f5a91ca14321199742318efb13ed418ffd8377817127efb851beb72ac",
+      "sourceText": "التصادم مع الأجسام المحيطة.",
+      "spokenText": "التصادم مع الأجسام المحيطة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6da38ff37d07",
+      "type": "paragraph",
+      "sourceHash": "6da38ff37d07f294461b8ae0875e720ccfe1b4bb7b81e61a88c7918c6823d5bb",
+      "sourceText": "أما في الفضاء، فالأمر مختلف.",
+      "spokenText": "أما في الفضاء، فالأمر مختلف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1d7ae668c2e9",
+      "type": "paragraph",
+      "sourceHash": "1d7ae668c2e93eb40cb089e1b50f5efb0e5ce67101a0443302ae7bec650c6955",
+      "sourceText": "الفضاء شبه خالٍ من الهواء، ولذلك تكون مقاومة الحركة ضعيفة جدًا. وبمجرد أن يصل القمر الصناعي إلى سرعته المدارية، يمكنه الاستمرار في الحركة دون حاجة إلى تشغيل محركاته بصورة دائمة.",
+      "spokenText": "الفضاء شبه خالٍ من الهواء، ولذلك تكون مقاومة الحركة ضعيفة جدًا. وبمجرد أن يصل القمر الصناعي إلى سرعته المدارية، يمكنه الاستمرار في الحركة دون حاجة إلى تشغيل محركاته بصورة دائمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7035d9f7045a",
+      "type": "paragraph",
+      "sourceHash": "7035d9f7045a3e3cc84d67ae006d17b32f9787f30f78d7dd85e01d5ec5c3df67",
+      "sourceText": "تعمل محركات القمر عادة عند الإطلاق أو لتعديل المدار أو تغيير الاتجاه، لكنها ليست مطالبة بدفعه إلى الأمام طوال الرحلة كما يحدث مع السيارة على الطريق.",
+      "spokenText": "تعمل محركات القمر عادة عند الإطلاق أو لتعديل المدار أو تغيير الاتجاه، لكنها ليست مطالبة بدفعه إلى الأمام طوال الرحلة كما يحدث مع السيارة على الطريق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b03629499115",
+      "type": "paragraph",
+      "sourceHash": "b03629499115294627beb69b1ee28e9a66465a48b361b27dd133930db699cad8",
+      "sourceText": "إنه يواصل حركته طبقًا لأحد المبادئ الأساسية في الفيزياء:",
+      "spokenText": "إنه يواصل حركته طبقًا لأحد المبادئ الأساسية في الفيزياء:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "quote-99fbe0a8d6a8",
+      "type": "quote",
+      "sourceHash": "99fbe0a8d6a80b29c80439cfcba2994f01b8dfb1a922acf88bd832277854dad3",
+      "sourceText": "الجسم المتحرك يستمر في حركته ما لم تؤثر فيه قوة تغير سرعته أو اتجاهه.",
+      "spokenText": "الجسم المتحرك يستمر في حركته ما لم تؤثر فيه قوة تغير سرعته أو اتجاهه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d2720c661c09",
+      "type": "paragraph",
+      "sourceHash": "d2720c661c092e5304a8e9eaa07b77c1f317be13ae10e0846cb08204084d5c57",
+      "sourceText": "ومع ذلك، لا يعني هذا أن كل الأقمار يمكنها البقاء إلى الأبد في مداراتها.",
+      "spokenText": "ومع ذلك، لا يعني هذا أن كل الأقمار يمكنها البقاء إلى الأبد في مداراتها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-4c355d4d6e79",
+      "type": "h2",
+      "sourceHash": "4c355d4d6e79470d94962a0a758cac37d3a79667d3bdc9e976e16029a9f0384c",
+      "sourceText": "الغلاف الجوي لا ينتهي فجأة",
+      "spokenText": "الغلاف الجوي لا ينتهي فجأة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a103fdfd6c0b",
+      "type": "paragraph",
+      "sourceHash": "a103fdfd6c0b4cac332caabf3efeb81031eb25b3823dc5655e44a871c0702237",
+      "sourceText": "قد يبدو لنا أن الغلاف الجوي ينتهي عند نقطة محددة، لكن طبقاته الخارجية تصبح أرق تدريجيًا ولا تختفي بصورة مفاجئة.",
+      "spokenText": "قد يبدو لنا أن الغلاف الجوي ينتهي عند نقطة محددة، لكن طبقاته الخارجية تصبح أرق تدريجيًا ولا تختفي بصورة مفاجئة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c55f7d6736c0",
+      "type": "paragraph",
+      "sourceHash": "c55f7d6736c0b05c911990cbd4378ca3074fffd129e1bda57579c99c94ba701a",
+      "sourceText": "حتى في ارتفاعات تصل إلى مئات الكيلومترات، توجد ذرات قليلة جدًا من الغازات. وهذه الذرات، رغم ندرتها، تصطدم بالأقمار الصناعية وتسبب مقاومة خفيفة.",
+      "spokenText": "حتى في ارتفاعات تصل إلى مئات الكيلومترات، توجد ذرات قليلة جدًا من الغازات. وهذه الذرات، رغم ندرتها، تصطدم بالأقمار الصناعية وتسبب مقاومة خفيفة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-74f0d3f6b094",
+      "type": "paragraph",
+      "sourceHash": "74f0d3f6b094351fa50a0686bd745ae4e4c4f4ac532de53e0414a15fc376784b",
+      "sourceText": "مع مرور الوقت، تفقد الأقمار الموجودة في المدارات المنخفضة جزءًا صغيرًا من سرعتها، وينخفض ارتفاعها تدريجيًا.",
+      "spokenText": "مع مرور الوقت، تفقد الأقمار الموجودة في المدارات المنخفضة جزءًا صغيرًا من سرعتها، وينخفض ارتفاعها تدريجيًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b8ff0c68ce5a",
+      "type": "paragraph",
+      "sourceHash": "b8ff0c68ce5aef6ad99e359f71752c419f0c5ca90a61f0b2ad81fbf3782d7ef7",
+      "sourceText": "وكلما اقتربت من الأرض، ازدادت كثافة الهواء، وازدادت المقاومة، فتتسارع عملية هبوطها.",
+      "spokenText": "وكلما اقتربت من الأرض، ازدادت كثافة الهواء، وازدادت المقاومة، فتتسارع عملية هبوطها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-15b9920ceb54",
+      "type": "paragraph",
+      "sourceHash": "15b9920ceb54a3d2d4d40d46bfdb01614a870de33ec0b4731333c0193a450c9a",
+      "sourceText": "لهذا السبب تحتاج محطة الفضاء الدولية من وقت إلى آخر إلى عملية رفع للمدار، باستخدام محركاتها أو مركبات فضائية متصلة بها، لتعويض الانخفاض الناتج عن آثار الغلاف الجوي.",
+      "spokenText": "لهذا السبب تحتاج محطة الفضاء الدولية من وقت إلى آخر إلى عملية رفع للمدار، باستخدام محركاتها أو مركبات فضائية متصلة بها، لتعويض الانخفاض الناتج عن آثار الغلاف الجوي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-616397bdecb3",
+      "type": "paragraph",
+      "sourceHash": "616397bdecb3c30279897421efad861471312efc285d5fba297dda592e57783d",
+      "sourceText": "أما الأقمار الصغيرة أو القديمة التي لا تملك وسيلة لتصحيح مدارها، فقد تستمر في الانخفاض حتى تدخل الطبقات الكثيفة من الغلاف الجوي وتحترق.",
+      "spokenText": "أما الأقمار الصغيرة أو القديمة التي لا تملك وسيلة لتصحيح مدارها، فقد تستمر في الانخفاض حتى تدخل الطبقات الكثيفة من الغلاف الجوي وتحترق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-c572e4eb09bd",
+      "type": "h2",
+      "sourceHash": "c572e4eb09bd244d224a5900754132d93f9b2df973309a119f88379b755cbb97",
+      "sourceText": "ماذا عن القمر الطبيعي؟",
+      "spokenText": "ماذا عن القمر الطبيعي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-29b8f01b8ff9",
+      "type": "paragraph",
+      "sourceHash": "29b8f01b8ff965cecae46f755ba79f15bb41c587f42069250b1bddcd1abd34e7",
+      "sourceText": "القمر الذي يضيء سماءنا يتبع المبدأ نفسه.",
+      "spokenText": "القمر الذي يضيء سماءنا يتبع المبدأ نفسه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ed90eb2b4eb1",
+      "type": "paragraph",
+      "sourceHash": "ed90eb2b4eb120e6d7db76ff061bc8062047d73364169e81db075489f264bb45",
+      "sourceText": "فهو أيضًا يسقط باستمرار نحو الأرض، لكنه يتحرك بسرعة جانبية تمنعه من الاصطدام بها.",
+      "spokenText": "فهو أيضًا يسقط باستمرار نحو الأرض، لكنه يتحرك بسرعة جانبية تمنعه من الاصطدام بها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-90eb80358cc7",
+      "type": "paragraph",
+      "sourceHash": "90eb80358cc7709588bf2f40ced93516f979b613714c822b844b8a4eb9568717",
+      "sourceText": "يبعد القمر عنا نحو 385 ألف كيلومتر، ولا توجد عند مسافته مقاومة جوية تُذكر، ولذلك يستطيع الاستمرار في مداره زمنًا بالغ الطول.",
+      "spokenText": "يبعد القمر عنا نحو 385 ألف كيلومتر، ولا توجد عند مسافته مقاومة جوية تُذكر، ولذلك يستطيع الاستمرار في مداره زمنًا بالغ الطول.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9a16f6f70c39",
+      "type": "paragraph",
+      "sourceHash": "9a16f6f70c39c8117fa47e3b45e923e0a67c22faf2087712e3ea1468e303ab66",
+      "sourceText": "لكن مداره ليس ثابتًا بصورة مطلقة.",
+      "spokenText": "لكن مداره ليس ثابتًا بصورة مطلقة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e9036afa20c0",
+      "type": "paragraph",
+      "sourceHash": "e9036afa20c0bfe42999b018f26afcdad9c810f45d0b945ff829ff7ebafec025",
+      "sourceText": "فبسبب التفاعلات المعقدة بين جاذبية الأرض والقمر، وتأثيرات المد والجزر، يبتعد القمر عن الأرض ببطء شديد، بمعدل يقارب بضعة سنتيمترات في السنة.",
+      "spokenText": "فبسبب التفاعلات المعقدة بين جاذبية الأرض والقمر، وتأثيرات المد والجزر، يبتعد القمر عن الأرض ببطء شديد، بمعدل يقارب بضعة سنتيمترات في السنة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b87312e495ab",
+      "type": "paragraph",
+      "sourceHash": "b87312e495abe9dd2b55e9553c65c8cc7e66d828c5213e8d8a340e4484355969",
+      "sourceText": "وهذا يوضح أن المدارات ليست دوائر جامدة لا تتغير، بل أنظمة ديناميكية تتأثر بقوى متعددة على مدى فترات زمنية طويلة.",
+      "spokenText": "وهذا يوضح أن المدارات ليست دوائر جامدة لا تتغير، بل أنظمة ديناميكية تتأثر بقوى متعددة على مدى فترات زمنية طويلة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-bedf44f586d7",
+      "type": "h2",
+      "sourceHash": "bedf44f586d7e28a5767f4c47557e25f3f48b8f1b5b8d4f5696417841d4f9f2e",
+      "sourceText": "حين تسقط الأقمار الصناعية فعلًا",
+      "spokenText": "حين تسقط الأقمار الصناعية فعلًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-629227e2e55a",
+      "type": "paragraph",
+      "sourceHash": "629227e2e55a44bd22802a15f6c285e5718ac0ffba3e802382a01a435e763adc",
+      "sourceText": "ليست كل الأقمار الصناعية مصممة للبقاء في الفضاء إلى الأبد.",
+      "spokenText": "ليست كل الأقمار الصناعية مصممة للبقاء في الفضاء إلى الأبد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-685fd3da400c",
+      "type": "paragraph",
+      "sourceHash": "685fd3da400c4b40a342538fa0c5d4095f1979fbdb501e2faf34111c402bb752",
+      "sourceText": "عندما ينتهي عمر القمر الصناعي، يمكن التعامل معه بعدة طرق، بحسب موقعه وحجمه وإمكاناته.",
+      "spokenText": "عندما ينتهي عمر القمر الصناعي، يمكن التعامل معه بعدة طرق، بحسب موقعه وحجمه وإمكاناته.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-43a24c10273e",
+      "type": "paragraph",
+      "sourceHash": "43a24c10273e7288d7d743351e432cea10d6fd4b114f338f0a9bde1c190c4945",
+      "sourceText": "بعض الأقمار الموجودة في المدارات المنخفضة تُوجَّه إلى الغلاف الجوي لتتحطم وتحترق بعيدًا عن المناطق المأهولة.",
+      "spokenText": "بعض الأقمار الموجودة في المدارات المنخفضة تُوجَّه إلى الغلاف الجوي لتتحطم وتحترق بعيدًا عن المناطق المأهولة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ab74e2a57ab0",
+      "type": "paragraph",
+      "sourceHash": "ab74e2a57ab0394113173206451060ca73c06446153fe2a54ab9c9cf94b258bc",
+      "sourceText": "وقد تُختار منطقة نائية فوق المحيط لتسقط فيها الأجزاء التي قد تنجو من الاحتراق.",
+      "spokenText": "وقد تُختار منطقة نائية فوق المحيط لتسقط فيها الأجزاء التي قد تنجو من الاحتراق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b5295f73f93a",
+      "type": "paragraph",
+      "sourceHash": "b5295f73f93a3e9fd0f8939ee305c70441400bd1d6f251f6ef8d535a655a0d80",
+      "sourceText": "أما الأقمار الموجودة في المدارات المرتفعة، فقد تُنقل أحيانًا إلى مدار أبعد يُعرف باسم مدار المقبرة، لإبعادها عن الأقمار العاملة.",
+      "spokenText": "أما الأقمار الموجودة في المدارات المرتفعة، فقد تُنقل أحيانًا إلى مدار أبعد يُعرف باسم مدار المقبرة، لإبعادها عن الأقمار العاملة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1c1064a278f9",
+      "type": "paragraph",
+      "sourceHash": "1c1064a278f97997b99b1efb0fe2d9886f881a6307a422dc8637dfdb7e12504b",
+      "sourceText": "لكن عمليات العودة لا تسير دائمًا كما هو مخطط لها.",
+      "spokenText": "لكن عمليات العودة لا تسير دائمًا كما هو مخطط لها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2564df4e07d0",
+      "type": "paragraph",
+      "sourceHash": "2564df4e07d00f42969559a6c025b1404f6524743d66851b34ffca8aa150fadb",
+      "sourceText": "ففي عام 1979، عادت محطة الفضاء الأمريكية سكاي لاب إلى الأرض بصورة لم تكن السيطرة عليها كاملة، وسقطت أجزاء من حطامها فوق مناطق في أستراليا، دون وقوع إصابات بشرية.",
+      "spokenText": "ففي عام 1979، عادت محطة الفضاء الأمريكية سكاي لاب إلى الأرض بصورة لم تكن السيطرة عليها كاملة، وسقطت أجزاء من حطامها فوق مناطق في أستراليا، دون وقوع إصابات بشرية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3704f0252463",
+      "type": "paragraph",
+      "sourceHash": "3704f025246327100759c67fd8c9922edd9b74e5db0da41bf14873e13ee1ffa3",
+      "sourceText": "ذكّرت هذه الحادثة العالم بأن إرسال جسم إلى الفضاء أسهل من ضمان التحكم الكامل في نهايته.",
+      "spokenText": "ذكّرت هذه الحادثة العالم بأن إرسال جسم إلى الفضاء أسهل من ضمان التحكم الكامل في نهايته.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-1390e322f810",
+      "type": "h2",
+      "sourceHash": "1390e322f81087e35d1b12573e4e420797de6a53dd1f241774cbc0fd5a21ccab",
+      "sourceText": "مشكلة الحطام الفضائي",
+      "spokenText": "مشكلة الحطام الفضائي",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-28924d8a445d",
+      "type": "paragraph",
+      "sourceHash": "28924d8a445d527a740a8d55106501e3f244b383c7e6e39f67d27a3ec5a25cea",
+      "sourceText": "لا تقتصر المدارات على الأقمار العاملة.",
+      "spokenText": "لا تقتصر المدارات على الأقمار العاملة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b0defe0cc1e4",
+      "type": "paragraph",
+      "sourceHash": "b0defe0cc1e499448bd6a406c24144b4740455f6d65aad83603c69e2ad2a3823",
+      "sourceText": "فحول الأرض أعداد كبيرة من الأجسام غير المستخدمة، مثل:",
+      "spokenText": "فحول الأرض أعداد كبيرة من الأجسام غير المستخدمة، مثل:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-d64459f07f80",
+      "type": "list-item",
+      "sourceHash": "d64459f07f80eaa607838e44cbedf152be4bac50b12da2d597a676768699d002",
+      "sourceText": "أقمار صناعية قديمة.",
+      "spokenText": "أقمار صناعية قديمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-4e2d6f16ab51",
+      "type": "list-item",
+      "sourceHash": "4e2d6f16ab515ad9d491385948898d6fac772d73ae1e7bfe4f7889ced53847dc",
+      "sourceText": "مراحل صواريخ مهجورة.",
+      "spokenText": "مراحل صواريخ مهجورة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-0d80f27d5a6a",
+      "type": "list-item",
+      "sourceHash": "0d80f27d5a6a0d1c5d89e2e0ddf9c9e5cd1aede9a1bcad0bff7ef7c84d38415b",
+      "sourceText": "قطع انفصلت أثناء الإطلاق.",
+      "spokenText": "قطع انفصلت أثناء الإطلاق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7c6a78bb54a8",
+      "type": "list-item",
+      "sourceHash": "7c6a78bb54a8565622b9ee772f5af4690232bb78b738586dea9f868f387061f1",
+      "sourceText": "شظايا نتجت عن تصادمات أو انفجارات.",
+      "spokenText": "شظايا نتجت عن تصادمات أو انفجارات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-090edb1fc683",
+      "type": "paragraph",
+      "sourceHash": "090edb1fc68357523164d66c649329a0c6bd84643a891629b0bb1437e1bd4059",
+      "sourceText": "تتحرك هذه الأجسام بسرعات هائلة، وقد يشكل اصطدام قطعة صغيرة منها خطرًا كبيرًا على الأقمار العاملة أو المركبات المأهولة.",
+      "spokenText": "تتحرك هذه الأجسام بسرعات هائلة، وقد يشكل اصطدام قطعة صغيرة منها خطرًا كبيرًا على الأقمار العاملة أو المركبات المأهولة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1145596ec440",
+      "type": "paragraph",
+      "sourceHash": "1145596ec44056b0c7324dcd589b90321b0a557312e6076a45ebfeff6564afb4",
+      "sourceText": "في المدار، لا يقاس خطر الجسم بحجمه فقط، بل بسرعته أيضًا. فقد تسبب قطعة صغيرة أضرارًا شديدة عندما تصطدم بمركبة بسرعة تبلغ عشرات الآلاف من الكيلومترات في الساعة.",
+      "spokenText": "في المدار، لا يقاس خطر الجسم بحجمه فقط، بل بسرعته أيضًا. فقد تسبب قطعة صغيرة أضرارًا شديدة عندما تصطدم بمركبة بسرعة تبلغ عشرات الآلاف من الكيلومترات في الساعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f501c4f52d7a",
+      "type": "paragraph",
+      "sourceHash": "f501c4f52d7a02630371df924580bce6528a8a556d4d0a4ca7dfab1e0682c235",
+      "sourceText": "ولهذا تتابع وكالات الفضاء مسارات الأجسام الكبيرة المعروفة، وقد تغيّر محطة الفضاء الدولية مدارها أحيانًا لتجنب اقتراب قطعة خطرة.",
+      "spokenText": "ولهذا تتابع وكالات الفضاء مسارات الأجسام الكبيرة المعروفة، وقد تغيّر محطة الفضاء الدولية مدارها أحيانًا لتجنب اقتراب قطعة خطرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-539c74800fc4",
+      "type": "paragraph",
+      "sourceHash": "539c74800fc47c8900489fef5d61f5d853a69b59a9e1de9cff72c34015785592",
+      "sourceText": "أصبحت إدارة الحطام الفضائي من التحديات الكبرى التي تواجه مستقبل الرحلات الفضائية، خصوصًا مع زيادة عدد الأقمار التي تُطلق كل عام.",
+      "spokenText": "أصبحت إدارة الحطام الفضائي من التحديات الكبرى التي تواجه مستقبل الرحلات الفضائية، خصوصًا مع زيادة عدد الأقمار التي تُطلق كل عام.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-713eb3d4279d",
+      "type": "h2",
+      "sourceHash": "713eb3d4279db38bbe1bf4bb4f91afe755e8443d9079a47502f6404413b407f2",
+      "sourceText": "كيف يصل القمر الصناعي إلى المدار؟",
+      "spokenText": "كيف يصل القمر الصناعي إلى المدار؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ce759d660711",
+      "type": "paragraph",
+      "sourceHash": "ce759d660711f29b6ec706b086d02736a7166dc2b541606810c77b6b847e411b",
+      "sourceText": "قد يبدو أن التحدي الأكبر هو رفع القمر الصناعي إلى ارتفاع كبير، لكن الوصول إلى المدار لا يعتمد على الارتفاع وحده.",
+      "spokenText": "قد يبدو أن التحدي الأكبر هو رفع القمر الصناعي إلى ارتفاع كبير، لكن الوصول إلى المدار لا يعتمد على الارتفاع وحده.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d9db5fd98a11",
+      "type": "paragraph",
+      "sourceHash": "d9db5fd98a117c4ef006ef6e0077ce27ddf36cd44e6a0166cd1e31dacad1a1dc",
+      "sourceText": "يجب أولًا استخدام صاروخ قوي لاختراق الطبقات الكثيفة من الغلاف الجوي. ثم تبدأ المرحلة الأهم: منح القمر الصناعي سرعة أفقية كبيرة.",
+      "spokenText": "يجب أولًا استخدام صاروخ قوي لاختراق الطبقات الكثيفة من الغلاف الجوي. ثم تبدأ المرحلة الأهم: منح القمر الصناعي سرعة أفقية كبيرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c9c91b2a2017",
+      "type": "paragraph",
+      "sourceHash": "c9c91b2a20174523557dd85d0039a79bbaeda61b7e24697ccaff3dadccf55253",
+      "sourceText": "لو صعد الصاروخ إلى ارتفاع مئات الكيلومترات ثم ترك القمر الصناعي دون سرعة جانبية، فسوف يسقط مرة أخرى نحو الأرض.",
+      "spokenText": "لو صعد الصاروخ إلى ارتفاع مئات الكيلومترات ثم ترك القمر الصناعي دون سرعة جانبية، فسوف يسقط مرة أخرى نحو الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c91851cbc6e3",
+      "type": "paragraph",
+      "sourceHash": "c91851cbc6e395f8a4ef2505d26fc5bc214e8baf38e232d8ec5bd502cdb21481",
+      "sourceText": "لذلك تنحني مسارات الصواريخ تدريجيًا بعد الإطلاق. تبدأ بالصعود، ثم تتحول حركتها شيئًا فشيئًا إلى الاتجاه الأفقي.",
+      "spokenText": "لذلك تنحني مسارات الصواريخ تدريجيًا بعد الإطلاق. تبدأ بالصعود، ثم تتحول حركتها شيئًا فشيئًا إلى الاتجاه الأفقي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-83dd5ef7afac",
+      "type": "paragraph",
+      "sourceHash": "83dd5ef7afac7ecd0db6cdcd58c086c8346b534b1ec7ff2c4dc1d5ea765eabfd",
+      "sourceText": "معظم طاقة الصاروخ لا تُستخدم فقط لرفع القمر الصناعي، بل لتسريعه حتى يصل إلى السرعة المدارية المطلوبة.",
+      "spokenText": "معظم طاقة الصاروخ لا تُستخدم فقط لرفع القمر الصناعي، بل لتسريعه حتى يصل إلى السرعة المدارية المطلوبة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3e58070df24f",
+      "type": "paragraph",
+      "sourceHash": "3e58070df24f8a6070d044b279f78966d0deab132488883846993cb6dfe25a6d",
+      "sourceText": "وعندما يصل القمر إلى الارتفاع والسرعة المناسبين، ينفصل عن الصاروخ ويبدأ دورانه المستقل حول الأرض.",
+      "spokenText": "وعندما يصل القمر إلى الارتفاع والسرعة المناسبين، ينفصل عن الصاروخ ويبدأ دورانه المستقل حول الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b2e306d193ba",
+      "type": "paragraph",
+      "sourceHash": "b2e306d193baa3545fcbcd3fae47198e2aa9ba4bbe0607b1f4c6e5747330be92",
+      "sourceText": "من تلك اللحظة، يمكنه الاستمرار في مداره سنوات، وربما عقودًا، مع استخدام كميات محدودة من الوقود لتعديل موقعه أو اتجاهه أو ارتفاعه.",
+      "spokenText": "من تلك اللحظة، يمكنه الاستمرار في مداره سنوات، وربما عقودًا، مع استخدام كميات محدودة من الوقود لتعديل موقعه أو اتجاهه أو ارتفاعه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-1618372075c0",
+      "type": "h2",
+      "sourceHash": "1618372075c04a248d2714612d69dbcbab0f3b4679097d03dda5e940dca4ea33",
+      "sourceText": "هل رواد الفضاء بلا وزن؟",
+      "spokenText": "هل رواد الفضاء بلا وزن؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6a796f06e0d0",
+      "type": "paragraph",
+      "sourceHash": "6a796f06e0d0916b133e291919368c5a9bca00990169fe6c32f25d2cc2875600",
+      "sourceText": "عندما نشاهد رواد الفضاء داخل محطة الفضاء الدولية، نراهم يطفون كما لو كانت الجاذبية غير موجودة.",
+      "spokenText": "عندما نشاهد رواد الفضاء داخل محطة الفضاء الدولية، نراهم يطفون كما لو كانت الجاذبية غير موجودة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-488379fcd830",
+      "type": "paragraph",
+      "sourceHash": "488379fcd8307ce535e9f4889ae07f23a8976b165c02a591705964e1a0e7b8ff",
+      "sourceText": "لكن الجاذبية موجودة وتؤثر فيهم بقوة.",
+      "spokenText": "لكن الجاذبية موجودة وتؤثر فيهم بقوة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0eb4ea4f5380",
+      "type": "paragraph",
+      "sourceHash": "0eb4ea4f53805d2ff9658816478479d0c7e38460534055659be87f3a29b4b0ea",
+      "sourceText": "السبب في شعورهم بانعدام الوزن هو أن المحطة وروادها يسقطون معًا نحو الأرض بالتسارع نفسه.",
+      "spokenText": "السبب في شعورهم بانعدام الوزن هو أن المحطة وروادها يسقطون معًا نحو الأرض بالتسارع نفسه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-191fafb50d99",
+      "type": "paragraph",
+      "sourceHash": "191fafb50d9935e7bc811cec41518d8a12f63c02264dc3cb0d4ea5bbf01b8309",
+      "sourceText": "لا توجد أرضية ثابتة تدفع أجسامهم إلى الأعلى كما يحدث على سطح الأرض، ولذلك يبدو كل شيء داخل المحطة وكأنه يطفو.",
+      "spokenText": "لا توجد أرضية ثابتة تدفع أجسامهم إلى الأعلى كما يحدث على سطح الأرض، ولذلك يبدو كل شيء داخل المحطة وكأنه يطفو.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b64a8bcb6fd2",
+      "type": "paragraph",
+      "sourceHash": "b64a8bcb6fd28a37eb0fa2746617edd25584277b2c0c84781fcfc3ad43054463",
+      "sourceText": "يمكن تشبيه ذلك، بصورة مبسطة، بالشعور الخفيف الذي قد تحسه للحظة عندما يهبط المصعد بسرعة، إلا أن السقوط في المدار يستمر بصورة دائمة.",
+      "spokenText": "يمكن تشبيه ذلك، بصورة مبسطة، بالشعور الخفيف الذي قد تحسه للحظة عندما يهبط المصعد بسرعة، إلا أن السقوط في المدار يستمر بصورة دائمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-98007090c6a3",
+      "type": "paragraph",
+      "sourceHash": "98007090c6a3aee35ca5dac5514dde46f126fb601800149be202ad8f48df726b",
+      "sourceText": "لهذا يُستخدم تعبير انعدام الوزن الظاهري أو الجاذبية الصغرى، وليس انعدام الجاذبية الكامل.",
+      "spokenText": "لهذا يُستخدم تعبير انعدام الوزن الظاهري أو الجاذبية الصغرى، وليس انعدام الجاذبية الكامل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-d9e8c46b090c",
+      "type": "h2",
+      "sourceHash": "d9e8c46b090c42dd663a8dcd5560f5cda5924a3747a85b196a2e3c8edc6b5a28",
+      "sourceText": "الخلاصة ببساطة",
+      "spokenText": "الخلاصة ببساطة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d475e478b99f",
+      "type": "paragraph",
+      "sourceHash": "d475e478b99f258c5b167903deba4d14535c035111499d2113b391252ca10375",
+      "sourceText": "الأقمار الصناعية لا تبقى في السماء لأنها خارج نطاق الجاذبية.",
+      "spokenText": "الأقمار الصناعية لا تبقى في السماء لأنها خارج نطاق الجاذبية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-536c34373355",
+      "type": "paragraph",
+      "sourceHash": "536c34373355d03c16039afdf6bf227bc5b73f1d8929e6ffaeb74c2bac70bbe7",
+      "sourceText": "ولا لأنها تستخدم محركاتها باستمرار.",
+      "spokenText": "ولا لأنها تستخدم محركاتها باستمرار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2737ee549365",
+      "type": "paragraph",
+      "sourceHash": "2737ee549365693a56a9d3d3359afdbdd8e357b5cb6d68cb7d9ab1b3ef0b08da",
+      "sourceText": "ولا لأنها معلقة في نقطة سحرية من الفضاء.",
+      "spokenText": "ولا لأنها معلقة في نقطة سحرية من الفضاء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7540e4b07cab",
+      "type": "paragraph",
+      "sourceHash": "7540e4b07cab1a2dac90bb0f007dd79c77d8aa3626573789082d5ac5f25edd5e",
+      "sourceText": "إنها تبقى في المدار لأنها تجمع بين أمرين:",
+      "spokenText": "إنها تبقى في المدار لأنها تجمع بين أمرين:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-9365644b91c5",
+      "type": "list-item",
+      "sourceHash": "9365644b91c5643a618db52c9ae14ba91467574eb7e431d9a6ea56f62044d703",
+      "sourceText": "الجاذبية التي تسحبها نحو الأرض.",
+      "spokenText": "الجاذبية التي تسحبها نحو الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-c055c823b25e",
+      "type": "list-item",
+      "sourceHash": "c055c823b25e036f3aa2867e53e1c963cce3729a77a2bab2f55786eebe3b1a7a",
+      "sourceText": "السرعة الأفقية التي تجعلها تستمر في تفويت سطح الأرض.",
+      "spokenText": "السرعة الأفقية التي تجعلها تستمر في تفويت سطح الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a20846203eb3",
+      "type": "paragraph",
+      "sourceHash": "a20846203eb34d090fd8e62ef66f0444d0779474482848dd360a4afdfdd4216e",
+      "sourceText": "فهي تسقط باستمرار، لكن انحناء الأرض وسرعتها المدارية يحولان هذا السقوط إلى دوران متواصل.",
+      "spokenText": "فهي تسقط باستمرار، لكن انحناء الأرض وسرعتها المدارية يحولان هذا السقوط إلى دوران متواصل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-db90ccaebacd",
+      "type": "paragraph",
+      "sourceHash": "db90ccaebacd60f8ba6ff7db4202821b2161c18c8c50d1ef14a0a2e1a90eabc7",
+      "sourceText": "وقد تكون أجمل طريقة لتلخيص الفكرة هي:",
+      "spokenText": "وقد تكون أجمل طريقة لتلخيص الفكرة هي:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "quote-77ee82f98938",
+      "type": "quote",
+      "sourceHash": "77ee82f98938cfd8b45d3ce9bca43d88f27048d9d91429dbf237f14a17cdf74a",
+      "sourceText": "القمر الصناعي لا ينتصر على الجاذبية، بل يستخدمها ليواصل رحلته حول الأرض.",
+      "spokenText": "القمر الصناعي لا ينتصر على الجاذبية، بل يستخدمها ليواصل رحلته حول الأرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b6c9c1e48b99",
+      "type": "paragraph",
+      "sourceHash": "b6c9c1e48b99710af603fe08155ca83e9787ebf9dc6c718a9e4ceea48c7a6276",
+      "sourceText": "في المرة القادمة التي تستخدم فيها خرائط هاتفك، أو تشاهد صورة للأعاصير، أو تستقبل بثًا تلفزيونيًا قادمًا من قمر صناعي، تذكر أن هذه التقنيات تعتمد على توازن دقيق بين السقوط والحركة، وبين قوة الجاذبية وسرعة الانطلاق.",
+      "spokenText": "في المرة القادمة التي تستخدم فيها خرائط هاتفك، أو تشاهد صورة للأعاصير، أو تستقبل بثًا تلفزيونيًا قادمًا من قمر صناعي، تذكر أن هذه التقنيات تعتمد على توازن دقيق بين السقوط والحركة، وبين قوة الجاذبية وسرعة الانطلاق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f4612d77b8e1",
+      "type": "paragraph",
+      "sourceHash": "f4612d77b8e17e384115e9064800bc53bb312b27575487113da95884188414b1",
+      "sourceText": "إنها رقصة فيزيائية مستمرة، مكّنت الإنسان من تحويل السماء إلى شبكة هائلة للاتصال والمراقبة والاستكشاف.",
+      "spokenText": "إنها رقصة فيزيائية مستمرة، مكّنت الإنسان من تحويل السماء إلى شبكة هائلة للاتصال والمراقبة والاستكشاف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8aeaec4f68ff",
+      "type": "paragraph",
+      "sourceHash": "8aeaec4f68ff687c88b857003fbd665093f08c63b2ba66e2412785b9d3bfd7c0",
+      "sourceText": "ولفهم مثال آخر على الأنظمة التي ترتب الاحتمالات لحظة بلحظة، اقرأ كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟.",
+      "spokenText": "ولفهم مثال آخر على الأنظمة التي ترتب الاحتمالات لحظة بلحظة، اقرأ كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "6f5daaf9fabba77bd5ff07f25f4d65735e8b79216a7ca527ee50e8f8bb57767b",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

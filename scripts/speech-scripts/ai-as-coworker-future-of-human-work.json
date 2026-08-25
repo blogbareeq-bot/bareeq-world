@@ -1,0 +1,1242 @@
+{
+  "version": 1,
+  "articleId": "ai-as-coworker-future-of-human-work",
+  "sourceSnapshotHash": "1687340cc19bc9c12981d13bdeb3025e2dd5010149844fe75d560824aaa2e3fb",
+  "sourceStructureHash": "679018682dd1c09db6a2c15637b615d4e0dad8a15dd93a7ae09f95d98193b82c",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر والمراجع",
+    "segmentCount": 14,
+    "sourceHash": "1ebb2a3bfc9edb37cc895abfe04ef1e969608a0235187d68b21852e8c94d9e70"
+  },
+  "segments": [
+    {
+      "segmentId": "title-05de777eff31",
+      "type": "title",
+      "sourceHash": "05de777eff31b73d787c599ca4233cb410c55aa966fdce08de0cb8ee9d7fa176",
+      "sourceText": "حين يصبح الذكاء الاصطناعي زميلًا لا أداة: ماذا يبقى للإنسان؟",
+      "spokenText": "حين يصبح الذكاء الاصطناعي زميلًا لا أداة: ماذا يبقى للإنسان؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-78bcbc2623fb",
+      "type": "paragraph",
+      "sourceHash": "78bcbc2623fb09b765036eeaff75a0fb85c74609218f5521eafe7770707df745",
+      "sourceText": "في اجتماع صباحي، تسأل المديرة عن سبب ارتفاع تكلفة المطالبات في الربع الأخير. خلال وقت قصير، يكون النظام قد جمع البيانات، ونظّمها، وبنى عدة تفسيرات، وأخرج عرضًا مرتبًا مع توصية.",
+      "spokenText": "في اجتماع صباحي، تسأل المديرة عن سبب ارتفاع تكلفة المطالبات في الربع الأخير. خلال وقت قصير، يكون النظام قد جمع البيانات، ونظّمها، وبنى عدة تفسيرات، وأخرج عرضًا مرتبًا مع توصية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1e5cb40f3ca7",
+      "type": "paragraph",
+      "sourceHash": "1e5cb40f3ca74aefe01c45dfe343a8a4d9ca47248f54790cc7f78b776c72cf4a",
+      "sourceText": "تقرأ المحللة العرض ثم تحذف التوصية الأولى. التفسير الأقوى إحصائيًا يعتمد على فرع افتُتح قبل أشهر قليلة، وهي تعرف أن أرقامه الأولى لا تصلح للمقارنة، وأن هذه المعلومة لم تُسجّل في البيانات التي قرأها النظام.",
+      "spokenText": "تقرأ المحللة العرض ثم تحذف التوصية الأولى. التفسير الأقوى إحصائيًا يعتمد على فرع افتُتح قبل أشهر قليلة، وهي تعرف أن أرقامه الأولى لا تصلح للمقارنة، وأن هذه المعلومة لم تُسجّل في البيانات التي قرأها النظام.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7135aba5ba0d",
+      "type": "paragraph",
+      "sourceHash": "7135aba5ba0da07573ca01a9b33698a56d91a518d2053b1200e11a1ea0bb4e5f",
+      "sourceText": "الآلة أنجزت معظم المخرجات. الإنسان غيّر النتيجة. فمن كان صاحب هذا العمل؟",
+      "spokenText": "الآلة أنجزت معظم المخرجات. الإنسان غيّر النتيجة. فمن كان صاحب هذا العمل؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6ee7dc9af130",
+      "type": "paragraph",
+      "sourceHash": "6ee7dc9af13004ba79a4bc7e4231c67d8c8c89e2f6150c67e353b9b7f42e998a",
+      "sourceText": "هذا السؤال أدق من سؤال «هل سيأخذ الذكاء الاصطناعي وظائفنا؟». فحين ينتقل النظام من أداة نفتحها لمهمة محددة إلى طرف حاضر داخل سير العمل، يصبح السؤال الأهم: ما الذي يصبح مسؤولية الإنسان عندما يستطيع النظام فعل المزيد؟",
+      "spokenText": "هذا السؤال أدق من سؤال «هل سيأخذ الذكاء الاصطناعي وظائفنا؟». فحين ينتقل النظام من أداة نفتحها لمهمة محددة إلى طرف حاضر داخل سير العمل، يصبح السؤال الأهم: ما الذي يصبح مسؤولية الإنسان عندما يستطيع النظام فعل المزيد؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-b3cddd1c629f",
+      "type": "h2",
+      "sourceHash": "b3cddd1c629f3c30324a971d2fbf6a1f5fc790a0543aea866c2c7b8acc20cda3",
+      "sourceText": "من أداة نستدعيها إلى طرف داخل سير العمل",
+      "spokenText": "من أداة نستدعيها إلى طرف داخل سير العمل",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d59bc5962c66",
+      "type": "paragraph",
+      "sourceHash": "d59bc5962c662e20072c08f6c8a53fa20c360946d603b9dda49d815eff227a5c",
+      "sourceText": "وصف الذكاء الاصطناعي بأنه «زميل» لا يعني أنه واعٍ، ولا أن له شخصية أو حقوقًا أو استقلالًا أخلاقيًا. المقصود هنا وظيفي: نظام لم يعد يظهر في خطوة واحدة ثم يختفي، بل يشارك في سلسلة عمل ممتدة؛ يستقبل هدفًا، ويستخدم أدوات، ويحتفظ بسياق، ويعيد نتيجة يمكن البناء عليها.",
+      "spokenText": "وصف الذكاء الاصطناعي بأنه «زميل» لا يعني أنه واعٍ، ولا أن له شخصية أو حقوقًا أو استقلالًا أخلاقيًا. المقصود هنا وظيفي: نظام لم يعد يظهر في خطوة واحدة ثم يختفي، بل يشارك في سلسلة عمل ممتدة؛ يستقبل هدفًا، ويستخدم أدوات، ويحتفظ بسياق، ويعيد نتيجة يمكن البناء عليها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9780d52fda33",
+      "type": "paragraph",
+      "sourceHash": "9780d52fda3370ee4cbb1bcef4627e2875e8c421cf34ca454ea300d03764d7f4",
+      "sourceText": "يمكن تصور طيف بسيط: أداة تنفذ وظيفة محددة، ثم مساعد يقترح أثناء العمل، ثم وكيل يختار بعض الخطوات ويستخدم أدوات لتحقيق هدف. أما «الزميل الاصطناعي» فهو تسمية عملية لحالة يصبح فيها هذا النظام جزءًا مستمرًا من سير العمل، لا تعريفًا تقنيًا متفقًا عليه.",
+      "spokenText": "يمكن تصور طيف بسيط: أداة تنفذ وظيفة محددة، ثم مساعد يقترح أثناء العمل، ثم وكيل يختار بعض الخطوات ويستخدم أدوات لتحقيق هدف. أما «الزميل الاصطناعي» فهو تسمية عملية لحالة يصبح فيها هذا النظام جزءًا مستمرًا من سير العمل، لا تعريفًا تقنيًا متفقًا عليه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0d2729862b9c",
+      "type": "paragraph",
+      "sourceHash": "0d2729862b9c278528e4999bcc2224d450d8b84ca1c59affa9034e7f27650b39",
+      "sourceText": "وقد بدأ هذا الانتقال يظهر في طريقة الاستخدام المؤسسي. تشير بيانات Anthropic عن استخدام منصتها في أواخر 2025 إلى أن التفاعل الفردي على Claude.ai كان أقرب إلى التعاون المتبادل، بينما كان الاستخدام عبر الواجهات البرمجية أكثر ميلًا إلى التفويض والأتمتة. هذه بيانات شركة واحدة ولا تمثل سوق العمل كله، لكنها توضح الفرق بين أن تستخدم النظام وأن تضعه داخل الإجراء نفسه.",
+      "spokenText": "وقد بدأ هذا الانتقال يظهر في طريقة الاستخدام المؤسسي. تشير بيانات Anthropic عن استخدام منصتها في أواخر 2025 إلى أن التفاعل الفردي على Claude.ai كان أقرب إلى التعاون المتبادل، بينما كان الاستخدام عبر الواجهات البرمجية أكثر ميلًا إلى التفويض والأتمتة. هذه بيانات شركة واحدة ولا تمثل سوق العمل كله، لكنها توضح الفرق بين أن تستخدم النظام وأن تضعه داخل الإجراء نفسه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a8700e184eb0",
+      "type": "paragraph",
+      "sourceHash": "a8700e184eb0a182fec81b15ef8292ac7dec50378cf8052a532cedb8ccc3f22e",
+      "sourceText": "في بريق شرحنا سابقًا كيف ينتقل الوكيل الذكي من الإجابة إلى التنفيذ. ما يعنينا هنا هو الخطوة التالية: ماذا يحدث للإنسان عندما يصبح هذا التنفيذ جزءًا من الفريق؟",
+      "spokenText": "في بريق شرحنا سابقًا كيف ينتقل الوكيل الذكي من الإجابة إلى التنفيذ. ما يعنينا هنا هو الخطوة التالية: ماذا يحدث للإنسان عندما يصبح هذا التنفيذ جزءًا من الفريق؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-607520442822",
+      "type": "h2",
+      "sourceHash": "6075204428220a436b77a7d40c2e2fe458c29c9d88e49ef10e92b05c619d7640",
+      "sourceText": "الوظيفة ليست قائمة مهام",
+      "spokenText": "الوظيفة ليست قائمة مهام",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bcaf68a439eb",
+      "type": "paragraph",
+      "sourceHash": "bcaf68a439ebc1c3296badb74104f2198c8d70ab85686ea36dbd8b1607f28eed",
+      "sourceText": "أكثر الاختصارات تضليلًا في هذا النقاش أن نتعامل مع الوظيفة كأنها لائحة مهام منفصلة: إذا استطاع النظام أداء نصفها، افترضنا أننا نستطيع حذف نصف الوظيفة.",
+      "spokenText": "أكثر الاختصارات تضليلًا في هذا النقاش أن نتعامل مع الوظيفة كأنها لائحة مهام منفصلة: إذا استطاع النظام أداء نصفها، افترضنا أننا نستطيع حذف نصف الوظيفة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-cd54be3c13b7",
+      "type": "paragraph",
+      "sourceHash": "cd54be3c13b7ecfb3672cdc5316a37509606013466b33e3eafe2bba8031e3f6e",
+      "sourceText": "لكن المحاسب لا «يحسب» فقط، والطبيب لا «يشخّص» فقط، والمحلل لا «يحلل البيانات» فقط. كل وظيفة تجمع بين مهام واضحة ومعرفة ضمنية وسياق مؤسسي وعلاقات وترتيب أولويات ومسؤولية عن النتيجة.",
+      "spokenText": "لكن المحاسب لا «يحسب» فقط، والطبيب لا «يشخّص» فقط، والمحلل لا «يحلل البيانات» فقط. كل وظيفة تجمع بين مهام واضحة ومعرفة ضمنية وسياق مؤسسي وعلاقات وترتيب أولويات ومسؤولية عن النتيجة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8aba2da6d771",
+      "type": "paragraph",
+      "sourceHash": "8aba2da6d771dbac986b4a64944711dbfaf7e0e4b321df7bd4cd8d04fc9b284b",
+      "sourceText": "لهذا تفرق الدراسات الجادة بين التعرض للذكاء الاصطناعي وبين الاستبدال الوظيفي. في مؤشر عالمي نشرته منظمة العمل الدولية عام 2025، يقع نحو ربع العمالة العالمية في مهن لها درجة ما من التعرض للذكاء الاصطناعي التوليدي، لكن 3.3% فقط تقع في أعلى فئة تعرض. وتؤكد المنظمة أن هذه التقديرات تقيس إمكان التأثر إذا طُبقت التقنية، لا عدد الوظائف التي ستختفي، وأن تحول الوظائف أرجح من استبدالها بالكامل.",
+      "spokenText": "لهذا تفرق الدراسات الجادة بين التعرض للذكاء الاصطناعي وبين الاستبدال الوظيفي. في مؤشر عالمي نشرته منظمة العمل الدولية عام 2025، يقع نحو ربع العمالة العالمية في مهن لها درجة ما من التعرض للذكاء الاصطناعي التوليدي، لكن 3.3% فقط تقع في أعلى فئة تعرض. وتؤكد المنظمة أن هذه التقديرات تقيس إمكان التأثر إذا طُبقت التقنية، لا عدد الوظائف التي ستختفي، وأن تحول الوظائف أرجح من استبدالها بالكامل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0eff12fba0bf",
+      "type": "paragraph",
+      "sourceHash": "0eff12fba0bfa57c8098dd92a7f282921cec373c687a09c38bc0f26223daa3bc",
+      "sourceText": "السبب بسيط: حتى عندما يمكن أتمتة عدد من المهام، تبقى مهام أخرى تحتاج إلى إنسان أو إلى أنظمة وبيانات وصلاحيات لم تتوافر بعد. والوظيفة لا تتفكك دائمًا بالطريقة التي نتوقعها؛ قد يأخذ النظام الجزء الأكثر مهارة في بعض الأدوار، بينما يأخذ الجزء الروتيني في أدوار أخرى.",
+      "spokenText": "السبب بسيط: حتى عندما يمكن أتمتة عدد من المهام، تبقى مهام أخرى تحتاج إلى إنسان أو إلى أنظمة وبيانات وصلاحيات لم تتوافر بعد. والوظيفة لا تتفكك دائمًا بالطريقة التي نتوقعها؛ قد يأخذ النظام الجزء الأكثر مهارة في بعض الأدوار، بينما يأخذ الجزء الروتيني في أدوار أخرى.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-2c78abdd887a",
+      "type": "h2",
+      "sourceHash": "2c78abdd887a425e007015216a408826d743b89071616aeec952966f6741a158",
+      "sourceText": "المكسب حقيقي… لكنه غير متساوٍ",
+      "spokenText": "المكسب حقيقي… لكنه غير متساوٍ",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-009591ba71ea",
+      "type": "paragraph",
+      "sourceHash": "009591ba71ea64a109c6df36b4a462395187ec4ac794dd49f5f731b27af35c80",
+      "sourceText": "الأدلة على مكاسب الإنتاجية موجودة، لكنها لا تسمح بجملة مريحة من نوع «الذكاء الاصطناعي يجعل الجميع أسرع».",
+      "spokenText": "الأدلة على مكاسب الإنتاجية موجودة، لكنها لا تسمح بجملة مريحة من نوع «الذكاء الاصطناعي يجعل الجميع أسرع».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a662b626cfca",
+      "type": "paragraph",
+      "sourceHash": "a662b626cfca31ac27c1658684ae4136baf0cb1cb67fdd2e08c726edbd2d8b18",
+      "sourceText": "في تجربة عشوائية على 758 عامل معرفة نُشرت في Organization Science عام 2026، أنجز مستخدمو الذكاء الاصطناعي مهامًا أكثر بنحو 12% وأسرع بنحو 25% في مجموعة مهام تقع داخل نطاق قدرة النظام، مع تحسن في الجودة. لكن في مهمة صُممت لتقع خارج ذلك النطاق، أصبح مستخدمو النظام أقل احتمالًا للوصول إلى الإجابة الصحيحة بنسبة 19%.",
+      "spokenText": "في تجربة عشوائية على 758 عامل معرفة نُشرت في Organization Science عام 2026، أنجز مستخدمو الذكاء الاصطناعي مهامًا أكثر بنحو 12% وأسرع بنحو 25% في مجموعة مهام تقع داخل نطاق قدرة النظام، مع تحسن في الجودة. لكن في مهمة صُممت لتقع خارج ذلك النطاق، أصبح مستخدمو النظام أقل احتمالًا للوصول إلى الإجابة الصحيحة بنسبة 19%.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ae63f0bbd554",
+      "type": "paragraph",
+      "sourceHash": "ae63f0bbd554848fa8608e66a584116faa76223fc3e6b3594cfe81b2f5f783c5",
+      "sourceText": "سمّى الباحثون هذا التفاوت «الحدود التقنية المسننة»: قد يكون النظام ممتازًا في مهمة معقدة ويفشل في مهمة قريبة منها تبدو أسهل، من دون أن يرسم للمستخدم خطًا واضحًا يفصل بين الاثنين.",
+      "spokenText": "سمّى الباحثون هذا التفاوت «الحدود التقنية المسننة»: قد يكون النظام ممتازًا في مهمة معقدة ويفشل في مهمة قريبة منها تبدو أسهل، من دون أن يرسم للمستخدم خطًا واضحًا يفصل بين الاثنين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8d8549ec544a",
+      "type": "paragraph",
+      "sourceHash": "8d8549ec544a0c385b2c4741b347d05c05d7ba9adbb44385f36d239988071302",
+      "sourceText": "وتظهر الصورة نفسها في مجالات أخرى. دراسة منشورة في The Quarterly Journal of Economics على 5,172 موظف خدمة عملاء وجدت زيادة متوسطة قدرها 15% في الإنتاجية، وكانت المكاسب أكبر لدى الأقل خبرة، بينما كانت محدودة لدى الأعلى خبرة. وفي المقابل، وجدت تجربة أصغر على مطورين خبراء في مشروعات يعرفونها جيدًا أن استخدام أدوات الذكاء الاصطناعي أبطأهم في المتوسط بنحو 19%، رغم أنهم بعد التجربة قدّروا أن الأدوات سرعتهم بنحو 20%.",
+      "spokenText": "وتظهر الصورة نفسها في مجالات أخرى. دراسة منشورة في The Quarterly Journal of Economics على 5,172 موظف خدمة عملاء وجدت زيادة متوسطة قدرها 15% في الإنتاجية، وكانت المكاسب أكبر لدى الأقل خبرة، بينما كانت محدودة لدى الأعلى خبرة. وفي المقابل، وجدت تجربة أصغر على مطورين خبراء في مشروعات يعرفونها جيدًا أن استخدام أدوات الذكاء الاصطناعي أبطأهم في المتوسط بنحو 19%، رغم أنهم بعد التجربة قدّروا أن الأدوات سرعتهم بنحو 20%.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2187505043a7",
+      "type": "paragraph",
+      "sourceHash": "2187505043a7162f201f7eca24678aef3b8ac02a3fb15b3614dca69c477ca314",
+      "sourceText": "هذه النتيجة الأخيرة لا تكفي للتعميم؛ العينة صغيرة والسياق خاص. لكنها تكشف مشكلة مهمة: الإحساس بالسرعة ليس دائمًا قياسًا للسرعة.",
+      "spokenText": "هذه النتيجة الأخيرة لا تكفي للتعميم؛ العينة صغيرة والسياق خاص. لكنها تكشف مشكلة مهمة: الإحساس بالسرعة ليس دائمًا قياسًا للسرعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-84a9d124f340",
+      "type": "paragraph",
+      "sourceHash": "84a9d124f3403c44c24bbb086359e788eb779bcfbcc64cda6121c1bc4c701ca3",
+      "sourceText": "إذن السؤال الأفضل ليس: هل يزيد الذكاء الاصطناعي الإنتاجية؟ بل: لمن، وفي أي مهمة، وتحت أي شروط؟",
+      "spokenText": "إذن السؤال الأفضل ليس: هل يزيد الذكاء الاصطناعي الإنتاجية؟ بل: لمن، وفي أي مهمة، وتحت أي شروط؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-ca8147b52a69",
+      "type": "h2",
+      "sourceHash": "ca8147b52a69beb7c03d147abed7cdb870fa60fdf0b52a897fc06e3eaed67266",
+      "sourceText": "حين يصبح التنفيذ أرخص، ترتفع قيمة الاختيار",
+      "spokenText": "حين يصبح التنفيذ أرخص، ترتفع قيمة الاختيار",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-92c086488b30",
+      "type": "paragraph",
+      "sourceHash": "92c086488b30f6e3d9bc88f0248d752d053beff0e907b2ba7ccb244f1a446c3b",
+      "sourceText": "قبل الذكاء الاصطناعي التوليدي، كان إنتاج عشرة تصورات لمشكلة ما قد يحتاج إلى ساعات. اليوم يمكن للنظام أن يولد عشرات البدائل في دقائق.",
+      "spokenText": "قبل الذكاء الاصطناعي التوليدي، كان إنتاج عشرة تصورات لمشكلة ما قد يحتاج إلى ساعات. اليوم يمكن للنظام أن يولد عشرات البدائل في دقائق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8800d09bb86e",
+      "type": "paragraph",
+      "sourceHash": "8800d09bb86e4ab4f49b5ab41ebb6dd11208ecb737aadc7559be9312b4de590f",
+      "sourceText": "هذا لا يلغي العمل؛ بل قد ينقل موضع الندرة. حين يصبح إنتاج المسودة والتحليل الأولي والكود والتصميم أسرع، تزداد أهمية أسئلة من نوع آخر: أي حل يستحق الاختبار؟ ما المشكلة التي نحاول حلها أصلًا؟ ما المعيار الذي سنقيس به النجاح؟ وما الأثر الذي لا يظهر في البيانات؟",
+      "spokenText": "هذا لا يلغي العمل؛ بل قد ينقل موضع الندرة. حين يصبح إنتاج المسودة والتحليل الأولي والكود والتصميم أسرع، تزداد أهمية أسئلة من نوع آخر: أي حل يستحق الاختبار؟ ما المشكلة التي نحاول حلها أصلًا؟ ما المعيار الذي سنقيس به النجاح؟ وما الأثر الذي لا يظهر في البيانات؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1cad270153d2",
+      "type": "paragraph",
+      "sourceHash": "1cad270153d2dc0d741e4a469bff98854d08921b549e04f7043730230a5a15d9",
+      "sourceText": "مسح McKinsey العالمي لعام 2025 يوضح الفجوة بين التبني والقيمة: 88% من المستجيبين قالوا إن مؤسساتهم تستخدم الذكاء الاصطناعي بانتظام في وظيفة واحدة على الأقل، لكن 39% فقط نسبوا إليه أي أثر على الأرباح التشغيلية على مستوى المؤسسة. وهذه بيانات مسحية ذاتية، لا تجربة سببية، لكنها تشير إلى أن امتلاك الأدوات ليس كافيًا.",
+      "spokenText": "مسح McKinsey العالمي لعام 2025 يوضح الفجوة بين التبني والقيمة: 88% من المستجيبين قالوا إن مؤسساتهم تستخدم الذكاء الاصطناعي بانتظام في وظيفة واحدة على الأقل، لكن 39% فقط نسبوا إليه أي أثر على الأرباح التشغيلية على مستوى المؤسسة. وهذه بيانات مسحية ذاتية، لا تجربة سببية، لكنها تشير إلى أن امتلاك الأدوات ليس كافيًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ddeef036d301",
+      "type": "paragraph",
+      "sourceHash": "ddeef036d3014fde8bf96791838e9139056fdbb8509f6f8e94c5aa72be24c138",
+      "sourceText": "ومن أكثر الفروق ارتباطًا بالمؤسسات الأعلى أداءً في المسح إعادة تصميم سير العمل نفسه. هنا لا تكون المشكلة «أي نموذج نشتري؟» بقدر ما تكون «كيف ينبغي أن يعمل هذا الفريق أصلًا؟».",
+      "spokenText": "ومن أكثر الفروق ارتباطًا بالمؤسسات الأعلى أداءً في المسح إعادة تصميم سير العمل نفسه. هنا لا تكون المشكلة «أي نموذج نشتري؟» بقدر ما تكون «كيف ينبغي أن يعمل هذا الفريق أصلًا؟».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-14370d8c23d9",
+      "type": "paragraph",
+      "sourceHash": "14370d8c23d98d52da7d0c08ba0dbd944fe3247e28b8dfd7d3fef786ffbd1f31",
+      "sourceText": "وقد يكون هذا أحد أهم التحولات في قيمة الإنسان: من مجرد تنفيذ خطوات معروفة إلى صياغة المشكلة وتحديد ما يستحق التنفيذ.",
+      "spokenText": "وقد يكون هذا أحد أهم التحولات في قيمة الإنسان: من مجرد تنفيذ خطوات معروفة إلى صياغة المشكلة وتحديد ما يستحق التنفيذ.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-c546a27eef69",
+      "type": "h2",
+      "sourceHash": "c546a27eef69d9e814925c0f2ec5bdb0081dbca956fbd5f7141148d152d81757",
+      "sourceText": "من يملك القرار عندما يكتب النظام نصفه؟",
+      "spokenText": "من يملك القرار عندما يكتب النظام نصفه؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9b9dd723ed31",
+      "type": "paragraph",
+      "sourceHash": "9b9dd723ed31e378c6ad1f947437eb8ef248fb8e495ae1de39535e738d7a17d7",
+      "sourceText": "القدرة على إنتاج قرار ليست هي المسؤولية عنه.",
+      "spokenText": "القدرة على إنتاج قرار ليست هي المسؤولية عنه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-cf3cff44fcd1",
+      "type": "paragraph",
+      "sourceHash": "cf3cff44fcd180bc7d5493744a5c6310630e88290e6ec5414e5d8a2a77292365",
+      "sourceText": "لائحة الاتحاد الأوروبي للذكاء الاصطناعي تقدم مثالًا واضحًا على هذا الفصل. فالمادة 14 الخاصة بالأنظمة عالية المخاطر تصف الإشراف البشري بأنه قدرة الشخص على فهم حدود النظام، والانتباه إلى خطر الاعتماد المفرط عليه، وتفسير المخرجات، وتجاهلها أو عكسها، بل وقرار عدم استخدام النظام في موقف معين. وبعد تعديلات 2026 تأجل تطبيق بعض متطلبات الأنظمة عالية المخاطر إلى مواعيد لاحقة، لكن المبدأ التنظيمي نفسه واضح: وجود الإنسان في الحلقة لا يكفي إذا لم يملك فهمًا وصلاحية حقيقية للتدخل.",
+      "spokenText": "لائحة الاتحاد الأوروبي للذكاء الاصطناعي تقدم مثالًا واضحًا على هذا الفصل. فالمادة 14 الخاصة بالأنظمة عالية المخاطر تصف الإشراف البشري بأنه قدرة الشخص على فهم حدود النظام، والانتباه إلى خطر الاعتماد المفرط عليه، وتفسير المخرجات، وتجاهلها أو عكسها، بل وقرار عدم استخدام النظام في موقف معين. وبعد تعديلات 2026 تأجل تطبيق بعض متطلبات الأنظمة عالية المخاطر إلى مواعيد لاحقة، لكن المبدأ التنظيمي نفسه واضح: وجود الإنسان في الحلقة لا يكفي إذا لم يملك فهمًا وصلاحية حقيقية للتدخل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dbb52ceb2583",
+      "type": "paragraph",
+      "sourceHash": "dbb52ceb2583e3e414e7257b08206fe4cbd5981be19434f071ae363e2c50d43b",
+      "sourceText": "وهذه ليست مشكلة قانونية فقط. في تجربة منشورة في Radiology، قرأ 27 طبيب أشعة صورًا مع توصيات من نظام قُدّم لهم على أنه ذكاء اصطناعي. عندما كانت التوصيات خاطئة، انخفضت دقة جميع مجموعات الخبرة، وإن كان الأكثر خبرة أقل تأثرًا من المبتدئين.",
+      "spokenText": "وهذه ليست مشكلة قانونية فقط. في تجربة منشورة في Radiology، قرأ 27 طبيب أشعة صورًا مع توصيات من نظام قُدّم لهم على أنه ذكاء اصطناعي. عندما كانت التوصيات خاطئة، انخفضت دقة جميع مجموعات الخبرة، وإن كان الأكثر خبرة أقل تأثرًا من المبتدئين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2147af7e7ece",
+      "type": "paragraph",
+      "sourceHash": "2147af7e7ecedad07ba03b936e025a46872fc10c4bab472d2dcad6fb56c898c0",
+      "sourceText": "المفارقة هنا أن الخبير قد يكون الشخص المطلوب لمراجعة النظام، لكنه ليس محصنًا من الميل إلى اتباعه. وهذا قريب من سؤال متى يستحق حكمنا السريع الثقة ومتى يحتاج إلى دليل.",
+      "spokenText": "المفارقة هنا أن الخبير قد يكون الشخص المطلوب لمراجعة النظام، لكنه ليس محصنًا من الميل إلى اتباعه. وهذا قريب من سؤال متى يستحق حكمنا السريع الثقة ومتى يحتاج إلى دليل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c3b53e2ac22c",
+      "type": "paragraph",
+      "sourceHash": "c3b53e2ac22c239797a32c9af60d68f8cf2d94114f21dfc905ae89154a33b7cd",
+      "sourceText": "لذلك يجب ألا تضيع المسؤولية لمجرد أن التنفيذ أصبح موزعًا بين الإنسان والنظام. إذا كان الموظف لا يملك الوقت أو المعلومات أو السلطة لرفض المخرج، فإن عبارة «راجعها إنسان» تصبح أضعف مما تبدو.",
+      "spokenText": "لذلك يجب ألا تضيع المسؤولية لمجرد أن التنفيذ أصبح موزعًا بين الإنسان والنظام. إذا كان الموظف لا يملك الوقت أو المعلومات أو السلطة لرفض المخرج، فإن عبارة «راجعها إنسان» تصبح أضعف مما تبدو.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-83ed23e2217b",
+      "type": "h2",
+      "sourceHash": "83ed23e2217babc426eeb35eb469a83b07cbc611ab9c838fea990d7c9c820ae6",
+      "sourceText": "مفارقة المبتدئ: من أين سيأتي الخبير التالي؟",
+      "spokenText": "مفارقة المبتدئ: من أين سيأتي الخبير التالي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-476b9450a365",
+      "type": "paragraph",
+      "sourceHash": "476b9450a3656c6c6bd64b81ff5f2c60f13f3b3fa5ee54de9d1b1c05a26b7370",
+      "sourceText": "أكثر أسئلة مستقبل العمل إلحاحًا قد لا يتعلق بمن سيخسر وظيفته، بل كيف سيتعلم المبتدئ.",
+      "spokenText": "أكثر أسئلة مستقبل العمل إلحاحًا قد لا يتعلق بمن سيخسر وظيفته، بل كيف سيتعلم المبتدئ.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3ccbcbf2f228",
+      "type": "paragraph",
+      "sourceHash": "3ccbcbf2f22883e137844b50eb70574dc51b03a671376b5cded8f140416aed68",
+      "sourceText": "كان جزء كبير من تكوين الخبرة يأتي من الأعمال التي تبدو بسيطة: البحث الأولي، وإعداد المسودة، وتصحيح الأخطاء، وقراءة الملفات الطويلة، ومحاولة الحل ثم اكتشاف سبب فشله. هذه الأعمال هي نفسها من أول ما نحاول تفويضه إلى الذكاء الاصطناعي.",
+      "spokenText": "كان جزء كبير من تكوين الخبرة يأتي من الأعمال التي تبدو بسيطة: البحث الأولي، وإعداد المسودة، وتصحيح الأخطاء، وقراءة الملفات الطويلة، ومحاولة الحل ثم اكتشاف سبب فشله. هذه الأعمال هي نفسها من أول ما نحاول تفويضه إلى الذكاء الاصطناعي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bea0f1de2453",
+      "type": "paragraph",
+      "sourceHash": "bea0f1de2453bdf2806b00362508f8240cd3701aa0d30dd503942b1fb89aca6c",
+      "sourceText": "تشير ورقة من Stanford Digital Economy Lab إلى أن العاملين في بدايات مسيرتهم، بين 22 و25 عامًا، في المهن الأمريكية الأكثر تعرضًا للذكاء الاصطناعي شهدوا تراجعًا نسبيًا قدره 16% في التوظيف مقارنة بالمسار المتوقع بعد ضبط صدمات الشركات، بينما لم يظهر النمط نفسه لدى الأكثر خبرة. لكن الباحثين يقدمون النتائج بوصفها أدلة مبكرة متسقة مع فرضية أثر الذكاء الاصطناعي، لا إثباتًا سببيًا نهائيًا.",
+      "spokenText": "تشير ورقة من Stanford Digital Economy Lab إلى أن العاملين في بدايات مسيرتهم، بين 22 و25 عامًا، في المهن الأمريكية الأكثر تعرضًا للذكاء الاصطناعي شهدوا تراجعًا نسبيًا قدره 16% في التوظيف مقارنة بالمسار المتوقع بعد ضبط صدمات الشركات، بينما لم يظهر النمط نفسه لدى الأكثر خبرة. لكن الباحثين يقدمون النتائج بوصفها أدلة مبكرة متسقة مع فرضية أثر الذكاء الاصطناعي، لا إثباتًا سببيًا نهائيًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-84dc66d9f684",
+      "type": "paragraph",
+      "sourceHash": "84dc66d9f684b051f31cc52b216fada4cc27ea63f25b992e1158d0f72b47f698",
+      "sourceText": "أما أثر الاستخدام على التعلم نفسه، فلدينا إشارة تجريبية أحدث. في دراسة عشوائية أولية نُشرت كمسودة بحثية عام 2026، تعلم مطورون مكتبة برمجية جديدة بمساعدة الذكاء الاصطناعي أو من دونها. المجموعة التي استخدمته لم تحقق تسارعًا متوسطًا ذا دلالة في إنجاز المهمة، وسجلت أداءً أضعف في اختبارات الفهم وقراءة الكود وتصحيح الأخطاء. وكان الفارق في التقييم نحو 17%.",
+      "spokenText": "أما أثر الاستخدام على التعلم نفسه، فلدينا إشارة تجريبية أحدث. في دراسة عشوائية أولية نُشرت كمسودة بحثية عام 2026، تعلم مطورون مكتبة برمجية جديدة بمساعدة الذكاء الاصطناعي أو من دونها. المجموعة التي استخدمته لم تحقق تسارعًا متوسطًا ذا دلالة في إنجاز المهمة، وسجلت أداءً أضعف في اختبارات الفهم وقراءة الكود وتصحيح الأخطاء. وكان الفارق في التقييم نحو 17%.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1ca2d2abd840",
+      "type": "paragraph",
+      "sourceHash": "1ca2d2abd84002871c04e09dd16f2505d4cbeb9c2bf5707c58c3738abfcd9eae",
+      "sourceText": "لكن الدراسة قدمت تفصيلًا أهم من الرقم: الضرر لم يكن واحدًا لدى جميع المستخدمين. من استخدموا النظام لطلب الشرح والأسئلة المفاهيمية وحافظوا على المشاركة الذهنية تعلموا أفضل من الذين فوّضوا العمل كاملًا.",
+      "spokenText": "لكن الدراسة قدمت تفصيلًا أهم من الرقم: الضرر لم يكن واحدًا لدى جميع المستخدمين. من استخدموا النظام لطلب الشرح والأسئلة المفاهيمية وحافظوا على المشاركة الذهنية تعلموا أفضل من الذين فوّضوا العمل كاملًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b95be186295e",
+      "type": "paragraph",
+      "sourceHash": "b95be186295e95db72c4eb88c12488fc70725b2284f8fd43f92dd5d56c6ba99e",
+      "sourceText": "هذه نقطة تغير السؤال من «هل نسمح للمبتدئ باستخدام الذكاء الاصطناعي؟» إلى «كيف نصمم العمل بحيث يستخدمه ولا يفقد الممارسة التي تصنع الخبرة؟»",
+      "spokenText": "هذه نقطة تغير السؤال من «هل نسمح للمبتدئ باستخدام الذكاء الاصطناعي؟» إلى «كيف نصمم العمل بحيث يستخدمه ولا يفقد الممارسة التي تصنع الخبرة؟»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5d93d29735fb",
+      "type": "paragraph",
+      "sourceHash": "5d93d29735fb4a1d176dbc481d1438ad6bc06d3cd02807331e68dc2c37584d8e",
+      "sourceText": "فإذا كان النظام يكتب الكود، فمن أين يتعلم الموظف اكتشاف الكود الرديء؟ وإذا كان يلخص كل وثيقة، فمن أين يبني المحلل حسه لما يستحق أن يلاحظه؟",
+      "spokenText": "فإذا كان النظام يكتب الكود، فمن أين يتعلم الموظف اكتشاف الكود الرديء؟ وإذا كان يلخص كل وثيقة، فمن أين يبني المحلل حسه لما يستحق أن يلاحظه؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-be2b4c162c01",
+      "type": "h2",
+      "sourceHash": "be2b4c162c015eaee45edcb37952d5ad82c5589de91b9693a6bc24cf6cb44892",
+      "sourceText": "العلاقات ليست ملاذًا سحريًا للإنسان",
+      "spokenText": "العلاقات ليست ملاذًا سحريًا للإنسان",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2b4d0b81b7c8",
+      "type": "paragraph",
+      "sourceHash": "2b4d0b81b7c8d7290ceb7e0f153d887c84848c19f4188339e374480528f185c6",
+      "sourceText": "من السهل عند هذه النقطة أن نقول: الآلة ستأخذ المهام التقنية، وسيبقى للإنسان الإبداع والعلاقات و«المهارات الناعمة». الأدلة لا تسمح بهذه الطمأنينة السريعة.",
+      "spokenText": "من السهل عند هذه النقطة أن نقول: الآلة ستأخذ المهام التقنية، وسيبقى للإنسان الإبداع والعلاقات و«المهارات الناعمة». الأدلة لا تسمح بهذه الطمأنينة السريعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5d6b093bfdff",
+      "type": "paragraph",
+      "sourceHash": "5d6b093bfdff4ae245ba3816850f7d3f9668a28902e711832e997617574def33",
+      "sourceText": "في تجربة ميدانية على 776 محترفًا في Procter & Gamble، عمل المشاركون أفرادًا أو في فرق على مشكلات ابتكار حقيقية، مع الذكاء الاصطناعي أو من دونه. ووجد الباحثون أن الفرد المدعوم بالنظام استطاع، في مقاييس الأداء المستخدمة، أن يضاهي فرقًا من شخصين تعمل من دون النظام. كما ساعد النظام المشاركين على إنتاج حلول أكثر توازنًا بين الجوانب التقنية والتجارية.",
+      "spokenText": "في تجربة ميدانية على 776 محترفًا في Procter & Gamble، عمل المشاركون أفرادًا أو في فرق على مشكلات ابتكار حقيقية، مع الذكاء الاصطناعي أو من دونه. ووجد الباحثون أن الفرد المدعوم بالنظام استطاع، في مقاييس الأداء المستخدمة، أن يضاهي فرقًا من شخصين تعمل من دون النظام. كما ساعد النظام المشاركين على إنتاج حلول أكثر توازنًا بين الجوانب التقنية والتجارية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-30d11f87a259",
+      "type": "paragraph",
+      "sourceHash": "30d11f87a2597eace498d086a0b04f16211cd0a00038dfc7e718e195ac3d9d77",
+      "sourceText": "هذا لا يعني أن «العلاقة البشرية قابلة للاستبدال». التجربة تخص نوعًا محددًا من التعاون في مهمة محددة. لكنها تضعف فكرة أن كل فائدة نحصل عليها من الزميل البشري محمية تلقائيًا.",
+      "spokenText": "هذا لا يعني أن «العلاقة البشرية قابلة للاستبدال». التجربة تخص نوعًا محددًا من التعاون في مهمة محددة. لكنها تضعف فكرة أن كل فائدة نحصل عليها من الزميل البشري محمية تلقائيًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9337173c87ab",
+      "type": "paragraph",
+      "sourceHash": "9337173c87ab0cc8b8fe73c3d6c3ff6d7c7c7e61ff67dea973a611aabc62fca5",
+      "sourceText": "ما يصعب اختزاله ليس «العلاقات» ككلمة عامة، بل وظائف أكثر تحديدًا: بناء ثقة تجعل المعلومة السيئة تصل مبكرًا، والتفاوض على قيود لم تُكتب، وإعطاء خبر سيئ، وإقناع طرف متردد، وتحمل قرار أمام شخص آخر. وفي كثير من الأعمال، هذه ليست زينة اجتماعية حول المهمة؛ إنها جزء من المهمة نفسها.",
+      "spokenText": "ما يصعب اختزاله ليس «العلاقات» ككلمة عامة، بل وظائف أكثر تحديدًا: بناء ثقة تجعل المعلومة السيئة تصل مبكرًا، والتفاوض على قيود لم تُكتب، وإعطاء خبر سيئ، وإقناع طرف متردد، وتحمل قرار أمام شخص آخر. وفي كثير من الأعمال، هذه ليست زينة اجتماعية حول المهمة؛ إنها جزء من المهمة نفسها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-d82cde99dc93",
+      "type": "h2",
+      "sourceHash": "d82cde99dc9361cd81fed2b073fb841129152da94b41a6f055f42bf1e0fb325d",
+      "sourceText": "اختبار بريق: أين تنتقل القيمة البشرية؟",
+      "spokenText": "اختبار بريق: أين تنتقل القيمة البشرية؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-22b080933a4e",
+      "type": "paragraph",
+      "sourceHash": "22b080933a4e5ec48ae2f8927371333f1bfddfe50c38e8f46e54522210f72b31",
+      "sourceText": "لا توجد قائمة أبدية بالأشياء التي «لن يستطيع الذكاء الاصطناعي فعلها». الحدود تتغير بسرعة، وما نعدّه اليوم مهارة بشرية حصرية قد يصبح غدًا قابلًا للمساعدة أو الأتمتة جزئيًا.",
+      "spokenText": "لا توجد قائمة أبدية بالأشياء التي «لن يستطيع الذكاء الاصطناعي فعلها». الحدود تتغير بسرعة، وما نعدّه اليوم مهارة بشرية حصرية قد يصبح غدًا قابلًا للمساعدة أو الأتمتة جزئيًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a6a7a3f76b99",
+      "type": "paragraph",
+      "sourceHash": "a6a7a3f76b99914f96720c24238a0ffc4dc29114832eb4c07c2f3ed0bdc1c6a2",
+      "sourceText": "الأدق أن نسأل عن كل مهمة عبر خمس طبقات:",
+      "spokenText": "الأدق أن نسأل عن كل مهمة عبر خمس طبقات:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c102a452ec92",
+      "type": "paragraph",
+      "sourceHash": "c102a452ec9248fe2324c7d2a4804bf9c73cc39a04b82f30f5aad7351aeea727",
+      "sourceText": "1. الاتجاه — ما الذي يستحق أن يُنجز؟ النظام يستطيع اقتراح طرق للوصول إلى هدف، لكن تحديد الهدف نفسه يظل مرتبطًا بالقيم والأولويات والمصالح والقيود.",
+      "spokenText": "1. الاتجاه — ما الذي يستحق أن يُنجز؟ النظام يستطيع اقتراح طرق للوصول إلى هدف، لكن تحديد الهدف نفسه يظل مرتبطًا بالقيم والأولويات والمصالح والقيود.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9e67dc0bdebf",
+      "type": "paragraph",
+      "sourceHash": "9e67dc0bdebf4f6275c19b69b981d8dafa78ce7c63ffb8d82b71340b2c089c74",
+      "sourceText": "2. السياق — ما الذي لم يُكتب؟ البيانات لا تحتوي دائمًا على تاريخ العلاقة، أو سياسة غير معلنة، أو سبب استثناء حدث قبل أشهر. من لا يملك السياق قد ينتج تحليلًا صحيحًا لمشكلة خاطئة.",
+      "spokenText": "2. السياق — ما الذي لم يُكتب؟ البيانات لا تحتوي دائمًا على تاريخ العلاقة، أو سياسة غير معلنة، أو سبب استثناء حدث قبل أشهر. من لا يملك السياق قد ينتج تحليلًا صحيحًا لمشكلة خاطئة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bd635fb07628",
+      "type": "paragraph",
+      "sourceHash": "bd635fb0762881f0bceba3fe649b05f8c6b9adbb5123d1f1c6881a9c892265dc",
+      "sourceText": "3. الحكم — أين تنتهي كفاءة النظام؟ القيمة ليست في الثقة به أو الشك فيه دائمًا، بل في معرفة متى تكون مساعدته مفيدة ومتى يصبح الاعتماد عليه مخاطرة.",
+      "spokenText": "3. الحكم — أين تنتهي كفاءة النظام؟ القيمة ليست في الثقة به أو الشك فيه دائمًا، بل في معرفة متى تكون مساعدته مفيدة ومتى يصبح الاعتماد عليه مخاطرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-469d9fdd385b",
+      "type": "paragraph",
+      "sourceHash": "469d9fdd385b43948a6d7fe56a11485bc8604f5b0966f044c9adc5ee38073fae",
+      "sourceText": "4. المسؤولية — من يملك القرار والتراجع عنه؟ المسؤولية الحقيقية تعني أن يملك الشخص وقتًا ومعلومة وسلطة لرفض النتيجة، لا أن يضع اسمه تحتها فقط.",
+      "spokenText": "4. المسؤولية — من يملك القرار والتراجع عنه؟ المسؤولية الحقيقية تعني أن يملك الشخص وقتًا ومعلومة وسلطة لرفض النتيجة، لا أن يضع اسمه تحتها فقط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9655d67c985b",
+      "type": "paragraph",
+      "sourceHash": "9655d67c985be582703607718712bc50c4829d8e0bd7aebe2746682741f1c147",
+      "sourceText": "5. التكوين — من يصنع الخبير التالي؟ أي مؤسسة تفوض المهام المبتدئة تحتاج في الوقت نفسه إلى تصميم مسار جديد للتعلم، وإلا فقد توفر اليوم على حساب قدرتها على المراجعة غدًا.",
+      "spokenText": "5. التكوين — من يصنع الخبير التالي؟ أي مؤسسة تفوض المهام المبتدئة تحتاج في الوقت نفسه إلى تصميم مسار جديد للتعلم، وإلا فقد توفر اليوم على حساب قدرتها على المراجعة غدًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6889f2fb87a0",
+      "type": "paragraph",
+      "sourceHash": "6889f2fb87a0fd74f7bda2be943808efeaf15aa53884a9727f7628835e218887",
+      "sourceText": "هذه الطبقات ليست حصونًا أبدية ضد الأتمتة. قيمتها أنها تحول السؤال من «ما الذي لا تستطيع الآلة فعله؟» إلى «ما الذي لا ينبغي أن نفقد ملكيته عندما نستخدمها؟»",
+      "spokenText": "هذه الطبقات ليست حصونًا أبدية ضد الأتمتة. قيمتها أنها تحول السؤال من «ما الذي لا تستطيع الآلة فعله؟» إلى «ما الذي لا ينبغي أن نفقد ملكيته عندما نستخدمها؟»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-5f79f604f2c9",
+      "type": "h2",
+      "sourceHash": "5f79f604f2c923f695bfad328a6bdb71ef023946238966de424aefc1a1e48ada",
+      "sourceText": "هل سيبقى الذكاء الاصطناعي «زميلًا»؟",
+      "spokenText": "هل سيبقى الذكاء الاصطناعي «زميلًا»؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3248fc09b1c3",
+      "type": "paragraph",
+      "sourceHash": "3248fc09b1c3ca07099dd0d5ff1b919d51581a2ef77fbb0529147c0f8f1ddaab",
+      "sourceText": "ربما تكون كلمة «زميل» نفسها مرحلة انتقالية.",
+      "spokenText": "ربما تكون كلمة «زميل» نفسها مرحلة انتقالية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-cbc068029e64",
+      "type": "paragraph",
+      "sourceHash": "cbc068029e64b3026cf509fc515c15d4292630bf4a817e61c21b96be401487b1",
+      "sourceText": "في ديسمبر 2025، نقلت Linux Foundation بروتوكولًا مفتوحًا لربط نماذج الذكاء الاصطناعي بالأدوات والبيانات إلى مؤسسة محايدة جديدة للذكاء الاصطناعي الوكيلي، إلى جانب مشروعات مفتوحة أخرى. أهمية الخطوة ليست في اسم البروتوكول، بل في ما ترمز إليه: بعض قدرات «الوكيل» بدأت تتحول من ميزة داخل منتج إلى طبقة بنية تحتية مشتركة.",
+      "spokenText": "في ديسمبر 2025، نقلت Linux Foundation بروتوكولًا مفتوحًا لربط نماذج الذكاء الاصطناعي بالأدوات والبيانات إلى مؤسسة محايدة جديدة للذكاء الاصطناعي الوكيلي، إلى جانب مشروعات مفتوحة أخرى. أهمية الخطوة ليست في اسم البروتوكول، بل في ما ترمز إليه: بعض قدرات «الوكيل» بدأت تتحول من ميزة داخل منتج إلى طبقة بنية تحتية مشتركة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9139e2fb2609",
+      "type": "paragraph",
+      "sourceHash": "9139e2fb2609bc4e87c9ee261d0de0f8c7452ce652e08fd6cb165af4c62091db",
+      "sourceText": "وحين تصبح التقنية بنية تحتية، نتوقف غالبًا عن وصفها كطرف مستقل. لا نصف محرك البحث في كل مرة بأنه «باحث مساعد»؛ أصبح جزءًا من طريقة العمل نفسها.",
+      "spokenText": "وحين تصبح التقنية بنية تحتية، نتوقف غالبًا عن وصفها كطرف مستقل. لا نصف محرك البحث في كل مرة بأنه «باحث مساعد»؛ أصبح جزءًا من طريقة العمل نفسها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6a6853b38fc9",
+      "type": "paragraph",
+      "sourceHash": "6a6853b38fc94ef6496388ee48fd9df78d8faeb818ceae9891eb033f4e6c483a",
+      "sourceText": "قد يحدث شيء مشابه مع الذكاء الاصطناعي: يصبح تأثيره أكبر حين يقل ظهور اسمه، ويصبح موزعًا داخل البريد والملفات والتحليل والبرمجة والعمليات.",
+      "spokenText": "قد يحدث شيء مشابه مع الذكاء الاصطناعي: يصبح تأثيره أكبر حين يقل ظهور اسمه، ويصبح موزعًا داخل البريد والملفات والتحليل والبرمجة والعمليات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d34fa066ba2d",
+      "type": "paragraph",
+      "sourceHash": "d34fa066ba2d81df6ebf6a0c193794de8b655dd1e9dee99edc0a68adb816fd31",
+      "sourceText": "وعندها تصبح الأسئلة السابقة أكثر أهمية لا أقل، لأن الأنظمة التي تعمل في الخلفية أسهل في الاستخدام، لكنها قد تكون أصعب في الملاحظة والمساءلة.",
+      "spokenText": "وعندها تصبح الأسئلة السابقة أكثر أهمية لا أقل، لأن الأنظمة التي تعمل في الخلفية أسهل في الاستخدام، لكنها قد تكون أصعب في الملاحظة والمساءلة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-83242593bdb0",
+      "type": "h2",
+      "sourceHash": "83242593bdb017fadfed5a94e288440d42779e7e1952c55ab725d74d93f8d740",
+      "sourceText": "ما يبقى للإنسان ليس ما تعجز عنه الآلة",
+      "spokenText": "ما يبقى للإنسان ليس ما تعجز عنه الآلة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6b63a0da07a1",
+      "type": "paragraph",
+      "sourceHash": "6b63a0da07a10da1eb80f324eb5e8d21590dcc85d08479caff6bf1c295076013",
+      "sourceText": "بعض المهام ستتغير، وبعضها سيختفي، وقد تحتاج بعض الأدوار إلى عدد أقل من الأشخاص. وفي المقابل ستظهر أعمال ومسؤوليات لم تكن موجودة بالشكل نفسه. الأدلة الحالية لا تسمح بحكم واحد على جميع المهن، ولا تمنحنا سببًا للطمأنينة أو للذعر.",
+      "spokenText": "بعض المهام ستتغير، وبعضها سيختفي، وقد تحتاج بعض الأدوار إلى عدد أقل من الأشخاص. وفي المقابل ستظهر أعمال ومسؤوليات لم تكن موجودة بالشكل نفسه. الأدلة الحالية لا تسمح بحكم واحد على جميع المهن، ولا تمنحنا سببًا للطمأنينة أو للذعر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f439b54376a2",
+      "type": "paragraph",
+      "sourceHash": "f439b54376a2a8a2e9791ada591c7a21b542b67d74cc4446ef6532e599e1d4d1",
+      "sourceText": "لكنها تشير إلى تحول واضح في موضع القيمة.",
+      "spokenText": "لكنها تشير إلى تحول واضح في موضع القيمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-404f80119608",
+      "type": "paragraph",
+      "sourceHash": "404f801196085be4c068715476cfb6fa25f870c1f4e01e0c153f87531a243e63",
+      "sourceText": "حين تصبح المسودة أرخص، ترتفع قيمة اختيار ما يستحق أن يصبح نهائيًا. وحين يصبح التنفيذ أسرع، تصبح معرفة حدود النظام أثمن. وحين نستطيع تفويض خطوات أكثر، تصبح المسؤولية عن الهدف والقرار والتعلم أكثر وضوحًا.",
+      "spokenText": "حين تصبح المسودة أرخص، ترتفع قيمة اختيار ما يستحق أن يصبح نهائيًا. وحين يصبح التنفيذ أسرع، تصبح معرفة حدود النظام أثمن. وحين نستطيع تفويض خطوات أكثر، تصبح المسؤولية عن الهدف والقرار والتعلم أكثر وضوحًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ae579a1c0d34",
+      "type": "paragraph",
+      "sourceHash": "ae579a1c0d34c5d3ef9fd77bd281d32780c6c77123e4e7058e29832186be1375",
+      "sourceText": "لذلك فالسؤال ليس: ماذا سيبقى للإنسان بعد الذكاء الاصطناعي؟",
+      "spokenText": "لذلك فالسؤال ليس: ماذا سيبقى للإنسان بعد الذكاء الاصطناعي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fbcbe508bf5b",
+      "type": "paragraph",
+      "sourceHash": "fbcbe508bf5b527f4f546001aec24abd6ef5b7a4f697433e9ac3518180d6fc8a",
+      "sourceText": "السؤال الأدق هو: أي جزء من العمل نريد أن نبقى قادرين على فهمه، والحكم عليه، وتحمل مسؤوليته — حتى عندما لا نعود نحن من ينفذ كل خطوة فيه؟",
+      "spokenText": "السؤال الأدق هو: أي جزء من العمل نريد أن نبقى قادرين على فهمه، والحكم عليه، وتحمل مسؤوليته — حتى عندما لا نعود نحن من ينفذ كل خطوة فيه؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "5a673aaee5ab56f5ba78f8c0dd2ece90ddc51b70e33a5c0003074f695e9c2d90",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}
