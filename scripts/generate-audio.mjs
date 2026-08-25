@@ -114,7 +114,7 @@ const CACHE_ORIGINS = configuredCacheOrigin
   ? [configuredCacheOrigin]
   : CONTRACT_TEST
     ? []
-    : ['https://bareeqworld.com', 'https://bareeq-world.pages.dev'];
+    : ['https://bareeq-world.pages.dev', 'https://bareeqworld.com'];
 const USER_AGENT = 'Bareeq-Audio-Builder/4.21.1';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
