@@ -1,0 +1,149 @@
+name: Verify pilot with strict Azure + Gemini
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/verify-pilot-azure-gemini-strict.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verify-pilot-azure-gemini-strict-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout exact working branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify source contracts and current pilot identity
+        run: |
+          node --check scripts/verify-gemini-pilot-transcript-fallback.mjs
+          node --check scripts/test-gemini-pilot-fallback-contract.mjs
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/test-gemini-audio-transcript-contract.mjs
+          node scripts/test-gemini-pilot-fallback-contract.mjs
+          node scripts/check-speech-scripts.mjs
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const crypto = require('node:crypto');
+          const audio = fs.readFileSync('scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3');
+          const metadata = JSON.parse(fs.readFileSync('scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json', 'utf8'));
+          const sha = crypto.createHash('sha256').update(audio).digest('hex');
+          const expected = 'e04466b4824db92821488b1fd2ee848e3312fded968a89ff91fdb97f1b15550e';
+          if (sha !== expected) throw new Error(`Unexpected pilot SHA: ${sha}`);
+          if (metadata.sha256 !== sha || metadata.bytes !== audio.length) throw new Error('Pilot metadata/audio integrity mismatch.');
+          console.log(`Pilot locked to SHA-256 ${sha}.`);
+          NODE
+
+      - name: Require both independent provider credentials
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+        run: |
+          test -n "$GEMINI_API_KEY" || { echo '::error::GEMINI_API_KEY is unavailable.'; exit 2; }
+          test -n "$AZURE_SPEECH_KEY" || { echo '::error::AZURE_SPEECH_KEY is unavailable.'; exit 2; }
+          test -n "$AZURE_SPEECH_REGION" || { echo '::error::AZURE_SPEECH_REGION is unavailable.'; exit 2; }
+
+      - name: Build fail-closed dual-engine verifier
+        run: |
+          cp scripts/verify-gemini-pilot-transcript-fallback.mjs scripts/.verify-pilot-dual-engine.mjs
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const file = 'scripts/.verify-pilot-dual-engine.mjs';
+          let source = fs.readFileSync(file, 'utf8');
+          const original = `  const orderedProviders = [\n    ...PROVIDER_CHAIN.slice(passIndex % PROVIDER_CHAIN.length),\n    ...PROVIDER_CHAIN.slice(0, passIndex % PROVIDER_CHAIN.length),\n  ];`;
+          const replacement = `  const orderedProviders = [passIndex === 0 ? 'azure-stt' : 'gemini'];`;
+          const hits = source.split(original).length - 1;
+          if (hits !== 1) throw new Error(`Expected exactly one provider-rotation block, found ${hits}.`);
+          source = source.replace(original, replacement);
+          fs.writeFileSync(file, source);
+          NODE
+          node --check scripts/.verify-pilot-dual-engine.mjs
+          grep -F "const orderedProviders = [passIndex === 0 ? 'azure-stt' : 'gemini'];" scripts/.verify-pilot-dual-engine.mjs
+
+      - name: Require exact Azure pass and exact Gemini 3.6 pass
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          AZURE_STT_LOCALE: ar-EG
+          BAREEQ_ASR_PROVIDERS: azure-stt,gemini
+          GEMINI_ASR_MODELS: gemini-3.6-flash
+          BAREEQ_ASR_MIN_INTERVAL_MS: "4000"
+          BAREEQ_ASR_CHUNK_IDEAL_SECONDS: "24"
+          BAREEQ_ASR_CHUNK_MAX_SECONDS: "32"
+          BAREEQ_ASR_CHUNK_HARD_MAX_SECONDS: "42"
+        run: node scripts/.verify-pilot-dual-engine.mjs
+
+      - name: Remove temporary verifier
+        if: always()
+        run: rm -f scripts/.verify-pilot-dual-engine.mjs
+
+      - name: Validate cross-engine zero-error evidence
+        if: success()
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const report = JSON.parse(fs.readFileSync('scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.fallback.json', 'utf8'));
+          const expectedSha = 'e04466b4824db92821488b1fd2ee848e3312fded968a89ff91fdb97f1b15550e';
+          if (report.status !== 'passed') throw new Error('Fallback report did not pass.');
+          if (report.expectedWordCount !== 160) throw new Error(`Expected 160 words, got ${report.expectedWordCount}.`);
+          if (report.parts?.length !== 1 || report.parts[0].audioSha256 !== expectedSha) throw new Error('Report is not bound to the regenerated pilot SHA.');
+          const passes = report.parts[0].passes || [];
+          if (passes.length !== 2) throw new Error('Exactly two ASR passes are required.');
+          if (passes[0].provider !== 'azure-stt' || passes[1].provider !== 'gemini') throw new Error('Pass providers are not independently pinned to Azure then Gemini.');
+          if (!String(passes[0].transcriptionProvider).includes('Microsoft Azure')) throw new Error('Pass 1 is not Azure Speech.');
+          if (!String(passes[1].transcriptionProvider).includes('Google Gemini')) throw new Error('Pass 2 is not Google Gemini.');
+          if (passes[0].transcriptionProvider === passes[1].transcriptionProvider) throw new Error('ASR providers are not independent.');
+          for (const pass of passes) {
+            if (!pass.exact || pass.wordErrorCount !== 0 || pass.substitutions !== 0 || pass.deletions !== 0 || pass.insertions !== 0) {
+              throw new Error(`Pass ${pass.pass} is not exact zero-error.`);
+            }
+          }
+          if (report.wordErrorCountAcrossAllPasses !== 0 || report.substitutions !== 0 || report.deletions !== 0 || report.insertions !== 0) throw new Error('Aggregate word errors are non-zero.');
+          console.log('STRICT_CROSS_ENGINE_ZERO_ERROR=PASS');
+          NODE
+
+      - name: Preserve strict verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: strict-azure-gemini-pilot-report-${{ github.run_id }}
+          path: |
+            scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.fallback.json
+            scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Commit strict automated evidence
+        if: success()
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.fallback.json scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          git diff --cached --quiet && { echo 'Strict evidence already current.'; exit 0; }
+          git commit -m 'audio: record strict Azure Gemini zero-error pilot evidence'
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
