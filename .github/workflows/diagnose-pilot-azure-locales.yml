@@ -1,0 +1,67 @@
+name: Compare Azure Arabic STT locales
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/diagnose-pilot-azure-locales.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        locale: [ar-KW, ar-SA]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Build single-pass Azure diagnostic
+        run: |
+          cp scripts/verify-gemini-pilot-transcript-fallback.mjs scripts/.azure-locale.mjs
+          node - <<'NODE'
+          const fs=require('node:fs'); const p='scripts/.azure-locale.mjs'; let s=fs.readFileSync(p,'utf8');
+          if(!s.includes('const PASS_COUNT = 2;')) throw new Error('PASS_COUNT contract changed.');
+          s=s.replace('const PASS_COUNT = 2;','const PASS_COUNT = 1;');
+          fs.writeFileSync(p,s);
+          NODE
+          node --check scripts/.azure-locale.mjs
+      - name: Run Azure audio-only exact diagnostic
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+          AZURE_STT_LOCALE: ${{ matrix.locale }}
+          BAREEQ_ASR_PROVIDERS: azure-stt
+          BAREEQ_ASR_MIN_INTERVAL_MS: '3000'
+          BAREEQ_ASR_CHUNK_IDEAL_SECONDS: '24'
+          BAREEQ_ASR_CHUNK_MAX_SECONDS: '32'
+          BAREEQ_ASR_CHUNK_HARD_MAX_SECONDS: '42'
+        run: node scripts/.azure-locale.mjs
+      - name: Validate exact locale result
+        if: success()
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs'); const r=JSON.parse(fs.readFileSync('scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.fallback.json','utf8'));
+          const p=r.parts?.[0]?.passes?.[0];
+          if(r.status!=='passed'||r.expectedWordCount!==160||r.wordErrorCountAcrossAllPasses!==0||!p?.exact||p.wordErrorCount!==0) throw new Error('Locale did not achieve exact 160/160.');
+          console.log('AZURE_LOCALE_EXACT_160_OF_160=PASS');
+          NODE
+      - name: Upload locale evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: azure-${{ matrix.locale }}-pilot-${{ github.run_id }}
+          path: scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.fallback.json
+          if-no-files-found: ignore
+          retention-days: 14
