@@ -1,0 +1,85 @@
+name: Verify Gemini pilot with ASR fallback now
+
+on:
+  push:
+    branches:
+      - arena/01a03a20-bareeq-world
+    paths:
+      - .github/workflows/verify-gemini-pilot-fallback-now.yml
+      - scripts/verify-gemini-pilot-transcript-fallback.mjs
+      - scripts/test-gemini-pilot-fallback-contract.mjs
+      - scripts/arabic-transcript-match.mjs
+      - scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify fallback gate and offline contracts
+        run: |
+          node --check scripts/verify-gemini-pilot-transcript-fallback.mjs
+          node --check scripts/test-gemini-pilot-fallback-contract.mjs
+          node --check scripts/verify-gemini-pilot-transcript-chunked.mjs
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/test-gemini-audio-transcript-contract.mjs
+          node scripts/test-gemini-pilot-fallback-contract.mjs
+          node scripts/check-speech-scripts.mjs
+
+      - name: Require encrypted ASR credentials (existing project secrets only)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+        run: |
+          if [ -z "$AZURE_SPEECH_KEY" ] || [ -z "$AZURE_SPEECH_REGION" ]; then
+            echo "::error::AZURE_SPEECH_KEY / AZURE_SPEECH_REGION repository secrets are unavailable."
+            exit 2
+          fi
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::warning::GEMINI_API_KEY is unavailable; the run will rely on azure-stt for both passes."
+          fi
+
+      - name: Transcribe silence-safe chunks twice across the ASR provider chain and require zero word errors
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          BAREEQ_ASR_PROVIDERS: azure-stt,gemini
+          GEMINI_ASR_MODELS: gemini-3.7-flash,gemini-3.6-flash,gemini-2.5-flash
+          BAREEQ_ASR_MIN_INTERVAL_MS: "4000"
+          BAREEQ_ASR_CHUNK_IDEAL_SECONDS: "24"
+          BAREEQ_ASR_CHUNK_MAX_SECONDS: "32"
+          BAREEQ_ASR_CHUNK_HARD_MAX_SECONDS: "42"
+        run: node scripts/verify-gemini-pilot-transcript-fallback.mjs
+
+      - name: Preserve fallback transcript report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-pilot-fallback-report-${{ github.run_id }}
+          path: |
+            scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.fallback.json
+            scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          if-no-files-found: ignore
+          retention-days: 14
