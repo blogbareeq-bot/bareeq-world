@@ -28,6 +28,7 @@ jobs:
       VOICE_ID: fahed
       AZURE_VOICE: ar-KW-FahedNeural
       AZURE_LANGUAGE: ar-KW
+      AZURE_PRONUNCIATION_PROFILE: fahed-kuwait-v2
       OUTPUT_DIR: pilot/fahed
       OUTPUT_MP3: pilot/fahed/how-touchscreens-work-test-clip.mp3
       OUTPUT_META: pilot/fahed/how-touchscreens-work-test-clip.json
@@ -78,6 +79,7 @@ jobs:
               const meta = JSON.parse(await readFile(process.env.OUTPUT_META, 'utf8'));
               reusable = meta.providerVoice === process.env.AZURE_VOICE
                 && meta.language === process.env.AZURE_LANGUAGE
+                && meta.azurePronunciationProfile === process.env.AZURE_PRONUNCIATION_PROFILE
                 && meta.speechScriptHash === plan.speechScriptHash
                 && meta.planHash === plan.planHash
                 && meta.reviewStatus === 'awaiting-human-listening-review';
@@ -111,7 +113,12 @@ jobs:
           const selected = plan.selectedSegments.map((item) => {
             const segment = byId.get(item.segmentId);
             if (!segment?.spokenText) throw new Error(`Selected segment is missing from reviewed Speech Script: ${item.segmentId}`);
-            return { ...item, type: segment.type, spokenText: segment.spokenText };
+            let providerSpokenText = segment.spokenText;
+            if (segment.segmentId === 'quote-7b1d6e9dad57') {
+              providerSpokenText = providerSpokenText.replace(/^بِبَسَاطَة:/, 'بِبَسَاطَهْ:');
+              if (providerSpokenText === segment.spokenText) throw new Error('Expected Fahed pronunciation override target was not found.');
+            }
+            return { ...item, type: segment.type, spokenText: segment.spokenText, providerSpokenText };
           });
 
           const escapeXml = (value) => String(value)
@@ -124,7 +131,7 @@ jobs:
           const paragraphs = selected.map((segment, index) => {
             const before = index === 0 ? '' : '<break time="220ms"/>';
             const after = segment.type === 'title' || /^h\d$/.test(segment.type) ? '<break time="320ms"/>' : '<break time="180ms"/>';
-            return `<p>${before}<prosody rate="0%">${escapeXml(segment.spokenText)}</prosody>${after}</p>`;
+            return `<p>${before}<prosody rate="0%">${escapeXml(segment.providerSpokenText)}</prosody>${after}</p>`;
           }).join('');
 
           const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${process.env.AZURE_LANGUAGE}"><voice name="${process.env.AZURE_VOICE}">${paragraphs}</voice></speak>`;
@@ -136,7 +143,7 @@ jobs:
               'Ocp-Apim-Subscription-Key': process.env.AZURE_SPEECH_KEY,
               'Content-Type': 'application/ssml+xml',
               'X-Microsoft-OutputFormat': 'audio-48khz-96kbitrate-mono-mp3',
-              'User-Agent': 'Bareeq-Fahed-Pilot/4.22.0',
+              'User-Agent': 'Bareeq-Fahed-Pilot/4.22.1',
             },
             body: ssml,
           });
@@ -150,13 +157,22 @@ jobs:
           const sha256 = createHash('sha256').update(bytes).digest('hex');
           await writeFile(process.env.OUTPUT_MP3, bytes);
           const metadata = {
-            version: 1,
+            version: 2,
             purpose: 'article-specific listening gate before full-article synthesis',
             articleId: process.env.ARTICLE_ID,
             voiceId: process.env.VOICE_ID,
             provider: 'Microsoft Azure AI Speech',
             providerVoice: process.env.AZURE_VOICE,
             language: process.env.AZURE_LANGUAGE,
+            azurePronunciationProfile: process.env.AZURE_PRONUNCIATION_PROFILE,
+            pronunciationOverrides: [
+              {
+                segmentId: 'quote-7b1d6e9dad57',
+                canonical: 'بِبَسَاطَة',
+                synthesizedAs: 'بِبَسَاطَهْ',
+                reason: 'Fahed clipped the final taa marbuta before the colon during listening review; canonical Speech Script remains unchanged.'
+              }
+            ],
             speechScriptHash: plan.speechScriptHash,
             planHash: plan.planHash,
             selectedSegments: selected.map(({ segmentId, type, challenges }) => ({ segmentId, type, challenges })),
@@ -181,6 +197,8 @@ jobs:
           const bytes = await readFile(process.env.OUTPUT_MP3);
           if (!info.isFile() || info.size < 1000) throw new Error('Pilot MP3 is missing or empty.');
           if (meta.providerVoice !== 'ar-KW-FahedNeural' || meta.language !== 'ar-KW') throw new Error('Fahed Kuwait voice contract mismatch.');
+          if (meta.azurePronunciationProfile !== process.env.AZURE_PRONUNCIATION_PROFILE) throw new Error('Fahed pronunciation profile mismatch.');
+          if (!Array.isArray(meta.pronunciationOverrides) || !meta.pronunciationOverrides.some((item) => item.canonical === 'بِبَسَاطَة' && item.synthesizedAs === 'بِبَسَاطَهْ')) throw new Error('Required ببساطة pronunciation override is missing.');
           if (meta.reviewStatus !== 'awaiting-human-listening-review') throw new Error('Pilot must remain unapproved until it is listened to.');
           if (meta.bytes !== bytes.length) throw new Error('Pilot metadata byte count mismatch.');
           if (meta.sha256 !== createHash('sha256').update(bytes).digest('hex')) throw new Error('Pilot SHA-256 mismatch.');
@@ -207,7 +225,7 @@ jobs:
             echo "No new pilot files to commit."
             exit 0
           fi
-          git commit -m 'audio: add Fahed Kuwait touchscreen listening pilot'
+          git commit -m 'audio: refresh Fahed Kuwait touchscreen listening pilot'
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
             target='${{ github.head_ref }}'
           else
