@@ -9,8 +9,7 @@ on:
       - scripts/arabic-transcript-match.mjs
       - scripts/test-arabic-transcript-match.mjs
       - scripts/test-gemini-audio-transcript-contract.mjs
-      - scripts/verify-gemini-audio-transcript.mjs
-      - scripts/gemini-background-fetch-shim.mjs
+      - scripts/verify-gemini-pilot-transcript-chunked.mjs
       - scripts/approve-gemini-test-clip.mjs
       - scripts/generate-audio.mjs
   workflow_dispatch:
@@ -25,7 +24,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
 
     steps:
       - name: Checkout selected branch
@@ -46,8 +45,7 @@ jobs:
       - name: Verify transcript-gate code and offline contract
         run: |
           node --check scripts/arabic-transcript-match.mjs
-          node --check scripts/verify-gemini-audio-transcript.mjs
-          node --check scripts/gemini-background-fetch-shim.mjs
+          node --check scripts/verify-gemini-pilot-transcript-chunked.mjs
           node --check scripts/approve-gemini-test-clip.mjs
           node scripts/test-arabic-transcript-match.mjs
           node scripts/test-gemini-audio-transcript-contract.mjs
@@ -62,13 +60,14 @@ jobs:
             exit 2
           fi
 
-      - name: Transcribe the exact pilot twice and require zero word errors
+      - name: Transcribe silence-safe chunks twice and require zero word errors
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          BAREEQ_ASR_MIN_INTERVAL_MS: "2000"
-          BAREEQ_GEMINI_BACKGROUND_POLL_MS: "5000"
-          BAREEQ_GEMINI_BACKGROUND_MAX_WAIT_MS: "480000"
-        run: node --import ./scripts/gemini-background-fetch-shim.mjs scripts/verify-gemini-audio-transcript.mjs --pilot
+          BAREEQ_ASR_MIN_INTERVAL_MS: "4000"
+          BAREEQ_ASR_CHUNK_IDEAL_SECONDS: "24"
+          BAREEQ_ASR_CHUNK_MAX_SECONDS: "32"
+          BAREEQ_ASR_CHUNK_HARD_MAX_SECONDS: "42"
+        run: node scripts/verify-gemini-pilot-transcript-chunked.mjs
 
       - name: Record the user's listening approval after automated verification
         env:
@@ -93,5 +92,6 @@ jobs:
           git config user.email 'actions@users.noreply.github.com'
           git add scripts/speech-test-clips/how-touchscreens-work.json scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.json
           git diff --cached --quiet && { echo 'Gemini pilot approval is already current.'; exit 0; }
-          git commit -m 'audio: approve Gemini pilot after exact transcript verification'
+          git commit -m 'audio: approve Gemini pilot after exact chunked transcript verification'
+          git pull --rebase origin ${{ github.ref_name }}
           git push origin HEAD:${{ github.ref_name }}
