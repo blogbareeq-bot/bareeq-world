@@ -32,22 +32,13 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install 'faster-whisper==1.2.0'
 
-      - name: Extract disputed audio region without reference text
+      - name: Transcribe exact pilot with Whisper large-v3-turbo using audio only
         run: |
-          ffmpeg -hide_banner -loglevel error \
-            -ss 70.862 -to 100.080 \
-            -i scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 \
-            -map_metadata -1 -vn -ac 1 -ar 16000 -c:a pcm_s16le \
-            /tmp/disputed-region.wav
-          sha256sum /tmp/disputed-region.wav
-          ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 /tmp/disputed-region.wav
-
-      - name: Transcribe with Whisper large-v3-turbo using audio only
-        run: |
+          sha256sum scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3
           cat > /tmp/transcribe.py <<'PY'
           from faster_whisper import WhisperModel
 
-          audio = '/tmp/disputed-region.wav'
+          audio = 'scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3'
           model = WhisperModel('large-v3-turbo', device='cpu', compute_type='int8', cpu_threads=4)
           segments, info = model.transcribe(
               audio,
@@ -64,10 +55,11 @@ jobs:
           print('TRANSCRIPT_BEGIN')
           print(' '.join(segment.text.strip() for segment in segments).strip())
           print('TRANSCRIPT_END')
-          print('WORDS_BEGIN')
+          print('WORDS_70_TO_90_SECONDS_BEGIN')
           for segment in segments:
               for word in (segment.words or []):
-                  print(f'{word.start:.3f}\t{word.end:.3f}\t{word.probability:.6f}\t{word.word.strip()}')
-          print('WORDS_END')
+                  if word.end >= 70.0 and word.start <= 90.0:
+                      print(f'{word.start:.3f}\t{word.end:.3f}\t{word.probability:.6f}\t{word.word.strip()}')
+          print('WORDS_70_TO_90_SECONDS_END')
           PY
           python /tmp/transcribe.py
