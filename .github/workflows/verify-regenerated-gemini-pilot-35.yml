@@ -1,0 +1,111 @@
+name: Verify regenerated Gemini pilot with 3.5
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/verify-regenerated-gemini-pilot-35.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: regenerated-gemini-pilot-35-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout exact regenerated branch state
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Validate exact audio and anti-leak contract
+        run: |
+          node --check scripts/verify-gemini-pilot-transcript-chunked.mjs
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/test-gemini-audio-transcript-contract.mjs
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const crypto = require('node:crypto');
+          const audioPath = 'scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3';
+          const metaPath = 'scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json';
+          const audio = fs.readFileSync(audioPath);
+          const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+          const sha = crypto.createHash('sha256').update(audio).digest('hex');
+          if (sha !== 'e04466b4824db92821488b1fd2ee848e3312fded968a89ff91fdb97f1b15550e') throw new Error(`Unexpected pilot SHA: ${sha}`);
+          if (meta.sha256 !== sha || meta.bytes !== audio.length) throw new Error('Pilot integrity mismatch.');
+          if (meta.listeningReview !== 'pending') throw new Error('Human listening status must remain pending during automated verification.');
+          NODE
+
+      - name: Require encrypted Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: test -n "$GEMINI_API_KEY"
+
+      - name: Build Gemini 3.5 strict chunked verifier
+        run: |
+          cp scripts/verify-gemini-pilot-transcript-chunked.mjs scripts/.verify-regenerated-35.mjs
+          sed -i "s/const MODEL = 'gemini-3.7-flash';/const MODEL = 'gemini-3.5-flash';/" scripts/.verify-regenerated-35.mjs
+          grep -F "const MODEL = 'gemini-3.5-flash';" scripts/.verify-regenerated-35.mjs
+          node --check scripts/.verify-regenerated-35.mjs
+
+      - name: Require two independent exact zero-error ASR passes
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_ASR_MIN_INTERVAL_MS: "5000"
+          BAREEQ_ASR_CHUNK_IDEAL_SECONDS: "24"
+          BAREEQ_ASR_CHUNK_MAX_SECONDS: "32"
+          BAREEQ_ASR_CHUNK_HARD_MAX_SECONDS: "42"
+        run: node scripts/.verify-regenerated-35.mjs
+
+      - name: Remove temporary verifier
+        if: always()
+        run: rm -f scripts/.verify-regenerated-35.mjs
+
+      - name: Preserve strict verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regenerated-gemini-pilot-35-report-${{ github.run_id }}
+          path: scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Commit zero-error automated evidence only
+        if: success()
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          git diff --cached --quiet && { echo 'Zero-error automated evidence already current.'; exit 0; }
+          git commit -m 'audio: record Gemini 3.5 zero-error ASR for regenerated pilot'
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
+
+      - name: Confirm human listening gate remains closed
+        if: success()
+        run: |
+          node - <<'NODE'
+          const plan = require('./scripts/speech-test-clips/how-touchscreens-work.json');
+          if (plan.testClipPassed || plan.fullSynthesisAllowed || plan.audioReview?.status === 'passed') {
+            throw new Error('Automated ASR must not impersonate human listening approval.');
+          }
+          console.log('Two exact automated passes completed; human listening/full synthesis gate remains separate.');
+          NODE
