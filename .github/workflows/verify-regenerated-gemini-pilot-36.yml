@@ -1,0 +1,115 @@
+name: Verify regenerated Gemini pilot with 3.6
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3
+      - scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json
+
+permissions:
+  contents: write
+
+concurrency:
+  group: regenerated-gemini-pilot-36-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout exact regenerated branch state
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Validate regenerated evidence contract
+        run: |
+          node --check scripts/verify-gemini-pilot-transcript-chunked.mjs
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/check-speech-scripts.mjs
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const crypto = require('node:crypto');
+          const meta = JSON.parse(fs.readFileSync('scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json', 'utf8'));
+          const audio = fs.readFileSync('scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3');
+          const sha = crypto.createHash('sha256').update(audio).digest('hex');
+          if (sha !== meta.sha256) throw new Error('Regenerated MP3 metadata hash mismatch.');
+          if (sha === '7c3a5b2bc4939c2ca5021982f435c33f78fb3a6386ac4e1d543a366a3f4aff62') throw new Error('Old ambiguous MP3 was not replaced.');
+          const critical = JSON.stringify(meta.criticalPronunciations || []);
+          if (!critical.includes('بِبَسَاطَة') || !critical.includes('مُخْتَلِفَتَيْنِ')) throw new Error('Regenerated evidence is missing both critical-pronunciation guards.');
+          console.log(`Regenerated MP3 SHA-256: ${sha}`);
+          NODE
+
+      - name: Require encrypted Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::GEMINI_API_KEY repository secret is unavailable."
+            exit 2
+          fi
+
+      - name: Build Gemini 3.6 chunked verifier
+        run: |
+          cp scripts/verify-gemini-pilot-transcript-chunked.mjs scripts/.verify-regenerated-36.mjs
+          sed -i "s/const MODEL = 'gemini-3.7-flash';/const MODEL = 'gemini-3.6-flash';/" scripts/.verify-regenerated-36.mjs
+          grep -F "const MODEL = 'gemini-3.6-flash';" scripts/.verify-regenerated-36.mjs
+          node --check scripts/.verify-regenerated-36.mjs
+
+      - name: Require two independent exact zero-error ASR passes
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_ASR_MIN_INTERVAL_MS: "5000"
+          BAREEQ_ASR_CHUNK_IDEAL_SECONDS: "24"
+          BAREEQ_ASR_CHUNK_MAX_SECONDS: "32"
+          BAREEQ_ASR_CHUNK_HARD_MAX_SECONDS: "42"
+        run: node scripts/.verify-regenerated-36.mjs
+
+      - name: Remove temporary verifier
+        if: always()
+        run: rm -f scripts/.verify-regenerated-36.mjs
+
+      - name: Preserve verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regenerated-gemini-pilot-36-report-${{ github.run_id }}
+          path: scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Commit zero-error automated evidence only
+        if: success()
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          git diff --cached --quiet && { echo 'Automated zero-error evidence already current.'; exit 0; }
+          git commit -m 'audio: record regenerated Gemini pilot zero-error ASR'
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
+
+      - name: Confirm human listening gate remains separate
+        if: success()
+        run: |
+          node - <<'NODE'
+          const plan = require('./scripts/speech-test-clips/how-touchscreens-work.json');
+          if (plan.testClipPassed || plan.fullSynthesisAllowed || plan.audioReview?.status === 'passed') {
+            throw new Error('Automated ASR must not impersonate a human listening review.');
+          }
+          console.log('Automated transcript passed; human listening/full-synthesis gate remains closed until the regenerated sample is actually heard.');
+          NODE
