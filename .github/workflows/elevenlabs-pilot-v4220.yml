@@ -1,0 +1,120 @@
+name: ElevenLabs Arabic speech pilot
+
+on:
+  push:
+    branches:
+      - audio/elevenlabs-pilot-v4220
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-clip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ARTICLE_ID: how-touchscreens-work
+      ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+      ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID || 'JBFqnCBsd6RMkjVDRZzb' }}
+      ELEVENLABS_MODEL_ID: eleven_multilingual_v2
+      OUTPUT_DIR: pilot/elevenlabs
+      OUTPUT_MP3: pilot/elevenlabs/how-touchscreens-work-test-clip.mp3
+      OUTPUT_META: pilot/elevenlabs/how-touchscreens-work-test-clip.json
+
+    steps:
+      - name: Checkout pilot branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Verify reviewed Arabic Speech Scripts
+        run: |
+          node scripts/test-speech-script-quality-gate.mjs
+          node scripts/check-speech-scripts.mjs
+
+      - name: Verify ElevenLabs credential
+        run: |
+          if [ -z "$ELEVENLABS_API_KEY" ]; then
+            echo "::error::ELEVENLABS_API_KEY repository secret is unavailable. Add your ElevenLabs API key as a GitHub Actions repository secret; do not paste it into source code."
+            exit 2
+          fi
+
+      - name: Generate ElevenLabs Arabic test clip
+        run: |
+          mkdir -p "$OUTPUT_DIR"
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile, writeFile } from 'node:fs/promises';
+
+          const article = JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json', 'utf8'));
+          const plan = JSON.parse(await readFile('scripts/speech-test-clips/how-touchscreens-work.json', 'utf8'));
+          const byId = new Map(article.segments.map((segment) => [segment.segmentId, segment]));
+          const selected = plan.selectedSegments.map((item) => {
+            const segment = byId.get(item.segmentId);
+            if (!segment?.spokenText) throw new Error(`Selected segment is missing from reviewed Speech Script: ${item.segmentId}`);
+            return { ...item, type: segment.type, spokenText: segment.spokenText };
+          });
+          const text = selected.map((item) => item.spokenText).join('\n\n');
+
+          const voiceId = process.env.ELEVENLABS_VOICE_ID;
+          const modelId = process.env.ELEVENLABS_MODEL_ID;
+          const endpoint = `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}?output_format=mp3_44100_128`;
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'xi-api-key': process.env.ELEVENLABS_API_KEY,
+              'Content-Type': 'application/json',
+              'Accept': 'audio/mpeg',
+            },
+            body: JSON.stringify({
+              text,
+              model_id: modelId,
+              language_code: 'ar',
+              voice_settings: {
+                stability: 0.7,
+                similarity_boost: 0.5,
+                style: 0.0,
+                use_speaker_boost: true,
+              },
+            }),
+          });
+          if (!response.ok) {
+            const detail = (await response.text()).slice(0, 1200);
+            throw new Error(`ElevenLabs synthesis failed (${response.status} ${response.statusText}): ${detail}`);
+          }
+          const bytes = Buffer.from(await response.arrayBuffer());
+          if (bytes.length < 1000) throw new Error(`ElevenLabs returned an implausibly small MP3 (${bytes.length} bytes).`);
+          await writeFile(process.env.OUTPUT_MP3, bytes);
+          const meta = {
+            version: 1,
+            purpose: 'cross-provider Arabic pronunciation comparison',
+            articleId: process.env.ARTICLE_ID,
+            provider: 'ElevenLabs',
+            providerVoiceId: voiceId,
+            modelId,
+            languageCode: 'ar',
+            speechScriptHash: plan.speechScriptHash,
+            planHash: plan.planHash,
+            selectedSegments: selected.map(({segmentId, type, challenges}) => ({segmentId, type, challenges})),
+            bytes: bytes.length,
+            sha256: createHash('sha256').update(bytes).digest('hex'),
+            generatedAt: new Date().toISOString(),
+            reviewStatus: 'awaiting-human-listening-review'
+          };
+          await writeFile(process.env.OUTPUT_META, `${JSON.stringify(meta, null, 2)}\n`);
+          console.log(`ElevenLabs test clip generated: ${bytes.length} bytes, voice ${voiceId}, model ${modelId}.`);
+          NODE
+
+      - name: Upload listening-review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elevenlabs-touchscreen-test-clip
+          path: |
+            pilot/elevenlabs/how-touchscreens-work-test-clip.mp3
+            pilot/elevenlabs/how-touchscreens-work-test-clip.json
+          if-no-files-found: error
+          retention-days: 14
