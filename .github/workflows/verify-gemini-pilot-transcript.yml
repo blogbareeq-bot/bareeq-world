@@ -10,6 +10,7 @@ on:
       - scripts/test-arabic-transcript-match.mjs
       - scripts/test-gemini-audio-transcript-contract.mjs
       - scripts/verify-gemini-audio-transcript.mjs
+      - scripts/gemini-background-fetch-shim.mjs
       - scripts/approve-gemini-test-clip.mjs
       - scripts/generate-audio.mjs
   workflow_dispatch:
@@ -46,6 +47,7 @@ jobs:
         run: |
           node --check scripts/arabic-transcript-match.mjs
           node --check scripts/verify-gemini-audio-transcript.mjs
+          node --check scripts/gemini-background-fetch-shim.mjs
           node --check scripts/approve-gemini-test-clip.mjs
           node scripts/test-arabic-transcript-match.mjs
           node scripts/test-gemini-audio-transcript-contract.mjs
@@ -64,7 +66,9 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_ASR_MIN_INTERVAL_MS: "2000"
-        run: node scripts/verify-gemini-audio-transcript.mjs --pilot
+          BAREEQ_GEMINI_BACKGROUND_POLL_MS: "5000"
+          BAREEQ_GEMINI_BACKGROUND_MAX_WAIT_MS: "480000"
+        run: node --import ./scripts/gemini-background-fetch-shim.mjs scripts/verify-gemini-audio-transcript.mjs --pilot
 
       - name: Record the user's listening approval after automated verification
         env:
