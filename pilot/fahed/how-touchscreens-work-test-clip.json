@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "purpose": "article-specific listening gate before full-article synthesis",
+  "articleId": "how-touchscreens-work",
+  "voiceId": "fahed",
+  "provider": "Microsoft Azure AI Speech",
+  "providerVoice": "ar-KW-FahedNeural",
+  "language": "ar-KW",
+  "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+  "planHash": "39edd749dadbd091b24812aece155bd865b83b3f30e3e15b38cf25350f7e3600",
+  "selectedSegments": [
+    {
+      "segmentId": "title-ef028c93bd7e",
+      "type": "title",
+      "challenges": [
+        "تَعْرِفُ",
+        "المخاطب",
+        "عنوان المقال"
+      ]
+    },
+    {
+      "segmentId": "paragraph-a63067d6c146",
+      "type": "paragraph",
+      "challenges": [
+        "تُعْرَفُ",
+        "المبني للمجهول"
+      ]
+    },
+    {
+      "segmentId": "quote-7b1d6e9dad57",
+      "type": "quote",
+      "challenges": [
+        "تُكَوِّنُ",
+        "الفعل المتعدي"
+      ]
+    },
+    {
+      "segmentId": "paragraph-9facdfecf62d",
+      "type": "paragraph",
+      "challenges": [
+        "تُنْتِجُ",
+        "يَنْتُجُ",
+        "اختصارات OLED/LCD"
+      ]
+    },
+    {
+      "segmentId": "paragraph-1e0c397252d0",
+      "type": "paragraph",
+      "challenges": [
+        "يَنْشَأُ",
+        "المثنى"
+      ]
+    },
+    {
+      "segmentId": "h2-e96da099522c",
+      "type": "h2",
+      "challenges": [
+        "تَعْرِفُ",
+        "إِصْبَعَيْنِ",
+        "عنوان فرعي"
+      ]
+    }
+  ],
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "synthesisRate": "0%",
+  "bytes": 1135584,
+  "sha256": "55ac9f6584356dd197f1d6d27c46b71e3d009e3eb220559c096b94de9353bd43",
+  "generatedAt": "2026-08-25T12:12:17.540Z",
+  "reviewStatus": "awaiting-human-listening-review"
+}
