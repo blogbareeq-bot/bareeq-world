@@ -9,6 +9,21 @@ import { PENDING_CLOUD } from './cloud-tts-rollout.mjs';
 const ROOT = process.cwd();
 const selected = [PENDING_CLOUD[0], PENDING_CLOUD[8]];
 const contractKey = 'bareeq-gemini-v4211-local-contract-key-never-publish';
+
+// Published temporary Hamed audio must be restored through the immutable
+// legacy cache contract before the rollout can consider a newly reviewed
+// Speech Script synthesis. This prevents a cache miss caused only by changing
+// input modes from reaching any provider.
+const rolloutSource = await readFile(path.join(ROOT, 'scripts', 'run-v4211-audio.mjs'), 'utf8');
+const temporaryStart = rolloutSource.indexOf('for (const articleId of TEMPORARY_HAMED_ARTICLES)');
+const legacyCacheRestore = rolloutSource.indexOf("BAREEQ_TTS_CACHE_ONLY: '1'", temporaryStart);
+const restoredHamedCheck = rolloutSource.indexOf("provider: 'Microsoft Azure AI Speech'", legacyCacheRestore);
+const gatedSynthesis = rolloutSource.indexOf("BAREEQ_TTS_CACHE_ONLY: ''", restoredHamedCheck);
+if (!(temporaryStart >= 0 && legacyCacheRestore > temporaryStart && restoredHamedCheck > legacyCacheRestore && gatedSynthesis > restoredHamedCheck)) {
+  throw new Error('Temporary Hamed policy must restore the published legacy cache before any gated synthesis path.');
+}
+
+
 const pcm = Buffer.alloc(Math.round(24000 * 2 * 0.9));
 let responseMode = 'success';
 let calls = 0;
@@ -65,6 +80,7 @@ const baseEnv = {
   BAREEQ_TTS_PROVIDER: 'gemini',
   BAREEQ_TTS_INCLUDE_IDS: selected.join(','),
   BAREEQ_TTS_CONTRACT_TEST: '1',
+  BAREEQ_SPEECH_GATE_UNSAFE_TEST_BYPASS: 'I_ACKNOWLEDGE_LOCAL_CONTRACT_ONLY',
   BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1',
   BAREEQ_TTS_MAX_RETRIES: '0',
   GEMINI_API_KEY: contractKey,

@@ -36,7 +36,7 @@ export function formatReadingMinutes(value: number): string {
 }
 
 export function postWordCount(post: Post): number {
-  return post.body
+  return (post.body ?? '')
     .replace(/^---[\s\S]*?---/m, '')
     .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
@@ -108,10 +108,10 @@ export function getSeriesMeta(slug?: string) {
 export function getSeriesEntries(slug: string, posts: Post[]): Post[] {
   const meta = getSeriesMeta(slug);
   const inSeries = posts.filter((post) => post.data.seriesSlug === slug);
-  const order = meta?.order ?? [];
+  const order: readonly string[] = meta?.order ?? [];
   return [...inSeries].sort((a, b) => {
-    const aIndex = order.indexOf(a.id as (typeof order)[number]);
-    const bIndex = order.indexOf(b.id as (typeof order)[number]);
+    const aIndex = order.indexOf(a.id);
+    const bIndex = order.indexOf(b.id);
     if (aIndex === -1 && bIndex === -1) return a.data.publishedAt.valueOf() - b.data.publishedAt.valueOf();
     if (aIndex === -1) return 1;
     if (bIndex === -1) return -1;
@@ -120,7 +120,7 @@ export function getSeriesEntries(slug: string, posts: Post[]): Post[] {
 }
 
 export function postSearchExcerpt(post: Post, max = 420): string {
-  const text = post.body
+  const text = (post.body ?? '')
     .replace(/<!--[\s\S]*?-->/g, ' ')
     .replace(/!\[[^\]]*]\([^)]+\)/g, ' ')
     .replace(/\[([^\]]+)]\([^)]+\)/g, '$1')

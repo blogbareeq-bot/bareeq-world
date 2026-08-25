@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "articleId": "altadakhom-explained-simply",
+  "speechScriptHash": "13fc68564d321c34f325988016d7ca8026420005461cbf7f887f69d2d14e94db",
+  "status": "draft-needs-speech-review",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 60,
+  "selectedSegments": [
+    {
+      "segmentId": "paragraph-7f3bbe863940",
+      "challenges": [
+        "2 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "list-item-bf618ccbe9dd",
+      "challenges": [
+        "2 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-b92564186377",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-254331acd0f3",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-8d415d8749b8",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "9dc7276c61a514fc4cdacc71c227e1eade665fa26ec307b34d5c6d42c51346c8"
+}

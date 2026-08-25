@@ -1,0 +1,756 @@
+{
+  "version": 1,
+  "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+  "sourceSnapshotHash": "830dd83f66218fcdee69a08b04f78c562549ae8b4e8d7d7e47fe4c8dcc01151e",
+  "sourceStructureHash": "194521f99c0f2ddbd39c0599c5d0eec2feb8185a948993adb05d9bbe954c5f9f",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر",
+    "segmentCount": 5,
+    "sourceHash": "2d7e74243a5f6d5a0a8351bc3ef0d4f4421b01a5ae950299bbb1840c7c871694"
+  },
+  "segments": [
+    {
+      "segmentId": "title-e56d8af9bab2",
+      "type": "title",
+      "sourceHash": "e56d8af9bab2e661b6cc20be75adfde5a49b974ad86cc61fa80bbb2c1b9f7ca2",
+      "sourceText": "عادات ثقافية من حول العالم: حين يصبح الاختلاف إثراءً",
+      "spokenText": "عادات ثقافية من حول العالم: حين يصبح الاختلاف إثراءً",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-876c182e70d9",
+      "type": "paragraph",
+      "sourceHash": "876c182e70d92f36a30446d59a521459590e93089773a64d9f06940340830209",
+      "sourceText": "هل سبق أن تصرفت بعفوية، ثم عرفت أن السلوك نفسه قد يُفهم بطريقة مختلفة في مجتمع آخر؟",
+      "spokenText": "هل سبق أن تصرفت بعفوية، ثم عرفت أن السلوك نفسه قد يُفهم بطريقة مختلفة في مجتمع آخر؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bdb9b7f5fa2e",
+      "type": "paragraph",
+      "sourceHash": "bdb9b7f5fa2edc8ee053131d0e429557e9148c17ce867f385598833a30107600",
+      "sourceText": "العادات ليست قواعد ثابتة تنطبق على كل فرد، بل ممارسات تتغير بحسب المنطقة والجيل والمناسبة. لذلك لا تهدف هذه الجولة إلى اختزال الشعوب في صور طريفة، بل إلى تذكيرنا بأن معنى «المهذب» و«المألوف» يتشكل داخل سياق ثقافي.",
+      "spokenText": "العادات ليست قواعد ثابتة تنطبق على كل فرد، بل ممارسات تتغير بحسب المنطقة والجيل والمناسبة. لذلك لا تهدف هذه الجولة إلى اختزال الشعوب في صور طريفة، بل إلى تذكيرنا بأن معنى «المهذب» و«المألوف» يتشكل داخل سياق ثقافي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-4af4beaeb5f0",
+      "type": "h2",
+      "sourceHash": "4af4beaeb5f0248dbeac4f11df01cdd732cd3d8d4c3ee3ca016e071d9e1468a5",
+      "sourceText": "اليابان: صوت النودلز ليس بالضرورة قلة ذوق",
+      "spokenText": "اليابان: صوت النودلز ليس بالضرورة قلة ذوق",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-de3eab4d2ebb",
+      "type": "paragraph",
+      "sourceHash": "de3eab4d2ebb61072f0eeca505838c756a0e80c50b4e391a1da23464ea74d678",
+      "sourceText": "قد يُعد إصدار صوت أثناء الطعام غير لائق في ثقافات كثيرة. لكن الهيئة الوطنية اليابانية للسياحة توضح أن شفط النودلز شائع ومقبول عمومًا في متاجر الرامن والأودون والسوبا، مع عدم إلزام الزائر بتقليده.",
+      "spokenText": "قد يُعد إصدار صوت أثناء الطعام غير لائق في ثقافات كثيرة. لكن الهيئة الوطنية اليابانية للسياحة توضح أن شفط النودلز شائع ومقبول عمومًا في متاجر الرامن والأودون والسوبا، مع عدم إلزام الزائر بتقليده.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-48c1b33e5a49",
+      "type": "paragraph",
+      "sourceHash": "48c1b33e5a490d593f9a7afff02fdc828ce95299f69d669aa8b87610910dfef5",
+      "sourceText": "النقطة المهمة هنا هي السياق: ما يُقبل في مطعم نودلز غير رسمي قد لا يكون قاعدة لكل وجبة أو مطعم رسمي. والقاعدة الأذكى للزائر هي مراقبة المكان واحترام من حوله بدل تحويل العادة إلى اختبار للأصالة.",
+      "spokenText": "النقطة المهمة هنا هي السياق: ما يُقبل في مطعم نودلز غير رسمي قد لا يكون قاعدة لكل وجبة أو مطعم رسمي. والقاعدة الأذكى للزائر هي مراقبة المكان واحترام من حوله بدل تحويل العادة إلى اختبار للأصالة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-9dcee117fa68",
+      "type": "h2",
+      "sourceHash": "9dcee117fa6834e673b1efd387b8c4c719d60ca2202cca9ef2b9b9d84098d1f7",
+      "sourceText": "فنلندا: الساونا مساحة اجتماعية وذاكرة حية",
+      "spokenText": "فنلندا: الساونا مساحة اجتماعية وذاكرة حية",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2f9a47bec2b9",
+      "type": "paragraph",
+      "sourceHash": "2f9a47bec2b9e5cce661c62cb60eeb3679b1ea686f61cd8e6451ec66ed06beac",
+      "sourceText": "الساونا في فنلندا ليست مرفقًا ترفيهيًا فحسب. أدرجت اليونسكو ثقافة الساونا الفنلندية على القائمة التمثيلية للتراث الثقافي غير المادي عام 2020، ووصفتها بأنها جزء من حياة غالبية السكان، تُمارس في المنازل والأماكن العامة وتنتقل تقاليدها داخل العائلات والمجتمعات.",
+      "spokenText": "الساونا في فنلندا ليست مرفقًا ترفيهيًا فحسب. أدرجت اليونسكو ثقافة الساونا الفنلندية على القائمة التمثيلية للتراث الثقافي غير المادي عام 2020، ووصفتها بأنها جزء من حياة غالبية السكان، تُمارس في المنازل والأماكن العامة وتنتقل تقاليدها داخل العائلات والمجتمعات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3049397b1f4e",
+      "type": "paragraph",
+      "sourceHash": "3049397b1f4e630e02036fd261c098e4ff47434fa7223476c0cae8d587795065",
+      "sourceText": "تتنوع أشكال الساونا وطريقة استخدامها، ولا توجد تجربة واحدة تمثل جميع الفنلنديين. لكن اجتماع الهدوء والبخار والوقت المشترك يوضح كيف يمكن لمكان بسيط أن يحمل وظيفة صحية واجتماعية ورمزية في آن واحد.",
+      "spokenText": "تتنوع أشكال الساونا وطريقة استخدامها، ولا توجد تجربة واحدة تمثل جميع الفنلنديين. لكن اجتماع الهدوء والبخار والوقت المشترك يوضح كيف يمكن لمكان بسيط أن يحمل وظيفة صحية واجتماعية ورمزية في آن واحد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-4acdd38a7e13",
+      "type": "h2",
+      "sourceHash": "4acdd38a7e13e82bcce2db795f3e0b557e6909cccedc6158b56d1f65c01c6af3",
+      "sourceText": "نيوزيلندا: «الهونغي» في المناسبات الماورية الرسمية",
+      "spokenText": "نيوزيلندا: «الهونغي» في المناسبات الماورية الرسمية",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-468eb2a5ab0d",
+      "type": "paragraph",
+      "sourceHash": "468eb2a5ab0d7bc213ed986d6cc89f4964db9303e4559ba0ae9ca35f0fed7168",
+      "sourceText": "في بعض مراسم الترحيب الماورية، يلتقي شخصان بتحية الهونغي عبر ملامسة الأنف برفق، وقد يصاحبها مصافحة. تشرح موسوعة تي آرا النيوزيلندية أن التحية تظهر خصوصًا في السياقات الثقافية الرسمية مثل الـ«ماراي».",
+      "spokenText": "في بعض مراسم الترحيب الماورية، يلتقي شخصان بتحية الهونغي عبر ملامسة الأنف برفق، وقد يصاحبها مصافحة. تشرح موسوعة تي آرا النيوزيلندية أن التحية تظهر خصوصًا في السياقات الثقافية الرسمية مثل الـ«ماراي».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-532d331ff732",
+      "type": "paragraph",
+      "sourceHash": "532d331ff732920c94e94ec01f0025401b54d53077969aa4a6c64b7efa6c8e98",
+      "sourceText": "ليست الهونغي تحية يومية يؤديها كل شخص في كل موقف. للزائر، الأفضل أن ينتظر دعوة المضيف ويتبع إرشاده. هذا التفصيل يحول الفضول من تقليد شكلي إلى احترام للبروتوكول وأصحابه.",
+      "spokenText": "ليست الهونغي تحية يومية يؤديها كل شخص في كل موقف. للزائر، الأفضل أن ينتظر دعوة المضيف ويتبع إرشاده. هذا التفصيل يحول الفضول من تقليد شكلي إلى احترام للبروتوكول وأصحابه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-ad84e9bb87fc",
+      "type": "h2",
+      "sourceHash": "ad84e9bb87fc78ea34510fab856ad162623e7d302df8043627a46d47d3bb1fa1",
+      "sourceText": "القهوة العربية: فنجان صغير يحمل لغة الضيافة",
+      "spokenText": "القهوة العربية: فنجان صغير يحمل لغة الضيافة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8d84b31c5586",
+      "type": "paragraph",
+      "sourceHash": "8d84b31c558600ca838d2c4513fc273064677177b22c0bf4d72c00c48f641e01",
+      "sourceText": "في مجتمعات عربية عدة، لا يمثل تقديم القهوة مشروبًا فقط، بل ترتيبًا من الإشارات الاجتماعية. تسجل اليونسكو القهوة العربية بوصفها رمزًا للكرم، وتشير إلى آداب منها تقديم الضيف وكبير السن أولًا، والصب باليد اليمنى، وهز الفنجان للدلالة على الاكتفاء.",
+      "spokenText": "في مجتمعات عربية عدة، لا يمثل تقديم القهوة مشروبًا فقط، بل ترتيبًا من الإشارات الاجتماعية. تسجل اليونسكو القهوة العربية بوصفها رمزًا للكرم، وتشير إلى آداب منها تقديم الضيف وكبير السن أولًا، والصب باليد اليمنى، وهز الفنجان للدلالة على الاكتفاء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c127247e3f13",
+      "type": "paragraph",
+      "sourceHash": "c127247e3f1338d82c29ae3a3e3251924e399d157b50cc73178a0a74549eb279",
+      "sourceText": "تختلف التفاصيل بين البلدان والعائلات، لكن المعنى المشترك هو تحويل الضيافة إلى فعل يمكن قراءته: من يُقدَّم أولًا، وكيف يُمسك الدلّة، ومتى يفهم المضيف أن الضيف اكتفى.",
+      "spokenText": "تختلف التفاصيل بين البلدان والعائلات، لكن المعنى المشترك هو تحويل الضيافة إلى فعل يمكن قراءته: من يُقدَّم أولًا، وكيف يُمسك الدلّة، ومتى يفهم المضيف أن الضيف اكتفى.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-241487644c14",
+      "type": "h2",
+      "sourceHash": "241487644c14471abe1d16ea0c307627aa63371e0cc00d4f838fbe0cec2d28e5",
+      "sourceText": "ماذا نتعلم من هذه الأمثلة؟",
+      "spokenText": "ماذا نتعلم من هذه الأمثلة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3aa12065982f",
+      "type": "paragraph",
+      "sourceHash": "3aa12065982ff4fad61cdcd0e04605cb28bde8e92e25b88c67bdd37382292b70",
+      "sourceText": "أولًا، أن السلوك لا يحمل معناه وحده؛ بل يكتسبه من المكان والمناسبة والعلاقة بين الناس. وثانيًا، أن المعلومة الثقافية تحتاج إلى تواضع: عبارة «بعض الناس» أو «في سياق رسمي» أدق من تعميم عادة على بلد كامل.",
+      "spokenText": "أولًا، أن السلوك لا يحمل معناه وحده؛ بل يكتسبه من المكان والمناسبة والعلاقة بين الناس. وثانيًا، أن المعلومة الثقافية تحتاج إلى تواضع: عبارة «بعض الناس» أو «في سياق رسمي» أدق من تعميم عادة على بلد كامل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a6af5c1419d7",
+      "type": "paragraph",
+      "sourceHash": "a6af5c1419d7fdc2af613c56eb5c03f4bbb9d5ae2d80857916dc7263235b6e46",
+      "sourceText": "وعندما تزور مجتمعًا جديدًا، تفيدك ثلاث قواعد بسيطة:",
+      "spokenText": "وعندما تزور مجتمعًا جديدًا، تفيدك ثلاث قواعد بسيطة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-d053b18bb33a",
+      "type": "list-item",
+      "sourceHash": "d053b18bb33af643e968351c323ff0fc8a36f9d9c17fe7d234d6ff3a756d7551",
+      "sourceText": "راقب قبل أن تقلد.",
+      "spokenText": "راقب قبل أن تقلد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7d6b6f831702",
+      "type": "list-item",
+      "sourceHash": "7d6b6f8317026a9ff3ccc8def3a8e772addce67f9432193b8afd1b6d287b65f9",
+      "sourceText": "اسأل بلطف عندما لا تعرف.",
+      "spokenText": "اسأل بلطف عندما لا تعرف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-0a653631a68f",
+      "type": "list-item",
+      "sourceHash": "0a653631a68f4b656b1a50336aeb3b2352bf43cad174fa834711dbab80fa4f29",
+      "sourceText": "اقبل أن أفراد المجتمع الواحد قد يختارون ممارسات مختلفة.",
+      "spokenText": "اقبل أن أفراد المجتمع الواحد قد يختارون ممارسات مختلفة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dc33ba2f19ad",
+      "type": "paragraph",
+      "sourceHash": "dc33ba2f19ad71b778efe1be539ce51f07147b56464eb27ff19fc2faf21d5d04",
+      "sourceText": "الاختلاف يصبح إثراءً حين يدفعنا إلى الفهم، لا حين نحوله إلى مشهد غريب للاستهلاك.",
+      "spokenText": "الاختلاف يصبح إثراءً حين يدفعنا إلى الفهم، لا حين نحوله إلى مشهد غريب للاستهلاك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f5fb497199e6",
+      "type": "paragraph",
+      "sourceHash": "f5fb497199e6861e86a82f9d222047ec4eae8d309954308bf3fa216e5652d84d",
+      "sourceText": "ويمكنك الانتقال من صفحة «ابدأ من هنا» إلى بقية مسارات بريق واختيار زاوية معرفية جديدة.",
+      "spokenText": "ويمكنك الانتقال من صفحة «ابدأ من هنا» إلى بقية مسارات بريق واختيار زاوية معرفية جديدة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-e6c65f61a172",
+      "type": "h2",
+      "sourceHash": "e6c65f61a17232d516e7f42602c721b7daafe36b84017b8a535583df46257614",
+      "sourceText": "لماذا لا تكفي قائمة «العادات الغريبة»؟",
+      "spokenText": "لماذا لا تكفي قائمة «العادات الغريبة»؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d5b48869efc8",
+      "type": "paragraph",
+      "sourceHash": "d5b48869efc8943aeae68ef0aac18f8db4149b42d5f9909c3b0eeafa41ed536b",
+      "sourceText": "من السهل تحويل الاختلاف الثقافي إلى قائمة للدهشة، لكن المعرفة تبدأ عندما نسأل: ما الوظيفة التي تؤديها العادة داخل سياقها؟ فالساونا الفنلندية لا تصبح مفهومة بمجرد وصف الحرارة والبخار؛ قيمتها تظهر حين نراها جزءًا من حياة اجتماعية وذاكرة تتوارثها العائلات. وكذلك القهوة العربية لا تُختزل في طريقة الصب، لأن الإشارة الأهم هي معنى التكريم والضيافة الذي تحمله التفاصيل.",
+      "spokenText": "من السهل تحويل الاختلاف الثقافي إلى قائمة للدهشة، لكن المعرفة تبدأ عندما نسأل: ما الوظيفة التي تؤديها العادة داخل سياقها؟ فالساونا الفنلندية لا تصبح مفهومة بمجرد وصف الحرارة والبخار؛ قيمتها تظهر حين نراها جزءًا من حياة اجتماعية وذاكرة تتوارثها العائلات. وكذلك القهوة العربية لا تُختزل في طريقة الصب، لأن الإشارة الأهم هي معنى التكريم والضيافة الذي تحمله التفاصيل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dfc405db307a",
+      "type": "paragraph",
+      "sourceHash": "dfc405db307ad79c15a07887b8676aeca7dfe7ed23c213e9bed9a2899afc3e42",
+      "sourceText": "هذه العدسة تحمينا من خطأين متعاكسين: أن نتعامل مع كل عادة مختلفة بوصفها «غرابة»، أو أن نفترض أن معرفة قاعدة عامة تمنحنا حق تفسير سلوك كل فرد. الثقافة تقدم إطارًا، لكنها لا تلغي الشخصية ولا الاختلاف بين الأجيال والمناطق والظروف.",
+      "spokenText": "هذه العدسة تحمينا من خطأين متعاكسين: أن نتعامل مع كل عادة مختلفة بوصفها «غرابة»، أو أن نفترض أن معرفة قاعدة عامة تمنحنا حق تفسير سلوك كل فرد. الثقافة تقدم إطارًا، لكنها لا تلغي الشخصية ولا الاختلاف بين الأجيال والمناطق والظروف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-3b4947d79d3a",
+      "type": "h2",
+      "sourceHash": "3b4947d79d3a4d15ce57e6db8241aefa6224190d3745be765142780522e1bcac",
+      "sourceText": "أربع طبقات لفهم أي عادة",
+      "spokenText": "أربع طبقات لفهم أي عادة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-1943d20a3589",
+      "type": "h3",
+      "sourceHash": "1943d20a3589a3344c171ea3b0399df4931e8dad9379a51cfcbb2d75a40ebeed",
+      "sourceText": "المكان",
+      "spokenText": "المكان",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a921cfd8f446",
+      "type": "paragraph",
+      "sourceHash": "a921cfd8f446c157290ccd88c1666842f6f7d18a05461005a2660b9e06e1f20f",
+      "sourceText": "السلوك المقبول في مطعم شعبي قد لا يكون مناسبًا في مناسبة رسمية. وهذا واضح في مثال النودلز اليابانية: قبول صوت الشفط في سياقات معروفة لا يعني أنه قاعدة عامة لكل طاولة أو كل شخص.",
+      "spokenText": "السلوك المقبول في مطعم شعبي قد لا يكون مناسبًا في مناسبة رسمية. وهذا واضح في مثال النودلز اليابانية: قبول صوت الشفط في سياقات معروفة لا يعني أنه قاعدة عامة لكل طاولة أو كل شخص.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-1734668c4bf0",
+      "type": "h3",
+      "sourceHash": "1734668c4bf01d3d33bd48cd02c2047c8c94705d8c55bab3ba249ed8d273f8a2",
+      "sourceText": "المناسبة",
+      "spokenText": "المناسبة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-de8a705b46c0",
+      "type": "paragraph",
+      "sourceHash": "de8a705b46c0acb857ce81d5a0416230cfed8b942db1829553cba0a557341ce7",
+      "sourceText": "بعض الممارسات مرتبطة بالترحيب أو الاحتفال أو الطقوس الرسمية. تحية الهونغي مثال جيد؛ وجودها في سياقات ماورية معروفة لا يجعلها تحية يومية تلقائية لكل لقاء في نيوزيلندا.",
+      "spokenText": "بعض الممارسات مرتبطة بالترحيب أو الاحتفال أو الطقوس الرسمية. تحية الهونغي مثال جيد؛ وجودها في سياقات ماورية معروفة لا يجعلها تحية يومية تلقائية لكل لقاء في نيوزيلندا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-c369639fb19d",
+      "type": "h3",
+      "sourceHash": "c369639fb19d1b51431534f520453202fe4d1dff1ed9aa4901c5dbf86bc9e039",
+      "sourceText": "العلاقة بين الناس",
+      "spokenText": "العلاقة بين الناس",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d2679efd973a",
+      "type": "paragraph",
+      "sourceHash": "d2679efd973ae521206971af2d724b17a71c57279490988765b964c486434269",
+      "sourceText": "من يبدأ؟ من يُقدَّم أولًا؟ هل الفعل بين أفراد عائلة أم بين مضيف وضيف؟ كثير من معاني السلوك لا يظهر إلا عندما نعرف العلاقة بين المشاركين.",
+      "spokenText": "من يبدأ؟ من يُقدَّم أولًا؟ هل الفعل بين أفراد عائلة أم بين مضيف وضيف؟ كثير من معاني السلوك لا يظهر إلا عندما نعرف العلاقة بين المشاركين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-31c3fd7cbbe8",
+      "type": "h3",
+      "sourceHash": "31c3fd7cbbe87bc0db105eaf5afbb6bebcc04e57d1a974c8e7b34fe224d78e83",
+      "sourceText": "حق الفرد في الاختيار",
+      "spokenText": "حق الفرد في الاختيار",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ba97d0b37cd4",
+      "type": "paragraph",
+      "sourceHash": "ba97d0b37cd45613bff95cc64583570be1b48f84c40d45019aff610ff5c26af4",
+      "sourceText": "حتى داخل المجتمع الواحد، قد يلتزم شخص عادة ما ويتركها آخر. لهذا تكون عبارة «يشيع في بعض السياقات» أدق معرفيًا من «الناس هناك يفعلون كذا».",
+      "spokenText": "حتى داخل المجتمع الواحد، قد يلتزم شخص عادة ما ويتركها آخر. لهذا تكون عبارة «يشيع في بعض السياقات» أدق معرفيًا من «الناس هناك يفعلون كذا».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-de5ee34f9282",
+      "type": "h2",
+      "sourceHash": "de5ee34f9282d8fb3149f1f0f1266a201616c417757b47e815bba5fb0b1f7e4f",
+      "sourceText": "عندما تسافر: الفضول يحتاج إلى أدب",
+      "spokenText": "عندما تسافر: الفضول يحتاج إلى أدب",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8dbbebf0fd5e",
+      "type": "paragraph",
+      "sourceHash": "8dbbebf0fd5eab432851c0552e8f70f908e8516ba94c545ea69a129a03c26c26",
+      "sourceText": "أفضل ما يحمله المسافر ليس قائمة طويلة من التعليمات، بل طريقة للتعلم. ابدأ بالمصادر الرسمية عندما تكون المسألة مرتبطة ببروتوكول واضح، ثم راقب ما يفعله المضيفون، واسأل إذا لم تعرف. وإذا أخطأت في تفصيل صغير، فالتواضع والاعتذار البسيط غالبًا أنفع من محاولة إظهار أنك خبير بثقافة لم تعشها.",
+      "spokenText": "أفضل ما يحمله المسافر ليس قائمة طويلة من التعليمات، بل طريقة للتعلم. ابدأ بالمصادر الرسمية عندما تكون المسألة مرتبطة ببروتوكول واضح، ثم راقب ما يفعله المضيفون، واسأل إذا لم تعرف. وإذا أخطأت في تفصيل صغير، فالتواضع والاعتذار البسيط غالبًا أنفع من محاولة إظهار أنك خبير بثقافة لم تعشها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0122f5afeea8",
+      "type": "paragraph",
+      "sourceHash": "0122f5afeea8dfca25a6f49a27a551718033272ed672eec493c3e73f68329cc7",
+      "sourceText": "ومن المفيد الانتباه إلى أن المحتوى القصير على الشبكات الاجتماعية يحب الأمثلة اللافتة لأنه يكافئ الدهشة. قد تكون المعلومة صحيحة في أصلها، لكنها تُنتزع من سياق محدود ثم تُعرض كصفة لشعب كامل. لذلك نسأل: من يفعل ذلك؟ متى؟ وأين؟ وهل المصدر يصف عادة عامة أم مناسبة محددة؟",
+      "spokenText": "ومن المفيد الانتباه إلى أن المحتوى القصير على الشبكات الاجتماعية يحب الأمثلة اللافتة لأنه يكافئ الدهشة. قد تكون المعلومة صحيحة في أصلها، لكنها تُنتزع من سياق محدود ثم تُعرض كصفة لشعب كامل. لذلك نسأل: من يفعل ذلك؟ متى؟ وأين؟ وهل المصدر يصف عادة عامة أم مناسبة محددة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-0602dcff439e",
+      "type": "h2",
+      "sourceHash": "0602dcff439e12a4d60159cca57c71b61cec922593e30a6e7b5d3e6eb188ef69",
+      "sourceText": "ما الذي يبقى من الرحلة؟",
+      "spokenText": "ما الذي يبقى من الرحلة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4b02c15ccdb8",
+      "type": "paragraph",
+      "sourceHash": "4b02c15ccdb8179eac2c919c0d23f132f26ed6d1e0490ea6bd7a8563a3c8faa1",
+      "sourceText": "الأمثلة الأربعة مختلفة جدًا، لكن الرابط بينها واحد: السلوك الإنساني لغة لها سياق. صوت في مطعم، وبخار في غرفة، وملامسة للأنف، وفنجان قهوة؛ كلها أفعال بسيطة ظاهريًا، لكنها تحمل معاني لا نلتقطها إذا نظرنا إليها بعيننا وحدها.",
+      "spokenText": "الأمثلة الأربعة مختلفة جدًا، لكن الرابط بينها واحد: السلوك الإنساني لغة لها سياق. صوت في مطعم، وبخار في غرفة، وملامسة للأنف، وفنجان قهوة؛ كلها أفعال بسيطة ظاهريًا، لكنها تحمل معاني لا نلتقطها إذا نظرنا إليها بعيننا وحدها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f4e2c8dd6922",
+      "type": "paragraph",
+      "sourceHash": "f4e2c8dd6922bb09a819366d85e5cd744f74d41af45539bc2efe1e37043858d0",
+      "sourceText": "معرفة العادات لا تجعلنا نحفظ بروتوكولات العالم، بل تدربنا على مهارة أوسع: أن نؤجل الحكم لحظة، وأن نبحث عن المعنى قبل أن نسمي الشيء غريبًا.",
+      "spokenText": "معرفة العادات لا تجعلنا نحفظ بروتوكولات العالم، بل تدربنا على مهارة أوسع: أن نؤجل الحكم لحظة، وأن نبحث عن المعنى قبل أن نسمي الشيء غريبًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "a492dc40f408579cb4deaa233f51747ec79e8513e416a258fca40e172b9a2e89",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

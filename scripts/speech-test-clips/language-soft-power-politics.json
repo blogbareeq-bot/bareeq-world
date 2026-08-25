@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "articleId": "language-soft-power-politics",
+  "speechScriptHash": "b38c35991618b2010c3ccef52e850822756bf496c77eebfc14f44559f76d7f05",
+  "status": "draft-needs-speech-review",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 60,
+  "selectedSegments": [
+    {
+      "segmentId": "paragraph-600e4f3ac8f8",
+      "challenges": [
+        "2 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-fa51f559bea4",
+      "challenges": [
+        "2 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-4c1eead74935",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-18e5b1924ccd",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-75fe80c8118d",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "759904036fcd48e2f2716b8c36890fdfed6040bf7d808ec942d9dbe6a14f6908"
+}

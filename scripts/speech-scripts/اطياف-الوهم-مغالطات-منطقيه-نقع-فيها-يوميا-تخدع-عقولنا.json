@@ -1,0 +1,1350 @@
+{
+  "version": 1,
+  "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+  "sourceSnapshotHash": "5a17b365ac70828825c4f95e7f063de8554156bcb0d7772669403df5340dee6e",
+  "sourceStructureHash": "1ee958fcf1d155ca10de9f8c8ec1dc34625e73c34c8229835c162e0066d7425c",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "مصادر للتوسع",
+    "segmentCount": 3,
+    "sourceHash": "e0c58ba63481344c0337c48f5b1a32cffc39c708e59078ff6341bcb7aa6525b3"
+  },
+  "segments": [
+    {
+      "segmentId": "title-fbfc3fd45f00",
+      "type": "title",
+      "sourceHash": "fbfc3fd45f004b6a458461f1627a491fbe066eb756e29884c7067f0c9a30e14b",
+      "sourceText": "أطياف الوهم: أربع مغالطات منطقية نقع فيها يوميًا",
+      "spokenText": "أطياف الوهم: أربع مغالطات منطقية نقع فيها يوميًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d8219bf8fcae",
+      "type": "paragraph",
+      "sourceHash": "d8219bf8fcae2a764ac858ab35613d1ddecf110057ce75377481dfb2d7ba9256",
+      "sourceText": "تقول في اجتماع: «نحتاج إلى أسبوع إضافي لاختبار المنتج قبل إطلاقه». فيأتي الرد: «إذن أنت تريد تأجيل المشروع إلى ما لا نهاية». تبدو الجملة حاسمة، لكنها لم تناقش اقتراحك فعلًا؛ لقد استبدلته باقتراح أسهل للهجوم.",
+      "spokenText": "تقول في اجتماع: «نحتاج إلى أسبوع إضافي لاختبار المنتج قبل إطلاقه». فيأتي الرد: «إذن أنت تريد تأجيل المشروع إلى ما لا نهاية». تبدو الجملة حاسمة، لكنها لم تناقش اقتراحك فعلًا؛ لقد استبدلته باقتراح أسهل للهجوم.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f33a8bf21dd7",
+      "type": "paragraph",
+      "sourceHash": "f33a8bf21dd72ee9bff3e017e56eb5403eba2a4abe4500da250ef62c00932d7d",
+      "sourceText": "هذا النوع من الانحراف يحدث كثيرًا لأن النقاش اليومي سريع، ولأننا لا نحلل كل جملة كما لو كنا في درس للمنطق. لكن تعلّم أسماء بعض المغالطات لا يهدف إلى تحويل الحوار إلى مباراة في اكتشاف الأخطاء، بل إلى شيء أبسط: أن نعرف متى غادرت الحجة السؤال الذي يفترض أن تجيب عنه.",
+      "spokenText": "هذا النوع من الانحراف يحدث كثيرًا لأن النقاش اليومي سريع، ولأننا لا نحلل كل جملة كما لو كنا في درس للمنطق. لكن تعلّم أسماء بعض المغالطات لا يهدف إلى تحويل الحوار إلى مباراة في اكتشاف الأخطاء، بل إلى شيء أبسط: أن نعرف متى غادرت الحجة السؤال الذي يفترض أن تجيب عنه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9a6ef26c5998",
+      "type": "paragraph",
+      "sourceHash": "9a6ef26c599893c8b97572ae66ed5221c01eca1109d1b4fd265062b902ad844c",
+      "sourceText": "المغالطة المنطقية خلل في بنية الحجة أو في الصلة بين مقدماتها ونتيجتها. وهي تختلف عن التحيز المعرفي؛ فالتحيز ميل نفسي منتظم قد يؤثر في الانتباه أو التذكر أو الحكم، بينما المغالطة وصف لطريقة استدلال معيبة. قد يجتمع الاثنان، لكنهما ليسا الشيء نفسه.",
+      "spokenText": "المغالطة المنطقية خلل في بنية الحجة أو في الصلة بين مقدماتها ونتيجتها. وهي تختلف عن التحيز المعرفي؛ فالتحيز ميل نفسي منتظم قد يؤثر في الانتباه أو التذكر أو الحكم، بينما المغالطة وصف لطريقة استدلال معيبة. قد يجتمع الاثنان، لكنهما ليسا الشيء نفسه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0d3d6d3d0aff",
+      "type": "paragraph",
+      "sourceHash": "0d3d6d3d0aff1810434625500bb29ab7eedc2d3e6d38936be0137cb6a32e8f37",
+      "sourceText": "في هذا المقال نركز على أربع مغالطات شائعة، والأهم من تعريفها: كيف نكتشفها في نقاش حقيقي، ومتى لا يصح استخدام اسمها.",
+      "spokenText": "في هذا المقال نركز على أربع مغالطات شائعة، والأهم من تعريفها: كيف نكتشفها في نقاش حقيقي، ومتى لا يصح استخدام اسمها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-5bd062901f97",
+      "type": "h2",
+      "sourceHash": "5bd062901f97f14f156df2d3f49cd27a2514f53b11959086a307d66ec4bf95a4",
+      "sourceText": "لماذا تبدو الحجة المعيبة مقنعة أحيانًا؟",
+      "spokenText": "لماذا تبدو الحجة المعيبة مقنعة أحيانًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f3be53fe275a",
+      "type": "paragraph",
+      "sourceHash": "f3be53fe275af30d78d9e2d3ac59d21a5115d4dafb908407b885867014c05ff4",
+      "sourceText": "لأن المغالطة لا تأتي عادة في صورة عبارة تقول: «أنا استدلال خاطئ». قد تكون الجملة صحيحة جزئيًا، أو تلمس نقطة جانبية مهمة، أو تستخدم مثالًا يثير الانتباه، ثم تنقلنا بهدوء من السؤال الأصلي إلى سؤال آخر. لهذا قد يختلف شخصان في تشخيص الحجة نفسها؛ فالاسم يعتمد على السياق، وما قيل قبل الجملة وبعدها، وما الذي كان مطلوبًا إثباته.",
+      "spokenText": "لأن المغالطة لا تأتي عادة في صورة عبارة تقول: «أنا استدلال خاطئ». قد تكون الجملة صحيحة جزئيًا، أو تلمس نقطة جانبية مهمة، أو تستخدم مثالًا يثير الانتباه، ثم تنقلنا بهدوء من السؤال الأصلي إلى سؤال آخر. لهذا قد يختلف شخصان في تشخيص الحجة نفسها؛ فالاسم يعتمد على السياق، وما قيل قبل الجملة وبعدها، وما الذي كان مطلوبًا إثباته.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e536d0c22269",
+      "type": "paragraph",
+      "sourceHash": "e536d0c222696463c0e17f27d0941cc21d172db102ec575c7a99d0c72ef02321",
+      "sourceText": "ومن المفيد هنا التمييز بين نتيجة خاطئة واستدلال مغلوط. قد يصل شخص إلى نتيجة صحيحة بطريقة ضعيفة؛ كأن يقول إن منتجًا آمن لأن الجميع يشتريه، ثم يتبين فعلًا أنه آمن لأسباب أخرى لم يذكرها. صحة النتيجة لا تجعل الطريق الذي سلكه لإثباتها صحيحًا. والعكس ممكن أيضًا: قد تكون مقدمات الحجة معقولة، لكن المعلومات المتاحة غير كافية لحسم النتيجة.",
+      "spokenText": "ومن المفيد هنا التمييز بين نتيجة خاطئة واستدلال مغلوط. قد يصل شخص إلى نتيجة صحيحة بطريقة ضعيفة؛ كأن يقول إن منتجًا آمن لأن الجميع يشتريه، ثم يتبين فعلًا أنه آمن لأسباب أخرى لم يذكرها. صحة النتيجة لا تجعل الطريق الذي سلكه لإثباتها صحيحًا. والعكس ممكن أيضًا: قد تكون مقدمات الحجة معقولة، لكن المعلومات المتاحة غير كافية لحسم النتيجة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-471470c38b0b",
+      "type": "paragraph",
+      "sourceHash": "471470c38b0ba59b1195cb70937f4a92e7e95ed030bff857ab193a047e993680",
+      "sourceText": "لذلك، حين نبحث عن المغالطة، لا نسأل فقط: «هل أتفق مع النتيجة؟» بل: هل الأسباب المقدمة تمنحني حقًا سببًا كافيًا لقبولها؟",
+      "spokenText": "لذلك، حين نبحث عن المغالطة، لا نسأل فقط: «هل أتفق مع النتيجة؟» بل: هل الأسباب المقدمة تمنحني حقًا سببًا كافيًا لقبولها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-f749bf2aa16b",
+      "type": "h2",
+      "sourceHash": "f749bf2aa16b8a0e243cd869faf60b9f60c376326f8adefbad4660495688b7af",
+      "sourceText": "1. رجل القش: حين نرد على نسخة أضعف من كلام الطرف الآخر",
+      "spokenText": "1. رجل القش: حين نرد على نسخة أضعف من كلام الطرف الآخر",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e9b39ea3809a",
+      "type": "paragraph",
+      "sourceHash": "e9b39ea3809afc554d570200a89146cc6fb9778a796069c7495c15d2b7e51e01",
+      "sourceText": "تحدث مغالطة رجل القش عندما يُعاد تقديم موقف شخص بطريقة أضعف أو أكثر تطرفًا أو أسهل للهجوم، ثم يُفند ذلك البديل بدل الموقف الأصلي.",
+      "spokenText": "تحدث مغالطة رجل القش عندما يُعاد تقديم موقف شخص بطريقة أضعف أو أكثر تطرفًا أو أسهل للهجوم، ثم يُفند ذلك البديل بدل الموقف الأصلي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1506e0c4d2d2",
+      "type": "paragraph",
+      "sourceHash": "1506e0c4d2d21b70bf54df0514a2f10f080c267e38e5b6045afccba71607a7bc",
+      "sourceText": "لنعد إلى المثال الأول. الاقتراح كان: «أسبوع إضافي للاختبار». الرد حوّله إلى: «تأجيل بلا نهاية». المشكلة ليست في اختلاف الرأي حول الموعد، بل في أن الحجة الجديدة لم تعد هي الحجة التي طُرحت.",
+      "spokenText": "لنعد إلى المثال الأول. الاقتراح كان: «أسبوع إضافي للاختبار». الرد حوّله إلى: «تأجيل بلا نهاية». المشكلة ليست في اختلاف الرأي حول الموعد، بل في أن الحجة الجديدة لم تعد هي الحجة التي طُرحت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f3b87dff515c",
+      "type": "paragraph",
+      "sourceHash": "f3b87dff515cb8cda6acbbb3a99ebefc5e679a4a123e6455483736bf058cd7ea",
+      "sourceText": "مثال آخر:",
+      "spokenText": "مثال آخر:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-511b13f96759",
+      "type": "list-item",
+      "sourceHash": "511b13f967594e5865b62361c9fbbf66ec58a9e8da2d8f4c8b125ad9668ccfa1",
+      "sourceText": "تقول: «من المفيد أن تقلل المدرسة الواجبات المتكررة وتزيد التمارين التي تحتاج إلى تطبيق».",
+      "spokenText": "تقول: «من المفيد أن تقلل المدرسة الواجبات المتكررة وتزيد التمارين التي تحتاج إلى تطبيق».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-0b277cef282f",
+      "type": "list-item",
+      "sourceHash": "0b277cef282f97848f409457f8eb81d676727103f71bb70fa97e5395739f7786",
+      "sourceText": "يرد شخص: «إذن تريد إلغاء الواجبات وترك الطلاب بلا تدريب».",
+      "spokenText": "يرد شخص: «إذن تريد إلغاء الواجبات وترك الطلاب بلا تدريب».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-edc13fedc583",
+      "type": "paragraph",
+      "sourceHash": "edc13fedc583d56e836f1e3463357df22e47133eed84dc7c9e8885059cd46fb7",
+      "sourceText": "الطرف الثاني يستطيع أن يعارض تقليل الواجبات، لكن عليه أن يعارض الاقتراح كما هو، لا أن يصنع نسخة أشد منه ثم يهزمها.",
+      "spokenText": "الطرف الثاني يستطيع أن يعارض تقليل الواجبات، لكن عليه أن يعارض الاقتراح كما هو، لا أن يصنع نسخة أشد منه ثم يهزمها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-e528cd21b312",
+      "type": "h3",
+      "sourceHash": "e528cd21b3128aebc3de9ec0051963fe329aa34068b58e3d3626a3ab90c5bdde",
+      "sourceText": "متى لا يكون الأمر رجل قش؟",
+      "spokenText": "متى لا يكون الأمر رجل قش؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9f210eb390e1",
+      "type": "paragraph",
+      "sourceHash": "9f210eb390e1b9ffaf74fd6245ce01e9fc074b5073c47a6daeb8fae19e57cd87",
+      "sourceText": "ليس كل تلخيص ناقص مغالطة. قد يفهم الطرف كلامك بصورة مختلفة فعلًا، وقد يطلب توضيحًا، وقد يستنتج نتيجة يعتقد أنها لازمة لموقفك. يصبح وصف «رجل القش» أقوى عندما نستطيع أن نبيّن أين تغيّر الادعاء ثم يستمر الهجوم على النسخة المعدلة بعد التصحيح.",
+      "spokenText": "ليس كل تلخيص ناقص مغالطة. قد يفهم الطرف كلامك بصورة مختلفة فعلًا، وقد يطلب توضيحًا، وقد يستنتج نتيجة يعتقد أنها لازمة لموقفك. يصبح وصف «رجل القش» أقوى عندما نستطيع أن نبيّن أين تغيّر الادعاء ثم يستمر الهجوم على النسخة المعدلة بعد التصحيح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-f2557abaec4d",
+      "type": "h3",
+      "sourceHash": "f2557abaec4dc8da22b410082e3508d1dd83cee3210f456024829c647230d14d",
+      "sourceText": "سؤال بريق للكشف عنها",
+      "spokenText": "سؤال بريق للكشف عنها",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9cc5fd9e76cd",
+      "type": "paragraph",
+      "sourceHash": "9cc5fd9e76cdd326d54b5edf0feed46cd0cb248a9e9759f4bab8ace1d8b8ccd1",
+      "sourceText": "لو طلبنا من صاحب الفكرة أن يصوغ موقفه بأقوى صورة يقبلها، هل ستكون هذه هي الحجة التي نرد عليها؟",
+      "spokenText": "لو طلبنا من صاحب الفكرة أن يصوغ موقفه بأقوى صورة يقبلها، هل ستكون هذه هي الحجة التي نرد عليها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-557f366007ca",
+      "type": "paragraph",
+      "sourceHash": "557f366007caa9fd6d0fce0d7e46913b7f560b1d7908868e5d68a7c68d7b6248",
+      "sourceText": "إذا كانت الإجابة لا، فربما ابتعد النقاش عن هدفه.",
+      "spokenText": "إذا كانت الإجابة لا، فربما ابتعد النقاش عن هدفه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-9457e0787782",
+      "type": "h2",
+      "sourceHash": "9457e07877823c4feb76f5a05140e5264433b2ed3170a889df9c4b5e8ee27e31",
+      "sourceText": "2. الشخصنة: حين تصبح سيرة المتحدث بديلًا عن فحص حجته",
+      "spokenText": "2. الشخصنة: حين تصبح سيرة المتحدث بديلًا عن فحص حجته",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-cc68aef0dda4",
+      "type": "paragraph",
+      "sourceHash": "cc68aef0dda471236963aa7a2dfbf4461ad1ed755116befabcce613a54f59bea",
+      "sourceText": "في الشخصنة يتحول الرد من تقييم الادعاء إلى مهاجمة صاحب الادعاء على نحو لا يحسم صحة ما قاله.",
+      "spokenText": "في الشخصنة يتحول الرد من تقييم الادعاء إلى مهاجمة صاحب الادعاء على نحو لا يحسم صحة ما قاله.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ed90bc5f1926",
+      "type": "paragraph",
+      "sourceHash": "ed90bc5f19267f839981ac15eb6b945a68506fd28e057e305cc8e20cd6582d62",
+      "sourceText": "مثال بسيط: يقدم موظف اقتراحًا لتقليل الهدر، فيقال: «لا نأخذ منه نصائح في الكفاءة؛ مكتبه نفسه غير مرتب». قد يكون ترتيب المكتب موضوعًا مستقلًا، لكنه لا يجيب عن السؤال: هل الاقتراح يقلل الهدر فعلًا؟",
+      "spokenText": "مثال بسيط: يقدم موظف اقتراحًا لتقليل الهدر، فيقال: «لا نأخذ منه نصائح في الكفاءة؛ مكتبه نفسه غير مرتب». قد يكون ترتيب المكتب موضوعًا مستقلًا، لكنه لا يجيب عن السؤال: هل الاقتراح يقلل الهدر فعلًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-407234b2ecb3",
+      "type": "paragraph",
+      "sourceHash": "407234b2ecb340525cbfd673aef9f8a0ce76e0feac8c01e8c31842cb5e7b8fad",
+      "sourceText": "الطريقة الأدق هي فصل مسارين:",
+      "spokenText": "الطريقة الأدق هي فصل مسارين:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-2e88d55cde86",
+      "type": "list-item",
+      "sourceHash": "2e88d55cde8623f18844b5036c63c9739610c66655ad710cb34b84ff9459520a",
+      "sourceText": "ما جودة الدليل أو الاستدلال؟",
+      "spokenText": "ما جودة الدليل أو الاستدلال؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-8225c5c6dd48",
+      "type": "list-item",
+      "sourceHash": "8225c5c6dd48e36853600c4f536abe61c047299515f2ec527404254380dabb6b",
+      "sourceText": "هل توجد معلومات عن المتحدث تؤثر فعلًا في موثوقية الشهادة أو وجود تضارب مصالح؟",
+      "spokenText": "هل توجد معلومات عن المتحدث تؤثر فعلًا في موثوقية الشهادة أو وجود تضارب مصالح؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-ec8de99ad5c6",
+      "type": "h3",
+      "sourceHash": "ec8de99ad5c604c79c2bf4e54cf3cae735a8906f674f221ac6f4aa40e20ccc70",
+      "sourceText": "متى تكون معلومات الشخص ذات صلة؟",
+      "spokenText": "متى تكون معلومات الشخص ذات صلة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-cd43ab998c9f",
+      "type": "paragraph",
+      "sourceHash": "cd43ab998c9f4584dc1f174450d2488648f2c27fc455c1287a2be0e470b0767c",
+      "sourceText": "هنا يقع خطأ معاكس شائع: الاعتقاد أن ذكر الشخص مغالطة في كل الأحوال. ليس كذلك.",
+      "spokenText": "هنا يقع خطأ معاكس شائع: الاعتقاد أن ذكر الشخص مغالطة في كل الأحوال. ليس كذلك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-547880e7f747",
+      "type": "paragraph",
+      "sourceHash": "547880e7f747562571be26931f22124a6d77dad0883337fe04b55677b3f0fa7c",
+      "sourceText": "إذا كان النقاش عن شهادة شاهد، أو خبرة متخصص، أو تضارب مصالح، أو مصدر تمويل، فقد تكون معلومات عن المتحدث ذات صلة مباشرة بوزن الشهادة. كذلك، إذا ادعى شخص سلطة مهنية لا يملكها، يصبح فحص مؤهلاته جزءًا مشروعًا من تقييم الادعاء.",
+      "spokenText": "إذا كان النقاش عن شهادة شاهد، أو خبرة متخصص، أو تضارب مصالح، أو مصدر تمويل، فقد تكون معلومات عن المتحدث ذات صلة مباشرة بوزن الشهادة. كذلك، إذا ادعى شخص سلطة مهنية لا يملكها، يصبح فحص مؤهلاته جزءًا مشروعًا من تقييم الادعاء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5dbb1b999f80",
+      "type": "paragraph",
+      "sourceHash": "5dbb1b999f805ad9d2cb3dda79fa4ee5dd5ae5dbb624c41d225af48d0f5a72b2",
+      "sourceText": "المغالطة تظهر عندما يُستخدم الهجوم الشخصي بدل فحص الحجة، لا عندما تكون خصائص المصدر جزءًا حقيقيًا من السؤال.",
+      "spokenText": "المغالطة تظهر عندما يُستخدم الهجوم الشخصي بدل فحص الحجة، لا عندما تكون خصائص المصدر جزءًا حقيقيًا من السؤال.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-f2557abaec4d-2",
+      "type": "h3",
+      "sourceHash": "f2557abaec4dc8da22b410082e3508d1dd83cee3210f456024829c647230d14d",
+      "sourceText": "سؤال بريق للكشف عنها",
+      "spokenText": "سؤال بريق للكشف عنها",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bca87d809fe4",
+      "type": "paragraph",
+      "sourceHash": "bca87d809fe48c36a2ae2bc29cd243b7e3c063c1e10c6f40b4161af1327a3c1c",
+      "sourceText": "لو قال الجملة نفسها شخص آخر لا نعرف عنه شيئًا، هل ستبقى الحجة قوية أو ضعيفة للأسباب نفسها؟",
+      "spokenText": "لو قال الجملة نفسها شخص آخر لا نعرف عنه شيئًا، هل ستبقى الحجة قوية أو ضعيفة للأسباب نفسها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c3d46ed0730f",
+      "type": "paragraph",
+      "sourceHash": "c3d46ed0730f51f47532ac38ee7969c3a1888c16f563910a814fd114e3d81042",
+      "sourceText": "إذا كان نعم، فربما انتقل الحوار من الفكرة إلى صاحبها بلا حاجة.",
+      "spokenText": "إذا كان نعم، فربما انتقل الحوار من الفكرة إلى صاحبها بلا حاجة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-4cd677468a5b",
+      "type": "h2",
+      "sourceHash": "4cd677468a5bdcba92604921a232951b97f01eded205e1108642f1c2f599fb48",
+      "sourceText": "3. المأزق المفتعل: حين يُختصر الواقع في خيارين فقط",
+      "spokenText": "3. المأزق المفتعل: حين يُختصر الواقع في خيارين فقط",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ee6948da5995",
+      "type": "paragraph",
+      "sourceHash": "ee6948da59958e869a16499a3f59d6382d113f868065076a377d836a33f3ba83",
+      "sourceText": "تظهر مغالطة المأزق المفتعل عندما تُعرض مسألة كأنها لا تسمح إلا بخيارين متعارضين، مع وجود بدائل أو درجات أو تركيبات معقولة أغفلها العرض.",
+      "spokenText": "تظهر مغالطة المأزق المفتعل عندما تُعرض مسألة كأنها لا تسمح إلا بخيارين متعارضين، مع وجود بدائل أو درجات أو تركيبات معقولة أغفلها العرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-56ed62f2ef15",
+      "type": "paragraph",
+      "sourceHash": "56ed62f2ef1558fcbad99b36fb3117298c5e87229879283fc174a0828c22b50b",
+      "sourceText": "مثلًا: «إما أن تعمل من المكتب خمسة أيام، أو أن الشركة لا تهتم بالتعاون». هذا التقسيم يتجاهل بدائل مثل العمل الهجين، أو اختلاف طبيعة الفرق، أو الاجتماعات الحضورية في أيام محددة.",
+      "spokenText": "مثلًا: «إما أن تعمل من المكتب خمسة أيام، أو أن الشركة لا تهتم بالتعاون». هذا التقسيم يتجاهل بدائل مثل العمل الهجين، أو اختلاف طبيعة الفرق، أو الاجتماعات الحضورية في أيام محددة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dce7212b209a",
+      "type": "paragraph",
+      "sourceHash": "dce7212b209a54852e4d08added8e7e9c04eaf1fcd5e010781e326b80586ef21",
+      "sourceText": "وفي الحياة الشخصية قد تظهر بصيغة: «إما أن أقبل هذه الفرصة الآن، أو سأندم طوال حياتي». قد تكون الفرصة مهمة، لكن النتيجة صيغت كأن المستقبل كله محصور في باب واحد.",
+      "spokenText": "وفي الحياة الشخصية قد تظهر بصيغة: «إما أن أقبل هذه الفرصة الآن، أو سأندم طوال حياتي». قد تكون الفرصة مهمة، لكن النتيجة صيغت كأن المستقبل كله محصور في باب واحد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-d8fc8016a53d",
+      "type": "h3",
+      "sourceHash": "d8fc8016a53d791037cfe978d534ed36983203922a4b263e80a58441eac9cb7d",
+      "sourceText": "متى لا يكون الخيار الثنائي مغالطة؟",
+      "spokenText": "متى لا يكون الخيار الثنائي مغالطة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-459be3c4f53b",
+      "type": "paragraph",
+      "sourceHash": "459be3c4f53b13dbcadf7f2a3dcbc218433a01ca173bb87638470e48d600a0cf",
+      "sourceText": "بعض الأسئلة ثنائية فعلًا. قد تنص لائحة على قبول طلب أو رفضه، وقد يكون مفتاح كهربائي في وضع تشغيل أو إيقاف. كذلك قد يختصر المتحدث الخيارات عمدًا بعد تحليل بدائل كثيرة ويقول: «عمليًا بقي أمامنا خياران».",
+      "spokenText": "بعض الأسئلة ثنائية فعلًا. قد تنص لائحة على قبول طلب أو رفضه، وقد يكون مفتاح كهربائي في وضع تشغيل أو إيقاف. كذلك قد يختصر المتحدث الخيارات عمدًا بعد تحليل بدائل كثيرة ويقول: «عمليًا بقي أمامنا خياران».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-79543132c6ba",
+      "type": "paragraph",
+      "sourceHash": "79543132c6ba774f4c9b0bf0b1a5c1c9a4bbdb18f3d6419d75faccf219180c55",
+      "sourceText": "المطلوب ليس الاعتراض على كل ثنائية، بل التحقق من أن حدود المسألة تبررها.",
+      "spokenText": "المطلوب ليس الاعتراض على كل ثنائية، بل التحقق من أن حدود المسألة تبررها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-f2557abaec4d-3",
+      "type": "h3",
+      "sourceHash": "f2557abaec4dc8da22b410082e3508d1dd83cee3210f456024829c647230d14d",
+      "sourceText": "سؤال بريق للكشف عنها",
+      "spokenText": "سؤال بريق للكشف عنها",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9ba75311fe4a",
+      "type": "paragraph",
+      "sourceHash": "9ba75311fe4a522751721332a36ee4cb06ae9de9a594127193ceaf3fd8714311",
+      "sourceText": "ما الخيار الثالث المعقول الذي لم يُذكر؟",
+      "spokenText": "ما الخيار الثالث المعقول الذي لم يُذكر؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0d177a36b95b",
+      "type": "paragraph",
+      "sourceHash": "0d177a36b95be00e6c4df48d03848e2a82e2a370ae7d6306bf453ca030576abf",
+      "sourceText": "إذا ظهر خيار ثالث بسهولة، فقد نكون أمام تبسيط زائد. وإذا لم يظهر بعد فحص حقيقي، فقد يكون التقسيم الثنائي مشروعًا.",
+      "spokenText": "إذا ظهر خيار ثالث بسهولة، فقد نكون أمام تبسيط زائد. وإذا لم يظهر بعد فحص حقيقي، فقد يكون التقسيم الثنائي مشروعًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-a68f1413f68d",
+      "type": "h2",
+      "sourceHash": "a68f1413f68dc5508929e4a3dbcd43db80feb01e866f6f9ceca7d3a48a11e1c2",
+      "sourceText": "4. الاحتكام إلى الأغلبية: حين تصبح الشعبية دليلًا على الصحة",
+      "spokenText": "4. الاحتكام إلى الأغلبية: حين تصبح الشعبية دليلًا على الصحة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-681690db0b1b",
+      "type": "paragraph",
+      "sourceHash": "681690db0b1b6483c225b76196a5e3e4c7481c15442e9cf8deaba8cb0ca7c90e",
+      "sourceText": "تحدث مغالطة الاحتكام إلى الأغلبية عندما تُستخدم شعبية فكرة أو منتج أو اعتقاد بوصفها دليلًا كافيًا على صحته.",
+      "spokenText": "تحدث مغالطة الاحتكام إلى الأغلبية عندما تُستخدم شعبية فكرة أو منتج أو اعتقاد بوصفها دليلًا كافيًا على صحته.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8eb90366b7b4",
+      "type": "paragraph",
+      "sourceHash": "8eb90366b7b46fff1e9ec68ed4db5bbfc95686e5aab9cba96e759218ae9c6150",
+      "sourceText": "«الجميع يستخدم هذا التطبيق، إذن هو الأكثر أمانًا». أو: «هذا الرأي منتشر جدًا، فلا يمكن أن يكون خاطئًا».",
+      "spokenText": "«الجميع يستخدم هذا التطبيق، إذن هو الأكثر أمانًا». أو: «هذا الرأي منتشر جدًا، فلا يمكن أن يكون خاطئًا».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b50dd5f35da4",
+      "type": "paragraph",
+      "sourceHash": "b50dd5f35da4c45e1e1c4ad3b818e6bd8332ecf34a5eb56db41dec56ba4c6ecc",
+      "sourceText": "الانتشار قد يخبرنا بأشياء مهمة: سهولة الاستخدام، قوة التسويق، أثر الشبكة، العادة، أو ثقة الجمهور. لكنه لا يختبر وحده الادعاء الذي نريد إثباته. إذا كان السؤال عن الأمان، نحتاج أدلة عن الأمان. وإذا كان السؤال علميًا، نحتاج أدلة علمية.",
+      "spokenText": "الانتشار قد يخبرنا بأشياء مهمة: سهولة الاستخدام، قوة التسويق، أثر الشبكة، العادة، أو ثقة الجمهور. لكنه لا يختبر وحده الادعاء الذي نريد إثباته. إذا كان السؤال عن الأمان، نحتاج أدلة عن الأمان. وإذا كان السؤال علميًا، نحتاج أدلة علمية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-a0dee6e04b3e",
+      "type": "h3",
+      "sourceHash": "a0dee6e04b3e2ba719b4512ff481764d7c163d26e438d6964fe985c6e184c86d",
+      "sourceText": "متى تكون الشعبية معلومة مفيدة؟",
+      "spokenText": "متى تكون الشعبية معلومة مفيدة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f979fa2ff6cd",
+      "type": "paragraph",
+      "sourceHash": "f979fa2ff6cd371b945a73304c949a8cb29af996c0bdc09d9b2443980a2ca867",
+      "sourceText": "الشعبية ليست بلا قيمة. إذا كنت تختار منصة تحتاج إلى عدد كبير من المستخدمين كي تعمل، فحجم المجتمع ميزة حقيقية. وإذا كان السؤال «ما المطعم الأكثر زيارة؟»، فالإقبال نفسه جزء من الإجابة.",
+      "spokenText": "الشعبية ليست بلا قيمة. إذا كنت تختار منصة تحتاج إلى عدد كبير من المستخدمين كي تعمل، فحجم المجتمع ميزة حقيقية. وإذا كان السؤال «ما المطعم الأكثر زيارة؟»، فالإقبال نفسه جزء من الإجابة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dca927283f5f",
+      "type": "paragraph",
+      "sourceHash": "dca927283f5fadf5db0467646a819abdd2729f68ea0a477e843892c63a608f40",
+      "sourceText": "المشكلة تظهر عندما ننتقل من «شائع» إلى «صحيح» أو «أفضل في كل معيار» من دون دليل إضافي.",
+      "spokenText": "المشكلة تظهر عندما ننتقل من «شائع» إلى «صحيح» أو «أفضل في كل معيار» من دون دليل إضافي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-f2557abaec4d-4",
+      "type": "h3",
+      "sourceHash": "f2557abaec4dc8da22b410082e3508d1dd83cee3210f456024829c647230d14d",
+      "sourceText": "سؤال بريق للكشف عنها",
+      "spokenText": "سؤال بريق للكشف عنها",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f7bcec2e786d",
+      "type": "paragraph",
+      "sourceHash": "f7bcec2e786d4688f93126fa9abffd2cb928d21935eda7cc707e21c6b10880a4",
+      "sourceText": "لو انخفض عدد المؤيدين إلى النصف، هل سيتغير الدليل على صحة الادعاء نفسه؟",
+      "spokenText": "لو انخفض عدد المؤيدين إلى النصف، هل سيتغير الدليل على صحة الادعاء نفسه؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2d1b3eeecfeb",
+      "type": "paragraph",
+      "sourceHash": "2d1b3eeecfeb5c80123a398a93fcd7ac4c209cdb29fe56a68cddb5667b1ff92c",
+      "sourceText": "إذا كانت قوة الحجة تعتمد فقط على عدد من يكررونها، فنحن بحاجة إلى دليل آخر.",
+      "spokenText": "إذا كانت قوة الحجة تعتمد فقط على عدد من يكررونها، فنحن بحاجة إلى دليل آخر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-eb8cbbf54e39",
+      "type": "h2",
+      "sourceHash": "eb8cbbf54e396adec061642398d7e81108c07dabd24fbbba18687e024ab557ee",
+      "sourceText": "لا تجعل أسماء المغالطات مغالطة جديدة",
+      "spokenText": "لا تجعل أسماء المغالطات مغالطة جديدة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a58f5f2d90ef",
+      "type": "paragraph",
+      "sourceHash": "a58f5f2d90ef5ac0dab48de770835c0c1fe390b8835c1be17b1f28f387e93c34",
+      "sourceText": "تعلم المصطلحات قد يمنحنا إغراءً غريبًا: بدل أن نناقش الطرف الآخر نقول «رجل قش!» أو «شخصنة!» ونعتبر الحوار منتهيًا. لكن اسم المغالطة ليس حكمًا سحريًا.",
+      "spokenText": "تعلم المصطلحات قد يمنحنا إغراءً غريبًا: بدل أن نناقش الطرف الآخر نقول «رجل قش!» أو «شخصنة!» ونعتبر الحوار منتهيًا. لكن اسم المغالطة ليس حكمًا سحريًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-35393c154de3",
+      "type": "paragraph",
+      "sourceHash": "35393c154de3e67cbe2dc3d0c7e16d6115f96199aeea27d7ae5995cc44558527",
+      "sourceText": "الطريقة الأقوى هي أن تشرح موضع الخلل:",
+      "spokenText": "الطريقة الأقوى هي أن تشرح موضع الخلل:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-bacaf4ee9085",
+      "type": "list-item",
+      "sourceHash": "bacaf4ee9085d75dbd24d10b79d580efc7388ef4978685604c3b0262812ed091",
+      "sourceText": "«أنا لم أقل إلغاء الواجبات؛ قلت تقليل النوع المتكرر منها».",
+      "spokenText": "«أنا لم أقل إلغاء الواجبات؛ قلت تقليل النوع المتكرر منها».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-401c7aefc4aa",
+      "type": "list-item",
+      "sourceHash": "401c7aefc4aa7018d22f68f2d50fa24b64c73f2f195087ca420ca5c4e2c1aee4",
+      "sourceText": "«ملاحظتك عن الشخص قد تكون صحيحة، لكن ما علاقتها بصحة هذا الرقم؟».",
+      "spokenText": "«ملاحظتك عن الشخص قد تكون صحيحة، لكن ما علاقتها بصحة هذا الرقم؟».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-fff188ea9823",
+      "type": "list-item",
+      "sourceHash": "fff188ea98237ad32734d06594b8a8186a304edab52e24e4dca052a39bb0bc71",
+      "sourceText": "«لدينا خيار ثالث: تجربة الحل لمدة شهر قبل التعميم».",
+      "spokenText": "«لدينا خيار ثالث: تجربة الحل لمدة شهر قبل التعميم».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-d10261ea7c11",
+      "type": "list-item",
+      "sourceHash": "d10261ea7c119111813a2b6cd0c145c5035860299c162b9d59bd96fd68cd61c2",
+      "sourceText": "«الشعبية تخبرنا عن الانتشار، لا عن الأمان؛ ما بيانات الأمان؟».",
+      "spokenText": "«الشعبية تخبرنا عن الانتشار، لا عن الأمان؛ ما بيانات الأمان؟».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-37f2f566052f",
+      "type": "paragraph",
+      "sourceHash": "37f2f566052f63c6b076d04294f2395f5a2969cf76411b8661fd3c97ee741440",
+      "sourceText": "حين نفعل ذلك، يصبح المنطق أداة لتحسين النقاش لا سلاحًا لإنهائه.",
+      "spokenText": "حين نفعل ذلك، يصبح المنطق أداة لتحسين النقاش لا سلاحًا لإنهائه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-494b9c025873",
+      "type": "h2",
+      "sourceHash": "494b9c02587383f8ef2a56ca7d9649b76b8bb2883692afd647f31f118e897a20",
+      "sourceText": "اختبار سريع قبل أن تقتنع بحجة",
+      "spokenText": "اختبار سريع قبل أن تقتنع بحجة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8f4870514a96",
+      "type": "paragraph",
+      "sourceHash": "8f4870514a9613def696fe0600a2edf9563ecefa1f6f7bb121142e7d098c8ad1",
+      "sourceText": "قبل أن تتبنى نتيجة في نقاش مهم، مررها على أربعة أسئلة:",
+      "spokenText": "قبل أن تتبنى نتيجة في نقاش مهم، مررها على أربعة أسئلة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7113721ce2dd",
+      "type": "list-item",
+      "sourceHash": "7113721ce2dd299e6e88ed4d81e249a3dfc8206557dccc4b77f9c91902254463",
+      "sourceText": "هل أُعيد عرض موقف الطرف الآخر بأمانة؟",
+      "spokenText": "هل أُعيد عرض موقف الطرف الآخر بأمانة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-99689c3ff4b1",
+      "type": "list-item",
+      "sourceHash": "99689c3ff4b16c4b8e4d6fffc716a24d2a5b8f6eae39ad0683927c56eed7ef1c",
+      "sourceText": "هل نناقش الادعاء أم صاحب الادعاء؟",
+      "spokenText": "هل نناقش الادعاء أم صاحب الادعاء؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-4b60c4dd1582",
+      "type": "list-item",
+      "sourceHash": "4b60c4dd15822eefa56dbbe9e5ad166eb790500b6767b85806a7416a15bf47bb",
+      "sourceText": "هل الخيارات المعروضة هي كل الخيارات المعقولة فعلًا؟",
+      "spokenText": "هل الخيارات المعروضة هي كل الخيارات المعقولة فعلًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-612073a4f267",
+      "type": "list-item",
+      "sourceHash": "612073a4f2672ffd32fb1e23c755596bf7ca734a34fa658be5e830ca24b4a03c",
+      "sourceText": "هل الدليل يثبت الفكرة، أم أن الدليل الوحيد هو أن كثيرين يصدقونها؟",
+      "spokenText": "هل الدليل يثبت الفكرة، أم أن الدليل الوحيد هو أن كثيرين يصدقونها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-51351d597cce",
+      "type": "paragraph",
+      "sourceHash": "51351d597ccecf2c635ddc0d12d4a6b7b1e68bac4bce1057534e5b6998c0eeb5",
+      "sourceText": "هذه الأسئلة لا تجعل أحكامنا معصومة، ولا تحول كل حوار إلى مسألة منطق صوري. لكنها تمنحنا فرصة قصيرة لإبطاء الانطباع والعودة إلى الحجة نفسها.",
+      "spokenText": "هذه الأسئلة لا تجعل أحكامنا معصومة، ولا تحول كل حوار إلى مسألة منطق صوري. لكنها تمنحنا فرصة قصيرة لإبطاء الانطباع والعودة إلى الحجة نفسها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a6b20b8e4372",
+      "type": "paragraph",
+      "sourceHash": "a6b20b8e4372c8243948bcc415d392e873019ad6211377cb5f9dc12aa9bf32ea",
+      "sourceText": "ولأن بعض الأخطاء تأتي من الحكم السريع لا من بنية الحجة وحدها، يرتبط هذا الموضوع مباشرة بسؤال الحدس: متى تكون السرعة خبرة، ومتى تكون مجرد اختصار يحتاج إلى فحص؟",
+      "spokenText": "ولأن بعض الأخطاء تأتي من الحكم السريع لا من بنية الحجة وحدها، يرتبط هذا الموضوع مباشرة بسؤال الحدس: متى تكون السرعة خبرة، ومتى تكون مجرد اختصار يحتاج إلى فحص؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-6c78e10ed9e0",
+      "type": "h2",
+      "sourceHash": "6c78e10ed9e046c9524e768dc292009e18afc4281ac16a980dcbf3dea387222d",
+      "sourceText": "الخلاصة",
+      "spokenText": "الخلاصة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-53511b4394a5",
+      "type": "paragraph",
+      "sourceHash": "53511b4394a546cd85a156d0be03292fe62b2ed1791f068e5d922f520ba6b5d3",
+      "sourceText": "المغالطات الأربع هنا مختلفة، لكنها تشترك في حركة واحدة: استبدال السؤال الأصعب بسؤال أسهل.",
+      "spokenText": "المغالطات الأربع هنا مختلفة، لكنها تشترك في حركة واحدة: استبدال السؤال الأصعب بسؤال أسهل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1963341aec03",
+      "type": "paragraph",
+      "sourceHash": "1963341aec0391a11498c6526054419ac267ca49d288217e88c4f816237c5672",
+      "sourceText": "رجل القش يستبدل الموقف الحقيقي بنسخة أضعف. الشخصنة تستبدل الحجة بصاحبها. المأزق المفتعل يستبدل الواقع الواسع بخيارين. والاحتكام إلى الأغلبية يستبدل اختبار الدليل بعدّ المؤيدين.",
+      "spokenText": "رجل القش يستبدل الموقف الحقيقي بنسخة أضعف. الشخصنة تستبدل الحجة بصاحبها. المأزق المفتعل يستبدل الواقع الواسع بخيارين. والاحتكام إلى الأغلبية يستبدل اختبار الدليل بعدّ المؤيدين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-940dcd00e9d3",
+      "type": "paragraph",
+      "sourceHash": "940dcd00e9d324ed19ff1197dbea7ce406e6803cf06adabea17dd02d3e904843",
+      "sourceText": "أفضل حماية ليست حفظ قائمة طويلة من الأسماء، بل اكتساب عادة واحدة: عندما تبدو الحجة مقنعة بسرعة، ارجع خطوة واسأل: ما الادعاء الذي أقيّمه الآن، وما الدليل الذي يخصه فعلًا؟",
+      "spokenText": "أفضل حماية ليست حفظ قائمة طويلة من الأسماء، بل اكتساب عادة واحدة: عندما تبدو الحجة مقنعة بسرعة، ارجع خطوة واسأل: ما الادعاء الذي أقيّمه الآن، وما الدليل الذي يخصه فعلًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "72de53ee8a81c9d48c2df5eb0334c23dba00369985ce47371ed357e506246b11",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

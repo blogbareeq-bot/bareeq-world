@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "articleId": "ai-as-coworker-future-of-human-work",
+  "speechScriptHash": "5a673aaee5ab56f5ba78f8c0dd2ece90ddc51b70e33a5c0003074f695e9c2d90",
+  "status": "draft-needs-speech-review",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 60,
+  "selectedSegments": [
+    {
+      "segmentId": "paragraph-ddeef036d301",
+      "challenges": [
+        "2 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-0d2729862b9c",
+      "challenges": [
+        "2 foreign term(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-5d6b093bfdff",
+      "challenges": [
+        "2 foreign term(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-1e5cb40f3ca7",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-9e67dc0bdebf",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "01152e56f256b7cdccecaafdbc0777cca1f243d3d56aee75f1d9eb81938a7737"
+}

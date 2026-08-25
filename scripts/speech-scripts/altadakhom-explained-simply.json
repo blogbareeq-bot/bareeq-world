@@ -1,0 +1,1458 @@
+{
+  "version": 1,
+  "articleId": "altadakhom-explained-simply",
+  "sourceSnapshotHash": "2d82cc083fea4ed46cc94f1f6a0d0c36fc0d96624262f4853f7c6f83271f36a5",
+  "sourceStructureHash": "1174dd772ceacf4e318da6c6d0c10b43ef7c6d6534bbff1af0705fc275d1e4a1",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر",
+    "segmentCount": 5,
+    "sourceHash": "07858b74f3f4e36e8b3290908b19ce39449eeacc5dd2eedffccc2e352f909347"
+  },
+  "segments": [
+    {
+      "segmentId": "title-37271451ee7b",
+      "type": "title",
+      "sourceHash": "37271451ee7b6c44324a4ed16d919350b82c88c152a8226b11fce95817da463e",
+      "sourceText": "التضخم ببساطة: لماذا ترتفع الأسعار؟",
+      "spokenText": "التضخم ببساطة: لماذا ترتفع الأسعار؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0d6028643493",
+      "type": "paragraph",
+      "sourceHash": "0d6028643493ac341da7ebdb3fe3180625071f3881d2bbda08d43c20a4322c96",
+      "sourceText": "قبل سنوات، كان مبلغ محدد يملأ عربة التسوق. اليوم قد تعود بالمبلغ نفسه وأكياس أقل. لم تتغير الأرقام المطبوعة على النقود، لكن ما تستطيع شراءه بها تغيّر؛ وهنا تبدأ قصة التضخم.",
+      "spokenText": "قبل سنوات، كان مبلغ محدد يملأ عربة التسوق. اليوم قد تعود بالمبلغ نفسه وأكياس أقل. لم تتغير الأرقام المطبوعة على النقود، لكن ما تستطيع شراءه بها تغيّر؛ وهنا تبدأ قصة التضخم.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-694a13930711",
+      "type": "paragraph",
+      "sourceHash": "694a139307111cc72af96fe9a0c00b41693f3244e77f95aa201615a7ecb0580b",
+      "sourceText": "قد نختصر المشهد بقولنا إن الأسعار ارتفعت، لكن هذا الاختصار لا يكفي. فارتفاع سعر البن بعد موسم سيئ لا يساوي تضخمًا في الاقتصاد كله، وبقاء الأسعار مرتفعة لا يعني أن التضخم ما زال يتسارع. لفهم الأخبار الاقتصادية بوعي، نحتاج إلى فصل ثلاثة أشياء: مستوى الأسعار، ومعدل تغيّره، والقوة الشرائية للنقود.",
+      "spokenText": "قد نختصر المشهد بقولنا إن الأسعار ارتفعت، لكن هذا الاختصار لا يكفي. فارتفاع سعر البن بعد موسم سيئ لا يساوي تضخمًا في الاقتصاد كله، وبقاء الأسعار مرتفعة لا يعني أن التضخم ما زال يتسارع. لفهم الأخبار الاقتصادية بوعي، نحتاج إلى فصل ثلاثة أشياء: مستوى الأسعار، ومعدل تغيّره، والقوة الشرائية للنقود.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "quote-6eceefa121d3",
+      "type": "quote",
+      "sourceHash": "6eceefa121d3a5d67903b390c98597133bc49e307e0e416f337ab5aaadf6b50d",
+      "sourceText": "ببساطة: التضخم هو ارتفاع واسع في المستوى العام لأسعار السلع والخدمات خلال مدة زمنية، ومعه تشتري الوحدة النقدية كمية أقل في المتوسط.",
+      "spokenText": "ببساطة: التضخم هو ارتفاع واسع في المستوى العام لأسعار السلع والخدمات خلال مدة زمنية، ومعه تشتري الوحدة النقدية كمية أقل في المتوسط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-d638552e5589",
+      "type": "h2",
+      "sourceHash": "d638552e5589385c2b7b92e2387fe009f025208db71361d62222cad87e11efac",
+      "sourceText": "السعر المرتفع ليس هو التضخم نفسه",
+      "spokenText": "السعر المرتفع ليس هو التضخم نفسه",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0a123b1f7670",
+      "type": "paragraph",
+      "sourceHash": "0a123b1f767087a74cd115113ac29ee8c7346e0ba11243a6c5d569ce6c4922a9",
+      "sourceText": "تخيّل أن سلة معتادة من السلع والخدمات كانت تكلف 1000 ريال، ثم أصبحت تكلف 1050 ريالًا بعد عام. ارتفعت تكلفة السلة 5% تقريبًا؛ وهذا هو معدل التضخم خلال تلك الفترة.",
+      "spokenText": "تخيّل أن سلة معتادة من السلع والخدمات كانت تكلف 1000 ريال، ثم أصبحت تكلف 1050 ريالًا بعد عام. ارتفعت تكلفة السلة 5% تقريبًا؛ وهذا هو معدل التضخم خلال تلك الفترة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fcb500a15977",
+      "type": "paragraph",
+      "sourceHash": "fcb500a1597778fd15de9c5e3b674e0aa531eeec3bf213dde5cb52108453f59d",
+      "sourceText": "أما إذا ارتفع سعر الطماطم وحدها بسبب موجة حر، بينما بقيت معظم الأسعار مستقرة، فلدينا تغير في سعر سلعة، لا دليل كافٍ على تضخم عام.",
+      "spokenText": "أما إذا ارتفع سعر الطماطم وحدها بسبب موجة حر، بينما بقيت معظم الأسعار مستقرة، فلدينا تغير في سعر سلعة، لا دليل كافٍ على تضخم عام.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c8989140b771",
+      "type": "paragraph",
+      "sourceHash": "c8989140b7715e3f1373bc9835c2702f9288fd96b2bbbbdae52c36ebb99646d8",
+      "sourceText": "وهناك فرق آخر يكثر الخلط فيه:",
+      "spokenText": "وهناك فرق آخر يكثر الخلط فيه:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-313c130aecc3",
+      "type": "list-item",
+      "sourceHash": "313c130aecc345ff60c5964fd1e79d9e452f05c1fa0be7051a5de03a3ce5bcee",
+      "sourceText": "عندما ينخفض معدل التضخم من 8% إلى 3%، فالأسعار لا تنخفض بالضرورة؛ إنها غالبًا تواصل الارتفاع ولكن بوتيرة أبطأ. يسمى ذلك تباطؤ التضخم.",
+      "spokenText": "عندما ينخفض معدل التضخم من 8% إلى 3%، فالأسعار لا تنخفض بالضرورة؛ إنها غالبًا تواصل الارتفاع ولكن بوتيرة أبطأ. يسمى ذلك تباطؤ التضخم.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-bb1493750d2e",
+      "type": "list-item",
+      "sourceHash": "bb1493750d2ee9005ad8fab70fc655854db100a6069e4b0259ce1067a777296b",
+      "sourceText": "عندما ينخفض المستوى العام للأسعار فعلًا فترة ممتدة، فهذا انكماش سعري، وهو ظاهرة مختلفة قد تحمل مشكلات اقتصادية خاصة بها.",
+      "spokenText": "عندما ينخفض المستوى العام للأسعار فعلًا فترة ممتدة، فهذا انكماش سعري، وهو ظاهرة مختلفة قد تحمل مشكلات اقتصادية خاصة بها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d3244cb5dde3",
+      "type": "paragraph",
+      "sourceHash": "d3244cb5dde3c5d31c412c9faf28444bca1932f8b40116221a8a0e889ba93486",
+      "sourceText": "لهذا قد يسمع الناس أن «التضخم تراجع»، ثم لا يجدون الأسعار عادت إلى ما كانت عليه. الخبر يتحدث عن سرعة الارتفاع، لا عن الرجوع بالأسعار إلى الوراء.",
+      "spokenText": "لهذا قد يسمع الناس أن «التضخم تراجع»، ثم لا يجدون الأسعار عادت إلى ما كانت عليه. الخبر يتحدث عن سرعة الارتفاع، لا عن الرجوع بالأسعار إلى الوراء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-c193fa6c494e",
+      "type": "h2",
+      "sourceHash": "c193fa6c494e779c4bef95477df1f432c47aa5f21fb9525d0a04f5f5a143d5f8",
+      "sourceText": "كيف يُقاس التضخم؟",
+      "spokenText": "كيف يُقاس التضخم؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2b106e9f544e",
+      "type": "paragraph",
+      "sourceHash": "2b106e9f544e496fa44cefd342ef40a08afef7f17b2044be86ec8d3f4a16c506",
+      "sourceText": "لا يستطيع الإحصائيون متابعة كل فاتورة في البلد، لذلك يبنون مؤشرًا يمثل نمط إنفاق الأسر. أشهر هذه المقاييس الرقم القياسي لأسعار المستهلك (CPI).",
+      "spokenText": "لا يستطيع الإحصائيون متابعة كل فاتورة في البلد، لذلك يبنون مؤشرًا يمثل نمط إنفاق الأسر. أشهر هذه المقاييس الرقم القياسي لأسعار المستهلك (CPI).",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8d415d8749b8",
+      "type": "paragraph",
+      "sourceHash": "8d415d8749b888e9603f5e932ab82c4a2daf207bc99a63cf9a199576660d0438",
+      "sourceText": "تختار الجهة الإحصائية سلة تضم سلعًا وخدمات تشتريها الأسر، مثل الغذاء والسكن والنقل والملابس والصحة والاتصالات. ثم تمنح كل مجموعة وزنًا يتناسب مع حصتها من الإنفاق، وتتابع تغير تكلفة السلة بمرور الوقت.",
+      "spokenText": "تختار الجهة الإحصائية سلة تضم سلعًا وخدمات تشتريها الأسر، مثل الغذاء والسكن والنقل والملابس والصحة والاتصالات. ثم تمنح كل مجموعة وزنًا يتناسب مع حصتها من الإنفاق، وتتابع تغير تكلفة السلة بمرور الوقت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7f3bbe863940",
+      "type": "paragraph",
+      "sourceHash": "7f3bbe86394099892220fee22b5a4af5a0c1c60c5f8d5b1ace0e4a7ee5b85a66",
+      "sourceText": "في السعودية، تعرّف الهيئة العامة للإحصاء المؤشر بأنه مقياس لتحركات أسعار سلة تمثل أنماط الإنفاق الاستهلاكي، وتحدّث الأوزان والعناصر وفق منهجيتها حتى تعكس تغير السلوك الاستهلاكي بصورة أفضل.",
+      "spokenText": "في السعودية، تعرّف الهيئة العامة للإحصاء المؤشر بأنه مقياس لتحركات أسعار سلة تمثل أنماط الإنفاق الاستهلاكي، وتحدّث الأوزان والعناصر وفق منهجيتها حتى تعكس تغير السلوك الاستهلاكي بصورة أفضل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b92564186377",
+      "type": "paragraph",
+      "sourceHash": "b92564186377e2a45b10ccd104ee3fcb8aee8ddb300103e55df3da7e401e415b",
+      "sourceText": "لكن الرقم الوطني متوسط، وليس نسخة مطابقة من فاتورة كل أسرة. من ينفق جزءًا كبيرًا من دخله على الإيجار قد يشعر بضغط مختلف عمّن يملك منزله، ومن يعتمد على السيارة يوميًا يتأثر بالوقود والنقل أكثر من غيره. لذلك قد تكون تجربتك الشخصية أعلى أو أقل من المعدل المنشور من دون أن يكون أحد الرقمين «كاذبًا».",
+      "spokenText": "لكن الرقم الوطني متوسط، وليس نسخة مطابقة من فاتورة كل أسرة. من ينفق جزءًا كبيرًا من دخله على الإيجار قد يشعر بضغط مختلف عمّن يملك منزله، ومن يعتمد على السيارة يوميًا يتأثر بالوقود والنقل أكثر من غيره. لذلك قد تكون تجربتك الشخصية أعلى أو أقل من المعدل المنشور من دون أن يكون أحد الرقمين «كاذبًا».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-9a60c6cb623d",
+      "type": "h2",
+      "sourceHash": "9a60c6cb623d65bec4f1237b0843db90f4cb54ec961308c434614917f2e6bcc9",
+      "sourceText": "لماذا ترتفع الأسعار على نطاق واسع؟",
+      "spokenText": "لماذا ترتفع الأسعار على نطاق واسع؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d46600bd6f0b",
+      "type": "paragraph",
+      "sourceHash": "d46600bd6f0bdde54ddf6cade35114884029c16ef8837d8d0da659df6f4f02df",
+      "sourceText": "لا توجد إجابة واحدة تصلح لكل موجة تضخم. وغالبًا تتداخل الأسباب بدل أن يعمل كل سبب بمفرده.",
+      "spokenText": "لا توجد إجابة واحدة تصلح لكل موجة تضخم. وغالبًا تتداخل الأسباب بدل أن يعمل كل سبب بمفرده.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-ebbf47ff0f1d",
+      "type": "h3",
+      "sourceHash": "ebbf47ff0f1d9bbf89c3c59ed15b48264624046b10bfaf1915e50b62a35138db",
+      "sourceText": "1. الطلب ينمو أسرع من قدرة الاقتصاد على الإنتاج",
+      "spokenText": "1. الطلب ينمو أسرع من قدرة الاقتصاد على الإنتاج",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-963aab897ae7",
+      "type": "paragraph",
+      "sourceHash": "963aab897ae769b30682b37c30b8c4ae2c33d89f593248ce5ae3c7bbb5096663",
+      "sourceText": "إذا زاد إنفاق الأسر والشركات والحكومة بسرعة، بينما لا تستطيع المصانع والمتاجر والخدمات زيادة إنتاجها بالسرعة نفسها، يتنافس المشترون على كمية محدودة، فتظهر ضغوط تصعد بالأسعار.",
+      "spokenText": "إذا زاد إنفاق الأسر والشركات والحكومة بسرعة، بينما لا تستطيع المصانع والمتاجر والخدمات زيادة إنتاجها بالسرعة نفسها، يتنافس المشترون على كمية محدودة، فتظهر ضغوط تصعد بالأسعار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-05033ffae0b6",
+      "type": "paragraph",
+      "sourceHash": "05033ffae0b693c1b84d34eab79501be50682b5f2f852d232a8fe1b91a3b47d8",
+      "sourceText": "مثال مبسط: إذا توفر في السوق عشرة أجهزة بينما يرغب مئة شخص في شرائها فورًا، يستطيع البائع رفع السعر. لكن الاقتصاد الحقيقي أعقد؛ فالمنتجون قد يوسعون الإنتاج، والمستهلكون قد يؤجلون الشراء، وقد تدخل بدائل جديدة إلى السوق.",
+      "spokenText": "مثال مبسط: إذا توفر في السوق عشرة أجهزة بينما يرغب مئة شخص في شرائها فورًا، يستطيع البائع رفع السعر. لكن الاقتصاد الحقيقي أعقد؛ فالمنتجون قد يوسعون الإنتاج، والمستهلكون قد يؤجلون الشراء، وقد تدخل بدائل جديدة إلى السوق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-a0ea7597f40d",
+      "type": "h3",
+      "sourceHash": "a0ea7597f40d424352ec944a249231b7ceb81a2a779b23ecb6dfbdc88249e50b",
+      "sourceText": "2. تكاليف الإنتاج أو الإمداد ترتفع",
+      "spokenText": "2. تكاليف الإنتاج أو الإمداد ترتفع",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0851d42b86b9",
+      "type": "paragraph",
+      "sourceHash": "0851d42b86b9b407fa58ac7a39b725af56f86c56ceeeadfb417c60e47f483b23",
+      "sourceText": "قد تبدأ المشكلة من جانب العرض: طاقة أغلى، محصول ضعيف، نقص في مكوّن صناعي، تعطل في الشحن، أو كارثة تقلل الإنتاج. عندما ترتفع التكلفة في حلقات كثيرة، تحاول الشركات تمرير جزء منها إلى السعر النهائي.",
+      "spokenText": "قد تبدأ المشكلة من جانب العرض: طاقة أغلى، محصول ضعيف، نقص في مكوّن صناعي، تعطل في الشحن، أو كارثة تقلل الإنتاج. عندما ترتفع التكلفة في حلقات كثيرة، تحاول الشركات تمرير جزء منها إلى السعر النهائي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3228f065a92c",
+      "type": "paragraph",
+      "sourceHash": "3228f065a92c659719b951c1b9bc338178b3f62827c41e8ae1745d98738fa297",
+      "sourceText": "لا تنجح كل شركة في ذلك بالقدر نفسه؛ المنافسة والعقود وهوامش الربح وقدرة المستهلك على الاستغناء كلها تحدد من يتحمل العبء.",
+      "spokenText": "لا تنجح كل شركة في ذلك بالقدر نفسه؛ المنافسة والعقود وهوامش الربح وقدرة المستهلك على الاستغناء كلها تحدد من يتحمل العبء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-dbfb8171f2c2",
+      "type": "h3",
+      "sourceHash": "dbfb8171f2c23311d921f9ccdde7376d44ece9f1ffc16ad52d7b55ec01ec7307",
+      "sourceText": "3. النقود والائتمان والسياسة الاقتصادية توسّع الإنفاق",
+      "spokenText": "3. النقود والائتمان والسياسة الاقتصادية توسّع الإنفاق",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-04e8c750aeda",
+      "type": "paragraph",
+      "sourceHash": "04e8c750aedadd5790bce56a0e14907d9c614a543ac5d8cd53ae0ea0035594e3",
+      "sourceText": "تتكرر عبارة «طباعة النقود تسبب التضخم»، وفيها جزء من الحقيقة لكنها تصبح مضللة عندما تُعامل كزر آلي. إذا توسعت كمية النقود والائتمان والإنفاق الاسمي مدة طويلة أسرع بكثير من قدرة الاقتصاد على إنتاج السلع والخدمات، فقد ترتفع الأسعار وتنخفض القوة الشرائية للوحدة النقدية.",
+      "spokenText": "تتكرر عبارة «طباعة النقود تسبب التضخم»، وفيها جزء من الحقيقة لكنها تصبح مضللة عندما تُعامل كزر آلي. إذا توسعت كمية النقود والائتمان والإنفاق الاسمي مدة طويلة أسرع بكثير من قدرة الاقتصاد على إنتاج السلع والخدمات، فقد ترتفع الأسعار وتنخفض القوة الشرائية للوحدة النقدية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-abb47dd4576d",
+      "type": "paragraph",
+      "sourceHash": "abb47dd4576d80d70f800a5c3ce5081de1449a067d48a90aa7169f21d4d82b29",
+      "sourceText": "لكن النتيجة لا تعتمد على كمية النقود وحدها؛ بل على سرعة تداولها، والطلب، والطاقة الإنتاجية، والثقة، وسياسة الفائدة، وقدرة النظام المالي على تحويل السيولة إلى إنفاق فعلي. لذلك لا تعني كل زيادة في المعروض النقدي تضخمًا مرتفعًا فورًا، ولا تفسر كل موجة تضخم بسبب واحد.",
+      "spokenText": "لكن النتيجة لا تعتمد على كمية النقود وحدها؛ بل على سرعة تداولها، والطلب، والطاقة الإنتاجية، والثقة، وسياسة الفائدة، وقدرة النظام المالي على تحويل السيولة إلى إنفاق فعلي. لذلك لا تعني كل زيادة في المعروض النقدي تضخمًا مرتفعًا فورًا، ولا تفسر كل موجة تضخم بسبب واحد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-d22f48a239df",
+      "type": "h3",
+      "sourceHash": "d22f48a239df2c417a1e423eb8230eafcbf56d204875ca14cc513f37fd11bcfb",
+      "sourceText": "4. التوقعات قد تغذي نفسها",
+      "spokenText": "4. التوقعات قد تغذي نفسها",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-35acf8f6def8",
+      "type": "paragraph",
+      "sourceHash": "35acf8f6def88ea1e2da1796ed654cdd5795782ded3d0ad0e2b94c5e894b9a93",
+      "sourceText": "إذا توقعت الأسر والشركات استمرار التضخم، فقد يطلب العاملون أجورًا أعلى، وترفع الشركات الأسعار تحسبًا لتكاليف لاحقة، وتُبنى الزيادات داخل العقود. لا تخلق التوقعات كل تضخم من الصفر، لكنها قد تساعد على استمراره بعد بدء الصدمة الأولى.",
+      "spokenText": "إذا توقعت الأسر والشركات استمرار التضخم، فقد يطلب العاملون أجورًا أعلى، وترفع الشركات الأسعار تحسبًا لتكاليف لاحقة، وتُبنى الزيادات داخل العقود. لا تخلق التوقعات كل تضخم من الصفر، لكنها قد تساعد على استمراره بعد بدء الصدمة الأولى.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-3cf8d379fd0e",
+      "type": "h2",
+      "sourceHash": "3cf8d379fd0ed66aefb0e0743d6966d5d1297f4fa8c6b6c69f9a72d6f1200042",
+      "sourceText": "أين يدخل البنك المركزي؟",
+      "spokenText": "أين يدخل البنك المركزي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-43d799840a3c",
+      "type": "paragraph",
+      "sourceHash": "43d799840a3c41dd75f3b59cfe7f340476a51d945e358ba408de8be3c2932ee7",
+      "sourceText": "تسعى البنوك المركزية عادة إلى استقرار الأسعار. وعندما ترى أن الطلب والائتمان يضغطان على الاقتصاد، قد ترفع أسعار الفائدة. الاقتراض الأعلى تكلفة يميل إلى تهدئة بعض الاستهلاك والاستثمار، فتخف ضغوط الطلب مع الوقت.",
+      "spokenText": "تسعى البنوك المركزية عادة إلى استقرار الأسعار. وعندما ترى أن الطلب والائتمان يضغطان على الاقتصاد، قد ترفع أسعار الفائدة. الاقتراض الأعلى تكلفة يميل إلى تهدئة بعض الاستهلاك والاستثمار، فتخف ضغوط الطلب مع الوقت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-17e5bd2749bd",
+      "type": "paragraph",
+      "sourceHash": "17e5bd2749bd469dfe271f5886de9c323e352363f0f41ab4af099ac4fb52166b",
+      "sourceText": "لكن الفائدة ليست ممحاة فورية:",
+      "spokenText": "لكن الفائدة ليست ممحاة فورية:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-177275c6a66c",
+      "type": "list-item",
+      "sourceHash": "177275c6a66c4a8f82ed5ce38a723f0db909e407425b0072f06fe95f150fab2d",
+      "sourceText": "أثرها ينتقل إلى القروض والإنفاق والاستثمار بتأخر.",
+      "spokenText": "أثرها ينتقل إلى القروض والإنفاق والاستثمار بتأخر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-bf618ccbe9dd",
+      "type": "list-item",
+      "sourceHash": "bf618ccbe9dd02b242eb8e095b81db5050c323bacec32e42c398d47058c3bb9b",
+      "sourceText": "لا تنتج نفطًا أو قمحًا ولا تصلح ميناءً متعطلًا؛ لذلك تكون أقل مباشرة أمام صدمة عرض.",
+      "spokenText": "لا تنتج نفطًا أو قمحًا ولا تصلح ميناءً متعطلًا؛ لذلك تكون أقل مباشرة أمام صدمة عرض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-731ed05aa968",
+      "type": "list-item",
+      "sourceHash": "731ed05aa96833af097b3cbd4c92d8bdc09cd85bc1ddec67238e27796cd06700",
+      "sourceText": "التشديد القوي قد يبطئ النشاط والتوظيف، ولهذا يوازن صانعو السياسة بين مخاطر متعددة.",
+      "spokenText": "التشديد القوي قد يبطئ النشاط والتوظيف، ولهذا يوازن صانعو السياسة بين مخاطر متعددة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ce62bc9446cb",
+      "type": "paragraph",
+      "sourceHash": "ce62bc9446cb9677eb760bfc0e771f20a82b88c0c30e22cff1bb5a5b31618805",
+      "sourceText": "وليس رقم 2% قانونًا اقتصاديًا عالميًا. هو هدف متوسط الأجل تعتمده بنوك مركزية معينة، مثل البنك المركزي الأوروبي، بينما تختلف الأطر والأهداف بين البلدان. الفكرة المشتركة هي أن التضخم المنخفض والمستقر والقابل للتوقع أقل إرباكًا من تقلبات حادة لا يستطيع الناس التخطيط حولها.",
+      "spokenText": "وليس رقم 2% قانونًا اقتصاديًا عالميًا. هو هدف متوسط الأجل تعتمده بنوك مركزية معينة، مثل البنك المركزي الأوروبي، بينما تختلف الأطر والأهداف بين البلدان. الفكرة المشتركة هي أن التضخم المنخفض والمستقر والقابل للتوقع أقل إرباكًا من تقلبات حادة لا يستطيع الناس التخطيط حولها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-1d18b4cda431",
+      "type": "h2",
+      "sourceHash": "1d18b4cda43173f952a8f1516dcd81b3043a4ca3f5f5ad7583d1e1346971ed52",
+      "sourceText": "من يتأثر بالتضخم؟",
+      "spokenText": "من يتأثر بالتضخم؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9f1d1f6f1acc",
+      "type": "paragraph",
+      "sourceHash": "9f1d1f6f1acce94b8afddea13b795bf936828fb12359e6a510515b1de7bdb8fe",
+      "sourceText": "لا يوزّع التضخم أثره بالتساوي.",
+      "spokenText": "لا يوزّع التضخم أثره بالتساوي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-2208e8fedc1c",
+      "type": "list-item",
+      "sourceHash": "2208e8fedc1c7190f5641560714fbf340a93f18d7839d2c6243f5a2d94c19057",
+      "sourceText": "أصحاب الدخل الثابت: إذا لم تلحق الرواتب أو المعاشات بالأسعار، ينخفض الدخل الحقيقي.",
+      "spokenText": "أصحاب الدخل الثابت: إذا لم تلحق الرواتب أو المعاشات بالأسعار، ينخفض الدخل الحقيقي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-93d763f38c59",
+      "type": "list-item",
+      "sourceHash": "93d763f38c599702eb1653301c28cc5943b29881bd610375229a9afd0ee88b16",
+      "sourceText": "المدخرون نقدًا: يبقى الرصيد الاسمي كما هو، لكن قدرته الشرائية قد تتراجع.",
+      "spokenText": "المدخرون نقدًا: يبقى الرصيد الاسمي كما هو، لكن قدرته الشرائية قد تتراجع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-51e9eaa18cdf",
+      "type": "list-item",
+      "sourceHash": "51e9eaa18cdf5df06c678a9ada21c6ab73641687bc9e794050f1c4787b374097",
+      "sourceText": "المقترضون والمقرضون: تتغير النتيجة بحسب نوع الفائدة، ومدى توقع التضخم، ونمو دخل المقترض.",
+      "spokenText": "المقترضون والمقرضون: تتغير النتيجة بحسب نوع الفائدة، ومدى توقع التضخم، ونمو دخل المقترض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-f9da976a3060",
+      "type": "list-item",
+      "sourceHash": "f9da976a3060970428b2c063174a1990e06324f3d7050fa5eb642fbbae59e927",
+      "sourceText": "الشركات: قد تواجه تكلفة أعلى وصعوبة في التسعير والتخطيط، بينما تستطيع بعض الشركات تمرير التكلفة أكثر من غيرها.",
+      "spokenText": "الشركات: قد تواجه تكلفة أعلى وصعوبة في التسعير والتخطيط، بينما تستطيع بعض الشركات تمرير التكلفة أكثر من غيرها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-aa273354a1a6",
+      "type": "list-item",
+      "sourceHash": "aa273354a1a6776b31fd44390c43e5e227a4ba442287e92231846b243d39cfad",
+      "sourceText": "الأسر الأقل دخلًا: تتضرر غالبًا عندما تتركز الزيادات في الضروريات التي يصعب تأجيلها.",
+      "spokenText": "الأسر الأقل دخلًا: تتضرر غالبًا عندما تتركز الزيادات في الضروريات التي يصعب تأجيلها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e204dafef2fe",
+      "type": "paragraph",
+      "sourceHash": "e204dafef2fe7dc6be0f7b6a7461dd66210e03eddf07ea1037954035125db3d0",
+      "sourceText": "لذلك لا يكفي أن نسأل: «كم بلغ التضخم؟» بل نسأل أيضًا: أي الأسعار تحركت؟ ومن ينفق عليها؟ وهل زادت الدخول بالوتيرة نفسها؟",
+      "spokenText": "لذلك لا يكفي أن نسأل: «كم بلغ التضخم؟» بل نسأل أيضًا: أي الأسعار تحركت؟ ومن ينفق عليها؟ وهل زادت الدخول بالوتيرة نفسها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-b1deba069863",
+      "type": "h2",
+      "sourceHash": "b1deba0698636de0687ad85466b6fd71cdf07a52f845059c8bbe0d49f9811032",
+      "sourceText": "مثال عملي: ماذا يحدث لألف ريال؟",
+      "spokenText": "مثال عملي: ماذا يحدث لألف ريال؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0639e30ede43",
+      "type": "paragraph",
+      "sourceHash": "0639e30ede43bbe6503a1152b03a6263c34790f715b4e3e642816501daa2f61a",
+      "sourceText": "افترض أن سلة احتياجات تكلف 1000 ريال اليوم، وأن أسعار مكوناتها ارتفعت في المتوسط 10% خلال عام. ستصبح تكلفة السلة قرابة 1100 ريال، إذا بقيت الكميات والجودة نفسها.",
+      "spokenText": "افترض أن سلة احتياجات تكلف 1000 ريال اليوم، وأن أسعار مكوناتها ارتفعت في المتوسط 10% خلال عام. ستصبح تكلفة السلة قرابة 1100 ريال، إذا بقيت الكميات والجودة نفسها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c97cdb5fd700",
+      "type": "paragraph",
+      "sourceHash": "c97cdb5fd700503a286fff1114253858c5c51895a19e504803ea906934ec25e5",
+      "sourceText": "ولو ارتفع دخلك 5% فقط، فلن تعوض الزيادة كامل ارتفاع السلة. دخلُك الاسمي أصبح أكبر، لكن دخلك الحقيقي — أي ما يشتريه بعد احتساب الأسعار — تراجع تقريبًا.",
+      "spokenText": "ولو ارتفع دخلك 5% فقط، فلن تعوض الزيادة كامل ارتفاع السلة. دخلُك الاسمي أصبح أكبر، لكن دخلك الحقيقي — أي ما يشتريه بعد احتساب الأسعار — تراجع تقريبًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-40b7e2093041",
+      "type": "paragraph",
+      "sourceHash": "40b7e20930410942df70b537c1c90c3e58ad04ff24c6e321ebf4b97faf898b97",
+      "sourceText": "هذا المثال للتوضيح لا للتنبؤ؛ فكل بند يتحرك بمعدل مختلف، وقد تغيّر الأسرة مشترياتها، وقد تتبدل الأوزان والجودة والعروض.",
+      "spokenText": "هذا المثال للتوضيح لا للتنبؤ؛ فكل بند يتحرك بمعدل مختلف، وقد تغيّر الأسرة مشترياتها، وقد تتبدل الأوزان والجودة والعروض.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-4403f26db707",
+      "type": "h2",
+      "sourceHash": "4403f26db7076f8d1fe2480499144b3d58c0a4fa0e9bb4646e14381e79d0ca98",
+      "sourceText": "أربع أفكار شائعة تحتاج إلى تصحيح",
+      "spokenText": "أربع أفكار شائعة تحتاج إلى تصحيح",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-c5b591c2faeb",
+      "type": "h3",
+      "sourceHash": "c5b591c2faebefbd481bdb200102e7641d631cdce3c35a72208118aef60182e5",
+      "sourceText": "«كل غلاء سببه جشع التجار»",
+      "spokenText": "«كل غلاء سببه جشع التجار»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f802abe10517",
+      "type": "paragraph",
+      "sourceHash": "f802abe10517be3115f8882a2cb9ef4c2f063e2c7bb5563ef1acdc3c12113314",
+      "sourceText": "قد تحدث ممارسات احتكارية أو استغلال في سوق معين، لكن تفسير تضخم اقتصاد كامل يتطلب النظر إلى التكاليف والمنافسة والعرض والطلب والسياسات والتوقعات. الاتهام السريع لا يغني عن الدليل.",
+      "spokenText": "قد تحدث ممارسات احتكارية أو استغلال في سوق معين، لكن تفسير تضخم اقتصاد كامل يتطلب النظر إلى التكاليف والمنافسة والعرض والطلب والسياسات والتوقعات. الاتهام السريع لا يغني عن الدليل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-59b45ca1c2c6",
+      "type": "h3",
+      "sourceHash": "59b45ca1c2c6e87d5590d42bbc8254dc180683e6e01e9013837531af1be4c717",
+      "sourceText": "«إذا انخفض التضخم ستعود الأسعار القديمة»",
+      "spokenText": "«إذا انخفض التضخم ستعود الأسعار القديمة»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a43753c4ce2c",
+      "type": "paragraph",
+      "sourceHash": "a43753c4ce2cad0dd3a8ef121bbbbf120f184b00b87adcf84c48847ba89b86fc",
+      "sourceText": "ليس بالضرورة. انخفاض التضخم يعني عادة أن الزيادة أصبحت أبطأ. عودة مستوى الأسعار تحتاج إلى انخفاض فعلي واسع، وهو أمر مختلف.",
+      "spokenText": "ليس بالضرورة. انخفاض التضخم يعني عادة أن الزيادة أصبحت أبطأ. عودة مستوى الأسعار تحتاج إلى انخفاض فعلي واسع، وهو أمر مختلف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-71c23eccc8d4",
+      "type": "h3",
+      "sourceHash": "71c23eccc8d445b476148c17e6bde671e7626522342f2517ffa5a48795a9b7ff",
+      "sourceText": "«الحكومة أو البنك المركزي يستطيعان إيقافه فورًا»",
+      "spokenText": "«الحكومة أو البنك المركزي يستطيعان إيقافه فورًا»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e95f1c5c121d",
+      "type": "paragraph",
+      "sourceHash": "e95f1c5c121d386359855460221517dd5e11f302a53ba9ace97d29bd9f6ce5b2",
+      "sourceText": "الأدوات تحتاج وقتًا، وقد تعالج سببًا ولا تعالج آخر. رفع الفائدة قد يهدئ الطلب، لكنه لا ينهي فورًا نقصًا عالميًا في الغذاء أو الطاقة.",
+      "spokenText": "الأدوات تحتاج وقتًا، وقد تعالج سببًا ولا تعالج آخر. رفع الفائدة قد يهدئ الطلب، لكنه لا ينهي فورًا نقصًا عالميًا في الغذاء أو الطاقة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-9c57c861343c",
+      "type": "h3",
+      "sourceHash": "9c57c861343cf65f25726995455a4be1f71dd3da50165c0baca255309c82c112",
+      "sourceText": "«معدل التضخم يصف تجربة الجميع بدقة»",
+      "spokenText": "«معدل التضخم يصف تجربة الجميع بدقة»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4c33683964c2",
+      "type": "paragraph",
+      "sourceHash": "4c33683964c2b34383cc814c1267b1c5a47ea599c804272c968b7dbc98a39380",
+      "sourceText": "المؤشر مصمم لقياس المتوسط وفق سلة وأوزان محددة. ميزانية أسرتك قد تختلف، ولذلك تختلف تجربتك.",
+      "spokenText": "المؤشر مصمم لقياس المتوسط وفق سلة وأوزان محددة. ميزانية أسرتك قد تختلف، ولذلك تختلف تجربتك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-629acf524947",
+      "type": "h2",
+      "sourceHash": "629acf52494708054c09c1c8b898898fc0babe65dc8aefb4062aa96eae5b9bff",
+      "sourceText": "كيف تقرأ خبرًا عن التضخم بوعي؟",
+      "spokenText": "كيف تقرأ خبرًا عن التضخم بوعي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-77eab4393d00",
+      "type": "paragraph",
+      "sourceHash": "77eab4393d0016821feaf28ba2227eae53aff0aac981a4d4b71789d8360002cc",
+      "sourceText": "قبل الحكم على عنوان اقتصادي، ابحث عن الإجابات التالية:",
+      "spokenText": "قبل الحكم على عنوان اقتصادي، ابحث عن الإجابات التالية:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-3fa160f013f9",
+      "type": "list-item",
+      "sourceHash": "3fa160f013f914d50144abdc7e11c9dbd85453db10abdc9d320e9853eb3b261b",
+      "sourceText": "هل الرقم شهري أم سنوي؟",
+      "spokenText": "هل الرقم شهري أم سنوي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-d129a0d9480f",
+      "type": "list-item",
+      "sourceHash": "d129a0d9480fb312037b792a36c3c345bf748412735eb19a017bcf9027ff5013",
+      "sourceText": "هل الحديث عن المؤشر العام أم مقياس يستبعد بنودًا شديدة التقلب؟",
+      "spokenText": "هل الحديث عن المؤشر العام أم مقياس يستبعد بنودًا شديدة التقلب؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-a0291aa1ae61",
+      "type": "list-item",
+      "sourceHash": "a0291aa1ae616625d83adb0ec0b4f73a047db9ddf730132235caabeb74573114",
+      "sourceText": "ما المجموعات التي قادت الارتفاع: السكن، الغذاء، النقل أم غيرها؟",
+      "spokenText": "ما المجموعات التي قادت الارتفاع: السكن، الغذاء، النقل أم غيرها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-5d02d2f9be91",
+      "type": "list-item",
+      "sourceHash": "5d02d2f9be9173d4e461cf8bf4d9806911e7b97134276f67e265f351f9d19696",
+      "sourceText": "هل تباطأ معدل الزيادة، أم انخفضت الأسعار فعلًا؟",
+      "spokenText": "هل تباطأ معدل الزيادة، أم انخفضت الأسعار فعلًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-600c871267da",
+      "type": "list-item",
+      "sourceHash": "600c871267da304d7866bd8f0ef24c4187765128d9ffffb624d397a65e4dc749",
+      "sourceText": "ما الجهة التي أصدرت الرقم وما منهجية السلة والأوزان؟",
+      "spokenText": "ما الجهة التي أصدرت الرقم وما منهجية السلة والأوزان؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e1cc236d5c97",
+      "type": "paragraph",
+      "sourceHash": "e1cc236d5c97c9d64c083b5b445b9a8c531dfa74fbfcccb14f712a38539b3dc1",
+      "sourceText": "بهذه الأسئلة يتحول التضخم من كلمة مخيفة إلى معلومة يمكن قراءتها في سياقها.",
+      "spokenText": "بهذه الأسئلة يتحول التضخم من كلمة مخيفة إلى معلومة يمكن قراءتها في سياقها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-d9e8c46b090c",
+      "type": "h2",
+      "sourceHash": "d9e8c46b090c42dd663a8dcd5560f5cda5924a3747a85b196a2e3c8edc6b5a28",
+      "sourceText": "الخلاصة ببساطة",
+      "spokenText": "الخلاصة ببساطة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-254331acd0f3",
+      "type": "paragraph",
+      "sourceHash": "254331acd0f33616610614cd45a15d2648875c7fe9caa79dfa6553bffbc08f1b",
+      "sourceText": "التضخم ليس مجرد غلاء سلعة، بل ارتفاع واسع في المستوى العام للأسعار خلال مدة. وهو يضعف القوة الشرائية عندما لا تلحق الدخول بالأسعار. قد ينشأ من طلب يفوق القدرة الإنتاجية، أو صدمات في العرض والتكاليف، أو توسع نقدي وائتماني، أو توقعات تساعد على استمرار الارتفاع — وغالبًا من مزيج بينها.",
+      "spokenText": "التضخم ليس مجرد غلاء سلعة، بل ارتفاع واسع في المستوى العام للأسعار خلال مدة. وهو يضعف القوة الشرائية عندما لا تلحق الدخول بالأسعار. قد ينشأ من طلب يفوق القدرة الإنتاجية، أو صدمات في العرض والتكاليف، أو توسع نقدي وائتماني، أو توقعات تساعد على استمرار الارتفاع — وغالبًا من مزيج بينها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dd752d8fb9ed",
+      "type": "paragraph",
+      "sourceHash": "dd752d8fb9edf112840431a51fd35660f0945bb61fb8bf553c5b075e09140ba8",
+      "sourceText": "أما الرقم المنشور فهو متوسط محسوب وفق سلة، لا فاتورة شخصية لكل فرد. وفهم الفرق بين ارتفاع الأسعار وارتفاع معدل التضخم وتباطؤه هو المفتاح لقراءة الخبر الاقتصادي بلا تهويل.",
+      "spokenText": "أما الرقم المنشور فهو متوسط محسوب وفق سلة، لا فاتورة شخصية لكل فرد. وفهم الفرق بين ارتفاع الأسعار وارتفاع معدل التضخم وتباطؤه هو المفتاح لقراءة الخبر الاقتصادي بلا تهويل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a598b7c1e732",
+      "type": "paragraph",
+      "sourceHash": "a598b7c1e7328cf780bfb5a1638739f0b2fd0f0e5d398f2605a2329e5e7c614a",
+      "sourceText": "إذا كانت هذه أول زيارة لك، فابدأ من خريطة بريق المختصرة لاختيار القسم الأقرب إلى فضولك.",
+      "spokenText": "إذا كانت هذه أول زيارة لك، فابدأ من خريطة بريق المختصرة لاختيار القسم الأقرب إلى فضولك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-10cfb406c4aa",
+      "type": "h2",
+      "sourceHash": "10cfb406c4aaf0e6fcf803455a44a5502931da9d6db39622501407b8bca3fc89",
+      "sourceText": "أسئلة شائعة",
+      "spokenText": "أسئلة شائعة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-1b9f7d3f9a7e",
+      "type": "h3",
+      "sourceHash": "1b9f7d3f9a7e3b3720395407cbddc17b73f36e9ffecd84264aff0346769442dd",
+      "sourceText": "هل التضخم دائمًا سلبي؟",
+      "spokenText": "هل التضخم دائمًا سلبي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-16f699001475",
+      "type": "paragraph",
+      "sourceHash": "16f699001475a5c16f7f26d3ff59ccfa8d86ae835105e540ece298208da14f9b",
+      "sourceText": "التضخم المرتفع أو المتقلب يربك التخطيط ويضعف القوة الشرائية، لكن كثيرًا من البنوك المركزية تستهدف معدلًا منخفضًا ومستقرًا بدل صفر دائم؛ لأن الانكماش السعري المستمر يحمل مخاطر أيضًا. الهدف والسياسة يختلفان باختلاف البلد.",
+      "spokenText": "التضخم المرتفع أو المتقلب يربك التخطيط ويضعف القوة الشرائية، لكن كثيرًا من البنوك المركزية تستهدف معدلًا منخفضًا ومستقرًا بدل صفر دائم؛ لأن الانكماش السعري المستمر يحمل مخاطر أيضًا. الهدف والسياسة يختلفان باختلاف البلد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-5bafadcffe53",
+      "type": "h3",
+      "sourceHash": "5bafadcffe53e04f2b8656b4f9b85f7df61f902d143d05a1c26bd3692d9ec67c",
+      "sourceText": "ما الفرق بين التضخم وارتفاع سعر منتج واحد؟",
+      "spokenText": "ما الفرق بين التضخم وارتفاع سعر منتج واحد؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5fe7afc02d39",
+      "type": "paragraph",
+      "sourceHash": "5fe7afc02d3976a59abafcfad7679bf8ccdf51b2ae237b063efde75848fc08fb",
+      "sourceText": "ارتفاع منتج واحد تغير نسبي في ذلك السوق. التضخم يصف تغيرًا أوسع في متوسط أسعار سلة من السلع والخدمات.",
+      "spokenText": "ارتفاع منتج واحد تغير نسبي في ذلك السوق. التضخم يصف تغيرًا أوسع في متوسط أسعار سلة من السلع والخدمات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-32e368e1a244",
+      "type": "h3",
+      "sourceHash": "32e368e1a24477139ed726b2c683536d08a305fd1c0ace20cd86bc635d53c6da",
+      "sourceText": "كيف يُقاس التضخم في السعودية؟",
+      "spokenText": "كيف يُقاس التضخم في السعودية؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-af0c533e72a9",
+      "type": "paragraph",
+      "sourceHash": "af0c533e72a9ee1ae4b37f826326f254124d24ccd58cc2032c319ab6d54d7689",
+      "sourceText": "تنشر الهيئة العامة للإحصاء الرقم القياسي لأسعار المستهلك اعتمادًا على سلة وأوزان تمثل إنفاق الأسر، مع بيانات أسعار من مصادر ميدانية وسجلية ومنهجية معلنة.",
+      "spokenText": "تنشر الهيئة العامة للإحصاء الرقم القياسي لأسعار المستهلك اعتمادًا على سلة وأوزان تمثل إنفاق الأسر، مع بيانات أسعار من مصادر ميدانية وسجلية ومنهجية معلنة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-521db7307373",
+      "type": "h3",
+      "sourceHash": "521db7307373bcedde071164cc1afb99be627389b2d826278afe8d94dab527ca",
+      "sourceText": "لماذا لا تنخفض الأسعار عندما يتراجع التضخم؟",
+      "spokenText": "لماذا لا تنخفض الأسعار عندما يتراجع التضخم؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1ef41928b7f8",
+      "type": "paragraph",
+      "sourceHash": "1ef41928b7f87c5a0df0176e057340854487e496354e4e37723f996e1e0a13a1",
+      "sourceText": "لأن تراجع التضخم يعني غالبًا أن الأسعار ترتفع بسرعة أقل. لا تنخفض الأسعار إلا إذا أصبح معدل التغير سالبًا في نطاق واسع.",
+      "spokenText": "لأن تراجع التضخم يعني غالبًا أن الأسعار ترتفع بسرعة أقل. لا تنخفض الأسعار إلا إذا أصبح معدل التغير سالبًا في نطاق واسع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-f60fec5629c1",
+      "type": "h3",
+      "sourceHash": "f60fec5629c11809b0823fe224d2d5d5b01ad3b48b8bb7205e18b6d39c5c6b65",
+      "sourceText": "هل رفع الفائدة يخفض التضخم فورًا؟",
+      "spokenText": "هل رفع الفائدة يخفض التضخم فورًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-462a124e6d8f",
+      "type": "paragraph",
+      "sourceHash": "462a124e6d8f0d984485a7bf61ba05104bf3be8b4772cc08a1bdc74630d22587",
+      "sourceText": "لا. يعمل أساسًا عبر تهدئة الائتمان والطلب، وينتقل أثره بتأخر، وقد يكون أقل مباشرة عندما يأتي التضخم من نقص الإمدادات.",
+      "spokenText": "لا. يعمل أساسًا عبر تهدئة الائتمان والطلب، وينتقل أثره بتأخر، وقد يكون أقل مباشرة عندما يأتي التضخم من نقص الإمدادات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "13fc68564d321c34f325988016d7ca8026420005461cbf7f887f69d2d14e94db",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

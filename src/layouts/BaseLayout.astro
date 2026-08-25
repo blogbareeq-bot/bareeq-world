@@ -156,21 +156,21 @@ const baseSchema = [
         updateStickyHeader();
 
         const categoryRoots = [...document.querySelectorAll('[data-category-menu-root]')];
-        const setCategoryMenu = (root, open) => {
+        const setCategoryMenu = (root: Element, open: boolean) => {
           const trigger = root.querySelector('[data-category-menu-trigger]');
           const menu = root.querySelector('[data-category-menu]');
           root.classList.toggle('is-open', open);
           trigger?.setAttribute('aria-expanded', String(open));
           menu?.setAttribute('aria-hidden', String(!open));
           if (open) {
-            menu?.querySelectorAll('img[data-src]').forEach((image) => {
+            menu?.querySelectorAll('img[data-src]').forEach((image: Element) => {
               if (!(image instanceof HTMLImageElement)) return;
               image.src = image.dataset.src ?? '';
               image.removeAttribute('data-src');
             });
           }
         };
-        const closeCategoryMenus = (except = null) => {
+        const closeCategoryMenus = (except: Element | null = null) => {
           categoryRoots.forEach((root) => {
             if (root !== except) setCategoryMenu(root, false);
           });
@@ -185,8 +185,9 @@ const baseSchema = [
             setCategoryMenu(root, willOpen);
           });
           trigger?.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowDown') {
-              event.preventDefault();
+            const keyboardEvent = event as KeyboardEvent;
+            if (keyboardEvent.key === 'ArrowDown') {
+              keyboardEvent.preventDefault();
               closeCategoryMenus(root);
               setCategoryMenu(root, true);
               const focusFirstLink = () => {
@@ -199,7 +200,8 @@ const baseSchema = [
             }
           });
           root.addEventListener('focusout', (event) => {
-            if (!root.contains(event.relatedTarget)) setCategoryMenu(root, false);
+            const relatedTarget = (event as FocusEvent).relatedTarget;
+            if (!(relatedTarget instanceof Node) || !root.contains(relatedTarget)) setCategoryMenu(root, false);
           });
           root.addEventListener('pointerenter', () => {
             if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
@@ -211,20 +213,22 @@ const baseSchema = [
             if (matchMedia('(hover:hover) and (pointer:fine)').matches) setCategoryMenu(root, false);
           });
           root.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && root.classList.contains('is-open')) {
-              event.preventDefault();
+            const keyboardEvent = event as KeyboardEvent;
+            if (keyboardEvent.key === 'Escape' && root.classList.contains('is-open')) {
+              keyboardEvent.preventDefault();
               setCategoryMenu(root, false);
               if (trigger instanceof HTMLElement) trigger.focus();
             }
           });
         });
         document.addEventListener('click', (event) => {
-          if (!categoryRoots.some((root) => root.contains(event.target))) closeCategoryMenus();
+          const target = event.target;
+          if (!(target instanceof Node) || !categoryRoots.some((root) => root.contains(target))) closeCategoryMenus();
         });
 
         const ticker = document.querySelector('[data-ticker]');
         const tickerToggle = document.querySelector('[data-ticker-toggle]');
-        const setTickerPaused = (paused) => {
+        const setTickerPaused = (paused: boolean) => {
           ticker?.classList.toggle('is-paused', paused);
           tickerToggle?.setAttribute('aria-pressed', String(paused));
           tickerToggle?.setAttribute('aria-label', paused ? 'تشغيل حركة أحدث المقالات' : 'إيقاف حركة أحدث المقالات');
@@ -249,7 +253,7 @@ const baseSchema = [
           const tickerSpeed = 42;
           let tickerOffset = 0;
           let tickerLoopWidth = 0;
-          let tickerLastStamp = null;
+          let tickerLastStamp: number | null = null;
           let tickerFrame = 0;
 
           const measureTicker = () => {
@@ -270,7 +274,7 @@ const baseSchema = [
             tickerTrack.style.transform = '';
             tickerTrack.dataset.tickerOffset = '0';
           };
-          const stepMobileTicker = (now) => {
+          const stepMobileTicker = (now: number) => {
             const stamp = Number(now) || 0;
             if (tickerLastStamp == null) tickerLastStamp = stamp;
             const delta = Math.min(48, Math.max(0, stamp - tickerLastStamp));
@@ -318,7 +322,7 @@ const baseSchema = [
         const panel = drawer?.querySelector('.drawer-panel');
         const openButton = document.querySelector('[data-menu-open]');
         const closeButton = document.querySelector('[data-menu-close]');
-        let previousFocus = null;
+        let previousFocus: HTMLElement | null = null;
         const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
         const closeDrawer = () => {
           drawer?.classList.remove('is-open');
@@ -329,7 +333,7 @@ const baseSchema = [
           if (previousFocus instanceof HTMLElement) previousFocus.focus();
         };
         const openDrawer = () => {
-          previousFocus = document.activeElement;
+          previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
           drawer?.classList.add('is-open');
           drawer?.setAttribute('aria-hidden', 'false');
           if (drawer instanceof HTMLElement) drawer.inert = false;
@@ -345,7 +349,7 @@ const baseSchema = [
         document.addEventListener('keydown', (event) => {
           if (event.key === 'Escape' && drawer?.classList.contains('is-open')) closeDrawer();
           if (event.key === 'Tab' && drawer?.classList.contains('is-open') && panel) {
-            const focusable = [...panel.querySelectorAll(focusableSelector)].filter((el) => el instanceof HTMLElement && !el.hasAttribute('hidden'));
+            const focusable = [...panel.querySelectorAll<HTMLElement>(focusableSelector)].filter((el) => !el.hasAttribute('hidden'));
             if (!focusable.length) return;
             const first = focusable[0];
             const last = focusable[focusable.length - 1];

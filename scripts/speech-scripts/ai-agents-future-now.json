@@ -1,0 +1,2394 @@
+{
+  "version": 1,
+  "articleId": "ai-agents-future-now",
+  "sourceSnapshotHash": "722b0759581c63e0fe00fdf100ac9f4a28682e2c7a90a90121217b9caba72dc5",
+  "sourceStructureHash": "1fd6d6a1258f01a8cbf890e04a7ed1115069701cf6ba0ea90729cb4f740ebe0b",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر",
+    "segmentCount": 6,
+    "sourceHash": "a2ab05d373e3a3163c37aea15e6457d8905df12c11dde097a7fe123d6048a200"
+  },
+  "segments": [
+    {
+      "segmentId": "title-62368e33cd39",
+      "type": "title",
+      "sourceHash": "62368e33cd396951377809a596af8ceaa1c57226585fb2644b9eac5200e74e85",
+      "sourceText": "الوكلاء الأذكياء: من الإجابة إلى التنفيذ",
+      "spokenText": "الوكلاء الأذكياء: من الإجابة إلى التنفيذ",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7fecaaa5210b",
+      "type": "paragraph",
+      "sourceHash": "7fecaaa5210b8ee5484da81a61207ccbde979fa59558f91b676826a887d89f5d",
+      "sourceText": "اعتدنا أن نسأل الذكاء الاصطناعي فيجيب: يشرح فكرة، يصوغ رسالة، أو يلخص ملفًا. لكن ماذا لو لم تنته المهمة عند الإجابة؟ ماذا لو استطاع النظام — ضمن صلاحيات محددة — أن يبحث في عدة مصادر، ويستخدم التقويم، ويجهز التقرير، ثم يتوقف قبل الإرسال طالبًا موافقتك؟",
+      "spokenText": "اعتدنا أن نسأل الذكاء الاصطناعي فيجيب: يشرح فكرة، يصوغ رسالة، أو يلخص ملفًا. لكن ماذا لو لم تنته المهمة عند الإجابة؟ ماذا لو استطاع النظام — ضمن صلاحيات محددة — أن يبحث في عدة مصادر، ويستخدم التقويم، ويجهز التقرير، ثم يتوقف قبل الإرسال طالبًا موافقتك؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fc36daa7d9dd",
+      "type": "paragraph",
+      "sourceHash": "fc36daa7d9dd1c7703aab7831dce82efdd807133761ff04267538c3cae16ead4",
+      "sourceText": "هنا يظهر مصطلح الوكلاء الأذكياء (AI Agents). وهو من أكثر مصطلحات التقنية تداولًا، ومن أكثرها تعرضًا للمبالغة أيضًا. فالمنتج قد يسمى «وكيلًا» وهو في الحقيقة سلسلة أتمتة مع خطوة ذكاء اصطناعي، وقد يبدو النظام مستقلًا بينما تحيط به قواعد وبرامج كتبها البشر.",
+      "spokenText": "هنا يظهر مصطلح الوكلاء الأذكياء (AI Agents). وهو من أكثر مصطلحات التقنية تداولًا، ومن أكثرها تعرضًا للمبالغة أيضًا. فالمنتج قد يسمى «وكيلًا» وهو في الحقيقة سلسلة أتمتة مع خطوة ذكاء اصطناعي، وقد يبدو النظام مستقلًا بينما تحيط به قواعد وبرامج كتبها البشر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "quote-aa6363854207",
+      "type": "quote",
+      "sourceHash": "aa6363854207ddab8fb5bd8c76e5b8a59dd5a76158d714a769364f572f4730f6",
+      "sourceText": "ببساطة: الوكيل الذكي نظام يستخدم نموذج ذكاء اصطناعي مع أدوات وتعليمات وحلقة تنفيذ، ليحاول إنجاز هدف متعدد الخطوات بدل الاكتفاء بإجابة واحدة.",
+      "spokenText": "ببساطة: الوكيل الذكي نظام يستخدم نموذج ذكاء اصطناعي مع أدوات وتعليمات وحلقة تنفيذ، ليحاول إنجاز هدف متعدد الخطوات بدل الاكتفاء بإجابة واحدة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-419acdcb77d2",
+      "type": "paragraph",
+      "sourceHash": "419acdcb77d21337e76313121d17b9eee89051a0f377003e205c59aa8ded54c0",
+      "sourceText": "كلمة «يحاول» مهمة؛ فالوكالة لا تجعل النظام معصومًا، ولا تعني أنه يفهم هدفك كما يفهمه إنسان أو أنه يستحق صلاحيات مفتوحة.",
+      "spokenText": "كلمة «يحاول» مهمة؛ فالوكالة لا تجعل النظام معصومًا، ولا تعني أنه يفهم هدفك كما يفهمه إنسان أو أنه يستحق صلاحيات مفتوحة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-fa5b952b3795",
+      "type": "h2",
+      "sourceHash": "fa5b952b3795e2e39cdcd3fddf45298025d8609816289bd4ca7479941801a07e",
+      "sourceText": "من الشات إلى الفعل",
+      "spokenText": "من الشات إلى الفعل",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ea326babfea3",
+      "type": "paragraph",
+      "sourceHash": "ea326babfea3faaa811cb82c0605ea6493a897e65dc1802c17e37fbcef747403",
+      "sourceText": "روبوت المحادثة التقليدي يتلقى رسالة ويعيد ردًا. قد يكون الرد ممتازًا، لكنه يبقى نصًا ما لم ينقله المستخدم إلى برنامج آخر.",
+      "spokenText": "روبوت المحادثة التقليدي يتلقى رسالة ويعيد ردًا. قد يكون الرد ممتازًا، لكنه يبقى نصًا ما لم ينقله المستخدم إلى برنامج آخر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3f92de7e353c",
+      "type": "paragraph",
+      "sourceHash": "3f92de7e353ca9ac8565f5c7aa516ecf2671e1ab123874db54b5563db18f7d56",
+      "sourceText": "أما الوكيل، فيمكن أن يُربط بأدوات تسمح له بإجراء عمليات ضمن بيئة: البحث في ملفات، قراءة تقويم، تشغيل اختبار برمجي، تحديث سجل، أو تجهيز مسودة إجراء. وتكرر بعض الأنظمة دورة من الملاحظة والاختيار والتنفيذ والمراجعة حتى تصل إلى نتيجة أو تتوقف عند حد مقرر.",
+      "spokenText": "أما الوكيل، فيمكن أن يُربط بأدوات تسمح له بإجراء عمليات ضمن بيئة: البحث في ملفات، قراءة تقويم، تشغيل اختبار برمجي، تحديث سجل، أو تجهيز مسودة إجراء. وتكرر بعض الأنظمة دورة من الملاحظة والاختيار والتنفيذ والمراجعة حتى تصل إلى نتيجة أو تتوقف عند حد مقرر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-c9dfa4219ab2",
+      "type": "h3",
+      "sourceHash": "c9dfa4219ab22ec2755081e20486fcaa4890d8607dc52c5b2af1d386c2294072",
+      "sourceText": "مقارنة سريعة",
+      "spokenText": "مقارنة سريعة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-70b5b28b743a",
+      "type": "paragraph",
+      "sourceHash": "70b5b28b743a15267df652a0d369341b6631e783813aef7adecdaa291504f34c",
+      "sourceText": "هذه الحدود ليست معيارًا عالميًا صارمًا؛ فالسوق يستخدم المصطلحات بمرونة. الأهم أن تسأل عن السلوك الفعلي والصلاحيات، لا الاسم المكتوب على المنتج.",
+      "spokenText": "هذه الحدود ليست معيارًا عالميًا صارمًا؛ فالسوق يستخدم المصطلحات بمرونة. الأهم أن تسأل عن السلوك الفعلي والصلاحيات، لا الاسم المكتوب على المنتج.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-a366df915224",
+      "type": "h2",
+      "sourceHash": "a366df915224ef2ec7f7c579fa012b4f2d925dbb0df9d4a7e3d57195087cc639",
+      "sourceText": "مم يتكون الوكيل الذكي؟",
+      "spokenText": "مم يتكون الوكيل الذكي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-956bf877b4fc",
+      "type": "paragraph",
+      "sourceHash": "956bf877b4fc0ec0a1f73ed7722ba6faa3f7a910c0f2cf0c4389a18a0057cb23",
+      "sourceText": "غالبًا لا يكون الوكيل «نموذجًا» وحده، بل نظامًا مركبًا من عدة طبقات.",
+      "spokenText": "غالبًا لا يكون الوكيل «نموذجًا» وحده، بل نظامًا مركبًا من عدة طبقات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-75d40100f326",
+      "type": "h3",
+      "sourceHash": "75d40100f3269545573eb7ce8ded6b67f263b8c28c09b5f816282ecfddd222a0",
+      "sourceText": "1. هدف وسياق",
+      "spokenText": "1. هدف وسياق",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8501231cb594",
+      "type": "paragraph",
+      "sourceHash": "8501231cb594e8e624d64b729a37a810949746d5c01aa2b211a7105a3154b425",
+      "sourceText": "يبدأ بطلب مثل: «اجمع تحديثات المشروع، وحدد المهام المتأخرة، وجهز ملخصًا لاجتماع الغد». يحتاج النظام إلى سياق يوضح المشروع والفريق والمدة وشكل المخرج المطلوب.",
+      "spokenText": "يبدأ بطلب مثل: «اجمع تحديثات المشروع، وحدد المهام المتأخرة، وجهز ملخصًا لاجتماع الغد». يحتاج النظام إلى سياق يوضح المشروع والفريق والمدة وشكل المخرج المطلوب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e75c8f516533",
+      "type": "paragraph",
+      "sourceHash": "e75c8f516533346045efe7e0a25f236adbc4c9c92f42f76e35dd6c8593ae1fea",
+      "sourceText": "كلما كان الهدف غامضًا، زادت مساحة التخمين. وقد يبدو الوكيل نشيطًا، لكنه ينفذ تفسيرًا لم تقصده.",
+      "spokenText": "كلما كان الهدف غامضًا، زادت مساحة التخمين. وقد يبدو الوكيل نشيطًا، لكنه ينفذ تفسيرًا لم تقصده.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-c029e7e22690",
+      "type": "h3",
+      "sourceHash": "c029e7e226906d6fc1152159dc8891cfbd4f68505c17eb860e8746cf380ce39c",
+      "sourceText": "2. نموذج يختار الخطوة التالية",
+      "spokenText": "2. نموذج يختار الخطوة التالية",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-37549f7f75c3",
+      "type": "paragraph",
+      "sourceHash": "37549f7f75c327a4ea6c09b0348196b9154598a37547f91f4319e7225c7e42de",
+      "sourceText": "يستخدم النظام نموذجًا لغويًا أو نموذجًا آخر لتحليل ما أمامه واقتراح الإجراء التالي. لا يعني هذا أن لديه وعيًا أو نية؛ إنه يولد قرارًا محتملًا اعتمادًا على التعليمات والسياق والأنماط التي تعلمها.",
+      "spokenText": "يستخدم النظام نموذجًا لغويًا أو نموذجًا آخر لتحليل ما أمامه واقتراح الإجراء التالي. لا يعني هذا أن لديه وعيًا أو نية؛ إنه يولد قرارًا محتملًا اعتمادًا على التعليمات والسياق والأنماط التي تعلمها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-0a5d9bf2fce5",
+      "type": "h3",
+      "sourceHash": "0a5d9bf2fce54c29d37760b7e274a543eacc02a400768dd8de89dc21c460057e",
+      "sourceText": "3. أدوات وصلاحيات",
+      "spokenText": "3. أدوات وصلاحيات",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-542de3c8486b",
+      "type": "paragraph",
+      "sourceHash": "542de3c8486b5c280eb20076a64111a010d4cc04ade684e1ef70b38f4f8ff558",
+      "sourceText": "من دون أدوات، يبقى النظام قريبًا من المحادثة. الأدوات هي الجسر إلى الفعل: بحث، بريد، تقويم، ملفات، قواعد بيانات، أو برامج داخلية.",
+      "spokenText": "من دون أدوات، يبقى النظام قريبًا من المحادثة. الأدوات هي الجسر إلى الفعل: بحث، بريد، تقويم، ملفات، قواعد بيانات، أو برامج داخلية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-17424f65c487",
+      "type": "paragraph",
+      "sourceHash": "17424f65c487c49d134188e25b8f22b79b4dede98a70578874207ad9c14f3add",
+      "sourceText": "وهنا تزداد المنفعة والخطر معًا. أداة «قراءة التقويم» لا تساوي صلاحية «حذف موعد»، وتجهيز مسودة رسالة لا يساوي إرسالها.",
+      "spokenText": "وهنا تزداد المنفعة والخطر معًا. أداة «قراءة التقويم» لا تساوي صلاحية «حذف موعد»، وتجهيز مسودة رسالة لا يساوي إرسالها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-5606d7857941",
+      "type": "h3",
+      "sourceHash": "5606d7857941fe650fc72f94d2d24c91bdae8dfe18f937342163c52383020e58",
+      "sourceText": "4. حلقة تنفيذ ومراجعة",
+      "spokenText": "4. حلقة تنفيذ ومراجعة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-28f74601778f",
+      "type": "paragraph",
+      "sourceHash": "28f74601778f9dff0752d7499273dc8880c06aa95eeb194431b757e54709543f",
+      "sourceText": "قد ينفذ الوكيل خطوة، يقرأ نتيجتها، ثم يقرر ما يلي. فإذا لم يجد ملفًا، يبحث باسم آخر؛ وإذا فشل اختبار، يحاول تشخيص السبب. تسمي بعض الأنظمة هذا المسار «حلقة الوكيل».",
+      "spokenText": "قد ينفذ الوكيل خطوة، يقرأ نتيجتها، ثم يقرر ما يلي. فإذا لم يجد ملفًا، يبحث باسم آخر؛ وإذا فشل اختبار، يحاول تشخيص السبب. تسمي بعض الأنظمة هذا المسار «حلقة الوكيل».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e45fe7967ce2",
+      "type": "paragraph",
+      "sourceHash": "e45fe7967ce25eff38b8da9339821b46967c8c87177ff659c42a93ec79a02459",
+      "sourceText": "لكن تكرار المحاولة لا يضمن الصواب؛ فقد يكرر افتراضًا خاطئًا ويضاعف أثره.",
+      "spokenText": "لكن تكرار المحاولة لا يضمن الصواب؛ فقد يكرر افتراضًا خاطئًا ويضاعف أثره.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-e6727bb38c9b",
+      "type": "h3",
+      "sourceHash": "e6727bb38c9b16774f7986b79bdd55c136c6ba980d6bfc5a44de76f11625dab3",
+      "sourceText": "5. حالة أو ذاكرة تشغيلية",
+      "spokenText": "5. حالة أو ذاكرة تشغيلية",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-260354cbc462",
+      "type": "paragraph",
+      "sourceHash": "260354cbc46284b7b5a47089c1c6119960f8f0b806e723df37b8547e1f38bf03",
+      "sourceText": "يحتاج الوكيل إلى تتبع ما فعله وما بقي. وقد يحتفظ بتاريخ المهمة أو بعض التفضيلات. هذه الذاكرة مفيدة، لكنها تفتح أسئلة عن مدة الاحتفاظ والخصوصية ومن يستطيع الوصول إليها.",
+      "spokenText": "يحتاج الوكيل إلى تتبع ما فعله وما بقي. وقد يحتفظ بتاريخ المهمة أو بعض التفضيلات. هذه الذاكرة مفيدة، لكنها تفتح أسئلة عن مدة الاحتفاظ والخصوصية ومن يستطيع الوصول إليها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-bd327ed4cd28",
+      "type": "h3",
+      "sourceHash": "bd327ed4cd28e0a6e708784a09a0f68637a2cd9ce79ca0128fc53b222f90f0fa",
+      "sourceText": "6. حواجز وموافقة بشرية",
+      "spokenText": "6. حواجز وموافقة بشرية",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9967b173a602",
+      "type": "paragraph",
+      "sourceHash": "9967b173a6024f3397075db09e785246a3349573dd16f457ce2c90ff04a91822",
+      "sourceText": "النظام الجيد لا يقاس بعدد الأشياء التي يستطيع فعلها فقط، بل بجودة الحدود التي تمنعه من الفعل الخطأ. تشمل الحواجز التحقق من المدخلات والمخرجات، وتقييد الأدوات، وتسجيل الخطوات، وطلب موافقة قبل الإرسال أو الحذف أو الدفع أو النشر.",
+      "spokenText": "النظام الجيد لا يقاس بعدد الأشياء التي يستطيع فعلها فقط، بل بجودة الحدود التي تمنعه من الفعل الخطأ. تشمل الحواجز التحقق من المدخلات والمخرجات، وتقييد الأدوات، وتسجيل الخطوات، وطلب موافقة قبل الإرسال أو الحذف أو الدفع أو النشر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-00297850c3a2",
+      "type": "h2",
+      "sourceHash": "00297850c3a2f9a85f5dbc421fa5557cd53421fd904149af51569bc96cf74a23",
+      "sourceText": "مثال: تنظيم اجتماع من دون تسليم المفتاح كله",
+      "spokenText": "مثال: تنظيم اجتماع من دون تسليم المفتاح كله",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1ad0d3100b2c",
+      "type": "paragraph",
+      "sourceHash": "1ad0d3100b2c8ec6843676ce215002feb243f3ddc2b56e0b8c8f2ce04e88f4ac",
+      "sourceText": "تطلب من وكيل: «اقترح موعدًا لاجتماع الفريق الأسبوع المقبل، وجهز جدول أعمال من آخر تحديثات المشروع».",
+      "spokenText": "تطلب من وكيل: «اقترح موعدًا لاجتماع الفريق الأسبوع المقبل، وجهز جدول أعمال من آخر تحديثات المشروع».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-56b0791b5b17",
+      "type": "paragraph",
+      "sourceHash": "56b0791b5b178b929c5f56082eed14ee3142692a80f3e5d223cc812e4c12a472",
+      "sourceText": "قد يسير المسار هكذا:",
+      "spokenText": "قد يسير المسار هكذا:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-0638ccad500a",
+      "type": "list-item",
+      "sourceHash": "0638ccad500a8ec1eb9980056cd81f162ff3b6ec586fdda3d730b133bc23a1ab",
+      "sourceText": "يقرأ الأوقات المتاحة المصرح بها.",
+      "spokenText": "يقرأ الأوقات المتاحة المصرح بها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-b770dea9d8e9",
+      "type": "list-item",
+      "sourceHash": "b770dea9d8e9cb8be6c29a369df0de45c809d3086a64f0257e615e1e8124e6e7",
+      "sourceText": "يبحث في مساحة المشروع عن أحدث التحديثات.",
+      "spokenText": "يبحث في مساحة المشروع عن أحدث التحديثات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-0ba18b44ca5b",
+      "type": "list-item",
+      "sourceHash": "0ba18b44ca5b673205dcb835322071467157b64eb1350970c619ec29209ebcf7",
+      "sourceText": "يستخرج الموضوعات المتكررة والمهام المتأخرة.",
+      "spokenText": "يستخرج الموضوعات المتكررة والمهام المتأخرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-a70c5062aada",
+      "type": "list-item",
+      "sourceHash": "a70c5062aadacb8e74683c97c0186a32e2885d1c44e9c4c56ab3bd8af701bbc1",
+      "sourceText": "يقترح موعدين وجدول أعمال.",
+      "spokenText": "يقترح موعدين وجدول أعمال.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-1c931f2ceb1c",
+      "type": "list-item",
+      "sourceHash": "1c931f2ceb1c54b841a643cdea197a4740050a41ae4ff9c4cee211bdefc011ba",
+      "sourceText": "يعرض النتيجة عليك.",
+      "spokenText": "يعرض النتيجة عليك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-b40ff28ea954",
+      "type": "list-item",
+      "sourceHash": "b40ff28ea954dbaf4671ae09dc6648efea31e9bd640800bfaaec9bb7bcbd8eb5",
+      "sourceText": "يرسل الدعوة بعد موافقتك.",
+      "spokenText": "يرسل الدعوة بعد موافقتك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-66098cb8d007",
+      "type": "paragraph",
+      "sourceHash": "66098cb8d00746f400ef654d022a1e2aab0438260877237cc9993ba1fe6be071",
+      "sourceText": "القيمة هنا ليست أن النظام «حل محل الإنسان»، بل أنه اختصر التنقل بين أدوات وجمع مواد أولية، بينما بقي الإجراء الخارجي عند بوابة واضحة.",
+      "spokenText": "القيمة هنا ليست أن النظام «حل محل الإنسان»، بل أنه اختصر التنقل بين أدوات وجمع مواد أولية، بينما بقي الإجراء الخارجي عند بوابة واضحة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-6483ddaa37f8",
+      "type": "h2",
+      "sourceHash": "6483ddaa37f8eccf6d5bf33861ff8dbaf005e61c2f45dfa0f134b9987a0dd7a0",
+      "sourceText": "ما الذي يستطيع الوكلاء فعله اليوم؟",
+      "spokenText": "ما الذي يستطيع الوكلاء فعله اليوم؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c0d1b5c79286",
+      "type": "paragraph",
+      "sourceHash": "c0d1b5c79286afb7525ebd19c1e22fdae503f0d9672233c10631f2baf20813c4",
+      "sourceText": "تنجح الأنظمة الحالية أكثر عندما تكون المهمة محددة، والبيئة منظمة، والأدوات واضحة، ومعايير النجاح قابلة للفحص.",
+      "spokenText": "تنجح الأنظمة الحالية أكثر عندما تكون المهمة محددة، والبيئة منظمة، والأدوات واضحة، ومعايير النجاح قابلة للفحص.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-99a795a459f2",
+      "type": "h3",
+      "sourceHash": "99a795a459f20bcd6a585f72900feb7c3737dc9923c6afae57a0bc27d52cb0af",
+      "sourceText": "في العمل المكتبي",
+      "spokenText": "في العمل المكتبي",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-137d3d72210d",
+      "type": "list-item",
+      "sourceHash": "137d3d72210d2e072478f2ff8c4609498814e1c267cebbd6c1891962e2cb262c",
+      "sourceText": "جمع تحديثات من مصادر معروفة وتجهيز ملخص.",
+      "spokenText": "جمع تحديثات من مصادر معروفة وتجهيز ملخص.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-8c68224a17e9",
+      "type": "list-item",
+      "sourceHash": "8c68224a17e9e3cc437a61ead84fdb24d943a8bc27b51ee1b3080e55a59a99f3",
+      "sourceText": "استخراج مهام ومواعيد من محادثات أو محاضر.",
+      "spokenText": "استخراج مهام ومواعيد من محادثات أو محاضر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-b24cf49dd27a",
+      "type": "list-item",
+      "sourceHash": "b24cf49dd27a33346122ef8c72fd46610e7aba85271301539b93544fe01255ad",
+      "sourceText": "فرز طلبات متكررة واقتراح مسودات ردود.",
+      "spokenText": "فرز طلبات متكررة واقتراح مسودات ردود.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-bf086020381d",
+      "type": "list-item",
+      "sourceHash": "bf086020381dc24965bf71c33211a01ee02654323b1d31e5ae97de9f94e6d3e6",
+      "sourceText": "تحديث سجل بعد التحقق من حقول محددة.",
+      "spokenText": "تحديث سجل بعد التحقق من حقول محددة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-4886817e2dd2",
+      "type": "h3",
+      "sourceHash": "4886817e2dd2c93e8b4ab4b9d9d85b0c9074a34e8ebc546fd477add27f0b5120",
+      "sourceText": "في البرمجة",
+      "spokenText": "في البرمجة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-4b1323878450",
+      "type": "list-item",
+      "sourceHash": "4b1323878450bb2217fb1429f3a315c49b25e1891be8a3a32e5a7390d6b535dd",
+      "sourceText": "التنقل في مستودع برمجي وتحليل مواضع مرتبطة بالمشكلة.",
+      "spokenText": "التنقل في مستودع برمجي وتحليل مواضع مرتبطة بالمشكلة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-95aff499611e",
+      "type": "list-item",
+      "sourceHash": "95aff499611e5f56d79e262a185b2b4653686279852e8a5c50ef9aee2705d6dc",
+      "sourceText": "اقتراح تعديلات وتشغيل اختبارات داخل بيئة معزولة.",
+      "spokenText": "اقتراح تعديلات وتشغيل اختبارات داخل بيئة معزولة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-a1037062e420",
+      "type": "list-item",
+      "sourceHash": "a1037062e42022a55985c31b32d1d641692f3509793cb36bcfe4f9f690c69870",
+      "sourceText": "تلخيص سجل أخطاء أو إعداد مسودة توثيق.",
+      "spokenText": "تلخيص سجل أخطاء أو إعداد مسودة توثيق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-44c7c5f6167b",
+      "type": "h3",
+      "sourceHash": "44c7c5f6167bf014cc576ed885917a13ae20491b68d298fd0b0b49ba8cd71de7",
+      "sourceText": "في البحث والتحليل",
+      "spokenText": "في البحث والتحليل",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-222d8ac6a343",
+      "type": "list-item",
+      "sourceHash": "222d8ac6a343e0d0f24bf2ac6a3837b889f367dbce62b7f98da1e75706ba6eca",
+      "sourceText": "تفكيك سؤال إلى استعلامات فرعية.",
+      "spokenText": "تفكيك سؤال إلى استعلامات فرعية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-49eb4aa927fc",
+      "type": "list-item",
+      "sourceHash": "49eb4aa927fc38afb39a1f77d532d38f79a31426be03b0eecbc870e1680ca826",
+      "sourceText": "جمع مصادر، واستخراج نقاط، وبناء مسودة منظمة.",
+      "spokenText": "جمع مصادر، واستخراج نقاط، وبناء مسودة منظمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-5ba09dbbcd59",
+      "type": "list-item",
+      "sourceHash": "5ba09dbbcd597cb202b9b617914e58ce0a97593abcfbe1cb94098d584af616a4",
+      "sourceText": "المقارنة وفق معايير يحددها المستخدم.",
+      "spokenText": "المقارنة وفق معايير يحددها المستخدم.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-c691f2e59a57",
+      "type": "h3",
+      "sourceHash": "c691f2e59a57fc7c1a422f9f7d6af33234605f077c6a183ff24252b6c0d57e6c",
+      "sourceText": "في خدمة العملاء والعمليات",
+      "spokenText": "في خدمة العملاء والعمليات",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-6605070176c1",
+      "type": "list-item",
+      "sourceHash": "6605070176c191cad82f5b3997283c907b0a4f81def933098ac61745827ca88f",
+      "sourceText": "استرجاع معلومات من قاعدة معرفة.",
+      "spokenText": "استرجاع معلومات من قاعدة معرفة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-b667e862ed5a",
+      "type": "list-item",
+      "sourceHash": "b667e862ed5ae8f314fa48ef45ec6284e501d99c3c0cbedab9236ee3ca3397e9",
+      "sourceText": "إنشاء تذكرة أو تحديث حالتها ضمن قواعد.",
+      "spokenText": "إنشاء تذكرة أو تحديث حالتها ضمن قواعد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-209d0163e825",
+      "type": "list-item",
+      "sourceHash": "209d0163e825623eeff4c952a845ee2c7978160edba83122ce9c921850c9bb4e",
+      "sourceText": "تصعيد الحالات الحساسة إلى موظف بشري.",
+      "spokenText": "تصعيد الحالات الحساسة إلى موظف بشري.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-36669b1921dd",
+      "type": "paragraph",
+      "sourceHash": "36669b1921dd38728836a8684715d219bd485449d4aec7a92757374bed2e44d8",
+      "sourceText": "هذه أمثلة لقدرات ممكنة، لا ضمانات عامة. الأداء يتغير باختلاف النموذج والأدوات والبيانات وتصميم النظام والاختبارات.",
+      "spokenText": "هذه أمثلة لقدرات ممكنة، لا ضمانات عامة. الأداء يتغير باختلاف النموذج والأدوات والبيانات وتصميم النظام والاختبارات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-9696fe763db2",
+      "type": "h2",
+      "sourceHash": "9696fe763db204a2a12d5288dd572c13b942ea5b5331b1a1c93ff18c8d2b7327",
+      "sourceText": "أين يفشل الوكيل؟",
+      "spokenText": "أين يفشل الوكيل؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0bafea912299",
+      "type": "paragraph",
+      "sourceHash": "0bafea91229938eb9ab5925bea3392bc06ee5eae077a8774be8843dca8db5d1f",
+      "sourceText": "المهم ليس أن ينجح في عرض تجريبي مرتب، بل أن يتعامل مع الواقع حين تكون التعليمات ناقصة والبيانات متعارضة والواجهات متغيرة.",
+      "spokenText": "المهم ليس أن ينجح في عرض تجريبي مرتب، بل أن يتعامل مع الواقع حين تكون التعليمات ناقصة والبيانات متعارضة والواجهات متغيرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-bd61abcf3494",
+      "type": "h3",
+      "sourceHash": "bd61abcf3494d072e5ac1a33e8a0851e30f0aede8d8bfd9d566ed00756975909",
+      "sourceText": "الخطأ المركب",
+      "spokenText": "الخطأ المركب",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-25d91a58bda8",
+      "type": "paragraph",
+      "sourceHash": "25d91a58bda89d94eac7484ac07f15f0dd784b5c9d0ca1c4aa3645fa50b33200",
+      "sourceText": "في المحادثة، قد تكون النتيجة معلومة خاطئة. في الوكيل، قد تصبح المعلومة الخاطئة أساسًا لخمس خطوات لاحقة. كل خطوة تبدو منطقية وحدها، لكن السلسلة كلها تنطلق من فرض غير صحيح.",
+      "spokenText": "في المحادثة، قد تكون النتيجة معلومة خاطئة. في الوكيل، قد تصبح المعلومة الخاطئة أساسًا لخمس خطوات لاحقة. كل خطوة تبدو منطقية وحدها، لكن السلسلة كلها تنطلق من فرض غير صحيح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-7b6caa87a2d4",
+      "type": "h3",
+      "sourceHash": "7b6caa87a2d4c16f3e11cc348096773f058230a665402ad61b2c3a828177666e",
+      "sourceText": "غموض الهدف",
+      "spokenText": "غموض الهدف",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6a7be9fbbdce",
+      "type": "paragraph",
+      "sourceHash": "6a7be9fbbdce91e703e1e84c838f9b8e08291fdc9d4e49cd5cfdae66d2d096ef",
+      "sourceText": "عبارة «رتب بريدي» قد تعني وضع التصنيفات، أو الأرشفة، أو حذف الرسائل. إذا منح النظام صلاحيات واسعة ولم توجد قواعد أو تأكيدات، يصبح الغموض خطرًا عمليًا.",
+      "spokenText": "عبارة «رتب بريدي» قد تعني وضع التصنيفات، أو الأرشفة، أو حذف الرسائل. إذا منح النظام صلاحيات واسعة ولم توجد قواعد أو تأكيدات، يصبح الغموض خطرًا عمليًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-2bf406c13b53",
+      "type": "h3",
+      "sourceHash": "2bf406c13b531dea6afe5425ad6cf0a18fc0e72b912c5108a6269fb9471c3b5f",
+      "sourceText": "تغير البيئة",
+      "spokenText": "تغير البيئة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ba76df5f23a6",
+      "type": "paragraph",
+      "sourceHash": "ba76df5f23a6e9df3f6e76500d7f086fa8c37f633b4123e23ef4a79290ad2d47",
+      "sourceText": "زر انتقل، أو حقل تغير اسمه، أو ملف لم يعد متاحًا. الوكيل الذي يعتمد على واجهة غير مستقرة قد يضل المسار حتى لو نجح أمس.",
+      "spokenText": "زر انتقل، أو حقل تغير اسمه، أو ملف لم يعد متاحًا. الوكيل الذي يعتمد على واجهة غير مستقرة قد يضل المسار حتى لو نجح أمس.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-3ef7c9f92b1f",
+      "type": "h3",
+      "sourceHash": "3ef7c9f92b1fff46e5a1ed07e63bd476e86d5a440b25e781f028f94d60d253c6",
+      "sourceText": "صعوبة التقييم",
+      "spokenText": "صعوبة التقييم",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-afc164aaa711",
+      "type": "paragraph",
+      "sourceHash": "afc164aaa7119c95b7e5c4b55317f1ed656652569ba0020220652d0880c13eff",
+      "sourceText": "توضح خبرة بناء اختبارات الوكلاء أن العمل متعدد الجولات والأدوات أصعب تقييمًا من إجابة منفردة؛ فالوكيل يغيّر حالة البيئة، وتتراكم النتائج، وقد تختلف المحاولة من تشغيل إلى آخر. لذلك لا يكفي اختبار ناجح واحد للحكم على الاعتمادية.",
+      "spokenText": "توضح خبرة بناء اختبارات الوكلاء أن العمل متعدد الجولات والأدوات أصعب تقييمًا من إجابة منفردة؛ فالوكيل يغيّر حالة البيئة، وتتراكم النتائج، وقد تختلف المحاولة من تشغيل إلى آخر. لذلك لا يكفي اختبار ناجح واحد للحكم على الاعتمادية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-849af69c73f7",
+      "type": "h2",
+      "sourceHash": "849af69c73f74bb12ec5138347be2581ddeee7e188592b139da5e09b7790464f",
+      "sourceText": "الخطر الأكبر: حين يقرأ التعليمات الخاطئة وينفذها",
+      "spokenText": "الخطر الأكبر: حين يقرأ التعليمات الخاطئة وينفذها",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-667e39b1029f",
+      "type": "paragraph",
+      "sourceHash": "667e39b1029f5a2ac7388188bf0c38c29a311276af237ec4b21778b4c2430739",
+      "sourceText": "قد يفتح الوكيل صفحة أو مستندًا يحتوي على نص خبيث صُمم ليبدو كتعليمات له. إذا لم يفصل النظام جيدًا بين أمر المستخدم ومحتوى المصدر، فقد يتعرض إلى حقن بالتعليمات أو اختطاف للهدف.",
+      "spokenText": "قد يفتح الوكيل صفحة أو مستندًا يحتوي على نص خبيث صُمم ليبدو كتعليمات له. إذا لم يفصل النظام جيدًا بين أمر المستخدم ومحتوى المصدر، فقد يتعرض إلى حقن بالتعليمات أو اختطاف للهدف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9a3f149850f1",
+      "type": "paragraph",
+      "sourceHash": "9a3f149850f12901f09aca02a59bbed7307651bc78853c8e091054ea7c84e84d",
+      "sourceText": "تزداد خطورة الهجوم إذا كان الوكيل يستطيع الإرسال أو التنزيل أو تعديل البيانات. حينها لا يبقى الخلل داخل نص؛ بل قد يتحول إلى فعل.",
+      "spokenText": "تزداد خطورة الهجوم إذا كان الوكيل يستطيع الإرسال أو التنزيل أو تعديل البيانات. حينها لا يبقى الخلل داخل نص؛ بل قد يتحول إلى فعل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2fd99fe14e6a",
+      "type": "paragraph",
+      "sourceHash": "2fd99fe14e6a37b07cd98ee57603ec2cbb1ae1ec94389e01ce07d2a1dabf8e04",
+      "sourceText": "وهناك مخاطر متصلة:",
+      "spokenText": "وهناك مخاطر متصلة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-ab61615ab05a",
+      "type": "list-item",
+      "sourceHash": "ab61615ab05a369a1fdf85fe8268e0f446d6123901e8fbd96c4f7d132169be77",
+      "sourceText": "إفراط في الصلاحيات: امتلاك أدوات أكثر مما تحتاجه المهمة.",
+      "spokenText": "إفراط في الصلاحيات: امتلاك أدوات أكثر مما تحتاجه المهمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-feaf32fc373f",
+      "type": "list-item",
+      "sourceHash": "feaf32fc373f10aee0971e60cd1967e43c399bc26c4a7c9bbcb8bb89429b574d",
+      "sourceText": "تسرب البيانات: نقل محتوى حساس إلى أداة أو جهة غير مقصودة.",
+      "spokenText": "تسرب البيانات: نقل محتوى حساس إلى أداة أو جهة غير مقصودة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-d83dfadcc3b3",
+      "type": "list-item",
+      "sourceHash": "d83dfadcc3b3ae309656fcf50e6186c951d6229f7caff6fc8f33e163596a81ea",
+      "sourceText": "إساءة استخدام الذاكرة: تخزين معلومة خاطئة أو خبيثة تؤثر في مهام لاحقة.",
+      "spokenText": "إساءة استخدام الذاكرة: تخزين معلومة خاطئة أو خبيثة تؤثر في مهام لاحقة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-9b9d370d7b54",
+      "type": "list-item",
+      "sourceHash": "9b9d370d7b54b6368e5e189e48d694ceb7fbd3683053621a7ae8cc5ad5ebe342",
+      "sourceText": "ضعف التتبع: عدم القدرة على معرفة لماذا اتخذ النظام خطوة معينة.",
+      "spokenText": "ضعف التتبع: عدم القدرة على معرفة لماذا اتخذ النظام خطوة معينة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-9233c7e21912",
+      "type": "list-item",
+      "sourceHash": "9233c7e21912658d7c479225a77f107710efb23b462e2eb07dc8a50e5fbad7ee",
+      "sourceText": "الاستنزاف: تكرار محاولات طويلة تستهلك وقتًا وموارد وتكلفة.",
+      "spokenText": "الاستنزاف: تكرار محاولات طويلة تستهلك وقتًا وموارد وتكلفة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b267244366d9",
+      "type": "paragraph",
+      "sourceHash": "b267244366d95534ca024547e8f852ea50c33a9b5e38e5a03e726e85c06663cf",
+      "sourceText": "لهذا تؤكد أطر إدارة مخاطر الذكاء الاصطناعي على القياس والمراقبة والإدارة عبر دورة حياة النظام، لا على وعد تسويقي بأن الأداة «ذكية وآمنة».",
+      "spokenText": "لهذا تؤكد أطر إدارة مخاطر الذكاء الاصطناعي على القياس والمراقبة والإدارة عبر دورة حياة النظام، لا على وعد تسويقي بأن الأداة «ذكية وآمنة».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-529554dd1b16",
+      "type": "h2",
+      "sourceHash": "529554dd1b16293c2021d067aeaa1fd571d00c8a35b26e61ab6ff72058b8f667",
+      "sourceText": "قاعدة عملية: أقل صلاحية، وأوضح موافقة",
+      "spokenText": "قاعدة عملية: أقل صلاحية، وأوضح موافقة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0e8bc859252e",
+      "type": "paragraph",
+      "sourceHash": "0e8bc859252ec53c1b8c8e581c13945e7cd3f236cb436112bb93e3369fa1ea0c",
+      "sourceText": "قبل ربط وكيل بحساب أو أداة حقيقية، اسأل:",
+      "spokenText": "قبل ربط وكيل بحساب أو أداة حقيقية، اسأل:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-555c2f0ba32f",
+      "type": "list-item",
+      "sourceHash": "555c2f0ba32f345f274f4a0fa04bd6082a2aa81262c2f895cf7c49d2dd4f807f",
+      "sourceText": "ما أقل البيانات التي يحتاجها؟",
+      "spokenText": "ما أقل البيانات التي يحتاجها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-c49129d52bc8",
+      "type": "list-item",
+      "sourceHash": "c49129d52bc85f3379912473bc960ab6fa48ccab1bb8501c73cef8b0e7dcc25e",
+      "sourceText": "هل يحتاج القراءة فقط، أم الكتابة أيضًا؟",
+      "spokenText": "هل يحتاج القراءة فقط، أم الكتابة أيضًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-bb7c2ca85692",
+      "type": "list-item",
+      "sourceHash": "bb7c2ca856927f4030d6b1517e706005bedaf34d38bf6c98ecd96afda004bc5d",
+      "sourceText": "ما الأفعال التي يجب أن تتوقف عند موافقة بشرية؟",
+      "spokenText": "ما الأفعال التي يجب أن تتوقف عند موافقة بشرية؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-5f51623c81e2",
+      "type": "list-item",
+      "sourceHash": "5f51623c81e27fd299c249760022444f7570e52567ad138277f44921a88d5eb9",
+      "sourceText": "هل يمكن التراجع عن الإجراء؟",
+      "spokenText": "هل يمكن التراجع عن الإجراء؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-3d96d6dd6826",
+      "type": "list-item",
+      "sourceHash": "3d96d6dd68268f4e1dbdbcfd738a09716cb967259fae903ec0ce830b022ad0b9",
+      "sourceText": "هل تُسجل الخطوات والأدوات والنتائج للمراجعة؟",
+      "spokenText": "هل تُسجل الخطوات والأدوات والنتائج للمراجعة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-f55143e30eec",
+      "type": "list-item",
+      "sourceHash": "f55143e30eec9936e6d851b173c3ba8e7ee531e0ad3ad3f61888f7115f68490d",
+      "sourceText": "هل اختُبر النظام على حالات الفشل والهجمات، لا على المسار المثالي فقط؟",
+      "spokenText": "هل اختُبر النظام على حالات الفشل والهجمات، لا على المسار المثالي فقط؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-f2c6d0077bea",
+      "type": "list-item",
+      "sourceHash": "f2c6d0077bea17b0ceb4e31bc891b6549e53fa013009eeb19de4cb1137ab2879",
+      "sourceText": "ماذا يحدث إذا انقطع الاتصال أو تعارض مصدران أو لم يفهم الهدف؟",
+      "spokenText": "ماذا يحدث إذا انقطع الاتصال أو تعارض مصدران أو لم يفهم الهدف؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0f9d6bf5816e",
+      "type": "paragraph",
+      "sourceHash": "0f9d6bf5816e5fccabf17cb4300abf36a39ce6fe024f5e8872b106a2f18e1a71",
+      "sourceText": "في المهام الحساسة، التصميم الآمن لا يجعل الموافقة عائقًا مزعجًا؛ بل يجعلها جزءًا من جودة المنتج.",
+      "spokenText": "في المهام الحساسة، التصميم الآمن لا يجعل الموافقة عائقًا مزعجًا؛ بل يجعلها جزءًا من جودة المنتج.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-3aabb93d5db7",
+      "type": "h2",
+      "sourceHash": "3aabb93d5db7b8d923305b308477ef6ee7a2ac53d802e4bed466351e9918e713",
+      "sourceText": "هل الوكيل هو نفسه الأتمتة؟",
+      "spokenText": "هل الوكيل هو نفسه الأتمتة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3ddfa7c4af19",
+      "type": "paragraph",
+      "sourceHash": "3ddfa7c4af19e704e95a75fe37b7b3cbe6013e0f4d77d863e61870cc410a6798",
+      "sourceText": "الأتمتة التقليدية ممتازة عندما تكون القاعدة ثابتة: تصل فاتورة إلى صندوق محدد، فتُنسخ إلى مجلد وتُرسل إشعارات. مسارها واضح وقابل للتوقع.",
+      "spokenText": "الأتمتة التقليدية ممتازة عندما تكون القاعدة ثابتة: تصل فاتورة إلى صندوق محدد، فتُنسخ إلى مجلد وتُرسل إشعارات. مسارها واضح وقابل للتوقع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3f0690bb83f7",
+      "type": "paragraph",
+      "sourceHash": "3f0690bb83f7260678deb09e39e3c191a56418bdef239df861562f3e83533e8e",
+      "sourceText": "أما الوكيل فيضيف مرونة عندما تختلف الحالات ويصعب كتابة قاعدة لكل احتمال. لكنه يدفع ثمن هذه المرونة بانخفاض قابلية التنبؤ. ولهذا يكون الحل الأفضل أحيانًا مزيجًا: قواعد حتمية للأفعال الحساسة، ونموذج ذكي للفهم والتصنيف والاقتراح.",
+      "spokenText": "أما الوكيل فيضيف مرونة عندما تختلف الحالات ويصعب كتابة قاعدة لكل احتمال. لكنه يدفع ثمن هذه المرونة بانخفاض قابلية التنبؤ. ولهذا يكون الحل الأفضل أحيانًا مزيجًا: قواعد حتمية للأفعال الحساسة، ونموذج ذكي للفهم والتصنيف والاقتراح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-46c09e259b4a",
+      "type": "paragraph",
+      "sourceHash": "46c09e259b4a2827d18f5da5f5e044b199485e798ab0db3f72cbbf87fd57d65d",
+      "sourceText": "ليس الأكثر «وكالة» هو الأفضل دائمًا. إذا أنجز سير عمل بسيط المهمة بثبات، فلا فائدة من إضافة استقلال معقد لمجرد أن الاسم أحدث.",
+      "spokenText": "ليس الأكثر «وكالة» هو الأفضل دائمًا. إذا أنجز سير عمل بسيط المهمة بثبات، فلا فائدة من إضافة استقلال معقد لمجرد أن الاسم أحدث.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-81ef3d563840",
+      "type": "h2",
+      "sourceHash": "81ef3d5638409ab609088b7ce1ff4222a9c59715f1e293ed070650ea571f7315",
+      "sourceText": "ماذا عن مستقبل الوظائف؟",
+      "spokenText": "ماذا عن مستقبل الوظائف؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bf98f65d0138",
+      "type": "paragraph",
+      "sourceHash": "bf98f65d0138b8867b4c8c19cc311fbf9da06719c87d0d5e3bfe8a3486575be5",
+      "sourceText": "من المبكر اختزال الأثر في جملة «سيستبدل الوكلاء الموظفين». الوظيفة الواحدة تجمع مهامًا مختلفة: بعضها متكرر وقابل للتفويض، وبعضها يعتمد على معرفة ضمنية أو تفاوض أو مسؤولية أو علاقة بشرية.",
+      "spokenText": "من المبكر اختزال الأثر في جملة «سيستبدل الوكلاء الموظفين». الوظيفة الواحدة تجمع مهامًا مختلفة: بعضها متكرر وقابل للتفويض، وبعضها يعتمد على معرفة ضمنية أو تفاوض أو مسؤولية أو علاقة بشرية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-978157ce9d57",
+      "type": "paragraph",
+      "sourceHash": "978157ce9d5736e0b5566d01f893437ffbb028cf71553529766e6628a2bf3a87",
+      "sourceText": "الأرجح في المدى القريب أن يعاد توزيع المهام قبل أن تختفي المهن دفعة واحدة. قد يقضي الموظف وقتًا أقل في الجمع والنسخ، ووقتًا أكبر في تحديد المشكلة والمراجعة والتواصل وتحمل القرار.",
+      "spokenText": "الأرجح في المدى القريب أن يعاد توزيع المهام قبل أن تختفي المهن دفعة واحدة. قد يقضي الموظف وقتًا أقل في الجمع والنسخ، ووقتًا أكبر في تحديد المشكلة والمراجعة والتواصل وتحمل القرار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c8a09be45ee8",
+      "type": "paragraph",
+      "sourceHash": "c8a09be45ee86a74aca74a5c04414c6621123ddac210765d8c13689207b44512",
+      "sourceText": "لكن حجم الأثر وسرعته سيختلفان بين القطاعات والبلدان، ويتوقفان على التكلفة والدقة والتنظيم وثقة الناس. الادعاءات القاطعة هنا توقعات، لا نتائج محسومة.",
+      "spokenText": "لكن حجم الأثر وسرعته سيختلفان بين القطاعات والبلدان، ويتوقفان على التكلفة والدقة والتنظيم وثقة الناس. الادعاءات القاطعة هنا توقعات، لا نتائج محسومة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-7142e315b7da",
+      "type": "h2",
+      "sourceHash": "7142e315b7da332bb0e9e97a7ff8d1d9276793497e77929810583bbcb8fd9981",
+      "sourceText": "ما الذي نعرفه وما الذي ما زال غير محسوم؟",
+      "spokenText": "ما الذي نعرفه وما الذي ما زال غير محسوم؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-d2f7093b81b2",
+      "type": "h3",
+      "sourceHash": "d2f7093b81b2ff14beacc422f4fa9824f7b6cc60bd1a0d45a7d04d98285133f5",
+      "sourceText": "نعرف بدرجة جيدة أن:",
+      "spokenText": "نعرف بدرجة جيدة أن:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-99e81a681ad2",
+      "type": "list-item",
+      "sourceHash": "99e81a681ad2b53aa8d391581b4470c8f5ce75b0db011d3ad730454be9c832a6",
+      "sourceText": "ربط النماذج بأدوات يوسّع فائدتها العملية.",
+      "spokenText": "ربط النماذج بأدوات يوسّع فائدتها العملية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-fd4a7de20bba",
+      "type": "list-item",
+      "sourceHash": "fd4a7de20bba6e0e32031d2533183877bfe796489a400bbf8f815ae438ef6fc0",
+      "sourceText": "المهام المحددة والبيئات المنظمة أسهل من الأهداف المفتوحة.",
+      "spokenText": "المهام المحددة والبيئات المنظمة أسهل من الأهداف المفتوحة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-744bd754109c",
+      "type": "list-item",
+      "sourceHash": "744bd754109c4ecf332687852ad0d5804f3797cafa7535bd3d9ebbe24f362c60",
+      "sourceText": "الأخطاء قد تتراكم عبر الجولات والأفعال.",
+      "spokenText": "الأخطاء قد تتراكم عبر الجولات والأفعال.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-25e9766bb19f",
+      "type": "list-item",
+      "sourceHash": "25e9766bb19f162006900cb47af5d05e855657630063f98963e8844fe768609b",
+      "sourceText": "التقييم والتسجيل والمراجعة البشرية مهمة خصوصًا مع الصلاحيات الحساسة.",
+      "spokenText": "التقييم والتسجيل والمراجعة البشرية مهمة خصوصًا مع الصلاحيات الحساسة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-74fb92507635",
+      "type": "h3",
+      "sourceHash": "74fb925076356ea4e17532e8ce59535e92da471af75e1245ba042ecd704360de",
+      "sourceText": "وما زلنا لا نعرف بدقة:",
+      "spokenText": "وما زلنا لا نعرف بدقة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-adf2f7819b6f",
+      "type": "list-item",
+      "sourceHash": "adf2f7819b6f6e68da2dbdfc5ef260663ac19e31066aa1ae171071ef93ad74fb",
+      "sourceText": "ما مستوى الاستقلال الآمن لكل نوع من المهام؟",
+      "spokenText": "ما مستوى الاستقلال الآمن لكل نوع من المهام؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-5e45cd6d7796",
+      "type": "list-item",
+      "sourceHash": "5e45cd6d7796c4fff899db17f21b97b101d447835fa0d8c8736acf3e4fd17992",
+      "sourceText": "كيف ستتغير واجهات الحاسوب عندما يصبح الهدف أهم من التطبيق؟",
+      "spokenText": "كيف ستتغير واجهات الحاسوب عندما يصبح الهدف أهم من التطبيق؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7e1b1029bf7b",
+      "type": "list-item",
+      "sourceHash": "7e1b1029bf7ba6a1d445bbd85bb320e7a4a085ddbc127f601b49f6f2358e96e1",
+      "sourceText": "ما حجم التحول النهائي في سوق العمل؟",
+      "spokenText": "ما حجم التحول النهائي في سوق العمل؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-66fce6a7ea85",
+      "type": "list-item",
+      "sourceHash": "66fce6a7ea85a98a158001bb04cd8a8912f37bceceb30075b49eab8e57ac3d12",
+      "sourceText": "أي معايير قانونية وتقنية ستصبح القاعدة المشتركة؟",
+      "spokenText": "أي معايير قانونية وتقنية ستصبح القاعدة المشتركة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-54c78c2c9d7b",
+      "type": "paragraph",
+      "sourceHash": "54c78c2c9d7bbecef8cf439c9f57b52d5e7327d819a1b3a702e6b5cfbe772f7a",
+      "sourceText": "الفكرة حقيقية، والاستخدام يتوسع، لكن الاسم سبق أحيانًا درجة النضج.",
+      "spokenText": "الفكرة حقيقية، والاستخدام يتوسع، لكن الاسم سبق أحيانًا درجة النضج.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-a32198e378cc",
+      "type": "h2",
+      "sourceHash": "a32198e378ccc8c2b376af414f5127f9d249c5fcadfc164359803dd9ccf7aaa9",
+      "sourceText": "مثال متوازن: متجر إلكتروني صغير",
+      "spokenText": "مثال متوازن: متجر إلكتروني صغير",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f789d00fb87a",
+      "type": "paragraph",
+      "sourceHash": "f789d00fb87a846feea6d357585974a337ce9ab4fb1c9c2b6fe140274ae05ba1",
+      "sourceText": "يمكن لوكيل محدود الصلاحيات أن يجمع رسائل العملاء، ويصنف أسباب الاستفسار، ويقارنها بحالة الطلب، ويقترح ردًا، ثم يجهز تقريرًا أسبوعيًا بالأسئلة المتكررة.",
+      "spokenText": "يمكن لوكيل محدود الصلاحيات أن يجمع رسائل العملاء، ويصنف أسباب الاستفسار، ويقارنها بحالة الطلب، ويقترح ردًا، ثم يجهز تقريرًا أسبوعيًا بالأسئلة المتكررة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d491922afbc2",
+      "type": "paragraph",
+      "sourceHash": "d491922afbc2b2767f81362ad54a9c996bb07c955db94bec7397426430a6c0f0",
+      "sourceText": "لكن من الأفضل أن تتوقف عند الإنسان خطوات مثل:",
+      "spokenText": "لكن من الأفضل أن تتوقف عند الإنسان خطوات مثل:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-4036471ea431",
+      "type": "list-item",
+      "sourceHash": "4036471ea431b4235b79c0f88602b28efd3932011ec1a8b4224cf34c5adb1106",
+      "sourceText": "الموافقة على تعويض مالي.",
+      "spokenText": "الموافقة على تعويض مالي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-4108b6e90ac6",
+      "type": "list-item",
+      "sourceHash": "4108b6e90ac6f12801d8e432d70fab085d857fe9244bd706ed309b65c0f3c9b8",
+      "sourceText": "تعديل سعر أو سياسة.",
+      "spokenText": "تعديل سعر أو سياسة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-09b7413dd9fc",
+      "type": "list-item",
+      "sourceHash": "09b7413dd9fc2c5f0bcd58a64bfd0fcb401dc4b3cb61c6d8e878985e3a4ec1d5",
+      "sourceText": "إرسال رسالة في شكوى حساسة.",
+      "spokenText": "إرسال رسالة في شكوى حساسة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-897ff3f29b50",
+      "type": "list-item",
+      "sourceHash": "897ff3f29b501558722dd01a5e26467af4727b716fd0f1894187eb114a361a95",
+      "sourceText": "حذف سجل أو كشف بيانات عميل.",
+      "spokenText": "حذف سجل أو كشف بيانات عميل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1eeb123e4e1c",
+      "type": "paragraph",
+      "sourceHash": "1eeb123e4e1c824f9e4938ff083d28835a23eeb0004374e2e18f308ddb2b9eb1",
+      "sourceText": "هكذا تصبح التقنية رافعة للعمل، لا مقامرة بصلاحيات الحساب.",
+      "spokenText": "هكذا تصبح التقنية رافعة للعمل، لا مقامرة بصلاحيات الحساب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-6c78e10ed9e0",
+      "type": "h2",
+      "sourceHash": "6c78e10ed9e046c9524e768dc292009e18afc4281ac16a980dcbf3dea387222d",
+      "sourceText": "الخلاصة",
+      "spokenText": "الخلاصة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4634f1e527b1",
+      "type": "paragraph",
+      "sourceHash": "4634f1e527b16fe8d7250dac7ef70ca1f1a18749579d29dfe481c8f454386741",
+      "sourceText": "الوكلاء الأذكياء ليسوا «شاتًا أقوى» فقط، ولا موظفين رقميين مستقلين بالمعنى البشري. إنهم أنظمة تجمع نموذجًا وتعليمات وأدوات وحلقة تنفيذ، وقد تختار خطوات أثناء سعيها إلى هدف.",
+      "spokenText": "الوكلاء الأذكياء ليسوا «شاتًا أقوى» فقط، ولا موظفين رقميين مستقلين بالمعنى البشري. إنهم أنظمة تجمع نموذجًا وتعليمات وأدوات وحلقة تنفيذ، وقد تختار خطوات أثناء سعيها إلى هدف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-740a5519a198",
+      "type": "paragraph",
+      "sourceHash": "740a5519a198d7359247802a781749f735f8c5d2605abf7cb21074792ed45196",
+      "sourceText": "قوتها الحقيقية تأتي من اتصالها بالعالم الرقمي، وهذا هو مصدر خطرها أيضًا. كلما زادت القدرة على الفعل، ازدادت الحاجة إلى أقل صلاحية، وحدود حتمية، وموافقة قبل الأفعال المؤثرة، وسجلات يمكن مراجعتها، واختبارات تلاحق الفشل لا النجاح وحده.",
+      "spokenText": "قوتها الحقيقية تأتي من اتصالها بالعالم الرقمي، وهذا هو مصدر خطرها أيضًا. كلما زادت القدرة على الفعل، ازدادت الحاجة إلى أقل صلاحية، وحدود حتمية، وموافقة قبل الأفعال المؤثرة، وسجلات يمكن مراجعتها، واختبارات تلاحق الفشل لا النجاح وحده.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6daa83ecd27f",
+      "type": "paragraph",
+      "sourceHash": "6daa83ecd27f9c9356a17f1549be038f886c07610360333a23973b166e8b4f92",
+      "sourceText": "ولفهم كيف توظف الأنظمة أنماط البيانات قبل أن تتوقع ما ستكتبه، اقرأ كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟.",
+      "spokenText": "ولفهم كيف توظف الأنظمة أنماط البيانات قبل أن تتوقع ما ستكتبه، اقرأ كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-10cfb406c4aa",
+      "type": "h2",
+      "sourceHash": "10cfb406c4aaf0e6fcf803455a44a5502931da9d6db39622501407b8bca3fc89",
+      "sourceText": "أسئلة شائعة",
+      "spokenText": "أسئلة شائعة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-ac5a637d95dd",
+      "type": "h3",
+      "sourceHash": "ac5a637d95ddeac3090885edd9d6dce3f107a7c57f46430b363ac072e55642c0",
+      "sourceText": "هل كل روبوت محادثة وكيل ذكي؟",
+      "spokenText": "هل كل روبوت محادثة وكيل ذكي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7e4d1e161c07",
+      "type": "paragraph",
+      "sourceHash": "7e4d1e161c0722dbcd5e62795c6d9cedc6c259cca24d37b4a84b7b0499386517",
+      "sourceText": "لا. قد يولد روبوت المحادثة ردودًا فقط، بينما يتطلب الوكيل عادة أدوات وحلقة تنفيذ وقدرة على اختيار خطوات ضمن هدف.",
+      "spokenText": "لا. قد يولد روبوت المحادثة ردودًا فقط، بينما يتطلب الوكيل عادة أدوات وحلقة تنفيذ وقدرة على اختيار خطوات ضمن هدف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-c7de653d7b65",
+      "type": "h3",
+      "sourceHash": "c7de653d7b65e8d2cd8d95f705dac445bfeba04dcc18474a4faac5b07c348b39",
+      "sourceText": "هل كل ما يسمى Agent يعمل باستقلال؟",
+      "spokenText": "هل كل ما يسمى Agent يعمل باستقلال؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-786c1c3e66b4",
+      "type": "paragraph",
+      "sourceHash": "786c1c3e66b412a3b28ee4dd726161b20b2a5ea137ba51e4500c6295b819ec91",
+      "sourceText": "لا. بعض المنتجات سير عمل مضبوط يستخدم نموذجًا في خطوة أو أكثر. الاسم التجاري لا يكشف وحده مقدار الاستقلال أو الصلاحيات.",
+      "spokenText": "لا. بعض المنتجات سير عمل مضبوط يستخدم نموذجًا في خطوة أو أكثر. الاسم التجاري لا يكشف وحده مقدار الاستقلال أو الصلاحيات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-33c4f13bdbbe",
+      "type": "h3",
+      "sourceHash": "33c4f13bdbbeb4553022d666d763c2765d7892597449e17a651220dc71c65ebd",
+      "sourceText": "هل يمكن الوثوق به بلا مراجعة بشرية؟",
+      "spokenText": "هل يمكن الوثوق به بلا مراجعة بشرية؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a4003f1018b7",
+      "type": "paragraph",
+      "sourceHash": "a4003f1018b7bc184c15837664b108f771bcbc9e480305fd4f64bfca7c4d7c2f",
+      "sourceText": "يعتمد ذلك على المهمة وعواقب الخطأ. قد تكون الأتمتة مقبولة في خطوة منخفضة المخاطر وقابلة للتراجع، بينما تحتاج الأفعال المالية أو القانونية أو الطبية أو المتعلقة بالنشر والبيانات إلى ضوابط وموافقة مختصة.",
+      "spokenText": "يعتمد ذلك على المهمة وعواقب الخطأ. قد تكون الأتمتة مقبولة في خطوة منخفضة المخاطر وقابلة للتراجع، بينما تحتاج الأفعال المالية أو القانونية أو الطبية أو المتعلقة بالنشر والبيانات إلى ضوابط وموافقة مختصة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-354117210538",
+      "type": "h3",
+      "sourceHash": "35411721053829689d931514b35e9e7095d2d5bd9324eff79796d37a918e9a16",
+      "sourceText": "ما الفرق بين الوكيل والأتمتة التقليدية؟",
+      "spokenText": "ما الفرق بين الوكيل والأتمتة التقليدية؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4c69108b7094",
+      "type": "paragraph",
+      "sourceHash": "4c69108b70941d3dc9d1ea06053c82ea23147b6b72d7006e48e2089887dcefc1",
+      "sourceText": "الأتمتة تتبع مسارًا محددًا مسبقًا، بينما يستطيع الوكيل اختيار بعض الخطوات بناءً على السياق. المرونة أكبر، لكن قابلية التنبؤ أقل.",
+      "spokenText": "الأتمتة تتبع مسارًا محددًا مسبقًا، بينما يستطيع الوكيل اختيار بعض الخطوات بناءً على السياق. المرونة أكبر، لكن قابلية التنبؤ أقل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-be268b68c60f",
+      "type": "h3",
+      "sourceHash": "be268b68c60fc8f33d6bd2acacfd3801d47ed9451443ac588b23304f020619cf",
+      "sourceText": "ما أهم احتياط عند استخدام وكيل؟",
+      "spokenText": "ما أهم احتياط عند استخدام وكيل؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-64c213d326c3",
+      "type": "paragraph",
+      "sourceHash": "64c213d326c3cbee68f6a6245c6cc71d052e11cc26e4d429d93bbd780ea8c477",
+      "sourceText": "امنحه أقل قدر من البيانات والصلاحيات، واجعل الإرسال والحذف والدفع والنشر وتغيير الأذونات خلف موافقة واضحة وقابلة للتدقيق.",
+      "spokenText": "امنحه أقل قدر من البيانات والصلاحيات، واجعل الإرسال والحذف والدفع والنشر وتغيير الأذونات خلف موافقة واضحة وقابلة للتدقيق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-81f40087765c",
+      "type": "h3",
+      "sourceHash": "81f40087765ce277de2f2ee89a41d33c94856bfe1d68d3e4c6708754f881c473",
+      "sourceText": "هل سيقضي الوكلاء على الوظائف؟",
+      "spokenText": "هل سيقضي الوكلاء على الوظائف؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5304451b4bc3",
+      "type": "paragraph",
+      "sourceHash": "5304451b4bc32718f0194e06bdc85982d21465e6114e8f41911a71a998c39699",
+      "sourceText": "لا توجد نتيجة محسومة. من المرجح أن تتغير مجموعات من المهام داخل الوظائف أولًا، ويختلف الأثر باختلاف القطاع والجودة والتنظيم والتكلفة.",
+      "spokenText": "لا توجد نتيجة محسومة. من المرجح أن تتغير مجموعات من المهام داخل الوظائف أولًا، ويختلف الأثر باختلاف القطاع والجودة والتنظيم والتكلفة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "e8106b721e3fa002e8b7a6cf7e2ce8cfb6edd165a68c4ed188003b78b33d381b",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

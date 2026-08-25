@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+  "speechScriptHash": "537041688633508bc130f9b23de22623b70c9374ac419a75161ae0a7f6493858",
+  "status": "draft-needs-speech-review",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 60,
+  "selectedSegments": [
+    {
+      "segmentId": "h3-c1265baf9098",
+      "challenges": [
+        "2 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-5bbf0ca21588",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-8a909d08fc7b",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-8846e4cc98ea",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-919fd2f106ca",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "febdc8389a1bf1648cd6908b13fc7a2e7aca798cfd6ae3472e95125aba1f8013"
+}

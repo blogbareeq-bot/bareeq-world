@@ -13,7 +13,7 @@ if (manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neu
 if (manifest.defaultVoice !== 'hamed' || manifest.voices?.length !== 1 || manifest.voices[0]?.providerVoice !== 'ar-SA-HamedNeural') throw new Error('Touchscreen fallback must contain Hamed only.');
 if (!Array.isArray(manifest.parts) || !manifest.parts.length) throw new Error('Touchscreen audio has no parts.');
 
-const planResult = spawnSync(process.execPath, ['scripts/generate-audio.mjs', '--sync-plan'], {
+const planResult = spawnSync(process.execPath, ['scripts/generate-audio.mjs', '--sync-plan', '--legacy-audio-validation'], {
   encoding: 'utf8',
   env: { ...process.env, BAREEQ_TTS_PROVIDER: 'azure', BAREEQ_TTS_INCLUDE_IDS: ARTICLE_ID },
   maxBuffer: 8 * 1024 * 1024,

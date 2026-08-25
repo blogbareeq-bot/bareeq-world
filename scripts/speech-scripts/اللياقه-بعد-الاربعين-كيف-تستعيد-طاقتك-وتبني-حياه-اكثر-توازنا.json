@@ -1,0 +1,936 @@
+{
+  "version": 1,
+  "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+  "sourceSnapshotHash": "9fa2a3319b7c1ea30edee5bfb5459ed98a9b3112458c602f954b9ca91af3d5bd",
+  "sourceStructureHash": "e0cd5b47e6a8e36f38f3c5f9f3e9c698de6b9758dff38d7d1f2ce7dfd69f18ee",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر والقراءة الإضافية",
+    "segmentCount": 5,
+    "sourceHash": "674f95a8c14c04752e756b901c3b9bb1962f49f4de1732e0e2f03e5c588dfe6d"
+  },
+  "segments": [
+    {
+      "segmentId": "title-c7ca733bf514",
+      "type": "title",
+      "sourceHash": "c7ca733bf5140f14a96772f02995a30a65cce0e0c83535a692b8b496ed454afe",
+      "sourceText": "اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا",
+      "spokenText": "اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e45268c6a94d",
+      "type": "paragraph",
+      "sourceHash": "e45268c6a94dbc5369eac655743f183eeaa2ca8225c8fc94927f0e00d0264f37",
+      "sourceText": "لا يحمل سن الأربعين زرًا خفيًا يغيّر الجسد في ليلة واحدة. هذه هي العدسة التي نقرأ بها كتاب «اللياقة بعد الأربعين: ثلاثة مفاتيح لتحظى بمظهر جيد وشعور رائع» للمدرب دون نافا: لا بوصفه وصفة لاستعادة عمر مضى، بل دعوة إلى بناء نمط يمكن الاستمرار عليه.",
+      "spokenText": "لا يحمل سن الأربعين زرًا خفيًا يغيّر الجسد في ليلة واحدة. هذه هي العدسة التي نقرأ بها كتاب «اللياقة بعد الأربعين: ثلاثة مفاتيح لتحظى بمظهر جيد وشعور رائع» للمدرب دون نافا: لا بوصفه وصفة لاستعادة عمر مضى، بل دعوة إلى بناء نمط يمكن الاستمرار عليه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d4fe9a77befa",
+      "type": "paragraph",
+      "sourceHash": "d4fe9a77befa215a60cee944820072093c8d5a90e52c64a8210f4e394fa31d01",
+      "sourceText": "هذه قراءة تحريرية لأفكار الكتاب وليست إعادة نشر لفصوله، وقد أضيفت إليها إرشادات صحية حديثة من جهات رسمية. والمقال للتثقيف العام، لا للتشخيص أو إعداد برنامج علاجي فردي. إذا كان لديك مرض مزمن، أو ألم مستمر، أو دوار، أو أعراض غير معتادة مع الجهد، فاستشر مختصًا مؤهلًا قبل زيادة نشاطك.",
+      "spokenText": "هذه قراءة تحريرية لأفكار الكتاب وليست إعادة نشر لفصوله، وقد أضيفت إليها إرشادات صحية حديثة من جهات رسمية. والمقال للتثقيف العام، لا للتشخيص أو إعداد برنامج علاجي فردي. إذا كان لديك مرض مزمن، أو ألم مستمر، أو دوار، أو أعراض غير معتادة مع الجهد، فاستشر مختصًا مؤهلًا قبل زيادة نشاطك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-fcc85adc4d47",
+      "type": "h2",
+      "sourceHash": "fcc85adc4d47927bdd7d7a760205b65211e1fb9ace68f6be48611e7c8159981b",
+      "sourceText": "بطاقة الكتاب",
+      "spokenText": "بطاقة الكتاب",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-223c4a6a5ff7",
+      "type": "list-item",
+      "sourceHash": "223c4a6a5ff7eb2bbbc2d4cecf915b2a916c4ac67578838806698110fc782a2b",
+      "sourceText": "العنوان: اللياقة بعد الأربعين: ثلاثة مفاتيح لتحظى بمظهر جيد وشعور رائع.",
+      "spokenText": "العنوان: اللياقة بعد الأربعين: ثلاثة مفاتيح لتحظى بمظهر جيد وشعور رائع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-951da700d46f",
+      "type": "list-item",
+      "sourceHash": "951da700d46f75610ec6b6b751174beb06edee58f158203374e74fb14deedcc5",
+      "sourceText": "المؤلف: دون نافا.",
+      "spokenText": "المؤلف: دون نافا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-2974dc3e0ac6",
+      "type": "list-item",
+      "sourceHash": "2974dc3e0ac6122a40f16fc91428a061429cdc7df6e875a1f0b098d832c9d0b3",
+      "sourceText": "النقل إلى العربية: عمرو الملاخ، وفق الغلاف العربي.",
+      "spokenText": "النقل إلى العربية: عمرو الملاخ، وفق الغلاف العربي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-fdce716f3082",
+      "type": "list-item",
+      "sourceHash": "fdce716f30821b15a59fb9d56bca2156a99ee5c6a8126a83922124f134b74a65",
+      "sourceText": "الناشر: شركة العبيكان للنشر.",
+      "spokenText": "الناشر: شركة العبيكان للنشر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-ad120975d114",
+      "type": "list-item",
+      "sourceHash": "ad120975d11422aa83c57d18a101e36c2f40e20bd25cf135abfc673fb2427e3e",
+      "sourceText": "الرقم الدولي للنسخة الرقمية العربية: 9789960549699.",
+      "spokenText": "الرقم الدولي للنسخة الرقمية العربية: 9789960549699.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-0a890dcfddd0",
+      "type": "h2",
+      "sourceHash": "0a890dcfddd0294fb72c411ee432edba56d7f8f1ea4f08d45fe8693695788fa1",
+      "sourceText": "ما الفكرة المركزية في الكتاب؟",
+      "spokenText": "ما الفكرة المركزية في الكتاب؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-338be2ae2432",
+      "type": "paragraph",
+      "sourceHash": "338be2ae243278d059db08a55734fa20dec1d2c7f5b7f0be0af5152153430ede",
+      "sourceText": "لا يعامل نافا اللياقة بوصفها ساعات تمرين منفصلة عن بقية الحياة. الفكرة الأهم هي أن القدرة على الحركة والطاقة اليومية تتأثران أيضًا بالنوم، والتغذية، والحالة النفسية، والبيئة المحيطة، ومن يساعدك على الاستمرار.",
+      "spokenText": "لا يعامل نافا اللياقة بوصفها ساعات تمرين منفصلة عن بقية الحياة. الفكرة الأهم هي أن القدرة على الحركة والطاقة اليومية تتأثران أيضًا بالنوم، والتغذية، والحالة النفسية، والبيئة المحيطة، ومن يساعدك على الاستمرار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-5c25e23436bc",
+      "type": "paragraph",
+      "sourceHash": "5c25e23436bc70afbca283accc0d23d4cefdd05a5d474b67c8239ab98989cbe4",
+      "sourceText": "هذه النظرة مفيدة لأنها تنقل السؤال من «ما أقسى برنامج أستطيع احتماله؟» إلى «ما النظام الذي أستطيع أن أعيش معه؟». لكن فائدتها لا تعني أن كل قارئ يحتاج الخطة نفسها؛ فالعمر التدريبي والحالة الصحية والأدوية والإصابات تصنع فروقًا كبيرة بين شخص وآخر.",
+      "spokenText": "هذه النظرة مفيدة لأنها تنقل السؤال من «ما أقسى برنامج أستطيع احتماله؟» إلى «ما النظام الذي أستطيع أن أعيش معه؟». لكن فائدتها لا تعني أن كل قارئ يحتاج الخطة نفسها؛ فالعمر التدريبي والحالة الصحية والأدوية والإصابات تصنع فروقًا كبيرة بين شخص وآخر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-4babadbd4bf0",
+      "type": "h2",
+      "sourceHash": "4babadbd4bf0fcf2630723c2635e1a55162cf54d2a5e52c80e5db31a3bc8bc40",
+      "sourceText": "ثلاث أفكار عملية نخرج بها من القراءة",
+      "spokenText": "ثلاث أفكار عملية نخرج بها من القراءة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-dd19d07c98bb",
+      "type": "h3",
+      "sourceHash": "dd19d07c98bb8d5e4cc6c5c7a02f51b226b88b70f66bc029502c931a80b183dc",
+      "sourceText": "1. التوازن أهم من مطاردة رقم واحد",
+      "spokenText": "1. التوازن أهم من مطاردة رقم واحد",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-86f115a46565",
+      "type": "paragraph",
+      "sourceHash": "86f115a46565efd7966e6108dbe898158d78c79660f5af55baae14d08d1da06a",
+      "sourceText": "الوزن مقياس واحد، لكنه لا يصف وحده القوة أو القدرة على صعود الدرج أو جودة النوم أو سهولة أداء المهام اليومية. لذلك يقترح المقال قياس التقدم بمؤشرات متعددة: انتظام الحركة، وتحسن القدرة، والتعافي، والشعور بالطاقة.",
+      "spokenText": "الوزن مقياس واحد، لكنه لا يصف وحده القوة أو القدرة على صعود الدرج أو جودة النوم أو سهولة أداء المهام اليومية. لذلك يقترح المقال قياس التقدم بمؤشرات متعددة: انتظام الحركة، وتحسن القدرة، والتعافي، والشعور بالطاقة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-53baf27730ba",
+      "type": "h3",
+      "sourceHash": "53baf27730ba886f18ab12417919af0dc38d4185b06815825c8acd5b12423ff5",
+      "sourceText": "2. الدعم والمساءلة يصنعان فرقًا",
+      "spokenText": "2. الدعم والمساءلة يصنعان فرقًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-367eebe43333",
+      "type": "paragraph",
+      "sourceHash": "367eebe43333c28a0d52f7843ffb10dda1da30e4bba5ca648f95e5fcb7c89dda",
+      "sourceText": "يمنح الكتاب مساحة واضحة للتشجيع والدعم وبناء نظام للمساءلة. والتطبيق البسيط لهذه الفكرة هو اختيار شخص موثوق تشاركه موعد الحركة أو سجل الإنجاز، لا ليراقبك بقسوة، بل ليساعدك على العودة بعد الأيام المتعثرة.",
+      "spokenText": "يمنح الكتاب مساحة واضحة للتشجيع والدعم وبناء نظام للمساءلة. والتطبيق البسيط لهذه الفكرة هو اختيار شخص موثوق تشاركه موعد الحركة أو سجل الإنجاز، لا ليراقبك بقسوة، بل ليساعدك على العودة بعد الأيام المتعثرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-f73b7bccb360",
+      "type": "h3",
+      "sourceHash": "f73b7bccb360fa00b0811e48395137c823db7fb931729678ff62dcd5b6adecd6",
+      "sourceText": "3. الخطة الجيدة تُفصّل على صاحبها",
+      "spokenText": "3. الخطة الجيدة تُفصّل على صاحبها",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1146062c73a8",
+      "type": "paragraph",
+      "sourceHash": "1146062c73a88646f5ce4b08e947760afc71fda7ca63cefe8701ffd86ff1da64",
+      "sourceText": "يرفض الكتاب ضمنيًا فكرة البرنامج الواحد المناسب للجميع. ابدأ من خطك أنت: كم تتحرك الآن؟ ما الحركات المريحة؟ ما الذي يسبب ألمًا؟ وما الوقت الواقعي الذي تستطيع حمايته كل أسبوع؟ المقارنة المفيدة هي بين هذا الأسبوع والأسبوع السابق، لا بين بدايتك وشخص يتدرب منذ سنوات.",
+      "spokenText": "يرفض الكتاب ضمنيًا فكرة البرنامج الواحد المناسب للجميع. ابدأ من خطك أنت: كم تتحرك الآن؟ ما الحركات المريحة؟ ما الذي يسبب ألمًا؟ وما الوقت الواقعي الذي تستطيع حمايته كل أسبوع؟ المقارنة المفيدة هي بين هذا الأسبوع والأسبوع السابق، لا بين بدايتك وشخص يتدرب منذ سنوات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-d24d02c941b5",
+      "type": "h2",
+      "sourceHash": "d24d02c941b5ce2857e546543f342acda3351d79820d9044d75b6efc91607553",
+      "sourceText": "أين نحتاج إلى ميزان علمي حديث؟",
+      "spokenText": "أين نحتاج إلى ميزان علمي حديث؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bfd26af49e13",
+      "type": "paragraph",
+      "sourceHash": "bfd26af49e139250474d54d131884693fcc63522c1ad0765544411a7ea9f48f5",
+      "sourceText": "الكتاب يحفز على تغيير شامل، لكن التوصيات الصحية يجب أن تُقرأ مع الإرشادات الأحدث. توصي منظمة الصحة العالمية البالغين عمومًا بما مجموعه 150 إلى 300 دقيقة أسبوعيًا من النشاط الهوائي متوسط الشدة، مع تمارين لتقوية العضلات في يومين أو أكثر.",
+      "spokenText": "الكتاب يحفز على تغيير شامل، لكن التوصيات الصحية يجب أن تُقرأ مع الإرشادات الأحدث. توصي منظمة الصحة العالمية البالغين عمومًا بما مجموعه 150 إلى 300 دقيقة أسبوعيًا من النشاط الهوائي متوسط الشدة، مع تمارين لتقوية العضلات في يومين أو أكثر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2f9ced363442",
+      "type": "paragraph",
+      "sourceHash": "2f9ced3634422f38a40625bae2e48921c1c3f581129d7b55931e8c54b2626a5a",
+      "sourceText": "هذا الرقم وجهة تدريجية وليس شرطًا للأسبوع الأول. عشر دقائق منتظمة أفضل من حصة شديدة تقود إلى الألم أو الانقطاع. كما أن الألم الحاد أو المتزايد ليس علامة نجاح، بل سبب للتوقف وطلب التقييم عند الحاجة.",
+      "spokenText": "هذا الرقم وجهة تدريجية وليس شرطًا للأسبوع الأول. عشر دقائق منتظمة أفضل من حصة شديدة تقود إلى الألم أو الانقطاع. كما أن الألم الحاد أو المتزايد ليس علامة نجاح، بل سبب للتوقف وطلب التقييم عند الحاجة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-dd23ff671b36",
+      "type": "h2",
+      "sourceHash": "dd23ff671b3606a142522132856b3b54729b793fd67f4d8b3196e93b753f18c5",
+      "sourceText": "تطبيق عملي لأربعة أسابيع",
+      "spokenText": "تطبيق عملي لأربعة أسابيع",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-e05efac99c73",
+      "type": "h3",
+      "sourceHash": "e05efac99c73a8ba397a4c50294a2ae8364889115705b0778ce8cf07024a9df0",
+      "sourceText": "الأسبوع الأول: احمِ الموعد",
+      "spokenText": "الأسبوع الأول: احمِ الموعد",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7e50472382d9",
+      "type": "list-item",
+      "sourceHash": "7e50472382d9a704588b033ea5b29cdf577823e99da526234cc5ca667063ff4f",
+      "sourceText": "ثلاث جولات مشي مريحة، مدة كل منها من 10 إلى 15 دقيقة.",
+      "spokenText": "ثلاث جولات مشي مريحة، مدة كل منها من 10 إلى 15 دقيقة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-e95f2d057e4a",
+      "type": "list-item",
+      "sourceHash": "e95f2d057e4a0199ab5e0aa785344a104768e8f286b15eaea21fdd6606ded65e",
+      "sourceText": "تسجيل ما أُنجز فعلًا، دون جلد للذات.",
+      "spokenText": "تسجيل ما أُنجز فعلًا، دون جلد للذات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-d49ddd15fef7",
+      "type": "h3",
+      "sourceHash": "d49ddd15fef758c018e83b44fe6bf013e3aba4def1d17020ddfe5750cc2792e0",
+      "sourceText": "الأسبوع الثاني: أضف القوة",
+      "spokenText": "الأسبوع الثاني: أضف القوة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-020a8e3bc637",
+      "type": "list-item",
+      "sourceHash": "020a8e3bc637163b4f0fd410609df4f6bd64b072350d15f99418b8267fbe0ef8",
+      "sourceText": "الاستمرار في المشي.",
+      "spokenText": "الاستمرار في المشي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-cc639dc03734",
+      "type": "list-item",
+      "sourceHash": "cc639dc03734aecf4eb8cd541d6458cc75eef10ae0af867a7da8a244e22d1b18",
+      "sourceText": "حصتان قصيرتان من حركات أساسية مناسبة للحالة، مع يوم راحة بينهما.",
+      "spokenText": "حصتان قصيرتان من حركات أساسية مناسبة للحالة، مع يوم راحة بينهما.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-eb1c14fbb22e",
+      "type": "h3",
+      "sourceHash": "eb1c14fbb22edf404c25524a6c8e69b0675f5baf0aaad74848b09e600d56bf25",
+      "sourceText": "الأسبوع الثالث: غيّر عنصرًا واحدًا",
+      "spokenText": "الأسبوع الثالث: غيّر عنصرًا واحدًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7d3c04be48e8",
+      "type": "paragraph",
+      "sourceHash": "7d3c04be48e89cb5660d05542d780cfd3251d45ea5b72162b6892ce93a9bfc79",
+      "sourceText": "زد المدة أو عدد الجولات زيادة صغيرة، لا الاثنين معًا. إذا كان التعافي جيدًا ولا توجد أعراض مقلقة، يمكن جعل بعض الدقائق أسرع قليلًا.",
+      "spokenText": "زد المدة أو عدد الجولات زيادة صغيرة، لا الاثنين معًا. إذا كان التعافي جيدًا ولا توجد أعراض مقلقة، يمكن جعل بعض الدقائق أسرع قليلًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-2a24dd143d71",
+      "type": "h3",
+      "sourceHash": "2a24dd143d71337d3e9ab030825b0e51e9061405e1c0f47a96a2b7f54e311b17",
+      "sourceText": "الأسبوع الرابع: راجع النظام لا إرادتك فقط",
+      "spokenText": "الأسبوع الرابع: راجع النظام لا إرادتك فقط",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1710de248b6f",
+      "type": "paragraph",
+      "sourceHash": "1710de248b6f3c005dcc25b8593261be2a2eb5cf861fc147acf82289de810ab0",
+      "sourceText": "اسأل: أي موعد التزمت به؟ ما العائق المتكرر؟ ومن يمكنه دعمك؟ ثم ابنِ الشهر التالي على إجابات واقعية بدل خطة مثالية لا تناسب يومك.",
+      "spokenText": "اسأل: أي موعد التزمت به؟ ما العائق المتكرر؟ ومن يمكنه دعمك؟ ثم ابنِ الشهر التالي على إجابات واقعية بدل خطة مثالية لا تناسب يومك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-2358e9ef5ae1",
+      "type": "h2",
+      "sourceHash": "2358e9ef5ae119125e8eb66592146db6a6b41e3e6eb73993e4bf4250457e3949",
+      "sourceText": "التغذية والمكملات بلا مبالغة",
+      "spokenText": "التغذية والمكملات بلا مبالغة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e422bbcfdd45",
+      "type": "paragraph",
+      "sourceHash": "e422bbcfdd458234e24efe6131b73c27014874a9c8c3df3e5be9d51896361aad",
+      "sourceText": "لا يوجد طعام واحد «يعيد الشباب»، كما أن المكملات ليست ضرورة تلقائية بعد الأربعين. توضح صحائف المعاهد الوطنية للصحة أن الاحتياج إلى فيتامين D أو المغنيسيوم يختلف بحسب الغذاء والحالة الصحية والأدوية ونتائج الفحوص. وقد تتداخل بعض المكملات مع الأدوية؛ لذلك لا تبدأ جرعات علاجية اعتمادًا على مقال عام.",
+      "spokenText": "لا يوجد طعام واحد «يعيد الشباب»، كما أن المكملات ليست ضرورة تلقائية بعد الأربعين. توضح صحائف المعاهد الوطنية للصحة أن الاحتياج إلى فيتامين D أو المغنيسيوم يختلف بحسب الغذاء والحالة الصحية والأدوية ونتائج الفحوص. وقد تتداخل بعض المكملات مع الأدوية؛ لذلك لا تبدأ جرعات علاجية اعتمادًا على مقال عام.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-8f4b96f3fe3f",
+      "type": "h2",
+      "sourceHash": "8f4b96f3fe3f8f164e88228d0e7559b2d65e8faeacf3f9507f60378996427794",
+      "sourceText": "القوة بعد الأربعين ليست مشروع «استعادة الماضي»",
+      "spokenText": "القوة بعد الأربعين ليست مشروع «استعادة الماضي»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-590445f663ba",
+      "type": "paragraph",
+      "sourceHash": "590445f663baa209793b28bd70ec605bc5cf8a2ecd24c77ce057bd2e52d83b4d",
+      "sourceText": "أحد الأخطاء الشائعة في الحديث عن منتصف العمر هو بناء الخطة كلها على مقارنة الجسد بنسخة أصغر منه. السؤال الأفضل: ما القدرة التي تريد حمايتها في السنوات المقبلة؟ حمل الأغراض، صعود الدرج، المشي في السفر، النهوض بسهولة، أو اللعب مع الأبناء والأحفاد؟ عندما تصبح الوظيفة اليومية هي الهدف، تتحول اللياقة من مطاردة شكل إلى استثمار طويل المدى.",
+      "spokenText": "أحد الأخطاء الشائعة في الحديث عن منتصف العمر هو بناء الخطة كلها على مقارنة الجسد بنسخة أصغر منه. السؤال الأفضل: ما القدرة التي تريد حمايتها في السنوات المقبلة؟ حمل الأغراض، صعود الدرج، المشي في السفر، النهوض بسهولة، أو اللعب مع الأبناء والأحفاد؟ عندما تصبح الوظيفة اليومية هي الهدف، تتحول اللياقة من مطاردة شكل إلى استثمار طويل المدى.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dab42b69374d",
+      "type": "paragraph",
+      "sourceHash": "dab42b69374db1673ac97bc2d6c89a2b4b187579f84c9e4b63cb68f7005e83d2",
+      "sourceText": "توصيات النشاط البدني للبالغين لا تقتصر على الحركة الهوائية؛ فهي تضم أيضًا تقوية العضلات. وهذه نقطة مهمة لأن القوة جزء من القدرة على أداء المهام والحفاظ على الاستقلال الوظيفي. لكن تمارين القوة لا تعني أن يبدأ الجميع بأوزان ثقيلة؛ المقاومة يمكن أن تكون بوزن الجسم أو أشرطة أو أجهزة أو أوزان، ويحدد المستوى المناسب تاريخك الصحي وخبرتك وقدرتك الحالية.",
+      "spokenText": "توصيات النشاط البدني للبالغين لا تقتصر على الحركة الهوائية؛ فهي تضم أيضًا تقوية العضلات. وهذه نقطة مهمة لأن القوة جزء من القدرة على أداء المهام والحفاظ على الاستقلال الوظيفي. لكن تمارين القوة لا تعني أن يبدأ الجميع بأوزان ثقيلة؛ المقاومة يمكن أن تكون بوزن الجسم أو أشرطة أو أجهزة أو أوزان، ويحدد المستوى المناسب تاريخك الصحي وخبرتك وقدرتك الحالية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-12dc5751783b",
+      "type": "h2",
+      "sourceHash": "12dc5751783bc579be906f5acc42a1eb9136660821c36c13c69a36854965bf7d",
+      "sourceText": "كيف تعرف أنك تتقدم من دون مطاردة الألم؟",
+      "spokenText": "كيف تعرف أنك تتقدم من دون مطاردة الألم؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dc7077b0d1cc",
+      "type": "paragraph",
+      "sourceHash": "dc7077b0d1ccd469f72eebf2be0dc57090f64b55f9bd9536c77e5601d65397c9",
+      "sourceText": "راقب مؤشرات بسيطة: هل صارت الجولة المعتادة أسهل؟ هل تستطيع أداء حركة بجودة أفضل أو تكرارات أكثر قليلًا؟ هل تتعافى في وقت مناسب؟ وهل أصبح النشاط جزءًا من الأسبوع بدل أن يكون حملة قصيرة؟",
+      "spokenText": "راقب مؤشرات بسيطة: هل صارت الجولة المعتادة أسهل؟ هل تستطيع أداء حركة بجودة أفضل أو تكرارات أكثر قليلًا؟ هل تتعافى في وقت مناسب؟ وهل أصبح النشاط جزءًا من الأسبوع بدل أن يكون حملة قصيرة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3cb349e784d4",
+      "type": "paragraph",
+      "sourceHash": "3cb349e784d4a05fc6997ff69386d0dc132b01949cf2b57cdcb734c0d9688170",
+      "sourceText": "زيادة الحمل أو المدة تصبح مفيدة عندما تأتي تدريجيًا. أما الألم الحاد، وألم الصدر، والدوار غير المعتاد، وضيق النفس الشديد غير المتوقع، فهي ليست «ثمنًا طبيعيًا للتقدم» ويجب التعامل معها بجدية وطلب تقييم مناسب عند الحاجة.",
+      "spokenText": "زيادة الحمل أو المدة تصبح مفيدة عندما تأتي تدريجيًا. أما الألم الحاد، وألم الصدر، والدوار غير المعتاد، وضيق النفس الشديد غير المتوقع، فهي ليست «ثمنًا طبيعيًا للتقدم» ويجب التعامل معها بجدية وطلب تقييم مناسب عند الحاجة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-e43a5f896b19",
+      "type": "h2",
+      "sourceHash": "e43a5f896b19cb8cb73b55f82ff01350966cc764f3c9560bda65f4e16c814ff2",
+      "sourceText": "النوم والتعافي جزء من الخطة",
+      "spokenText": "النوم والتعافي جزء من الخطة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-53f1e0d262e1",
+      "type": "paragraph",
+      "sourceHash": "53f1e0d262e1773ae39dedc5730f793f47f8a295ec827ce8f5fa229620b4d280",
+      "sourceText": "من السهل أن ننظر إلى التدريب وحده وننسى ما يحدث بين الحصص. النوم الكافي، وتوزيع الجهد، وأيام التعافي تساعد على جعل الخطة قابلة للتكرار. إذا أدى جدولك إلى نوم أقل باستمرار كي «تلحق بالتمرين»، فقد تحتاج إلى إعادة تصميم الموعد بدل إضافة ضغط جديد إلى يوم مزدحم.",
+      "spokenText": "من السهل أن ننظر إلى التدريب وحده وننسى ما يحدث بين الحصص. النوم الكافي، وتوزيع الجهد، وأيام التعافي تساعد على جعل الخطة قابلة للتكرار. إذا أدى جدولك إلى نوم أقل باستمرار كي «تلحق بالتمرين»، فقد تحتاج إلى إعادة تصميم الموعد بدل إضافة ضغط جديد إلى يوم مزدحم.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-ef6299cc16c5",
+      "type": "h2",
+      "sourceHash": "ef6299cc16c51af6d7e3e4b3c83dcc189a9c727101edc33bdbe1005fe44d785c",
+      "sourceText": "التغذية: ابحث عن النمط قبل المنتج",
+      "spokenText": "التغذية: ابحث عن النمط قبل المنتج",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8c7dc522da28",
+      "type": "paragraph",
+      "sourceHash": "8c7dc522da28e4d678769499d622b6f470bedf703c4e0fff6edb62dabcf3d260",
+      "sourceText": "في منتصف العمر تكثر الرسائل التي تعد بمكمل أو مسحوق يعوض كل شيء. القراءة الأكثر اتزانًا تبدأ بالنمط الغذائي العام، ثم تُبحث المكملات عند وجود سبب واضح. صحائف المعاهد الوطنية للصحة التي أشرنا إليها تشرح أن الإفراط أو التداخل مع الأدوية ليس أمرًا نظريًا. لذلك لا تجعل التسويق يختصر صحتك في عبوة. إذا كان لديك نقص مثبت أو حالة طبية أو أدوية مزمنة، يصبح القرار فرديًا ويستحق سؤال مختص مؤهل.",
+      "spokenText": "في منتصف العمر تكثر الرسائل التي تعد بمكمل أو مسحوق يعوض كل شيء. القراءة الأكثر اتزانًا تبدأ بالنمط الغذائي العام، ثم تُبحث المكملات عند وجود سبب واضح. صحائف المعاهد الوطنية للصحة التي أشرنا إليها تشرح أن الإفراط أو التداخل مع الأدوية ليس أمرًا نظريًا. لذلك لا تجعل التسويق يختصر صحتك في عبوة. إذا كان لديك نقص مثبت أو حالة طبية أو أدوية مزمنة، يصبح القرار فرديًا ويستحق سؤال مختص مؤهل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-e89c3a4e8ae7",
+      "type": "h2",
+      "sourceHash": "e89c3a4e8ae73d72f4da0fc3990b21903e91372ad58950c37819952fd6e1005c",
+      "sourceText": "اختبار الاستمرار",
+      "spokenText": "اختبار الاستمرار",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2ab9252fdcbb",
+      "type": "paragraph",
+      "sourceHash": "2ab9252fdcbb21d98e10893b52ed3c83dd876ac648ed94b20680915df7cd5b11",
+      "sourceText": "قبل اختيار برنامج، اسأل: هل أستطيع تكرار هذا بعد شهر؟ إذا كانت الإجابة لا، فالمشكلة ليست دائمًا في قوة الإرادة؛ قد تكون الخطة نفسها أكبر من الحياة التي يفترض أن تعيش داخلها. اللياقة بعد الأربعين ليست سباقًا ضد العمر، بل طريقة للحفاظ على أكبر مساحة ممكنة من الحركة والقدرة والثقة بالجسد.",
+      "spokenText": "قبل اختيار برنامج، اسأل: هل أستطيع تكرار هذا بعد شهر؟ إذا كانت الإجابة لا، فالمشكلة ليست دائمًا في قوة الإرادة؛ قد تكون الخطة نفسها أكبر من الحياة التي يفترض أن تعيش داخلها. اللياقة بعد الأربعين ليست سباقًا ضد العمر، بل طريقة للحفاظ على أكبر مساحة ممكنة من الحركة والقدرة والثقة بالجسد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-205338991aa4",
+      "type": "h2",
+      "sourceHash": "205338991aa4ad8031ec1f89986dcf93c6b02710704a134c298508df7782e11b",
+      "sourceText": "الحكم على الكتاب",
+      "spokenText": "الحكم على الكتاب",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1160328e0786",
+      "type": "paragraph",
+      "sourceHash": "1160328e0786abf5eeb8cf9920755a9387d9530d5e5877dbaef0949c81c2d6a4",
+      "sourceText": "قوة الكتاب في توسيع معنى اللياقة من «تمرين» إلى «نظام حياة ودعم واستمرارية». أما ما يحتاجه القارئ فهو فصل التحفيز العام عن القرار الصحي الفردي، والاستفادة من الفكرة دون تحويلها إلى وصفة موحدة.",
+      "spokenText": "قوة الكتاب في توسيع معنى اللياقة من «تمرين» إلى «نظام حياة ودعم واستمرارية». أما ما يحتاجه القارئ فهو فصل التحفيز العام عن القرار الصحي الفردي، والاستفادة من الفكرة دون تحويلها إلى وصفة موحدة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9e41f554df0f",
+      "type": "paragraph",
+      "sourceHash": "9e41f554df0f11ccc552d320c941736cf65d127f07317ccbbf17309b17e1d617",
+      "sourceText": "أفضل بداية ليست الأكثر قسوة، بل الأكثر أمانًا وقابلية للتكرار. خطوة صغيرة تستطيع العودة إليها الأسبوع المقبل أهم من اندفاعة كبيرة لا تدوم.",
+      "spokenText": "أفضل بداية ليست الأكثر قسوة، بل الأكثر أمانًا وقابلية للتكرار. خطوة صغيرة تستطيع العودة إليها الأسبوع المقبل أهم من اندفاعة كبيرة لا تدوم.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-90a8b810da74",
+      "type": "paragraph",
+      "sourceHash": "90a8b810da74c937be34809084654720edd927769183b55e795d944efff5ae39",
+      "sourceText": "ولقراءة أخرى في تحويل الاهتمام إلى ممارسة قابلة للبناء، اقرأ: لا تبحث عن شغفك… ابنِه.",
+      "spokenText": "ولقراءة أخرى في تحويل الاهتمام إلى ممارسة قابلة للبناء، اقرأ: لا تبحث عن شغفك… ابنِه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "676675c864de9f12e2017ce143e5c220271eeb042d5e6f72d8a56844baa39c03",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

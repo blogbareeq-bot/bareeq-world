@@ -63,6 +63,7 @@ const contractEnv = {
   BAREEQ_TTS_PROVIDER: 'gemini',
   GEMINI_API_KEY: contractKey,
   BAREEQ_TTS_CONTRACT_TEST: '1',
+  BAREEQ_SPEECH_GATE_UNSAFE_TEST_BYPASS: 'I_ACKNOWLEDGE_LOCAL_CONTRACT_ONLY',
   GEMINI_TTS_ENDPOINT: `http://127.0.0.1:${address.port}/v1beta/interactions`,
   GEMINI_TTS_MIN_INTERVAL_MS: '0',
 };

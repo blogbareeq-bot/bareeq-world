@@ -1,0 +1,1044 @@
+{
+  "version": 1,
+  "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+  "sourceSnapshotHash": "ba8c193b5537c9e967eec5471aedca92809dcde3bc457c57c8aa83200593b571",
+  "sourceStructureHash": "c482d23ef6b0dc2ba02c53aa9c7ad921c82cf948283616cd5fa6b98596c0c38c",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر والقراءة الإضافية",
+    "segmentCount": 3,
+    "sourceHash": "3fa82e4aad2d6ce74112f956cb17c5dc481e491570591ac000cf220beefe8e7a"
+  },
+  "segments": [
+    {
+      "segmentId": "title-4bd4c3f965d6",
+      "type": "title",
+      "sourceHash": "4bd4c3f965d65ab3573d34057ea6ab689ecece5fd625bdbcc7d0b7ec18bd4e20",
+      "sourceText": "لا تبحث عن شغفك… ابنِه: ما الذي يقوله البحث؟",
+      "spokenText": "لا تبحث عن شغفك… ابنِه: ما الذي يقوله البحث؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c7872437e4fd",
+      "type": "paragraph",
+      "sourceHash": "c7872437e4fda589a99f9d6c499eab21bb4ff163f589531f63e59673acf33bc0",
+      "sourceText": "كم مرة سألت نفسك: ما شغفي الحقيقي؟ ثم انتظرت إجابة واضحة قبل أن تبدأ؟",
+      "spokenText": "كم مرة سألت نفسك: ما شغفي الحقيقي؟ ثم انتظرت إجابة واضحة قبل أن تبدأ؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-946b8f4ff502",
+      "type": "paragraph",
+      "sourceHash": "946b8f4ff50206e7240b57b206ed48474ba31a06d9a66e510d06ed68dd80a2c8",
+      "sourceText": "يبدو السؤال بريئًا، لكنه قد يوحي بأن لكل إنسان اهتمامًا مكتملًا ومخفيًا، وأن مهمته الوحيدة هي العثور عليه. يقدم كتاب كال نيوبورت So Good They Can't Ignore You زاوية مختلفة: العمل الذي نحبه قد ينمو من المهارة والاستقلال والأثر، لا من ومضة عاطفية تسبق التجربة.",
+      "spokenText": "يبدو السؤال بريئًا، لكنه قد يوحي بأن لكل إنسان اهتمامًا مكتملًا ومخفيًا، وأن مهمته الوحيدة هي العثور عليه. يقدم كتاب كال نيوبورت So Good They Can't Ignore You زاوية مختلفة: العمل الذي نحبه قد ينمو من المهارة والاستقلال والأثر، لا من ومضة عاطفية تسبق التجربة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9d6b69c5508b",
+      "type": "paragraph",
+      "sourceHash": "9d6b69c5508bcc737639736fc90b6e4e757122d760a868bb29deb40e6c2fb0ef",
+      "sourceText": "هذه ليست قاعدة حتمية لكل شخص أو مهنة، لكنها عدسة مفيدة تمنعنا من انتظار اليقين الكامل.",
+      "spokenText": "هذه ليست قاعدة حتمية لكل شخص أو مهنة، لكنها عدسة مفيدة تمنعنا من انتظار اليقين الكامل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-9a6ecf24bf07",
+      "type": "h2",
+      "sourceHash": "9a6ecf24bf07e5e3714befcedffafdf88cc55d1de928ad0f281e8ab93b2cd591",
+      "sourceText": "فكرتان عن الاهتمام",
+      "spokenText": "فكرتان عن الاهتمام",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e4029437c7d4",
+      "type": "paragraph",
+      "sourceHash": "e4029437c7d461ddb1da071e628b0f216603641af565456ad749eba49633119b",
+      "sourceText": "يمكن النظر إلى الاهتمامات بطريقتين:",
+      "spokenText": "يمكن النظر إلى الاهتمامات بطريقتين:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-eacb8efdfe8e",
+      "type": "list-item",
+      "sourceHash": "eacb8efdfe8eb542dd1f02868f453b29b5a720aa07001f0e8bb29d097f17c744",
+      "sourceText": "اهتمام ثابت: موجود كاملًا في الداخل، وسأشعر به فور العثور على المجال الصحيح.",
+      "spokenText": "اهتمام ثابت: موجود كاملًا في الداخل، وسأشعر به فور العثور على المجال الصحيح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-ad04cfdef155",
+      "type": "list-item",
+      "sourceHash": "ad04cfdef1559442862a3f02a11b7f8ac8a09077d8ee54c53fd54ab6351ffaa4",
+      "sourceText": "اهتمام قابل للنمو: قد يبدأ بفضول صغير، ثم يقوى مع التعلم والممارسة وفهم المجال.",
+      "spokenText": "اهتمام قابل للنمو: قد يبدأ بفضول صغير، ثم يقوى مع التعلم والممارسة وفهم المجال.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7dd625db2e70",
+      "type": "paragraph",
+      "sourceHash": "7dd625db2e705210deecde6cd93ff5d7f0f9089742c19b46c6b2ff088047d580",
+      "sourceText": "بحث منشور في Psychological Science اختبر هاتين النظرتين عبر خمس دراسات. وجد الباحثون أن تبني النظرة الثابتة ارتبط بتوقع دافع بلا حدود عند «العثور على الشغف»، وبانخفاض أكبر في الاهتمام عندما أصبح الموضوع الجديد صعبًا. لا يثبت ذلك أن كل شغف يُبنى بالطريقة نفسها، لكنه يحذر من اعتقاد أن الصعوبة تعني تلقائيًا أنك في المكان الخطأ.",
+      "spokenText": "بحث منشور في Psychological Science اختبر هاتين النظرتين عبر خمس دراسات. وجد الباحثون أن تبني النظرة الثابتة ارتبط بتوقع دافع بلا حدود عند «العثور على الشغف»، وبانخفاض أكبر في الاهتمام عندما أصبح الموضوع الجديد صعبًا. لا يثبت ذلك أن كل شغف يُبنى بالطريقة نفسها، لكنه يحذر من اعتقاد أن الصعوبة تعني تلقائيًا أنك في المكان الخطأ.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-0b7753489315",
+      "type": "h2",
+      "sourceHash": "0b7753489315f9c78c3ef52c540b4d4f343e0585dc7c0f09c33b5346456a9cb1",
+      "sourceText": "لماذا تبدو البداية فاترة أحيانًا؟",
+      "spokenText": "لماذا تبدو البداية فاترة أحيانًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-160bfbafa671",
+      "type": "paragraph",
+      "sourceHash": "160bfbafa671dd6f468049a09b0bef3fbe21f8eb018873cce44b666dabe590b3",
+      "sourceText": "المبتدئ لا يرى المجال كما يراه الخبير. هو يقضي وقتًا في فهم الأدوات والمصطلحات وتصحيح الأخطاء، بينما يملك الخبير مساحة أكبر للإبداع واتخاذ القرار. لذلك قد لا تكون المتعة في الأسبوع الأول مقياسًا عادلًا لقيمة المجال على المدى البعيد.",
+      "spokenText": "المبتدئ لا يرى المجال كما يراه الخبير. هو يقضي وقتًا في فهم الأدوات والمصطلحات وتصحيح الأخطاء، بينما يملك الخبير مساحة أكبر للإبداع واتخاذ القرار. لذلك قد لا تكون المتعة في الأسبوع الأول مقياسًا عادلًا لقيمة المجال على المدى البعيد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-cc0a1061630c",
+      "type": "paragraph",
+      "sourceHash": "cc0a1061630c9ae520dec7ce69ae04d574508dbccae34895a0c4aa5d9abb4fd7",
+      "sourceText": "في المقابل، لا تعني المثابرة أن تجبر نفسك إلى الأبد على عمل يضر صحتك أو يخالف قيمك. الفكرة هي إعطاء التجربة وقتًا كافيًا قبل الحكم، مع مراجعة واعية للواقع.",
+      "spokenText": "في المقابل، لا تعني المثابرة أن تجبر نفسك إلى الأبد على عمل يضر صحتك أو يخالف قيمك. الفكرة هي إعطاء التجربة وقتًا كافيًا قبل الحكم، مع مراجعة واعية للواقع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-6f5330770a61",
+      "type": "h2",
+      "sourceHash": "6f5330770a614a859e2b12cb9209ccc531eec01fc59e63a0d8690d61fa8b8536",
+      "sourceText": "رأس المال المهني في فكرة نيوبورت",
+      "spokenText": "رأس المال المهني في فكرة نيوبورت",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-453f5a107cf6",
+      "type": "paragraph",
+      "sourceHash": "453f5a107cf634854f9bbe6c704cee4f213c02c5048b996b6016a3611be062cb",
+      "sourceText": "يستخدم نيوبورت تعبير «رأس المال المهني» للإشارة إلى مهارات نادرة وقيّمة تستطيع مبادلتها بقدر أكبر من الاستقلال أو الإبداع أو الأثر في العمل.",
+      "spokenText": "يستخدم نيوبورت تعبير «رأس المال المهني» للإشارة إلى مهارات نادرة وقيّمة تستطيع مبادلتها بقدر أكبر من الاستقلال أو الإبداع أو الأثر في العمل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-8de9bfc464da",
+      "type": "paragraph",
+      "sourceHash": "8de9bfc464da312ee378e8cfa9f2c743d2a40a8b174a45cb28995f8e2989c25e",
+      "sourceText": "بدل سؤال «هل أحب هذا المجال الآن؟» يمكن أن تسأل:",
+      "spokenText": "بدل سؤال «هل أحب هذا المجال الآن؟» يمكن أن تسأل:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-de1216426a01",
+      "type": "list-item",
+      "sourceHash": "de1216426a0142f13cd43dab1509468561a7b2ac2d12eb70a324699c5bdce3b4",
+      "sourceText": "ما المهارة المحددة التي أتعلمها هنا؟",
+      "spokenText": "ما المهارة المحددة التي أتعلمها هنا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-04faa336c653",
+      "type": "list-item",
+      "sourceHash": "04faa336c653ffea3968c352234de196ceb96729bbf075dcc6f1e9f8ef41bea6",
+      "sourceText": "هل لهذه المهارة قيمة حقيقية لدى الآخرين؟",
+      "spokenText": "هل لهذه المهارة قيمة حقيقية لدى الآخرين؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-591f1f92ea06",
+      "type": "list-item",
+      "sourceHash": "591f1f92ea06e45098c410fd1893a36bf7c9c41ada5baa7e9d4c0cb3bbeba57b",
+      "sourceText": "هل يتيح لي التحسن مساحة أكبر للاختيار أو الإبداع؟",
+      "spokenText": "هل يتيح لي التحسن مساحة أكبر للاختيار أو الإبداع؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-c1e5d89d9e4d",
+      "type": "list-item",
+      "sourceHash": "c1e5d89d9e4d5007b74b415e740b4bb6d8c63171bfa4122c67c1be54f0f59b2d",
+      "sourceText": "هل تتوافق طبيعة العمل مع قيمي وحدودي؟",
+      "spokenText": "هل تتوافق طبيعة العمل مع قيمي وحدودي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-12ac751b32f9",
+      "type": "paragraph",
+      "sourceHash": "12ac751b32f94794d7c39dbb3671d1e2f0759e4e020e0eac68604cc8197fd066",
+      "sourceText": "هذه الأسئلة لا تلغي المشاعر، لكنها تمنح القرار أرضًا أكثر صلابة.",
+      "spokenText": "هذه الأسئلة لا تلغي المشاعر، لكنها تمنح القرار أرضًا أكثر صلابة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-464d5e4c0623",
+      "type": "h2",
+      "sourceHash": "464d5e4c0623fd86f7ed3848169efcf8da888a47898b34cf2ac754d289903d16",
+      "sourceText": "تجربة صغيرة بدل قرار كبير",
+      "spokenText": "تجربة صغيرة بدل قرار كبير",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e16982521f17",
+      "type": "paragraph",
+      "sourceHash": "e16982521f17da5feeb422271d8c45966e4fb7b59cd077491ddc2b0044ba8ca4",
+      "sourceText": "لا تحتاج إلى ترك عملك أو شراء معدات مكلفة. صمم تجربة محدودة:",
+      "spokenText": "لا تحتاج إلى ترك عملك أو شراء معدات مكلفة. صمم تجربة محدودة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-de21d3479bd4",
+      "type": "list-item",
+      "sourceHash": "de21d3479bd44c958cd53f72e04e339d43e829d42f36e7b4ac785e1d0dfb239c",
+      "sourceText": "اختر مجالًا يثير فضولك، لا مجالًا تزعم أنك متأكد منه.",
+      "spokenText": "اختر مجالًا يثير فضولك، لا مجالًا تزعم أنك متأكد منه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-cdf52a9e9a21",
+      "type": "list-item",
+      "sourceHash": "cdf52a9e9a21158dd5c5d87d29023beab6f6c729b09fa2073018e25ce5e72644",
+      "sourceText": "حدد مشروعًا صغيرًا يمكن إنهاؤه خلال أسبوعين.",
+      "spokenText": "حدد مشروعًا صغيرًا يمكن إنهاؤه خلال أسبوعين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-352144f38655",
+      "type": "list-item",
+      "sourceHash": "352144f3865504132688741e8dffab2725cb4491c71213beee727a088e74dcbb",
+      "sourceText": "استخدم الأدوات المتاحة قبل الاستثمار المالي.",
+      "spokenText": "استخدم الأدوات المتاحة قبل الاستثمار المالي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-50b0d1f12059",
+      "type": "list-item",
+      "sourceHash": "50b0d1f12059f40683cd942360d1be9d84ad75b3c81d985920e50b245853df9d",
+      "sourceText": "اطلب ملاحظة من شخص يعرف المجال.",
+      "spokenText": "اطلب ملاحظة من شخص يعرف المجال.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-b6418a66a181",
+      "type": "list-item",
+      "sourceHash": "b6418a66a18106acf67c36e143f4d7ab087327e55b4c06b52deb95c199705b8f",
+      "sourceText": "دوّن ما أحببته، وما أتعبك، وما ترغب في تعلمه بعد ذلك.",
+      "spokenText": "دوّن ما أحببته، وما أتعبك، وما ترغب في تعلمه بعد ذلك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4818d37ac433",
+      "type": "paragraph",
+      "sourceHash": "4818d37ac433b6a9e3a522d081e1eaa52b08be9f072fa59a0c1b3bd3f2b0d98e",
+      "sourceText": "إذا أردت اختبار الكتابة، أنجز مقالًا كاملًا. وإذا أردت اختبار البرمجة، ابنِ أداة صغيرة. وإذا أردت التصوير، نفّذ سلسلة صور حول موضوع واحد. المنتج المكتمل—ولو كان بسيطًا—يعطيك معلومات لا يوفرها التأمل وحده.",
+      "spokenText": "إذا أردت اختبار الكتابة، أنجز مقالًا كاملًا. وإذا أردت اختبار البرمجة، ابنِ أداة صغيرة. وإذا أردت التصوير، نفّذ سلسلة صور حول موضوع واحد. المنتج المكتمل—ولو كان بسيطًا—يعطيك معلومات لا يوفرها التأمل وحده.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-1c72feeb8835",
+      "type": "h2",
+      "sourceHash": "1c72feeb88354d958cfbf46a95616b04e8a1c0a7e584cfeded548965afc18839",
+      "sourceText": "اختبر العملية لا الصورة اللامعة",
+      "spokenText": "اختبر العملية لا الصورة اللامعة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e5808b229e98",
+      "type": "paragraph",
+      "sourceHash": "e5808b229e98880821e5c804d40164843c336e473a7b6131dd457e212abf4485",
+      "sourceText": "من السهل أن نحب صورة المهنة: الكاتب المنشور، أو المصور المسافر، أو رائد الأعمال المستقل. الاختبار الأدق هو علاقتك بالعملية اليومية:",
+      "spokenText": "من السهل أن نحب صورة المهنة: الكاتب المنشور، أو المصور المسافر، أو رائد الأعمال المستقل. الاختبار الأدق هو علاقتك بالعملية اليومية:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-82e71d7cea12",
+      "type": "list-item",
+      "sourceHash": "82e71d7cea12331c254eca18333c897cdbfc1622b1bd6a6b9808bc30497df608",
+      "sourceText": "هل تستطيع تقبل التدريب المتكرر؟",
+      "spokenText": "هل تستطيع تقبل التدريب المتكرر؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-3bad8b82b65a",
+      "type": "list-item",
+      "sourceHash": "3bad8b82b65a79f5391afe3e57c4e9d2e22ae6c74430a8a0048d3c16ddc5c21e",
+      "sourceText": "هل يثير حل المشكلات فضولك؟",
+      "spokenText": "هل يثير حل المشكلات فضولك؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-8e1e289be569",
+      "type": "list-item",
+      "sourceHash": "8e1e289be569f0d429f6be51050e1b7048ab604f4547ea1eae401a07b0fae53d",
+      "sourceText": "هل تتحمل التصحيح وإعادة المحاولة؟",
+      "spokenText": "هل تتحمل التصحيح وإعادة المحاولة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-5d49747ad1e0",
+      "type": "list-item",
+      "sourceHash": "5d49747ad1e00a5fc41ebf676437378e7cecc5b3936f1c3ee30cf183c9db5563",
+      "sourceText": "هل تريد فهم المجال بصورة أعمق بعد أن رأيت جانبه الصعب؟",
+      "spokenText": "هل تريد فهم المجال بصورة أعمق بعد أن رأيت جانبه الصعب؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-18aec61456cc",
+      "type": "paragraph",
+      "sourceHash": "18aec61456cca7bfd0f9bad808c42f30c51d01c447620de0bc6f901cc6d45809",
+      "sourceText": "لا يلزم أن تستمتع بكل دقيقة. لكن وجود فضول مستمر، وتقدم يمكن ملاحظته، وقيمة تتوافق معك مؤشرات أفضل من الحماس العابر.",
+      "spokenText": "لا يلزم أن تستمتع بكل دقيقة. لكن وجود فضول مستمر، وتقدم يمكن ملاحظته، وقيمة تتوافق معك مؤشرات أفضل من الحماس العابر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-10d5efdde070",
+      "type": "h2",
+      "sourceHash": "10d5efdde0709633635283e15f2a6cebeaba93f6d2a3baa6f21dcf776ed28ecc",
+      "sourceText": "أين تحتاج الفكرة إلى توازن؟",
+      "spokenText": "أين تحتاج الفكرة إلى توازن؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dfdbc391bd61",
+      "type": "paragraph",
+      "sourceHash": "dfdbc391bd61506fbfe90f51854b825fae778409d1bcb59313958bb3e9c9248a",
+      "sourceText": "التركيز على المهارة وحدها قد يتجاهل ظروفًا مهمة: بيئة عمل سامة، أو غياب الأمان، أو التمييز، أو مسؤوليات لا يستطيع الفرد تغييرها بسهولة. ليست كل مشكلة في العمل نقصًا في المثابرة، وليست كل مغادرة استسلامًا.",
+      "spokenText": "التركيز على المهارة وحدها قد يتجاهل ظروفًا مهمة: بيئة عمل سامة، أو غياب الأمان، أو التمييز، أو مسؤوليات لا يستطيع الفرد تغييرها بسهولة. ليست كل مشكلة في العمل نقصًا في المثابرة، وليست كل مغادرة استسلامًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2296703a833a",
+      "type": "paragraph",
+      "sourceHash": "2296703a833a01178e2919b1dd001ea9d8ba0013c5e91b66399a33ec5e66a48e",
+      "sourceText": "كما أن بعض الناس يملكون اهتمامًا مبكرًا وواضحًا بالفعل. المقصود ليس إنكار ذلك، بل التحرر من فكرة أن وضوح الشغف شرط لبدء تجربة مفيدة.",
+      "spokenText": "كما أن بعض الناس يملكون اهتمامًا مبكرًا وواضحًا بالفعل. المقصود ليس إنكار ذلك، بل التحرر من فكرة أن وضوح الشغف شرط لبدء تجربة مفيدة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-f9db2c6465bf",
+      "type": "h2",
+      "sourceHash": "f9db2c6465bf531b0408fc4814d5050d4e95810e19747cbfd6fb00c8b57b7d4c",
+      "sourceText": "الشغف ليس عنصرًا واحدًا",
+      "spokenText": "الشغف ليس عنصرًا واحدًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-03f372f5f867",
+      "type": "paragraph",
+      "sourceHash": "03f372f5f8674916445b1b979dae915678ad76c8d7f83a2c53f9c8678716bbf3",
+      "sourceText": "تزداد الفكرة وضوحًا إذا فصلنا بين ثلاثة أشياء نخلطها عادة تحت كلمة «الشغف»: الاهتمام، والكفاءة، والمعنى. قد يثيرك مجال ما لكنك لم تكتسب أدواته بعد. وقد تصبح ممتازًا في عمل لا يناسب قيمك. وقد ترى معنى عميقًا في وظيفة تحتاج سنوات قبل أن تشعر فيها بالتمكن.",
+      "spokenText": "تزداد الفكرة وضوحًا إذا فصلنا بين ثلاثة أشياء نخلطها عادة تحت كلمة «الشغف»: الاهتمام، والكفاءة، والمعنى. قد يثيرك مجال ما لكنك لم تكتسب أدواته بعد. وقد تصبح ممتازًا في عمل لا يناسب قيمك. وقد ترى معنى عميقًا في وظيفة تحتاج سنوات قبل أن تشعر فيها بالتمكن.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a31bfb08b65f",
+      "type": "paragraph",
+      "sourceHash": "a31bfb08b65f7f211620b5ae6ae22c381876daf70d6010a69f2f402e5c032e1b",
+      "sourceText": "لذلك لا يوجد سؤال واحد يحسم القرار. الأفضل أن تسأل: هل ما زال فضولي حيًا بعد الاحتكاك بالواقع؟ هل تتحسن مهارتي مع التدريب؟ وهل أرى في هذا المسار قيمة تتوافق مع الطريقة التي أريد أن أعيش وأعمل بها؟",
+      "spokenText": "لذلك لا يوجد سؤال واحد يحسم القرار. الأفضل أن تسأل: هل ما زال فضولي حيًا بعد الاحتكاك بالواقع؟ هل تتحسن مهارتي مع التدريب؟ وهل أرى في هذا المسار قيمة تتوافق مع الطريقة التي أريد أن أعيش وأعمل بها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-64782e76daa4",
+      "type": "h2",
+      "sourceHash": "64782e76daa4513b16d3159e870a7405ce801b1c6795824efa9a2a49f4511f6f",
+      "sourceText": "من الفضول إلى المهارة",
+      "spokenText": "من الفضول إلى المهارة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c6696d6753de",
+      "type": "paragraph",
+      "sourceHash": "c6696d6753de8e35d2984bf737cb2f65fd2a1696fcc9f2385c312b1ade425bc8",
+      "sourceText": "يمكن أن يبدأ المسار بفضول صغير يدفعك إلى تجربة. التجربة تمنحك معرفة أولية، والمعرفة تجعل التدريب أقل غموضًا. مع التحسن تظهر مهام لم تكن قادرًا على الاستمتاع بها عندما كنت مبتدئًا، وقد يزيد الإحساس بالاستقلال أو الأثر. عندها يقوى الاهتمام، أو تكتشف بوضوح أكبر أنه ليس لك.",
+      "spokenText": "يمكن أن يبدأ المسار بفضول صغير يدفعك إلى تجربة. التجربة تمنحك معرفة أولية، والمعرفة تجعل التدريب أقل غموضًا. مع التحسن تظهر مهام لم تكن قادرًا على الاستمتاع بها عندما كنت مبتدئًا، وقد يزيد الإحساس بالاستقلال أو الأثر. عندها يقوى الاهتمام، أو تكتشف بوضوح أكبر أنه ليس لك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bcb17b71ec51",
+      "type": "paragraph",
+      "sourceHash": "bcb17b71ec5146f9fdf1e50ced486dc3b8f7dda804513d69096bd9288ef0d980",
+      "sourceText": "المهم أن هذه الحلقة لا تعد بنتيجة واحدة. بعض التجارب تنتهي بقرار واعٍ بالمغادرة، وهذا أيضًا مكسب إذا اتخذته بعد معرفة حقيقية بدل صورة متخيلة.",
+      "spokenText": "المهم أن هذه الحلقة لا تعد بنتيجة واحدة. بعض التجارب تنتهي بقرار واعٍ بالمغادرة، وهذا أيضًا مكسب إذا اتخذته بعد معرفة حقيقية بدل صورة متخيلة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-94d608fd298d",
+      "type": "h2",
+      "sourceHash": "94d608fd298dabf175e0637c87992a9e34c747d60c6fb0526d67c5c3d2df361d",
+      "sourceText": "تجربة الثلاثين يومًا",
+      "spokenText": "تجربة الثلاثين يومًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-14e5412c381b",
+      "type": "paragraph",
+      "sourceHash": "14e5412c381b0d0c76dbec08d0f66faa895a70e9674aaa1ea160935014fda133",
+      "sourceText": "إذا كنت حائرًا بين التأمل الطويل وقرار كبير، جرّب فترة محدودة: اختر مهارة واحدة تمثل العمل الحقيقي في المجال، خصص لها وقتًا ثابتًا، أنجز مخرجًا واضحًا، اطلب نقدًا محددًا، ثم قيّم الفضول والتحسن وطبيعة الصعوبات لا مزاج آخر يوم فقط.",
+      "spokenText": "إذا كنت حائرًا بين التأمل الطويل وقرار كبير، جرّب فترة محدودة: اختر مهارة واحدة تمثل العمل الحقيقي في المجال، خصص لها وقتًا ثابتًا، أنجز مخرجًا واضحًا، اطلب نقدًا محددًا، ثم قيّم الفضول والتحسن وطبيعة الصعوبات لا مزاج آخر يوم فقط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-495565d38d3e",
+      "type": "paragraph",
+      "sourceHash": "495565d38d3e8b00b15553dad9396593e88101e73ded00ec19fc5fe0343d79c9",
+      "sourceText": "لا تجعل التجربة اختبارًا لإثبات أنك «خلقت لهذا المجال». هي طريقة منخفضة المخاطر نسبيًا للحصول على بيانات عن نفسك.",
+      "spokenText": "لا تجعل التجربة اختبارًا لإثبات أنك «خلقت لهذا المجال». هي طريقة منخفضة المخاطر نسبيًا للحصول على بيانات عن نفسك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-0b569ffa7523",
+      "type": "h2",
+      "sourceHash": "0b569ffa7523d3d6369f1d61e512ae08c62c133b72613cebf33fca889b3e29b1",
+      "sourceText": "متى يكون التوقف قرارًا ناضجًا؟",
+      "spokenText": "متى يكون التوقف قرارًا ناضجًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-19e2e9aac844",
+      "type": "paragraph",
+      "sourceHash": "19e2e9aac844446e843abb4807ca5e88444b90fcc0969c2a73752fc213aae4e6",
+      "sourceText": "خطاب «ابن شغفك» يمكن أن يتحول إلى فخ إذا فهمناه كدعوة للاستمرار مهما كان الثمن. هناك فرق بين صعوبة التعلم التي تستحق الصبر وبين بيئة تؤذي صحتك أو تنتهك قيمك أو تسد فرص النمو. كما أن القيود المالية والعائلية والفرص المتاحة ليست تفاصيل نفسية يمكن تجاهلها.",
+      "spokenText": "خطاب «ابن شغفك» يمكن أن يتحول إلى فخ إذا فهمناه كدعوة للاستمرار مهما كان الثمن. هناك فرق بين صعوبة التعلم التي تستحق الصبر وبين بيئة تؤذي صحتك أو تنتهك قيمك أو تسد فرص النمو. كما أن القيود المالية والعائلية والفرص المتاحة ليست تفاصيل نفسية يمكن تجاهلها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9df0ca3ace9a",
+      "type": "paragraph",
+      "sourceHash": "9df0ca3ace9abddbc64ea8ec90753e65f2f99f1c4283cf8e82d7b32ba00f644f",
+      "sourceText": "التوقف يكون أكثر نضجًا عندما تستطيع تحديد السبب: هل المشكلة في المجال نفسه، أم شكل الوظيفة الحالية، أم البيئة، أم مستوى المهارة، أم أن أولوياتك تغيرت؟ كلما كان جوابك أدق، كان القرار التالي أقل اعتمادًا على الشعارات.",
+      "spokenText": "التوقف يكون أكثر نضجًا عندما تستطيع تحديد السبب: هل المشكلة في المجال نفسه، أم شكل الوظيفة الحالية، أم البيئة، أم مستوى المهارة، أم أن أولوياتك تغيرت؟ كلما كان جوابك أدق، كان القرار التالي أقل اعتمادًا على الشعارات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-eb89f939be04",
+      "type": "h2",
+      "sourceHash": "eb89f939be04d880f227fa9e6d499c1c05928044b53121f94cd0eaeedf120ea4",
+      "sourceText": "سؤال أصغر وأفضل",
+      "spokenText": "سؤال أصغر وأفضل",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1f02f901edca",
+      "type": "paragraph",
+      "sourceHash": "1f02f901edcaa4dd76cf3d33836a5db478f35bc65ac6b885db6288af82f6eca2",
+      "sourceText": "بدل البحث عن كلمة واحدة تصف بقية حياتك، جرّب سؤالًا أصغر: ما التجربة التالية التي تستحق أن أبني فيها مهارة حقيقية؟ هذا السؤال لا يطلب منك معرفة المستقبل، لكنه يمنحك خطوة يمكن فحصها.",
+      "spokenText": "بدل البحث عن كلمة واحدة تصف بقية حياتك، جرّب سؤالًا أصغر: ما التجربة التالية التي تستحق أن أبني فيها مهارة حقيقية؟ هذا السؤال لا يطلب منك معرفة المستقبل، لكنه يمنحك خطوة يمكن فحصها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6c94442fa9fe",
+      "type": "paragraph",
+      "sourceHash": "6c94442fa9fe5c159ef3811e56d44a7936bc27bf81c2b158bead7f64ffcaf778",
+      "sourceText": "وقد يكون هذا أكثر ما يجمع بين فكرة نيوبورت والبحث النفسي: الاهتمام لا يعيش منفصلًا عن الممارسة. أحيانًا نكتشفه، وأحيانًا نصنع ظروف نموه، وأحيانًا نتعلم أنه لا يناسبنا. في الحالات الثلاث، الحركة الواعية تعطينا معرفة أكثر من انتظار الإشارة المثالية.",
+      "spokenText": "وقد يكون هذا أكثر ما يجمع بين فكرة نيوبورت والبحث النفسي: الاهتمام لا يعيش منفصلًا عن الممارسة. أحيانًا نكتشفه، وأحيانًا نصنع ظروف نموه، وأحيانًا نتعلم أنه لا يناسبنا. في الحالات الثلاث، الحركة الواعية تعطينا معرفة أكثر من انتظار الإشارة المثالية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-6c78e10ed9e0",
+      "type": "h2",
+      "sourceHash": "6c78e10ed9e046c9524e768dc292009e18afc4281ac16a980dcbf3dea387222d",
+      "sourceText": "الخلاصة",
+      "spokenText": "الخلاصة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c0045b207231",
+      "type": "paragraph",
+      "sourceHash": "c0045b207231e00be147101e49f23292eeeb6b20b1984d7919c3361c095113d8",
+      "sourceText": "ربما لا تحتاج إلى إجابة نهائية عن «شغف العمر». تحتاج إلى تجربة تالية جيدة، ومهارة تتطور، ومراجعة صادقة لما تتعلمه عن نفسك وعن الواقع.",
+      "spokenText": "ربما لا تحتاج إلى إجابة نهائية عن «شغف العمر». تحتاج إلى تجربة تالية جيدة، ومهارة تتطور، ومراجعة صادقة لما تتعلمه عن نفسك وعن الواقع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-0c75dd45f928",
+      "type": "paragraph",
+      "sourceHash": "0c75dd45f928fa7e61afb95be1763992cabb8fbae4ad097b6a4bd555e29ae60c",
+      "sourceText": "لا تنتظر شعورًا كاملًا قبل الحركة. ابدأ بخطوة صغيرة يمكن قياسها، ثم دع الخبرة—لا الخيال وحده—تخبرك إن كان هذا المسار يستحق المزيد.",
+      "spokenText": "لا تنتظر شعورًا كاملًا قبل الحركة. ابدأ بخطوة صغيرة يمكن قياسها، ثم دع الخبرة—لا الخيال وحده—تخبرك إن كان هذا المسار يستحق المزيد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-63d23944b394",
+      "type": "paragraph",
+      "sourceHash": "63d23944b394228640b15bcaf330aa369b4d8ebc499aa2bb2ff467320cf9eaa0",
+      "sourceText": "ولتطبيق الفكرة نفسها على بناء عادة صحية واقعية، اقرأ اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا.",
+      "spokenText": "ولتطبيق الفكرة نفسها على بناء عادة صحية واقعية، اقرأ اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "5c6abff36c79f30aa06e53cffb7ea27fdf59594bd37b66e516aba333f69b98b1",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

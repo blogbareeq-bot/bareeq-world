@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+  "speechScriptHash": "6f5daaf9fabba77bd5ff07f25f4d65735e8b79216a7ca527ee50e8f8bb57767b",
+  "status": "draft-needs-speech-review",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 60,
+  "selectedSegments": [
+    {
+      "segmentId": "paragraph-e3175497e126",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-b6c9c1e48b99",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-1d7ae668c2e9",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-f501c4f52d7a",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-90eb80358cc7",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "489e285bbd21dc2538c029896a2e32c32fa9b926bc98b7adbd001f7572128e4e"
+}

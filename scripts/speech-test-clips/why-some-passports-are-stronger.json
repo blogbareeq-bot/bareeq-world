@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "articleId": "why-some-passports-are-stronger",
+  "speechScriptHash": "1e50637f8f3647d382d82d6f0b3790a73446cb5630112a6803ff1646368b62e3",
+  "status": "ready",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 60,
+  "selectedSegments": [
+    {
+      "segmentId": "paragraph-4f6b641f774c",
+      "challenges": [
+        "تَعُدُّهَا",
+        "تَحْسِبُ",
+        "e-Visa"
+      ]
+    },
+    {
+      "segmentId": "paragraph-2e24aef1933e",
+      "challenges": [
+        "سَتَرُدُّ",
+        "المعاملة بالمثل"
+      ]
+    },
+    {
+      "segmentId": "paragraph-05eb2889675b",
+      "challenges": [
+        "تُولَدْ",
+        "المبني للمجهول"
+      ]
+    },
+    {
+      "segmentId": "paragraph-17e8cc23eb15",
+      "challenges": [
+        "تَذْكُرُ",
+        "الفاعل المؤخر"
+      ]
+    },
+    {
+      "segmentId": "paragraph-dc24715076c6",
+      "challenges": [
+        "يُحَوِّلُ",
+        "C-181/23"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "fc89941f5482306b843a7d4c2665bf4a2e9cad2a2938fa4c4476c15588d31f3a"
+}

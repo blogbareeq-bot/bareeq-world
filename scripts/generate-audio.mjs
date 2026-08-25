@@ -15,6 +15,17 @@ import {
   getCloudTtsAccessToken,
   hasCloudTtsCredentials,
 } from './cloud-tts.mjs';
+import {
+  extractArticleSpeechModel,
+  readAmbiguityRules,
+  readSpeechScript,
+  readTestClipPlan,
+  splitReferenceSection,
+  validateSpeechScript,
+  verifyTestClipEvidence,
+} from './speech-script-core.mjs';
+import { assertSynthesisAllowed, evaluateSynthesisReadiness } from './speech-synthesis-gate.mjs';
+import { buildGeminiPrompt, GEMINI_STYLE, LEGACY_GEMINI_STYLE } from './speech-prompt.mjs';
 
 let ffmpegInstaller = null;
 try { ffmpegInstaller = (await import('@ffmpeg-installer/ffmpeg')).default; }
@@ -34,17 +45,6 @@ const RESOURCE_ENDPOINT = process.env.AZURE_SPEECH_ENDPOINT?.trim().replace(/\/$
 const GEMINI_MODEL = 'gemini-3.1-flash-tts-preview';
 const GEMINI_OFFICIAL_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/interactions';
 const GEMINI_API_REVISION = '2026-05-20';
-const GEMINI_STYLE = `### TASK
-Synthesize the Arabic transcript below as speech. Speak only the text under TRANSCRIPT, exactly as written. Do not read these directions or labels aloud, and do not add commentary.
-
-### AUDIO PROFILE
-A mature, well-read Arabic narrator for Bareeq, a refined knowledge blog for curious adult readers.
-
-### SCENE
-A contemporary Arabic recording studio in daylight. The narrator speaks naturally to one attentive listener in a calm, professional setting.
-
-### DIRECTOR'S NOTES
-Use clear Modern Standard Arabic. Sound natural, human, warm, and intellectually engaging. Use a normal conversational volume, never a whisper or a breathy delivery. Keep a comfortable medium pace with subtle organic variation. Articulate clearly without over-pronouncing words or sounding like a news anchor. Let questions carry gentle curiosity, explanations sound calm and confident, and conclusions feel reflective and quietly uplifting. Avoid theatrical acting, advertising energy, excessive solemnity, and monotone delivery.`;
 const OPENAI_MODEL = 'gpt-4o-mini-tts-2025-12-15';
 const OPENAI_OFFICIAL_ENDPOINT = 'https://api.openai.com/v1/audio/speech';
 const OPENAI_STYLE = 'اقرأ بالعربية الفصحى الطبيعية بصوت معرفي بشري هادئ، مع وضوح كامل ووقفات تخدم المعنى وإيقاع مريح لمقال طويل، ومن دون مبالغة تمثيلية أو نبرة إعلانية.';
@@ -83,6 +83,8 @@ const VOICES = PROVIDER === 'gemini'
     ] : [];
 const PLAN_ONLY = process.argv.includes('--plan');
 const SYNC_PLAN_ONLY = process.argv.includes('--sync-plan');
+const LEGACY_AUDIO_VALIDATION = process.argv.includes('--legacy-audio-validation');
+if (LEGACY_AUDIO_VALIDATION && !SYNC_PLAN_ONLY) throw new Error('--legacy-audio-validation is restricted to the read-only --sync-plan command.');
 const SPEECH_QA_JSON = process.argv.includes('--speech-qa-json') || process.argv.some((arg) => arg.startsWith('--speech-qa-output='));
 const SPEECH_QA_OUTPUT = process.argv.find((arg) => arg.startsWith('--speech-qa-output='))?.slice('--speech-qa-output='.length) || '';
 const ALLOW_PARTIAL = process.env.BAREEQ_AUDIO_ALLOW_PARTIAL === '1';
@@ -107,7 +109,12 @@ const OPENAI_ARABIC_CHARS_PER_TEXT_TOKEN = Number(process.env.OPENAI_TTS_ARABIC_
 const OPENAI_AUDIO_TOKENS_PER_SECOND = Number(process.env.OPENAI_TTS_AUDIO_TOKENS_PER_SECOND || '50');
 const FFMPEG_PATH = process.env.FFMPEG_PATH?.trim() || ffmpegInstaller?.path || 'ffmpeg';
 const TTS_BASE = (process.env.AZURE_SPEECH_TTS_BASE?.trim().replace(/\/$/, '') || `https://${REGION}.tts.speech.microsoft.com`);
-const CACHE_ORIGIN = (process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '') || 'https://bareeqworld.com');
+const configuredCacheOrigin = process.env.BAREEQ_AUDIO_CACHE_ORIGIN?.trim().replace(/\/$/, '');
+const CACHE_ORIGINS = configuredCacheOrigin
+  ? [configuredCacheOrigin]
+  : CONTRACT_TEST
+    ? []
+    : ['https://bareeq-world.pages.dev', 'https://bareeqworld.com'];
 const USER_AGENT = 'Bareeq-Audio-Builder/4.21.1';
 const SPEECH_OVERRIDES_FILE = path.join(ROOT, 'scripts', 'speech-overrides.json');
 const SPEECH_OVERRIDES = JSON.parse(await readFile(SPEECH_OVERRIDES_FILE, 'utf8'));
@@ -119,6 +126,7 @@ const STUDIO_ARTICLE_IDS = new Set(Object.values(STUDIO_MAP.imports || {}).map((
 const BUNDLED_MAP_FILE = path.join(ROOT, 'scripts', 'bundled-azure-audio-map.json');
 const BUNDLED_MAP = JSON.parse(await readFile(BUNDLED_MAP_FILE, 'utf8'));
 const BUNDLED_BY_ARTICLE = new Map((BUNDLED_MAP.articles || []).map((item) => [item.articleId, item]));
+const CONTEXTUAL_AMBIGUITY_RULES = await readAmbiguityRules(ROOT);
 
 const encoder = new TextEncoder();
 const byteLength = (value) => encoder.encode(value).byteLength;
@@ -143,7 +151,7 @@ function parsePost(source, filename) {
 }
 
 function stripReferences(body) {
-  return body.replace(/\n##\s+(?:المصادر(?:\s+والتحقق|\s+والقراءة\s+الإضافية)?|المراجع|References?)\b[\s\S]*$/i, '').trim();
+  return splitReferenceSection(body).spokenBody;
 }
 
 function cleanInlineMarkdown(text) {
@@ -192,8 +200,8 @@ function optimizeForSpeech(text, articleId) {
   return text;
 }
 
-function extractSpeechSegments(body, articleId) {
-  body = stripReferences(body)
+function extractSpeechSegments(body, articleId, { includeReferences = false } = {}) {
+  body = (includeReferences ? body : stripReferences(body))
     .replace(/```[\s\S]*?```/g, '\n')
     .replace(/<!--[\s\S]*?-->/g, '\n');
 
@@ -335,8 +343,8 @@ function joinSpeechPieces(items) {
   return text.trim();
 }
 
-function buildAudioParts(title, segments, articleId) {
-  const items = [{ segmentId: null, type: 'title', match: '', text: optimizeForSpeech(title, articleId) }];
+function buildAudioParts(title, segments, articleId, { titleIsApproved = false } = {}) {
+  const items = [{ segmentId: null, type: 'title', match: '', text: titleIsApproved ? title : optimizeForSpeech(title, articleId) }];
   for (const segment of segments) {
     const pieces = splitByBytes(segment.spokenText);
     for (const text of pieces) items.push({ segmentId: segment.id, type: segment.type, match: segment.match, text });
@@ -557,14 +565,6 @@ async function synthesizeOpenAI(apiKey, voice, part) {
   }, { throttle: true, label: 'OpenAI speech synthesis' });
 }
 
-function buildGeminiPrompt(part, context) {
-  const topic = String(context?.articleTitle || '').replace(/[\r\n]+/g, ' ').trim();
-  const sequence = Number.isInteger(context?.partIndex) && Number.isInteger(context?.partCount)
-    ? `This is continuity segment ${context.partIndex + 1} of ${context.partCount}. Keep the same narrator identity and recording distance as the other segments.`
-    : '';
-  return `${GEMINI_STYLE}\n\n### CONTEXT (DO NOT READ ALOUD)\nArticle topic: ${topic}\n${sequence}\n\n### TRANSCRIPT\n${part.text}`;
-}
-
 function encodeGeminiPcmToMp3(pcm) {
   return new Promise((resolve, reject) => {
     const child = spawn(FFMPEG_PATH, [
@@ -701,27 +701,79 @@ async function loadPosts() {
     const post = parsePost(source, name);
     if (post.draft) continue;
     const id = name.replace(/\.md$/, '');
-    const segments = extractSpeechSegments(post.body, id);
-    const audioParts = buildAudioParts(post.title, segments, id);
+    const speechModel = extractArticleSpeechModel({ articleId: id, source, filename: name });
+    const speechScript = await readSpeechScript(id, ROOT);
+    const speechValidation = validateSpeechScript(speechModel, speechScript, CONTEXTUAL_AMBIGUITY_RULES, { requireReviews: false });
+    const testClipPlan = await readTestClipPlan(id, ROOT);
+    const testClipEvidenceVerified = await verifyTestClipEvidence(testClipPlan, ROOT);
+    const useLegacyPublishedInput = LEGACY_AUDIO_VALIDATION || PROVIDER === 'bundled' || CACHE_ONLY;
+    let title = post.title;
+    let segments;
+    let audioParts;
+    let speechInput;
+
+    if (useLegacyPublishedInput) {
+      // Existing bundled/static audio is immutable in this migration. Its manifests
+      // retain the historical segment plan (including any already-published source
+      // appendix). Every future synthesis provider uses the reviewed Speech Script.
+      segments = extractSpeechSegments(post.body, id, { includeReferences: true });
+      audioParts = buildAudioParts(post.title, segments, id);
+      speechInput = 'legacy-published-audio-compatibility';
+    } else {
+      const records = new Map((speechScript?.segments ?? []).map((segment) => [segment.segmentId, segment]));
+      const titleSegment = speechModel.segments.find((segment) => segment.type === 'title');
+      title = records.get(titleSegment?.segmentId)?.spokenText ?? titleSegment?.sourceText ?? post.title;
+      segments = speechModel.segments.filter((segment) => segment.type !== 'title').map((segment) => {
+        const record = records.get(segment.segmentId);
+        return {
+          id: segment.runtimeId,
+          speechScriptSegmentId: segment.segmentId,
+          type: segment.type,
+          visibleText: segment.sourceText,
+          match: segment.match,
+          spokenText: record?.spokenText ?? segment.sourceText,
+        };
+      });
+      audioParts = buildAudioParts(title, segments, id, { titleIsApproved: true });
+      speechInput = 'reviewed-contextual-speech-script';
+    }
+
     const spokenText = joinSpeechPieces(audioParts.map((part) => ({ text: part.text })));
     if (!spokenText || !audioParts.length || !segments.length) throw new Error(`${name}: no speech text after cleanup.`);
     if (audioParts.some((part) => byteLength(part.text) > MAX_REQUEST_BYTES)) throw new Error(`${name}: a TTS part exceeds ${MAX_REQUEST_BYTES} bytes.`);
-    posts.push({ id, title: post.title, spokenText, segments, audioParts, key: audioKeyFor(id) });
+    posts.push({
+      id,
+      title: post.title,
+      spokenTitle: title,
+      spokenText,
+      segments,
+      audioParts,
+      key: audioKeyFor(id),
+      speechInput,
+      speechScriptHash: speechScript?.scriptHash ?? null,
+      speechApproval: { model: speechModel, script: speechScript, validation: speechValidation, testClipPlan, testClipEvidenceVerified },
+    });
   }
   return posts;
 }
 
 function providerFingerprint(post) {
+  const reviewedSpeechInput = post.speechInput === 'reviewed-contextual-speech-script';
   return sha(JSON.stringify({
     generatorVersion: GENERATOR_VERSION,
     cloudTtsIntegrationVersion: PROVIDER === 'google-cloud' ? CLOUD_TTS_INTEGRATION_VERSION : undefined,
     speechOverridesVersion: SPEECH_OVERRIDES_VERSION,
+    ...(reviewedSpeechInput ? {
+      speechScriptVersion: post.speechApproval?.script?.version,
+      speechScriptHash: post.speechScriptHash,
+      speechInput: post.speechInput,
+    } : {}),
     provider: PROVIDER,
     model: MODEL,
     region: PROVIDER === 'azure' ? REGION : PROVIDER === 'google-cloud' ? (process.env.GOOGLE_CLOUD_TTS_REGION?.trim().toLowerCase() || 'global') : undefined,
     language: LANGUAGE,
     voices: VOICES.map(({ id, providerVoice }) => ({ id, providerVoice })),
-    style: PROVIDER === 'gemini' ? GEMINI_STYLE : PROVIDER === 'google-cloud' ? CLOUD_TTS_STYLE : PROVIDER === 'openai' ? OPENAI_STYLE : undefined,
+    style: PROVIDER === 'gemini' ? (reviewedSpeechInput ? GEMINI_STYLE : LEGACY_GEMINI_STYLE) : PROVIDER === 'google-cloud' ? CLOUD_TTS_STYLE : PROVIDER === 'openai' ? OPENAI_STYLE : undefined,
     rate: PROVIDER === 'azure' ? SYNTHESIS_RATE : 1,
     outputFormat: OUTPUT_FORMAT,
     text: post.spokenText,
@@ -828,7 +880,7 @@ function manifestAssets(manifest, post) {
     if (!Array.isArray(part?.sync) || !part.audio || typeof part.audio !== 'object') return null;
     for (const voice of effectiveManifestVoices) {
       const asset = part.audio[voice.id];
-      if (typeof asset?.src !== 'string' || !asset.src.startsWith(`/audio/articles/${post.key}/`) || !asset.src.endsWith('.mp3') || !(asset.bytes >= 100) || !(asset.durationSeconds > 0) || paths.has(asset.src)) return null;
+      if (typeof asset?.src !== 'string' || !asset.src.startsWith(`/audio/articles/${post.key}/`) || !asset.src.endsWith('.mp3') || !(asset.bytes >= 100) || !(asset.durationSeconds > 0) || !/^[a-f0-9]{64}$/.test(asset.sha256 || '') || paths.has(asset.src)) return null;
       paths.add(asset.src);
       assets.push(asset);
     }
@@ -849,17 +901,34 @@ async function hasCompleteCache(post) {
   } catch { return false; }
 }
 
-async function restoreFromProduction(post) {
-  const manifestUrl = `${CACHE_ORIGIN}/audio/articles/${post.key}/manifest.json`;
+async function restoreFromProductionOrigin(post, cacheOrigin) {
+  const cacheHost = new URL(cacheOrigin).host;
+  const manifestUrl = `${cacheOrigin}/audio/articles/${post.key}/manifest.json`;
   let response;
   try { response = await fetch(manifestUrl, { headers: { 'User-Agent': USER_AGENT } }); }
-  catch { return false; }
-  if (!response.ok) return false;
+  catch (error) {
+    console.warn(`↷ ${post.id}: cache manifest unavailable from ${cacheHost} (${transportCode(error) || error.name}).`);
+    return false;
+  }
+  if (!response.ok) {
+    console.warn(`↷ ${post.id}: cache manifest from ${cacheHost} returned HTTP ${response.status}.`);
+    return false;
+  }
   let manifest;
-  try { manifest = await response.json(); } catch { return false; }
-  if (manifest?.contractTest) return false;
+  try { manifest = await response.json(); }
+  catch {
+    console.warn(`↷ ${post.id}: cache manifest from ${cacheHost} is not valid JSON.`);
+    return false;
+  }
+  if (manifest?.contractTest) {
+    console.warn(`↷ ${post.id}: rejected contract-test cache manifest from ${cacheHost}.`);
+    return false;
+  }
   const assets = manifestAssets(manifest, post);
-  if (!assets) return false;
+  if (!assets) {
+    console.warn(`↷ ${post.id}: cache manifest from ${cacheHost} failed the locked provider/source/assets contract.`);
+    return false;
+  }
 
   const finalDir = path.join(AUDIO_ROOT, post.key);
   const tempDir = `${finalDir}.restore-${process.pid}`;
@@ -867,7 +936,9 @@ async function restoreFromProduction(post) {
   await mkdir(tempDir, { recursive: true });
   try {
     for (const asset of assets) {
-      const bytes = await requestBinary(`${CACHE_ORIGIN}${asset.src}`, { headers: { 'User-Agent': USER_AGENT } }, { label: 'Production audio cache download' });
+      const bytes = await requestBinary(`${cacheOrigin}${asset.src}`, { headers: { 'User-Agent': USER_AGENT } }, { label: 'Production audio cache download' });
+      if (bytes.length !== asset.bytes) throw new Error(`Cached MP3 byte-length mismatch: ${asset.src}`);
+      if (sha(bytes) !== asset.sha256) throw new Error(`Cached MP3 SHA-256 mismatch: ${asset.src}`);
       const duration = mp3DurationSeconds(bytes);
       if (Math.abs(duration - asset.durationSeconds) > 2) throw new Error(`Cached MP3 duration mismatch: ${asset.src}`);
       await writeFile(path.join(tempDir, path.basename(asset.src)), bytes);
@@ -876,10 +947,18 @@ async function restoreFromProduction(post) {
     await rm(finalDir, { recursive: true, force: true });
     await rename(tempDir, finalDir);
     return true;
-  } catch {
+  } catch (error) {
+    console.warn(`↷ ${post.id}: atomic cache restore from ${cacheHost} failed (${transportCode(error) || error.message}).`);
     await rm(tempDir, { recursive: true, force: true });
     return false;
   }
+}
+
+async function restoreFromProduction(post) {
+  for (const cacheOrigin of CACHE_ORIGINS) {
+    if (await restoreFromProductionOrigin(post, cacheOrigin)) return true;
+  }
+  return false;
 }
 
 function estimateOpenAiCost(characters, requestCount) {
@@ -946,11 +1025,13 @@ if (PLAN_ONLY) {
       ? `${PROVIDER_NAME} pre-activation plan: ${providerPosts.length} selected article(s), ${generationRequests} synthesis request(s), ${generationChars} ${characterLabel}, model ${CLOUD_TTS_MODEL}, voice ${CLOUD_TTS_VOICE}, locale ${CLOUD_TTS_LANGUAGE}. Planning sends 0 API requests.`
       : `${PROVIDER_NAME} audio plan: ${providerPosts.length} selected article(s), ${generationRequests * VOICES.length} synthesis request(s), ${generationChars * VOICES.length} ${characterLabel}, ${sourceBytes} source UTF-8 bytes.`);
   console.log(`Voices: ${VOICES.map((voice) => `${voice.label} [${voice.providerVoice}]`).join(' + ')}.`);
-  for (const post of providerPosts) {
+  const readiness = providerPosts.map((post) => ({ post, state: evaluateSynthesisReadiness(post) }));
+  console.log(`Speech Script synthesis gate: ${readiness.filter(({ state }) => state.allowed).length}/${readiness.length} selected article(s) allowed; planning itself sends 0 provider requests.`);
+  for (const { post, state } of readiness) {
     const imported = PROVIDER === 'openai' && STUDIO_ARTICLE_IDS.has(post.id);
     console.log(imported
       ? `- ${post.id}: approved Bareeq Voice Studio release (Cedar), no synthesis request`
-      : `- ${post.id}: ${post.audioParts.length} part(s) × ${VOICES.length} voice(s), ${post.segments.length} sync block(s), ${[...post.spokenText].length} source chars`);
+      : `- ${post.id}: ${post.audioParts.length} part(s) × ${VOICES.length} voice(s), ${post.segments.length} sync block(s), ${[...post.spokenText].length} source chars; ${state.allowed ? 'SYNTHESIS ALLOWED' : `BLOCKED — ${state.reasons.join('; ')}`}`);
   }
   process.exit(0);
 }
@@ -989,6 +1070,9 @@ if (MAX_MISSING_ARTICLES_PER_BUILD > 0 && missing.length > MAX_MISSING_ARTICLES_
   missing = missing.slice(0, MAX_MISSING_ARTICLES_PER_BUILD);
   console.log(`Progressive article cap: selected ${missing.length} of ${unresolvedBeforeArticleCap} unresolved article(s) for this build; the remainder keep their approved fallback audio.`);
 }
+
+if (PROVIDER === 'google-cloud' && missing.length) assertCloudTtsActivation(process.env, CONTRACT_TEST);
+if (PROVIDER !== 'bundled' && missing.length) assertSynthesisAllowed(missing, process.env);
 
 const missingSourceChars = missing.reduce((sum, post) => sum + [...post.spokenText].length, 0);
 const effectiveVoiceCount = PROVIDER === 'azure' && process.env.BAREEQ_AZURE_HAMED_ONLY === '1' ? 1 : VOICES.length;
@@ -1041,8 +1125,8 @@ if (PROVIDER !== 'google-cloud' && !API_KEY && missing.length) {
     console.warn(`⚠ Offline pilot mode: preserving imported fallback audio and skipping ${missing.length} unavailable synthesis article(s). This mode is for local release verification only.`);
     process.exit(0);
   }
-  if (PROVIDER === 'gemini') throw new Error(`GEMINI_API_KEY is required to generate Sadaltager for ${missing.length} new or changed article(s). Existing unchanged Gemini audio is restored automatically from ${CACHE_ORIGIN}. Create the key in Google AI Studio and add it as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
-  if (PROVIDER === 'openai') throw new Error(`OPENAI_API_KEY is required to generate Cedar and Marin for ${missing.length} new or changed article(s). Existing unchanged OpenAI audio is restored automatically from ${CACHE_ORIGIN}. Add OPENAI_API_KEY as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
+  if (PROVIDER === 'gemini') throw new Error(`GEMINI_API_KEY is required to generate Sadaltager for ${missing.length} new or changed article(s). Existing unchanged Gemini audio is restored automatically from ${CACHE_ORIGINS.join(' or ')}. Create the key in Google AI Studio and add it as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
+  if (PROVIDER === 'openai') throw new Error(`OPENAI_API_KEY is required to generate Cedar and Marin for ${missing.length} new or changed article(s). Existing unchanged OpenAI audio is restored automatically from ${CACHE_ORIGINS.join(' or ')}. Add OPENAI_API_KEY as an encrypted Production Secret in Cloudflare Pages; if it is absent, the deployment fails safely and the previous live version remains active.`);
   throw new Error(`AZURE_SPEECH_KEY is required to generate Hamed and Zariyah for ${missing.length} new or changed article(s). Add it as an encrypted Production Secret in Cloudflare Pages, or redeploy the previous release for an immediate rollback.`);
 }
 
@@ -1120,6 +1204,10 @@ for (const post of missing) {
       syncVersion: 1,
       speechOverridesVersion: SPEECH_OVERRIDES_VERSION,
       speechReviewVersion: SPEECH_REVIEW_VERSION,
+      speechScriptVersion: post.speechApproval?.script?.version,
+      speechScriptHash: post.speechScriptHash,
+      speechInput: post.speechInput,
+      speechQualityState: 'tts-synthesis-allowed-after-reviewed-test-clip',
       provider: PROVIDER_NAME,
       model: MODEL,
       language: LANGUAGE,

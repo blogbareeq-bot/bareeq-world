@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+  "speechScriptHash": "5c6abff36c79f30aa06e53cffb7ea27fdf59594bd37b66e516aba333f69b98b1",
+  "status": "draft-needs-speech-review",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 60,
+  "selectedSegments": [
+    {
+      "segmentId": "paragraph-946b8f4ff502",
+      "challenges": [
+        "2 foreign term(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-160bfbafa671",
+      "challenges": [
+        "1 contextual ambiguity occurrence(s)"
+      ]
+    },
+    {
+      "segmentId": "paragraph-7dd625db2e70",
+      "challenges": [
+        "1 foreign term(s)"
+      ]
+    },
+    {
+      "segmentId": "title-4bd4c3f965d6",
+      "challenges": [
+        "title/structure/natural pause control"
+      ]
+    },
+    {
+      "segmentId": "h2-0b7753489315",
+      "challenges": [
+        "title/structure/natural pause control"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "f1a6e54a18efcf3c79f1c1410f6ba25e5fd5d4932db90fa1a0cc40eb4eab8ebb"
+}

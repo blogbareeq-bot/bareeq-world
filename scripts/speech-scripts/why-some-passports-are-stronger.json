@@ -1,0 +1,2113 @@
+{
+  "version": 1,
+  "articleId": "why-some-passports-are-stronger",
+  "sourceSnapshotHash": "2b2999dba95bff5e6bfb8ff16d2848fa3b677ffe8f595a5b6166ca15ebf7d4c1",
+  "sourceStructureHash": "46cc1cde81243774e5f65a53bf466e75a8961f5f3b9459361a15289c9a949359",
+  "generatedAt": "2026-08-25T05:43:53.171Z",
+  "reviewVersion": 1,
+  "status": "pronunciation-review-passed-test-clip-ready",
+  "referenceExclusion": {
+    "heading": "المصادر",
+    "segmentCount": 13,
+    "sourceHash": "3f45f82d2fa7b6fabb57b8677c1f0e4df7f7f49451e9acf912f799ca84b205b3"
+  },
+  "segments": [
+    {
+      "segmentId": "title-97da5de4de3b",
+      "type": "title",
+      "sourceHash": "97da5de4de3b0c3a6c9597ed7733633adad8f9d5252bc04b8245d8bc41be0044",
+      "sourceText": "لماذا تفتح بعض جوازات السفر أبواب العالم أكثر من غيرها؟",
+      "spokenText": "لِمَاذَا تَفْتَحُ بَعْضُ جَوَازَاتِ السَّفَرِ أَبْوَابَ العَالَمِ أَكْثَرَ مِنْ غَيْرِهَا؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-1a16a737eebf",
+      "type": "paragraph",
+      "sourceHash": "1a16a737eebf936e875c9df80b8d74ef2a392cf7bce77b0e1fa0322c498485b4",
+      "sourceText": "في صالة مطار واحدة، يقف مسافران أمام الوجهة نفسها. الأول حجز تذكرته قبل أيام، وسيمر من بوابة الجوازات في دقائق. أما الثاني فقد بدأت رحلته قبل أسابيع: نموذج طويل، وكشف حساب بنكي، وحجز فندق، وخطاب من جهة العمل، ثم انتظار لموعد السفارة وقرارها.",
+      "spokenText": "في صالة مطار واحدة، يقف مسافران أمام الوجهة نفسها. الأول حجز تذكرته قبل أيام، وسيمر من بوابة الجوازات في دقائق. أما الثاني فقد بدأت رحلته قبل أسابيع: نموذج طويل، وكشف حساب بنكي، وحجز فندق، وخطاب من جهة العمل، ثم انتظار لموعد السفارة وقرارها.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-94ef1b322b23",
+      "type": "paragraph",
+      "sourceHash": "94ef1b322b2348101047beb4f6d4d195ed238906b6efdc5385022f4fe6c00dda",
+      "sourceText": "الاثنان يحملان وثيقة تحمل الاسم نفسه: جواز سفر. فلماذا يفتح أحد الجوازين الباب شبه مباشرة، بينما ينتظر الآخر موافقة قد تطول؟",
+      "spokenText": "الاثنان يحملان وثيقة تحمل الاسم نفسه: جواز سفر. فلماذا يفتح أحد الجوازين الباب شبه مباشرة، بينما ينتظر الآخر موافقة قد تطول؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-37579327d29d",
+      "type": "paragraph",
+      "sourceHash": "37579327d29d75c2d1da1dba40a181733032a8395b22eab8e17e7c360d46fe64",
+      "sourceText": "الجواب لا علاقة له بلون الغلاف ولا بجودة الورق. خلف هذا الفارق تقف منظومة كاملة من الثقة والاتفاقيات والمصالح بين الدول، وهي ما سنحاول تفكيكه في هذا المقال.",
+      "spokenText": "الجواب لا علاقة له بلون الغلاف ولا بجودة الورق. خلف هذا الفارق تقف منظومة كاملة من الثقة والاتفاقيات والمصالح بين الدول، وهي ما سنحاول تفكيكه في هذا المقال.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-f6df7770277c",
+      "type": "h2",
+      "sourceHash": "f6df7770277c323f2a0fc0c2c1ab6e57ce49ce26f3dc82b28d8612bdd8a5183b",
+      "sourceText": "ماذا نعني عندما نقول إن جوازًا ما «قوي»؟",
+      "spokenText": "مَاذَا نَعْنِي عِنْدَمَا نَقُولُ إِنَّ جَوَازًا مَا «قَوِيٌّ»؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-e886f7f26ffa",
+      "type": "paragraph",
+      "sourceHash": "e886f7f26ffa92bc38eb7e7ca3925586765c745109de980da1252dbeb589e93e",
+      "sourceText": "المقصود الشائع بسيط: عدد الوجهات التي يستطيع حامل الجواز الوصول إليها دون الحاجة إلى استخراج تأشيرة مسبقة قبل السفر.",
+      "spokenText": "المقصود الشائع بسيط: عدد الوجهات التي يستطيع حامل الجواز الوصول إليها دون الحاجة إلى استخراج تأشيرة مسبقة قبل السفر.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-68c01b502860",
+      "type": "paragraph",
+      "sourceHash": "68c01b502860fe3c4880265984f1c0cf38fb7480b501d18cdbd0464ddde46e96",
+      "sourceText": "هذا الوصول الميسر يأخذ عادة ثلاث صور. الأولى هي الدخول دون تأشيرة مسبقة، مع بقاء شروط الدخول المعتادة التي تحددها الدولة المستقبلة. والثانية هي التأشيرة عند الوصول، حيث تُمنح في المطار أو المنفذ دون طلب مسبق. والثالثة هي التصريح الإلكتروني للسفر، المعروف اختصارًا باسم ETA، وهو إذن سريع يُستخرج عبر الإنترنت قبل الرحلة بإجراءات مبسطة ودون مراجعة قنصلية.",
+      "spokenText": "هذا الوصول الميسر يأخذ عادة ثلاث صور. الأولى هي الدخول دون تأشيرة مسبقة، مع بقاء شروط الدخول المعتادة التي تحددها الدولة المستقبلة. والثانية هي التأشيرة عند الوصول، حيث تُمنح في المطار أو المنفذ دون طلب مسبق. والثالثة هي التصريح الإلكتروني للسفر، المعروف اختصارًا باسم إِي تِي إِيه، وهو إذن سريع يُستخرج عبر الإنترنت قبل الرحلة بإجراءات مبسطة ودون مراجعة قنصلية.",
+      "transformations": [
+        {
+          "type": "abbreviation-expansion",
+          "from": "ETA",
+          "to": "إِي تِي إِيه"
+        },
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-4f6b641f774c",
+      "type": "paragraph",
+      "sourceHash": "4f6b641f774c805614fd9a850217dd37ed6a4b5423ab27fa6cc515ee0f2d84a4",
+      "sourceText": "ويحسن هنا التمييز بين هذا التصريح وe-Visa؛ فالأخيرة تتطلب موافقة حكومية قبل المغادرة، ولهذا تعدها منهجية مؤشر هينلي ضمن الوجهات التي «تتطلب تأشيرة»، بينما تحسب التصريح الإلكتروني والتأشيرة عند الوصول ضمن الوصول الميسر.",
+      "spokenText": "ويحسن هنا التمييز بين هذا التصريح وإِي فِيزَا؛ فالأخيرة تتطلب موافقة حكومية قبل المغادرة، وَلِهَذَا تَعُدُّهَا مَنْهَجِيَّةُ مُؤَشِّرِ هِينْلِي ضمن الوجهات التي «تتطلب تأشيرة»، بَيْنَمَا تَحْسِبُ التَّصْرِيحَ الإِلِكْتُرُونِيَّ والتأشيرة عند الوصول ضمن الوصول الميسر.",
+      "transformations": [
+        {
+          "type": "abbreviation-expansion",
+          "from": "e-Visa",
+          "to": "إِي فِيزَا"
+        },
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-534c5a91396c",
+      "type": "paragraph",
+      "sourceHash": "534c5a91396c1993a81ecd8e986b075df18c692b9254f43f5328df798d986223",
+      "sourceText": "وهذا يقودنا إلى تفصيل مهم: المؤشرات التي تقيس قوة الجوازات لا تحسب هذه الفئات كلها بالطريقة نفسها. لذلك قد ترى جوازًا في المركز الأول على مؤشر، وفي مركز آخر على مؤشر ثانٍ، دون أن يكون أحدهما مخطئًا بالضرورة؛ فكل منهما يقيس بمسطرة مختلفة.",
+      "spokenText": "وهذا يقودنا إلى تفصيل مهم: المؤشرات التي تقيس قوة الجوازات لَا تَحْسِبُ هَذِهِ الفِئَاتِ كلها بالطريقة نفسها. لذلك قد ترى جوازًا في المركز الأول على مؤشر، وفي مركز آخر على مؤشر ثانٍ، دون أن يكون أحدهما مخطئًا بالضرورة؛ فكل منهما يقيس بمسطرة مختلفة.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-1410e3f510c7",
+      "type": "h2",
+      "sourceHash": "1410e3f510c7a89e0db8e0c9726170f94f0b4621fe8f49f87541bf9b38a24758",
+      "sourceText": "من يقرر أصلًا من يدخل بلا تأشيرة؟",
+      "spokenText": "مَنْ يُقَرِّرُ أَصْلًا مَنْ يَدْخُلُ بِلَا تَأْشِيرَةٍ؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-709363285bc4",
+      "type": "paragraph",
+      "sourceHash": "709363285bc41d90edcc98bf0514dae6cd3b2f96fc22497520f11eeebd000828",
+      "sourceText": "لا توجد جهة عالمية واحدة توزع الإعفاءات على الدول. سياسة الدخول قرار سيادي؛ كل دولة تقرر بنفسها من يدخل أراضيها، وبأي شروط.",
+      "spokenText": "لا توجد جهة عالمية واحدة توزع الإعفاءات على الدول. سياسة الدخول قرار سيادي؛ كل دولة تقرر بنفسها من يدخل أراضيها، وبأي شروط.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-5b8d1e5dc827",
+      "type": "paragraph",
+      "sourceHash": "5b8d1e5dc827ff26107b3ecbbbc60c2c95f0f4c2dc526279dfa7b9fa6bf8544d",
+      "sourceText": "هذه القرارات تُبنى غالبًا عبر اتفاقيات ثنائية أو إقليمية. ومن أشهر مبادئها مبدأ المعاملة بالمثل: إذا أعفيتَ مواطنيّ من التأشيرة، أعفيتُ مواطنيك منها.",
+      "spokenText": "هذه القرارات تُبنى غالبًا عبر اتفاقيات ثنائية أو إقليمية. ومن أشهر مبادئها مبدأ المعاملة بالمثل: إذا أعفيتَ مواطنيّ من التأشيرة، أعفيتُ مواطنيك منها.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-2e24aef1933e",
+      "type": "paragraph",
+      "sourceHash": "2e24aef1933e46597a48018f8a4e135ef535d18acd71171428babc8c8653b9e4",
+      "sourceText": "تخيل دولتين نسميهما «أ» و«ب». وقعت الدولتان اتفاقية إعفاء متبادل، فصار مواطنو كل منهما يدخلون الأخرى بالجواز فقط. بعد سنوات، قررت الدولة «أ» فرض تأشيرة على مواطني «ب» لأسباب أمنية أو اقتصادية. غالبًا سترد الدولة «ب» بإجراء مماثل، لا انتقامًا بالضرورة، بل حفاظًا على التوازن في العلاقة. الاتحاد الأوروبي مثلًا يدير آلية رسمية للمعاملة بالمثل في التأشيرات، تتحرك عندما تفرض دولة خارجية تأشيرة على مواطني إحدى دول الاتحاد بينما يدخل مواطنوها الاتحاد بحرية.",
+      "spokenText": "تخيل دولتين نسميهما «أ» و«ب». وَقَّعَتِ الدَّوْلَتَانِ اتِّفَاقِيَّةَ إعفاء متبادل، فصار مواطنو كل منهما يدخلون الأخرى بالجواز فقط. بعد سنوات، قررت الدولة «أ» فرض تأشيرة على مواطني «ب» لأسباب أمنية أو اقتصادية. غَالِبًا سَتَرُدُّ الدَّوْلَةُ «ب» بإجراء مماثل، لا انتقامًا بالضرورة، بل حفاظًا على التوازن في العلاقة. الاتحاد الأوروبي مثلًا يدير آلية رسمية للمعاملة بالمثل في التأشيرات، تتحرك عندما تفرض دولة خارجية تأشيرة على مواطني إحدى دول الاتحاد بينما يدخل مواطنوها الاتحاد بحرية.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-d5365e8ed0d6",
+      "type": "paragraph",
+      "sourceHash": "d5365e8ed0d6b8356bf048ebfa96223df54fef5cea2338b6ecb647affbdec599",
+      "sourceText": "لكن المعاملة بالمثل ليست قاعدة صارمة. كثير من الدول تفتح أبوابها لجنسيات لا تعاملها بالمثل، لأن لديها ما تكسبه من ذلك: سياحة، أو استثمار، أو علاقات أوسع. جواز الولايات المتحدة مثلًا يتيح لحامله دخول 180 وجهة دون تأشيرة مسبقة بحسب تحديث يوليو 2026، بينما تفرض الولايات المتحدة نفسها تأشيرة مسبقة على معظم الجنسيات، مع إعفاءات محددة من أبرزها برنامج الإعفاء من التأشيرة. القوة والانفتاح ليسا وجهين للعملة نفسها.",
+      "spokenText": "لكن المعاملة بالمثل ليست قاعدة صارمة. كثير من الدول تفتح أبوابها لجنسيات لا تعاملها بالمثل، لأن لديها ما تكسبه من ذلك: سياحة، أو استثمار، أو علاقات أوسع. جواز الولايات المتحدة مثلًا يتيح لحامله دخول 180 وجهة دون تأشيرة مسبقة بحسب تحديث يوليو 2026، بينما تفرض الولايات المتحدة نفسها تأشيرة مسبقة على معظم الجنسيات، مع إعفاءات محددة من أبرزها برنامج الإعفاء من التأشيرة. القوة والانفتاح ليسا وجهين للعملة نفسها.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-29ad6f0e2d00",
+      "type": "h2",
+      "sourceHash": "29ad6f0e2d0072cb38443eb53cd28885216e6b6f79249dfbfd862328df9a1264",
+      "sourceText": "لماذا تثق دولة في جواز أكثر من آخر؟",
+      "spokenText": "لِمَاذَا تَثِقُ دَوْلَةٌ فِي جَوَازٍ أَكْثَرَ مِنْ آخَرَ؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-5dc98e11296b",
+      "type": "paragraph",
+      "sourceHash": "5dc98e11296b546586c707a7042a9abde7ba2447ee7fab7870365264183f41b8",
+      "sourceText": "هذا هو قلب الموضوع. عندما تقرر دولة إعفاء مواطني دولة أخرى من التأشيرة، فهي عمليًا تجيب عن سؤال واحد: ما حجم المخاطرة مقابل حجم الفائدة؟ وفي هذه الموازنة تتداخل عوامل عدة.",
+      "spokenText": "هذا هو قلب الموضوع. عندما تقرر دولة إعفاء مواطني دولة أخرى من التأشيرة، فهي عمليًا تجيب عن سؤال واحد: ما حجم المخاطرة مقابل حجم الفائدة؟ وفي هذه الموازنة تتداخل عوامل عدة.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-db3c8a34d695",
+      "type": "h3",
+      "sourceHash": "db3c8a34d695b25efb7b41833e2c2742cdd91bce43de7923a6701d6c632997fd",
+      "sourceText": "العلاقات الدبلوماسية",
+      "spokenText": "العَلَاقَاتُ الدِّبْلُومَاسِيَّةُ",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-4ab587de259f",
+      "type": "paragraph",
+      "sourceHash": "4ab587de259f09c3b311cbaf93fada37655aad7699ef71d97454d339b5b6e5d5",
+      "sourceText": "الإعفاء من التأشيرة ثمرة علاقات مستقرة ومفاوضات طويلة. الدول التي تبني شبكة واسعة من الشراكات والاتفاقيات تحصد ذلك في جواز مواطنيها. وليس مصادفة أن أكبر القفزات في تصنيفات الجوازات خلال العقدين الماضيين جاءت من دول جعلت توقيع اتفاقيات الإعفاء هدفًا دبلوماسيًا معلنًا.",
+      "spokenText": "الإعفاء من التأشيرة ثمرة علاقات مستقرة ومفاوضات طويلة. الدول التي تبني شبكة واسعة من الشراكات والاتفاقيات تحصد ذلك في جواز مواطنيها. وليس مصادفة أن أكبر القفزات في تصنيفات الجوازات خلال العقدين الماضيين جاءت من دول جعلت توقيع اتفاقيات الإعفاء هدفًا دبلوماسيًا معلنًا.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-b4a36983587c",
+      "type": "h3",
+      "sourceHash": "b4a36983587cf604eb76317c4513905015851441338cb72b36c53eb7599577a8",
+      "sourceText": "الوضع الاقتصادي",
+      "spokenText": "الوَضْعُ الاقْتِصَادِيُّ",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-f0f62b778c9a",
+      "type": "paragraph",
+      "sourceHash": "f0f62b778c9a990f195a6812b93e48e6072dd58c9417face1ea76c895346d5dd",
+      "sourceText": "الدولة المستقبِلة تسأل نفسها: هل القادمون زوار سيعودون إلى بلدهم، أم باحثون عن فرصة للبقاء؟ تفترض حكومات كثيرة أن ارتفاع الدخل والاستقرار الاقتصادي في بلد المسافر يقللان من دوافع البقاء غير النظامي، فيبدو الإعفاء أقل مخاطرة في تقديرها. وهو افتراض عام تستخدمه الدول في تقييم المخاطر، لا قاعدة تصدق في كل حالة.",
+      "spokenText": "الدولة المستقبِلة تسأل نفسها: هل القادمون زوار سيعودون إلى بلدهم، أم باحثون عن فرصة للبقاء؟ تفترض حكومات كثيرة أن ارتفاع الدخل والاستقرار الاقتصادي في بلد المسافر يقللان من دوافع البقاء غير النظامي، فيبدو الإعفاء أقل مخاطرة في تقديرها. وهو افتراض عام تستخدمه الدول في تقييم المخاطر، لَا قَاعِدَةَ تَصْدُقُ فِي كُلِّ حَالَةٍ.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-37acf65571ce",
+      "type": "h3",
+      "sourceHash": "37acf65571ce57d5f0fd9ca8f9e955fbb66e430ea46ebecd07b97900646908b7",
+      "sourceText": "سجل الالتزام بمدة الإقامة",
+      "spokenText": "سِجِلُّ الالْتِزَامِ بِمُدَّةِ الإِقَامَةِ",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-4b55ca8c8244",
+      "type": "paragraph",
+      "sourceHash": "4b55ca8c8244168d51c65c9f05b7975606ca6666c1ec93a558eb657c343fbeed",
+      "sourceText": "تتابع دول كثيرة نسبة من يبقون بعد انتهاء المدة القانونية لكل جنسية. الولايات المتحدة مثلًا تنشر تقريرًا سنويًا عن تجاوز مدة الإقامة يرصد هذه النسب جنسية بجنسية. وعندما ترتفع النسبة لجنسية معينة، يصبح تشديد شروط التأشيرة عليها أقرب، والعكس صحيح.",
+      "spokenText": "تتابع دول كثيرة نسبة من يبقون بعد انتهاء المدة القانونية لكل جنسية. الولايات المتحدة مثلًا تنشر تقريرًا سنويًا عن تجاوز مدة الإقامة يرصد هذه النسب جنسية بجنسية. وعندما ترتفع النسبة لجنسية معينة، يصبح تشديد شروط التأشيرة عليها أقرب، والعكس صحيح.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-9e3596278524",
+      "type": "h3",
+      "sourceHash": "9e3596278524ade4de8f11485a5d35fe68cddc8fde96a27c8cb36e7e7bcf3846",
+      "sourceText": "موثوقية الجواز نفسه",
+      "spokenText": "مَوْثُوقِيَّةُ الجَوَازِ نَفْسِهِ",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-b5013cf6523c",
+      "type": "paragraph",
+      "sourceHash": "b5013cf6523c1081bf9042ff53f0a3d89145c51f039840597f5a59e30e5c65d7",
+      "sourceText": "الجواز وثيقة ثقة قبل أن يكون وثيقة سفر. الدول تثق أكثر بجوازات تصدر عبر أنظمة تحقق صارمة من الهوية، وتحمل خصائص بيومترية يصعب تزويرها، وتقف خلفها حكومة تتبادل المعلومات مع الشركاء وتتعاون في إعادة قبول مواطنيها إذا خالفوا أنظمة الإقامة، وهو تعاون تنظمه عادة اتفاقيات تُعرف باتفاقيات إعادة القبول.",
+      "spokenText": "الجواز وثيقة ثقة قبل أن يكون وثيقة سفر. الدول تثق أكثر بجَوَازَاتٍ تَصْدُرُ عَبْرَ أَنْظِمَةِ تَحَقُّقٍ صارمة من الهوية، وتحمل خصائص بيومترية يصعب تزويرها، وتقف خلفها حكومة تتبادل المعلومات مع الشركاء وتتعاون في إعادة قبول مواطنيها إذا خالفوا أنظمة الإقامة، وَهُوَ تَعَاوُنٌ تُنَظِّمُهُ عَادَةً اتِّفَاقِيَّاتٌ تُعْرَفُ بِاتِّفَاقِيَّاتِ إِعَادَةِ القَبُولِ.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-311b9f56b009",
+      "type": "h3",
+      "sourceHash": "311b9f56b00991960a570335be804c81bddc870f5eca4bebe33b88ead53c5fc9",
+      "sourceText": "الاستقرار السياسي والأمني",
+      "spokenText": "الاسْتِقْرَارُ السِّيَاسِيُّ وَالأَمْنِيُّ",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-8dd9e724acad",
+      "type": "paragraph",
+      "sourceHash": "8dd9e724acadc0cf173e145e4e9d435b54df9ab706169c0991a5a15036453e38",
+      "sourceText": "كثيرًا ما تترك الحروب والأزمات أثرها في حرية السفر. فحين تتدهور الأوضاع في بلد ما، قد تعلّق دول أخرى إعفاءاتها أو تشدد اشتراطاتها تحسبًا لموجات لجوء أو مخاوف أمنية. وليس ذلك مسارًا حتميًا واحدًا في كل حالة، لكنه نمط يتكرر؛ إذ نجد في ذيل تصنيفات الجوازات غالبًا دولًا أنهكتها النزاعات، بصرف النظر عن تاريخها أو مكانتها الحضارية.",
+      "spokenText": "كثيرًا ما تترك الحروب والأزمات أثرها في حرية السفر. فحين تتدهور الأوضاع في بلد ما، قَدْ تُعَلِّقُ دُوَلٌ أُخْرَى إِعْفَاءَاتِهَا أَوْ تُشَدِّدُ اشْتِرَاطَاتِهَا تحسبًا لموجات لجوء أو مخاوف أمنية. وليس ذلك مسارًا حتميًا واحدًا في كل حالة، لكنه نمط يتكرر؛ إذ نجد في ذيل تصنيفات الجوازات غالبًا دولًا أنهكتها النزاعات، بصرف النظر عن تاريخها أو مكانتها الحضارية.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-98d8ce40742d",
+      "type": "h3",
+      "sourceHash": "98d8ce40742ddd67ac2b1db14049a15a2b8532c5d060a0de8f059b1c4e9f80a5",
+      "sourceText": "المصلحة الاقتصادية والسياحية",
+      "spokenText": "المَصْلَحَةُ الاقْتِصَادِيَّةُ وَالسِّيَاحِيَّةُ",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-c8af081a3f19",
+      "type": "paragraph",
+      "sourceHash": "c8af081a3f197ca5323a853bd78c79769e91498d3d0451a4a937f0b45db71383",
+      "sourceText": "وفي الاتجاه المقابل، قد تخفف دولة شروط الدخول سعيًا إلى جذب السياح ورجال الأعمال والمستثمرين، حتى دون معاملة بالمثل. فالتأشيرة ليست أداة أمنية فقط؛ إنها أيضًا أداة اقتصادية.",
+      "spokenText": "وفي الاتجاه المقابل، قد تخفف دولة شروط الدخول سعيًا إلى جذب السياح ورجال الأعمال والمستثمرين، حتى دون معاملة بالمثل. فالتأشيرة ليست أداة أمنية فقط؛ إنها أيضًا أداة اقتصادية.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-464a58f55ff1",
+      "type": "paragraph",
+      "sourceHash": "464a58f55ff13de9cbce8928caca60f40759014b6cbbd5a8d0ef28bb76e3f6a4",
+      "sourceText": "المهم ألا نتخيل هذه العوامل معادلة حسابية ثابتة. إنها موازنة تتحرك باستمرار: دولة ترجّح الأمن، وأخرى ترجّح السياحة، وثالثة توازن بينهما، وقد تتغير الموازنة نفسها مع تغير الظروف أو الحكومات.",
+      "spokenText": "المهم ألا نتخيل هذه العوامل معادلة حسابية ثابتة. إنها موازنة تتحرك باستمرار: دولة ترجّح الأمن، وأخرى ترجّح السياحة، وثالثة توازن بينهما، وقد تتغير الموازنة نفسها مَعَ تَغَيُّرِ الظُّرُوفِ أو الحكومات.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-d83e0bb41630",
+      "type": "h2",
+      "sourceHash": "d83e0bb4163016247cdf4b317583fef0ad0e8af0eabdd5a52777e4a1c871de3d",
+      "sourceText": "هل المسألة كلها سياسة إذن؟",
+      "spokenText": "هَلِ المَسْأَلَةُ كُلُّهَا سِيَاسَةٌ إِذَنْ؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-52f1d972c349",
+      "type": "paragraph",
+      "sourceHash": "52f1d972c3495cf4e9e729bb96a4914fa71e139a433570b6405db0eb372913f3",
+      "sourceText": "لا. السياسة حاضرة بقوة، لكنها خيط واحد في نسيج أوسع يشمل الاقتصاد والأمن والهجرة والسياحة والتجارة، وحتى العلاقات التاريخية واللغوية بين الشعوب.",
+      "spokenText": "لا. السياسة حاضرة بقوة، لكنها خيط واحد في نسيج أوسع يشمل الاقتصاد والأمن والهجرة والسياحة والتجارة، وحتى العلاقات التاريخية واللغوية بين الشعوب.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-05eb2889675b",
+      "type": "paragraph",
+      "sourceHash": "05eb2889675b92ab0397d76ce7dcdf9b908bcb05f36792fd87fd2ddf2817b24e",
+      "sourceText": "أوضح مثال على هذا التداخل هو الاتحاد الأوروبي. فمن المبادئ التأسيسية للاتحاد حرية تنقل الأشخاص، التي تتيح لمواطني الدول الأعضاء التنقل والإقامة والعمل داخل دول الاتحاد. هذه الحرية لم تولد من قرار سياسي معزول، بل من مشروع اقتصادي طويل بدأ بسوق مشتركة، ثم توسع إلى منظومة قانونية كاملة. ولهذا نجد جوازات دول الاتحاد الأوروبي متقاربة في الصدارة؛ فكل جواز منها يفتح تلقائيًا بابًا واسعًا يضم بقية دول الاتحاد، قبل أن يبدأ التفاوض مع بقية العالم.",
+      "spokenText": "أوضح مثال على هذا التداخل هو الاتحاد الأوروبي. فمن المبادئ التأسيسية للاتحاد حرية تنقل الأشخاص، التي تتيح لمواطني الدول الأعضاء التنقل والإقامة والعمل داخل دول الاتحاد. هَذِهِ الحُرِّيَّةُ لَمْ تُولَدْ مِنْ قَرَارٍ سِيَاسِيٍّ معزول، بل من مشروع اقتصادي طويل بدأ بسوق مشتركة، ثم توسع إلى منظومة قانونية كاملة. ولهذا نجد جوازات دول الاتحاد الأوروبي متقاربة في الصدارة؛ فكل جواز منها يفتح تلقائيًا بابًا واسعًا يضم بقية دول الاتحاد، قبل أن يبدأ التفاوض مع بقية العالم.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-e40920c7035a",
+      "type": "paragraph",
+      "sourceHash": "e40920c7035a6cd9e6a7d7de9b577441f53d1785574d5c5471c89c5c7ca6265f",
+      "sourceText": "وقصة قريبة منا: مواطنو دول مجلس التعاون الخليجي يتنقلون بين دول المجلس بإجراءات ميسرة، وهو نموذج آخر لتكتل إقليمي يحوّل الجغرافيا والروابط المشتركة إلى حرية حركة.",
+      "spokenText": "وقصة قريبة منا: مواطنو دول مجلس التعاون الخليجي يتنقلون بين دول المجلس بإجراءات ميسرة، وهو نموذج آخر لِتَكْتُّلٍ إِقْلِيمِيٍّ يُحَوِّلُ الجُغْرَافِيَا والروابط المشتركة إلى حرية حركة.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-5d3e03519048",
+      "type": "h2",
+      "sourceHash": "5d3e03519048ffa01db76f7250f3217dea4e01452d8db99e3fc0e4c9c3255d8d",
+      "sourceText": "كيف يقيس العالم قوة الجواز؟",
+      "spokenText": "كَيْفَ يَقِيسُ العَالَمُ قُوَّةَ الجَوَازِ؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-388d955fc52f",
+      "type": "paragraph",
+      "sourceHash": "388d955fc52f4a19793e8bcee6afbe0b962e17c718fd870a41a9787f93d61cae",
+      "sourceText": "توجد مؤشرات متخصصة تتابع هذا الملف، أشهرها مؤشر هينلي لجوازات السفر الذي يصنف 199 جوازًا وفق عدد الوجهات التي يمكن الوصول إليها دون تأشيرة مسبقة من أصل 227 وجهة، اعتمادًا على بيانات اتحاد النقل الجوي الدولي «إياتا» التي تستخدمها شركات الطيران حول العالم.",
+      "spokenText": "توجد مؤشرات متخصصة تتابع هذا الملف، أشهرها مؤشر هينلي لجوازات السفر الذي يصنف 199 جوازًا وفق عدد الوجهات التي يمكن الوصول إليها دون تأشيرة مسبقة من أصل 227 وجهة، اعتمادًا على بيانات اتحاد النقل الجوي الدولي «إياتا» التي تستخدمها شركات الطيران حول العالم.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-cc697862f3e1",
+      "type": "paragraph",
+      "sourceHash": "cc697862f3e143e7713c233540ab037b04421c95f620a322d62c799db26ad742",
+      "sourceText": "بحسب إصدار الذكرى العشرين للمؤشر، الصادر في 21 يوليو 2026، تتصدر سنغافورة التصنيف بوصول ميسر إلى 192 وجهة، تليها اليابان وكوريا الجنوبية والإمارات في المركز الثاني بواقع 188 وجهة لكل منها. وفي المقابل، يقبع الجواز الأفغاني في ذيل القائمة بوصول لا يتجاوز 22 وجهة. أي أن الفجوة بين أعلى القائمة وأسفلها بلغت 170 وجهة، وهي الأوسع في تاريخ المؤشر.",
+      "spokenText": "بحسب إصدار الذكرى العشرين للمؤشر، الصادر في 21 يوليو 2026، تتصدر سنغافورة التصنيف بوصول ميسر إلى 192 وجهة، تليها اليابان وكوريا الجنوبية والإمارات في المركز الثاني بواقع 188 وجهة لكل منها. وفي المقابل، يقبع الجواز الأفغاني في ذيل القائمة بوصول لا يتجاوز 22 وجهة. أي أن الفجوة بين أعلى القائمة وأسفلها بلغت 170 وجهة، وهي الأوسع في تاريخ المؤشر.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-21878f813ae1",
+      "type": "paragraph",
+      "sourceHash": "21878f813ae1ccf5ca29e3661e411cfddd5a1b01aa470f74a5c9b6cf343310a9",
+      "sourceText": "أما مؤشر Passport Index من Arton Capital، فيعتمد منهجية مختلفة تجمع في درجة واحدة تسمى «درجة التنقل» الإعفاءَ الكامل والتأشيرة عند الوصول والتصريح الإلكتروني للسفر، بل وحتى التأشيرة الإلكترونية إذا كانت تصدر خلال ثلاثة أيام أو أقل بحسب منهجيته المعلنة، ويضع في نسخته لعام 2026 جواز الإمارات في المركز الأول. الجواز نفسه، بترتيبين مختلفين على مؤشرين مختلفين، والسبب ببساطة اختلاف المسطرة لا اختلاف الحقائق.",
+      "spokenText": "أما مؤشر بَاسْبُورْت إِنْدِكْس من أَرْتُون كَابِيتَال، فيعتمد منهجية مختلفة تجمع في درجة واحدة تسمى «درجة التنقل» الإعفاءَ الكامل والتأشيرة عند الوصول والتصريح الإلكتروني للسفر، بل وحتى التأشيرة الإلكترونية إِذَا كَانَتْ تَصْدُرُ خِلَالَ ثَلَاثَةِ أَيَّامٍ أو أقل بحسب منهجيته المعلنة، ويضع في نسخته لعام 2026 جواز الإمارات في المركز الأول. الجواز نفسه، بترتيبين مختلفين على مؤشرين مختلفين، والسبب ببساطة اختلاف المسطرة لا اختلاف الحقائق.",
+      "transformations": [
+        {
+          "type": "foreign-name-pronunciation",
+          "from": "Arton Capital",
+          "to": "أَرْتُون كَابِيتَال"
+        },
+        {
+          "type": "foreign-name-pronunciation",
+          "from": "Passport Index",
+          "to": "بَاسْبُورْت إِنْدِكْس"
+        },
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-17e8cc23eb15",
+      "type": "paragraph",
+      "sourceHash": "17e8cc23eb15a2dacb7175fb9037f98a9e6172951ae5b87b1f987db4a73d9a09",
+      "sourceText": "وماذا عن الجواز السعودي؟ في أحدث بيانات هينلي المتاحة عند إعداد هذا المقال في أغسطس 2026، يأتي الجواز السعودي في منتصف الخمسينيات عالميًا، مع وصول ميسر إلى نحو تسعين وجهة. وتذكر بيانات المؤشر التاريخية أن عدد وجهاته لم يتجاوز 31 وجهة عام 2006؛ أي أن حرية حركته اتسعت إلى نحو ثلاثة أمثالها خلال عشرين عامًا.",
+      "spokenText": "وماذا عن الجواز السعودي؟ في أحدث بيانات هينلي المتاحة عند إعداد هذا المقال في أغسطس 2026، يأتي الجواز السعودي في منتصف الخمسينيات عالميًا، مع وصول ميسر إلى نحو تسعين وجهة. وَتَذْكُرُ بَيَانَاتُ المُؤَشِّرِ التَّارِيخِيَّةُ أن عدد وجهاته لم يتجاوز 31 وجهة عام 2006؛ أي أن حرية حركته اتسعت إلى نحو ثلاثة أمثالها خلال عشرين عامًا.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-0ed3ee0d51de",
+      "type": "paragraph",
+      "sourceHash": "0ed3ee0d51de18969668b1a28d0542d3446bb10d6bc838aa36346720fed8d999",
+      "sourceText": "يبقى تنبيه ضروري: هذه المؤشرات تصدر عن جهات خاصة، بعضها يعمل في سوق الإقامة والجنسية أصلًا، وهي تقيس جانبًا واحدًا محددًا هو حرية السفر الدولية. التصنيف مفيد للمقارنة، لكنه ليس شهادة شاملة في جودة دولة أو حياة مواطنيها. كما أن الأرقام تتغير خلال السنة نفسها مع كل تحديث، ولهذا حرصنا على تثبيت تاريخ البيانات المذكورة هنا.",
+      "spokenText": "يبقى تنبيه ضروري: هَذِهِ المُؤَشِّرَاتُ تَصْدُرُ عَنْ جِهَاتٍ خَاصَّةٍ، بعضها يعمل في سوق الإقامة والجنسية أصلًا، وهي تقيس جانبًا واحدًا محددًا هو حرية السفر الدولية. التصنيف مفيد للمقارنة، لكنه ليس شهادة شاملة في جودة دولة أو حياة مواطنيها. كما أن الأرقام تتغير خلال السنة نفسها مع كل تحديث، ولهذا حرصنا على تثبيت تاريخ البيانات المذكورة هنا.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-c83104d1046b",
+      "type": "h2",
+      "sourceHash": "c83104d1046bb058e863a2b57c88dfa3796616e098166c1af6d01326e2a6a604",
+      "sourceText": "هل يستطيع الإنسان شراء «جواز قوي»؟",
+      "spokenText": "هَلْ يَسْتَطِيعُ الإِنْسَانُ شِرَاءَ «جَوَازٍ قَوِيٍّ»؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-1e663fd7cda3",
+      "type": "paragraph",
+      "sourceHash": "1e663fd7cda3795209f59a8aeb4eee0ec56242aaea0b37894c9d70fbd0a2e1d9",
+      "sourceText": "سؤال يتردد كثيرًا، والجواب: في نطاق محدود، ويضيق مع الوقت.",
+      "spokenText": "سؤال يتردد كثيرًا، والجواب: في نطاق محدود، ويضيق مع الوقت.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-59c3c63146ee",
+      "type": "paragraph",
+      "sourceHash": "59c3c63146ee79dbdcfacc700bb6876aac1ccfad82558a448772d84e8c85ce69",
+      "sourceText": "توجد دول خارج الاتحاد الأوروبي تمنح جنسيتها عبر برامج الجنسية مقابل الاستثمار المنصوص عليها في تشريعاتها، وترى فيها موردًا اقتصاديًا. وتوجد دول أخرى كثيرة تمنح المستثمرين إقامة طويلة الأجل، لكن الإقامة غير الجنسية؛ فهي لا تمنح جواز البلد، وقد لا تقود إليه إطلاقًا، ولكل دولة شروط تجنيس مستقلة من مدد إقامة وروابط فعلية بالمجتمع.",
+      "spokenText": "توجد دول خارج الاتحاد الأوروبي تمنح جنسيتها عبر برامج الجنسية مقابل الاستثمار المنصوص عليها في تشريعاتها، وترى فيها موردًا اقتصاديًا. وتوجد دول أخرى كثيرة تمنح المستثمرين إقامة طويلة الأجل، لكن الإقامة غير الجنسية؛ فهي لا تمنح جواز البلد، وقد لا تقود إليه إطلاقًا، ولكل دولة شروط تجنيس مستقلة من مدد إقامة وروابط فعلية بالمجتمع.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-dc24715076c6",
+      "type": "paragraph",
+      "sourceHash": "dc24715076c6799a131d18faa392399bf179d1881eef5e5b5e6f2830088fbba3",
+      "sourceText": "وفي أوروبا تحديدًا ضاق هذا الباب. ففي أبريل 2025، قضت محكمة العدل التابعة للاتحاد الأوروبي في القضية C-181/23 بأن برنامج مالطا لمنح الجنسية مقابل استثمارات محددة مسبقًا يخل بالتزاماتها بموجب قانون الاتحاد؛ لأنه يحول اكتساب الجنسية، وما يترتب عليه من مواطنة أوروبية، إلى معاملة تجارية دون اشتراط صلة حقيقية بالبلد. وكان ذلك آخر برامج الجنسية مقابل الاستثمار العاملة داخل الاتحاد. أما برامج الإقامة مقابل الاستثمار فما تزال قائمة في دول عدة، داخل أوروبا وخارجها، مع مراجعات وتشديد مستمرين.",
+      "spokenText": "وفي أوروبا تحديدًا ضاق هذا الباب. ففي أبريل 2025، قضت محكمة العدل التابعة للاتحاد الأوروبي في القضية سِي 181 شَرْطَة 23 بأن برنامج مالطا لمنح الجنسية مقابل استثمارات محددة مسبقًا يُخِلُّ بِالْتِزَامَاتِهَا بموجب قانون الاتحاد؛ لِأَنَّهُ يُحَوِّلُ اكْتِسَابَ الجِنْسِيَّةِ، وما يترتب عليه من مواطنة أوروبية، إلى معاملة تجارية دون اشتراط صلة حقيقية بالبلد. وكان ذلك آخر برامج الجنسية مقابل الاستثمار العاملة داخل الاتحاد. أما برامج الإقامة مقابل الاستثمار فما تزال قائمة في دول عدة، داخل أوروبا وخارجها، مع مراجعات وتشديد مستمرين.",
+      "transformations": [
+        {
+          "type": "abbreviation-expansion",
+          "from": "C-181/23",
+          "to": "سِي 181 شَرْطَة 23"
+        },
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-d486eb6e1747",
+      "type": "paragraph",
+      "sourceHash": "d486eb6e1747016ad4bf6d3366ff55c422aa885ac9982b8fdb4908cf8a0e7ea5",
+      "sourceText": "الخلاصة أن الحصول على جواز أقوى بالاستثمار ممكن قانونًا في دول محدودة، لكنه يخضع لقوانين تختلف جذريًا من بلد إلى آخر، ولتدقيق دولي يتزايد عامًا بعد عام.",
+      "spokenText": "الخلاصة أن الحصول على جواز أقوى بالاستثمار ممكن قانونًا في دول محدودة، لكنه يخضع لقوانين تختلف جذريًا من بلد إلى آخر، ولتدقيق دولي يتزايد عامًا بعد عام.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-518cf016927c",
+      "type": "h2",
+      "sourceHash": "518cf016927c631f62bb184a5f706750611c1bf0d07d5e10cf059784f60f51c5",
+      "sourceText": "الجواز الأقوى لا يعني دائمًا الحياة الأفضل",
+      "spokenText": "الجَوَازُ الأَقْوَى لَا يَعْنِي دَائِمًا الحَيَاةَ الأَفْضَلَ",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-60fef10a0253",
+      "type": "paragraph",
+      "sourceHash": "60fef10a02534c5782e8d02b05010b0d908e3d18ce1fd5a3a6ac0cb1d07af38c",
+      "sourceText": "هذه نقطة تستحق التوقف. قوة الجواز تقيس شيئًا واحدًا محددًا: سهولة عبور الحدود. وهي لا تعني تلقائيًا أن الدولة صاحبة الجواز هي الأغنى، ولا الأفضل في التعليم والصحة، ولا الأعلى دخلًا لمواطنيها، ولا الأقوى عسكريًا، ولا الأكثر جاذبية للعيش.",
+      "spokenText": "هذه نقطة تستحق التوقف. قوة الجواز تقيس شيئًا واحدًا محددًا: سهولة عبور الحدود. وهي لا تعني تلقائيًا أن الدولة صاحبة الجواز هي الأغنى، ولا الأفضل في التعليم والصحة، ولا الأعلى دخلًا لمواطنيها، ولا الأقوى عسكريًا، ولا الأكثر جاذبية للعيش.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-d6b1e20e6267",
+      "type": "paragraph",
+      "sourceHash": "d6b1e20e62670a7b9b9fec7ec5f27240babd119e30395815e8ef5336c11b17c0",
+      "sourceText": "توجد دول صغيرة تسبق قوى كبرى في تصنيف الجوازات، ودول ذات اقتصادات ضخمة يقع جوازها في منتصف القائمة لأن علاقاتها الدولية معقدة. بل إن الدولة صاحبة أقوى جواز قد تكون من أكثر الدول تشددًا في منح تأشيراتها للآخرين.",
+      "spokenText": "توجد دول صغيرة تسبق قوى كبرى في تصنيف الجوازات، ودول ذات اقتصادات ضخمة يقع جوازها في منتصف القائمة لأن علاقاتها الدولية معقدة. بل إن الدولة صاحبة أقوى جواز قَدْ تَكُونُ مِنْ أَكْثَرِ الدُّوَلِ تَشَدُّدًا في منح تأشيراتها للآخرين.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-86f8938a2ae1",
+      "type": "paragraph",
+      "sourceHash": "86f8938a2ae1e8ed6135e473c7ab35c2fce0a956cffa560286ac0fec6ea0dd1e",
+      "sourceText": "الجواز القوي مؤشر على شبكة علاقات ناجحة وثقة دولية متراكمة. هذا كثير، لكنه ليس كل شيء.",
+      "spokenText": "الجواز القوي مؤشر على شبكة علاقات ناجحة وثقة دولية متراكمة. هذا كثير، لكنه ليس كل شيء.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-521ff52343f2",
+      "type": "h2",
+      "sourceHash": "521ff52343f2abce91987899852333d241b49899df7bdaa829e058f85a5f6ec7",
+      "sourceText": "وهل يبقى ترتيب الجواز ثابتًا؟",
+      "spokenText": "وَهَلْ يَبْقَى تَرْتِيبُ الجَوَازِ ثَابِتًا؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-88c6ce61719a",
+      "type": "paragraph",
+      "sourceHash": "88c6ce61719a714137d14cd36de9fc10c9bf83374e49f742c13ff09875dca543",
+      "sourceText": "إطلاقًا. ترتيب الجوازات يتغير باستمرار مع كل اتفاقية إعفاء تُبرَم أو تُلغى، وكل أزمة تندلع أو تنطفئ، وكل سياسة هجرة تتشدد أو تتيسر.",
+      "spokenText": "إطلاقًا. ترتيب الجوازات يتغير باستمرار مع كل اتفاقية إعفاء تُبرَم أو تُلغى، وكل أزمة تندلع أو تنطفئ، وكل سياسة هجرة تتشدد أو تتيسر.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-6874556ff557",
+      "type": "paragraph",
+      "sourceHash": "6874556ff5576b834b40b253cb9797cdf61bdeb392f9d42b2e9a88bfe0e29a67",
+      "sourceText": "القصة الأوضح في العقدين الأخيرين هي صعود الجواز الإماراتي. فبحسب بيان إصدار الذكرى العشرين لمؤشر هينلي، أضاف الجواز الإماراتي 153 وجهة ميسرة خلال عشرين عامًا، وهي أكبر زيادة سجلها المؤشر في تاريخه، لينتقل من منتصف القائمة إلى المركز الثاني عالميًا في تحديث يوليو 2026، في حصيلة عقدين من الاتفاقيات المتتابعة.",
+      "spokenText": "القصة الأوضح في العقدين الأخيرين هي صعود الجواز الإماراتي. فبحسب بيان إصدار الذكرى العشرين لمؤشر هينلي، أضاف الجواز الإماراتي 153 وجهة ميسرة خلال عشرين عامًا، وهي أكبر زيادة سجلها المؤشر في تاريخه، لينتقل من منتصف القائمة إلى المركز الثاني عالميًا في تحديث يوليو 2026، في حصيلة عقدين من الاتفاقيات المتتابعة.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-2a2d360f791a",
+      "type": "paragraph",
+      "sourceHash": "2a2d360f791abae230ce9eb1393e781208e8dd87eadaae65110d7d5490f3a0b4",
+      "sourceText": "وفي الاتجاه المعاكس، تراجع الجوازان الأمريكي والبريطاني. كان الأول في صدارة العالم عام 2006 والثاني في المركز الثالث، وتقاسما لاحقًا المركز الأول عام 2014، ثم وقفا في تحديث يوليو 2026 عند المركزين العاشر والسادس. ولا يعني هذا أن قوة الدولتين الاقتصادية تراجعت بالقدر نفسه؛ فالترتيب يقيس أساسًا تغير الوصول دون تأشيرة مقارنة بما حققته جوازات أخرى.",
+      "spokenText": "وفي الاتجاه المعاكس، تراجع الجوازان الأمريكي والبريطاني. كان الأول في صدارة العالم عام 2006 والثاني في المركز الثالث، وتقاسما لاحقًا المركز الأول عام 2014، ثم وقفا في تحديث يوليو 2026 عند المركزين العاشر والسادس. ولا يعني هذا أن قوة الدولتين الاقتصادية تراجعت بالقدر نفسه؛ فالترتيب يقيس أساسًا تَغَيُّرَ الوُصُولِ دُونَ تَأْشِيرَةٍ مقارنة بما حققته جوازات أخرى.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-e45b43861be2",
+      "type": "paragraph",
+      "sourceHash": "e45b43861be2a573d1c4fb270fc81812944e4237f8208c7a5101831e70edbe16",
+      "sourceText": "الدرس هنا أن قوة الجواز ليست مكسبًا دائمًا، بل علاقة تحتاج إلى صيانة مستمرة بالتفاوض والاتفاقيات، وقد تتراجع مع الأزمات أو الجمود الدبلوماسي.",
+      "spokenText": "الدرس هنا أن قوة الجواز ليست مكسبًا دائمًا، بل علاقة تحتاج إلى صيانة مستمرة بالتفاوض والاتفاقيات، وقد تتراجع مع الأزمات أو الجمود الدبلوماسي.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-62ee8d96a133",
+      "type": "h2",
+      "sourceHash": "62ee8d96a1337646b6fee05f8374d4fdb4ca203c66ea636863a0e7cb95a07318",
+      "sourceText": "في الختام",
+      "spokenText": "فِي الخِتَامِ",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-ffb0dcb87976",
+      "type": "paragraph",
+      "sourceHash": "ffb0dcb87976c34d836a44a9400175ab652a33e6bfb8ff5b914f904821b4b7b9",
+      "sourceText": "عد الآن إلى مشهد المطار الذي بدأنا به. المسافران يحملان كتيبين متشابهين في الحجم والشكل، لكن أحدهما يحمل خلفه شبكة كثيفة من الاتفاقيات والثقة المتبادلة والمصالح المشتركة، والآخر يحمل شبكة أضيق، لأسباب لا يد له فيها غالبًا.",
+      "spokenText": "عُدِ الآنَ إِلَى مَشْهَدِ المَطَارِ الذي بدأنا به. المسافران يحملان كتيبين متشابهين في الحجم والشكل، لكن أحدهما يحمل خلفه شبكة كثيفة من الاتفاقيات والثقة المتبادلة والمصالح المشتركة، والآخر يحمل شبكة أضيق، لأسباب لا يد له فيها غالبًا.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-a0cdd2563c54",
+      "type": "paragraph",
+      "sourceHash": "a0cdd2563c54f11e199da899aa1b96e25f056341b7cd84300281be30bd69e7f0",
+      "sourceText": "جواز السفر ليس مجرد وثيقة شخصية؛ فمدى حركته يعكس جانبًا من شبكة العلاقات والثقة والاتفاقيات التي بنتها دولته مع العالم. وحين تتغير تلك الشبكة، يتغير وزن الكتيب الصغير في يد حامله.",
+      "spokenText": "جواز السفر ليس مجرد وثيقة شخصية؛ فمدى حركته يعكس جانبًا من شبكة العلاقات والثقة والاتفاقيات التي بنتها دولته مع العالم. وحين تتغير تلك الشبكة، يتغير وزن الكتيب الصغير في يد حامله.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-1c858b631875",
+      "type": "paragraph",
+      "sourceHash": "1c858b6318757e47414edd5a92c50f7c59b869abe937ec5bd0e606a764bc6741",
+      "sourceText": "والمطمئن في هذه القصة أن الشبكة ليست قدرًا نهائيًا؛ فالحدود التي تتطلب اليوم تأشيرة وانتظارًا، قد يفتحها غدًا اتفاق جديد.",
+      "spokenText": "والمطمئن في هذه القصة أن الشبكة ليست قدرًا نهائيًا؛ فالحدود التي تتطلب اليوم تأشيرة وانتظارًا، قد يفتحها غدًا اتفاق جديد.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-19d94869ecdd",
+      "type": "paragraph",
+      "sourceHash": "19d94869ecdd8a329c44b191e1d4822ea79f8ae1f40ea68e42d0015197806582",
+      "sourceText": "ولوجه آخر من وجوه النفوذ الهادئ بين الدول ضمن السلسلة نفسها، اقرأ: حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟.",
+      "spokenText": "ولوجه آخر من وجوه النفوذ الهادئ بين الدول ضمن السلسلة نفسها، اقرأ: حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h2-10cfb406c4aa",
+      "type": "h2",
+      "sourceHash": "10cfb406c4aaf0e6fcf803455a44a5502931da9d6db39622501407b8bca3fc89",
+      "sourceText": "أسئلة شائعة",
+      "spokenText": "أَسْئِلَةٌ شَائِعَةٌ",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-e8050ede4c4e",
+      "type": "h3",
+      "sourceHash": "e8050ede4c4e8b0ce73b4aa7e5b0abdd212dbf5880809772a01e51b441bc902d",
+      "sourceText": "ما المقصود بقوة جواز السفر؟",
+      "spokenText": "مَا المَقْصُودُ بِقُوَّةِ جَوَازِ السَّفَرِ؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-7c922f3a5a9e",
+      "type": "paragraph",
+      "sourceHash": "7c922f3a5a9ed8831589123c3c29e9ccd32b977db01152e1cd20c66a68b1256c",
+      "sourceText": "هي عدد الوجهات التي يستطيع حامل الجواز دخولها دون استخراج تأشيرة مسبقة قبل السفر، سواء بإعفاء تام أو بتأشيرة عند الوصول أو بتصريح إلكتروني للسفر، بحسب منهجية المؤشر الذي يقيس.",
+      "spokenText": "هي عدد الوجهات التي يستطيع حامل الجواز دخولها دون استخراج تأشيرة مسبقة قبل السفر، سواء بإعفاء تام أو بتأشيرة عند الوصول أو بتصريح إلكتروني للسفر، بحسب منهجية المؤشر الذي يقيس.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-99f930c9de03",
+      "type": "h3",
+      "sourceHash": "99f930c9de03e764cc9928394d5ad914a2752fdbe037092a8c564646ee140fac",
+      "sourceText": "من يقرر دخول مواطني دولة دون تأشيرة؟",
+      "spokenText": "مَنْ يُقَرِّرُ دُخُولَ مُوَاطِنِي دَوْلَةٍ دُونَ تَأْشِيرَةٍ؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-dc8b7b50ede7",
+      "type": "paragraph",
+      "sourceHash": "dc8b7b50ede7eecad7916adff9eed479d72929803a6509fa7574736b2f0ad79a",
+      "sourceText": "كل دولة تقرر ذلك بنفسها؛ فسياسة الدخول قرار سيادي. وتُبنى الإعفاءات عادة عبر اتفاقيات ثنائية أو إقليمية، وكثيرًا ما يحكمها مبدأ المعاملة بالمثل.",
+      "spokenText": "كل دولة تقرر ذلك بنفسها؛ فسياسة الدخول قرار سيادي. وتُبنى الإعفاءات عادة عبر اتفاقيات ثنائية أو إقليمية، وكثيرًا ما يحكمها مبدأ المعاملة بالمثل.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-8d3941c12430",
+      "type": "h3",
+      "sourceHash": "8d3941c1243096bd1120522b08fd6a21951649ad37bcc077d97bd4aee2e983e5",
+      "sourceText": "هل يمكن أن تتغير قوة جواز السفر؟",
+      "spokenText": "هَلْ يُمْكِنُ أَنْ تَتَغَيَّرَ قُوَّةُ جَوَازِ السَّفَرِ؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-10f465e37e91",
+      "type": "paragraph",
+      "sourceHash": "10f465e37e9126c44efd1c4264d3d47693f3a96f89af6bf4f64e5135aaa9ee50",
+      "sourceText": "نعم، وباستمرار. اتفاقيات جديدة ترفع الترتيب، وأزمات سياسية أو أمنية قد تخفضه. الجواز الإماراتي أضاف 153 وجهة خلال عشرين عامًا، بينما تراجع جوازان تصدرا العالم معًا عام 2014.",
+      "spokenText": "نعم، وباستمرار. اتفاقيات جديدة ترفع الترتيب، وأزمات سياسية أو أمنية قد تخفضه. الجواز الإماراتي أضاف 153 وجهة خلال عشرين عامًا، بينما تراجع جوازان تصدرا العالم معًا عام 2014.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-be532086e0c0",
+      "type": "h3",
+      "sourceHash": "be532086e0c0a88d8675e467c6a10c349a989d2f5f480a6e2c4624aeb8103395",
+      "sourceText": "هل الجواز الأقوى يعني أن الدولة الأقوى؟",
+      "spokenText": "هَلِ الجَوَازُ الأَقْوَى يَعْنِي أَنَّ الدَّوْلَةَ الأَقْوَى؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-2b4515f6debc",
+      "type": "paragraph",
+      "sourceHash": "2b4515f6debc03369b54d924807fe5ada37b7e532f955d73a7416ebe598fc210",
+      "sourceText": "لا. قوة الجواز تقيس حرية السفر فقط، ولا تعكس بالضرورة حجم الاقتصاد أو القوة العسكرية أو جودة الحياة. دول صغيرة كثيرة تسبق قوى كبرى في هذا التصنيف.",
+      "spokenText": "لا. قوة الجواز تقيس حرية السفر فقط، ولا تعكس بالضرورة حجم الاقتصاد أو القوة العسكرية أو جودة الحياة. دول صغيرة كثيرة تسبق قوى كبرى في هذا التصنيف.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "h3-50c8a697a5e6",
+      "type": "h3",
+      "sourceHash": "50c8a697a5e651e48f5d609104a4501c8e26afdc8200cdd9c22a675c876382e7",
+      "sourceText": "ما الفرق بين الدخول دون تأشيرة والتأشيرة عند الوصول؟",
+      "spokenText": "مَا الفَرْقُ بَيْنَ الدُّخُولِ دُونَ تَأْشِيرَةٍ وَالتَّأْشِيرَةِ عِنْدَ الوُصُولِ؟",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    },
+    {
+      "segmentId": "paragraph-c2e6f8515daf",
+      "type": "paragraph",
+      "sourceHash": "c2e6f8515daf790957df9dd714864e6019d6c0516c5aacf684fe087d0ae48eff",
+      "sourceText": "الدخول دون تأشيرة يعني عدم الحاجة إلى استخراج تأشيرة مسبقة، مع بقاء شروط الدخول المعتادة التي تحددها كل دولة. أما التأشيرة عند الوصول فهي تأشيرة فعلية تصدر في المطار أو المنفذ عند القدوم، وقد تتطلب رسومًا ومستندات بسيطة، دون طلب مسبق لدى السفارة. يحسبهما مؤشر هينلي معًا ضمن الوصول الميسر، بينما قد تعاملهما مؤشرات أخرى بأوزان مختلفة عند المفاضلة بين الجوازات.",
+      "spokenText": "الدخول دون تأشيرة يعني عدم الحاجة إلى استخراج تأشيرة مسبقة، مع بقاء شروط الدخول المعتادة التي تحددها كل دولة. أما التأشيرة عند الوصول فهي تَأْشِيرَةٌ فِعْلِيَّةٌ تَصْدُرُ فِي المَطَارِ أو المنفذ عند القدوم، وقد تتطلب رسومًا ومستندات بسيطة، دون طلب مسبق لدى السفارة. يحسبهما مؤشر هينلي معًا ضمن الوصول الميسر، بينما قد تعاملهما مؤشرات أخرى بأوزان مختلفة عند المفاضلة بين الجوازات.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        },
+        {
+          "type": "punctuation-pause-normalization"
+        }
+      ],
+      "linguisticReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      },
+      "pronunciationReview": {
+        "status": "passed",
+        "reviewer": "Arena contextual linguistic implementation review",
+        "reviewedAt": "2026-08-25T05:43:53.171Z",
+        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+      }
+    }
+  ],
+  "scriptHash": "1e50637f8f3647d382d82d6f0b3790a73446cb5630112a6803ff1646368b62e3",
+  "notes": "Complete segment inventory reviewed for contextual ambiguities and pronunciation. High-risk forms and every title/heading are explicitly vocalized; foreign terms use declared transformations."
+}

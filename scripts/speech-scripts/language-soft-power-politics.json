@@ -1,0 +1,1548 @@
+{
+  "version": 1,
+  "articleId": "language-soft-power-politics",
+  "sourceSnapshotHash": "16d2ebbe1e45a669288359a5a1ef3f1ad3c9a9f25481b4f18c70e63ba1945220",
+  "sourceStructureHash": "e47c918c670b6f1212ccb614eee058b0a09f5fcd538b48d76dc25b67067281a1",
+  "generatedAt": "2026-08-25T05:35:20.515Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر",
+    "segmentCount": 8,
+    "sourceHash": "3cb4588bcb98db5bb976c639a345f935709504374c5a96414543078d59807d5e"
+  },
+  "segments": [
+    {
+      "segmentId": "title-97d4ba177304",
+      "type": "title",
+      "sourceHash": "97d4ba177304e23c2ef392bb6c5759d1768fed7be5ce900b8e9f813a06aec673",
+      "sourceText": "حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟",
+      "spokenText": "حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c8a6c31b0f48",
+      "type": "paragraph",
+      "sourceHash": "c8a6c31b0f48a47378859716d1c60f4b1d1e44516f3b64ae609eaab9c7dd0197",
+      "sourceText": "قبل أن يبدأ اجتماع دولي، قد يكون جزء من ميزان القوة قد حُسم بالفعل: ما اللغة التي سيُعقد بها؟",
+      "spokenText": "قبل أن يبدأ اجتماع دولي، قد يكون جزء من ميزان القوة قد حُسم بالفعل: ما اللغة التي سيُعقد بها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-10f103b73bc3",
+      "type": "paragraph",
+      "sourceHash": "10f103b73bc33ac57a33240fedeb37e85f752a38520561a8b208b2766389e0b7",
+      "sourceText": "من يتقنها يستطيع أن يفكر بصوت مرتفع، ويلتقط المزاح والتلميح، ويعترض في اللحظة المناسبة. أما من يتحدثها كلغة ثانية فقد يقسم انتباهه بين الفكرة وصياغتها، أو ينتظر الترجمة بينما ينتقل النقاش إلى نقطة أخرى.",
+      "spokenText": "من يتقنها يستطيع أن يفكر بصوت مرتفع، ويلتقط المزاح والتلميح، ويعترض في اللحظة المناسبة. أما من يتحدثها كلغة ثانية فقد يقسم انتباهه بين الفكرة وصياغتها، أو ينتظر الترجمة بينما ينتقل النقاش إلى نقطة أخرى.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7452247510cb",
+      "type": "paragraph",
+      "sourceHash": "7452247510cb96ece342efd77281a4c89239fbc9730c18f098a63b42ab38d2c3",
+      "sourceText": "اللغة هنا ليست زينة تحيط بالقرار؛ إنها جزء من الطريق المؤدي إليه.",
+      "spokenText": "اللغة هنا ليست زينة تحيط بالقرار؛ إنها جزء من الطريق المؤدي إليه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-34102590ce93",
+      "type": "paragraph",
+      "sourceHash": "34102590ce93251d36dc344ebb2765077578057485754541dfaad030d04c0ecc",
+      "sourceText": "والأمر لا يقتصر على قاعات السياسة. اللغة التي تختارها جامعة للتدريس، أو شركة للتوظيف، أو منصة لواجهة الاستخدام، تحدد من يدخل بسهولة ومن يحتاج إلى بذل جهد إضافي. لذلك قد تبدأ اللغة وسيلة تواصل، ثم تتحول بهدوء إلى بنية تحتية للفرص والمعرفة والانتماء.",
+      "spokenText": "والأمر لا يقتصر على قاعات السياسة. اللغة التي تختارها جامعة للتدريس، أو شركة للتوظيف، أو منصة لواجهة الاستخدام، تحدد من يدخل بسهولة ومن يحتاج إلى بذل جهد إضافي. لذلك قد تبدأ اللغة وسيلة تواصل، ثم تتحول بهدوء إلى بنية تحتية للفرص والمعرفة والانتماء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a844d4274320",
+      "type": "paragraph",
+      "sourceHash": "a844d42743208bbc958843c4213f42684c448b2158639dd76e26603f3bd855bb",
+      "sourceText": "فكيف يحدث ذلك؟ وهل تستطيع دولة أن تجعل لغتها مؤثرة بمجرد فتح المعاهد وتمويل الحملات؟",
+      "spokenText": "فكيف يحدث ذلك؟ وهل تستطيع دولة أن تجعل لغتها مؤثرة بمجرد فتح المعاهد وتمويل الحملات؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-7fb5b829eae9",
+      "type": "h2",
+      "sourceHash": "7fb5b829eae98c8f74a19dcda9296a4f1affc8f4ba0e378bd49ddb4fcfb1bf1e",
+      "sourceText": "الجواب المختصر",
+      "spokenText": "الجواب المختصر",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bb8f78ed2a74",
+      "type": "paragraph",
+      "sourceHash": "bb8f78ed2a743da1239fe7a3fc2f56a60a471ab638bf689900c346775e9a3b21",
+      "sourceText": "لا تصبح اللغة قوة لأنها واسعة الانتشار فحسب. تصبح ذات نفوذ عندما تجتمع حولها خمسة عناصر:",
+      "spokenText": "لا تصبح اللغة قوة لأنها واسعة الانتشار فحسب. تصبح ذات نفوذ عندما تجتمع حولها خمسة عناصر:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-c68fa99558ca",
+      "type": "list-item",
+      "sourceHash": "c68fa99558ca34b4e1485669c309320bbeb02c6a1247a330ce47ff4738b26b67",
+      "sourceText": "منفعة تفتح بابًا إلى التعليم أو العمل أو التجارة.",
+      "spokenText": "منفعة تفتح بابًا إلى التعليم أو العمل أو التجارة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-9b56e7775b15",
+      "type": "list-item",
+      "sourceHash": "9b56e7775b15eb6bbfa2297fba2d2f7bb1a85ff238fd316d9070f89b0daf458f",
+      "sourceText": "جاذبية تجعل الناس يرغبون في الاقتراب من ثقافتها.",
+      "spokenText": "جاذبية تجعل الناس يرغبون في الاقتراب من ثقافتها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-fe6c102b6480",
+      "type": "list-item",
+      "sourceHash": "fe6c102b648096998a57f99301c19f014e74cc58856f52ae0fb538ed6c7ca380",
+      "sourceText": "مؤسسات تحول الاهتمام العابر إلى تعلم مستمر وفرص حقيقية.",
+      "spokenText": "مؤسسات تحول الاهتمام العابر إلى تعلم مستمر وفرص حقيقية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-714a322ffa33",
+      "type": "list-item",
+      "sourceHash": "714a322ffa33d7b197fd555f468d30df666540cf3488f5c061e3231e7de713a1",
+      "sourceText": "حضور رقمي يجعلها متاحة في البحث والمنصات وأدوات الذكاء الاصطناعي.",
+      "spokenText": "حضور رقمي يجعلها متاحة في البحث والمنصات وأدوات الذكاء الاصطناعي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-8815df48fde3",
+      "type": "list-item",
+      "sourceHash": "8815df48fde3f28fdb6bab897180d2bb7aacfe83c7b35d60a24a0500ac5b063a",
+      "sourceText": "زمن يراكم العادات والشبكات ويجعل استخدامها هو الخيار الافتراضي.",
+      "spokenText": "زمن يراكم العادات والشبكات ويجعل استخدامها هو الخيار الافتراضي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "quote-20775c813731",
+      "type": "quote",
+      "sourceHash": "20775c813731c28bf5266441b9a3a5b90808efec131c4e751ad48ee97511b104",
+      "sourceText": "اللغة لا تصبح نفوذًا لأن الناس يتحدثون بها فقط، بل حين يصبح الوصول إلى أشياء مهمة أسهل لمن يجيدها.",
+      "spokenText": "اللغة لا تصبح نفوذًا لأن الناس يتحدثون بها فقط، بل حين يصبح الوصول إلى أشياء مهمة أسهل لمن يجيدها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-1e03f6730eb7",
+      "type": "h2",
+      "sourceHash": "1e03f6730eb7a0ccbfa839c80746f3b2dc3e0d08d8618aa8321bfc8f505dbb37",
+      "sourceText": "ما علاقة اللغة بالقوة الناعمة؟",
+      "spokenText": "ما علاقة اللغة بالقوة الناعمة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-de959534a8b4",
+      "type": "paragraph",
+      "sourceHash": "de959534a8b47cbc521c8fcc367b2a12e443e837ac9f780cac3c94ea2c304ddb",
+      "sourceText": "يرتبط مفهوم القوة الناعمة بأعمال أستاذ العلاقات الدولية جوزيف ناي. والفكرة، في أبسط صورها، هي القدرة على التأثير عبر الجاذبية والإقناع بدل الإكراه أو الدفع المباشر. لكن ناي نفسه نبّه إلى أن الدعاية لا تصنع قوة ناعمة موثوقة؛ لأن المصداقية جزء من الجاذبية وليست تفصيلًا تجميليًا. (Harvard Kennedy School)",
+      "spokenText": "يرتبط مفهوم القوة الناعمة بأعمال أستاذ العلاقات الدولية جوزيف ناي. والفكرة، في أبسط صورها، هي القدرة على التأثير عبر الجاذبية والإقناع بدل الإكراه أو الدفع المباشر. لكن ناي نفسه نبّه إلى أن الدعاية لا تصنع قوة ناعمة موثوقة؛ لأن المصداقية جزء من الجاذبية وليست تفصيلًا تجميليًا. (Harvard Kennedy School)",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4c1eead74935",
+      "type": "paragraph",
+      "sourceHash": "4c1eead749355d3e6a5c6e0ab93edb4a9b0f395290b60055c7cd914d4525de5f",
+      "sourceText": "اللغة، بهذا المعنى، ليست قوة ناعمة تلقائيًا. القواعد النحوية لا تكسب الحلفاء، والقواميس لا تغيّر السياسات بمفردها. لكنها تصبح قناة للقوة الناعمة عندما تحمل تعليمًا مطلوبًا، أو أدبًا وموسيقى محبوبين، أو فرصًا مهنية، أو شبكة من الجامعات والمؤسسات.",
+      "spokenText": "اللغة، بهذا المعنى، ليست قوة ناعمة تلقائيًا. القواعد النحوية لا تكسب الحلفاء، والقواميس لا تغيّر السياسات بمفردها. لكنها تصبح قناة للقوة الناعمة عندما تحمل تعليمًا مطلوبًا، أو أدبًا وموسيقى محبوبين، أو فرصًا مهنية، أو شبكة من الجامعات والمؤسسات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-763e60c2ca2d",
+      "type": "paragraph",
+      "sourceHash": "763e60c2ca2d813c318270b46bf547f245d9d70e1b56f6397e9d12ef86cee202",
+      "sourceText": "وهذا يفسر لماذا قد يكون للغة ملايين المتحدثين من دون نفوذ عالمي مماثل، بينما تؤثر لغة أقل عددًا لأنها حاضرة في مراكز المال أو البحث أو الثقافة.",
+      "spokenText": "وهذا يفسر لماذا قد يكون للغة ملايين المتحدثين من دون نفوذ عالمي مماثل، بينما تؤثر لغة أقل عددًا لأنها حاضرة في مراكز المال أو البحث أو الثقافة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-db1cd9e1d561",
+      "type": "h2",
+      "sourceHash": "db1cd9e1d5616211846c669b3db83f4b1c45cbb51957e8ddda566a876788f4bb",
+      "sourceText": "خمس بوابات يتحول عبرها الكلام إلى نفوذ",
+      "spokenText": "خمس بوابات يتحول عبرها الكلام إلى نفوذ",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-86f8acf23a1a",
+      "type": "h3",
+      "sourceHash": "86f8acf23a1adecb8a2332d426d977c60ea20b1bf0c758c00e895bedc8591e83",
+      "sourceText": "1. بوابة المنفعة: ماذا تفتح هذه اللغة؟",
+      "spokenText": "1. بوابة المنفعة: ماذا تفتح هذه اللغة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2325aa25c24f",
+      "type": "paragraph",
+      "sourceHash": "2325aa25c24fc33c79d2eb942c270b9d9ddf2e446e85f7f0862871f274f44fc7",
+      "sourceText": "يتعلم الناس اللغة التي يتوقعون أن تغيّر خياراتهم: قبول جامعي، وظيفة أفضل، سوق جديد، هجرة، أو وصول أوسع إلى المعرفة.",
+      "spokenText": "يتعلم الناس اللغة التي يتوقعون أن تغيّر خياراتهم: قبول جامعي، وظيفة أفضل، سوق جديد، هجرة، أو وصول أوسع إلى المعرفة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f4d11f97a1c9",
+      "type": "paragraph",
+      "sourceHash": "f4d11f97a1c9ef9c20998878fa93f8d414a809a5d585a309ef22d61bd25e964c",
+      "sourceText": "لهذا اكتسبت الإنجليزية موقعها الحالي من تراكب عوامل تاريخية واقتصادية وعلمية، لا من «تفوق» لغوي فطري. امتداد الإمبراطورية البريطانية وضعها في مناطق كثيرة، ثم عزز صعود الولايات المتحدة والجامعات والشركات والإعلام والتقنية أثر الشبكة: كل مستخدم جديد يزيد فائدتها لمستخدمين آخرين.",
+      "spokenText": "لهذا اكتسبت الإنجليزية موقعها الحالي من تراكب عوامل تاريخية واقتصادية وعلمية، لا من «تفوق» لغوي فطري. امتداد الإمبراطورية البريطانية وضعها في مناطق كثيرة، ثم عزز صعود الولايات المتحدة والجامعات والشركات والإعلام والتقنية أثر الشبكة: كل مستخدم جديد يزيد فائدتها لمستخدمين آخرين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7dc98c6ba8ff",
+      "type": "paragraph",
+      "sourceHash": "7dc98c6ba8ff449e2b250d11b907394d91024435083664365fa7f4d340d7a9b6",
+      "sourceText": "حينئذ يصبح تعلمها قرارًا عمليًا حتى لمن لا يحمل إعجابًا خاصًا بثقافتها. المنفعة قد تسبق الجاذبية، وأحيانًا تحل محلها.",
+      "spokenText": "حينئذ يصبح تعلمها قرارًا عمليًا حتى لمن لا يحمل إعجابًا خاصًا بثقافتها. المنفعة قد تسبق الجاذبية، وأحيانًا تحل محلها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-514ea1ecd485",
+      "type": "h3",
+      "sourceHash": "514ea1ecd485db4a622e61f2d138b120f071d217544743aa34eb248e66238be3",
+      "sourceText": "2. بوابة الجاذبية: حين يسبق المسلسلُ المعهدَ",
+      "spokenText": "2. بوابة الجاذبية: حين يسبق المسلسلُ المعهدَ",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bd539dc298d2",
+      "type": "paragraph",
+      "sourceHash": "bd539dc298d2f521ac8feb55f7a39c5a6771be125cb08caed172510062f12f76",
+      "sourceText": "قد يبدأ الطريق من أغنية، أو لعبة، أو رواية، أو مسلسل لا يحتاج المشاهد إلى قرار سياسي كي يحبه. الثقافة الشعبية تمنح اللغة صوتًا ووجهًا وذاكرة عاطفية؛ فينتقل المتلقي من متابعة الترجمة إلى تمييز العبارات، ثم ربما إلى تعلم اللغة.",
+      "spokenText": "قد يبدأ الطريق من أغنية، أو لعبة، أو رواية، أو مسلسل لا يحتاج المشاهد إلى قرار سياسي كي يحبه. الثقافة الشعبية تمنح اللغة صوتًا ووجهًا وذاكرة عاطفية؛ فينتقل المتلقي من متابعة الترجمة إلى تمييز العبارات، ثم ربما إلى تعلم اللغة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-883a0188a53c",
+      "type": "paragraph",
+      "sourceHash": "883a0188a53c0d07a97318bfaf03f63616259dcabd9e7a769bc8cf44d256f6bf",
+      "sourceText": "توضح الموجة الثقافية الكورية هذا المسار جيدًا. فالدراما والموسيقى والطعام والتجميل لم تجعل الكورية لغة عمل عالمية، لكنها وسّعت دائرة الفضول تجاهها وخلقت طلبًا تعليميًا لم يكن بالحجم نفسه من قبل. وتتابع مؤسسة كوريا هذا الانتشار في تقارير دورية عن حضور «الهاليو» عالميًا. (Korea Foundation)",
+      "spokenText": "توضح الموجة الثقافية الكورية هذا المسار جيدًا. فالدراما والموسيقى والطعام والتجميل لم تجعل الكورية لغة عمل عالمية، لكنها وسّعت دائرة الفضول تجاهها وخلقت طلبًا تعليميًا لم يكن بالحجم نفسه من قبل. وتتابع مؤسسة كوريا هذا الانتشار في تقارير دورية عن حضور «الهاليو» عالميًا. (Korea Foundation)",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a009dd6077e1",
+      "type": "paragraph",
+      "sourceHash": "a009dd6077e18d3e2967d3fee79a4949663ad68312206f59f1b99fe1ad2faf35",
+      "sourceText": "الدرس هنا ليس أن أي دولة تستطيع شراء الإعجاب. يمكنها دعم الإنتاج والتوزيع، لكنها لا تستطيع أن تأمر الجمهور بأن يحب قصة رديئة. القوة الناعمة تنمو حين يجد الناس في المنتج الثقافي قيمة حقيقية، لا حين يُعاملون كهدف لحملة علاقات عامة.",
+      "spokenText": "الدرس هنا ليس أن أي دولة تستطيع شراء الإعجاب. يمكنها دعم الإنتاج والتوزيع، لكنها لا تستطيع أن تأمر الجمهور بأن يحب قصة رديئة. القوة الناعمة تنمو حين يجد الناس في المنتج الثقافي قيمة حقيقية، لا حين يُعاملون كهدف لحملة علاقات عامة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-ca7f514af99f",
+      "type": "h3",
+      "sourceHash": "ca7f514af99f2f6334756dcf0e0c09de8f441bc9f4466b7ca6476a85c8810b21",
+      "sourceText": "3. بوابة المؤسسة: من الفضول إلى المسار الطويل",
+      "spokenText": "3. بوابة المؤسسة: من الفضول إلى المسار الطويل",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a12b324d9c36",
+      "type": "paragraph",
+      "sourceHash": "a12b324d9c36063ae7f2e028743ceb86abc98fade1dce58a8555ec4e242d3fdd",
+      "sourceText": "الإعجاب قد يشعل البداية، لكن المؤسسات تجعلها قابلة للاستمرار. المعاهد، والمنح، والجامعات، واختبارات الكفاءة، وبرامج التبادل، والترجمة، والإعلام الدولي، كلها تحول اللغة من اهتمام شخصي إلى طريق معترف به.",
+      "spokenText": "الإعجاب قد يشعل البداية، لكن المؤسسات تجعلها قابلة للاستمرار. المعاهد، والمنح، والجامعات، واختبارات الكفاءة، وبرامج التبادل، والترجمة، والإعلام الدولي، كلها تحول اللغة من اهتمام شخصي إلى طريق معترف به.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-81099c63d883",
+      "type": "paragraph",
+      "sourceHash": "81099c63d8835e88bbef6d53d51df04ba7cc4450a69505fa388e2c1084ac8c8f",
+      "sourceText": "تقدم الفرنسية مثالًا واضحًا على قوة الاستمرارية المؤسسية. فشبكات الفرنكوفونية لا تتعامل مع اللغة كدروس منفصلة فقط، بل تربطها بالتعليم والثقافة والإعلام والاقتصاد والحضور الدولي. ويعرض تقرير المنظمة الدولية للفرنكوفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين. (المنظمة الدولية للفرنكوفونية)",
+      "spokenText": "تقدم الفرنسية مثالًا واضحًا على قوة الاستمرارية المؤسسية. فشبكات الفرنكوفونية لا تتعامل مع اللغة كدروس منفصلة فقط، بل تربطها بالتعليم والثقافة والإعلام والاقتصاد والحضور الدولي. ويعرض تقرير المنظمة الدولية للفرنكوفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين. (المنظمة الدولية للفرنكوفونية)",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f8904311076a",
+      "type": "paragraph",
+      "sourceHash": "f8904311076a4e01816fb120b4916a716586608f44fd186b271537977ef24b1b",
+      "sourceText": "لكن المؤسسة ليست بريئة دائمًا؛ فقد تحمل إرثًا استعماريًا، أو تعيد إنتاج تفاوت بين لغة الإدارة ولغات المجتمع. لذلك ينبغي التمييز بين التبادل الثقافي المتكافئ وبين استخدام التعليم لمحو لغة أضعف أو إقصائها.",
+      "spokenText": "لكن المؤسسة ليست بريئة دائمًا؛ فقد تحمل إرثًا استعماريًا، أو تعيد إنتاج تفاوت بين لغة الإدارة ولغات المجتمع. لذلك ينبغي التمييز بين التبادل الثقافي المتكافئ وبين استخدام التعليم لمحو لغة أضعف أو إقصائها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-1b85a25b81b4",
+      "type": "h3",
+      "sourceHash": "1b85a25b81b4c9633079e65ad416ba4113e160057eb6c0947977ebed3f4345ac",
+      "sourceText": "4. بوابة الوضع الافتراضي: أي لغة يجدها الهاتف أولًا؟",
+      "spokenText": "4. بوابة الوضع الافتراضي: أي لغة يجدها الهاتف أولًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7b20c35e8c1b",
+      "type": "paragraph",
+      "sourceHash": "7b20c35e8c1b398c8add6778e781217395fddcbe33751c2aef45755222cda454",
+      "sourceText": "في العصر الرقمي، لا يكفي أن تكون للغة كتب ومدارس. عليها أن توجد في لوحة المفاتيح، ونتائج البحث، والترجمة، والتعرف إلى الصوت، وواجهات الخدمات، وبيانات تدريب النماذج.",
+      "spokenText": "في العصر الرقمي، لا يكفي أن تكون للغة كتب ومدارس. عليها أن توجد في لوحة المفاتيح، ونتائج البحث، والترجمة، والتعرف إلى الصوت، وواجهات الخدمات، وبيانات تدريب النماذج.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7526459cf8cf",
+      "type": "paragraph",
+      "sourceHash": "7526459cf8cf4755e93bff29e42815cfd5593df884548faf9a5cc13e536d1c9c",
+      "sourceText": "تشير اليونسكو إلى أن العالم يضم أكثر من سبعة آلاف لغة، بينما يوجد نحو ألف منها فقط على الإنترنت. الفجوة ليست تقنية بحتة؛ فهي تحدد من يستطيع التعلم والعمل والوصول إلى الخدمات بلغته، ومن يضطر إلى مغادرتها كي يشارك. (خارطة اليونسكو للتعدد اللغوي في العصر الرقمي)",
+      "spokenText": "تشير اليونسكو إلى أن العالم يضم أكثر من سبعة آلاف لغة، بينما يوجد نحو ألف منها فقط على الإنترنت. الفجوة ليست تقنية بحتة؛ فهي تحدد من يستطيع التعلم والعمل والوصول إلى الخدمات بلغته، ومن يضطر إلى مغادرتها كي يشارك. (خارطة اليونسكو للتعدد اللغوي في العصر الرقمي)",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fa51f559bea4",
+      "type": "paragraph",
+      "sourceHash": "fa51f559bea4463e924d10aa62a98bbd2e363e1e12d83683713ac7afd37afe0e",
+      "sourceText": "الخوارزمية لا «تكره» لغة بعينها، لكنها تتعلم مما تجده. فإذا كان المحتوى والبيانات والأدوات قليلة، تصبح نتائجها أضعف؛ وضعف النتائج يقلل الاستخدام؛ وقلة الاستخدام تبرر مزيدًا من الإهمال. هكذا تنشأ دائرة لا تحتاج إلى قرار رسمي كي تنتج تهميشًا حقيقيًا.",
+      "spokenText": "الخوارزمية لا «تكره» لغة بعينها، لكنها تتعلم مما تجده. فإذا كان المحتوى والبيانات والأدوات قليلة، تصبح نتائجها أضعف؛ وضعف النتائج يقلل الاستخدام؛ وقلة الاستخدام تبرر مزيدًا من الإهمال. هكذا تنشأ دائرة لا تحتاج إلى قرار رسمي كي تنتج تهميشًا حقيقيًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-cd87554bd8dc",
+      "type": "h3",
+      "sourceHash": "cd87554bd8dcf28ae5a6b6ef47208e848ede6951e0cfaa95da48a62e8aff80d6",
+      "sourceText": "5. بوابة الزمن: الشبكات لا تُبنى في موسم واحد",
+      "spokenText": "5. بوابة الزمن: الشبكات لا تُبنى في موسم واحد",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4062d106918d",
+      "type": "paragraph",
+      "sourceHash": "4062d106918d37c0782e34048a37101a77c9bd331447ef2370a5179b1a1cf63a",
+      "sourceText": "النفوذ اللغوي تراكمي. لغة الجامعات اليوم قد تستفيد من قرون من الإدارة والتجارة والهجرة والنشر. ولغة الثقافة الصاعدة تحتاج إلى وقت كي تنتقل من موجة جماهيرية إلى شبكة تعليم وبحث وعمل.",
+      "spokenText": "النفوذ اللغوي تراكمي. لغة الجامعات اليوم قد تستفيد من قرون من الإدارة والتجارة والهجرة والنشر. ولغة الثقافة الصاعدة تحتاج إلى وقت كي تنتقل من موجة جماهيرية إلى شبكة تعليم وبحث وعمل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ed2ea0953111",
+      "type": "paragraph",
+      "sourceHash": "ed2ea09531117cdd3d1bd66b5962e830767135e69262eab6f0c93b435054b66f",
+      "sourceText": "لهذا لا تتحول القوة الاقتصادية تلقائيًا إلى هيمنة لغوية. فالصينية، مثلًا، تستفيد من وزن اقتصادي كبير واهتمام تعليمي متزايد، لكن تحويل ذلك إلى لغة مشتركة واسعة يحتاج إلى مؤسسات وجاذبية واعتياد رقمي طويل. السوق يفتح الباب، لكنه لا يضمن أن تصبح اللغة هي الممر اليومي للجميع.",
+      "spokenText": "لهذا لا تتحول القوة الاقتصادية تلقائيًا إلى هيمنة لغوية. فالصينية، مثلًا، تستفيد من وزن اقتصادي كبير واهتمام تعليمي متزايد، لكن تحويل ذلك إلى لغة مشتركة واسعة يحتاج إلى مؤسسات وجاذبية واعتياد رقمي طويل. السوق يفتح الباب، لكنه لا يضمن أن تصبح اللغة هي الممر اليومي للجميع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-baccfe63ce44",
+      "type": "h2",
+      "sourceHash": "baccfe63ce44b430e5fd5861eac8139510a63b197d31dc5584c7bddaddb3e600",
+      "sourceText": "خمس لغات، وخمسة مسارات مختلفة",
+      "spokenText": "خمس لغات، وخمسة مسارات مختلفة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a23defc96bf2",
+      "type": "paragraph",
+      "sourceHash": "a23defc96bf20907af3cce492f45c7e23f0765e92c7bbbc0d902a7d41a6b7b00",
+      "sourceText": "هذه الأمثلة ليست ترتيبًا للقوة، بل عدسات توضح أن النفوذ اللغوي لا يسلك طريقًا واحدًا:",
+      "spokenText": "هذه الأمثلة ليست ترتيبًا للقوة، بل عدسات توضح أن النفوذ اللغوي لا يسلك طريقًا واحدًا:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-7f3e88277d5b",
+      "type": "h2",
+      "sourceHash": "7f3e88277d5bf30006b4f760a02185c254d99c1fe3ff0e9c67aa333a43488c3e",
+      "sourceText": "الوجه الآخر: عندما تصبح اللغة بوابةً وحاجزًا",
+      "spokenText": "الوجه الآخر: عندما تصبح اللغة بوابةً وحاجزًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e5efd8b305b6",
+      "type": "paragraph",
+      "sourceHash": "e5efd8b305b6fc600bd37b8b18ddd9ebd793ddf386466b3c3a1b3c6322317863",
+      "sourceText": "اللغة المهيمنة توسع الفرص لمن يتقنها، لكنها قد تفرض «ضريبة خفية» على الآخرين: وقت أطول للفهم والكتابة، واعتمادًا أكبر على الوسطاء، وثقة أقل في المواقف السريعة، وربما حرمانًا من تعليم جيد.",
+      "spokenText": "اللغة المهيمنة توسع الفرص لمن يتقنها، لكنها قد تفرض «ضريبة خفية» على الآخرين: وقت أطول للفهم والكتابة، واعتمادًا أكبر على الوسطاء، وثقة أقل في المواقف السريعة، وربما حرمانًا من تعليم جيد.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-18e5b1924ccd",
+      "type": "paragraph",
+      "sourceHash": "18e5b1924ccde1374241a3a494eda88f3aeeb31c4a6411cc46f61a3c07244006",
+      "sourceText": "تذكر اليونسكو أن 40% من الناس عالميًا لا يحصلون على التعليم باللغة التي يتحدثونها ويفهمونها بطلاقة، وأن أكثر من ربع مليار متعلم متأثرون بذلك. المسألة هنا ليست حنينًا إلى اللغة الأم، بل جودة تعلم وعدالة وصول. (اليونسكو: اللغات في التعليم)",
+      "spokenText": "تذكر اليونسكو أن 40% من الناس عالميًا لا يحصلون على التعليم باللغة التي يتحدثونها ويفهمونها بطلاقة، وأن أكثر من ربع مليار متعلم متأثرون بذلك. المسألة هنا ليست حنينًا إلى اللغة الأم، بل جودة تعلم وعدالة وصول. (اليونسكو: اللغات في التعليم)",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f6ccb1243e51",
+      "type": "paragraph",
+      "sourceHash": "f6ccb1243e513b3a04ec73c35bafbf4a376e01cdd6f8d802d4b31df04b933150",
+      "sourceText": "لذلك لا ينبغي أن يكون السؤال: «أي لغة ستنتصر؟» بل: كيف نجعل تعلم لغة واسعة الانتشار إضافةً إلى رصيد الإنسان، لا ثمنًا لمحو لغته الأولى؟",
+      "spokenText": "لذلك لا ينبغي أن يكون السؤال: «أي لغة ستنتصر؟» بل: كيف نجعل تعلم لغة واسعة الانتشار إضافةً إلى رصيد الإنسان، لا ثمنًا لمحو لغته الأولى؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-178aa1c1e561",
+      "type": "paragraph",
+      "sourceHash": "178aa1c1e561404630580f3fa05f4a5c1dde5a59678e1fbfca64fbe6862ebbfd",
+      "sourceText": "التعدد اللغوي ليس حلًا سحريًا، لكنه يرفض الاختيار الزائف بين الانفتاح والهوية. يمكن للطالب أن يتعلم الإنجليزية للبحث، والكورية لشغف ثقافي، ويحافظ في الوقت نفسه على قدرته على التفكير والكتابة والإبداع بالعربية.",
+      "spokenText": "التعدد اللغوي ليس حلًا سحريًا، لكنه يرفض الاختيار الزائف بين الانفتاح والهوية. يمكن للطالب أن يتعلم الإنجليزية للبحث، والكورية لشغف ثقافي، ويحافظ في الوقت نفسه على قدرته على التفكير والكتابة والإبداع بالعربية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-77b33ce44c45",
+      "type": "h2",
+      "sourceHash": "77b33ce44c459bb5986a4e28004f2a680435a12a6f2fbae88f1d3f7a84922c67",
+      "sourceText": "هل ستنهي الترجمة الآلية هيمنة اللغات الكبرى؟",
+      "spokenText": "هل ستنهي الترجمة الآلية هيمنة اللغات الكبرى؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-d7f4abf3733d",
+      "type": "paragraph",
+      "sourceHash": "d7f4abf3733d597622cf224141bba95a49067a2dbf7319d85e5e6bd90f4b3105",
+      "sourceText": "ستقللها في بعض المواقف، لكنها لن تلغيها قريبًا.",
+      "spokenText": "ستقللها في بعض المواقف، لكنها لن تلغيها قريبًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b81a0512d4a4",
+      "type": "paragraph",
+      "sourceHash": "b81a0512d4a4f85027ae1dbd909546d65ca08fc7300cb50faec99929b7c4cb9b",
+      "sourceText": "تساعد الترجمة الفورية على قراءة قائمة طعام أو فهم رسالة أو متابعة محادثة بسيطة. لكنها لا تنقل دائمًا النبرة والمجاز والسياق والعلاقة الاجتماعية، ولا تمنح صاحبها تلقائيًا القدرة على التفاوض أو بناء الثقة أو إنتاج معرفة داخل مجتمع لغوي.",
+      "spokenText": "تساعد الترجمة الفورية على قراءة قائمة طعام أو فهم رسالة أو متابعة محادثة بسيطة. لكنها لا تنقل دائمًا النبرة والمجاز والسياق والعلاقة الاجتماعية، ولا تمنح صاحبها تلقائيًا القدرة على التفاوض أو بناء الثقة أو إنتاج معرفة داخل مجتمع لغوي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-49c82278336b",
+      "type": "paragraph",
+      "sourceHash": "49c82278336bdf86b29eda8a7b9186bf45b9e93a4bcdd0da43f807507d005d97",
+      "sourceText": "ثم إن أدوات الترجمة نفسها لا تعمل بالجودة ذاتها لكل اللغات. اللغة ذات البيانات الغزيرة تحصل عادة على نماذج أفضل، بينما قد تعاني اللغات قليلة الموارد من أخطاء أكبر أو تغطية أضعف. التقنية تستطيع أن تخفض كلفة العبور، لكنها قد تعيد أيضًا توزيع الامتياز لمصلحة اللغات الأكثر حضورًا رقميًا.",
+      "spokenText": "ثم إن أدوات الترجمة نفسها لا تعمل بالجودة ذاتها لكل اللغات. اللغة ذات البيانات الغزيرة تحصل عادة على نماذج أفضل، بينما قد تعاني اللغات قليلة الموارد من أخطاء أكبر أو تغطية أضعف. التقنية تستطيع أن تخفض كلفة العبور، لكنها قد تعيد أيضًا توزيع الامتياز لمصلحة اللغات الأكثر حضورًا رقميًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-75fe80c8118d",
+      "type": "paragraph",
+      "sourceHash": "75fe80c8118d41017ffad70b63846c1e3d62573bc46fe1d354023a45bda0bfe0",
+      "sourceText": "المستقبل المرجح ليس عالمًا بلا حاجة إلى تعلم اللغات، بل عالمًا تتغير فيه أسباب التعلم: تقل الحاجة في المهام السطحية، وتبقى قيمته مرتفعة حين تكون الثقة والدقة والهوية والمعرفة العميقة مهمة.",
+      "spokenText": "المستقبل المرجح ليس عالمًا بلا حاجة إلى تعلم اللغات، بل عالمًا تتغير فيه أسباب التعلم: تقل الحاجة في المهام السطحية، وتبقى قيمته مرتفعة حين تكون الثقة والدقة والهوية والمعرفة العميقة مهمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-82d5702c6ae7",
+      "type": "h2",
+      "sourceHash": "82d5702c6ae7d0089dfb7f8323941df7c7d5f5ea58d91ba99d9b3124c5d95c29",
+      "sourceText": "وماذا عن العربية؟ من الاتساع إلى التأثير",
+      "spokenText": "وماذا عن العربية؟ من الاتساع إلى التأثير",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-758bcd5117db",
+      "type": "paragraph",
+      "sourceHash": "758bcd5117db75d5649f411b857adba41a820129e8fd8f6989197f6dab7c03b8",
+      "sourceText": "تقول الأمم المتحدة إن العربية تُستخدم يوميًا من أكثر من 400 مليون شخص، وهي إحدى لغاتها الرسمية منذ 1973. (اليوم العالمي للغة العربية) لكن العدد والمكانة التاريخية لا يكفيان وحدهما لصناعة نفوذ معاصر.",
+      "spokenText": "تقول الأمم المتحدة إن العربية تُستخدم يوميًا من أكثر من 400 مليون شخص، وهي إحدى لغاتها الرسمية منذ 1973. (اليوم العالمي للغة العربية) لكن العدد والمكانة التاريخية لا يكفيان وحدهما لصناعة نفوذ معاصر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e8265001f422",
+      "type": "paragraph",
+      "sourceHash": "e8265001f422bbdad5b676be405b58de3cb0c02799cf141912f1c78fa3367511",
+      "sourceText": "ما يزيد أثر العربية اليوم ليس تكرار الثناء عليها، بل بناء ما يجعل الآخرين وأبناءها أنفسهم يحتاجون إليها ويستمتعون بها:",
+      "spokenText": "ما يزيد أثر العربية اليوم ليس تكرار الثناء عليها، بل بناء ما يجعل الآخرين وأبناءها أنفسهم يحتاجون إليها ويستمتعون بها:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-963d7866576b",
+      "type": "list-item",
+      "sourceHash": "963d7866576bd6ee0b7676537d6b6ae717a2ea496ff02b60d39861e3800577ff",
+      "sourceText": "معرفة أصلية: أبحاث وشروح وبيانات ومراجع تُنتج بالعربية، لا تصل إليها متأخرة بالترجمة فقط.",
+      "spokenText": "معرفة أصلية: أبحاث وشروح وبيانات ومراجع تُنتج بالعربية، لا تصل إليها متأخرة بالترجمة فقط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-78e5767432b0",
+      "type": "list-item",
+      "sourceHash": "78e5767432b028bad1a408cd2d2d09b854850980851742f68f37e0e2581b400e",
+      "sourceText": "منتجات ثقافية قابلة للسفر: قصص وأفلام وألعاب وبودكاست تحمل خصوصيتها وتخاطب الإنسان خارج حدودها.",
+      "spokenText": "منتجات ثقافية قابلة للسفر: قصص وأفلام وألعاب وبودكاست تحمل خصوصيتها وتخاطب الإنسان خارج حدودها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-84412a94abb1",
+      "type": "list-item",
+      "sourceHash": "84412a94abb190029d49e18ee5c85aa3528b15597fa3784acafe200911fda02a",
+      "sourceText": "تعليم أفضل: مسارات واضحة لغير الناطقين بها، تراعي الفصحى واللهجات بدل تقديم العلاقة بينهما كمشكلة بلا حل.",
+      "spokenText": "تعليم أفضل: مسارات واضحة لغير الناطقين بها، تراعي الفصحى واللهجات بدل تقديم العلاقة بينهما كمشكلة بلا حل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-429b7e9b879b",
+      "type": "list-item",
+      "sourceHash": "429b7e9b879b8d451b6cacc0985e8ff0b6c23e0a34b1dc34ff0adbd37ce8c48b",
+      "sourceText": "بنية رقمية مفتوحة: مصطلحات وقواميس وبيانات صوتية ونصية وأدوات تساعد المطورين والباحثين على بناء خدمات جيدة.",
+      "spokenText": "بنية رقمية مفتوحة: مصطلحات وقواميس وبيانات صوتية ونصية وأدوات تساعد المطورين والباحثين على بناء خدمات جيدة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-172613470792",
+      "type": "list-item",
+      "sourceHash": "172613470792d234a6b17118e6d42be1486dd7724c056deb9fa9c87c6c4d22c5",
+      "sourceText": "نشر متعدد اللغات: حضور عربي أصيل، مع ترجمات وملخصات تفتح نافذة للآخرين بدل انتظار أن يجدوا الباب وحدهم.",
+      "spokenText": "نشر متعدد اللغات: حضور عربي أصيل، مع ترجمات وملخصات تفتح نافذة للآخرين بدل انتظار أن يجدوا الباب وحدهم.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a41d0718f65e",
+      "type": "paragraph",
+      "sourceHash": "a41d0718f65e93ab90d6f6fc69cbca6b0f1b83eb786c7070611e9859e162695d",
+      "sourceText": "الهدف ليس أن تزاحم العربية كل لغة؛ فهذه نسخة لغوية من صراع صفري لا يفيد أحدًا. الهدف أن تكون قادرة على إنتاج المعنى وتصديره، لا مجرد الدفاع الرمزي عن ماضيها.",
+      "spokenText": "الهدف ليس أن تزاحم العربية كل لغة؛ فهذه نسخة لغوية من صراع صفري لا يفيد أحدًا. الهدف أن تكون قادرة على إنتاج المعنى وتصديره، لا مجرد الدفاع الرمزي عن ماضيها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-fecf906ccaa7",
+      "type": "h2",
+      "sourceHash": "fecf906ccaa732081b1205cca4b6d14f056a76cf39f3ac6a0e8bda3958392f59",
+      "sourceText": "اختبار النفوذ اللغوي: خمس أسئلة تكشف الصورة",
+      "spokenText": "اختبار النفوذ اللغوي: خمس أسئلة تكشف الصورة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3fc63e8ca0a2",
+      "type": "paragraph",
+      "sourceHash": "3fc63e8ca0a2e473dfcece00d461665fcae91292284d04679491fba67b18b74e",
+      "sourceText": "حين ترى إقبالًا على لغة ما، لا تسأل فقط: «كم شخصًا يتحدثها؟». اسأل:",
+      "spokenText": "حين ترى إقبالًا على لغة ما، لا تسأل فقط: «كم شخصًا يتحدثها؟». اسأل:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-0fd58d635601",
+      "type": "list-item",
+      "sourceHash": "0fd58d635601e389cfd7d50ed026fd9740395644e288af129a932d2e00cab8ef",
+      "sourceText": "ما الفرص التي تفتحها هذه اللغة فعليًا؟",
+      "spokenText": "ما الفرص التي تفتحها هذه اللغة فعليًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-4f99b016fd21",
+      "type": "list-item",
+      "sourceHash": "4f99b016fd21b833a60ed6c6114a48eb21934f158baf28f91c6fc321cc4e322f",
+      "sourceText": "ما القصص والمنتجات التي تجعل الناس يريدون الاقتراب منها؟",
+      "spokenText": "ما القصص والمنتجات التي تجعل الناس يريدون الاقتراب منها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-51cedc780202",
+      "type": "list-item",
+      "sourceHash": "51cedc78020220313532a51df55759dbc0e1089a778bb0707e9f0edd6a777a46",
+      "sourceText": "ما المؤسسات التي تحول الاهتمام إلى تعلم وعمل؟",
+      "spokenText": "ما المؤسسات التي تحول الاهتمام إلى تعلم وعمل؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-b682ca6993d2",
+      "type": "list-item",
+      "sourceHash": "b682ca6993d26b280042dd3bc3ff8e1c1f95d1ad569cbbdb59258d88ad5347ad",
+      "sourceText": "هل توجد اللغة في البحث والمنصات والذكاء الاصطناعي بجودة حقيقية؟",
+      "spokenText": "هل توجد اللغة في البحث والمنصات والذكاء الاصطناعي بجودة حقيقية؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "list-item-7eafdb60442b",
+      "type": "list-item",
+      "sourceHash": "7eafdb60442ba5d6a3d303fcee04ef7e1cc0215bc9bdd78aa46dc352c4bf2a83",
+      "sourceText": "من يصبح أقل ظهورًا أو يدفع كلفة إضافية عندما تكون هي الخيار الافتراضي؟",
+      "spokenText": "من يصبح أقل ظهورًا أو يدفع كلفة إضافية عندما تكون هي الخيار الافتراضي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-684703d9e8de",
+      "type": "paragraph",
+      "sourceHash": "684703d9e8deb907e7a90d2afb007b79462b95ad12a1a09ca79293176227db18",
+      "sourceText": "الأسئلة الأربعة الأولى تقيس القوة. الخامس يقيس عدالتها.",
+      "spokenText": "الأسئلة الأربعة الأولى تقيس القوة. الخامس يقيس عدالتها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-6c78e10ed9e0",
+      "type": "h2",
+      "sourceHash": "6c78e10ed9e046c9524e768dc292009e18afc4281ac16a980dcbf3dea387222d",
+      "sourceText": "الخلاصة",
+      "spokenText": "الخلاصة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-cb5bd1232980",
+      "type": "paragraph",
+      "sourceHash": "cb5bd12329808c45132b941acfa8467a0a320515cf0c0ad8cd0ef8bd62e75b28",
+      "sourceText": "لا تنتشر اللغة بجمال مفرداتها وحده، ولا بقرار حكومي منفرد. إنها تتحرك حين تلتقي المصلحة بالرغبة، وتساندهما مؤسسة، وتضاعفهما المنصة، ثم يحولهما الزمن إلى عادة.",
+      "spokenText": "لا تنتشر اللغة بجمال مفرداتها وحده، ولا بقرار حكومي منفرد. إنها تتحرك حين تلتقي المصلحة بالرغبة، وتساندهما مؤسسة، وتضاعفهما المنصة، ثم يحولهما الزمن إلى عادة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-600e4f3ac8f8",
+      "type": "paragraph",
+      "sourceHash": "600e4f3ac8f8009dd0bd36dec0c00bf6c491b1ae025b545cba50e93fe43b1650",
+      "sourceText": "لهذا تكون اللغة أحيانًا جسرًا إلى عالم أوسع، وأحيانًا حارسًا على بابه. وقد تكون وسيلة تعارف حقيقية، أو غطاءً لدعاية، أو أثرًا باقياً لقوة صلبة قديمة. التمييز بين هذه الصور هو ما يجعل فهم اللغة والقوة الناعمة أكثر دقة من الاحتفاء الساذج بالانتشار أو الخوف منه.",
+      "spokenText": "لهذا تكون اللغة أحيانًا جسرًا إلى عالم أوسع، وأحيانًا حارسًا على بابه. وقد تكون وسيلة تعارف حقيقية، أو غطاءً لدعاية، أو أثرًا باقياً لقوة صلبة قديمة. التمييز بين هذه الصور هو ما يجعل فهم اللغة والقوة الناعمة أكثر دقة من الاحتفاء الساذج بالانتشار أو الخوف منه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-f26c2425b0ed",
+      "type": "paragraph",
+      "sourceHash": "f26c2425b0ed8f47dcb02cb0bbe1019a023d79e26590e8a1b399565ab8e9fa39",
+      "sourceText": "حين تختار لغة جديدة، فأنت لا تحفظ قاموسًا فقط؛ بل تدخل شبكة من الفرص والقصص والقيم. وحين تنتج معرفة بلغتك، فأنت لا تحمي كلمات فحسب؛ بل توسع من يستطيع أن يفكر ويشارك من خلالها.",
+      "spokenText": "حين تختار لغة جديدة، فأنت لا تحفظ قاموسًا فقط؛ بل تدخل شبكة من الفرص والقصص والقيم. وحين تنتج معرفة بلغتك، فأنت لا تحمي كلمات فحسب؛ بل توسع من يستطيع أن يفكر ويشارك من خلالها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e5c6a2d4fb64",
+      "type": "paragraph",
+      "sourceHash": "e5c6a2d4fb6432379cf956d16f53cd331562d29fa9554e178e351682c6c49f36",
+      "sourceText": "ولجولة أخرى تكشف كيف يغيّر السياق معنى السلوك، اقرأ: عادات ثقافية من حول العالم: حين يصبح الاختلاف إثراءً.",
+      "spokenText": "ولجولة أخرى تكشف كيف يغيّر السياق معنى السلوك، اقرأ: عادات ثقافية من حول العالم: حين يصبح الاختلاف إثراءً.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-10cfb406c4aa",
+      "type": "h2",
+      "sourceHash": "10cfb406c4aaf0e6fcf803455a44a5502931da9d6db39622501407b8bca3fc89",
+      "sourceText": "أسئلة شائعة",
+      "spokenText": "أسئلة شائعة",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-d7099c820eef",
+      "type": "h3",
+      "sourceHash": "d7099c820eef51615f71b996f9346241db3a23b02c704e166837d5b2470f761f",
+      "sourceText": "هل اللغة قوة ناعمة في ذاتها؟",
+      "spokenText": "هل اللغة قوة ناعمة في ذاتها؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c05fa36edad9",
+      "type": "paragraph",
+      "sourceHash": "c05fa36edad9537bed43a860eb16ab8d2a911467c7ede1a67d92c6372f13360b",
+      "sourceText": "لا. تصبح قناة للقوة الناعمة عندما ترتبط بثقافة جذابة، أو تعليم وفرص، أو مؤسسات موثوقة. وقد تنتشر أيضًا بفعل الإكراه أو التاريخ الاستعماري، وهذا لا يُعد جاذبية ناعمة بالمعنى نفسه.",
+      "spokenText": "لا. تصبح قناة للقوة الناعمة عندما ترتبط بثقافة جذابة، أو تعليم وفرص، أو مؤسسات موثوقة. وقد تنتشر أيضًا بفعل الإكراه أو التاريخ الاستعماري، وهذا لا يُعد جاذبية ناعمة بالمعنى نفسه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-5d64782b0300",
+      "type": "h3",
+      "sourceHash": "5d64782b0300728c9052bda114ee98bb37ead8baba6253e626a6acb3223d56e3",
+      "sourceText": "لماذا تهيمن الإنجليزية؟ هل لأنها أسهل؟",
+      "spokenText": "لماذا تهيمن الإنجليزية؟ هل لأنها أسهل؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2f62196af3b1",
+      "type": "paragraph",
+      "sourceHash": "2f62196af3b12c003c1b25ff98d3892c54fd4c5579fa461f6f0c2dbbe54194de",
+      "sourceText": "لا يوجد دليل يجعل سهولة اللغة تفسيرًا كافيًا. موقع الإنجليزية نتاج تراكم تاريخي واقتصادي وعلمي وإعلامي وتقني، ثم عززه أثر الشبكة: كثرة استخدامها جعلت تعلمها أكثر فائدة، وزيادة فائدتها جذبت مستخدمين جددًا.",
+      "spokenText": "لا يوجد دليل يجعل سهولة اللغة تفسيرًا كافيًا. موقع الإنجليزية نتاج تراكم تاريخي واقتصادي وعلمي وإعلامي وتقني، ثم عززه أثر الشبكة: كثرة استخدامها جعلت تعلمها أكثر فائدة، وزيادة فائدتها جذبت مستخدمين جددًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-d2b6d59bf7e6",
+      "type": "h3",
+      "sourceHash": "d2b6d59bf7e648c625ee87092abb09f7369eaf8015035f54ada2ad6c3cb4d6b8",
+      "sourceText": "هل تعلم لغة أجنبية يهدد الهوية؟",
+      "spokenText": "هل تعلم لغة أجنبية يهدد الهوية؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-08d69fe0495e",
+      "type": "paragraph",
+      "sourceHash": "08d69fe0495e2fce1aeb1fff4df352dea19d71dd792bed29d83313f7f0606057",
+      "sourceText": "ليس بالضرورة. الخطر يظهر عندما تصبح اللغة الجديدة شرطًا لإقصاء الأولى من التعليم والمعرفة والحياة العامة. أما التعدد اللغوي الجيد فيضيف أدوات جديدة من دون مطالبة الإنسان بالتخلي عن صوته الأول.",
+      "spokenText": "ليس بالضرورة. الخطر يظهر عندما تصبح اللغة الجديدة شرطًا لإقصاء الأولى من التعليم والمعرفة والحياة العامة. أما التعدد اللغوي الجيد فيضيف أدوات جديدة من دون مطالبة الإنسان بالتخلي عن صوته الأول.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-23290cca3965",
+      "type": "h3",
+      "sourceHash": "23290cca39652bd4fc8ee236d7df0b34715c8c9375d4d0db0aa8245c50df5774",
+      "sourceText": "هل ستجعل الترجمة بالذكاء الاصطناعي تعلم اللغات غير ضروري؟",
+      "spokenText": "هل ستجعل الترجمة بالذكاء الاصطناعي تعلم اللغات غير ضروري؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7f951b1ab6df",
+      "type": "paragraph",
+      "sourceHash": "7f951b1ab6dfbf6a20d5e8ba83ec7eae9c12420673134a8f6aaa5302e4a2026f",
+      "sourceText": "ستقلل الحاجة في بعض المهام اليومية، لكنها لا تعوض بالكامل الفهم الثقافي والثقة والدقة والقدرة على التفكير والمشاركة مباشرة داخل مجتمع لغوي. كما أن جودتها غير متساوية بين اللغات.",
+      "spokenText": "ستقلل الحاجة في بعض المهام اليومية، لكنها لا تعوض بالكامل الفهم الثقافي والثقة والدقة والقدرة على التفكير والمشاركة مباشرة داخل مجتمع لغوي. كما أن جودتها غير متساوية بين اللغات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-4dc4ded4501e",
+      "type": "h3",
+      "sourceHash": "4dc4ded4501e757168dfa64e8d9b156ce46a4450c884ccd8a964d9525a29f6dd",
+      "sourceText": "هل تمتلك العربية قوة ناعمة؟",
+      "spokenText": "هل تمتلك العربية قوة ناعمة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-4049df498f3c",
+      "type": "paragraph",
+      "sourceHash": "4049df498f3cb26a3ffce7cff37ed9ae4b1677581527fa42a6b84db6ab8eae55",
+      "sourceText": "نعم، بفضل عمقها الحضاري والديني والثقافي وانتشارها العابر للحدود. لكن تحويل هذا الرصيد إلى نفوذ معاصر يحتاج إلى معرفة أصلية، ومنتجات ثقافية قابلة للسفر، وتعليم جيد، وحضور رقمي أقوى.",
+      "spokenText": "نعم، بفضل عمقها الحضاري والديني والثقافي وانتشارها العابر للحدود. لكن تحويل هذا الرصيد إلى نفوذ معاصر يحتاج إلى معرفة أصلية، ومنتجات ثقافية قابلة للسفر، وتعليم جيد، وحضور رقمي أقوى.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h3-d50e64a9f02e",
+      "type": "h3",
+      "sourceHash": "d50e64a9f02e3a9ef967a688b7c8d505e24847d4d9d52850b83531144325382f",
+      "sourceText": "هل تستطيع دولة صناعة نفوذ لغتها بالمال؟",
+      "spokenText": "هل تستطيع دولة صناعة نفوذ لغتها بالمال؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bedcd1b14edd",
+      "type": "paragraph",
+      "sourceHash": "bedcd1b14edd6a969c90117f98efdd5b8d49ecc72f471e0b1552c4cd37a689b6",
+      "sourceText": "يمكنها تمويل التعليم والترجمة والتبادل والإنتاج، لكنها لا تستطيع شراء الثقة أو الإعجاب بصورة مضمونة. المؤسسة تمهّد الطريق، أما الجاذبية فتحتاج إلى قيمة يلمسها الناس فعلًا.",
+      "spokenText": "يمكنها تمويل التعليم والترجمة والتبادل والإنتاج، لكنها لا تستطيع شراء الثقة أو الإعجاب بصورة مضمونة. المؤسسة تمهّد الطريق، أما الجاذبية فتحتاج إلى قيمة يلمسها الناس فعلًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "b38c35991618b2010c3ccef52e850822756bf496c77eebfc14f44559f76d7f05",
+  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+}

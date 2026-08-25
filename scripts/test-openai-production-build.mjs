@@ -55,6 +55,7 @@ const contractEnv = {
   BAREEQ_TTS_PROVIDER: 'openai',
   OPENAI_API_KEY: contractKey,
   BAREEQ_TTS_CONTRACT_TEST: '1',
+  BAREEQ_SPEECH_GATE_UNSAFE_TEST_BYPASS: 'I_ACKNOWLEDGE_LOCAL_CONTRACT_ONLY',
   OPENAI_TTS_ENDPOINT: `http://127.0.0.1:${address.port}/v1/audio/speech`,
   OPENAI_TTS_MIN_INTERVAL_MS: '0',
 };
