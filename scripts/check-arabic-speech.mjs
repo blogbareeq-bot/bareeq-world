@@ -12,13 +12,13 @@ try {
   ], { cwd: ROOT, stdio: 'inherit' });
   const inventory = JSON.parse(await readFile(inventoryFile, 'utf8'));
   if (inventory.articleCount !== 15) throw new Error(`Expected 15 published Speech Script inventories, found ${inventory.articleCount}.`);
-  if (inventory.synthesisAllowed !== 0) throw new Error('This no-audio migration must leave every provider synthesis gate closed until a real test clip is reviewed.');
-  const pilots = inventory.articles.filter((article) => article.bucket === 'A');
-  if (pilots.length !== 2 || !pilots.some((article) => article.articleId === 'how-touchscreens-work') || !pilots.some((article) => article.articleId === 'why-some-passports-are-stronger')) {
-    throw new Error('The two required contextual Speech Script pilots are not the exact approved A set.');
+  const approved = inventory.articles.filter((article) => article.bucket === 'A');
+  if (approved.length !== 15 || inventory.counts?.needsReview !== 0 || inventory.counts?.highRisk !== 0) throw new Error('All 15 published Speech Scripts must remain in the approved A set.');
+  if (!approved.some((article) => article.articleId === 'how-touchscreens-work') || !approved.some((article) => article.articleId === 'why-some-passports-are-stronger')) {
+    throw new Error('The two contextual benchmark pilots are missing from the approved A set.');
   }
-  console.log(`Arabic Speech Script QA validated ${inventory.articleCount} article inventories: ${inventory.counts.passed} text/pronunciation-reviewed pilot(s), ${inventory.counts.needsReview} needing review, ${inventory.counts.highRisk} high-risk; provider synthesis allowed for 0 article(s).`);
-  console.log('This result means Speech Script inventory integrity passed. It does NOT mean Test Clip Passed, Audio Review Passed, or Audio Ready.');
+  console.log(`Arabic Speech Script QA validated ${inventory.articleCount} article inventories: ${inventory.counts.passed} text/pronunciation-reviewed article(s), ${inventory.counts.needsReview} needing review, ${inventory.counts.highRisk} high-risk; provider synthesis allowed for ${inventory.synthesisAllowed} article(s) with verified listening evidence.`);
+  console.log('Speech Script approval and listening/full-synthesis approval remain separate states.');
 } finally {
   await rm(inventoryFile, { force: true }).catch(() => {});
 }

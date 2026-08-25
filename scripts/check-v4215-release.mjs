@@ -22,7 +22,7 @@ const pkg = JSON.parse(pkgText);
 const lock = JSON.parse(lockText);
 const review = JSON.parse(reviewText);
 
-const versionSupported = ['4.21.5', '4.21.6'].includes(pkg.version);
+const versionSupported = ['4.21.5', '4.21.6', '4.22.0'].includes(pkg.version);
 const lockMatches = lock.version === pkg.version && lock.packages?.['']?.version === pkg.version;
 const rcMetadataOnly = lock.version === '4.21.4' && lock.packages?.['']?.version === '4.21.4';
 if (!versionSupported || (!lockMatches && !(pkg.version === '4.21.5' && rcMetadataOnly))) {
@@ -81,7 +81,7 @@ const manifestPath = path.join('public', 'audio', 'articles', ARTICLE_KEY, 'mani
 let manifestExists = true;
 try { await access(manifestPath); } catch { manifestExists = false; }
 if (!isDraft && !manifestExists && pkg.version === '4.21.5') throw new Error('Published passport article has no production audio manifest.');
-if (!isDraft && !manifestExists && pkg.version === '4.21.6') console.log('V4.21.5 compatibility: passport audio is queued for verified production-cache restoration before Astro build.');
+if (!isDraft && !manifestExists && ['4.21.6', '4.22.0'].includes(pkg.version)) console.log('V4.21.5 compatibility: passport audio is queued for verified production-cache restoration before Astro build.');
 if (manifestExists) {
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
   const approvedGemini = manifest.articleId === ARTICLE_ID

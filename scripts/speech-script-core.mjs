@@ -347,6 +347,18 @@ function reviewPassed(review) {
   return review?.status === 'passed' && typeof review?.reviewedAt === 'string' && typeof review?.reviewer === 'string' && review.reviewer.trim();
 }
 
+const EXPLICIT_INDICATIVE_READINGS = '(?:تَعْرِفُ|تَكُونُ|تُنْتِجُ|يُنْتِجُ|يُحَوِّلُ|تُغَيِّرُ|يَنْشَأُ|تَنْشَأُ|تُرَتِّبُ)';
+const EXPLICIT_SUBJUNCTIVE_CONFLICT = new RegExp(`(?:^|[^\\p{L}\\p{M}])(?:أَنْ|أن|لَنْ|لن|كَيْ|كي)\\s+(?:لَا\\s+|لا\\s+)?(${EXPLICIT_INDICATIVE_READINGS})(?=$|[^\\p{L}\\p{M}])`, 'gu');
+const EXPLICIT_JUSSIVE_CONFLICT = new RegExp(`(?:^|[^\\p{L}\\p{M}])(?:لَمْ|لم)\\s+(${EXPLICIT_INDICATIVE_READINGS})(?=$|[^\\p{L}\\p{M}])`, 'gu');
+
+export function detectExplicitMoodErrors(value) {
+  const text = String(value ?? '');
+  const errors = [];
+  for (const match of text.matchAll(EXPLICIT_SUBJUNCTIVE_CONFLICT)) errors.push(`explicit indicative reading follows a subjunctive particle: ${match[1]}`);
+  for (const match of text.matchAll(EXPLICIT_JUSSIVE_CONFLICT)) errors.push(`explicit indicative reading follows the jussive particle لم: ${match[1]}`);
+  return [...new Set(errors)];
+}
+
 export function validateSpeechScript(model, script, ambiguityRules, { requireReviews = false } = {}) {
   const errors = [];
   const warnings = [];
@@ -383,6 +395,7 @@ export function validateSpeechScript(model, script, ambiguityRules, { requireRev
     }
     const sukun = startsWithSukunToken(record.spokenText ?? '');
     if (sukun) segmentErrors.push(`Arabic phonetic token starts with sukun: ${sukun}`);
+    segmentErrors.push(...detectExplicitMoodErrors(record.spokenText ?? ''));
     const ambiguities = detectContextualAmbiguities(sourceSegment.sourceText, record.spokenText ?? '', ambiguityRules);
     const unresolved = ambiguities.reduce((sum, item) => sum + item.unresolved, 0);
     if (unresolved) segmentErrors.push(`unresolved contextual ambiguity (${unresolved})`);

@@ -24,7 +24,7 @@ const lock = JSON.parse(lockText);
 const review = JSON.parse(reviewText);
 const overrides = JSON.parse(overridesText);
 
-if (pkg.version !== '4.21.6' || lock.version !== '4.21.6' || lock.packages?.['']?.version !== '4.21.6') {
+if (!['4.21.6', '4.22.0'].includes(pkg.version) || lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) {
   throw new Error('V4.21.6 package and dependency-lock identities must match.');
 }
 

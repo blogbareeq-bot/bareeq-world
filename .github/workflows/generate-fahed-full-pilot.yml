@@ -1,0 +1,117 @@
+name: Generate full Fahed pilot article
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/generate-fahed-full-pilot.yml
+      - scripts/speech-test-clips/how-touchscreens-work.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fahed-full-pilot-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  generate-full-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Check exact listening approval
+        id: listening_gate
+        run: |
+          node scripts/check-speech-scripts.mjs
+          node --input-type=module <<'NODE'
+          import { appendFile, readFile } from 'node:fs/promises';
+          const plan = JSON.parse(await readFile('scripts/speech-test-clips/how-touchscreens-work.json', 'utf8'));
+          const approved = Boolean(plan.testClipPassed && plan.fullSynthesisAllowed && plan.audioReview?.status === 'passed');
+          await appendFile(process.env.GITHUB_OUTPUT, `approved=${approved}\n`, 'utf8');
+          console.log(approved
+            ? 'Exact Fahed listening evidence is approved; full pilot may proceed.'
+            : 'Exact Fahed listening evidence is still pending; full synthesis remains safely paused.');
+          NODE
+
+      - name: Require encrypted Azure credential
+        if: steps.listening_gate.outputs.approved == 'true'
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+        run: |
+          if [ -z "$AZURE_SPEECH_KEY" ]; then
+            echo "::error::AZURE_SPEECH_KEY repository secret is unavailable."
+            exit 2
+          fi
+
+      - name: Plan one-article Fahed synthesis without provider access
+        if: steps.listening_gate.outputs.approved == 'true'
+        env:
+          BAREEQ_TTS_PROVIDER: azure-fahed
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+        run: node scripts/generate-audio.mjs --plan
+
+      - name: Generate complete article atomically
+        if: steps.listening_gate.outputs.approved == 'true'
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          AZURE_SPEECH_SYNTHESIS_RATE: "-2%"
+          AZURE_SPEECH_MONTHLY_USED_CHARS: ${{ vars.AZURE_SPEECH_MONTHLY_USED_CHARS }}
+          BAREEQ_TTS_PROVIDER: azure-fahed
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: "1"
+        run: node scripts/generate-audio.mjs
+
+      - name: Validate Fahed manifest and every MP3
+        if: steps.listening_gate.outputs.approved == 'true'
+        run: |
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { readFile, stat } from 'node:fs/promises';
+          import path from 'node:path';
+          import { mp3DurationSeconds } from './scripts/mp3-duration.mjs';
+
+          const root = 'public/audio/articles/de93f3d9f91c8b8b';
+          const manifest = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
+          if (manifest.articleId !== 'how-touchscreens-work' || manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS') throw new Error('Fahed pilot manifest identity mismatch.');
+          if (manifest.language !== 'ar-KW' || manifest.defaultVoice !== 'fahed' || manifest.azureSsmlVersion !== 1) throw new Error('Fahed pilot locale/SSML contract mismatch.');
+          if (manifest.voices?.length !== 1 || manifest.voices[0]?.providerVoice !== 'ar-KW-FahedNeural') throw new Error('Fahed pilot voice contract mismatch.');
+          let totalDuration = 0;
+          for (const part of manifest.parts ?? []) {
+            const asset = part.audio?.fahed;
+            if (!asset?.src || !(asset.bytes > 100) || !(asset.durationSeconds > 0)) throw new Error('Fahed pilot has an invalid part asset.');
+            const file = path.join('public', asset.src.replace(/^\//u, ''));
+            const info = await stat(file);
+            const bytes = await readFile(file);
+            if (info.size !== asset.bytes || createHash('sha256').update(bytes).digest('hex') !== asset.sha256) throw new Error(`Fahed pilot integrity mismatch: ${asset.src}`);
+            const measured = mp3DurationSeconds(bytes);
+            if (Math.abs(measured - asset.durationSeconds) > 0.1) throw new Error(`Fahed pilot duration mismatch: ${asset.src}`);
+            totalDuration += measured;
+          }
+          if (!(totalDuration > 60)) throw new Error(`Fahed full pilot is implausibly short: ${totalDuration.toFixed(2)}s.`);
+          console.log(`Full Fahed pilot validated: ${manifest.parts.length} MP3 part(s), ${totalDuration.toFixed(2)} seconds.`);
+          NODE
+
+      - name: Commit full Fahed pilot
+        if: steps.listening_gate.outputs.approved == 'true'
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A public/audio/articles/de93f3d9f91c8b8b/
+          git diff --cached --quiet && { echo 'Full Fahed pilot is already current.'; exit 0; }
+          git commit -m 'audio: generate full Fahed touchscreen pilot'
+          git push origin HEAD:${{ github.ref_name }}

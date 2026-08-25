@@ -1,0 +1,72 @@
+name: Generate reviewed Fahed pilot clip
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/generate-fahed-pilot.yml
+      - scripts/azure-speech-ssml.mjs
+      - scripts/generate-fahed-test-clip.mjs
+      - scripts/test-azure-fahed.mjs
+      - scripts/speech-script-core.mjs
+      - scripts/contextual-ambiguities.json
+      - scripts/speech-scripts/how-touchscreens-work.json
+      - scripts/speech-test-clips/how-touchscreens-work.json
+      - src/content/posts/how-touchscreens-work.md
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fahed-pilot-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  generate-reviewed-test-clip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Verify Speech Script and SSML contracts
+        run: |
+          node --check scripts/generate-fahed-test-clip.mjs
+          node scripts/test-azure-fahed.mjs
+          node scripts/check-speech-scripts.mjs
+
+      - name: Require encrypted Azure credential
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+        run: |
+          if [ -z "$AZURE_SPEECH_KEY" ]; then
+            echo "::error::AZURE_SPEECH_KEY repository secret is unavailable."
+            exit 2
+          fi
+
+      - name: Generate official Azure Fahed test clip
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          AZURE_SPEECH_SYNTHESIS_RATE: "-2%"
+        run: node scripts/generate-fahed-test-clip.mjs --article=how-touchscreens-work
+
+      - name: Commit immutable listening evidence
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-fahed-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-fahed-v1.json
+          git diff --cached --quiet && { echo 'Fahed pilot evidence is already current.'; exit 0; }
+          git commit -m 'audio: generate reviewed Fahed pilot clip'
+          git push origin HEAD:${{ github.ref_name }}

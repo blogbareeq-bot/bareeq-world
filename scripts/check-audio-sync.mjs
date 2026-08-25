@@ -2,13 +2,17 @@ import { execFileSync } from 'node:child_process';
 import { readFile, readdir } from 'node:fs/promises';
 
 const generator = await readFile('scripts/generate-audio.mjs', 'utf8');
+const azureSsml = await readFile('scripts/azure-speech-ssml.mjs', 'utf8');
 const client = await readFile('public/scripts/article.js', 'utf8');
 const component = await readFile('src/components/ReadingModes.astro', 'utf8');
 const styles = await readFile('src/styles/global.css', 'utf8');
 const overrides = JSON.parse(await readFile('scripts/speech-overrides.json', 'utf8'));
 
-for (const needle of ['extractSpeechSegments', 'buildAudioParts', 'syncMethod: \'paragraph-weighted\'', 'speech-overrides.json', '<p>${body}', 'sync: audioPart.sync']) {
+for (const needle of ['extractSpeechSegments', 'buildAudioParts', 'syncMethod: \'paragraph-weighted\'', 'speech-overrides.json', 'buildAzureSsml', 'sync: audioPart.sync']) {
   if (!generator.includes(needle)) throw new Error(`Audio generator is missing synchronization safeguard: ${needle}`);
+}
+for (const needle of ['<p>${body}', 'textToAzureSsml', '<break time="260ms"/>']) {
+  if (!azureSsml.includes(needle)) throw new Error(`Azure SSML module is missing synchronization/performance safeguard: ${needle}`);
 }
 for (const needle of ['buildSyncTargets', 'Number.isInteger(entry.ordinal)', 'syncTextToAudio', 'is-audio-active', 'smartScrollTo', 'forceScroll', 'ratioOverride', 'data-audio-current', "audio?.addEventListener('timeupdate'", 'stopAudio', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'fetchManifestAttempt', 'nativeFallbackButton', 'PLAY_START_TIMEOUT_MS', 'switchVoice', 'saveProgress', "seekInput?.addEventListener('change',", "seekInput?.addEventListener('input',"]) {
   if (!client.includes(needle)) throw new Error(`Article client is missing synchronized-reading behavior: ${needle}`);

@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
-  "speechScriptHash": "537041688633508bc130f9b23de22623b70c9374ac419a75161ae0a7f6493858",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "febdc8389a1bf1648cd6908b13fc7a2e7aca798cfd6ae3472e95125aba1f8013"
+  "planHash": "20d8e43464a563fc0dba67987f8f05a6e10ab3d3f8f6231bcab3cd9b20700c54"
 }

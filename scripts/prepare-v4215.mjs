@@ -8,7 +8,7 @@ const EXPECTED_BODY_HASH = '2b2999dba95bff5e6bfb8ff16d2848fa3b677ffe8f595a5b6166
 const EXPECTED_AUDIO_KEY = '34e34b6f4633d928';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.5', '4.21.6'].includes(pkg.version)) throw new Error(`V4.21.5 compatibility preparation expected package 4.21.5 or 4.21.6, got ${pkg.version}.`);
+if (!['4.21.5', '4.21.6', '4.22.0'].includes(pkg.version)) throw new Error(`V4.21.5 compatibility preparation expected package 4.21.5 or a supported successor, got ${pkg.version}.`);
 
 async function patchFile(file, mutate) {
   const before = await readFile(file, 'utf8');
