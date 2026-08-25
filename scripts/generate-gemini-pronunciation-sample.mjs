@@ -132,7 +132,9 @@ Read only the Arabic text under TRANSCRIPT, exactly as written. Do not read thes
 A mature, knowledgeable Arabic narrator for Bareeq. Natural Modern Standard Arabic, warm tone, clear articulation, comfortable medium pace, normal volume, and no newsreader or advertising delivery.
 
 ### CRITICAL PRONUNCIATION
-When the transcript reaches بِبَسَاطَة, pronounce it completely as “bi-basaat-ah”, with the final light h sound clearly audible. Never truncate it to بِبَسَاط. Preserve every Arabic word and diacritic; add, omit, paraphrase, and reorder nothing.
+When the transcript reaches بِبَسَاطَة, pronounce it completely as “bi-basaat-ah”, with the final light h sound clearly audible. Never truncate it to بِبَسَاط.
+When the transcript reaches مُخْتَلِفَتَيْنِ, pronounce the complete feminine dual ending تَيْنِ clearly and audibly — “mukh-ta-li-fa-tay-ni”. Do not reduce it to مُخْتَلِفَيْنِ or swallow the ت sound. Keep the natural sentence rhythm; clarity must come from articulation, not from inserting extra words or spelling the word aloud.
+Preserve every Arabic word and diacritic; add, omit, paraphrase, and reorder nothing.
 
 ### TRANSCRIPT
 ${transcript}`;
@@ -189,6 +191,10 @@ await writeFile(temporaryMetadata, `${JSON.stringify({
   language: 'ar',
   focusWord: 'بِبَسَاطَة',
   rejectedReading: 'بِبَسَاط',
+  criticalPronunciations: [
+    { text: 'بِبَسَاطَة', reject: 'بِبَسَاط' },
+    { text: 'مُخْتَلِفَتَيْنِ', reject: 'مُخْتَلِفَيْنِ' },
+  ],
   outputFormat: 'audio-48khz-96kbitrate-mono-mp3',
   sourceAudioFormat: 'pcm-s16le-24000hz-mono',
   bytes: mp3.length,
