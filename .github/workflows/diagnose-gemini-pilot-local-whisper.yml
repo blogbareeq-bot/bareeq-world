@@ -1,0 +1,74 @@
+name: Diagnose Gemini pilot with local Whisper
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/diagnose-gemini-pilot-local-whisper.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install local ASR runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'faster-whisper==1.2.0'
+
+      - name: Extract disputed audio region without reference text
+        run: |
+          ffmpeg -hide_banner -loglevel error \
+            -ss 70.862 -to 100.080 \
+            -i scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 \
+            -map_metadata -1 -vn -ac 1 -ar 16000 -c:a pcm_s16le \
+            /tmp/disputed-region.wav
+          sha256sum /tmp/disputed-region.wav
+          ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 /tmp/disputed-region.wav
+
+      - name: Transcribe with Whisper large-v3-turbo using audio only
+        run: |
+          cat > /tmp/transcribe.py <<'PY'
+          from faster_whisper import WhisperModel
+
+          audio = '/tmp/disputed-region.wav'
+          model = WhisperModel('large-v3-turbo', device='cpu', compute_type='int8', cpu_threads=4)
+          segments, info = model.transcribe(
+              audio,
+              language='ar',
+              beam_size=5,
+              best_of=5,
+              temperature=0.0,
+              condition_on_previous_text=False,
+              word_timestamps=True,
+              vad_filter=False,
+          )
+          segments = list(segments)
+          print(f'language={info.language} probability={info.language_probability:.6f}')
+          print('TRANSCRIPT_BEGIN')
+          print(' '.join(segment.text.strip() for segment in segments).strip())
+          print('TRANSCRIPT_END')
+          print('WORDS_BEGIN')
+          for segment in segments:
+              for word in (segment.words or []):
+                  print(f'{word.start:.3f}\t{word.end:.3f}\t{word.probability:.6f}\t{word.word.strip()}')
+          print('WORDS_END')
+          PY
+          python /tmp/transcribe.py
