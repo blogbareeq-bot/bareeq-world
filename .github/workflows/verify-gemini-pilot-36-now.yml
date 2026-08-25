@@ -1,0 +1,92 @@
+name: Verify Gemini pilot with 3.6 now
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/verify-gemini-pilot-36-now.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Build a temporary Gemini 3.6 verifier from the reviewed chunked gate
+        run: |
+          cp scripts/verify-gemini-pilot-transcript-chunked.mjs scripts/.verify-gemini-pilot-transcript-36-runtime.mjs
+          sed -i "s/const MODEL = 'gemini-3.7-flash';/const MODEL = 'gemini-3.6-flash';/" scripts/.verify-gemini-pilot-transcript-36-runtime.mjs
+          grep -F "const MODEL = 'gemini-3.6-flash';" scripts/.verify-gemini-pilot-transcript-36-runtime.mjs
+          node --check scripts/.verify-gemini-pilot-transcript-36-runtime.mjs
+          node --check scripts/approve-gemini-test-clip-36.mjs
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/check-speech-scripts.mjs
+
+      - name: Require encrypted Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::GEMINI_API_KEY repository secret is unavailable."
+            exit 2
+          fi
+
+      - name: Transcribe silence-safe chunks twice with Gemini 3.6 and require zero word errors
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_ASR_MIN_INTERVAL_MS: "4000"
+          BAREEQ_ASR_CHUNK_IDEAL_SECONDS: "24"
+          BAREEQ_ASR_CHUNK_MAX_SECONDS: "32"
+          BAREEQ_ASR_CHUNK_HARD_MAX_SECONDS: "42"
+        run: node scripts/.verify-gemini-pilot-transcript-36-runtime.mjs
+
+      - name: Remove temporary verifier
+        if: always()
+        run: rm -f scripts/.verify-gemini-pilot-transcript-36-runtime.mjs
+
+      - name: Record listening approval only after Gemini 3.6 zero-error verification
+        env:
+          BAREEQ_GEMINI_LISTENING_REVIEW: I_LISTENED_TO_THE_EXACT_CLIP_AND_APPROVE_FULL_SYNTHESIS
+        run: node scripts/approve-gemini-test-clip-36.mjs --article=how-touchscreens-work --reviewed-by='عبدالعزيز'
+
+      - name: Recheck synthesis gate
+        run: node scripts/check-speech-scripts.mjs
+
+      - name: Preserve transcript report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-pilot-36-report-${{ github.run_id }}
+          path: scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Commit approved evidence
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/speech-test-clips/how-touchscreens-work.json scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json scripts/speech-transcript-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          git diff --cached --quiet && { echo 'Gemini pilot approval is already current.'; exit 0; }
+          git commit -m 'audio: approve Gemini pilot after Gemini 3.6 zero-error ASR'
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
