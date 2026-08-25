@@ -1,0 +1,65 @@
+name: Diagnose regenerated pilot with Whisper large-v3
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/diagnose-regenerated-pilot-whisper-large-v3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install independent local ASR
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'faster-whisper==1.2.0' 'requests>=2.32,<3'
+
+      - name: Transcribe exact regenerated pilot with Whisper large-v3
+        run: |
+          sha256sum scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3
+          cat > /tmp/transcribe.py <<'PY'
+          from faster_whisper import WhisperModel
+
+          audio = 'scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3'
+          model = WhisperModel('large-v3', device='cpu', compute_type='int8', cpu_threads=4)
+          segments, info = model.transcribe(
+              audio,
+              language='ar',
+              beam_size=5,
+              best_of=5,
+              temperature=0.0,
+              condition_on_previous_text=False,
+              word_timestamps=True,
+              vad_filter=False,
+          )
+          segments = list(segments)
+          print(f'language={info.language} probability={info.language_probability:.6f}')
+          print('TRANSCRIPT_BEGIN')
+          print(' '.join(s.text.strip() for s in segments).strip())
+          print('TRANSCRIPT_END')
+          print('WORDS_20_TO_85_BEGIN')
+          for segment in segments:
+              for word in (segment.words or []):
+                  if word.end >= 20.0 and word.start <= 85.0:
+                      print(f'{word.start:.3f}\t{word.end:.3f}\t{word.probability:.6f}\t{word.word.strip()}')
+          print('WORDS_20_TO_85_END')
+          PY
+          python /tmp/transcribe.py
