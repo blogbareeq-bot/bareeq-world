@@ -22,5 +22,16 @@
   "durationSeconds": 94.632,
   "sha256": "c86c5b369c17577adc956d9f90f80cde1d8f62902b4da015c1b4124ab4a81008",
   "generatedAt": "2026-08-25T15:13:54.639Z",
-  "listeningReview": "pending"
+  "listeningReview": {
+    "status": "failed",
+    "reviewedBy": "عبدالعزيز",
+    "reviewedAt": "2026-08-25T15:38:23.759Z",
+    "approvedFullSynthesis": false,
+    "failure": {
+      "segmentId": "quote-7b1d6e9dad57",
+      "word": "بِبَسَاطَة",
+      "heardAs": "بِبَسَاط",
+      "reason": "Azure Fahed truncated the final taa marbuta during synthesis."
+    }
+  }
 }
