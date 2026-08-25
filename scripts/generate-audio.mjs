@@ -902,16 +902,33 @@ async function hasCompleteCache(post) {
 }
 
 async function restoreFromProductionOrigin(post, cacheOrigin) {
+  const cacheHost = new URL(cacheOrigin).host;
   const manifestUrl = `${cacheOrigin}/audio/articles/${post.key}/manifest.json`;
   let response;
   try { response = await fetch(manifestUrl, { headers: { 'User-Agent': USER_AGENT } }); }
-  catch { return false; }
-  if (!response.ok) return false;
+  catch (error) {
+    console.warn(`↷ ${post.id}: cache manifest unavailable from ${cacheHost} (${transportCode(error) || error.name}).`);
+    return false;
+  }
+  if (!response.ok) {
+    console.warn(`↷ ${post.id}: cache manifest from ${cacheHost} returned HTTP ${response.status}.`);
+    return false;
+  }
   let manifest;
-  try { manifest = await response.json(); } catch { return false; }
-  if (manifest?.contractTest) return false;
+  try { manifest = await response.json(); }
+  catch {
+    console.warn(`↷ ${post.id}: cache manifest from ${cacheHost} is not valid JSON.`);
+    return false;
+  }
+  if (manifest?.contractTest) {
+    console.warn(`↷ ${post.id}: rejected contract-test cache manifest from ${cacheHost}.`);
+    return false;
+  }
   const assets = manifestAssets(manifest, post);
-  if (!assets) return false;
+  if (!assets) {
+    console.warn(`↷ ${post.id}: cache manifest from ${cacheHost} failed the locked provider/source/assets contract.`);
+    return false;
+  }
 
   const finalDir = path.join(AUDIO_ROOT, post.key);
   const tempDir = `${finalDir}.restore-${process.pid}`;
@@ -930,7 +947,8 @@ async function restoreFromProductionOrigin(post, cacheOrigin) {
     await rm(finalDir, { recursive: true, force: true });
     await rename(tempDir, finalDir);
     return true;
-  } catch {
+  } catch (error) {
+    console.warn(`↷ ${post.id}: atomic cache restore from ${cacheHost} failed (${transportCode(error) || error.message}).`);
     await rm(tempDir, { recursive: true, force: true });
     return false;
   }
