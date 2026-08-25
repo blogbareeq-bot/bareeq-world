@@ -1,0 +1,92 @@
+name: Diagnose regenerated pilot with Gemini 3.5 Flash-Lite chunk4
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/diagnose-regenerated-pilot-35-lite-chunk4.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Lock exact regenerated pilot and extract final chunk
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const crypto = require('node:crypto');
+          const p = 'scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3';
+          const audio = fs.readFileSync(p);
+          const sha = crypto.createHash('sha256').update(audio).digest('hex');
+          if (sha !== 'e04466b4824db92821488b1fd2ee848e3312fded968a89ff91fdb97f1b15550e') throw new Error(`Unexpected pilot SHA: ${sha}`);
+          NODE
+          FFMPEG_PATH="$(node -p "require('@ffmpeg-installer/ffmpeg').path")"
+          "$FFMPEG_PATH" -hide_banner -loglevel error \
+            -ss 83.173 -to 93.744 \
+            -i scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 \
+            -map_metadata -1 -vn -ac 1 -ar 48000 -c:a libmp3lame -b:a 96k \
+            /tmp/chunk4.mp3
+
+      - name: Require encrypted Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: test -n "$GEMINI_API_KEY"
+
+      - name: Transcribe final chunk once with Gemini 3.5 Flash-Lite audio only
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          cat > /tmp/smoke.mjs <<'JS'
+          import { readFile } from 'node:fs/promises';
+          const audio = await readFile('/tmp/chunk4.mp3');
+          const response = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+            method: 'POST',
+            headers: {
+              'x-goog-api-key': process.env.GEMINI_API_KEY.trim(),
+              'Api-Revision': '2026-05-20',
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'gemini-3.5-flash-lite',
+              input: [
+                { type: 'text', text: 'Transcribe the attached Arabic speech verbatim using only the audio. Do not repair grammar, replace words with synonyms, infer, summarize, or paraphrase. Return only the words actually spoken, in order.' },
+                { type: 'audio', data: audio.toString('base64'), mime_type: 'audio/mp3' },
+              ],
+              generation_config: { temperature: 0, thinking_level: 'minimal' },
+              store: false,
+            }),
+          });
+          const body = await response.text();
+          console.log(`HTTP_STATUS=${response.status}`);
+          if (!response.ok) throw new Error(body.slice(0, 1000));
+          const payload = JSON.parse(body);
+          const texts = [];
+          if (typeof payload.output_text === 'string') texts.push(payload.output_text);
+          for (const step of (payload.steps || [])) for (const block of (step.content || [])) if (block?.type === 'text' && typeof block.text === 'string') texts.push(block.text);
+          console.log('TRANSCRIPT_OUTPUT_BEGIN');
+          console.log(texts.join('').trim());
+          console.log('TRANSCRIPT_OUTPUT_END');
+          JS
+          node /tmp/smoke.mjs
