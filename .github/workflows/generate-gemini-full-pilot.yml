@@ -6,6 +6,7 @@ on:
       - audio/fahed-v4220
     paths:
       - .github/workflows/generate-gemini-full-pilot.yml
+      - scripts/gemini-background-fetch-shim.mjs
       - scripts/speech-test-clips/how-touchscreens-work.json
   workflow_dispatch:
 
@@ -40,6 +41,7 @@ jobs:
       - name: Check exact listening and transcript approval
         id: approval
         run: |
+          node --check scripts/gemini-background-fetch-shim.mjs
           node scripts/check-speech-scripts.mjs
           node --input-type=module <<'NODE'
           import { appendFile, readFile } from 'node:fs/promises';
@@ -91,7 +93,9 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_ASR_MIN_INTERVAL_MS: "2000"
-        run: node scripts/verify-gemini-audio-transcript.mjs --article=how-touchscreens-work
+          BAREEQ_GEMINI_BACKGROUND_POLL_MS: "5000"
+          BAREEQ_GEMINI_BACKGROUND_MAX_WAIT_MS: "480000"
+        run: node --import ./scripts/gemini-background-fetch-shim.mjs scripts/verify-gemini-audio-transcript.mjs --article=how-touchscreens-work
 
       - name: Validate verified manifest and every MP3
         if: steps.approval.outputs.approved == 'true'
