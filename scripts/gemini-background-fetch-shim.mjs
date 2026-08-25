@@ -1,14 +1,13 @@
 const nativeFetch = globalThis.fetch.bind(globalThis);
 
 const INTERACTIONS_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/interactions';
+const STREAM_ENDPOINT = `${INTERACTIONS_ENDPOINT}?alt=sse`;
 const API_REVISION = '2026-05-20';
-const POLL_INTERVAL_MS = Number(process.env.BAREEQ_GEMINI_BACKGROUND_POLL_MS || '5000');
-const MAX_WAIT_MS = Number(process.env.BAREEQ_GEMINI_BACKGROUND_MAX_WAIT_MS || '600000');
-const NETWORK_RETRIES = Number(process.env.BAREEQ_GEMINI_BACKGROUND_NETWORK_RETRIES || '4');
+const NETWORK_RETRIES = Number(process.env.BAREEQ_GEMINI_STREAM_NETWORK_RETRIES || '3');
+const STREAM_RETRIES = Number(process.env.BAREEQ_GEMINI_STREAM_RETRIES || '2');
 
-if (!Number.isFinite(POLL_INTERVAL_MS) || POLL_INTERVAL_MS < 1000) throw new Error('BAREEQ_GEMINI_BACKGROUND_POLL_MS must be at least 1000ms.');
-if (!Number.isFinite(MAX_WAIT_MS) || MAX_WAIT_MS < POLL_INTERVAL_MS) throw new Error('BAREEQ_GEMINI_BACKGROUND_MAX_WAIT_MS must be at least one poll interval.');
-if (!Number.isInteger(NETWORK_RETRIES) || NETWORK_RETRIES < 0) throw new Error('BAREEQ_GEMINI_BACKGROUND_NETWORK_RETRIES must be zero or a positive integer.');
+if (!Number.isInteger(NETWORK_RETRIES) || NETWORK_RETRIES < 0) throw new Error('BAREEQ_GEMINI_STREAM_NETWORK_RETRIES must be zero or a positive integer.');
+if (!Number.isInteger(STREAM_RETRIES) || STREAM_RETRIES < 0) throw new Error('BAREEQ_GEMINI_STREAM_RETRIES must be zero or a positive integer.');
 
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -52,21 +51,96 @@ async function fetchWithRetry(url, init, label) {
   throw lastError || new Error(`${label} failed after retries.`);
 }
 
-async function bestEffortDelete(interactionId, headers) {
+function consumeSseData(data, state) {
+  const trimmed = data.trim();
+  if (!trimmed || trimmed === '[DONE]') return;
+
+  let event;
   try {
-    const response = await nativeFetch(`${INTERACTIONS_ENDPOINT}/${encodeURIComponent(interactionId)}`, {
-      method: 'DELETE',
-      headers,
-    });
-    if (!response.ok && response.status !== 404 && response.status !== 405) {
-      console.warn(`Gemini background cleanup returned HTTP ${response.status}; verification result is unaffected.`);
-    }
+    event = JSON.parse(trimmed);
   } catch (error) {
-    console.warn(`Gemini background cleanup failed (${error?.cause?.code || error?.code || error?.message || 'unknown'}); verification result is unaffected.`);
+    throw new Error(`Gemini SSE returned invalid JSON data: ${error.message}; data=${trimmed.slice(0, 300)}`);
+  }
+
+  if (event?.event_type === 'step.start' && event?.step?.type === 'model_output') {
+    for (const block of event.step.content || []) {
+      if (block?.type === 'text' && typeof block.text === 'string') state.text += block.text;
+    }
+  }
+
+  if (event?.event_type === 'step.delta' && event?.delta?.type === 'text' && typeof event.delta.text === 'string') {
+    state.text += event.delta.text;
+  }
+
+  if (event?.event_type === 'interaction.completed') {
+    state.completed = event.interaction || { status: 'completed' };
+  }
+
+  if (event?.event_type === 'interaction.failed') {
+    state.failed = event?.interaction?.error || event?.error || 'interaction.failed';
   }
 }
 
-globalThis.fetch = async function bareeqBackgroundFetch(input, init = {}) {
+async function readSseInteraction(response) {
+  if (!response.body) throw new Error('Gemini SSE response did not contain a body.');
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  const state = { text: '', completed: null, failed: null };
+  let buffer = '';
+  let dataLines = [];
+
+  const flushEvent = () => {
+    if (!dataLines.length) return;
+    consumeSseData(dataLines.join('\n'), state);
+    dataLines = [];
+  };
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+
+    while (true) {
+      const newlineIndex = buffer.indexOf('\n');
+      if (newlineIndex < 0) break;
+      let line = buffer.slice(0, newlineIndex);
+      buffer = buffer.slice(newlineIndex + 1);
+      if (line.endsWith('\r')) line = line.slice(0, -1);
+
+      if (!line) {
+        flushEvent();
+        continue;
+      }
+      if (line.startsWith('data:')) dataLines.push(line.slice(5).trimStart());
+    }
+  }
+
+  buffer += decoder.decode();
+  if (buffer.trim()) {
+    let line = buffer.trimEnd();
+    if (line.endsWith('\r')) line = line.slice(0, -1);
+    if (line.startsWith('data:')) dataLines.push(line.slice(5).trimStart());
+  }
+  flushEvent();
+
+  if (state.failed) throw new Error(`Gemini SSE interaction failed: ${typeof state.failed === 'string' ? state.failed : JSON.stringify(state.failed)}`);
+  if (!state.text.trim()) throw new Error('Gemini SSE interaction completed without text output.');
+
+  const completed = state.completed || {};
+  return {
+    ...completed,
+    status: completed.status || 'completed',
+    steps: [
+      {
+        type: 'model_output',
+        content: [{ type: 'text', text: state.text }],
+      },
+    ],
+  };
+}
+
+globalThis.fetch = async function bareeqStreamingFetch(input, init = {}) {
   const url = requestUrl(input);
   const method = String(init?.method || (input instanceof Request ? input.method : 'GET')).toUpperCase();
 
@@ -83,70 +157,38 @@ globalThis.fetch = async function bareeqBackgroundFetch(input, init = {}) {
 
   const headers = new Headers(init.headers || (input instanceof Request ? input.headers : undefined));
   headers.set('Api-Revision', API_REVISION);
+  headers.set('Accept', 'text/event-stream');
 
-  // Background execution requires storage while the job is running. The interaction
-  // is deleted on a best-effort basis immediately after we capture the completed result.
-  delete payload.store;
-  payload.background = true;
+  delete payload.background;
+  payload.stream = true;
+  payload.generation_config = {
+    ...(payload.generation_config || {}),
+    thinking_level: 'low',
+  };
 
-  const startResponse = await fetchWithRetry(INTERACTIONS_ENDPOINT, {
-    ...init,
-    method: 'POST',
-    headers,
-    body: JSON.stringify(payload),
-  }, 'Gemini background start');
-
-  if (!startResponse.ok) return startResponse;
-
-  let interaction;
-  try {
-    interaction = await startResponse.json();
-  } catch (error) {
-    return responseFromJson({ error: { message: `Gemini background start returned invalid JSON: ${error.message}` } }, 502);
-  }
-
-  if (interaction?.status === 'completed') return responseFromJson(interaction);
-  if (!interaction?.id) return responseFromJson({ error: { message: 'Gemini background start did not return an interaction id.' } }, 502);
-
-  const interactionId = interaction.id;
-  const pollHeaders = new Headers();
-  const apiKey = headers.get('x-goog-api-key');
-  if (apiKey) pollHeaders.set('x-goog-api-key', apiKey);
-  pollHeaders.set('Api-Revision', API_REVISION);
-  pollHeaders.set('Accept', 'application/json');
-
-  const startedAt = Date.now();
-  console.log(`Gemini ASR background interaction started: ${interactionId}.`);
-
-  while (Date.now() - startedAt < MAX_WAIT_MS) {
-    await sleep(POLL_INTERVAL_MS);
-    const pollResponse = await fetchWithRetry(`${INTERACTIONS_ENDPOINT}/${encodeURIComponent(interactionId)}`, {
-      method: 'GET',
-      headers: pollHeaders,
-    }, 'Gemini background poll');
-
-    if (!pollResponse.ok) return pollResponse;
-
-    let current;
+  let lastError;
+  for (let streamAttempt = 0; streamAttempt <= STREAM_RETRIES; streamAttempt += 1) {
     try {
-      current = await pollResponse.json();
+      const streamResponse = await fetchWithRetry(STREAM_ENDPOINT, {
+        ...init,
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      }, 'Gemini SSE start');
+
+      if (!streamResponse.ok) return streamResponse;
+
+      const interaction = await readSseInteraction(streamResponse);
+      console.log(`Gemini ASR SSE completed${interaction.id ? `: ${interaction.id}` : ''}.`);
+      return responseFromJson(interaction);
     } catch (error) {
-      return responseFromJson({ error: { message: `Gemini background poll returned invalid JSON: ${error.message}` } }, 502);
-    }
-
-    if (current?.status === 'completed') {
-      console.log(`Gemini ASR background interaction completed: ${interactionId}.`);
-      await bestEffortDelete(interactionId, pollHeaders);
-      return responseFromJson(current);
-    }
-
-    if (current?.status === 'failed' || current?.status === 'cancelled' || current?.status === 'canceled') {
-      const detail = current?.error?.message || current?.error || current?.status;
-      await bestEffortDelete(interactionId, pollHeaders);
-      return responseFromJson({ error: { message: `Gemini background interaction ${interactionId} ${current.status}: ${detail}` } }, 400);
+      lastError = error;
+      if (streamAttempt === STREAM_RETRIES) throw error;
+      const delay = Math.min(30000, 3000 * (2 ** streamAttempt));
+      console.warn(`Gemini SSE stream error (${error?.cause?.code || error?.code || error?.message || 'unknown'}); retry ${streamAttempt + 1}/${STREAM_RETRIES} in ${delay}ms.`);
+      await sleep(delay);
     }
   }
 
-  await bestEffortDelete(interactionId, pollHeaders);
-  return responseFromJson({ error: { message: `Gemini background interaction ${interactionId} exceeded ${MAX_WAIT_MS}ms.` } }, 400);
+  throw lastError || new Error('Gemini SSE stream failed after retries.');
 };
