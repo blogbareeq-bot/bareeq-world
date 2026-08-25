@@ -159,7 +159,27 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
       language: 'ar',
       voiceId: 'sadaltager',
     })) continue;
-    console.warn(`⚠ Gemini Sadaltager is unavailable or incomplete for ${articleId}. Restoring or generating the approved Azure Hamed fallback immediately.`);
+
+    // Published Hamed audio was synthesized from the immutable legacy input.
+    // Restore that exact cache contract before considering any new synthesis;
+    // allow-missing keeps the later Speech Script gate authoritative if the
+    // published cache is genuinely unavailable.
+    runStrict('scripts/generate-audio.mjs', [], {
+      BAREEQ_TTS_PROVIDER: 'azure',
+      BAREEQ_AZURE_HAMED_ONLY: '1',
+      BAREEQ_TTS_CACHE_ONLY: '1',
+      BAREEQ_TTS_CACHE_ALLOW_MISSING: '1',
+      BAREEQ_TTS_INCLUDE_IDS: articleId,
+      BAREEQ_AUDIO_ALLOW_PARTIAL: '',
+    });
+    if (await hasCompleteVoice(articleId, {
+      provider: 'Microsoft Azure AI Speech',
+      model: 'Neural TTS',
+      language: 'ar-SA',
+      voiceId: 'hamed',
+    })) continue;
+
+    console.warn(`⚠ Published Azure Hamed cache is unavailable for ${articleId}. Any new synthesis remains subject to the Speech Script quality gate.`);
     runStrict('scripts/generate-audio.mjs', [], {
       BAREEQ_TTS_PROVIDER: 'azure',
       BAREEQ_AZURE_HAMED_ONLY: '1',
