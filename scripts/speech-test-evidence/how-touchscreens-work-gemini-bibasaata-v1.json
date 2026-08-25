@@ -17,5 +17,11 @@
   "durationSeconds": 23.832,
   "sha256": "f35a025c9ed5ba1bbdf5d6a7dbc48b58a29c29be620c84b308dff70762f91684",
   "generatedAt": "2026-08-25T15:36:22.351Z",
-  "listeningReview": "pending"
+  "listeningReview": {
+    "status": "passed",
+    "reviewedBy": "عبدالعزيز",
+    "reviewedAt": "2026-08-25T15:54:17.709Z",
+    "approvedExpandedPilot": true,
+    "approvedFullSynthesis": false
+  }
 }

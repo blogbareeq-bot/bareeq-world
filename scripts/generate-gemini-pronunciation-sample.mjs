@@ -16,7 +16,10 @@ const MODEL = 'gemini-3.1-flash-tts-preview';
 const VOICE = 'Sadaltager';
 const ARTICLE_ID = 'how-touchscreens-work';
 const SEGMENT_ID = 'quote-7b1d6e9dad57';
-const BASENAME = `${ARTICLE_ID}-gemini-bibasaata-v1`;
+const PILOT_MODE = process.argv.includes('--pilot');
+const BASENAME = PILOT_MODE
+  ? `${ARTICLE_ID}-gemini-pilot-v1`
+  : `${ARTICLE_ID}-gemini-bibasaata-v1`;
 const FFMPEG_PATH = process.env.FFMPEG_PATH?.trim() || ffmpegInstaller?.path || 'ffmpeg';
 const MAX_RETRIES = 5;
 
@@ -103,11 +106,25 @@ function encodePcmToMp3(pcm) {
 }
 
 const scriptFile = path.join(ROOT, 'scripts', 'speech-scripts', `${ARTICLE_ID}.json`);
+const planFile = path.join(ROOT, 'scripts', 'speech-test-clips', `${ARTICLE_ID}.json`);
 const speechScript = JSON.parse(await readFile(scriptFile, 'utf8'));
 const segment = speechScript.segments?.find((item) => item.segmentId === SEGMENT_ID);
 if (!segment?.spokenText?.startsWith('بِبَسَاطَة')) throw new Error('Approved focus segment is missing or no longer begins with بِبَسَاطَة.');
 
-const transcript = segment.spokenText;
+const plan = PILOT_MODE ? JSON.parse(await readFile(planFile, 'utf8')) : null;
+const records = new Map((speechScript.segments || []).map((item) => [item.segmentId, item]));
+const selectedSegmentIds = PILOT_MODE
+  ? (plan?.selectedSegments || []).map((item) => item.segmentId)
+  : [SEGMENT_ID];
+if (PILOT_MODE && (plan?.status !== 'ready' || plan?.speechScriptHash !== speechScript.scriptHash || selectedSegmentIds.length !== 6)) {
+  throw new Error('Gemini pilot requires the current ready six-segment listening plan.');
+}
+const selectedSegments = selectedSegmentIds.map((segmentId) => {
+  const selected = records.get(segmentId);
+  if (!selected?.spokenText) throw new Error(`Approved pilot segment is missing: ${segmentId}`);
+  return selected;
+});
+const transcript = selectedSegments.map((item) => item.spokenText).join('\n\n');
 const prompt = `### TASK
 Read only the Arabic text under TRANSCRIPT, exactly as written. Do not read these instructions, labels, or any commentary.
 
@@ -115,7 +132,7 @@ Read only the Arabic text under TRANSCRIPT, exactly as written. Do not read thes
 A mature, knowledgeable Arabic narrator for Bareeq. Natural Modern Standard Arabic, warm tone, clear articulation, comfortable medium pace, normal volume, and no newsreader or advertising delivery.
 
 ### CRITICAL PRONUNCIATION
-Pronounce the first word بِبَسَاطَة completely as “bi-basaat-ah”, with the final light h sound clearly audible. Never truncate it to بِبَسَاط. Preserve every Arabic word and diacritic; add, omit, paraphrase, and reorder nothing.
+When the transcript reaches بِبَسَاطَة, pronounce it completely as “bi-basaat-ah”, with the final light h sound clearly audible. Never truncate it to بِبَسَاط. Preserve every Arabic word and diacritic; add, omit, paraphrase, and reorder nothing.
 
 ### TRANSCRIPT
 ${transcript}`;
@@ -158,9 +175,12 @@ await rm(temporaryMetadata, { force: true });
 await writeFile(temporaryAudio, mp3);
 await writeFile(temporaryMetadata, `${JSON.stringify({
   schema: 'bareeq.gemini-pronunciation-sample.v1',
+  sampleMode: PILOT_MODE ? 'six-segment-pilot' : 'focus-word',
   articleId: ARTICLE_ID,
-  segmentId: SEGMENT_ID,
+  segmentId: PILOT_MODE ? undefined : SEGMENT_ID,
+  selectedSegmentIds,
   speechScriptHash: speechScript.scriptHash,
+  planHash: plan?.planHash,
   transcriptHash: sha256(transcript),
   promptHash: sha256(prompt),
   provider: 'Google Gemini API',
@@ -179,4 +199,4 @@ await writeFile(temporaryMetadata, `${JSON.stringify({
 }, null, 2)}\n`, 'utf8');
 await rename(temporaryAudio, audioFile);
 await rename(temporaryMetadata, metadataFile);
-console.log(`Gemini pronunciation sample generated: ${mp3.length.toLocaleString('en-US')} bytes, ${durationSeconds.toFixed(2)}s, ${VOICE}. Listening review is pending.`);
+console.log(`Gemini ${PILOT_MODE ? 'six-segment pilot' : 'pronunciation'} sample generated: ${mp3.length.toLocaleString('en-US')} bytes, ${durationSeconds.toFixed(2)}s, ${VOICE}. Listening review is pending.`);

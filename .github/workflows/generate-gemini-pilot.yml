@@ -1,13 +1,19 @@
-name: Generate Gemini pronunciation sample
+name: Generate reviewed Gemini pilot clip
 
 on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/generate-gemini-pilot.yml
+      - scripts/generate-gemini-pronunciation-sample.mjs
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: gemini-pronunciation-${{ github.ref_name }}
+  group: gemini-pilot-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -45,16 +51,16 @@ jobs:
             exit 2
           fi
 
-      - name: Generate Sadaltager pronunciation sample
+      - name: Generate six-segment Sadaltager pilot
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/generate-gemini-pronunciation-sample.mjs
+        run: node scripts/generate-gemini-pronunciation-sample.mjs --pilot
 
-      - name: Commit immutable Gemini listening evidence
+      - name: Commit immutable Gemini pilot evidence
         run: |
           git config user.name 'bareeq-audio-bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add -f scripts/speech-test-evidence/how-touchscreens-work-gemini-bibasaata-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-gemini-bibasaata-v1.json
-          git diff --cached --quiet && { echo 'Gemini pronunciation evidence is already current.'; exit 0; }
-          git commit -m 'audio: generate Gemini pronunciation sample'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          git diff --cached --quiet && { echo 'Gemini pilot evidence is already current.'; exit 0; }
+          git commit -m 'audio: generate reviewed Gemini pilot clip'
           git push origin HEAD:${{ github.ref_name }}
