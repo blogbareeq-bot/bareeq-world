@@ -1,0 +1,103 @@
+name: Regenerate Gemini pilot with clear dual ending
+
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/regenerate-gemini-pilot-clear-dual-ending.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: regenerate-gemini-pilot-clear-dual-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Validate generator and immutable speech text
+        run: |
+          node --check scripts/generate-gemini-pronunciation-sample.mjs
+          node scripts/check-speech-scripts.mjs
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const script = JSON.parse(fs.readFileSync('scripts/speech-scripts/how-touchscreens-work.json', 'utf8'));
+          const segment = script.segments.find(x => x.segmentId === 'paragraph-1e0c397252d0');
+          if (!segment?.spokenText?.includes('مُخْتَلِفَتَيْنِ')) throw new Error('Expected fully diacritized feminine dual word is missing from immutable Speech Script.');
+          if (segment.spokenText.includes('مُخْتَلِفَيْنِ')) throw new Error('Speech Script itself contains the rejected masculine reading.');
+          console.log('Speech Script remains correct; only acoustic articulation will be regenerated.');
+          NODE
+
+      - name: Require encrypted Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::GEMINI_API_KEY repository secret is unavailable."
+            exit 2
+          fi
+
+      - name: Regenerate exact six-segment pilot
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate-gemini-pronunciation-sample.mjs --pilot
+
+      - name: Reject stale or malformed regeneration
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const crypto = require('node:crypto');
+          const audioPath = 'scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3';
+          const metaPath = 'scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json';
+          const audio = fs.readFileSync(audioPath);
+          const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+          const sha = crypto.createHash('sha256').update(audio).digest('hex');
+          const oldSha = '7c3a5b2bc4939c2ca5021982f435c33f78fb3a6386ac4e1d543a366a3f4aff62';
+          if (sha === oldSha) throw new Error('Regeneration returned the exact old ambiguous MP3; refusing to continue.');
+          if (sha !== meta.sha256 || meta.bytes !== audio.length) throw new Error('Regenerated evidence integrity mismatch.');
+          if (meta.model !== 'gemini-3.1-flash-tts-preview' || meta.voice !== 'Sadaltager') throw new Error('Unexpected TTS model/voice.');
+          if (meta.listeningReview !== 'pending') throw new Error('A newly regenerated sample must begin with listeningReview=pending.');
+          const critical = JSON.stringify(meta.criticalPronunciations || []);
+          if (!critical.includes('بِبَسَاطَة') || !critical.includes('مُخْتَلِفَتَيْنِ')) throw new Error('Critical pronunciation metadata is incomplete.');
+          console.log(`New pilot SHA-256: ${sha}; bytes=${audio.length}; duration=${meta.durationSeconds}s`);
+          NODE
+
+      - name: Upload regenerated pilot for independent listening
+        uses: actions/upload-artifact@v4
+        with:
+          name: regenerated-gemini-pilot-${{ github.run_id }}
+          path: |
+            scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3
+            scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          retention-days: 14
+
+      - name: Commit regenerated pilot
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json
+          git diff --cached --quiet && { echo 'No regeneration change to commit.'; exit 1; }
+          git commit -m 'audio: regenerate Gemini pilot with clear dual ending'
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
