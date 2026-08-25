@@ -5,6 +5,7 @@ on:
     branches:
       - audio/fahed-v4220
     paths:
+      - .github/workflows/verify-regenerated-gemini-pilot-36.yml
       - scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.mp3
       - scripts/speech-test-evidence/how-touchscreens-work-gemini-pilot-v1.json
 
