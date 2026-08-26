@@ -1,0 +1,82 @@
+name: Verify corrected Hamed pilot with Whisper large-v3 fixed
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-hamed-corrected-whisper-v3-fixed.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Generate deterministic corrected Hamed pilot
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: |
+          cp scripts/generate-fahed-test-clip.mjs scripts/.hamed-whisper-fixed-pilot.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/.hamed-whisper-fixed-pilot.mjs';let s=fs.readFileSync(p,'utf8');
+          const once=(a,b,l)=>{const n=s.split(a).length-1;if(n!==1)throw new Error(`${l}:${n}`);s=s.replace(a,b)};
+          once("const VOICE = 'ar-KW-FahedNeural';","const VOICE = 'ar-SA-HamedNeural';",'voice');
+          once("const LANGUAGE = 'ar-KW';","const LANGUAGE = 'ar-SA';",'lang');
+          once("const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '-2%';","const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';",'rate');
+          once("const basename = `${ARTICLE_ID}-fahed-v1`;","const basename = `${ARTICLE_ID}-hamed-corrected-whisper-fixed-pilot-v1`;",'basename');
+          once("return { type: record.type, text: record.spokenText, segmentId };",`let text=record.spokenText;\n  const fixes=[\n    ['بِبَسَاطَة:', 'بِبَسَاطَةٍ:'],\n    ['أَقْطَابِ الشَّبَكَة.', 'أَقْطَابِ الشَّبَكَةِ.'],\n    ['عَلَى الشَّاشَة.', 'عَلَى الشَّاشَةِ.'],\n    ['عَادَةً «الشَّاشَة» لَيْسَ طَبَقَةً وَاحِدَة.', 'عَادَةً «الشَّاشَةَ» لَيْسَ طَبَقَةً وَاحِدَةً.'],\n    ['عَلَى الشَّاشَة،', 'عَلَى الشَّاشَةِ،'],\n    ['مِنَ الشَّبَكَة.', 'مِنَ الشَّبَكَةِ.'],\n    ['تَكْبِيرَ الصُّورَة،', 'تَكْبِيرَ الصُّورَةِ،'],\n    ['تَحْرِيكَ خَرِيطَة.', 'تَحْرِيكَ خَرِيطَةٍ.']\n  ];\n  for(const [a,b] of fixes) text=text.split(a).join(b);\n  return { type: record.type, text, segmentId };`,'case fixes');
+          fs.writeFileSync(p,s);
+          NODE
+          node scripts/.hamed-whisper-fixed-pilot.mjs --article=how-touchscreens-work
+          rm scripts/.hamed-whisper-fixed-pilot.mjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local Whisper and required HTTP dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'faster-whisper==1.2.0' 'requests>=2.32,<3'
+      - name: Transcribe with Whisper large-v3
+        run: |
+          cat > /tmp/transcribe.py <<'PY'
+          from faster_whisper import WhisperModel
+          audio='scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-whisper-fixed-pilot-v1.mp3'
+          model=WhisperModel('large-v3',device='cpu',compute_type='int8',cpu_threads=4)
+          segments,info=model.transcribe(audio,language='ar',beam_size=5,best_of=5,temperature=0.0,condition_on_previous_text=False,vad_filter=False)
+          text=' '.join(s.text.strip() for s in segments).strip()
+          open('/tmp/whisper.txt','w',encoding='utf-8').write(text)
+          print('WHISPER_TRANSCRIPT='+text)
+          PY
+          python /tmp/transcribe.py
+      - name: Compare exact transcript and write report
+        id: qa
+        continue-on-error: true
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';import {createHash} from 'node:crypto';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const sha=v=>createHash('sha256').update(v).digest('hex');const audio=await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-whisper-fixed-pilot-v1.mp3');const meta=JSON.parse(await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-whisper-fixed-pilot-v1.json','utf8'));const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));const map=new Map(script.segments.map(x=>[x.segmentId,x]));const expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||'').join('\n\n');const transcript=(await readFile('/tmp/whisper.txt','utf8')).trim();const c=compareArabicTranscripts(expected,transcript);console.log(`WHISPER_HAMED expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log('WHISPER_DIFF='+JSON.stringify(c.operations));const report={schema:'bareeq.hamed-corrected-whisper-large-v3-pilot.v1',status:c.exact?'passed':'failed',articleId:'how-touchscreens-work',ttsProvider:'Microsoft Azure AI Speech',ttsVoice:'ar-SA-HamedNeural',asrProvider:'local faster-whisper',asrModel:'large-v3',audioSha256:sha(audio),transcript,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations,verifiedAt:new Date().toISOString()};await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-whisper-v3-fixed.json',JSON.stringify(report,null,2)+'\n');if(!c.exact)process.exitCode=2;
+          NODE
+      - name: Persist report even on mismatch
+        if: always()
+        run: |
+          git config user.name 'bareeq-audio-bot'; git config user.email 'actions@users.noreply.github.com'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-whisper-fixed-pilot-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-whisper-fixed-pilot-v1.json
+          test ! -f scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-whisper-v3-fixed.json || git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-whisper-v3-fixed.json
+          git commit -m 'audio: persist corrected Hamed independent Whisper evidence' || true
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
+      - name: Enforce exact gate
+        if: steps.qa.outcome != 'success'
+        run: exit 1
