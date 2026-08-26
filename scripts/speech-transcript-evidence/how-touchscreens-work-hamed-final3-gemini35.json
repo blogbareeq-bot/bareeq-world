@@ -1,0 +1,15 @@
+{
+  "schema": "bareeq.hamed-final3-gemini35-adjudication.v1",
+  "status": "passed",
+  "audioSha256": "c6c7660dff09b5f9434f19ab23f757d637341393d321c998cd075fada113a7b9",
+  "model": "gemini-3.5-flash",
+  "transcript": "لنفهم اللمسة نحتاج إلى فكرة صغيرة فقط تخيل أنك تكتب الآن حرف باء في لحظات قصيرة جدا يدخل إصبعك مجال شبكة الاستشعار ويتغير الاقتران السعوي في المنطقة القريبة منه وتلتقط شريحة اللمس نمط التغير وتحسب الإحداثيات ثم ترسلها إلى نظام التشغيل تعرف لوحة المفاتيح أن الموضع يقع فوق حرف باء فيسجل التطبيق الحرف وتعيد الشاشة رسم الجزء المطلوب",
+  "expectedWordCount": 58,
+  "actualWordCount": 58,
+  "wordErrorCount": 0,
+  "substitutions": 0,
+  "deletions": 0,
+  "insertions": 0,
+  "differences": [],
+  "verifiedAt": "2026-08-26T08:18:56.092Z"
+}
