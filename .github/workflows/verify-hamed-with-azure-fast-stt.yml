@@ -1,0 +1,67 @@
+name: Verify Hamed pilot with Azure fast transcription
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-hamed-with-azure-fast-stt.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Generate exact Hamed pilot
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: |
+          cp scripts/generate-fahed-test-clip.mjs scripts/.generate-hamed-faststt.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/.generate-hamed-faststt.mjs';let s=fs.readFileSync(p,'utf8');
+          const once=(a,b,l)=>{const n=s.split(a).length-1;if(n!==1)throw new Error(`${l}: ${n}`);s=s.replace(a,b)};
+          once("const VOICE = 'ar-KW-FahedNeural';","const VOICE = 'ar-SA-HamedNeural';",'voice');once("const LANGUAGE = 'ar-KW';","const LANGUAGE = 'ar-SA';",'language');once("const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '-2%';","const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';",'rate');once("const basename = `${ARTICLE_ID}-fahed-v1`;","const basename = `${ARTICLE_ID}-hamed-faststt-pilot-v1`;",'basename');once("schema: 'bareeq.fahed-test-clip.v1'","schema: 'bareeq.hamed-test-clip.v1'",'schema');once("}, 'Azure Fahed test synthesis');","}, 'Azure Hamed test synthesis');",'label');fs.writeFileSync(p,s);
+          NODE
+          node scripts/.generate-hamed-faststt.mjs --article=how-touchscreens-work
+          rm scripts/.generate-hamed-faststt.mjs
+      - name: Azure fast transcription audio-only exact check
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {readFile,writeFile} from 'node:fs/promises';import {compareArabicTranscripts,ARABIC_TRANSCRIPT_COMPARISON_PROFILE} from './scripts/arabic-transcript-match.mjs';
+          const sha=v=>createHash('sha256').update(v).digest('hex');const base='how-touchscreens-work-hamed-faststt-pilot-v1';const [audio,metaRaw,scriptRaw]=await Promise.all([readFile(`scripts/speech-test-evidence/${base}.mp3`),readFile(`scripts/speech-test-evidence/${base}.json`,'utf8'),readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8')]);const meta=JSON.parse(metaRaw),script=JSON.parse(scriptRaw);const map=new Map(script.segments.map(x=>[x.segmentId,x]));const expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||'').join('\n\n');
+          const form=new FormData();form.append('audio',new Blob([audio],{type:'audio/mpeg'}),`${base}.mp3`);form.append('definition',JSON.stringify({locales:['ar-SA']}));
+          const endpoint=`https://${process.env.AZURE_SPEECH_REGION}.api.cognitive.microsoft.com/speechtotext/transcriptions:transcribe?api-version=2025-10-15`;
+          const r=await fetch(endpoint,{method:'POST',headers:{'Ocp-Apim-Subscription-Key':process.env.AZURE_SPEECH_KEY},body:form});const body=await r.text();if(!r.ok)throw new Error(`Azure fast STT ${r.status}: ${body.slice(0,1000)}`);const data=JSON.parse(body);const transcript=(data.combinedPhrases||[]).map(x=>x?.text||'').join(' ').trim();if(!transcript)throw new Error('Azure fast STT returned empty transcript');const c=compareArabicTranscripts(expected,transcript);console.log(`AZURE_FAST_STT expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log(JSON.stringify(c.operations.slice(0,20)));
+          const report={schema:'bareeq.azure-fast-stt-verification.v1',status:c.exact?'passed':'failed',articleId:'how-touchscreens-work',audioFile:`scripts/speech-test-evidence/${base}.mp3`,audioSha256:sha(audio),ttsVoice:'ar-SA-HamedNeural',asrProvider:'Microsoft Azure AI Speech Fast Transcription',apiVersion:'2025-10-15',locale:'ar-SA',expectedTextDisclosure:'ASR received only the audio file and locale ar-SA; expected text was used only after the response.',transcript,exact:c.exact,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations.slice(0,100),comparisonProfile:ARABIC_TRANSCRIPT_COMPARISON_PROFILE,verifiedAt:new Date().toISOString()};await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-azure-fast-stt-v1.json',JSON.stringify(report,null,2)+'\n');if(!c.exact)throw new Error('Azure fast STT did not exactly match Hamed pilot');console.log('HAMED_AZURE_FAST_STT_ZERO_ERROR=PASS');
+          NODE
+      - name: Commit exact evidence only
+        run: |
+          git config user.name 'bareeq-audio-bot'; git config user.email 'actions@users.noreply.github.com'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-faststt-pilot-v1.mp3
+          git add scripts/speech-test-evidence/how-touchscreens-work-hamed-faststt-pilot-v1.json scripts/speech-transcript-evidence/how-touchscreens-work-hamed-azure-fast-stt-v1.json
+          git commit -m 'audio: verify Azure Hamed pilot with independent fast STT'
+          git pull --rebase origin ${{ github.ref_name }}; git push origin HEAD:${{ github.ref_name }}
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hamed-azure-fast-stt-${{ github.run_id }}
+          path: |
+            scripts/speech-test-evidence/how-touchscreens-work-hamed-faststt-pilot-v1.mp3
+            scripts/speech-test-evidence/how-touchscreens-work-hamed-faststt-pilot-v1.json
+            scripts/speech-transcript-evidence/how-touchscreens-work-hamed-azure-fast-stt-v1.json
+          if-no-files-found: ignore
