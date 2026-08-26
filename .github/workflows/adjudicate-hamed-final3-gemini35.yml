@@ -1,0 +1,43 @@
+name: Adjudicate Hamed final3 with Gemini 3.5
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: ['.github/workflows/adjudicate-hamed-final3-gemini35.yml']
+permissions:
+  contents: write
+jobs:
+  adjudicate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Independent Gemini 3.5 transcript of immutable final3 audio
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {readFile,writeFile} from 'node:fs/promises';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const audio=await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-final3-test.mp3');
+          const meta=JSON.parse(await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-final3-test.json','utf8'));const sha=v=>createHash('sha256').update(v).digest('hex');if(sha(audio)!==meta.audioSha256)throw new Error('immutable final3 audio mismatch');
+          const ids=['paragraph-1c05c5d0f015','paragraph-fe3d834a4f9e','paragraph-ac45a70f8b5d'];const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));const map=new Map(script.segments.map(s=>[s.segmentId,s]));const expected=ids.map(id=>map.get(id).spokenText).join(' ');
+          const prompt='Transcribe only the attached Arabic audio strictly verbatim. Preserve every audible lexical word exactly once and in order. Do not repair grammar, infer wording, add or omit words, replace synonyms, or use external text. Return transcript only in the requested JSON schema.';
+          const sleep=ms=>new Promise(r=>setTimeout(r,ms));function extract(p){if(typeof p?.output_text==='string')return p.output_text;const out=[];for(const c of[p?.steps,p?.outputs].filter(Array.isArray))for(const i of c)for(const b of(i?.content||[]))if(b?.type==='text')out.push(b.text);return out.join('');}
+          let transcript,last='';for(let n=1;n<=12;n++){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:'gemini-3.5-flash',input:[{type:'text',text:prompt},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});last=await r.text();if(r.ok){transcript=JSON.parse(extract(JSON.parse(last)).trim()).transcript.trim();break;}if(![429,500,502,503,504].includes(r.status))throw new Error(`Gemini35 ${r.status}: ${last.slice(0,600)}`);await sleep(Math.min(90000,25000+n*5000));}if(!transcript)throw new Error(`Gemini35 retries exhausted ${last.slice(0,500)}`);
+          const c=compareArabicTranscripts(expected,transcript);console.log(`GEMINI35_FINAL3 expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log(`GEMINI35_FINAL3_DIFF=${JSON.stringify(c.operations)}`);await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final3-gemini35.json',JSON.stringify({schema:'bareeq.hamed-final3-gemini35-adjudication.v1',status:c.exact?'passed':'failed',audioSha256:sha(audio),model:'gemini-3.5-flash',transcript,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations,verifiedAt:new Date().toISOString()},null,2)+'\n');
+          NODE
+      - name: Persist adjudication
+        if: always()
+        run: |
+          git config user.name bareeq-audio-bot
+          git config user.email actions@users.noreply.github.com
+          test ! -f scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final3-gemini35.json || git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final3-gemini35.json
+          git commit -m 'audio: persist Gemini 3.5 final3 adjudication' || true
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
