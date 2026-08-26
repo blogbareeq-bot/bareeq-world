@@ -1,0 +1,79 @@
+name: Verify corrected Hamed pilot with two Gemini 3.6 passes
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-hamed-corrected-36-twopass.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Generate deterministic corrected Hamed pilot
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: |
+          cp scripts/generate-fahed-test-clip.mjs scripts/.hamed-36x2-pilot.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/.hamed-36x2-pilot.mjs';let s=fs.readFileSync(p,'utf8');
+          const once=(a,b,l)=>{const n=s.split(a).length-1;if(n!==1)throw new Error(`${l}:${n}`);s=s.replace(a,b)};
+          once("const VOICE = 'ar-KW-FahedNeural';","const VOICE = 'ar-SA-HamedNeural';",'voice');
+          once("const LANGUAGE = 'ar-KW';","const LANGUAGE = 'ar-SA';",'lang');
+          once("const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '-2%';","const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';",'rate');
+          once("const basename = `${ARTICLE_ID}-fahed-v1`;","const basename = `${ARTICLE_ID}-hamed-corrected-36x2-pilot-v1`;",'basename');
+          once("return { type: record.type, text: record.spokenText, segmentId };",`let text=record.spokenText;\n  const fixes=[\n    ['بِبَسَاطَة:', 'بِبَسَاطَةٍ:'],\n    ['أَقْطَابِ الشَّبَكَة.', 'أَقْطَابِ الشَّبَكَةِ.'],\n    ['عَلَى الشَّاشَة.', 'عَلَى الشَّاشَةِ.'],\n    ['عَادَةً «الشَّاشَة» لَيْسَ طَبَقَةً وَاحِدَة.', 'عَادَةً «الشَّاشَةَ» لَيْسَ طَبَقَةً وَاحِدَةً.'],\n    ['عَلَى الشَّاشَة،', 'عَلَى الشَّاشَةِ،'],\n    ['مِنَ الشَّبَكَة.', 'مِنَ الشَّبَكَةِ.'],\n    ['تَكْبِيرَ الصُّورَة،', 'تَكْبِيرَ الصُّورَةِ،'],\n    ['تَحْرِيكَ خَرِيطَة.', 'تَحْرِيكَ خَرِيطَةٍ.']\n  ];\n  for(const [a,b] of fixes) text=text.split(a).join(b);\n  return { type: record.type, text, segmentId };`,'case fixes');
+          fs.writeFileSync(p,s);
+          NODE
+          node scripts/.hamed-36x2-pilot.mjs --article=how-touchscreens-work
+          rm scripts/.hamed-36x2-pilot.mjs
+      - name: Two independent exact Gemini 3.6 ASR passes
+        id: qa
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';import {createHash} from 'node:crypto';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const sha=v=>createHash('sha256').update(v).digest('hex'),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          const audio=await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-36x2-pilot-v1.mp3');
+          const meta=JSON.parse(await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-36x2-pilot-v1.json','utf8'));
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));const map=new Map(script.segments.map(x=>[x.segmentId,x]));const expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||'').join('\n\n');
+          const prompts=[
+            'استمع إلى الملف الصوتي فقط واكتب تفريغًا عربيًا حرفيًا للكلمات المسموعة بالترتيب نفسه. لا تضف أي حرف عطف أو أداة ربط أو كلمة غير مسموعة، ولا تصحح النص ولا تستنتج شيئًا. أعد transcript فقط.',
+            'Produce a strictly verbatim Arabic transcript from the attached audio only. Preserve every audible lexical word exactly once and in order. Do not add conjunctions, particles, fillers, repairs, or inferred words. Return transcript only.'
+          ];
+          function extract(p){if(typeof p.output_text==='string')return p.output_text;return (p.steps||p.outputs||[]).flatMap(x=>x.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('');}
+          async function tx(prompt){let r,body='';for(let a=0;a<8;a++){r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:'gemini-3.6-flash',input:[{type:'text',text:prompt},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});body=await r.text();if(r.ok)break;if(r.status!==429)throw new Error(`ASR36 ${r.status}: ${body.slice(0,800)}`);const sec=Number(body.match(/retry in ([0-9.]+)s/i)?.[1]||45);await sleep((Math.ceil(sec)+2)*1000);}if(!r?.ok)throw new Error('ASR36 retries exhausted');const p=JSON.parse(body);return JSON.parse(extract(p).trim()).transcript.trim();}
+          const passes=[];for(let i=0;i<2;i++){const transcript=await tx(prompts[i]);const c=compareArabicTranscripts(expected,transcript);console.log(`PASS_${i+1} expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log(`DIFF_${i+1}=${JSON.stringify(c.operations)}`);passes.push({pass:i+1,model:'gemini-3.6-flash',promptSha256:sha(prompts[i]),transcript,exact:c.exact,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations});}
+          const passed=passes.every(p=>p.exact&&p.wordErrorCount===0&&p.substitutions===0&&p.deletions===0&&p.insertions===0);
+          const report={schema:'bareeq.hamed-corrected-36-two-pass-pilot.v1',status:passed?'passed':'failed',articleId:'how-touchscreens-work',ttsProvider:'Microsoft Azure AI Speech',ttsVoice:'ar-SA-HamedNeural',audioSha256:sha(audio),expectedWordCount:160,expectedTextDisclosure:'ASR received only audio plus generic transcription instructions; expected text was used only after responses.',passes,verifiedAt:new Date().toISOString()};
+          await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-36x2-pilot-v1.json',JSON.stringify(report,null,2)+'\n');
+          if(!passed)process.exitCode=2;
+          NODE
+      - name: Persist QA evidence even on mismatch
+        if: always()
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-36x2-pilot-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-36x2-pilot-v1.json scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-36x2-pilot-v1.json
+          git commit -m 'audio: persist corrected Hamed 3.6 two-pass pilot evidence' || true
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
+      - name: Enforce exact gate
+        if: steps.qa.outcome != 'success'
+        run: exit 1
