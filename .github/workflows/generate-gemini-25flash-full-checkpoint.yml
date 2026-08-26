@@ -57,19 +57,22 @@ jobs:
         run: test -n "$GEMINI_API_KEY" || { echo '::error::GEMINI_API_KEY unavailable'; exit 2; }
 
       - name: Generate or resume complete Sadaltager article
+        id: synth
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_TTS_PROVIDER: gemini
           BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
           BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'
           BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD: '20'
-          BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS: '1200000'
-          BAREEQ_TTS_MAX_RETRIES: '1'
-          GEMINI_TTS_MIN_INTERVAL_MS: '9000'
+          BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS: '1800000'
+          BAREEQ_TTS_MAX_RETRIES: '4'
+          GEMINI_TTS_MIN_INTERVAL_MS: '15000'
           GEMINI_TTS_MAX_REQUEST_BYTES: '5500'
         run: node scripts/generate-audio.mjs
 
       - name: Preserve candidate or checkpoint
+        if: always()
         run: |
           git checkout -- scripts/generate-audio.mjs
           if node --input-type=module <<'NODE'
@@ -89,6 +92,7 @@ jobs:
               git pull --rebase origin ${{ github.ref_name }}
               git push origin HEAD:${{ github.ref_name }}
             fi
+            echo 'candidate_complete=1' >> "$GITHUB_ENV"
           else
             echo '::warning::Full article incomplete; preserving checkpoint only.'
             git checkout -- scripts/speech-test-clips/how-touchscreens-work.json
@@ -100,8 +104,14 @@ jobs:
               git pull --rebase origin ${{ github.ref_name }}
               git push origin HEAD:${{ github.ref_name }}
             fi
-            exit 78
+            echo 'candidate_complete=0' >> "$GITHUB_ENV"
           fi
+
+      - name: Stop safely when only checkpoint exists
+        if: env.candidate_complete != '1'
+        run: |
+          echo '::error::Full candidate is not complete yet; checkpoint was preserved for the next resume.'
+          exit 1
 
       - name: Require two exact whole-article transcripts and seal manifest
         env:
@@ -133,5 +143,6 @@ jobs:
             scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-full-v1.mp3
             scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-full-v1.json
             public/audio/articles/de93f3d9f91c8b8b/
+            scripts/gemini-checkpoints/
           if-no-files-found: ignore
           retention-days: 30
