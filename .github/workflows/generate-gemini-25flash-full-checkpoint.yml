@@ -1,0 +1,211 @@
+name: Generate full Gemini 2.5 Flash article with resumable exact QA
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/generate-gemini-25flash-full-checkpoint.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemini-25flash-full-how-touchscreens
+  cancel-in-progress: false
+
+jobs:
+  generate-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - name: Checkout exact working branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Require approved 2.5 Flash v3 zero-error pilot
+        run: |
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/check-speech-scripts.mjs
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';
+          import {readFile} from 'node:fs/promises';
+          import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const sha=v=>createHash('sha256').update(v).digest('hex');
+          const reportFile='scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-pilot-v3-two-pass.json';
+          const audioFile='scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-pilot-v3.mp3';
+          const [reportRaw,audio,scriptRaw]=await Promise.all([readFile(reportFile,'utf8'),readFile(audioFile),readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8')]);
+          const report=JSON.parse(reportRaw),script=JSON.parse(scriptRaw);
+          if(report.status!=='passed'||report.ttsModel!=='gemini-2.5-flash-preview-tts'||report.ttsVoice!=='Sadaltager'||report.audioSha256!==sha(audio)||report.audioBytes!==audio.length) throw new Error('Approved v3 pilot identity/integrity mismatch.');
+          if(report.expectedWordCount!==160||report.independentPasses!==2||report.wordErrorCountAcrossAllPasses!==0||report.substitutions!==0||report.deletions!==0||report.insertions!==0) throw new Error('Approved v3 pilot is not exact zero-error.');
+          if(!Array.isArray(report.passes)||report.passes.length!==2||!report.passes.every(p=>p.exact&&p.expectedWordCount===160&&p.actualWordCount===160&&p.wordErrorCount===0&&p.substitutions===0&&p.deletions===0&&p.insertions===0)) throw new Error('Both approved v3 passes must be independently exact.');
+          const expected=script.segments.filter(x=>['title','paragraph','quote','h2','h3','h4','list-item'].includes(x.type)).filter(x=>['title-ef028c93bd7e','paragraph-a63067d6c146','quote-7b1d6e9dad57','paragraph-9facdfecf62d','paragraph-1e0c397252d0','h2-e96da099522c'].includes(x.segmentId)).map(x=>x.spokenText).join('\n\n');
+          if(!report.passes.every(p=>compareArabicTranscripts(expected,p.transcript).exact)) throw new Error('Stored v3 transcripts no longer match the reviewed speech script.');
+          console.log(`V3_PILOT_ZERO_ERROR=PASS audio=${report.audioSha256} passes=2 words=160`);
+          NODE
+
+      - name: Apply user-authorized automated synthesis gate in working tree
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {readFile,writeFile} from 'node:fs/promises';
+          const sha=v=>createHash('sha256').update(v).digest('hex');
+          const planFile='scripts/speech-test-clips/how-touchscreens-work.json';
+          const audioFile='scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-pilot-v3.mp3';
+          const reportFile='scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-pilot-v3-two-pass.json';
+          const [planRaw,audio,reportBytes]=await Promise.all([readFile(planFile,'utf8'),readFile(audioFile),readFile(reportFile)]);
+          const plan=JSON.parse(planRaw),report=JSON.parse(reportBytes.toString('utf8'));
+          if(report.status!=='passed'||report.wordErrorCountAcrossAllPasses!==0) throw new Error('Cannot open synthesis gate without exact v3 report.');
+          const at=new Date().toISOString();
+          plan.testClipPassed=true;plan.fullSynthesisAllowed=true;
+          plan.audioReview={status:'passed',reviewedBy:'Automated two-pass exact ASR — user-authorized conditional publication',reviewedAt:at,evidence:{file:audioFile,sha256:sha(audio),bytes:audio.length,provider:'Google Gemini API',model:'gemini-2.5-flash-preview-tts',voice:'Sadaltager',automatedTranscriptReport:reportFile,automatedTranscriptReportSha256:sha(reportBytes),transcriptionModel:'gemini-3.5-flash',transcriptionPasses:2,wordErrorCount:0,substitutions:0,deletions:0,insertions:0,humanListening:false,approvalBasis:'User instructed to continue through publication if automated speech-to-text matches the original text exactly.'}};
+          await writeFile(planFile,JSON.stringify(plan,null,2)+'\n');
+          console.log('USER_CONDITIONAL_SYNTHESIS_GATE=OPEN');
+          NODE
+          node scripts/check-speech-scripts.mjs
+
+      - name: Patch generator runtime for approved 2.5 Flash model, v3 pauses, and checkpoints
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/generate-audio.mjs';let s=fs.readFileSync(p,'utf8');
+          const once=(a,b,label)=>{const n=s.split(a).length-1;if(n!==1)throw new Error(`${label}: expected exactly one match, found ${n}`);s=s.replace(a,b)};
+          once("const GEMINI_MODEL = 'gemini-3.1-flash-tts-preview';","const GEMINI_MODEL = 'gemini-2.5-flash-preview-tts';",'model');
+          once('spokenText: record?.spokenText ?? segment.sourceText,',`spokenText: (record?.spokenText ?? segment.sourceText).replace('مَا نُسَمِّيهِ عَادَةً «الشَّاشَة» لَيْسَ طَبَقَةً وَاحِدَة.', 'مَا نُسَمِّيهِ عَادَةً، «الشَّاشَة»، لَيْسَ طَبَقَةً وَاحِدَة.'),`,'v3 punctuation-only transform');
+          once("  const tempDir = `${finalDir}.tmp-${process.pid}`;\n  await rm(tempDir, { recursive: true, force: true });\n  await mkdir(tempDir, { recursive: true });",`  const checkpointName = \`${'${post.key}'}-${'${post.sourceHash.slice(0,16)}'}-${'${MODEL.replace(/[^a-z0-9.-]+/gi, "_")}'}\`;\n  const tempDir = PROVIDER === 'gemini' ? path.join(ROOT, 'scripts', 'gemini-checkpoints', checkpointName) : \`${'${finalDir}'}.tmp-${'${process.pid}'}\`;\n  if (PROVIDER !== 'gemini') await rm(tempDir, { recursive: true, force: true });\n  await mkdir(tempDir, { recursive: true });`,'checkpoint directory');
+          once(`        const audio = await synthesizeVoice(API_KEY, voice, audioPart, {\n          articleTitle: post.title,\n          partIndex: index,\n          partCount: post.audioParts.length,\n        });\n        if (audio.length < 100) throw new Error(\`${'${post.id}'}: generated MP3 ${'${filename}'} is unexpectedly small.\`);\n        const durationSeconds = mp3DurationSeconds(audio);\n        await writeFile(path.join(tempDir, filename), audio);`, `        const checkpointFile = path.join(tempDir, filename);\n        let audio;\n        if (PROVIDER === 'gemini' && await exists(checkpointFile)) {\n          audio = await readFile(checkpointFile);\n          if (audio.length < 100 || !(mp3DurationSeconds(audio) > 0)) throw new Error(\`${'${post.id}'}: checkpoint ${'${filename}'} is invalid.\`);\n          console.log(\`↺ ${'${post.id}'}: reusing checkpoint ${'${filename}'}\`);\n        } else {\n          audio = await synthesizeVoice(API_KEY, voice, audioPart, {\n            articleTitle: post.title,\n            partIndex: index,\n            partCount: post.audioParts.length,\n          });\n          if (audio.length < 100) throw new Error(\`${'${post.id}'}: generated MP3 ${'${filename}'} is unexpectedly small.\`);\n          await writeFile(checkpointFile, audio);\n          console.log(\`✓ ${'${post.id}'}: checkpointed ${'${filename}'}\`);\n        }\n        const durationSeconds = mp3DurationSeconds(audio);`,'checkpoint reuse');
+          once("  } catch (error) {\n    await rm(tempDir, { recursive: true, force: true });", "  } catch (error) {\n    if (PROVIDER !== 'gemini') await rm(tempDir, { recursive: true, force: true });\n    else console.warn(`⚠ Preserving Gemini checkpoint at ${tempDir}.`);",'preserve checkpoint');
+          fs.writeFileSync(p,s);
+          NODE
+          node --check scripts/generate-audio.mjs
+          grep -F "const GEMINI_MODEL = 'gemini-2.5-flash-preview-tts';" scripts/generate-audio.mjs
+          grep -F "gemini-checkpoints" scripts/generate-audio.mjs
+
+      - name: Prove punctuation-only full speech input remains lexically identical
+        env:
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          GEMINI_TTS_MAX_REQUEST_BYTES: '5500'
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));const original=script.segments.map(x=>x.spokenText).join(' ');const adjusted=original.replace('مَا نُسَمِّيهِ عَادَةً «الشَّاشَة» لَيْسَ طَبَقَةً وَاحِدَة.','مَا نُسَمِّيهِ عَادَةً، «الشَّاشَة»، لَيْسَ طَبَقَةً وَاحِدَة.');const c=compareArabicTranscripts(original,adjusted);if(!c.exact||c.wordErrorCount!==0)throw new Error('v3 full punctuation transform altered lexical text.');console.log(`FULL_LEXICAL_EQUIVALENCE=PASS words=${c.expectedWordCount}`);
+          NODE
+          node scripts/generate-audio.mjs --plan
+
+      - name: Require Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: test -n "$GEMINI_API_KEY" || { echo '::error::GEMINI_API_KEY unavailable'; exit 2; }
+
+      - name: Generate or resume complete 2.5 Flash Sadaltager article
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'
+          BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD: '20'
+          BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS: '1200000'
+          BAREEQ_TTS_MAX_RETRIES: '1'
+          GEMINI_TTS_MIN_INTERVAL_MS: '9000'
+          GEMINI_TTS_MAX_REQUEST_BYTES: '5500'
+        run: node scripts/generate-audio.mjs
+
+      - name: Commit checkpoint and stop safely if article is incomplete
+        env:
+          BAREEQ_TTS_PROVIDER: gemini
+        run: |
+          if node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const m=JSON.parse(await readFile('public/audio/articles/de93f3d9f91c8b8b/manifest.json','utf8'));
+          if(m.provider!=='Google Gemini API'||m.model!=='gemini-2.5-flash-preview-tts'||m.defaultVoice!=='sadaltager') process.exit(1);
+          if(!Array.isArray(m.parts)||!m.parts.length||!m.parts.every(p=>p.audio?.sadaltager?.src)) process.exit(1);
+          console.log(`FULL_SYNTHESIS_COMPLETE parts=${m.parts.length}`);
+          NODE
+          then
+            echo 'Full article is present; proceeding to whole-audio QA.'
+          else
+            echo '::warning::Full article is incomplete; preserving non-public checkpoint and stopping before QA/publication.'
+            git checkout -- scripts/generate-audio.mjs scripts/speech-test-clips/how-touchscreens-work.json
+            git config user.name 'bareeq-audio-bot'
+            git config user.email 'actions@users.noreply.github.com'
+            git add -f scripts/gemini-checkpoints/ || true
+            if ! git diff --cached --quiet; then
+              git commit -m 'audio: checkpoint Gemini 2.5 Flash touchscreen synthesis'
+              git pull --rebase origin ${{ github.ref_name }}
+              git push origin HEAD:${{ github.ref_name }}
+            fi
+            exit 78
+          fi
+
+      - name: Assemble immutable complete-article QA target
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {spawnSync} from 'node:child_process';import {mkdir,readFile,writeFile} from 'node:fs/promises';import path from 'node:path';import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';import {mp3DurationSeconds} from './scripts/mp3-duration.mjs';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const sha=v=>createHash('sha256').update(v).digest('hex');const root='public/audio/articles/de93f3d9f91c8b8b';const manifest=JSON.parse(await readFile(`${root}/manifest.json`,'utf8'));if(manifest.provider!=='Google Gemini API'||manifest.model!=='gemini-2.5-flash-preview-tts'||manifest.defaultVoice!=='sadaltager')throw new Error('Full 2.5 Flash manifest identity mismatch');
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));const original=script.segments.map(x=>x.spokenText).join(' ');const expected=original.replace('مَا نُسَمِّيهِ عَادَةً «الشَّاشَة» لَيْسَ طَبَقَةً وَاحِدَة.','مَا نُسَمِّيهِ عَادَةً، «الشَّاشَة»، لَيْسَ طَبَقَةً وَاحِدَة.');if(!compareArabicTranscripts(original,expected).exact)throw new Error('Whole expected text changed lexically');
+          let duration=0;const list=[];for(const [i,p] of manifest.parts.entries()){const a=p.audio?.sadaltager;if(!a?.src||!(a.bytes>100)||!(a.durationSeconds>0)||!/^[a-f0-9]{64}$/i.test(a.sha256||''))throw new Error(`Invalid part ${i+1}`);const file=path.join('public',a.src.replace(/^\//,''));const bytes=await readFile(file);if(bytes.length!==a.bytes||sha(bytes)!==a.sha256)throw new Error(`Integrity mismatch ${a.src}`);duration+=mp3DurationSeconds(bytes);list.push(`file '${path.resolve(file).replace(/'/g,"'\\''")}'`)}if(!(duration>300))throw new Error(`Implausibly short full article: ${duration}`);await mkdir('scripts/speech-test-evidence',{recursive:true});await writeFile('/tmp/bareeq-full-concat.txt',list.join('\n')+'\n');const out='scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-full-v1.mp3';const r=spawnSync(ffmpegInstaller.path,['-hide_banner','-loglevel','error','-f','concat','-safe','0','-i','/tmp/bareeq-full-concat.txt','-map_metadata','-1','-c','copy','-y',out],{encoding:'utf8'});if(r.status!==0)throw new Error(`ffmpeg concat failed: ${r.stderr}`);const full=await readFile(out);const measured=mp3DurationSeconds(full);if(!(full.length>10000)||Math.abs(measured-duration)>2)throw new Error(`Assembled audio mismatch ${measured} vs ${duration}`);await writeFile('/tmp/bareeq-full-expected.txt',expected);await writeFile('/tmp/bareeq-full-meta.json',JSON.stringify({partCount:manifest.parts.length,bytes:full.length,durationSeconds:Number(measured.toFixed(3)),sha256:sha(full),expectedTranscriptSha256:sha(expected)},null,2));console.log(`FULL_QA_TARGET_READY parts=${manifest.parts.length} duration=${measured.toFixed(2)}s sha=${sha(full)}`);
+          NODE
+
+      - name: Require two exact audio-only transcripts of complete article
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {readFile,writeFile} from 'node:fs/promises';import {compareArabicTranscripts,ARABIC_TRANSCRIPT_COMPARISON_PROFILE} from './scripts/arabic-transcript-match.mjs';const sha=v=>createHash('sha256').update(v).digest('hex');
+          const audio=await readFile('scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-full-v1.mp3');const expected=await readFile('/tmp/bareeq-full-expected.txt','utf8');const meta=JSON.parse(await readFile('/tmp/bareeq-full-meta.json','utf8'));if(meta.sha256!==sha(audio)||meta.expectedTranscriptSha256!==sha(expected))throw new Error('Whole-article QA target hash mismatch');
+          const prompts=['استمع إلى التسجيل الكامل المرفق وحوّل كل الكلام المسموع إلى نص عربي حرفي كامل. اكتب كل كلمة تسمعها مرة واحدة وبالترتيب نفسه من البداية إلى النهاية. لا تلخص، ولا تصحح المتحدث، ولا تضف أو تحذف شيئًا، ولا تعتمد على أي نص خارجي. لا حاجة إلى التشكيل أو الترقيم. أعد حقل transcript فقط وفق JSON المطلوب.','Produce a complete verbatim Arabic transcript of the attached recording, using the audio as the only source. Include every audible word exactly once and in its original order from beginning to end. Do not infer, repair, summarize, paraphrase, omit, or add commentary. Diacritics and punctuation are optional. Return only transcript in the requested JSON schema.'];
+          const extract=p=>{if(typeof p?.output_text==='string')return p.output_text;if(typeof p?.outputText==='string')return p.outputText;const o=[];for(const c of [p?.steps,p?.outputs].filter(Array.isArray))for(const i of c)for(const b of (Array.isArray(i?.content)?i.content:[]))if(b?.type==='text'&&typeof b.text==='string')o.push(b.text);return o.join('')};const passes=[];
+          for(let i=0;i<2;i++){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:'gemini-3.5-flash',input:[{type:'text',text:prompts[i]},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});const body=await r.text();if(!r.ok)throw new Error(`Whole ASR pass ${i+1} failed (${r.status}): ${body.slice(0,700)}`);const transcript=JSON.parse(extract(JSON.parse(body)).trim()).transcript?.trim();if(!transcript)throw new Error(`Whole ASR pass ${i+1} empty`);const c=compareArabicTranscripts(expected,transcript);console.log(`WHOLE_ASR_${i+1}: expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);passes.push({pass:i+1,model:'gemini-3.5-flash',promptSha256:sha(prompts[i]),transcript,transcriptSha256:sha(transcript),normalizedTranscript:c.actualNormalized,normalizedTranscriptSha256:sha(c.actualNormalized),exact:c.exact,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations.slice(0,100)});}
+          const passed=passes.length===2&&passes.every(p=>p.exact&&p.wordErrorCount===0&&p.substitutions===0&&p.deletions===0&&p.insertions===0);const report={schema:'bareeq.whole-article-transcript-verification.v1',status:passed?'passed':'failed',articleId:'how-touchscreens-work',ttsProvider:'Google Gemini API',ttsModel:'gemini-2.5-flash-preview-tts',ttsVoice:'Sadaltager',audioMode:'assembled-complete-article',audioFile:'scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-full-v1.mp3',audioSha256:sha(audio),audioBytes:audio.length,durationSeconds:meta.durationSeconds,partCount:meta.partCount,expectedTranscriptSha256:sha(expected),expectedWordCount:passes[0]?.expectedWordCount,transcriptionProvider:'Google Gemini API',transcriptionModel:'gemini-3.5-flash',independentPasses:2,wordErrorCountAcrossAllPasses:passes.reduce((s,p)=>s+p.wordErrorCount,0),substitutions:passes.reduce((s,p)=>s+p.substitutions,0),deletions:passes.reduce((s,p)=>s+p.deletions,0),insertions:passes.reduce((s,p)=>s+p.insertions,0),expectedTextDisclosure:'ASR received only the assembled complete audio and generic transcription instructions. Expected text was used only after each response for exact comparison.',comparisonProfile:ARABIC_TRANSCRIPT_COMPARISON_PROFILE,passes,verifiedAt:new Date().toISOString()};await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-full-v1.json',JSON.stringify(report,null,2)+'\n');if(!passed)throw new Error(`Whole-article exact gate rejected audio: ${JSON.stringify(passes.map(p=>p.differences.slice(0,10)))}`);console.log(`WHOLE_ARTICLE_ZERO_ERROR=PASS words=${report.expectedWordCount} passes=2`);
+          NODE
+
+      - name: Seal manifest with whole-article exact evidence
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {readFile,writeFile} from 'node:fs/promises';const sha=v=>createHash('sha256').update(v).digest('hex');const manifestFile='public/audio/articles/de93f3d9f91c8b8b/manifest.json';const reportFile='scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-full-v1.json';const [manifestRaw,reportBytes]=await Promise.all([readFile(manifestFile,'utf8'),readFile(reportFile)]);const m=JSON.parse(manifestRaw),r=JSON.parse(reportBytes.toString('utf8'));if(r.status!=='passed'||r.wordErrorCountAcrossAllPasses!==0||r.substitutions!==0||r.deletions!==0||r.insertions!==0)throw new Error('Cannot seal non-zero transcript report');m.automatedTranscriptReview={status:'passed',scope:'assembled-complete-article',reportFile,reportSha256:sha(reportBytes),transcriptionProvider:r.transcriptionProvider,transcriptionModel:r.transcriptionModel,transcriptionPasses:2,expectedWordCount:r.expectedWordCount,wordErrorCountAcrossAllPasses:0,substitutions:0,deletions:0,insertions:0,fullAudioSha256:r.audioSha256,reviewedAt:r.verifiedAt};await writeFile(manifestFile,JSON.stringify(m,null,2)+'\n');console.log('FULL_MANIFEST_SEALED_ZERO_ERROR=PASS');
+          NODE
+
+      - name: Validate production build with verified audio
+        env:
+          BAREEQ_GEMINI_FREE_ROLLOUT: '0'
+          BAREEQ_CLOUD_TTS_ACTIVATE: '0'
+        run: npm run build
+
+      - name: Restore runtime-only generator patch
+        if: always()
+        run: git checkout -- scripts/generate-audio.mjs
+
+      - name: Upload full QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-25flash-full-zero-error-${{ github.run_id }}
+          path: |
+            scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-full-v1.mp3
+            scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-full-v1.json
+            public/audio/articles/de93f3d9f91c8b8b/manifest.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Commit only fully generated and zero-error publication candidate
+        if: success()
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/speech-test-clips/how-touchscreens-work.json
+          git add scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-full-v1.json
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-full-v1.mp3
+          git add -A public/audio/articles/de93f3d9f91c8b8b/
+          git diff --cached --quiet && { echo 'Publication candidate already current.'; exit 0; }
+          git commit -m 'audio: verify full Gemini 2.5 Flash touchscreen article at zero errors'
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
