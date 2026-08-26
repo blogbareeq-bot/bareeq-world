@@ -1,0 +1,90 @@
+name: Verify Azure Hamed pilot at zero lexical errors
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-azure-hamed-pilot-zero-error.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Lock text contract
+        run: |
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/check-speech-scripts.mjs
+      - name: Require Azure and Gemini ASR credentials
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: test -n "$AZURE_SPEECH_KEY" && test -n "$GEMINI_API_KEY"
+      - name: Generate Hamed pilot from exact reviewed segments
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: |
+          cp scripts/generate-fahed-test-clip.mjs scripts/.generate-hamed-pilot.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/.generate-hamed-pilot.mjs';let s=fs.readFileSync(p,'utf8');
+          const once=(a,b,l)=>{const n=s.split(a).length-1;if(n!==1)throw new Error(`${l}: ${n}`);s=s.replace(a,b)};
+          once("const VOICE = 'ar-KW-FahedNeural';","const VOICE = 'ar-SA-HamedNeural';",'voice');
+          once("const LANGUAGE = 'ar-KW';","const LANGUAGE = 'ar-SA';",'language');
+          once("const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '-2%';","const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';",'rate');
+          once("const basename = `${ARTICLE_ID}-fahed-v1`;","const basename = `${ARTICLE_ID}-hamed-zero-error-pilot-v1`;",'basename');
+          once("schema: 'bareeq.fahed-test-clip.v1'","schema: 'bareeq.hamed-test-clip.v1'",'schema');
+          once("}, 'Azure Fahed test synthesis');","}, 'Azure Hamed test synthesis');",'label');
+          fs.writeFileSync(p,s);
+          NODE
+          node scripts/.generate-hamed-pilot.mjs --article=how-touchscreens-work
+          rm scripts/.generate-hamed-pilot.mjs
+      - name: Require two exact independent audio-only ASR passes
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {readFile,writeFile} from 'node:fs/promises';import {compareArabicTranscripts,ARABIC_TRANSCRIPT_COMPARISON_PROFILE} from './scripts/arabic-transcript-match.mjs';
+          const sha=v=>createHash('sha256').update(v).digest('hex');
+          const base='how-touchscreens-work-hamed-zero-error-pilot-v1';
+          const meta=JSON.parse(await readFile(`scripts/speech-test-evidence/${base}.json`,'utf8'));
+          const audio=await readFile(`scripts/speech-test-evidence/${base}.mp3`);
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));
+          if(meta.voice!=='ar-SA-HamedNeural'||meta.language!=='ar-SA'||meta.sha256!==sha(audio)||meta.bytes!==audio.length)throw new Error('Hamed pilot identity mismatch');
+          const map=new Map(script.segments.map(x=>[x.segmentId,x]));const expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||(()=>{throw new Error(`missing ${id}`)})()).join('\n\n');
+          const prompts=['استمع إلى التسجيل المرفق وحوّل الكلام المسموع إلى نص عربي حرفي كامل. اكتب الكلمات التي تسمعها فقط وبالترتيب نفسه. لا تلخص ولا تصحح ولا تضف شيئًا ولا تعتمد على نص خارجي. لا حاجة إلى التشكيل أو الترقيم. أعد حقل transcript فقط وفق JSON المطلوب.','Produce a verbatim Arabic transcript of the attached audio using audio as the only source. Write every audible word once and in order. Do not infer, repair, summarize, paraphrase, or add commentary. Diacritics and punctuation are optional. Return only transcript in the requested JSON schema.'];
+          const extract=p=>{if(typeof p?.output_text==='string')return p.output_text;if(typeof p?.outputText==='string')return p.outputText;const o=[];for(const c of [p?.steps,p?.outputs].filter(Array.isArray))for(const i of c)for(const b of (Array.isArray(i?.content)?i.content:[]))if(b?.type==='text'&&typeof b.text==='string')o.push(b.text);return o.join('')};
+          const passes=[];for(let i=0;i<2;i++){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:'gemini-3.5-flash',input:[{type:'text',text:prompts[i]},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});const body=await r.text();if(!r.ok)throw new Error(`ASR pass ${i+1} failed ${r.status}: ${body.slice(0,500)}`);const tr=JSON.parse(extract(JSON.parse(body)).trim()).transcript?.trim();const c=compareArabicTranscripts(expected,tr);console.log(`HAMED_ASR_${i+1}: expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);passes.push({pass:i+1,model:'gemini-3.5-flash',promptSha256:sha(prompts[i]),transcript:tr,exact:c.exact,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations.slice(0,50)});}
+          const passed=passes.every(p=>p.exact&&p.wordErrorCount===0&&p.substitutions===0&&p.deletions===0&&p.insertions===0);
+          const report={schema:'bareeq.azure-hamed-pilot-verification.v1',status:passed?'passed':'failed',articleId:'how-touchscreens-work',ttsProvider:'Microsoft Azure AI Speech',ttsModel:'Neural TTS',ttsVoice:'ar-SA-HamedNeural',audioFile:`scripts/speech-test-evidence/${base}.mp3`,audioSha256:sha(audio),audioBytes:audio.length,expectedTranscriptSha256:sha(expected),expectedWordCount:passes[0]?.expectedWordCount,independentPasses:2,wordErrorCountAcrossAllPasses:passes.reduce((s,p)=>s+p.wordErrorCount,0),substitutions:passes.reduce((s,p)=>s+p.substitutions,0),deletions:passes.reduce((s,p)=>s+p.deletions,0),insertions:passes.reduce((s,p)=>s+p.insertions,0),expectedTextDisclosure:'ASR received audio and generic instructions only.',comparisonProfile:ARABIC_TRANSCRIPT_COMPARISON_PROFILE,passes,verifiedAt:new Date().toISOString()};await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-zero-error-pilot-v1.json',JSON.stringify(report,null,2)+'\n');if(!passed)throw new Error(`Hamed rejected: ${JSON.stringify(passes.map(p=>p.differences.slice(0,10)))}`);console.log('HAMED_PILOT_ZERO_ERROR=PASS');
+          NODE
+      - name: Commit only exact Hamed evidence
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-zero-error-pilot-v1.mp3
+          git add scripts/speech-test-evidence/how-touchscreens-work-hamed-zero-error-pilot-v1.json scripts/speech-transcript-evidence/how-touchscreens-work-hamed-zero-error-pilot-v1.json
+          git commit -m 'audio: approve Azure Hamed pilot at zero errors'
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: azure-hamed-zero-error-pilot-${{ github.run_id }}
+          path: |
+            scripts/speech-test-evidence/how-touchscreens-work-hamed-zero-error-pilot-v1.mp3
+            scripts/speech-test-evidence/how-touchscreens-work-hamed-zero-error-pilot-v1.json
+            scripts/speech-transcript-evidence/how-touchscreens-work-hamed-zero-error-pilot-v1.json
+          if-no-files-found: ignore
