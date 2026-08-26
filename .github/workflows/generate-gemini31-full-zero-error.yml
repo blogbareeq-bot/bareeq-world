@@ -1,0 +1,147 @@
+name: Generate full Gemini 3.1 article with cross-provider zero-error QA
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/generate-gemini31-full-zero-error.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemini31-full-how-touchscreens
+  cancel-in-progress: false
+
+jobs:
+  generate-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - name: Checkout exact working branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Prepare approved Gemini 3.1 runtime
+        run: |
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/prepare-gemini31-full-runtime.mjs
+          node --check scripts/generate-audio.mjs
+          node scripts/check-speech-scripts.mjs
+
+      - name: Prove bounded generation plan
+        env:
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          GEMINI_TTS_MAX_REQUEST_BYTES: '5500'
+        run: node scripts/generate-audio.mjs --plan
+
+      - name: Require synthesis and independent ASR credentials
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+        run: test -n "$GEMINI_API_KEY" && test -n "$AZURE_SPEECH_KEY"
+
+      - name: Generate or resume complete Gemini 3.1 Sadaltager article
+        id: synth
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'
+          BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD: '10'
+          BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS: '1800000'
+          BAREEQ_TTS_MAX_RETRIES: '4'
+          GEMINI_TTS_MIN_INTERVAL_MS: '15000'
+          GEMINI_TTS_MAX_REQUEST_BYTES: '5500'
+        run: node scripts/generate-audio.mjs
+
+      - name: Preserve complete candidate or resumable checkpoint
+        if: always()
+        run: |
+          git checkout -- scripts/generate-audio.mjs
+          if node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const m=JSON.parse(await readFile('public/audio/articles/de93f3d9f91c8b8b/manifest.json','utf8'));
+          if(m.provider!=='Google Gemini API'||m.model!=='gemini-3.1-flash-tts-preview'||m.defaultVoice!=='sadaltager') process.exit(1);
+          if(!Array.isArray(m.parts)||!m.parts.length||!m.parts.every(p=>p.audio?.sadaltager?.src)) process.exit(1);
+          console.log(`FULL_SYNTHESIS_COMPLETE parts=${m.parts.length}`);
+          NODE
+          then
+            git config user.name 'bareeq-audio-bot'
+            git config user.email 'actions@users.noreply.github.com'
+            git add scripts/speech-test-clips/how-touchscreens-work.json
+            git add -f public/audio/articles/de93f3d9f91c8b8b/
+            if ! git diff --cached --quiet; then
+              git commit -m 'audio: stage complete Gemini 3.1 touchscreen candidate'
+              git pull --rebase origin ${{ github.ref_name }}
+              git push origin HEAD:${{ github.ref_name }}
+            fi
+            echo 'candidate_complete=1' >> "$GITHUB_ENV"
+          else
+            echo '::warning::Gemini 3.1 article incomplete; preserving checkpoint.'
+            git checkout -- scripts/speech-test-clips/how-touchscreens-work.json
+            git config user.name 'bareeq-audio-bot'
+            git config user.email 'actions@users.noreply.github.com'
+            git add -f scripts/gemini-checkpoints/ || true
+            if ! git diff --cached --quiet; then
+              git commit -m 'audio: checkpoint Gemini 3.1 touchscreen synthesis'
+              git pull --rebase origin ${{ github.ref_name }}
+              git push origin HEAD:${{ github.ref_name }}
+            fi
+            echo 'candidate_complete=0' >> "$GITHUB_ENV"
+          fi
+
+      - name: Stop safely if only checkpoint exists
+        if: env.candidate_complete != '1'
+        run: |
+          echo '::error::Gemini 3.1 candidate is incomplete; checkpoint was preserved.'
+          exit 1
+
+      - name: Require two independent cross-provider exact full transcripts
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: node scripts/verify-and-seal-gemini31-full.mjs
+
+      - name: Build publication candidate
+        run: |
+          ASTRO_TELEMETRY_DISABLED=1 npx astro build
+          node scripts/check-audio-dist.mjs
+          node scripts/check-dist.mjs
+
+      - name: Commit sealed zero-error candidate
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/speech-test-clips/how-touchscreens-work.json scripts/speech-test-evidence/how-touchscreens-work-gemini31-full-v1.mp3 scripts/speech-transcript-evidence/how-touchscreens-work-gemini31-full-v1.json
+          git add -f public/audio/articles/de93f3d9f91c8b8b/
+          git commit -m 'audio: approve full Gemini 3.1 touchscreen audio at zero errors'
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
+
+      - name: Upload QA evidence and checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini31-full-zero-error-${{ github.run_id }}
+          path: |
+            scripts/speech-test-evidence/how-touchscreens-work-gemini31-full-v1.mp3
+            scripts/speech-transcript-evidence/how-touchscreens-work-gemini31-full-v1.json
+            public/audio/articles/de93f3d9f91c8b8b/
+            scripts/gemini-checkpoints/
+          if-no-files-found: ignore
+          retention-days: 30
