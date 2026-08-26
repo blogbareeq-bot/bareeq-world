@@ -1,0 +1,39 @@
+name: Probe Gemini 3.1 TTS quota now
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/probe-gemini-31-tts-now.yml]
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Single guarded Gemini 3.1 pronunciation request
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          cp scripts/generate-gemini-pronunciation-sample.mjs scripts/.probe-gemini31.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/.probe-gemini31.mjs';let s=fs.readFileSync(p,'utf8');s=s.replace('const MAX_RETRIES = 5;','const MAX_RETRIES = 0;').replace("? `${ARTICLE_ID}-gemini-pilot-v1`\n  : `${ARTICLE_ID}-gemini-bibasaata-v1`;","? `${ARTICLE_ID}-gemini-pilot-probe-v1`\n  : `${ARTICLE_ID}-gemini31-quota-probe-v1`;");fs.writeFileSync(p,s);
+          NODE
+          node scripts/.probe-gemini31.mjs
+          rm scripts/.probe-gemini31.mjs
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini31-quota-probe-${{ github.run_id }}
+          path: |
+            scripts/speech-test-evidence/how-touchscreens-work-gemini31-quota-probe-v1.mp3
+            scripts/speech-test-evidence/how-touchscreens-work-gemini31-quota-probe-v1.json
+          if-no-files-found: ignore
