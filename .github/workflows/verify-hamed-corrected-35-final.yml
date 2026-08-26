@@ -1,0 +1,62 @@
+name: Final Gemini 3.5 check of corrected Hamed pilot
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-hamed-corrected-35-final.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Generate exact corrected Hamed pilot
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: |
+          cp scripts/generate-fahed-test-clip.mjs scripts/.hamed35-final.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/.hamed35-final.mjs';let s=fs.readFileSync(p,'utf8');
+          const once=(a,b,l)=>{const n=s.split(a).length-1;if(n!==1)throw new Error(`${l}:${n}`);s=s.replace(a,b)};
+          once("const VOICE = 'ar-KW-FahedNeural';","const VOICE = 'ar-SA-HamedNeural';",'voice');once("const LANGUAGE = 'ar-KW';","const LANGUAGE = 'ar-SA';",'lang');once("const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '-2%';","const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';",'rate');once("const basename = `${ARTICLE_ID}-fahed-v1`;","const basename = `${ARTICLE_ID}-hamed-corrected-final-pilot-v1`;",'basename');
+          once("return { type: record.type, text: record.spokenText, segmentId };",`let text=record.spokenText;\n  const fixes=[['بِبَسَاطَة:', 'بِبَسَاطَةٍ:'],['أَقْطَابِ الشَّبَكَة.', 'أَقْطَابِ الشَّبَكَةِ.'],['عَلَى الشَّاشَة.', 'عَلَى الشَّاشَةِ.'],['عَادَةً «الشَّاشَة» لَيْسَ طَبَقَةً وَاحِدَة.', 'عَادَةً «الشَّاشَةَ» لَيْسَ طَبَقَةً وَاحِدَةً.'],['عَلَى الشَّاشَة،', 'عَلَى الشَّاشَةِ،'],['مِنَ الشَّبَكَة.', 'مِنَ الشَّبَكَةِ.'],['تَكْبِيرَ الصُّورَة،', 'تَكْبِيرَ الصُّورَةِ،'],['تَحْرِيكَ خَرِيطَة.', 'تَحْرِيكَ خَرِيطَةٍ.']];\n  for(const [a,b] of fixes) text=text.split(a).join(b);\n  return { type: record.type, text, segmentId };`,'fixes');fs.writeFileSync(p,s);
+          NODE
+          node scripts/.hamed35-final.mjs --article=how-touchscreens-work
+          rm scripts/.hamed35-final.mjs
+      - name: Gemini 3.5 exact audio-only pass
+        id: qa
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';import {createHash} from 'node:crypto';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';const sleep=ms=>new Promise(r=>setTimeout(r,ms)),sha=v=>createHash('sha256').update(v).digest('hex');
+          const audio=await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.mp3'),meta=JSON.parse(await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.json','utf8')),script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8')),map=new Map(script.segments.map(x=>[x.segmentId,x])),expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||'').join('\n\n');const prompt='Produce a strictly verbatim Arabic transcript of the attached audio only. Write every audible lexical word exactly once and in order. Do not infer grammar, do not repair wording, and do not add conjunctions or particles. Return transcript only in the JSON schema.';
+          let r,body='';for(let a=0;a<12;a++){r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:'gemini-3.5-flash',input:[{type:'text',text:prompt},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});body=await r.text();if(r.ok)break;if(r.status!==429)throw new Error(`ASR35 ${r.status}:${body.slice(0,800)}`);const sec=Number(body.match(/retry in ([0-9.]+)s/i)?.[1]||55);console.log(`ASR35_WAIT=${Math.ceil(sec)+3}`);await sleep((Math.ceil(sec)+3)*1000);}if(!r?.ok)throw new Error('ASR35 quota retries exhausted');const p=JSON.parse(body);const raw=typeof p.output_text==='string'?p.output_text:(p.steps||p.outputs||[]).flatMap(x=>x.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('');const transcript=JSON.parse(raw.trim()).transcript.trim(),c=compareArabicTranscripts(expected,transcript);console.log(`HAMED35 expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log('HAMED35_DIFF='+JSON.stringify(c.operations));const report={schema:'bareeq.hamed-corrected-gemini35-final.v1',status:c.exact?'passed':'failed',articleId:'how-touchscreens-work',ttsProvider:'Microsoft Azure AI Speech',ttsVoice:'ar-SA-HamedNeural',asrModel:'gemini-3.5-flash',audioSha256:sha(audio),expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations,transcript,verifiedAt:new Date().toISOString()};await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini35-final.json',JSON.stringify(report,null,2)+'\n');if(!c.exact)process.exitCode=2;
+          NODE
+      - name: Persist Gemini 3.5 evidence regardless of lexical result
+        if: always()
+        run: |
+          git config user.name 'bareeq-audio-bot';git config user.email 'actions@users.noreply.github.com'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.json
+          test ! -f scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini35-final.json || git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini35-final.json
+          git commit -m 'audio: persist corrected Hamed Gemini 3.5 final evidence' || true
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
+      - name: Enforce exact gate
+        if: steps.qa.outcome != 'success'
+        run: exit 1
