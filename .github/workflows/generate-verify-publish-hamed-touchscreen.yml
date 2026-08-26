@@ -1,0 +1,174 @@
+name: Generate verify and publish reviewed Hamed touchscreen fallback
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/generate-verify-publish-hamed-touchscreen.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hamed-touchscreen-zero-error-publish
+  cancel-in-progress: false
+
+jobs:
+  generate-verify-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+
+      - name: Lock speech contracts and credentials
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/check-speech-scripts.mjs
+          node --check scripts/verify-hamed-pilot-and-open-gate.mjs
+          node --check scripts/verify-and-seal-hamed-full.mjs
+          test -n "$AZURE_SPEECH_KEY" || { echo '::error::AZURE_SPEECH_KEY unavailable'; exit 2; }
+          test -n "$GEMINI_API_KEY" || { echo '::error::GEMINI_API_KEY unavailable'; exit 2; }
+
+      - name: Generate new reviewed Hamed pilot
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+          BAREEQ_TTS_MAX_RETRIES: '2'
+        run: |
+          cp scripts/generate-fahed-test-clip.mjs scripts/.generate-hamed-zero-pilot.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/.generate-hamed-zero-pilot.mjs';let s=fs.readFileSync(p,'utf8');
+          const once=(a,b,l)=>{const n=s.split(a).length-1;if(n!==1)throw new Error(`${l}: expected 1 got ${n}`);s=s.replace(a,b)};
+          once("const VOICE = 'ar-KW-FahedNeural';","const VOICE = 'ar-SA-HamedNeural';",'voice');
+          once("const LANGUAGE = 'ar-KW';","const LANGUAGE = 'ar-SA';",'language');
+          once("const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '-2%';","const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';",'rate');
+          once("const basename = `${ARTICLE_ID}-fahed-v1`;","const basename = `${ARTICLE_ID}-hamed-zero-pilot-v1`;",'basename');
+          once("schema: 'bareeq.fahed-test-clip.v1'","schema: 'bareeq.hamed-zero-test-clip.v1'",'schema');
+          once("}, 'Azure Fahed test synthesis');","}, 'Azure Hamed reviewed test synthesis');",'label');
+          fs.writeFileSync(p,s);
+          NODE
+          node scripts/.generate-hamed-zero-pilot.mjs --article=how-touchscreens-work
+          rm scripts/.generate-hamed-zero-pilot.mjs
+
+      - name: Require exact Hamed pilot twice and open synthesis gate
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node scripts/verify-hamed-pilot-and-open-gate.mjs
+          node scripts/check-speech-scripts.mjs
+
+      - name: Show Hamed full synthesis plan
+        env:
+          BAREEQ_TTS_PROVIDER: azure
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_AZURE_HAMED_ONLY: '1'
+        run: node scripts/generate-audio.mjs --plan
+
+      - name: Generate full reviewed Hamed article
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+          BAREEQ_TTS_PROVIDER: azure
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_AZURE_HAMED_ONLY: '1'
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'
+          BAREEQ_TTS_MAX_RETRIES: '3'
+          AZURE_SPEECH_MIN_INTERVAL_MS: '1500'
+        run: node scripts/generate-audio.mjs
+
+      - name: Require full article exact twice and seal static audio
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/verify-and-seal-hamed-full.mjs
+
+      - name: Restore gate-only plan mutation
+        if: always()
+        run: git checkout -- scripts/speech-test-clips/how-touchscreens-work.json || true
+
+      - name: Validate sealed Hamed candidate
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const m=JSON.parse(await readFile('public/audio/articles/de93f3d9f91c8b8b/manifest.json','utf8'));const q=m.automatedTranscriptReview;
+          if(m.provider!=='Microsoft Azure AI Speech'||m.model!=='Neural TTS'||m.defaultVoice!=='hamed'||m.voices?.[0]?.providerVoice!=='ar-SA-HamedNeural'||m.verifiedStaticAudio!==true)throw new Error('Hamed candidate identity mismatch');
+          if(q?.status!=='passed'||q?.scope!=='assembled-complete-article'||q?.transcriptionPasses!==2||q?.wordErrorCountAcrossAllPasses!==0||q?.substitutions!==0||q?.deletions!==0||q?.insertions!==0)throw new Error('Hamed whole-article zero-error seal missing');
+          console.log(`HAMED_PUBLICATION_CANDIDATE=PASS words=${q.expectedWordCount}`);
+          NODE
+
+      - name: Commit QA evidence on audio branch
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add public/audio/articles/de93f3d9f91c8b8b/ scripts/speech-test-evidence/how-touchscreens-work-hamed-zero-pilot-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-hamed-zero-pilot-v1.json scripts/speech-transcript-evidence/how-touchscreens-work-hamed-gemini35-two-pass-v1.json scripts/speech-test-evidence/how-touchscreens-work-hamed-full-v1.mp3 scripts/speech-transcript-evidence/how-touchscreens-work-hamed-full-v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'audio: approve reviewed Hamed touchscreen article at zero errors'
+            git pull --rebase origin audio/fahed-v4220
+            git push origin HEAD:audio/fahed-v4220
+          fi
+
+      - name: Stage verified Hamed release over current main
+        run: |
+          rm -rf /tmp/bareeq-hamed-release && mkdir -p /tmp/bareeq-hamed-release
+          cp -a public/audio/articles/de93f3d9f91c8b8b /tmp/bareeq-hamed-release/audio
+          git fetch origin main
+          git checkout -B bareeq-publish-main origin/main
+          rm -rf public/audio/articles/de93f3d9f91c8b8b
+          mkdir -p public/audio/articles
+          cp -a /tmp/bareeq-hamed-release/audio public/audio/articles/de93f3d9f91c8b8b
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/generate-audio.mjs';let s=fs.readFileSync(p,'utf8');
+          const marker='function manifestAssets(manifest, post) {';
+          const n=s.split(marker).length-1;if(n!==1)throw new Error(`manifestAssets marker count ${n}`);
+          const injected=`function verifiedStaticManifestAssets(manifest, post) {\n  if (manifest?.verifiedStaticAudio !== true || manifest?.articleId !== post.id || manifest?.version !== 3 || !Array.isArray(manifest.parts) || !manifest.parts.length) return null;\n  const review = manifest.automatedTranscriptReview;\n  if (review?.status !== 'passed' || review?.scope !== 'assembled-complete-article' || review?.transcriptionPasses !== 2 || review?.wordErrorCountAcrossAllPasses !== 0 || review?.substitutions !== 0 || review?.deletions !== 0 || review?.insertions !== 0) return null;\n  if (manifest.provider !== 'Microsoft Azure AI Speech' || manifest.model !== 'Neural TTS' || manifest.defaultVoice !== 'hamed' || manifest.voices?.length !== 1 || manifest.voices[0]?.providerVoice !== 'ar-SA-HamedNeural') return null;\n  const assets=[];\n  for (const part of manifest.parts) { const a=part?.audio?.hamed; if (!a?.src || !(a.bytes>100) || !(a.durationSeconds>0) || !/^[a-f0-9]{64}$/i.test(a.sha256||'')) return null; assets.push(a); }\n  return assets;\n}\n\n${marker}\n  const verifiedStatic = verifiedStaticManifestAssets(manifest, post);\n  if (verifiedStatic) return verifiedStatic;`;
+          s=s.replace(marker,injected);fs.writeFileSync(p,s);
+          NODE
+          node --check scripts/generate-audio.mjs
+
+      - name: Prove current main build preserves verified static Hamed
+        env:
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_GEMINI_FREE_ROLLOUT: '0'
+          BAREEQ_CLOUD_TTS_ACTIVATE: '0'
+        run: |
+          npm run build
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          for(const f of ['public/audio/articles/de93f3d9f91c8b8b/manifest.json','dist/audio/articles/de93f3d9f91c8b8b/manifest.json']){const m=JSON.parse(await readFile(f,'utf8'));const q=m.automatedTranscriptReview;if(m.defaultVoice!=='hamed'||m.verifiedStaticAudio!==true||q?.status!=='passed'||q?.wordErrorCountAcrossAllPasses!==0)throw new Error(`${f}: verified static Hamed not preserved`);}console.log('PRODUCTION_BUILD_VERIFIED_STATIC_HAMED=PASS');
+          NODE
+
+      - name: Publish tested fallback to main
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/generate-audio.mjs public/audio/articles/de93f3d9f91c8b8b/
+          git diff --cached --quiet && { echo '::error::No tested Hamed release delta'; exit 3; }
+          git commit -m 'audio: publish zero-error reviewed Hamed touchscreen article'
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "PUBLISHED_MAIN_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Record published SHA
+        run: echo "PUBLISHED_MAIN_SHA=$PUBLISHED_MAIN_SHA"
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hamed-touchscreen-zero-error-publication-${{ github.run_id }}
+          path: |
+            scripts/speech-test-evidence/how-touchscreens-work-hamed-full-v1.mp3
+            scripts/speech-transcript-evidence/how-touchscreens-work-hamed-full-v1.json
+            public/audio/articles/de93f3d9f91c8b8b/manifest.json
+          if-no-files-found: ignore
+          retention-days: 30
