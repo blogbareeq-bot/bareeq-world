@@ -1,0 +1,94 @@
+name: Verify tuned Fahed pilot cross engine
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-fahed-tuned-cross-engine.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Generate tuned Fahed pilot
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: |
+          cp scripts/generate-fahed-test-clip.mjs scripts/.generate-fahed-tuned-pilot.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/.generate-fahed-tuned-pilot.mjs';let s=fs.readFileSync(p,'utf8');
+          const once=(a,b,l)=>{const n=s.split(a).length-1;if(n!==1)throw new Error(`${l}: expected 1 got ${n}`);s=s.replace(a,b)};
+          once('const ssml = buildAzureSsml({ language: LANGUAGE, voice: VOICE, rate: RATE, items });',`let ssml = buildAzureSsml({ language: LANGUAGE, voice: VOICE, rate: RATE, items });
+          ssml = ssml.replace('مُخْتَلِفَتَيْنِ', 'مُخْتَلِفَ<break time="20ms"/>تَيْنِ');
+          ssml = ssml.replace('تَكْبِيرَ الصُّورَة،', 'تَكْبِيرَ الصُّورَةِ،');`,'ssml tuning');
+          once('const basename = `${ARTICLE_ID}-fahed-v1`;','const basename = `${ARTICLE_ID}-fahed-tuned-v1`;','basename');
+          fs.writeFileSync(p,s);
+          NODE
+          node scripts/.generate-fahed-tuned-pilot.mjs --article=how-touchscreens-work
+          rm scripts/.generate-fahed-tuned-pilot.mjs
+      - name: Gemini 3.6 exact pass and durable report
+        id: gemini
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          mkdir -p scripts/speech-transcript-evidence
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';import {createHash} from 'node:crypto';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const sha=v=>createHash('sha256').update(v).digest('hex'),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          const audioPath='scripts/speech-test-evidence/how-touchscreens-work-fahed-tuned-v1.mp3',metaPath='scripts/speech-test-evidence/how-touchscreens-work-fahed-tuned-v1.json',reportPath='scripts/speech-transcript-evidence/how-touchscreens-work-fahed-tuned-v1.json';
+          const audio=await readFile(audioPath),meta=JSON.parse(await readFile(metaPath,'utf8')),script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));const map=new Map(script.segments.map(x=>[x.segmentId,x]));const expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||'').join('\n\n');const prompt='Produce a strictly verbatim Arabic transcript from the attached audio only. Write every audible lexical word exactly once and in order. Never add conjunctions, particles, fillers, repairs, or inferred words. Diacritics and punctuation are optional. Return transcript only.';
+          let r,body='';for(let a=0;a<10;a++){r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:'gemini-3.6-flash',input:[{type:'text',text:prompt},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});body=await r.text();if(r.ok)break;if(r.status!==429)throw new Error(`Gemini ASR ${r.status}: ${body.slice(0,900)}`);const sec=Number(body.match(/retry in ([0-9.]+)s/i)?.[1]||45);console.log(`GEMINI36_WAIT=${Math.ceil(sec)+2}s`);await sleep((Math.ceil(sec)+2)*1000);}if(!r?.ok)throw new Error(`Gemini ASR retries exhausted: ${body.slice(0,900)}`);const p=JSON.parse(body);const text=typeof p.output_text==='string'?p.output_text:(p.steps||p.outputs||[]).flatMap(x=>x.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('');const transcript=JSON.parse(text.trim()).transcript.trim();const c=compareArabicTranscripts(expected,transcript);const report={schema:'bareeq.fahed-tuned-cross-engine-pilot.v1',articleId:'how-touchscreens-work',status:'pending-second-engine',audioFile:audioPath,audioSha256:sha(audio),expectedWordCount:c.expectedWordCount,passes:[{engine:'Gemini',model:'gemini-3.6-flash',transcript,exact:c.exact,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations}]};await writeFile(reportPath,JSON.stringify(report,null,2)+'\n');console.log(`FAHED_TUNED_GEMINI36 expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log('FAHED_TUNED_GEMINI36_DIFF='+JSON.stringify(c.operations));if(!c.exact)process.exit(3);
+          NODE
+      - name: Install Faster Whisper
+        if: steps.gemini.outcome == 'success'
+        run: pip install --disable-pip-version-check faster-whisper==1.2.0
+      - name: Whisper Large-v3 exact pass and finalize report
+        id: whisper
+        if: steps.gemini.outcome == 'success'
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          from faster_whisper import WhisperModel
+          import json, re, unicodedata, sys
+          from pathlib import Path
+          audio='scripts/speech-test-evidence/how-touchscreens-work-fahed-tuned-v1.mp3'
+          model=WhisperModel('large-v3',device='cpu',compute_type='int8')
+          segments,info=model.transcribe(audio,language='ar',beam_size=5,temperature=0.0,vad_filter=False,condition_on_previous_text=False)
+          transcript=' '.join(s.text.strip() for s in segments if s.text.strip()).strip()
+          Path('/tmp/whisper-transcript.txt').write_text(transcript,encoding='utf-8')
+          print('WHISPER_TRANSCRIPT='+transcript)
+          PY
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const reportPath='scripts/speech-transcript-evidence/how-touchscreens-work-fahed-tuned-v1.json';const report=JSON.parse(await readFile(reportPath,'utf8'));const meta=JSON.parse(await readFile('scripts/speech-test-evidence/how-touchscreens-work-fahed-tuned-v1.json','utf8'));const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));const map=new Map(script.segments.map(x=>[x.segmentId,x]));const expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||'').join('\n\n'),transcript=(await readFile('/tmp/whisper-transcript.txt','utf8')).trim();const c=compareArabicTranscripts(expected,transcript);report.passes.push({engine:'Faster Whisper',model:'large-v3',transcript,exact:c.exact,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations});report.status=report.passes.length===2&&report.passes.every(p=>p.exact&&p.wordErrorCount===0)?'passed':'failed';await writeFile(reportPath,JSON.stringify(report,null,2)+'\n');console.log(`FAHED_TUNED_WHISPER expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log('FAHED_TUNED_WHISPER_DIFF='+JSON.stringify(c.operations));if(report.status!=='passed')process.exit(4);console.log('FAHED_TUNED_CROSS_ENGINE_ZERO_ERROR=PASS');
+          NODE
+      - name: Persist pilot and report regardless of result
+        if: always()
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-fahed-tuned-v1.mp3 scripts/speech-test-evidence/how-touchscreens-work-fahed-tuned-v1.json || true
+          git add -f scripts/speech-transcript-evidence/how-touchscreens-work-fahed-tuned-v1.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m 'audio: persist tuned Fahed touchscreen pilot QA evidence'
+            git pull --rebase origin audio/fahed-v4220
+            git push origin HEAD:audio/fahed-v4220
+          fi
+      - name: Enforce zero-error cross-engine gate
+        run: |
+          node -e "const r=require('./scripts/speech-transcript-evidence/how-touchscreens-work-fahed-tuned-v1.json'); if(r.status!=='passed'||r.passes?.length!==2||!r.passes.every(p=>p.exact&&p.wordErrorCount===0)) process.exit(1); console.log('FAHED_TUNED_FINAL_GATE=PASS')"
