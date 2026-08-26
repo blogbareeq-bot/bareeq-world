@@ -1,0 +1,38 @@
+name: Map stable Hamed errors to speech segments
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/map-hamed-stable-errors.yml]
+  workflow_dispatch:
+jobs:
+  map:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Map stable lexical indices
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          import {transcriptTokens} from './scripts/arabic-transcript-match.mjs';
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));
+          const recheck=JSON.parse(await readFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-full-v2-recheck.json','utf8'));
+          const targets=new Map(recheck.stablePosition.map(x=>[x.expectedIndex,x]));
+          let offset=0;
+          for(const segment of script.segments){
+            const tokens=transcriptTokens(segment.spokenText);
+            for(let i=0;i<tokens.length;i++){
+              const index=offset+i;
+              if(targets.has(index)){
+                const d=targets.get(index);
+                console.log(JSON.stringify({index,expected:d.expected,actual:d.actual,segmentId:segment.segmentId,type:segment.type,localIndex:i,tokens,spokenText:segment.spokenText}));
+              }
+            }
+            offset+=tokens.length;
+          }
+          console.log(`TOTAL=${offset}`);
+          NODE
