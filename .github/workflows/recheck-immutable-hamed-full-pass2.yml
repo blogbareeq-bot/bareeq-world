@@ -1,0 +1,89 @@
+name: Independently recheck immutable Hamed full candidate
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/recheck-immutable-hamed-full-pass2.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  recheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Independent Gemini 3.6 pass over immutable five-part candidate
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';
+          import {readFile,writeFile} from 'node:fs/promises';
+          import path from 'node:path';
+          import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const A='how-touchscreens-work',K='de93f3d9f91c8b8b';
+          const priorFile=`scripts/speech-transcript-evidence/${A}-hamed-corrected-full-v2.json`;
+          const reportFile=`scripts/speech-transcript-evidence/${A}-hamed-corrected-full-v2-recheck.json`;
+          const sha=v=>createHash('sha256').update(v).digest('hex'),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          const prior=JSON.parse(await readFile(priorFile,'utf8'));
+          if(prior.audioSha256!=='6de37e9d553539808cf1a9ec5544cb39e546821aa991658949bd05bdf5caa0f2'||prior.partCount!==5||prior.passes?.length!==1) throw new Error('Immutable prior candidate identity mismatch');
+          const manifest=JSON.parse(await readFile(`public/audio/articles/${K}/manifest.json`,'utf8'));
+          const script=JSON.parse(await readFile(`scripts/speech-scripts/${A}.json`,'utf8'));
+          const parts=[];
+          for(const [i,p] of manifest.parts.entries()){
+            const a=p.audio?.hamed;if(!a?.src)throw new Error(`part ${i+1} missing`);
+            const file=path.join('public',a.src.replace(/^\//,''));const bytes=await readFile(file);
+            if(sha(bytes)!==a.sha256)throw new Error(`part ${i+1} SHA mismatch`);
+            parts.push({part:i+1,bytes,a});
+          }
+          if(parts.length!==5)throw new Error('Expected five immutable parts');
+          const expected=script.segments.map(x=>x.spokenText).join(' ');
+          const prompt='Listen only to this Arabic audio part and transcribe every audible lexical word verbatim and exactly once, in order. Do not correct grammar, infer missing words, replace synonyms, add conjunctions, or use any external text. Return transcript only in the requested JSON schema.';
+          function extract(p){if(typeof p?.output_text==='string')return p.output_text;const out=[];for(const c of[p?.steps,p?.outputs].filter(Array.isArray))for(const item of c)for(const b of(Array.isArray(item?.content)?item.content:[]))if(b?.type==='text'&&typeof b.text==='string')out.push(b.text);return out.join('');}
+          async function tx(bytes,label){let last='';for(let n=1;n<=12;n++){
+            const r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:'gemini-3.6-flash',input:[{type:'text',text:prompt},{type:'audio',data:bytes.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});
+            last=await r.text();if(r.ok){const raw=extract(JSON.parse(last)).trim();return JSON.parse(raw).transcript.trim();}
+            if(![429,500,502,503,504].includes(r.status))throw new Error(`${label} ${r.status}: ${last.slice(0,500)}`);
+            const hinted=Number(last.match(/retry in ([0-9.]+)s/i)?.[1]||0);const sec=hinted?Math.ceil(hinted)+3:Math.min(75,20+n*5);console.log(`${label}: retry ${r.status} in ${sec}s`);await sleep(sec*1000);
+          }throw new Error(`${label}: retries exhausted`);}
+          const chunks=[];
+          for(const p of parts){const transcript=await tx(p.bytes,`PART_${p.part}`);chunks.push({part:p.part,audioSha256:p.a.sha256,transcript,transcriptSha256:sha(transcript)});console.log(`PASS2_PART_${p.part}=DONE`);await sleep(12000);}
+          const transcript=chunks.map(x=>x.transcript).join(' ');const c=compareArabicTranscripts(expected,transcript);
+          console.log(`HAMED_FULL_RECHECK expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);
+          console.log(`HAMED_FULL_RECHECK_DIFF=${JSON.stringify(c.operations)}`);
+          const first=prior.passes[0].differences||[];
+          const k=o=>`${o.type}|${o.expectedIndex}|${o.expected}|${o.actual}`;
+          const pos=o=>`${o.type}|${o.expectedIndex}|${o.expected}`;
+          const second=c.operations;
+          const exactSet=new Set(second.map(k)),posSet=new Set(second.map(pos));
+          const stableExact=first.filter(x=>exactSet.has(k(x)));
+          const stablePosition=first.filter(x=>posSet.has(pos(x)));
+          const firstOnly=first.filter(x=>!posSet.has(pos(x)));
+          const firstPos=new Set(first.map(pos));
+          const secondOnly=second.filter(x=>!firstPos.has(pos(x)));
+          console.log(`STABLE_EXACT=${JSON.stringify(stableExact)}`);
+          console.log(`STABLE_POSITION=${JSON.stringify(stablePosition)}`);
+          console.log(`FIRST_ONLY=${JSON.stringify(firstOnly)}`);
+          console.log(`SECOND_ONLY=${JSON.stringify(secondOnly)}`);
+          const report={schema:'bareeq.hamed-corrected-whole-article-recheck.v1',articleId:A,audioSha256:prior.audioSha256,partCount:5,asrModel:'gemini-3.6-flash',promptSha256:sha(prompt),expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations,stableExact,stablePosition,firstOnly,secondOnly,chunks,verifiedAt:new Date().toISOString()};
+          await writeFile(reportFile,JSON.stringify(report,null,2)+'\n');
+          NODE
+      - name: Persist independent recheck
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-full-v2-recheck.json
+          git commit -m 'audio: persist independent Hamed full ASR recheck'
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
