@@ -1,0 +1,58 @@
+{
+  "schema": "bareeq.hamed-final3-test-asr.v1",
+  "status": "failed",
+  "audioSha256": "c6c7660dff09b5f9434f19ab23f757d637341393d321c998cd075fada113a7b9",
+  "passes": [
+    {
+      "pass": 1,
+      "transcript": "لنفهم اللمس نحتاج إلى فكرة صغيرة فقط. تخيل أنك تكتب الآن حرف باء. في لحظات صغيرة جدا يدخل إصبعك مجال شبكة الاستشعار، ويتغير الاقتران السعوي في المنطقة القريبة منه، وتلتقط شريحة اللمس نمط التغير، وتحسب الإحداثيات، ثم ترسلها إلى نظام التشغيل. تعرف لوحة المفاتيح أن الموضع يقع فوق حرف باء، فيسجل التطبيق الحرف وتعيد الشاشة رسم الجزء المطلوب.",
+      "exact": false,
+      "wordErrorCount": 2,
+      "substitutions": 2,
+      "deletions": 0,
+      "insertions": 0,
+      "differences": [
+        {
+          "type": "substitution",
+          "expected": "اللمسة",
+          "actual": "اللمس",
+          "expectedIndex": 1,
+          "actualIndex": 1
+        },
+        {
+          "type": "substitution",
+          "expected": "قصيرة",
+          "actual": "صغيرة",
+          "expectedIndex": 15,
+          "actualIndex": 15
+        }
+      ]
+    },
+    {
+      "pass": 2,
+      "transcript": "لنفهم اللمسة نحتاج إلى فكرة صغيرة فقط تخيل أنك تكتب الآن حرف دال في لحظات قصيرة جدا يدخل إصبعك مجال شبكة الاستشعار ويتغير الاقتران السعوي في المنطقة القريبة منه وتلتقط شريحة اللمس نمط التغير وتحسب الإحداثيات ثم ترسلها إلى نظام التشغيل تعرف لوحة المفاتيح أن الموضع يقع فوق حرف دال فيسجل التطبيق الحرف وتعيد الشاشة رسم الجزء المطلوب",
+      "exact": false,
+      "wordErrorCount": 2,
+      "substitutions": 2,
+      "deletions": 0,
+      "insertions": 0,
+      "differences": [
+        {
+          "type": "substitution",
+          "expected": "باء",
+          "actual": "دال",
+          "expectedIndex": 12,
+          "actualIndex": 12
+        },
+        {
+          "type": "substitution",
+          "expected": "باء",
+          "actual": "دال",
+          "expectedIndex": 49,
+          "actualIndex": 49
+        }
+      ]
+    }
+  ],
+  "verifiedAt": "2026-08-26T08:17:01.160Z"
+}
