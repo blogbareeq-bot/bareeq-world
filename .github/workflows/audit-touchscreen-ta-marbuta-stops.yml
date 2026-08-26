@@ -1,0 +1,43 @@
+name: Audit touchscreen ta marbuta stops
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/audit-touchscreen-ta-marbuta-stops.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Print all ta-marbuta pause candidates with context
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));
+          let count=0;
+          for(const seg of script.segments){
+            const t=seg.spokenText||'';
+            const re=/([\p{L}\u064B-\u065F\u0670]+ة)(?=\s*[،؛؟.!:\n»]|\s*$)/gu;
+            let m;
+            while((m=re.exec(t))){
+              const token=m[1];
+              const afterTa=token.slice(token.lastIndexOf('ة')+1);
+              const hasEnding=/[\u064B-\u0652]/u.test(afterTa);
+              if(hasEnding) continue;
+              count++;
+              const start=Math.max(0,m.index-80),end=Math.min(t.length,m.index+token.length+80);
+              console.log(`TA_STOP_${count} segment=${seg.segmentId} token=${token} context=${t.slice(start,end)}`);
+            }
+          }
+          console.log(`TA_STOP_TOTAL=${count}`);
+          NODE
