@@ -1,0 +1,205 @@
+name: Generate verify and publish touchscreen Gemini 3.1
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths:
+      - .github/workflows/generate-publish-gemini31-touchscreen.yml
+      - scripts/gemini-checkpoints/**
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemini31-touchscreen-publish
+  cancel-in-progress: false
+
+jobs:
+  generate-verify-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout working branch
+        uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Lock speech and pilot contracts
+        run: |
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/check-speech-scripts.mjs
+          node --check scripts/prepare-gemini31-full-runtime.mjs
+          node --check scripts/verify-and-seal-gemini31-full-dual.mjs
+
+      - name: Prepare approved resumable Gemini 3.1 runtime
+        run: |
+          node scripts/prepare-gemini31-full-runtime.mjs
+          node scripts/check-speech-scripts.mjs
+          node --check scripts/generate-audio.mjs
+
+      - name: Require Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: test -n "$GEMINI_API_KEY" || { echo '::error::GEMINI_API_KEY unavailable'; exit 2; }
+
+      - name: Show exact synthesis plan
+        env:
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'
+          BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD: '20'
+        run: node scripts/generate-audio.mjs --plan
+
+      - name: Generate or resume complete Gemini 3.1 Sadaltager article
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'
+          BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD: '20'
+          BAREEQ_GEMINI_SYNTHESIS_BUDGET_MS: '2400000'
+          BAREEQ_TTS_MAX_RETRIES: '1'
+          GEMINI_TTS_MIN_INTERVAL_MS: '9000'
+        run: node scripts/generate-audio.mjs
+
+      - name: Preserve checkpoint and stop only if quota blocked completion
+        id: completeness
+        run: |
+          if node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const m=JSON.parse(await readFile('public/audio/articles/de93f3d9f91c8b8b/manifest.json','utf8'));
+          if(m.articleId!=='how-touchscreens-work'||m.provider!=='Google Gemini API'||m.model!=='gemini-3.1-flash-tts-preview'||m.defaultVoice!=='sadaltager') process.exit(1);
+          if(!Array.isArray(m.parts)||!m.parts.length||!m.parts.every(p=>p.audio?.sadaltager?.src)) process.exit(1);
+          console.log(`FULL_SYNTHESIS_COMPLETE parts=${m.parts.length}`);
+          NODE
+          then
+            echo 'complete=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'complete=false' >> "$GITHUB_OUTPUT"
+            git checkout -- scripts/generate-audio.mjs scripts/speech-test-clips/how-touchscreens-work.json
+            git config user.name 'bareeq-audio-bot'
+            git config user.email 'actions@users.noreply.github.com'
+            git add -f scripts/gemini-checkpoints/ || true
+            if ! git diff --cached --quiet; then
+              git commit -m 'audio: checkpoint Gemini 3.1 touchscreen synthesis'
+              git pull --rebase origin audio/fahed-v4220
+              git push origin HEAD:audio/fahed-v4220
+            fi
+            echo '::error::Gemini 3.1 synthesis remains incomplete after this quota window; checkpoint preserved exactly.'
+            exit 1
+          fi
+
+      - name: Require two independent exact full-article transcripts
+        if: steps.completeness.outputs.complete == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/verify-and-seal-gemini31-full-dual.mjs
+
+      - name: Restore runtime-only files
+        if: always()
+        run: git checkout -- scripts/generate-audio.mjs scripts/speech-test-clips/how-touchscreens-work.json || true
+
+      - name: Validate verified audio candidate
+        if: steps.completeness.outputs.complete == 'true'
+        env:
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const m=JSON.parse(await readFile('public/audio/articles/de93f3d9f91c8b8b/manifest.json','utf8'));
+          const q=m.automatedTranscriptReview;
+          if(m.provider!=='Google Gemini API'||m.model!=='gemini-3.1-flash-tts-preview'||m.defaultVoice!=='sadaltager') throw new Error('Candidate identity mismatch');
+          if(q?.status!=='passed'||q?.scope!=='assembled-complete-article'||q?.transcriptionPasses!==2||q?.wordErrorCountAcrossAllPasses!==0||q?.substitutions!==0||q?.deletions!==0||q?.insertions!==0) throw new Error('Whole-article zero-error seal missing');
+          console.log(`PUBLICATION_CANDIDATE_ZERO_ERROR=PASS words=${q.expectedWordCount} models=${q.transcriptionModels.join('+')}`);
+          NODE
+
+      - name: Commit immutable verified candidate on audio branch
+        if: steps.completeness.outputs.complete == 'true'
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add public/audio/articles/de93f3d9f91c8b8b/ \
+            scripts/speech-test-evidence/how-touchscreens-work-gemini31-full-v1.mp3 \
+            scripts/speech-transcript-evidence/how-touchscreens-work-gemini31-full-dual-v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'audio: approve full Gemini 3.1 touchscreen article at zero errors'
+            git pull --rebase origin audio/fahed-v4220
+            git push origin HEAD:audio/fahed-v4220
+          fi
+
+      - name: Stage verified audio over current main
+        if: steps.completeness.outputs.complete == 'true'
+        run: |
+          rm -rf /tmp/bareeq-verified-touchscreen
+          mkdir -p /tmp/bareeq-verified-touchscreen
+          cp -a public/audio/articles/de93f3d9f91c8b8b /tmp/bareeq-verified-touchscreen/audio
+          git fetch origin main
+          git checkout -B bareeq-publish-main origin/main
+          rm -rf public/audio/articles/de93f3d9f91c8b8b
+          mkdir -p public/audio/articles
+          cp -a /tmp/bareeq-verified-touchscreen/audio public/audio/articles/de93f3d9f91c8b8b
+
+      - name: Build production tree with verified Gemini cache
+        if: steps.completeness.outputs.complete == 'true'
+        env:
+          BAREEQ_TTS_PROVIDER: gemini
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'
+          BAREEQ_GEMINI_MAX_REQUESTS_PER_BUILD: '20'
+          BAREEQ_AUDIO_ALLOW_PARTIAL: '0'
+          BAREEQ_GEMINI_FREE_ROLLOUT: '0'
+          BAREEQ_CLOUD_TTS_ACTIVATE: '0'
+        run: |
+          npm run build
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          for(const file of ['public/audio/articles/de93f3d9f91c8b8b/manifest.json','dist/audio/articles/de93f3d9f91c8b8b/manifest.json']){
+            const m=JSON.parse(await readFile(file,'utf8'));
+            if(m.provider!=='Google Gemini API'||m.model!=='gemini-3.1-flash-tts-preview'||m.defaultVoice!=='sadaltager') throw new Error(`${file}: verified Gemini audio did not survive production build`);
+            const q=m.automatedTranscriptReview;
+            if(q?.status!=='passed'||q?.wordErrorCountAcrossAllPasses!==0||q?.substitutions!==0||q?.deletions!==0||q?.insertions!==0) throw new Error(`${file}: zero-error seal missing after build`);
+          }
+          console.log('PRODUCTION_BUILD_PRESERVED_ZERO_ERROR_GEMINI=PASS');
+          NODE
+
+      - name: Publish verified audio to main
+        if: steps.completeness.outputs.complete == 'true'
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add public/audio/articles/de93f3d9f91c8b8b/
+          git diff --cached --quiet && { echo '::error::No verified audio delta to publish on main'; exit 3; }
+          git commit -m 'audio: publish zero-error Gemini Sadaltager touchscreen article'
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "PUBLISHED_MAIN_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Record publication result
+        if: steps.completeness.outputs.complete == 'true'
+        run: |
+          echo "PUBLISHED_MAIN_SHA=$PUBLISHED_MAIN_SHA"
+          git show --stat --oneline --summary "$PUBLISHED_MAIN_SHA"
+
+      - name: Upload QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini31-touchscreen-publication-${{ github.run_id }}
+          path: |
+            scripts/speech-test-evidence/how-touchscreens-work-gemini31-full-v1.mp3
+            scripts/speech-transcript-evidence/how-touchscreens-work-gemini31-full-dual-v1.json
+            public/audio/articles/de93f3d9f91c8b8b/manifest.json
+          if-no-files-found: ignore
+          retention-days: 30
