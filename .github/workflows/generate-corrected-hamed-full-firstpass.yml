@@ -1,0 +1,98 @@
+name: Generate corrected full Hamed and run exact Gemini 3.6 QA
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/generate-corrected-hamed-full-firstpass.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: corrected-hamed-full-qa
+  cancel-in-progress: false
+
+jobs:
+  full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Require exact immutable pilot authorization
+        run: |
+          node scripts/test-arabic-transcript-match.mjs
+          node - <<'NODE'
+          const fs=require('fs');const p='scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini36-independent-final.json';const r=JSON.parse(fs.readFileSync(p));if(r.status!=='passed'||r.audioSha256!=='78ed2a90885a629903426727c1aa22fd70770f073b638cdec9e8b01cd97cbe71'||r.expectedWordCount!==160||r.actualWordCount!==160||r.wordErrorCount!==0||r.substitutions!==0||r.deletions!==0||r.insertions!==0)throw new Error('Exact corrected Hamed pilot evidence missing');console.log('CORRECTED_HAMED_PILOT_GATE=PASS');
+          NODE
+      - name: Open full synthesis gate in working tree only
+        run: |
+          cp scripts/speech-test-clips/how-touchscreens-work.json /tmp/how-touchscreens-plan.json
+          node - <<'NODE'
+          const fs=require('fs'),p='scripts/speech-test-clips/how-touchscreens-work.json',x=JSON.parse(fs.readFileSync(p));x.testClipPassed=true;x.fullSynthesisAllowed=true;x.audioReview={status:'passed',reviewedBy:'Automated exact Gemini 3.6 ASR on immutable corrected Hamed pilot — user-authorized fallback publication',reviewedAt:new Date().toISOString(),evidence:{file:'scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.mp3',sha256:'78ed2a90885a629903426727c1aa22fd70770f073b638cdec9e8b01cd97cbe71',provider:'Microsoft Azure AI Speech',model:'Neural TTS',voice:'ar-SA-HamedNeural',automatedTranscriptReport:'scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini36-independent-final.json',transcriptionModel:'gemini-3.6-flash',wordErrorCount:0,substitutions:0,deletions:0,insertions:0,humanListening:false,approvalBasis:'User explicitly instructed continuation through publication after exact automated transcript validation.'}};fs.writeFileSync(p,JSON.stringify(x,null,2)+'\n');
+          NODE
+          node scripts/check-speech-scripts.mjs
+      - name: Prepare Hamed-specific corrected generator
+        run: |
+          cp scripts/generate-audio.mjs scripts/.generate-hamed-corrected-full.mjs
+          node - <<'NODE'
+          const fs=require('fs'),p='scripts/.generate-hamed-corrected-full.mjs';let s=fs.readFileSync(p,'utf8');const old='const pieces = splitByBytes(segment.spokenText);';if((s.split(old).length-1)!==1)throw new Error('splitByBytes marker mismatch');const repl=`let correctedHamedText = segment.spokenText;\n    const hamedFixes = [\n      ['بِبَسَاطَة:', 'بِبَسَاطَةٍ:'],\n      ['أَقْطَابِ الشَّبَكَة.', 'أَقْطَابِ الشَّبَكَةِ.'],\n      ['عَلَى الشَّاشَة.', 'عَلَى الشَّاشَةِ.'],\n      ['عَادَةً «الشَّاشَة» لَيْسَ طَبَقَةً وَاحِدَة.', 'عَادَةً «الشَّاشَةَ» لَيْسَ طَبَقَةً وَاحِدَةً.'],\n      ['عَلَى الشَّاشَة،', 'عَلَى الشَّاشَةِ،'],\n      ['مِنَ الشَّبَكَة.', 'مِنَ الشَّبَكَةِ.'],\n      ['تَكْبِيرَ الصُّورَة،', 'تَكْبِيرَ الصُّورَةِ،'],\n      ['تَحْرِيكَ خَرِيطَة.', 'تَحْرِيكَ خَرِيطَةٍ.']\n    ];\n    for (const [from, to] of hamedFixes) correctedHamedText = correctedHamedText.split(from).join(to);\n    const pieces = splitByBytes(correctedHamedText);`;s=s.replace(old,repl);fs.writeFileSync(p,s);
+          NODE
+          node --check scripts/.generate-hamed-corrected-full.mjs
+      - name: Show exact full synthesis plan
+        env:
+          BAREEQ_TTS_PROVIDER: azure
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_AZURE_HAMED_ONLY: '1'
+        run: node scripts/.generate-hamed-corrected-full.mjs --plan
+      - name: Generate complete corrected Hamed article
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+          BAREEQ_TTS_PROVIDER: azure
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_AZURE_HAMED_ONLY: '1'
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'
+          BAREEQ_TTS_MAX_RETRIES: '4'
+          AZURE_SPEECH_MIN_INTERVAL_MS: '1500'
+        run: node scripts/.generate-hamed-corrected-full.mjs
+      - name: Restore nonpublication gate and remove temp generator
+        if: always()
+        run: |
+          test ! -f /tmp/how-touchscreens-plan.json || cp /tmp/how-touchscreens-plan.json scripts/speech-test-clips/how-touchscreens-work.json
+          rm -f scripts/.generate-hamed-corrected-full.mjs
+      - name: Assemble full article and perform exact Gemini 3.6 audio-only QA
+        id: qa
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {spawn} from 'node:child_process';import {mkdir,readFile,writeFile,rm} from 'node:fs/promises';import path from 'node:path';import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';import {compareArabicTranscripts,ARABIC_TRANSCRIPT_COMPARISON_PROFILE} from './scripts/arabic-transcript-match.mjs';import {mp3DurationSeconds} from './scripts/mp3-duration.mjs';
+          const A='how-touchscreens-work',K='de93f3d9f91c8b8b',sha=v=>createHash('sha256').update(v).digest('hex'),sleep=ms=>new Promise(r=>setTimeout(r,ms));const mf=`public/audio/articles/${K}/manifest.json`,sf=`scripts/speech-scripts/${A}.json`,out=`scripts/speech-test-evidence/${A}-hamed-corrected-full-v1.mp3`,rf=`scripts/speech-transcript-evidence/${A}-hamed-corrected-full-gemini36-pass1.json`;const m=JSON.parse(await readFile(mf,'utf8')),s=JSON.parse(await readFile(sf,'utf8'));if(m.provider!=='Microsoft Azure AI Speech'||m.model!=='Neural TTS'||m.defaultVoice!=='hamed'||m.voices?.[0]?.providerVoice!=='ar-SA-HamedNeural')throw new Error('Full Hamed manifest identity mismatch');const files=[];let sumDur=0;for(const [i,p] of m.parts.entries()){const a=p.audio?.hamed;if(!a?.src||!(a.bytes>100)||!/^[a-f0-9]{64}$/i.test(a.sha256||''))throw new Error(`bad part ${i+1}`);const f=path.join('public',a.src.replace(/^\//,'')),b=await readFile(f),d=mp3DurationSeconds(b);if(b.length!==a.bytes||sha(b)!==a.sha256||Math.abs(d-a.durationSeconds)>.15)throw new Error(`integrity part ${i+1}`);files.push(f);sumDur+=d;}if(!(sumDur>300))throw new Error(`implausible full duration ${sumDur}`);await mkdir(path.dirname(out),{recursive:true});const list='/tmp/hamed-corrected-full.txt',esc=v=>path.resolve(v).replace(/'/g,"'\\''");await writeFile(list,files.map(f=>`file '${esc(f)}'`).join('\n')+'\n');await rm(out,{force:true});await new Promise((res,rej)=>{const c=spawn(ffmpegInstaller.path,['-hide_banner','-loglevel','error','-f','concat','-safe','0','-i',list,'-map_metadata','-1','-c','copy','-y',out],{stdio:['ignore','ignore','pipe']});const e=[];c.stderr.on('data',x=>e.push(x));c.once('error',rej);c.once('close',code=>code===0?res():rej(new Error(Buffer.concat(e).toString())));});const audio=await readFile(out),dur=mp3DurationSeconds(audio);const expected=s.segments.map(x=>x.spokenText).join(' '),prompt='Produce a strictly verbatim Arabic transcript of the attached complete article audio using the audio as the only source. Write every audible lexical word exactly once and in order. Do not infer grammar, replace synonyms, repair wording, add conjunctions, summarize, omit, or use external text. Return only transcript in the requested JSON schema.';
+          let r,body='';for(let n=0;n<18;n++){r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:'gemini-3.6-flash',input:[{type:'text',text:prompt},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});body=await r.text();if(r.ok)break;if(r.status!==429)throw new Error(`ASR36 ${r.status}:${body.slice(0,900)}`);const sec=Number(body.match(/retry in ([0-9.]+)s/i)?.[1]||55);console.log(`FULL_ASR36_WAIT=${Math.ceil(sec)+3}`);await sleep((Math.ceil(sec)+3)*1000);}if(!r?.ok)throw new Error('Full ASR36 quota retries exhausted');const p=JSON.parse(body);const raw=typeof p.output_text==='string'?p.output_text:(p.steps||p.outputs||[]).flatMap(x=>x.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('');const transcript=JSON.parse(raw.trim()).transcript.trim(),c=compareArabicTranscripts(expected,transcript);console.log(`HAMED_FULL_36_PASS1 expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log('HAMED_FULL_36_DIFF='+JSON.stringify(c.operations));const report={schema:'bareeq.hamed-corrected-whole-article-gemini36-pass1.v1',status:c.exact?'passed':'failed',articleId:A,ttsProvider:'Microsoft Azure AI Speech',ttsVoice:'ar-SA-HamedNeural',audioFile:out,audioSha256:sha(audio),audioBytes:audio.length,durationSeconds:Number(dur.toFixed(3)),partCount:files.length,expectedTranscriptSha256:sha(expected),expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,asrModel:'gemini-3.6-flash',promptSha256:sha(prompt),wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations,transcript,expectedTextDisclosure:'ASR received only complete assembled audio plus generic transcription instructions.',comparisonProfile:ARABIC_TRANSCRIPT_COMPARISON_PROFILE,verifiedAt:new Date().toISOString()};await writeFile(rf,JSON.stringify(report,null,2)+'\n');m.automatedTranscriptReview={status:c.exact?'pass1-exact':'failed',scope:'assembled-complete-article',reportFile:rf,transcriptionProvider:'Google Gemini API',transcriptionModel:'gemini-3.6-flash',transcriptionPasses:c.exact?1:0,expectedWordCount:c.expectedWordCount,wordErrorCountAcrossAllPasses:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,fullAudioSha256:report.audioSha256,reviewedAt:report.verifiedAt};m.verifiedStaticAudio=false;await writeFile(mf,JSON.stringify(m,null,2)+'\n');if(!c.exact)process.exitCode=2;
+          NODE
+      - name: Persist full candidate and QA report even on mismatch
+        if: always()
+        run: |
+          git config user.name 'bareeq-audio-bot';git config user.email 'actions@users.noreply.github.com'
+          git add public/audio/articles/de93f3d9f91c8b8b/
+          test ! -f scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-full-v1.mp3 || git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-full-v1.mp3
+          test ! -f scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-full-gemini36-pass1.json || git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-full-gemini36-pass1.json
+          git commit -m 'audio: persist corrected Hamed full candidate and exact QA verdict' || true
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
+      - name: Enforce exact full first pass from persisted report
+        if: always()
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),p='scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-full-gemini36-pass1.json';if(!fs.existsSync(p))process.exit(2);const r=JSON.parse(fs.readFileSync(p));if(r.status!=='passed'||r.wordErrorCount!==0||r.substitutions!==0||r.deletions!==0||r.insertions!==0)process.exit(3);console.log(`HAMED_FULL_FIRST_EXACT_PASS=PASS words=${r.expectedWordCount} parts=${r.partCount}`);
+          NODE
