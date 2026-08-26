@@ -1,0 +1,69 @@
+name: Run final Hamed production candidate v3b
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/run-hamed-final-production-v3b.yml
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Inject complete proven pilot evidence into ephemeral runner
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const p='scripts/run-hamed-final-production-v3.mjs';
+          let s=fs.readFileSync(p,'utf8');
+          const old=`evidence: {
+      humanListening: false,
+      approvalBasis: 'User authorized continuation through publication after exact automated transcript validation.',
+    },`;
+          const replacement=`evidence: {
+      file: 'scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.mp3',
+      sha256: '78ed2a90885a629903426727c1aa22fd70770f073b638cdec9e8b01cd97cbe71',
+      provider: 'Microsoft Azure AI Speech',
+      model: 'Neural TTS',
+      voice: 'ar-SA-HamedNeural',
+      automatedTranscriptReport: 'scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini36-independent-final.json',
+      transcriptionModel: 'gemini-3.6-flash',
+      wordErrorCount: 0,
+      substitutions: 0,
+      deletions: 0,
+      insertions: 0,
+      humanListening: false,
+      approvalBasis: 'User authorized continuation through publication after exact automated transcript validation.',
+    },`;
+          if(!s.includes(old)) throw new Error('Ephemeral evidence marker missing');
+          s=s.replace(old,replacement);
+          fs.writeFileSync(p,s);
+          NODE
+          test -f scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.mp3
+          sha256sum scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.mp3 | grep '^78ed2a90885a629903426727c1aa22fd70770f073b638cdec9e8b01cd97cbe71 '
+      - name: Generate immutable final candidate
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: node scripts/run-hamed-final-production-v3.mjs
+      - name: Persist immutable candidate only
+        run: |
+          git checkout -- scripts/run-hamed-final-production-v3.mjs
+          git config user.name bareeq-audio-bot
+          git config user.email actions@users.noreply.github.com
+          git add -f public/audio/articles/de93f3d9f91c8b8b/
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-final-production-v3.mp3
+          git add scripts/speech-test-evidence/how-touchscreens-work-hamed-final-production-v3.json
+          git commit -m 'audio: persist final Hamed v3 production candidate'
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
