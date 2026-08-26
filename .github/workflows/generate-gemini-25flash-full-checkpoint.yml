@@ -82,7 +82,8 @@ jobs:
           then
             git config user.name 'bareeq-audio-bot'
             git config user.email 'actions@users.noreply.github.com'
-            git add scripts/speech-test-clips/how-touchscreens-work.json public/audio/articles/de93f3d9f91c8b8b/
+            git add scripts/speech-test-clips/how-touchscreens-work.json
+            git add -f public/audio/articles/de93f3d9f91c8b8b/
             if ! git diff --cached --quiet; then
               git commit -m 'audio: stage complete Gemini 2.5 Flash touchscreen candidate'
               git pull --rebase origin ${{ github.ref_name }}
@@ -117,7 +118,8 @@ jobs:
         run: |
           git config user.name 'bareeq-audio-bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add public/audio/articles/de93f3d9f91c8b8b/ scripts/speech-test-clips/how-touchscreens-work.json scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-full-v1.mp3 scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-full-v1.json
+          git add scripts/speech-test-clips/how-touchscreens-work.json scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-full-v1.mp3 scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-full-v1.json
+          git add -f public/audio/articles/de93f3d9f91c8b8b/
           git commit -m 'audio: approve full Gemini 2.5 Flash touchscreen audio at zero errors'
           git pull --rebase origin ${{ github.ref_name }}
           git push origin HEAD:${{ github.ref_name }}
@@ -130,6 +132,6 @@ jobs:
           path: |
             scripts/speech-test-evidence/how-touchscreens-work-gemini-25flash-full-v1.mp3
             scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25flash-full-v1.json
-            public/audio/articles/de93f3d9f91c8b8b/manifest.json
+            public/audio/articles/de93f3d9f91c8b8b/
           if-no-files-found: ignore
           retention-days: 30
