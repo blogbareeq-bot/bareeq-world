@@ -1,0 +1,37 @@
+name: Run final Hamed production candidate v3
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/run-hamed-final-production-v3.yml
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Generate immutable final candidate
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: node scripts/run-hamed-final-production-v3.mjs
+      - name: Persist immutable candidate
+        run: |
+          git config user.name bareeq-audio-bot
+          git config user.email actions@users.noreply.github.com
+          git add -f public/audio/articles/de93f3d9f91c8b8b/
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-final-production-v3.mp3
+          git add scripts/speech-test-evidence/how-touchscreens-work-hamed-final-production-v3.json
+          git commit -m 'audio: persist final Hamed v3 production candidate'
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
