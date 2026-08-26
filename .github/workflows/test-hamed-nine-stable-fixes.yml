@@ -1,0 +1,81 @@
+name: Test nine stable Hamed pronunciation fixes
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/test-hamed-nine-stable-fixes.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Synthesize only the eight affected speech segments
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';
+          import {mkdir,readFile,writeFile} from 'node:fs/promises';
+          import {buildAzureSsml} from './scripts/azure-speech-ssml.mjs';
+          import {mp3DurationSeconds} from './scripts/mp3-duration.mjs';
+          const ids=['paragraph-8a64a75f490f','paragraph-1c05c5d0f015','paragraph-cc44d7e8d050','paragraph-1b75cdb036fd','paragraph-b7b262dd352f','paragraph-2b420a273355','paragraph-fe3d834a4f9e','paragraph-ac45a70f8b5d'];
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));const map=new Map(script.segments.map(s=>[s.segmentId,s]));
+          const replacements=[
+            ['الَّذِي اعْتَدْنَاهُ اليَوْم.','الَّذِي اِعْتَدْنَاهُ اليَوْم.'],
+            ['لِنَفْهَمِ اللَّمْسَة،','لِنَفْهَمِ اللَّمْسَةَ،'],
+            ['ثُمَّ تُقَدِّرُ مَرْكَزَ مِنْطَقَةِ اللَّمْسِ','ثُمَّ تُقَدِّرُ مَرْكَزَ، مِنْطَقَةِ اللَّمْسِ'],
+            ['إِلَى سَطْحِ الشَّاشَة.','إِلَى سَطْحِ الشَّاشَةِ.'],
+            ['الَّذِي تَبْحَثُ عَنْهُ الشَّاشَة.','الَّذِي تَبْحَثُ عَنْهُ الشَّاشَةُ.'],
+            ['تُغَطِّي الشَّاشَة،','تُغَطِّي الشَّاشَةَ،'],
+            ['حَرْفَ «بَاء».','حَرْفَ، «بَاء».'],
+            ['فَوْقَ حَرْفِ «بَاء»،','فَوْقَ حَرْفِ، «بَاء»،']
+          ];
+          const items=ids.map(id=>{const s=map.get(id);if(!s)throw new Error(`missing ${id}`);let text=s.spokenText;for(const [a,b] of replacements){if(text.includes(a))text=text.replaceAll(a,b);}return {type:s.type,text,segmentId:id};});
+          const expected=ids.map(id=>map.get(id).spokenText).join(' ');
+          const ssml=buildAzureSsml({language:'ar-SA',voice:'ar-SA-HamedNeural',rate:'0%',items});
+          const url='https://eastus.tts.speech.microsoft.com/cognitiveservices/v1';let response,body;
+          for(let n=0;n<5;n++){response=await fetch(url,{method:'POST',headers:{'Ocp-Apim-Subscription-Key':process.env.AZURE_SPEECH_KEY,'Content-Type':'application/ssml+xml; charset=utf-8','X-Microsoft-OutputFormat':'audio-48khz-96kbitrate-mono-mp3',Accept:'audio/mpeg','User-Agent':'Bareeq-Hamed-Stable-Fix-Test/1'},body:ssml});if(response.ok)break;body=await response.text();if(response.status!==429&&response.status<500)throw new Error(`Azure ${response.status}: ${body.slice(0,500)}`);await new Promise(r=>setTimeout(r,2000*(2**n)));}
+          if(!response?.ok)throw new Error(`Azure synthesis failed: ${body}`);const audio=Buffer.from(await response.arrayBuffer());
+          await mkdir('scripts/speech-test-evidence',{recursive:true});await writeFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-stable9-test.mp3',audio);await writeFile('/tmp/stable9-expected.txt',expected);
+          await writeFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-stable9-test.json',JSON.stringify({articleId:'how-touchscreens-work',segmentIds:ids,ttsInputReplacements:replacements,audioSha256:createHash('sha256').update(audio).digest('hex'),bytes:audio.length,durationSeconds:Number(mp3DurationSeconds(audio).toFixed(3)),generatedAt:new Date().toISOString()},null,2)+'\n');
+          console.log(`STABLE9_AUDIO bytes=${audio.length} duration=${mp3DurationSeconds(audio).toFixed(3)}`);
+          NODE
+      - name: Require two exact Gemini 3.6 transcripts of affected segments
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {readFile,writeFile} from 'node:fs/promises';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const audio=await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-stable9-test.mp3'),expected=await readFile('/tmp/stable9-expected.txt','utf8');const sleep=ms=>new Promise(r=>setTimeout(r,ms)),sha=v=>createHash('sha256').update(v).digest('hex');
+          const prompts=['استمع فقط إلى هذا التسجيل العربي واكتب كل الكلمات المسموعة حرفيًا وبالترتيب نفسه. لا تصحح الصياغة، لا تستنتج كلمات، لا تضف أدوات أو حروف عطف، ولا تستخدم نصًا خارجيًا. أعد transcript فقط وفق JSON.','Transcribe only the attached Arabic audio verbatim. Preserve every audible lexical word exactly once and in order. Do not repair grammar, infer wording, add articles or conjunctions, replace synonyms, or use outside text. Return only transcript in the requested JSON schema.'];
+          function extract(p){if(typeof p?.output_text==='string')return p.output_text;return (p.steps||p.outputs||[]).flatMap(x=>x.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('');}
+          async function tx(prompt,label){let last='';for(let n=1;n<=10;n++){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:'gemini-3.6-flash',input:[{type:'text',text:prompt},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});last=await r.text();if(r.ok)return JSON.parse(extract(JSON.parse(last)).trim()).transcript.trim();if(![429,500,502,503,504].includes(r.status))throw new Error(`${label} ${r.status}:${last.slice(0,500)}`);const hinted=Number(last.match(/retry in ([0-9.]+)s/i)?.[1]||0);await sleep((hinted?Math.ceil(hinted)+3:20+n*5)*1000);}throw new Error(`${label} retries exhausted`);}
+          const passes=[];for(let i=0;i<2;i++){const transcript=await tx(prompts[i],`pass${i+1}`),c=compareArabicTranscripts(expected,transcript);console.log(`STABLE9_PASS_${i+1} expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log(`STABLE9_DIFF_${i+1}=${JSON.stringify(c.operations)}`);passes.push({pass:i+1,promptSha256:sha(prompts[i]),transcript,exact:c.exact,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations});await sleep(12000);}
+          const passed=passes.every(p=>p.exact&&p.wordErrorCount===0);const report={schema:'bareeq.hamed-stable-nine-fixes-test.v1',status:passed?'passed':'failed',audioSha256:sha(audio),passes,verifiedAt:new Date().toISOString()};await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-stable9-test.json',JSON.stringify(report,null,2)+'\n');if(!passed)process.exitCode=2;
+          NODE
+      - name: Persist targeted fix evidence even on mismatch
+        if: always()
+        run: |
+          git config user.name 'bareeq-audio-bot';git config user.email 'actions@users.noreply.github.com'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-stable9-test.mp3 scripts/speech-test-evidence/how-touchscreens-work-hamed-stable9-test.json
+          test ! -f scripts/speech-transcript-evidence/how-touchscreens-work-hamed-stable9-test.json || git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-stable9-test.json
+          git commit -m 'audio: persist targeted Hamed stable-error fix test' || true
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
+      - name: Enforce targeted fixes
+        run: |
+          node - <<'NODE'
+          const r=require('./scripts/speech-transcript-evidence/how-touchscreens-work-hamed-stable9-test.json');if(r.status!=='passed'||r.passes.length!==2||r.passes.some(p=>!p.exact||p.wordErrorCount!==0))process.exit(1);console.log('HAMED_STABLE9_FIXES=PASS');
+          NODE
