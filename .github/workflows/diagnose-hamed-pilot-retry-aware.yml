@@ -1,0 +1,43 @@
+name: Diagnose Hamed pilot with quota-aware ASR
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/diagnose-hamed-pilot-retry-aware.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Generate deterministic reviewed Hamed pilot
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+        run: |
+          cp scripts/generate-fahed-test-clip.mjs scripts/.diag-hamed.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');const p='scripts/.diag-hamed.mjs';let s=fs.readFileSync(p,'utf8');s=s.replace("const VOICE = 'ar-KW-FahedNeural';","const VOICE = 'ar-SA-HamedNeural';").replace("const LANGUAGE = 'ar-KW';","const LANGUAGE = 'ar-SA';").replace("const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '-2%';","const RATE = process.env.AZURE_SPEECH_SYNTHESIS_RATE?.trim() || '0%';").replace("const basename = `${ARTICLE_ID}-fahed-v1`;","const basename = `${ARTICLE_ID}-hamed-zero-pilot-v1`;");fs.writeFileSync(p,s);
+          NODE
+          node scripts/.diag-hamed.mjs --article=how-touchscreens-work
+      - name: Diagnose exact lexical mismatches with retry-after handling
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const sleep=ms=>new Promise(r=>setTimeout(r,ms));const audio=await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-zero-pilot-v1.mp3');const meta=JSON.parse(await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-zero-pilot-v1.json','utf8'));const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));const map=new Map(script.segments.map(x=>[x.segmentId,x]));const expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||'').join('\n\n');const prompt='Produce a verbatim Arabic transcript of the attached audio using audio as the only source. Write every audible word exactly once and in order. Do not infer, repair, summarize, paraphrase, omit, or add commentary. Diacritics and punctuation are optional. Return only transcript in the requested JSON schema.';
+          let body='',r;for(let attempt=0;attempt<6;attempt++){r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:'gemini-3.5-flash',input:[{type:'text',text:prompt},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});body=await r.text();if(r.ok)break;if(r.status!==429)throw new Error(`ASR ${r.status}: ${body.slice(0,900)}`);const sec=Number(body.match(/retry in ([0-9.]+)s/i)?.[1]||45);console.log(`ASR_429_WAIT_SECONDS=${Math.ceil(sec)+2}`);await sleep((Math.ceil(sec)+2)*1000);}if(!r?.ok)throw new Error(`ASR retries exhausted: ${body.slice(0,900)}`);const p=JSON.parse(body);const text=typeof p.output_text==='string'?p.output_text:(p.steps||p.outputs||[]).flatMap(x=>x.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('');const transcript=JSON.parse(text.trim()).transcript.trim();const c=compareArabicTranscripts(expected,transcript);console.log(`HAMED_DIAG expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log('HAMED_DIFFERENCES='+JSON.stringify(c.operations));console.log('HAMED_TRANSCRIPT='+transcript);
+          NODE
