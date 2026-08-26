@@ -20,6 +20,8 @@ jobs:
           node-version-file: .node-version
           cache: npm
       - run: npm ci
+      - name: Load complete immutable pilot evidence into runner
+        run: node scripts/patch-hamed-runner-evidence.mjs
       - name: Generate immutable final candidate
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
@@ -27,6 +29,7 @@ jobs:
         run: node scripts/run-hamed-final-production-v3.mjs
       - name: Persist immutable candidate
         run: |
+          git checkout -- scripts/run-hamed-final-production-v3.mjs
           git config user.name bareeq-audio-bot
           git config user.email actions@users.noreply.github.com
           git add -f public/audio/articles/de93f3d9f91c8b8b/
