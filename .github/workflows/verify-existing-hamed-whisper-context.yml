@@ -1,0 +1,51 @@
+name: Tune independent Whisper decode on immutable Hamed pilot
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-existing-hamed-whisper-context.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'faster-whisper==1.2.0' 'requests>=2.32,<3'
+      - name: Decode immutable pilot with contextual Whisper large-v3
+        run: |
+          cat > /tmp/w.py <<'PY'
+          from faster_whisper import WhisperModel
+          from hashlib import sha256
+          p='scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.mp3'
+          b=open(p,'rb').read(); assert sha256(b).hexdigest()=='78ed2a90885a629903426727c1aa22fd70770f073b638cdec9e8b01cd97cbe71'
+          m=WhisperModel('large-v3',device='cpu',compute_type='int8',cpu_threads=4)
+          segs,info=m.transcribe(p,language='ar',beam_size=10,best_of=10,temperature=0.0,condition_on_previous_text=True,vad_filter=True)
+          t=' '.join(s.text.strip() for s in segs).strip();open('/tmp/t.txt','w',encoding='utf-8').write(t);print('WHISPER_CONTEXT='+t)
+          PY
+          python /tmp/w.py
+      - name: Exact compare and persist
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const meta=JSON.parse(await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.json','utf8')),script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8')),map=new Map(script.segments.map(x=>[x.segmentId,x])),expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||'').join('\n\n'),transcript=(await readFile('/tmp/t.txt','utf8')).trim(),c=compareArabicTranscripts(expected,transcript);console.log(`WHISPER_CONTEXT_EXACT expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log('WHISPER_CONTEXT_DIFF='+JSON.stringify(c.operations));const r={status:c.exact?'passed':'failed',schema:'bareeq.hamed-whisper-context-pilot.v1',articleId:'how-touchscreens-work',audioSha256:meta.sha256,asrModel:'whisper-large-v3',decode:{beamSize:10,bestOf:10,conditionOnPreviousText:true,vadFilter:true},transcript,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations,verifiedAt:new Date().toISOString()};await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-whisper-context.json',JSON.stringify(r,null,2)+'\n');if(!c.exact)process.exitCode=2;
+          NODE
+      - name: Persist verdict
+        if: always()
+        run: |
+          git config user.name 'bareeq-audio-bot';git config user.email 'actions@users.noreply.github.com';test ! -f scripts/speech-transcript-evidence/how-touchscreens-work-hamed-whisper-context.json || git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-whisper-context.json;git commit -m 'audio: persist contextual Whisper verdict for Hamed pilot' || true;git pull --rebase origin audio/fahed-v4220;git push origin HEAD:audio/fahed-v4220
