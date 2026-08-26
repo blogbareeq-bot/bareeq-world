@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "language-soft-power-politics",
-  "speechScriptHash": "b38c35991618b2010c3ccef52e850822756bf496c77eebfc14f44559f76d7f05",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "759904036fcd48e2f2716b8c36890fdfed6040bf7d808ec942d9dbe6a14f6908"
+  "planHash": "1985aaafff4b85bd14e25a359d6e26d8f2f8bb152d6459274b9cdce6695568bf"
 }

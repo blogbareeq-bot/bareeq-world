@@ -2,7 +2,7 @@ import { readFile, readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.4', '4.21.5', '4.21.6'].includes(pkg.version)) throw new Error(`V4.21.4 preparation expected package 4.21.4 or a supported successor through V4.21.6, got ${pkg.version}.`);
+if (!['4.21.4', '4.21.5', '4.21.6', '4.22.0'].includes(pkg.version)) throw new Error(`V4.21.4 preparation expected package 4.21.4 or a supported successor, got ${pkg.version}.`);
 
 const [header, layout, css, intro, startHere, desktopWave, mobileWave] = await Promise.all([
   readFile('src/components/Header.astro', 'utf8'),

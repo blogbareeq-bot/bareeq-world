@@ -19,7 +19,7 @@ const pkg = JSON.parse(pkgText);
 const lock = JSON.parse(lockText);
 const review = JSON.parse(reviewText);
 const overrides = JSON.parse(overridesText);
-if (pkg.version !== '4.21.6' || lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) {
+if (!['4.21.6', '4.22.0'].includes(pkg.version) || lock.version !== pkg.version || lock.packages?.['']?.version !== pkg.version) {
   throw new Error('V4.21.6 package identity is not locked consistently.');
 }
 
@@ -54,7 +54,8 @@ try { manifest = JSON.parse(await readFile(manifestPath, 'utf8')); } catch {}
 if (!isDraft && manifest) {
   const approvedGemini = manifest.articleId === ARTICLE_ID && manifest.provider === 'Google Gemini API' && manifest.model === 'gemini-3.1-flash-tts-preview' && manifest.language === 'ar' && manifest.defaultVoice === 'sadaltager';
   const approvedHamed = manifest.articleId === ARTICLE_ID && manifest.provider === 'Microsoft Azure AI Speech' && manifest.model === 'Neural TTS' && manifest.language === 'ar-SA' && manifest.defaultVoice === 'hamed' && manifest.voices?.length === 1 && manifest.voices[0]?.providerVoice === 'ar-SA-HamedNeural';
-  if (!approvedGemini && !approvedHamed) throw new Error('Touchscreen production audio must be complete Gemini Sadaltager or Azure Hamed.');
+  const approvedFahed = manifest.articleId === ARTICLE_ID && manifest.provider === 'Microsoft Azure AI Speech' && manifest.model === 'Neural TTS' && manifest.language === 'ar-KW' && manifest.defaultVoice === 'fahed' && manifest.voices?.length === 1 && manifest.voices[0]?.providerVoice === 'ar-KW-FahedNeural';
+  if (!approvedGemini && !approvedHamed && !approvedFahed) throw new Error('Touchscreen production audio must be complete Gemini Sadaltager, Azure Hamed, or Azure Fahed.');
 }
 
 for (const file of [

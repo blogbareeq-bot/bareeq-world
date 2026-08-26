@@ -12,7 +12,7 @@ const pkg = JSON.parse(pkgText);
 const lock = JSON.parse(lockText);
 const metrics = JSON.parse(metricsText);
 
-const versionSupported = ['4.21.4', '4.21.5', '4.21.6'].includes(pkg.version);
+const versionSupported = ['4.21.4', '4.21.5', '4.21.6', '4.22.0'].includes(pkg.version);
 const lockMatches = lock.version === pkg.version && lock.packages?.['']?.version === pkg.version;
 const rcMetadataOnly = pkg.version === '4.21.5' && lock.version === '4.21.4' && lock.packages?.['']?.version === '4.21.4';
 if (!versionSupported || (!lockMatches && !rcMetadataOnly)) {

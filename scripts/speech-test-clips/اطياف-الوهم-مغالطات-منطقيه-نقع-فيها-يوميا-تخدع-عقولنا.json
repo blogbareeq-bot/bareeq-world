@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
-  "speechScriptHash": "72de53ee8a81c9d48c2df5eb0334c23dba00369985ce47371ed357e506246b11",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "87554f32f21b695d2ea2c1611a658d1a9e97be42347836b073e12b68f03cac7f",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "b644edd0345a6d680d052f180d8892c882f49362fc07ae4b08d850f41c0af7fb"
+  "planHash": "faa036a1724465f3474088a1496edc3895c54d1a93d922e9747528294acb2cfc"
 }

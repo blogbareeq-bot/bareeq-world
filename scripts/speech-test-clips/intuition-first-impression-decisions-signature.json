@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "intuition-first-impression-decisions-signature",
-  "speechScriptHash": "71c6330107430e33829f0894ea3c7ab892c415f8495a98f8791d606b32a254f1",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "1434b324f42bbe6995191bfb88e7b1d5b7524ee7895cc18241d683fdfb1149ea",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 59,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "3419e8a01c7143893f1a80e088f562dcfa264b06036641934af6b1de55d6c81c"
+  "planHash": "14e6ad9f6f849e881b1204907fdc234f0c4bea8b3c25f37b50b3eb1ba8dbbf3b"
 }

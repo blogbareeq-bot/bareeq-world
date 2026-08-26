@@ -3,8 +3,8 @@
   "articleId": "why-some-passports-are-stronger",
   "sourceSnapshotHash": "2b2999dba95bff5e6bfb8ff16d2848fa3b677ffe8f595a5b6166ca15ebf7d4c1",
   "sourceStructureHash": "46cc1cde81243774e5f65a53bf466e75a8961f5f3b9459361a15289c9a949359",
-  "generatedAt": "2026-08-25T05:43:53.171Z",
-  "reviewVersion": 1,
+  "generatedAt": "2026-08-25T12:00:00.000Z",
+  "reviewVersion": 2,
   "status": "pronunciation-review-passed-test-clip-ready",
   "referenceExclusion": {
     "heading": "المصادر",
@@ -1662,7 +1662,7 @@
       "type": "paragraph",
       "sourceHash": "ffb0dcb87976c34d836a44a9400175ab652a33e6bfb8ff5b914f904821b4b7b9",
       "sourceText": "عد الآن إلى مشهد المطار الذي بدأنا به. المسافران يحملان كتيبين متشابهين في الحجم والشكل، لكن أحدهما يحمل خلفه شبكة كثيفة من الاتفاقيات والثقة المتبادلة والمصالح المشتركة، والآخر يحمل شبكة أضيق، لأسباب لا يد له فيها غالبًا.",
-      "spokenText": "عُدِ الآنَ إِلَى مَشْهَدِ المَطَارِ الذي بدأنا به. المسافران يحملان كتيبين متشابهين في الحجم والشكل، لكن أحدهما يحمل خلفه شبكة كثيفة من الاتفاقيات والثقة المتبادلة والمصالح المشتركة، والآخر يحمل شبكة أضيق، لأسباب لا يد له فيها غالبًا.",
+      "spokenText": "عُدْ الآنَ إِلَى مَشْهَدِ المَطَارِ الذي بدأنا به. المسافران يحملان كتيبين متشابهين في الحجم والشكل، لكن أحدهما يحمل خلفه شبكة كثيفة من الاتفاقيات والثقة المتبادلة والمصالح المشتركة، والآخر يحمل شبكة أضيق، لأسباب لا يد له فيها غالبًا.",
       "transformations": [
         {
           "type": "arabic-diacritization"
@@ -1676,15 +1676,15 @@
       ],
       "linguisticReview": {
         "status": "passed",
-        "reviewer": "Arena contextual linguistic implementation review",
-        "reviewedAt": "2026-08-25T05:43:53.171Z",
-        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
         "status": "passed",
-        "reviewer": "Arena contextual linguistic implementation review",
-        "reviewedAt": "2026-08-25T05:43:53.171Z",
-        "method": "full-segment contextual text review; no synthesized audio was generated or reviewed"
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -2108,6 +2108,6 @@
       }
     }
   ],
-  "scriptHash": "1e50637f8f3647d382d82d6f0b3790a73446cb5630112a6803ff1646368b62e3",
+  "scriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
   "notes": "Complete segment inventory reviewed for contextual ambiguities and pronunciation. High-risk forms and every title/heading are explicitly vocalized; foreign terms use declared transformations."
 }

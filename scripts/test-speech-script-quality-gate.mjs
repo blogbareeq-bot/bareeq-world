@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {
   extractArticleSpeechModel,
+  detectExplicitMoodErrors,
   isReferenceHeading,
   loadPublishedArticleModels,
   normalizeArabicForComparison,
@@ -20,6 +21,11 @@ import { evaluateSynthesisReadiness } from './speech-synthesis-gate.mjs';
 const ROOT = process.cwd();
 const rules = await readAmbiguityRules(ROOT);
 const review = { status: 'passed', reviewer: 'quality-gate-test', reviewedAt: '2026-08-25T00:00:00.000Z' };
+
+assert.deepEqual(detectExplicitMoodErrors('قبل أن تَكُونَ المهمة واضحة، لم تَعْرِفْ النتيجة، وكي تُنْتِجَ جوابًا صحيحًا راجع السياق.'), []);
+for (const sample of ['أن تَكُونُ المهمة', 'لم تَعْرِفُ النتيجة', 'كي تُنْتِجُ جوابًا']) {
+  assert.equal(detectExplicitMoodErrors(sample).length, 1, `explicit mood conflict was missed: ${sample}`);
+}
 
 function approvedScript(model, spokenById = new Map()) {
   const segments = model.segments.map((segment) => ({

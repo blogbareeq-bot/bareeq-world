@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "schema": "bareeq.audio-queue.v1",
+  "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+  "provider": "gemini",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "voice": "Sadaltager",
+  "status": "queued",
+  "stage": "pilot",
+  "attempted": [],
+  "note": "Shortest pending-cloud article (4528 spoken chars). Queue order follows spoken length: internet, cultural-habits, passion, fitness40, spectra, difficult-situations, inflation, intuition, satellites, language, morning-book; then temporary-hamed track (touchscreen resume, passports)."
+}

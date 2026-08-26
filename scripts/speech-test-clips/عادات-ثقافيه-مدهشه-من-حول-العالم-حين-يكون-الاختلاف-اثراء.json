@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
-  "speechScriptHash": "a492dc40f408579cb4deaa233f51747ec79e8513e416a258fca40e172b9a2e89",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "7f944cfd952e958af408893a0df13f56a113744f4764ab4d996fa255414d887a",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "2d525bb233bd5579d2c56110b24234414b43c7d2f946c533061aecbfc1bef80b"
+  "planHash": "436e5d3e6c2c533dca79bf195428e14a6794ee71316b6a10502a9624241f373c"
 }

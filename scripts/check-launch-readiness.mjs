@@ -28,7 +28,7 @@ V4.19 baseline transformations before prepare-v4200.mjs. This exact inert
 source marker lets that idempotent preparer recognize an already-newer gate:
 if (pkg.version !== '4.19.0') failures.push(`Expected package version 4.19.0, got ${pkg.version}`);
 */
-if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5', '4.21.6'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.21.6, got ${pkg.version}`);
+if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5', '4.21.6', '4.22.0'].includes(pkg.version)) failures.push(`Expected supported package version 4.21.1–4.22.0, got ${pkg.version}`);
 
 // Homepage identity/heading hierarchy.
 if (!/<h1\b[^>]*>عالم بريق — نافذتك إلى المعرفة<\/h1>/u.test(intro)) failures.push('Homepage identity H1 is missing or does not use the canonical brand promise.');

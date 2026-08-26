@@ -1,0 +1,40 @@
+{
+  "schema": "bareeq.gemini-pronunciation-sample.v1",
+  "sampleMode": "six-segment-pilot",
+  "articleId": "how-touchscreens-work",
+  "selectedSegmentIds": [
+    "title-ef028c93bd7e",
+    "paragraph-a63067d6c146",
+    "quote-7b1d6e9dad57",
+    "paragraph-9facdfecf62d",
+    "paragraph-1e0c397252d0",
+    "h2-e96da099522c"
+  ],
+  "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+  "planHash": "39edd749dadbd091b24812aece155bd865b83b3f30e3e15b38cf25350f7e3600",
+  "transcriptHash": "79f55ce0ce0b24c4372203f0b64e7e104da007b1373927acc98a00d177eb67ee",
+  "promptHash": "202b515955a9db3003edd275ad40101ad2c3bc1d897ed84a8ea465241e9b9155",
+  "provider": "Google Gemini API",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Sadaltager",
+  "language": "ar",
+  "focusWord": "بِبَسَاطَة",
+  "rejectedReading": "بِبَسَاط",
+  "criticalPronunciations": [
+    {
+      "text": "بِبَسَاطَة",
+      "reject": "بِبَسَاط"
+    },
+    {
+      "text": "مُخْتَلِفَتَيْنِ",
+      "reject": "مُخْتَلِفَيْنِ"
+    }
+  ],
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "bytes": 979245,
+  "durationSeconds": 81.6,
+  "sha256": "8a2e65dbad810b29ceb0a097a30be23180c7daf184df844c158c9c36ea4391e2",
+  "generatedAt": "2026-08-26T03:35:59.556Z",
+  "listeningReview": "pending"
+}

@@ -1,0 +1,85 @@
+{
+  "schema": "bareeq.hamed-final-production-candidate.v3",
+  "articleId": "how-touchscreens-work",
+  "provider": "Microsoft Azure AI Speech",
+  "model": "Neural TTS",
+  "voice": "ar-SA-HamedNeural",
+  "partCount": 10,
+  "parts": [
+    {
+      "part": 1,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-001-f4a18ef4.mp3",
+      "sha256": "84ce760ece1ca016ad069bf05ad98c247629382a68e018775f89bf2342472348",
+      "bytes": 1037952,
+      "durationSeconds": 86.496
+    },
+    {
+      "part": 2,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-002-f4a18ef4.mp3",
+      "sha256": "a88d7401aa8a66784750a9ec56eb7a1add62874db42d096417d17d2e79ff5d0f",
+      "bytes": 952704,
+      "durationSeconds": 79.392
+    },
+    {
+      "part": 3,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-003-f4a18ef4.mp3",
+      "sha256": "fcf71d9f04451e0ecc25b3555fb4b20b22ea68477fef03ff28670245b9f3703c",
+      "bytes": 1133568,
+      "durationSeconds": 94.464
+    },
+    {
+      "part": 4,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-004-f4a18ef4.mp3",
+      "sha256": "e3f8f330696847c59e6c7bbcff97703e3e02d810be0d5fee579e48557ee28338",
+      "bytes": 995328,
+      "durationSeconds": 82.944
+    },
+    {
+      "part": 5,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-005-f4a18ef4.mp3",
+      "sha256": "8c0e384fbc02896ee12b538da331835b1bcdabeb3dce4da137dc184c2c0d34f1",
+      "bytes": 1139616,
+      "durationSeconds": 94.968
+    },
+    {
+      "part": 6,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-006-f4a18ef4.mp3",
+      "sha256": "286265ffe35fdc79caeca98753648bef3fcde2a86b449cb643a9cedc6ff0d6cd",
+      "bytes": 945216,
+      "durationSeconds": 78.768
+    },
+    {
+      "part": 7,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-007-f4a18ef4.mp3",
+      "sha256": "8266650703501d62ac3b5a12ed2d4534a0dcec212b3ff6776aa8e5fc7787fc39",
+      "bytes": 1065312,
+      "durationSeconds": 88.776
+    },
+    {
+      "part": 8,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-008-f4a18ef4.mp3",
+      "sha256": "3b96702da58f71a6d072e2f89be32a3cdcaff8592bff72419531c70e1f8365bd",
+      "bytes": 1076544,
+      "durationSeconds": 89.712
+    },
+    {
+      "part": 9,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-009-f4a18ef4.mp3",
+      "sha256": "e988e2fd964f8d39fa321735371c79bd01415cca64fddae72a14066b740c890d",
+      "bytes": 1139040,
+      "durationSeconds": 94.92
+    },
+    {
+      "part": 10,
+      "src": "/audio/articles/de93f3d9f91c8b8b/hamed-part-010-f4a18ef4.mp3",
+      "sha256": "20bddf9e279ce951c7d50094e3f5c62228a75d96c127a163f5465475d17505d0",
+      "bytes": 986688,
+      "durationSeconds": 82.224
+    }
+  ],
+  "fullAudioSha256": "c46d1426210c595562aeda5d3acc40e82f98475d712d9ca3ba7caf7632d9f1ce",
+  "fullAudioBytes": 10472301,
+  "durationSeconds": 872.688,
+  "qaStatus": "pending",
+  "generatedAt": "2026-08-26T08:28:25.091Z"
+}

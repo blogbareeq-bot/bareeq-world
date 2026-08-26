@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
-  "speechScriptHash": "2f213a916778b088296f7b04c81266626fbb85b67e7b3d1a31f7b0e7db93d0d2",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "939f9e56e4ee2ad3569a8de10374a573a8888b22e8872a38085096a5c4c68647",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -37,6 +37,12 @@
       "challenges": [
         "1 foreign term(s)"
       ]
+    },
+    {
+      "segmentId": "paragraph-765abab7e65e",
+      "challenges": [
+        "person-ending disambiguation (كُنْتَ)"
+      ]
     }
   ],
   "acceptance": [
@@ -52,5 +58,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "69bd1b096435b655f32610d7658bbe9d49c864a47dce4eddd80f36aed59b142a"
+  "planHash": "719d8baa5167c5249bbecd5835039816ba17ce9d0d363f1c323daec2209fbfc1"
 }

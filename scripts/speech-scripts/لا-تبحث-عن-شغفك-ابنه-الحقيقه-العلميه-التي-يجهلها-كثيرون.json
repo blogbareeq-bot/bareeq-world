@@ -3,9 +3,9 @@
   "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
   "sourceSnapshotHash": "ba8c193b5537c9e967eec5471aedca92809dcde3bc457c57c8aa83200593b571",
   "sourceStructureHash": "c482d23ef6b0dc2ba02c53aa9c7ad921c82cf948283616cd5fa6b98596c0c38c",
-  "generatedAt": "2026-08-25T05:35:20.515Z",
-  "reviewVersion": 1,
-  "status": "needs-linguistic-review",
+  "generatedAt": "2026-08-26T10:06:58.763Z",
+  "reviewVersion": 3,
+  "status": "pronunciation-review-passed-test-clip-ready",
   "referenceExclusion": {
     "heading": "المصادر والقراءة الإضافية",
     "segmentCount": 3,
@@ -20,14 +20,16 @@
       "spokenText": "لا تبحث عن شغفك… ابنِه: ما الذي يقوله البحث؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -38,14 +40,16 @@
       "spokenText": "كم مرة سألت نفسك: ما شغفي الحقيقي؟ ثم انتظرت إجابة واضحة قبل أن تبدأ؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -53,17 +57,25 @@
       "type": "paragraph",
       "sourceHash": "946b8f4ff50206e7240b57b206ed48474ba31a06d9a66e510d06ed68dd80a2c8",
       "sourceText": "يبدو السؤال بريئًا، لكنه قد يوحي بأن لكل إنسان اهتمامًا مكتملًا ومخفيًا، وأن مهمته الوحيدة هي العثور عليه. يقدم كتاب كال نيوبورت So Good They Can't Ignore You زاوية مختلفة: العمل الذي نحبه قد ينمو من المهارة والاستقلال والأثر، لا من ومضة عاطفية تسبق التجربة.",
-      "spokenText": "يبدو السؤال بريئًا، لكنه قد يوحي بأن لكل إنسان اهتمامًا مكتملًا ومخفيًا، وأن مهمته الوحيدة هي العثور عليه. يقدم كتاب كال نيوبورت So Good They Can't Ignore You زاوية مختلفة: العمل الذي نحبه قد ينمو من المهارة والاستقلال والأثر، لا من ومضة عاطفية تسبق التجربة.",
-      "transformations": [],
+      "spokenText": "يبدو السؤال بريئًا، لكنه قد يوحي بأن لكل إنسان اهتمامًا مكتملًا ومخفيًا، وأن مهمته الوحيدة هي العثور عليه. يقدم كتاب كال نيوبورت مُمَيَّزٌ لِدَرَجَةٍ لَنْ يَتَجَاهَلُوكَ زاوية مختلفة: العمل الذي نحبه قد ينمو من المهارة والاستقلال والأثر، لا من ومضة عاطفية تسبق التجربة.",
+      "transformations": [
+        {
+          "type": "foreign-name-pronunciation",
+          "from": "So Good They Can't Ignore You",
+          "to": "مُمَيَّزٌ لِدَرَجَةٍ لَنْ يَتَجَاهَلُوكَ"
+        }
+      ],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -74,14 +86,16 @@
       "spokenText": "هذه ليست قاعدة حتمية لكل شخص أو مهنة، لكنها عدسة مفيدة تمنعنا من انتظار اليقين الكامل.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -92,14 +106,16 @@
       "spokenText": "فكرتان عن الاهتمام",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -110,14 +126,16 @@
       "spokenText": "يمكن النظر إلى الاهتمامات بطريقتين:",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -128,14 +146,16 @@
       "spokenText": "اهتمام ثابت: موجود كاملًا في الداخل، وسأشعر به فور العثور على المجال الصحيح.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -146,14 +166,16 @@
       "spokenText": "اهتمام قابل للنمو: قد يبدأ بفضول صغير، ثم يقوى مع التعلم والممارسة وفهم المجال.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -161,17 +183,25 @@
       "type": "paragraph",
       "sourceHash": "7dd625db2e705210deecde6cd93ff5d7f0f9089742c19b46c6b2ff088047d580",
       "sourceText": "بحث منشور في Psychological Science اختبر هاتين النظرتين عبر خمس دراسات. وجد الباحثون أن تبني النظرة الثابتة ارتبط بتوقع دافع بلا حدود عند «العثور على الشغف»، وبانخفاض أكبر في الاهتمام عندما أصبح الموضوع الجديد صعبًا. لا يثبت ذلك أن كل شغف يُبنى بالطريقة نفسها، لكنه يحذر من اعتقاد أن الصعوبة تعني تلقائيًا أنك في المكان الخطأ.",
-      "spokenText": "بحث منشور في Psychological Science اختبر هاتين النظرتين عبر خمس دراسات. وجد الباحثون أن تبني النظرة الثابتة ارتبط بتوقع دافع بلا حدود عند «العثور على الشغف»، وبانخفاض أكبر في الاهتمام عندما أصبح الموضوع الجديد صعبًا. لا يثبت ذلك أن كل شغف يُبنى بالطريقة نفسها، لكنه يحذر من اعتقاد أن الصعوبة تعني تلقائيًا أنك في المكان الخطأ.",
-      "transformations": [],
+      "spokenText": "بحث منشور في مَجَلَّةِ عِلْمِ النَّفْس اختبر هاتين النظرتين عبر خمس دراسات. وجد الباحثون أن تبني النظرة الثابتة ارتبط بتوقع دافع بلا حدود عند «العثور على الشغف»، وبانخفاض أكبر في الاهتمام عندما أصبح الموضوع الجديد صعبًا. لا يثبت ذلك أن كل شغف يُبنى بالطريقة نفسها، لكنه يحذر من اعتقاد أن الصعوبة تعني تلقائيًا أنك في المكان الخطأ.",
+      "transformations": [
+        {
+          "type": "foreign-name-pronunciation",
+          "from": "Psychological Science",
+          "to": "مَجَلَّةِ عِلْمِ النَّفْس"
+        }
+      ],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -182,14 +212,16 @@
       "spokenText": "لماذا تبدو البداية فاترة أحيانًا؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -197,17 +229,26 @@
       "type": "paragraph",
       "sourceHash": "160bfbafa671dd6f468049a09b0bef3fbe21f8eb018873cce44b666dabe590b3",
       "sourceText": "المبتدئ لا يرى المجال كما يراه الخبير. هو يقضي وقتًا في فهم الأدوات والمصطلحات وتصحيح الأخطاء، بينما يملك الخبير مساحة أكبر للإبداع واتخاذ القرار. لذلك قد لا تكون المتعة في الأسبوع الأول مقياسًا عادلًا لقيمة المجال على المدى البعيد.",
-      "spokenText": "المبتدئ لا يرى المجال كما يراه الخبير. هو يقضي وقتًا في فهم الأدوات والمصطلحات وتصحيح الأخطاء، بينما يملك الخبير مساحة أكبر للإبداع واتخاذ القرار. لذلك قد لا تكون المتعة في الأسبوع الأول مقياسًا عادلًا لقيمة المجال على المدى البعيد.",
-      "transformations": [],
+      "spokenText": "المبتدئ لا يرى المجال كما يراه الخبير. هو يقضي وقتًا في فهم الأدوات والمصطلحات وتصحيح الأخطاء، بينما يملك الخبير مساحة أكبر للإبداع واتخاذ القرار. لذلك قد لا تَكُونُ المتعة في الأسبوع الأول مقياسًا عادلًا لقيمة المجال على المدى البعيد.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        }
+      ],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -218,14 +259,16 @@
       "spokenText": "في المقابل، لا تعني المثابرة أن تجبر نفسك إلى الأبد على عمل يضر صحتك أو يخالف قيمك. الفكرة هي إعطاء التجربة وقتًا كافيًا قبل الحكم، مع مراجعة واعية للواقع.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -236,14 +279,16 @@
       "spokenText": "رأس المال المهني في فكرة نيوبورت",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -254,14 +299,16 @@
       "spokenText": "يستخدم نيوبورت تعبير «رأس المال المهني» للإشارة إلى مهارات نادرة وقيّمة تستطيع مبادلتها بقدر أكبر من الاستقلال أو الإبداع أو الأثر في العمل.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -272,14 +319,16 @@
       "spokenText": "بدل سؤال «هل أحب هذا المجال الآن؟» يمكن أن تسأل:",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -290,14 +339,16 @@
       "spokenText": "ما المهارة المحددة التي أتعلمها هنا؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -308,14 +359,16 @@
       "spokenText": "هل لهذه المهارة قيمة حقيقية لدى الآخرين؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -326,14 +379,16 @@
       "spokenText": "هل يتيح لي التحسن مساحة أكبر للاختيار أو الإبداع؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -344,14 +399,16 @@
       "spokenText": "هل تتوافق طبيعة العمل مع قيمي وحدودي؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -362,14 +419,16 @@
       "spokenText": "هذه الأسئلة لا تلغي المشاعر، لكنها تمنح القرار أرضًا أكثر صلابة.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -380,14 +439,16 @@
       "spokenText": "تجربة صغيرة بدل قرار كبير",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -398,14 +459,16 @@
       "spokenText": "لا تحتاج إلى ترك عملك أو شراء معدات مكلفة. صمم تجربة محدودة:",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -416,14 +479,16 @@
       "spokenText": "اختر مجالًا يثير فضولك، لا مجالًا تزعم أنك متأكد منه.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -434,14 +499,16 @@
       "spokenText": "حدد مشروعًا صغيرًا يمكن إنهاؤه خلال أسبوعين.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -452,14 +519,16 @@
       "spokenText": "استخدم الأدوات المتاحة قبل الاستثمار المالي.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -470,14 +539,16 @@
       "spokenText": "اطلب ملاحظة من شخص يعرف المجال.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -488,14 +559,16 @@
       "spokenText": "دوّن ما أحببته، وما أتعبك، وما ترغب في تعلمه بعد ذلك.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -506,14 +579,16 @@
       "spokenText": "إذا أردت اختبار الكتابة، أنجز مقالًا كاملًا. وإذا أردت اختبار البرمجة، ابنِ أداة صغيرة. وإذا أردت التصوير، نفّذ سلسلة صور حول موضوع واحد. المنتج المكتمل—ولو كان بسيطًا—يعطيك معلومات لا يوفرها التأمل وحده.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -524,14 +599,16 @@
       "spokenText": "اختبر العملية لا الصورة اللامعة",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -542,14 +619,16 @@
       "spokenText": "من السهل أن نحب صورة المهنة: الكاتب المنشور، أو المصور المسافر، أو رائد الأعمال المستقل. الاختبار الأدق هو علاقتك بالعملية اليومية:",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -560,14 +639,16 @@
       "spokenText": "هل تستطيع تقبل التدريب المتكرر؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -578,14 +659,16 @@
       "spokenText": "هل يثير حل المشكلات فضولك؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -596,14 +679,16 @@
       "spokenText": "هل تتحمل التصحيح وإعادة المحاولة؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -611,17 +696,19 @@
       "type": "list-item",
       "sourceHash": "5d49747ad1e00a5fc41ebf676437378e7cecc5b3936f1c3ee30cf183c9db5563",
       "sourceText": "هل تريد فهم المجال بصورة أعمق بعد أن رأيت جانبه الصعب؟",
-      "spokenText": "هل تريد فهم المجال بصورة أعمق بعد أن رأيت جانبه الصعب؟",
+      "spokenText": "هل تريد فهم المجال بصورة أعمق بعد أن رَأَيْتَ جانبه الصعب؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Arena contextual Arabic speech review — person endings (كنت class)",
+        "reviewedAt": "2026-08-26T10:06:58.763Z",
+        "method": "full-context person-ending review: the reader-addressed forms take the fathah on the final taa (كُنْتَ/عَرَفْتَ/رَأَيْتَ), quoted self-statements take the dammah (كُنْتُ/عَرَفْتُ/قُلْتُ), and the jussive after لم takes the sukun (أَقُلْ)."
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Arena contextual Arabic speech review — person endings (كنت class)",
+        "reviewedAt": "2026-08-26T10:06:58.763Z",
+        "method": "full-context person-ending review: the reader-addressed forms take the fathah on the final taa (كُنْتَ/عَرَفْتَ/رَأَيْتَ), quoted self-statements take the dammah (كُنْتُ/عَرَفْتُ/قُلْتُ), and the jussive after لم takes the sukun (أَقُلْ)."
       }
     },
     {
@@ -632,14 +719,16 @@
       "spokenText": "لا يلزم أن تستمتع بكل دقيقة. لكن وجود فضول مستمر، وتقدم يمكن ملاحظته، وقيمة تتوافق معك مؤشرات أفضل من الحماس العابر.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -650,14 +739,16 @@
       "spokenText": "أين تحتاج الفكرة إلى توازن؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -668,14 +759,16 @@
       "spokenText": "التركيز على المهارة وحدها قد يتجاهل ظروفًا مهمة: بيئة عمل سامة، أو غياب الأمان، أو التمييز، أو مسؤوليات لا يستطيع الفرد تغييرها بسهولة. ليست كل مشكلة في العمل نقصًا في المثابرة، وليست كل مغادرة استسلامًا.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -686,14 +779,16 @@
       "spokenText": "كما أن بعض الناس يملكون اهتمامًا مبكرًا وواضحًا بالفعل. المقصود ليس إنكار ذلك، بل التحرر من فكرة أن وضوح الشغف شرط لبدء تجربة مفيدة.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -704,14 +799,16 @@
       "spokenText": "الشغف ليس عنصرًا واحدًا",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -722,14 +819,16 @@
       "spokenText": "تزداد الفكرة وضوحًا إذا فصلنا بين ثلاثة أشياء نخلطها عادة تحت كلمة «الشغف»: الاهتمام، والكفاءة، والمعنى. قد يثيرك مجال ما لكنك لم تكتسب أدواته بعد. وقد تصبح ممتازًا في عمل لا يناسب قيمك. وقد ترى معنى عميقًا في وظيفة تحتاج سنوات قبل أن تشعر فيها بالتمكن.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -740,14 +839,16 @@
       "spokenText": "لذلك لا يوجد سؤال واحد يحسم القرار. الأفضل أن تسأل: هل ما زال فضولي حيًا بعد الاحتكاك بالواقع؟ هل تتحسن مهارتي مع التدريب؟ وهل أرى في هذا المسار قيمة تتوافق مع الطريقة التي أريد أن أعيش وأعمل بها؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -758,14 +859,16 @@
       "spokenText": "من الفضول إلى المهارة",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -773,17 +876,19 @@
       "type": "paragraph",
       "sourceHash": "c6696d6753de8e35d2984bf737cb2f65fd2a1696fcc9f2385c312b1ade425bc8",
       "sourceText": "يمكن أن يبدأ المسار بفضول صغير يدفعك إلى تجربة. التجربة تمنحك معرفة أولية، والمعرفة تجعل التدريب أقل غموضًا. مع التحسن تظهر مهام لم تكن قادرًا على الاستمتاع بها عندما كنت مبتدئًا، وقد يزيد الإحساس بالاستقلال أو الأثر. عندها يقوى الاهتمام، أو تكتشف بوضوح أكبر أنه ليس لك.",
-      "spokenText": "يمكن أن يبدأ المسار بفضول صغير يدفعك إلى تجربة. التجربة تمنحك معرفة أولية، والمعرفة تجعل التدريب أقل غموضًا. مع التحسن تظهر مهام لم تكن قادرًا على الاستمتاع بها عندما كنت مبتدئًا، وقد يزيد الإحساس بالاستقلال أو الأثر. عندها يقوى الاهتمام، أو تكتشف بوضوح أكبر أنه ليس لك.",
+      "spokenText": "يمكن أن يبدأ المسار بفضول صغير يدفعك إلى تجربة. التجربة تمنحك معرفة أولية، والمعرفة تجعل التدريب أقل غموضًا. مع التحسن تظهر مهام لم تكن قادرًا على الاستمتاع بها عندما كُنْتَ مبتدئًا، وقد يزيد الإحساس بالاستقلال أو الأثر. عندها يقوى الاهتمام، أو تكتشف بوضوح أكبر أنه ليس لك.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Arena contextual Arabic speech review — person endings (كنت class)",
+        "reviewedAt": "2026-08-26T10:06:58.763Z",
+        "method": "full-context person-ending review: the reader-addressed forms take the fathah on the final taa (كُنْتَ/عَرَفْتَ/رَأَيْتَ), quoted self-statements take the dammah (كُنْتُ/عَرَفْتُ/قُلْتُ), and the jussive after لم takes the sukun (أَقُلْ)."
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Arena contextual Arabic speech review — person endings (كنت class)",
+        "reviewedAt": "2026-08-26T10:06:58.763Z",
+        "method": "full-context person-ending review: the reader-addressed forms take the fathah on the final taa (كُنْتَ/عَرَفْتَ/رَأَيْتَ), quoted self-statements take the dammah (كُنْتُ/عَرَفْتُ/قُلْتُ), and the jussive after لم takes the sukun (أَقُلْ)."
       }
     },
     {
@@ -794,14 +899,16 @@
       "spokenText": "المهم أن هذه الحلقة لا تعد بنتيجة واحدة. بعض التجارب تنتهي بقرار واعٍ بالمغادرة، وهذا أيضًا مكسب إذا اتخذته بعد معرفة حقيقية بدل صورة متخيلة.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -812,14 +919,16 @@
       "spokenText": "تجربة الثلاثين يومًا",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -827,17 +936,19 @@
       "type": "paragraph",
       "sourceHash": "14e5412c381b0d0c76dbec08d0f66faa895a70e9674aaa1ea160935014fda133",
       "sourceText": "إذا كنت حائرًا بين التأمل الطويل وقرار كبير، جرّب فترة محدودة: اختر مهارة واحدة تمثل العمل الحقيقي في المجال، خصص لها وقتًا ثابتًا، أنجز مخرجًا واضحًا، اطلب نقدًا محددًا، ثم قيّم الفضول والتحسن وطبيعة الصعوبات لا مزاج آخر يوم فقط.",
-      "spokenText": "إذا كنت حائرًا بين التأمل الطويل وقرار كبير، جرّب فترة محدودة: اختر مهارة واحدة تمثل العمل الحقيقي في المجال، خصص لها وقتًا ثابتًا، أنجز مخرجًا واضحًا، اطلب نقدًا محددًا، ثم قيّم الفضول والتحسن وطبيعة الصعوبات لا مزاج آخر يوم فقط.",
+      "spokenText": "إذا كُنْتَ حائرًا بين التأمل الطويل وقرار كبير، جرّب فترة محدودة: اختر مهارة واحدة تمثل العمل الحقيقي في المجال، خصص لها وقتًا ثابتًا، أنجز مخرجًا واضحًا، اطلب نقدًا محددًا، ثم قيّم الفضول والتحسن وطبيعة الصعوبات لا مزاج آخر يوم فقط.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Arena contextual Arabic speech review — person endings (كنت class)",
+        "reviewedAt": "2026-08-26T10:06:58.763Z",
+        "method": "full-context person-ending review: the reader-addressed forms take the fathah on the final taa (كُنْتَ/عَرَفْتَ/رَأَيْتَ), quoted self-statements take the dammah (كُنْتُ/عَرَفْتُ/قُلْتُ), and the jussive after لم takes the sukun (أَقُلْ)."
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Arena contextual Arabic speech review — person endings (كنت class)",
+        "reviewedAt": "2026-08-26T10:06:58.763Z",
+        "method": "full-context person-ending review: the reader-addressed forms take the fathah on the final taa (كُنْتَ/عَرَفْتَ/رَأَيْتَ), quoted self-statements take the dammah (كُنْتُ/عَرَفْتُ/قُلْتُ), and the jussive after لم takes the sukun (أَقُلْ)."
       }
     },
     {
@@ -848,14 +959,16 @@
       "spokenText": "لا تجعل التجربة اختبارًا لإثبات أنك «خلقت لهذا المجال». هي طريقة منخفضة المخاطر نسبيًا للحصول على بيانات عن نفسك.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -866,14 +979,16 @@
       "spokenText": "متى يكون التوقف قرارًا ناضجًا؟",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -884,14 +999,16 @@
       "spokenText": "خطاب «ابن شغفك» يمكن أن يتحول إلى فخ إذا فهمناه كدعوة للاستمرار مهما كان الثمن. هناك فرق بين صعوبة التعلم التي تستحق الصبر وبين بيئة تؤذي صحتك أو تنتهك قيمك أو تسد فرص النمو. كما أن القيود المالية والعائلية والفرص المتاحة ليست تفاصيل نفسية يمكن تجاهلها.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -899,17 +1016,26 @@
       "type": "paragraph",
       "sourceHash": "9df0ca3ace9abddbc64ea8ec90753e65f2f99f1c4283cf8e82d7b32ba00f644f",
       "sourceText": "التوقف يكون أكثر نضجًا عندما تستطيع تحديد السبب: هل المشكلة في المجال نفسه، أم شكل الوظيفة الحالية، أم البيئة، أم مستوى المهارة، أم أن أولوياتك تغيرت؟ كلما كان جوابك أدق، كان القرار التالي أقل اعتمادًا على الشعارات.",
-      "spokenText": "التوقف يكون أكثر نضجًا عندما تستطيع تحديد السبب: هل المشكلة في المجال نفسه، أم شكل الوظيفة الحالية، أم البيئة، أم مستوى المهارة، أم أن أولوياتك تغيرت؟ كلما كان جوابك أدق، كان القرار التالي أقل اعتمادًا على الشعارات.",
-      "transformations": [],
+      "spokenText": "التوقف يكون أكثر نضجًا عندما تستطيع تحديد السبب: هل المشكلة في المجال نفسه، أم شكل الوظيفة الحالية، أم البيئة، أم مستوى المهارة، أم أن أولوياتك تَغَيَّرَتْ؟ كلما كان جوابك أدق، كان القرار التالي أقل اعتمادًا على الشعارات.",
+      "transformations": [
+        {
+          "type": "arabic-diacritization"
+        },
+        {
+          "type": "contextual-disambiguation"
+        }
+      ],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -920,14 +1046,16 @@
       "spokenText": "سؤال أصغر وأفضل",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -938,14 +1066,16 @@
       "spokenText": "بدل البحث عن كلمة واحدة تصف بقية حياتك، جرّب سؤالًا أصغر: ما التجربة التالية التي تستحق أن أبني فيها مهارة حقيقية؟ هذا السؤال لا يطلب منك معرفة المستقبل، لكنه يمنحك خطوة يمكن فحصها.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -956,14 +1086,16 @@
       "spokenText": "وقد يكون هذا أكثر ما يجمع بين فكرة نيوبورت والبحث النفسي: الاهتمام لا يعيش منفصلًا عن الممارسة. أحيانًا نكتشفه، وأحيانًا نصنع ظروف نموه، وأحيانًا نتعلم أنه لا يناسبنا. في الحالات الثلاث، الحركة الواعية تعطينا معرفة أكثر من انتظار الإشارة المثالية.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -974,14 +1106,16 @@
       "spokenText": "الخلاصة",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -992,14 +1126,16 @@
       "spokenText": "ربما لا تحتاج إلى إجابة نهائية عن «شغف العمر». تحتاج إلى تجربة تالية جيدة، ومهارة تتطور، ومراجعة صادقة لما تتعلمه عن نفسك وعن الواقع.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -1010,14 +1146,16 @@
       "spokenText": "لا تنتظر شعورًا كاملًا قبل الحركة. ابدأ بخطوة صغيرة يمكن قياسها، ثم دع الخبرة—لا الخيال وحده—تخبرك إن كان هذا المسار يستحق المزيد.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     },
     {
@@ -1028,17 +1166,18 @@
       "spokenText": "ولتطبيق الفكرة نفسها على بناء عادة صحية واقعية، اقرأ اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا.",
       "transformations": [],
       "linguisticReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       },
       "pronunciationReview": {
-        "status": "review-required",
-        "reviewer": "",
-        "reviewedAt": ""
+        "status": "passed",
+        "reviewer": "Codex — Bareeq contextual Arabic speech review",
+        "reviewedAt": "2026-08-25T12:00:00.000Z",
+        "method": "full-segment contextual review with selective homograph vocalization; CATT ED used only as a second opinion after its out-of-domain output failed the gold-script benchmark"
       }
     }
   ],
-  "scriptHash": "5c6abff36c79f30aa06e53cffb7ea27fdf59594bd37b66e516aba333f69b98b1",
-  "notes": "Generated review inventory only. Synthesis is blocked until every segment is contextually reviewed and the test clip is passed."
+  "scriptHash": "319ec294ac672a4a33a103fa3493f007c1a824af49ca94edc42de3578b487db1"
 }

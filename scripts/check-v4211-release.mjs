@@ -3,7 +3,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { PENDING_CLOUD, RETAINED_GEMINI } from './cloud-tts-rollout.mjs';
 
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
-if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5', '4.21.6'].includes(pkg.version)) throw new Error(`Expected package 4.21.1 through 4.21.6, got ${pkg.version}.`);
+if (!['4.21.1', '4.21.2', '4.21.3', '4.21.4', '4.21.5', '4.21.6', '4.22.0'].includes(pkg.version)) throw new Error(`Expected package 4.21.1 or a supported successor, got ${pkg.version}.`);
 if (![11, 12, 13].includes(PENDING_CLOUD.length) || RETAINED_GEMINI.length !== 2 || new Set([...PENDING_CLOUD, ...RETAINED_GEMINI]).size !== PENDING_CLOUD.length + RETAINED_GEMINI.length) throw new Error('V4.21.6 must keep the 11–13 pending + 2 retained article boundary.');
 
 const [runner, generator, envExample, privacy, footer, about, contact, site, mobileAudit, distAudit] = await Promise.all([
@@ -73,7 +73,7 @@ for (const token of ['prepare-v4211.mjs', 'test-gemini-free-rollout-v4211.mjs', 
   if (!build.includes(token)) throw new Error(`Build pipeline is missing ${token}.`);
 }
 if (!build.includes('node scripts/run-v4211-audio.mjs && ASTRO_TELEMETRY_DISABLED=1 astro build')) throw new Error('V4.21.1 runner is not the production audio step immediately before Astro build.');
-if (['4.21.5', '4.21.6'].includes(pkg.version) && !build.includes('BAREEQ_GEMINI_FREE_ROLLOUT=0 BAREEQ_CLOUD_TTS_ACTIVATE=0 node scripts/run-v4211-audio.mjs')) {
+if (['4.21.5', '4.21.6', '4.22.0'].includes(pkg.version) && !build.includes('BAREEQ_GEMINI_FREE_ROLLOUT=0 BAREEQ_CLOUD_TTS_ACTIVATE=0 node scripts/run-v4211-audio.mjs')) {
   throw new Error('V4.21.5/V4.21.6 normal builds must disable Gemini rollout and use guarded article-level audio publication.');
 }
 
