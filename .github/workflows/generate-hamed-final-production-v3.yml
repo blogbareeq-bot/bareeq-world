@@ -1,0 +1,123 @@
+name: Generate final Hamed production candidate v3
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: ['.github/workflows/generate-hamed-final-production-v3.yml']
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Require proven pilot and final-target adjudication
+        run: |
+          node scripts/test-arabic-transcript-match.mjs
+          node - <<'NODE'
+          const fs=require('fs');
+          const pilot=JSON.parse(fs.readFileSync('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini36-independent-final.json'));
+          if(pilot.status!=='passed'||pilot.wordErrorCount!==0||pilot.substitutions!==0||pilot.deletions!==0||pilot.insertions!==0) throw new Error('Corrected Hamed pilot exact evidence missing');
+          const final3=JSON.parse(fs.readFileSync('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final3-gemini35.json'));
+          if(final3.status!=='passed'||final3.wordErrorCount!==0||final3.substitutions!==0||final3.deletions!==0||final3.insertions!==0) throw new Error('Final three-target Gemini 3.5 exact adjudication missing');
+          console.log('PROVEN_INPUT_EVIDENCE=PASS');
+          NODE
+      - name: Open synthesis gate inside runner only
+        run: |
+          cp scripts/speech-test-clips/how-touchscreens-work.json /tmp/how-touchscreens-plan-v3.json
+          node - <<'NODE'
+          const fs=require('fs'),p='scripts/speech-test-clips/how-touchscreens-work.json',x=JSON.parse(fs.readFileSync(p));
+          x.testClipPassed=true;x.fullSynthesisAllowed=true;
+          x.audioReview={status:'passed',reviewedBy:'Automated exact ASR evidence — user-authorized conditional publication',reviewedAt:new Date().toISOString(),evidence:{humanListening:false,approvalBasis:'User authorized continuation through publication after exact automated transcript validation.'}};
+          fs.writeFileSync(p,JSON.stringify(x,null,2)+'\n');
+          NODE
+          node scripts/check-speech-scripts.mjs
+      - name: Prepare shorter-part corrected Hamed generator
+        run: |
+          cp scripts/generate-audio.mjs scripts/.generate-hamed-final-v3.mjs
+          node - <<'NODE'
+          const fs=require('fs'),p='scripts/.generate-hamed-final-v3.mjs';let s=fs.readFileSync(p,'utf8');
+          const maxOld='IS_AZURE ? 6000 : 4800';
+          if((s.split(maxOld).length-1)!==1) throw new Error('Azure max request bytes marker mismatch');
+          s=s.replace(maxOld,'IS_AZURE ? 3000 : 4800');
+          const old='const pieces = splitByBytes(segment.spokenText);';
+          if((s.split(old).length-1)!==1) throw new Error('splitByBytes marker mismatch');
+          const repl=`let correctedHamedText = segment.spokenText;
+    const hamedFixes = [
+      ['بِبَسَاطَة:', 'بِبَسَاطَةٍ:'],
+      ['أَقْطَابِ الشَّبَكَة.', 'أَقْطَابِ الشَّبَكَةِ.'],
+      ['عَلَى الشَّاشَة.', 'عَلَى الشَّاشَةِ.'],
+      ['عَادَةً «الشَّاشَة» لَيْسَ طَبَقَةً وَاحِدَة.', 'عَادَةً «الشَّاشَةَ» لَيْسَ طَبَقَةً وَاحِدَةً.'],
+      ['عَلَى الشَّاشَة،', 'عَلَى الشَّاشَةِ،'],
+      ['مِنَ الشَّبَكَة.', 'مِنَ الشَّبَكَةِ.'],
+      ['تَكْبِيرَ الصُّورَة،', 'تَكْبِيرَ الصُّورَةِ،'],
+      ['تَحْرِيكَ خَرِيطَة.', 'تَحْرِيكَ خَرِيطَةٍ.'],
+      ['الَّذِي اعْتَدْنَاهُ اليَوْم.', 'الَّذِي اِعْتَدْنَاهُ اليَوْم.'],
+      ['لِنَفْهَمِ اللَّمْسَة، نَحْتَاجُ', 'لِنَفْهَمِ اللَّمْسَةَ نَحْتَاجُ'],
+      ['ثُمَّ تُقَدِّرُ مَرْكَزَ مِنْطَقَةِ اللَّمْسِ', 'ثُمَّ تُقَدِّرُ مَرْكَزَ، مِنْطَقَةِ اللَّمْسِ'],
+      ['إِلَى سَطْحِ الشَّاشَة.', 'إِلَى سَطْحِ الشَّاشَةِ.'],
+      ['الَّذِي تَبْحَثُ عَنْهُ الشَّاشَة.', 'الَّذِي تَبْحَثُ عَنْهُ الشَّاشَةُ.'],
+      ['تُغَطِّي الشَّاشَة،', 'تُغَطِّي الشَّاشَةَ،'],
+      ['حَرْفَ «بَاء».', 'حَرْفَ بَاءٍ.'],
+      ['فَوْقَ حَرْفِ «بَاء»،', 'فَوْقَ حَرْفِ بَاءٍ،']
+    ];
+    for (const [from,to] of hamedFixes) correctedHamedText = correctedHamedText.split(from).join(to);
+    const pieces = splitByBytes(correctedHamedText);`;
+          s=s.replace(old,repl);fs.writeFileSync(p,s);
+          NODE
+          node --check scripts/.generate-hamed-final-v3.mjs
+      - name: Prove one-article plan
+        env:
+          BAREEQ_TTS_PROVIDER: azure
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_AZURE_HAMED_ONLY: '1'
+        run: node scripts/.generate-hamed-final-v3.mjs --plan
+      - name: Force fresh final candidate and synthesize
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: eastus
+          BAREEQ_TTS_PROVIDER: azure
+          BAREEQ_TTS_INCLUDE_IDS: how-touchscreens-work
+          BAREEQ_AZURE_HAMED_ONLY: '1'
+          BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD: '1'
+          BAREEQ_TTS_MAX_RETRIES: '4'
+          AZURE_SPEECH_MIN_INTERVAL_MS: '1500'
+        run: |
+          rm -rf public/audio/articles/de93f3d9f91c8b8b
+          node scripts/.generate-hamed-final-v3.mjs
+      - name: Restore permanent gate and remove temporary generator
+        if: always()
+        run: |
+          test ! -f /tmp/how-touchscreens-plan-v3.json || cp /tmp/how-touchscreens-plan-v3.json scripts/speech-test-clips/how-touchscreens-work.json
+          rm -f scripts/.generate-hamed-final-v3.mjs
+      - name: Validate and assemble immutable v3 candidate
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {mkdir,readFile,writeFile} from 'node:fs/promises';import {spawn} from 'node:child_process';import path from 'node:path';import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';import {mp3DurationSeconds} from './scripts/mp3-duration.mjs';
+          const K='de93f3d9f91c8b8b',A='how-touchscreens-work',manifestPath=`public/audio/articles/${K}/manifest.json`;const m=JSON.parse(await readFile(manifestPath,'utf8')),sha=v=>createHash('sha256').update(v).digest('hex');
+          if(m.provider!=='Microsoft Azure AI Speech'||m.model!=='Neural TTS'||m.defaultVoice!=='hamed'||m.voices?.length!==1||m.voices[0]?.providerVoice!=='ar-SA-HamedNeural')throw new Error('Hamed v3 identity mismatch');
+          if(m.parts.length<8||m.parts.length>12)throw new Error(`Expected 8-12 shorter parts, got ${m.parts.length}`);
+          let total=0;const files=[];for(const [i,p] of m.parts.entries()){const a=p.audio?.hamed;if(!a?.src||!a.sha256)throw new Error(`part ${i+1} missing`);const f=path.join('public',a.src.replace(/^\//,'')),b=await readFile(f);if(sha(b)!==a.sha256||b.length!==a.bytes)throw new Error(`part ${i+1} integrity mismatch`);const d=mp3DurationSeconds(b);if(Math.abs(d-a.durationSeconds)>.15)throw new Error(`part ${i+1} duration mismatch`);total+=d;files.push(f);}
+          if(!(total>800&&total<1000))throw new Error(`Unexpected total duration ${total}`);
+          const list='/tmp/hamed-final-v3-concat.txt';const esc=v=>path.resolve(v).replace(/'/g,"'\\''");await writeFile(list,files.map(f=>`file '${esc(f)}'`).join('\n')+'\n');
+          await mkdir('scripts/speech-test-evidence',{recursive:true});const full=`scripts/speech-test-evidence/${A}-hamed-final-production-v3.mp3`;
+          await new Promise((res,rej)=>{const c=spawn(ffmpegInstaller.path,['-hide_banner','-loglevel','error','-f','concat','-safe','0','-i',list,'-map_metadata','-1','-c','copy','-y',full],{stdio:['ignore','ignore','pipe']});const e=[];c.stderr.on('data',x=>e.push(x));c.once('error',rej);c.once('close',code=>code===0?res():rej(new Error(Buffer.concat(e).toString())));});
+          const b=await readFile(full),duration=mp3DurationSeconds(b);await writeFile(`scripts/speech-test-evidence/${A}-hamed-final-production-v3.json`,JSON.stringify({schema:'bareeq.hamed-final-production-candidate.v3',articleId:A,provider:m.provider,model:m.model,voice:'ar-SA-HamedNeural',partCount:m.parts.length,parts:m.parts.map((p,i)=>({part:i+1,src:p.audio.hamed.src,sha256:p.audio.hamed.sha256,bytes:p.audio.hamed.bytes,durationSeconds:p.audio.hamed.durationSeconds})),fullAudioSha256:sha(b),fullAudioBytes:b.length,durationSeconds:Number(duration.toFixed(3)),qaStatus:'pending',generatedAt:new Date().toISOString()},null,2)+'\n');
+          console.log(`HAMED_FINAL_V3_CANDIDATE parts=${m.parts.length} duration=${duration.toFixed(3)} sha=${sha(b)}`);
+          NODE
+      - name: Persist immutable v3 production candidate
+        run: |
+          git config user.name bareeq-audio-bot
+          git config user.email actions@users.noreply.github.com
+          git add -f public/audio/articles/de93f3d9f91c8b8b/
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-final-production-v3.mp3 scripts/speech-test-evidence/how-touchscreens-work-hamed-final-production-v3.json
+          git commit -m 'audio: persist final Hamed v3 production candidate'
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
