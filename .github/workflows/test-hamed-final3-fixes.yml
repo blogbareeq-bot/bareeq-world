@@ -1,0 +1,71 @@
+name: Test final three Hamed pronunciation fixes
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: ['.github/workflows/test-hamed-final3-fixes.yml']
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Synthesize only final three target contexts
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';
+          import {mkdir,readFile,writeFile} from 'node:fs/promises';
+          import {buildAzureSsml} from './scripts/azure-speech-ssml.mjs';
+          import {mp3DurationSeconds} from './scripts/mp3-duration.mjs';
+          const ids=['paragraph-1c05c5d0f015','paragraph-fe3d834a4f9e','paragraph-ac45a70f8b5d'];
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));
+          const map=new Map(script.segments.map(s=>[s.segmentId,s]));
+          const replacements=[
+            ['لِنَفْهَمِ اللَّمْسَة، نَحْتَاجُ','لِنَفْهَمِ اللَّمْسَةَ نَحْتَاجُ'],
+            ['حَرْفَ «بَاء».','حَرْفَ بَاءٍ.'],
+            ['فَوْقَ حَرْفِ «بَاء»،','فَوْقَ حَرْفِ بَاءٍ،']
+          ];
+          const items=ids.map(id=>{const s=map.get(id);let text=s.spokenText;for(const [a,b] of replacements)text=text.replaceAll(a,b);return {type:s.type,text};});
+          const expected=ids.map(id=>map.get(id).spokenText).join(' ');
+          const ssml=buildAzureSsml({language:'ar-SA',voice:'ar-SA-HamedNeural',rate:'0%',items});
+          let r,last='';for(let n=1;n<=6;n++){r=await fetch('https://eastus.tts.speech.microsoft.com/cognitiveservices/v1',{method:'POST',headers:{'Ocp-Apim-Subscription-Key':process.env.AZURE_SPEECH_KEY,'Content-Type':'application/ssml+xml; charset=utf-8','X-Microsoft-OutputFormat':'audio-48khz-96kbitrate-mono-mp3',Accept:'audio/mpeg'},body:ssml});if(r.ok)break;last=await r.text();if(r.status!==429&&r.status<500)throw new Error(`Azure ${r.status}: ${last}`);await new Promise(x=>setTimeout(x,2000*(2**(n-1))));}
+          if(!r?.ok)throw new Error(`Azure failed: ${last}`);const audio=Buffer.from(await r.arrayBuffer());
+          await mkdir('scripts/speech-test-evidence',{recursive:true});await writeFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-final3-test.mp3',audio);await writeFile('/tmp/final3-expected.txt',expected);
+          await writeFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-final3-test.json',JSON.stringify({schema:'bareeq.hamed-final3-test.v1',audioSha256:createHash('sha256').update(audio).digest('hex'),bytes:audio.length,durationSeconds:Number(mp3DurationSeconds(audio).toFixed(3)),replacements,generatedAt:new Date().toISOString()},null,2)+'\n');
+          NODE
+      - name: Require two exact Gemini transcripts
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';import {readFile,writeFile} from 'node:fs/promises';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const audio=await readFile('scripts/speech-test-evidence/how-touchscreens-work-hamed-final3-test.mp3');const expected=await readFile('/tmp/final3-expected.txt','utf8');const sha=v=>createHash('sha256').update(v).digest('hex'),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+          const prompts=['اكتب تفريغًا عربيًا حرفيًا لكل الكلمات المسموعة في التسجيل فقط، بالترتيب نفسه، من دون تصحيح أو استنتاج أو إضافة. أعد transcript فقط في JSON.','Transcribe the attached Arabic audio strictly verbatim. Preserve every audible lexical word once and in order. Do not repair grammar, infer, add, omit, or use outside text. Return transcript only in JSON.'];
+          function extract(p){if(typeof p?.output_text==='string')return p.output_text;const out=[];for(const c of[p?.steps,p?.outputs].filter(Array.isArray))for(const i of c)for(const b of(i?.content||[]))if(b?.type==='text')out.push(b.text);return out.join('');}
+          async function tx(prompt,label){let last='';for(let n=1;n<=10;n++){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:'gemini-3.6-flash',input:[{type:'text',text:prompt},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});last=await r.text();if(r.ok)return JSON.parse(extract(JSON.parse(last)).trim()).transcript.trim();if(![429,500,502,503,504].includes(r.status))throw new Error(`${label} ${r.status}: ${last.slice(0,500)}`);await sleep(Math.min(80000,20000+n*5000));}throw new Error(`${label}: retries exhausted`);}
+          const passes=[];for(let i=0;i<2;i++){const transcript=await tx(prompts[i],`pass${i+1}`);const c=compareArabicTranscripts(expected,transcript);console.log(`FINAL3_PASS_${i+1} expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log(`FINAL3_DIFF_${i+1}=${JSON.stringify(c.operations)}`);passes.push({pass:i+1,transcript,exact:c.exact,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations});await sleep(12000);}
+          const passed=passes.every(p=>p.exact&&p.wordErrorCount===0);await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final3-test.json',JSON.stringify({schema:'bareeq.hamed-final3-test-asr.v1',status:passed?'passed':'failed',audioSha256:sha(audio),passes,verifiedAt:new Date().toISOString()},null,2)+'\n');if(!passed)process.exitCode=2;
+          NODE
+      - name: Persist final3 evidence
+        if: always()
+        run: |
+          git config user.name bareeq-audio-bot
+          git config user.email actions@users.noreply.github.com
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-hamed-final3-test.mp3 scripts/speech-test-evidence/how-touchscreens-work-hamed-final3-test.json
+          test ! -f scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final3-test.json || git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final3-test.json
+          git commit -m 'audio: persist final three Hamed pronunciation test' || true
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
+      - name: Enforce exact final3
+        run: |
+          node -e "const r=require('./scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final3-test.json');if(r.status!=='passed')process.exit(1)"
