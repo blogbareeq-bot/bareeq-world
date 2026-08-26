@@ -1,0 +1,52 @@
+name: Independently recheck immutable corrected Hamed pilot with Gemini 3.6
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-existing-hamed-corrected-36-final.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Verify immutable audio SHA and exact transcript
+        id: qa
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';import {createHash} from 'node:crypto';import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const sleep=ms=>new Promise(r=>setTimeout(r,ms)),sha=v=>createHash('sha256').update(v).digest('hex');
+          const audioFile='scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.mp3';const metaFile='scripts/speech-test-evidence/how-touchscreens-work-hamed-corrected-final-pilot-v1.json';const audio=await readFile(audioFile),meta=JSON.parse(await readFile(metaFile,'utf8'));if(sha(audio)!=='78ed2a90885a629903426727c1aa22fd70770f073b638cdec9e8b01cd97cbe71'||sha(audio)!==meta.sha256)throw new Error('Immutable Hamed pilot SHA mismatch');
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8')),map=new Map(script.segments.map(x=>[x.segmentId,x])),expected=meta.selectedSegmentIds.map(id=>map.get(id)?.spokenText||'').join('\n\n');const prompt='Listen only to the attached audio and produce a strictly verbatim Arabic transcript. Preserve exactly the lexical words that are audibly spoken, once and in order. Do not infer grammar, replace synonyms, add conjunctions, repair wording, summarize, or use external text. Return transcript only in the requested JSON schema.';
+          let r,body='';for(let a=0;a<15;a++){r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:'gemini-3.6-flash',input:[{type:'text',text:prompt},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});body=await r.text();if(r.ok)break;if(r.status!==429)throw new Error(`ASR36 ${r.status}:${body.slice(0,800)}`);const sec=Number(body.match(/retry in ([0-9.]+)s/i)?.[1]||55);console.log(`ASR36_WAIT=${Math.ceil(sec)+3}`);await sleep((Math.ceil(sec)+3)*1000);}if(!r?.ok)throw new Error('ASR36 quota retries exhausted');const p=JSON.parse(body);const raw=typeof p.output_text==='string'?p.output_text:(p.steps||p.outputs||[]).flatMap(x=>x.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('');const transcript=JSON.parse(raw.trim()).transcript.trim(),c=compareArabicTranscripts(expected,transcript);console.log(`HAMED36_FINAL expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);console.log('HAMED36_FINAL_DIFF='+JSON.stringify(c.operations));const report={schema:'bareeq.hamed-corrected-gemini36-independent-final.v1',status:c.exact?'passed':'failed',articleId:'how-touchscreens-work',audioFile,audioSha256:sha(audio),ttsProvider:'Microsoft Azure AI Speech',ttsVoice:'ar-SA-HamedNeural',asrModel:'gemini-3.6-flash',expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations,transcript,promptSha256:sha(prompt),expectedTextDisclosure:'ASR received immutable audio and generic transcription instructions only.',verifiedAt:new Date().toISOString()};await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini36-independent-final.json',JSON.stringify(report,null,2)+'\n');if(!c.exact)process.exitCode=2;
+          NODE
+      - name: Persist report
+        if: always()
+        run: |
+          git config user.name 'bareeq-audio-bot';git config user.email 'actions@users.noreply.github.com'
+          test ! -f scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini36-independent-final.json || git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini36-independent-final.json
+          git commit -m 'audio: persist independent Gemini 3.6 Hamed pilot verdict' || true
+          git pull --rebase origin audio/fahed-v4220
+          git push origin HEAD:audio/fahed-v4220
+      - name: Enforce exact result from report
+        if: always()
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');const p='scripts/speech-transcript-evidence/how-touchscreens-work-hamed-corrected-gemini36-independent-final.json';if(!fs.existsSync(p))process.exit(2);const r=JSON.parse(fs.readFileSync(p));if(r.status!=='passed'||r.wordErrorCount!==0||r.substitutions!==0||r.deletions!==0||r.insertions!==0)process.exit(3);console.log('HAMED36_INDEPENDENT_ZERO_ERROR=PASS');
+          NODE
