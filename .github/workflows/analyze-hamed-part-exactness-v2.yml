@@ -1,0 +1,39 @@
+name: Analyze exactness per immutable Hamed part v2
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/analyze-hamed-part-exactness-v2.yml]
+  workflow_dispatch:
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Compare both saved passes part by part
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          import {compareArabicTranscripts} from './scripts/arabic-transcript-match.mjs';
+          const A='how-touchscreens-work',K='de93f3d9f91c8b8b';
+          const script=JSON.parse(await readFile(`scripts/speech-scripts/${A}.json`,'utf8'));
+          const manifest=JSON.parse(await readFile(`public/audio/articles/${K}/manifest.json`,'utf8'));
+          const first=JSON.parse(await readFile(`scripts/speech-transcript-evidence/${A}-hamed-corrected-full-v2.json`,'utf8'));
+          const second=JSON.parse(await readFile(`scripts/speech-transcript-evidence/${A}-hamed-corrected-full-v2-recheck.json`,'utf8'));
+          for(let i=0;i<manifest.parts.length;i++){
+            const ordinals=manifest.parts[i].sync.map(e=>Number(e.id.slice(1)));
+            if(ordinals.some(n=>!Number.isInteger(n)||n<1||n>=script.segments.length))throw new Error(`bad sync ordinal part ${i+1}`);
+            const texts=ordinals.map(n=>script.segments[n].spokenText);
+            if(i===0)texts.unshift(script.segments[0].spokenText);
+            const expected=texts.join(' ');
+            const c1=compareArabicTranscripts(expected,first.passes[0].chunks[i].transcript);
+            const c2=compareArabicTranscripts(expected,second.chunks[i].transcript);
+            console.log(`PART_${i+1}_SHA=${manifest.parts[i].audio.hamed.sha256}`);
+            console.log(`PART_${i+1}_PASS1 expected=${c1.expectedWordCount} actual=${c1.actualWordCount} errors=${c1.wordErrorCount} diff=${JSON.stringify(c1.operations)}`);
+            console.log(`PART_${i+1}_PASS2 expected=${c2.expectedWordCount} actual=${c2.actualWordCount} errors=${c2.wordErrorCount} diff=${JSON.stringify(c2.operations)}`);
+          }
+          NODE
