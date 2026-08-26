@@ -1,0 +1,126 @@
+name: Verify Gemini 2.5 Pro TTS pilot exactly
+
+on:
+  push:
+    branches: [audio/fahed-v4220]
+    paths: [.github/workflows/verify-gemini-25pro-pilot-exact.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Lock speech contracts
+        run: |
+          node scripts/test-arabic-transcript-match.mjs
+          node scripts/check-speech-scripts.mjs
+          node scripts/verify-cross-model-pilot-evidence.mjs
+
+      - name: Require Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: test -n "$GEMINI_API_KEY" || { echo '::error::GEMINI_API_KEY unavailable'; exit 2; }
+
+      - name: Generate isolated Gemini 2.5 Pro Sadaltager pilot
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          cp scripts/generate-gemini-pronunciation-sample.mjs scripts/.generate-25pro-pilot.mjs
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const p='scripts/.generate-25pro-pilot.mjs';
+          let s=fs.readFileSync(p,'utf8');
+          const once=(a,b,label)=>{const n=s.split(a).length-1;if(n!==1)throw new Error(`${label}: expected 1 match, found ${n}`);s=s.replace(a,b)};
+          once("const MODEL = 'gemini-3.1-flash-tts-preview';", "const MODEL = 'gemini-2.5-pro-preview-tts';", 'TTS model');
+          once("? `${ARTICLE_ID}-gemini-pilot-v1`", "? `${ARTICLE_ID}-gemini-25pro-pilot-v1`", 'pilot basename');
+          once('const MAX_RETRIES = 5;', 'const MAX_RETRIES = 1;', 'retry guard');
+          fs.writeFileSync(p,s);
+          NODE
+          node --check scripts/.generate-25pro-pilot.mjs
+          node scripts/.generate-25pro-pilot.mjs --pilot
+          rm -f scripts/.generate-25pro-pilot.mjs
+
+      - name: Require two independent exact audio-only ASR transcripts
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {createHash} from 'node:crypto';
+          import {readFile,writeFile} from 'node:fs/promises';
+          import {compareArabicTranscripts,ARABIC_TRANSCRIPT_COMPARISON_PROFILE} from './scripts/arabic-transcript-match.mjs';
+          const sha=v=>createHash('sha256').update(v).digest('hex');
+          const base='how-touchscreens-work-gemini-25pro-pilot-v1';
+          const meta=JSON.parse(await readFile(`scripts/speech-test-evidence/${base}.json`,'utf8'));
+          const audio=await readFile(`scripts/speech-test-evidence/${base}.mp3`);
+          const script=JSON.parse(await readFile('scripts/speech-scripts/how-touchscreens-work.json','utf8'));
+          if(meta.model!=='gemini-2.5-pro-preview-tts'||meta.voice!=='Sadaltager'||meta.sampleMode!=='six-segment-pilot') throw new Error('2.5 Pro pilot identity mismatch.');
+          if(meta.sha256!==sha(audio)||meta.bytes!==audio.length) throw new Error('2.5 Pro pilot audio integrity mismatch.');
+          const map=new Map(script.segments.map(x=>[x.segmentId,x]));
+          const expected=meta.selectedSegmentIds.map(id=>{const x=map.get(id);if(!x?.spokenText)throw new Error(`Missing ${id}`);return x.spokenText}).join('\n\n');
+          if(sha(expected)!==meta.transcriptHash) throw new Error('Expected transcript hash mismatch.');
+          const prompts=[
+            'استمع إلى التسجيل المرفق وحوّل كل الكلام المسموع إلى نص عربي حرفي كامل. اكتب الكلمات التي تسمعها فقط وبالترتيب نفسه. لا تلخص ولا تصحح ولا تضف شيئًا، ولا تعتمد على أي نص خارجي. لا حاجة إلى التشكيل أو علامات الترقيم. أعد حقل transcript فقط وفق JSON المطلوب.',
+            'Produce a verbatim Arabic transcript of the attached audio using audio as the only source. Write every audible word once and in order. Do not infer, repair, summarize, paraphrase, or add commentary. Diacritics and punctuation are optional. Return only the transcript field in the requested JSON schema.'
+          ];
+          const models=['gemini-3.5-flash','gemini-3.6-flash'];
+          const extract=p=>{if(typeof p?.output_text==='string')return p.output_text;if(typeof p?.outputText==='string')return p.outputText;const out=[];for(const c of [p?.steps,p?.outputs].filter(Array.isArray))for(const i of c)for(const b of (Array.isArray(i?.content)?i.content:[]))if(b?.type==='text'&&typeof b.text==='string')out.push(b.text);return out.join('')};
+          const passes=[];
+          for(let i=0;i<2;i++){
+            const r=await fetch('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':process.env.GEMINI_API_KEY,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({model:models[i],input:[{type:'text',text:prompts[i]},{type:'audio',data:audio.toString('base64'),mime_type:'audio/mp3'}],response_format:{type:'text',mime_type:'application/json',schema:{type:'object',properties:{transcript:{type:'string'}},required:['transcript']}},store:false})});
+            const body=await r.text();
+            if(!r.ok) throw new Error(`ASR ${models[i]} failed (${r.status}): ${body.slice(0,700)}`);
+            const payload=JSON.parse(body);const text=extract(payload).trim();const structured=JSON.parse(text);const transcript=structured.transcript?.trim();if(!transcript)throw new Error(`ASR ${models[i]} returned no transcript`);
+            const c=compareArabicTranscripts(expected,transcript);
+            console.log(`${models[i]}: expected=${c.expectedWordCount} actual=${c.actualWordCount} errors=${c.wordErrorCount}`);
+            passes.push({model:models[i],promptSha256:sha(prompts[i]),transcript,transcriptSha256:sha(transcript),normalizedTranscript:c.actualNormalized,normalizedTranscriptSha256:sha(c.actualNormalized),exact:c.exact,expectedWordCount:c.expectedWordCount,actualWordCount:c.actualWordCount,wordErrorCount:c.wordErrorCount,substitutions:c.substitutions,deletions:c.deletions,insertions:c.insertions,differences:c.operations.slice(0,50)});
+            if(!c.exact||c.expectedWordCount!==160||c.wordErrorCount!==0) throw new Error(`${models[i]} rejected 2.5 Pro pilot: ${JSON.stringify(c.operations.slice(0,10))}`);
+          }
+          if(passes[0].normalizedTranscriptSha256!==passes[1].normalizedTranscriptSha256) throw new Error('Independent ASR normalized transcripts differ despite individual checks.');
+          const report={schema:'bareeq.cross-model-tts-pilot-verification.v1',status:'passed',articleId:'how-touchscreens-work',ttsProvider:'Google Gemini API',ttsModel:'gemini-2.5-pro-preview-tts',ttsVoice:'Sadaltager',audioFile:`scripts/speech-test-evidence/${base}.mp3`,audioSha256:sha(audio),audioBytes:audio.length,expectedTranscriptSha256:sha(expected),normalizedExpectedTranscript:compareArabicTranscripts(expected,expected).expectedNormalized,expectedWordCount:160,successfulIndependentPasses:2,wordErrorCountAcrossSelectedPasses:0,substitutions:0,deletions:0,insertions:0,expectedTextDisclosure:'ASR received only audio and generic transcription instructions; expected text was used only after each response for exact comparison.',comparisonProfile:ARABIC_TRANSCRIPT_COMPARISON_PROFILE,passes,verifiedAt:new Date().toISOString()};
+          await writeFile('scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25pro-pilot-cross-model-v1.json',JSON.stringify(report,null,2)+'\n');
+          console.log('GEMINI_25PRO_PILOT_EXACT_TWO_MODEL=PASS');
+          NODE
+
+      - name: Upload pilot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-25pro-pilot-exact-${{ github.run_id }}
+          path: |
+            scripts/speech-test-evidence/how-touchscreens-work-gemini-25pro-pilot-v1.mp3
+            scripts/speech-test-evidence/how-touchscreens-work-gemini-25pro-pilot-v1.json
+            scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25pro-pilot-cross-model-v1.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Commit only exact approved 2.5 Pro pilot evidence
+        if: success()
+        run: |
+          git config user.name 'bareeq-audio-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -f scripts/speech-test-evidence/how-touchscreens-work-gemini-25pro-pilot-v1.mp3
+          git add scripts/speech-test-evidence/how-touchscreens-work-gemini-25pro-pilot-v1.json
+          git add scripts/speech-transcript-evidence/how-touchscreens-work-gemini-25pro-pilot-cross-model-v1.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'audio: approve Gemini 2.5 Pro Sadaltager pilot at zero errors'
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
