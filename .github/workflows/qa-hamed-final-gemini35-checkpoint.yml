@@ -1,0 +1,53 @@
+name: QA Hamed final Gemini 3.5 checkpoint
+on:
+  push:
+    branches:
+      - audio/fahed-v4220
+    paths:
+      - .github/workflows/qa-hamed-final-gemini35-checkpoint.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  qa35:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/fahed-v4220
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: node --check scripts/verify-hamed-final-production-v3.mjs
+      - name: Continue exact QA with Gemini 3.5 into isolated checkpoint
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          QA_MODELS: gemini-3.5-flash
+          QA_MAX_NEW_LEXICAL_ATTEMPTS: '1'
+          QA_REPORT_FILE: scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final-production-v3-gemini35-checkpoint.json
+        run: node scripts/verify-hamed-final-production-v3.mjs
+      - name: Persist Gemini 3.5 checkpoint
+        if: always()
+        run: |
+          git config user.name bareeq-audio-bot
+          git config user.email actions@users.noreply.github.com
+          test ! -f scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final-production-v3-gemini35-checkpoint.json || git add scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final-production-v3-gemini35-checkpoint.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'audio: checkpoint Gemini 3.5 Hamed QA'
+            git pull --rebase origin audio/fahed-v4220
+            git push origin HEAD:audio/fahed-v4220
+          fi
+      - name: Report Gemini 3.5 checkpoint
+        if: always()
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const p='scripts/speech-transcript-evidence/how-touchscreens-work-hamed-final-production-v3-gemini35-checkpoint.json';
+          if(!fs.existsSync(p)) throw new Error('Gemini 3.5 checkpoint missing');
+          const r=JSON.parse(fs.readFileSync(p));
+          const n=(r.parts||[]).filter(p=>p.models?.some(m=>m.model==='gemini-3.5-flash'&&m.status==='passed')).length;
+          console.log(`HAMED_GEMINI35_EXACT_PARTS=${n}/10 status=${r.status}`);
+          NODE
