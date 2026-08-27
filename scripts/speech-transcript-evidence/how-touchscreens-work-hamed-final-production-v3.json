@@ -1,0 +1,232 @@
+{
+  "schema": "bareeq.hamed-final-production-cross-model-per-part.v2",
+  "status": "pending-quota",
+  "articleId": "how-touchscreens-work",
+  "audioSha256": "c46d1426210c595562aeda5d3acc40e82f98475d712d9ca3ba7caf7632d9f1ce",
+  "partCount": 10,
+  "expectedWordCount": 1507,
+  "verificationMode": "ten-immutable-production-parts-two-distinct-models-exact-checkpointed",
+  "requiredModels": [
+    "gemini-3.5-flash",
+    "gemini-3.6-flash"
+  ],
+  "expectedTextDisclosure": "ASR receives only immutable audio and generic transcription instructions; expected text is compared locally after each response.",
+  "humanListening": false,
+  "parts": [
+    {
+      "part": 1,
+      "audioSha256": "84ce760ece1ca016ad069bf05ad98c247629382a68e018775f89bf2342472348",
+      "expectedWordCount": 147,
+      "models": [
+        {
+          "model": "gemini-3.6-flash",
+          "status": "passed",
+          "selectedAttempt": 1,
+          "attempts": [
+            {
+              "attempt": 1,
+              "promptIndex": 1,
+              "promptSha256": "70cb3f286abee327ac72271794087afe45610504594009e367e10e0988d7bb6c",
+              "technicalAttempts": 1,
+              "transcript": "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟ تلمس الشاشة بخفة فيفتح القفل، تمرر إصبعك فتتحرك الخريطة، وتضغط على حرف في لوحة المفاتيح فيظهر فورًا. نفعل ذلك مئات المرات يوميًا من دون أن نسمع نقرة ميكانيكية أو نشعر بزر يهبط تحت إصبعنا. أمامك لوح زجاجي صلب وأملس، ومع ذلك يستطيع الهاتف تحديد موضع لمستك بسرعة ودقة تكفيان لتبدو الاستجابة فورية تقريبًا. فكيف يعرف الهاتف أين وضعت إصبعك بالضبط؟ هل يقيس مقدار الضغط على الزجاج؟ هل توجد كاميرا خفية تراقب إصبعك؟ أم أن شيئًا آخر يحدث تحت السطح؟ الإجابة تكمن في خاصية كهربائية لا نراها تسمى السعة الكهربائية. ببساطة، تحت الزجاج شبكة من الأقطاب الشفافة تكون مجالات كهربائية دقيقة. عندما يقترب إصبعك الموصل منها، يغير المجال الكهربائي والاقتران السعوي بين أقطاب الشبكة. تقيس شريحة التحكم هذا التغير، ثم تحوله إلى إحداثيات على الشاشة. قبل شاشات اليوم، حين كانت اللمسة تعني الضغط: لم تكن كل الشاشات اللمسية تعمل بهذه الطريقة.",
+              "transcriptSha256": "362a49d9346b61758b9202ebf682fcf58b64f7fd8e474c6ac573162c7e5706df",
+              "exact": true,
+              "expectedWordCount": 147,
+              "actualWordCount": 147,
+              "wordErrorCount": 0,
+              "substitutions": 0,
+              "deletions": 0,
+              "insertions": 0,
+              "differences": [],
+              "checkedAt": "2026-08-27T06:40:07.383Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "part": 2,
+      "audioSha256": "a88d7401aa8a66784750a9ec56eb7a1add62874db42d096417d17d2e79ff5d0f",
+      "expectedWordCount": 138,
+      "models": [
+        {
+          "model": "gemini-3.6-flash",
+          "status": "pending",
+          "selectedAttempt": null,
+          "attempts": [
+            {
+              "attempt": 1,
+              "promptIndex": 1,
+              "promptSha256": "70cb3f286abee327ac72271794087afe45610504594009e367e10e0988d7bb6c",
+              "technicalAttempts": 2,
+              "transcript": "إذا استخدمت جهاز ملاحة قديماً، أو جهازاً كفياً من الأجيال السابقة، أو بعض الشاشات الصناعية وشاشات الصراف، فربما تتذكر أنك كنت تحتاج إلى الضغط على الشاشة، وأحياناً بقلم بلاستيكي. كانت هذه التقنية تعرف باسم الشاشات المقاومية. وتتكون الشاشة المقاومية التقليدية من طبقتين رقيقتين موصلتين يفصل بينهما فراغ صغير جداً. عندما تضغط على السطح تنحني الطبقة العليا حتى تلامس الأخرى، فتقيس دارة التحكم التغير الكهربائي الناتج وتستنتج موضع الضغط. الميزة هنا أن الشاشة لا تحتاج إلى إصبع موصل للكهرباء، فقد تعمل بقلم بلاستيكي أو قفاز أو أي جسم قادر على الضغط على السطح بالقدر الكافي. لكن كثيراً من هذه التصميمات القديمة كان أقل ملائمة للمس المتعدد السلس الذي اعتدناه اليوم. ثم انتشرت تقنية أصبحت أساس معظم الهواتف الذكية الحديثة، الشاشات السعوية المسقطة. وهنا تغير السؤال من أين ضغط المستخدم؟ إلى أين تغير المجال الكهربائي؟ ما الذي يختبئ تحت الزجاج؟",
+              "transcriptSha256": "0f48cfadcda79250b40feb0a63ccdbd27404c20384b547014ee6ffd9d5ae13ec",
+              "exact": false,
+              "expectedWordCount": 138,
+              "actualWordCount": 138,
+              "wordErrorCount": 1,
+              "substitutions": 1,
+              "deletions": 0,
+              "insertions": 0,
+              "differences": [
+                {
+                  "type": "substitution",
+                  "expected": "ملاءمة",
+                  "actual": "ملائمة",
+                  "expectedIndex": 102,
+                  "actualIndex": 102
+                }
+              ],
+              "checkedAt": "2026-08-27T06:41:13.032Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "part": 3,
+      "audioSha256": "fcf71d9f04451e0ecc25b3555fb4b20b22ea68477fef03ff28670245b9f3703c",
+      "expectedWordCount": 151,
+      "models": [
+        {
+          "model": "gemini-3.6-flash",
+          "status": "pending",
+          "selectedAttempt": null,
+          "attempts": [
+            {
+              "attempt": 1,
+              "promptIndex": 1,
+              "promptSha256": "70cb3f286abee327ac72271794087afe45610504594009e367e10e0988d7bb6c",
+              "technicalAttempts": 3,
+              "transcript": "ما نسميه عادة الشاشة ليس طبقة واحدة. هناك زجاج الحماية الخارجي، وتحته طبقات الاستشعار والعرض، ثم لوحة أوليد أو إل سي دي التي تنتج الصورة التي تراها. وفي منظومة اللمس توجد شبكة شديدة الرقة من الأقطاب الموصلة والشفافة. ومن أشهر المواد المستخدمة لصنع هذه الأقطاب أكسيد الإنديوم والقصدير، لأنه يوصل الكهرباء مع بقائه شفافاً بدرجة تسمح باستخدامه فوق لوحة العرض. وهناك أيضاً مواد وتصميمات أخرى، لذلك لا تعتمد كل الشاشات على أكسيد الإنديوم والقصدير بالضرورة. في أحد التصميمات الشائعة ترتب الأقطاب في مجموعتين متقاطعتين: خطوط إرسال أو قيادة، تحفز بإشارات كهربائية. خطوط استقبال أو استشعار، تقيس الاستجابة الكهربائية. ومن العلاقة بين الخطوط المتقاطعة تنشأ خاصية تسمى السعة المتبادلة. وهذه الشبكة هي الخريطة الكهربائية الخفية التي تغطي الشاشة. ما السعة الكهربائية أصلاً؟ لنفهم اللمس نحتاج إلى فكرة صغيرة فقط: عندما يكون موصلان قريبين من بعضهما ويفصل بينهما عازل، تنشأ بينهما قدرة على تخزين الشحنة والتأثر بالمجال الكهربائي. تسمى هذه الخاصية السعة الكهربائية.",
+              "transcriptSha256": "c5a94edd8775ba9ea4915466c54172d0eb07d881af4e5e95c28ab3e073832404",
+              "exact": false,
+              "expectedWordCount": 151,
+              "actualWordCount": 151,
+              "wordErrorCount": 1,
+              "substitutions": 1,
+              "deletions": 0,
+              "insertions": 0,
+              "differences": [
+                {
+                  "type": "substitution",
+                  "expected": "اللمسة",
+                  "actual": "اللمس",
+                  "expectedIndex": 122,
+                  "actualIndex": 122
+                }
+              ],
+              "checkedAt": "2026-08-27T06:43:15.145Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "part": 4,
+      "audioSha256": "e3f8f330696847c59e6c7bbcff97703e3e02d810be0d5fee579e48557ee28338",
+      "expectedWordCount": 148,
+      "models": [
+        {
+          "model": "gemini-3.6-flash",
+          "status": "pending",
+          "selectedAttempt": null,
+          "attempts": []
+        }
+      ]
+    }
+  ],
+  "technicalEvents": [
+    {
+      "model": "gemini-3.6-flash",
+      "part": 4,
+      "at": "2026-08-27T06:51:03.092Z",
+      "message": "PART_4_gemini-3.6-flash_ATTEMPT_1: technical retries exhausted: {\"error\":{\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 55.980814412s.\",\"code\":\"too_many_requests\"}}"
+    }
+  ],
+  "verifiedAt": null,
+  "lastRequestedModels": [
+    "gemini-3.6-flash"
+  ],
+  "selectedExactPasses": 1,
+  "requiredExactPasses": 20,
+  "progressPercent": 5,
+  "pendingModelParts": [
+    {
+      "part": 1,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 2,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 2,
+      "model": "gemini-3.6-flash"
+    },
+    {
+      "part": 3,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 3,
+      "model": "gemini-3.6-flash"
+    },
+    {
+      "part": 4,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 4,
+      "model": "gemini-3.6-flash"
+    },
+    {
+      "part": 5,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 5,
+      "model": "gemini-3.6-flash"
+    },
+    {
+      "part": 6,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 6,
+      "model": "gemini-3.6-flash"
+    },
+    {
+      "part": 7,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 7,
+      "model": "gemini-3.6-flash"
+    },
+    {
+      "part": 8,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 8,
+      "model": "gemini-3.6-flash"
+    },
+    {
+      "part": 9,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 9,
+      "model": "gemini-3.6-flash"
+    },
+    {
+      "part": 10,
+      "model": "gemini-3.5-flash"
+    },
+    {
+      "part": 10,
+      "model": "gemini-3.6-flash"
+    }
+  ]
+}
