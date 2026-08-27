@@ -24,7 +24,7 @@ const plan = execFileSync(process.execPath, ['scripts/generate-audio.mjs', '--pl
 for (const token of [
   '15 selected article(s)',
   '52 synthesis request(s)',
-  '140591 billable character(s)',
+  '140633 billable character(s)',
   'فهد [ar-KW-FahedNeural]',
   'planning itself sends 0 provider requests',
 ]) if (!plan.includes(token)) throw new Error(`V4.22.0 Fahed plan is missing: ${token}`);

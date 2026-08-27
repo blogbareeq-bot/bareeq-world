@@ -1,0 +1,460 @@
+{
+  "generatedAt": "2026-08-27T05:53:56.160Z",
+  "mode": "repository",
+  "origin": "https://bareeqworld.com",
+  "totals": {
+    "articles": 15,
+    "published": 15,
+    "withRepositoryCandidate": 1,
+    "productionParts": null,
+    "productionSyncBlocks": null,
+    "scriptSegments": 1167,
+    "scriptWords": 22883
+  },
+  "articles": [
+    {
+      "articleId": "ai-agents-future-now",
+      "draft": false,
+      "sourceSha256": "8b0b5eba24afc8cfaac6cdbaa5f44c9ad7dc79b98b700fd8a46d16a2212ca213",
+      "audioKey": "84f9f6b53f7ce503",
+      "rollout": "retained-gemini",
+      "speechScript": {
+        "scriptHash": "8844b531d744699e492f28c15315279cac00d6bad22b697ffa6fb82339f7a153",
+        "reviewVersion": 2,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "722b0759581c63e0fe00fdf100ac9f4a28682e2c7a90a90121217b9caba72dc5",
+        "segments": 132,
+        "spokenWords": 1660
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 4,
+        "sourceManifestSha256": "b112d6eefe62f44517e03c80fc2bddaf5876aeda9838908ec2d6d642f2567a5f"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "draft": false,
+      "sourceSha256": "93e909bee078e45526f36c8fd953823fa0ad739ac3a61fd5fee25be95ca2974e",
+      "audioKey": "263e3d148e6386a8",
+      "rollout": "retained-gemini",
+      "speechScript": {
+        "scriptHash": "6716a5b9240a5f90e56d0a18e93ac60a431121e3911e89329cbdcdf596c04f82",
+        "reviewVersion": 2,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "1687340cc19bc9c12981d13bdeb3025e2dd5010149844fe75d560824aaa2e3fb",
+        "segments": 68,
+        "spokenWords": 1982
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": null,
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "altadakhom-explained-simply",
+      "draft": false,
+      "sourceSha256": "0d31296298d13e92364aacdb81377a1494f033de619d9051e1d215369d23dbe9",
+      "audioKey": "3fe4cd044730c91d",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "818300e754265bc5ae7aa2d37d5b0afcfb685b5fc5af0861233b6a9c9792a9eb",
+        "reviewVersion": 2,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "2d82cc083fea4ed46cc94f1f6a0d0c36fc0d96624262f4853f7c6f83271f36a5",
+        "segments": 80,
+        "spokenWords": 1417
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 3,
+        "sourceManifestSha256": "4da29f0794421301fe7711f606c9a4252e3c64ecc8cf9d81a3f33e09bc05131b"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "how-touchscreens-work",
+      "draft": false,
+      "sourceSha256": "3903f7d13a288c7218e4f24756545603ddd5d7cf66564692a81c3312c2c2cc1f",
+      "audioKey": "de93f3d9f91c8b8b",
+      "rollout": "temporary-hamed",
+      "speechScript": {
+        "scriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+        "reviewVersion": 1,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "06072389348ff82fd251858c1fe85376f16a56a604cbcde4d47b0228ef2cbd81",
+        "segments": 69,
+        "spokenWords": 1507
+      },
+      "repositoryCandidate": {
+        "manifestVersion": 3,
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "defaultVoice": "hamed",
+        "sourceHash": "538305924f589992cf623fed0ecd5b0aaf9fcc9305eb1a986aaff2a0cd9a01e4",
+        "parts": 3,
+        "syncBlocks": 73,
+        "missingFiles": 0,
+        "problems": [],
+        "partCountConsistent": true
+      },
+      "bundledFallback": null,
+      "production": null,
+      "qaEvidence": [
+        {
+          "file": "how-touchscreens-work-gemini-25flash-pilot-v3-two-pass.json",
+          "status": "passed",
+          "asrModel": "gemini-3.5-flash",
+          "wordErrorCount": 0,
+          "expectedWordCount": 160
+        },
+        {
+          "file": "how-touchscreens-work-gemini-pilot-cross-model-v1.json",
+          "status": "passed",
+          "asrModel": null,
+          "wordErrorCount": null,
+          "expectedWordCount": 160
+        },
+        {
+          "file": "how-touchscreens-work-hamed-corrected-full-v2-recheck.json",
+          "status": null,
+          "asrModel": "gemini-3.6-flash",
+          "wordErrorCount": 14,
+          "expectedWordCount": 1507
+        },
+        {
+          "file": "how-touchscreens-work-hamed-corrected-full-v2.json",
+          "status": "failed",
+          "asrModel": "gemini-3.6-flash",
+          "wordErrorCount": 20,
+          "expectedWordCount": 1507
+        },
+        {
+          "file": "how-touchscreens-work-hamed-corrected-gemini35-final.json",
+          "status": "failed",
+          "asrModel": "gemini-3.5-flash",
+          "wordErrorCount": 1,
+          "expectedWordCount": 160
+        },
+        {
+          "file": "how-touchscreens-work-hamed-corrected-gemini36-independent-final.json",
+          "status": "passed",
+          "asrModel": "gemini-3.6-flash",
+          "wordErrorCount": 0,
+          "expectedWordCount": 160
+        },
+        {
+          "file": "how-touchscreens-work-hamed-corrected-whisper-v3-fixed.json",
+          "status": "failed",
+          "asrModel": "large-v3",
+          "wordErrorCount": 1,
+          "expectedWordCount": 160
+        },
+        {
+          "file": "how-touchscreens-work-hamed-final3-gemini35.json",
+          "status": "passed",
+          "asrModel": null,
+          "wordErrorCount": 0,
+          "expectedWordCount": 58
+        },
+        {
+          "file": "how-touchscreens-work-hamed-final3-test.json",
+          "status": "failed",
+          "asrModel": null,
+          "wordErrorCount": null,
+          "expectedWordCount": null
+        },
+        {
+          "file": "how-touchscreens-work-hamed-stable9-test.json",
+          "status": "failed",
+          "asrModel": null,
+          "wordErrorCount": null,
+          "expectedWordCount": null
+        },
+        {
+          "file": "how-touchscreens-work-hamed-whisper-context.json",
+          "status": "failed",
+          "asrModel": "whisper-large-v3",
+          "wordErrorCount": 2,
+          "expectedWordCount": 160
+        }
+      ],
+      "fileStatus": "needs-review"
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "draft": false,
+      "sourceSha256": "b27b52c1647e7bb6a676ce33ebd238fa6b912f1cba7b3243275fc742653d6f46",
+      "audioKey": "1d1b681593122b59",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "1434b324f42bbe6995191bfb88e7b1d5b7524ee7895cc18241d683fdfb1149ea",
+        "reviewVersion": 3,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "12d20bdbfdfd602681e73b439fbbeb3261ad844702dc45ae94d4f8333e7552fe",
+        "segments": 81,
+        "spokenWords": 1547
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": null,
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "not-generated"
+    },
+    {
+      "articleId": "language-soft-power-politics",
+      "draft": false,
+      "sourceSha256": "bb0adbfb5ff842f3c4261114de37a70f4decaf2e45e26f828bbae76efe6ad2e8",
+      "audioKey": "b19e29e785a22c73",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+        "reviewVersion": 2,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "16d2ebbe1e45a669288359a5a1ef3f1ad3c9a9f25481b4f18c70e63ba1945220",
+        "segments": 85,
+        "spokenWords": 1750
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 4,
+        "sourceManifestSha256": "fc846fa56b798b4b803219ddb2597fedd99b782360137d8dab40e19821dd01ab"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "draft": false,
+      "sourceSha256": "0976c298e02512b8456fe605713213358c4c1e888c4f36236021aacab2437360",
+      "audioKey": "34e34b6f4633d928",
+      "rollout": "temporary-hamed",
+      "speechScript": {
+        "scriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+        "reviewVersion": 2,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "2b2999dba95bff5e6bfb8ff16d2848fa3b677ffe8f595a5b6166ca15ebf7d4c1",
+        "segments": 69,
+        "spokenWords": 1975
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": null,
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "not-generated"
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "draft": false,
+      "sourceSha256": "4dab25e2e8e7907a325e2d009bbce3274eada375854bab33df952b971c3bba6e",
+      "audioKey": "cf933330ca485220",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "87554f32f21b695d2ea2c1611a658d1a9e97be42347836b073e12b68f03cac7f",
+        "reviewVersion": 3,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "5a17b365ac70828825c4f95e7f063de8554156bcb0d7772669403df5340dee6e",
+        "segments": 74,
+        "spokenWords": 1311
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 1,
+        "sourceManifestSha256": "061cd12a4c3d60613e5d4bc8b5f52bf5193084a72a470062ebcfea020e471aea"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "draft": false,
+      "sourceSha256": "26dee15c48e91f1f6f5ed3f7698150098812ffad4448b6ace934119777b72a4b",
+      "audioKey": "8f0fcef1d803164a",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+        "reviewVersion": 2,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "8bcfd8e0cc97f8e892746ea493929375169137906cc90116bb8246533b5bb877",
+        "segments": 116,
+        "spokenWords": 3016
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 6,
+        "sourceManifestSha256": "9718bc8040d4f25fa17af0d3bfe0df071a57c72d25220479deeedda4db84e66c"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "draft": false,
+      "sourceSha256": "1004c5f0c7c4b8acae5f5df803333033210906af7cb881cd53b9400c1362f6b9",
+      "audioKey": "43993d7a722d81d4",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "42dcf30b9b8b603709af43f193080270659babc091678a079ae2173563c2a057",
+        "reviewVersion": 2,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "9fa2a3319b7c1ea30edee5bfb5459ed98a9b3112458c602f954b9ca91af3d5bd",
+        "segments": 51,
+        "spokenWords": 1051
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 2,
+        "sourceManifestSha256": "0a14e35630f888f49db98bf7e87ffaa2f3c50dc96ad37a2380653c513b1eacb8"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "draft": false,
+      "sourceSha256": "311e9ef2250d89c415d1aca2b3de8adf1813525456f0377ff6d63c882115c693",
+      "audioKey": "0d7d16713d3cea31",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "7f944cfd952e958af408893a0df13f56a113744f4764ab4d996fa255414d887a",
+        "reviewVersion": 3,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "830dd83f66218fcdee69a08b04f78c562549ae8b4e8d7d7e47fe4c8dcc01151e",
+        "segments": 41,
+        "spokenWords": 848
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "20260815T050435Z-73ce11f5",
+        "provider": "openai/gpt-4o-mini-tts-2025-12-15/cedar",
+        "parts": 21,
+        "sourceManifestSha256": null
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "draft": false,
+      "sourceSha256": "ebbb6934dd16a355701cc926e1d2aeb1d1ada07b877ac8c96851592629d88368",
+      "audioKey": "9d04080d1962a365",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "fc5a9729972c2054e92fb5bd2e8fdadf073f7f09478c50c42042fbb5f9be7019",
+        "reviewVersion": 2,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "3c82f177f16bcb0489d17fa5fabc94bd6499cc99a06bcccafe8e6005ca3c221b",
+        "segments": 88,
+        "spokenWords": 1356
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 2,
+        "sourceManifestSha256": "aebb0ae7e362a899f3b48fe171c64750ddff5fb33c9a8775b36274bad02bda27"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "draft": false,
+      "sourceSha256": "a600f17c31f49e09fe72e78e2232ca977df0d5b40793f5d2c107153eff293126",
+      "audioKey": "4d194dd1e6a739a8",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "939f9e56e4ee2ad3569a8de10374a573a8888b22e8872a38085096a5c4c68647",
+        "reviewVersion": 3,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "eaaf17d0e97859bd410a5bd04540c766ea0f86aa8f217a81c2ec012187bdb8a5",
+        "segments": 37,
+        "spokenWords": 779
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 1,
+        "sourceManifestSha256": "5ad0d43fb6ecd2dfe6946607f23d0e5be1ae4bf596c9615e6477ef2836bd5ee1"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "draft": false,
+      "sourceSha256": "cab1913cc5c835f99c47ce9bd32711bc03129dc095c8a04ec07cc2c7ce265a93",
+      "audioKey": "d15e87706b55a08d",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "319ec294ac672a4a33a103fa3493f007c1a824af49ca94edc42de3578b487db1",
+        "reviewVersion": 3,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "ba8c193b5537c9e967eec5471aedca92809dcde3bc457c57c8aa83200593b571",
+        "segments": 57,
+        "spokenWords": 1007
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 2,
+        "sourceManifestSha256": "b780d3c5c4163451c04e3f12bb18449e9e1822487310f9272da9173d6590ea00"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "draft": false,
+      "sourceSha256": "23c6b6edb06d82cfed76303cdaa43a4031a520e1930e5b2570453c45dfd52475",
+      "audioKey": "45d512425faa533a",
+      "rollout": "pending-cloud",
+      "speechScript": {
+        "scriptHash": "d8b98cccc75c2ab62964608ebd65e4bed1b201d59c94b5780a525d74a3213a78",
+        "reviewVersion": 2,
+        "status": "pronunciation-review-passed-test-clip-ready",
+        "sourceSnapshotHash": "87971b1e2a8f3a2e3042b256acd50cca177716e36f2c27e6e8500ecf1599760e",
+        "segments": 119,
+        "spokenWords": 1677
+      },
+      "repositoryCandidate": null,
+      "bundledFallback": {
+        "releaseId": "azure-hamed-live-20260815",
+        "provider": "Microsoft Azure AI Speech (bundled Hamed lock)",
+        "parts": 4,
+        "sourceManifestSha256": "cd61433234130679223f25d0c50e2fb2624d810f848627f3d3f693ebe7b907e7"
+      },
+      "production": null,
+      "qaEvidence": [],
+      "fileStatus": "approved"
+    }
+  ]
+}
