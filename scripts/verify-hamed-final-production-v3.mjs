@@ -10,7 +10,9 @@ const MANIFEST_FILE = path.join(ROOT, 'public', 'audio', 'articles', AUDIO_KEY, 
 const SCRIPT_FILE = path.join(ROOT, 'scripts', 'speech-scripts', `${ARTICLE_ID}.json`);
 const META_FILE = path.join(ROOT, 'scripts', 'speech-test-evidence', `${ARTICLE_ID}-hamed-final-production-v3.json`);
 const FULL_AUDIO_FILE = path.join(ROOT, 'scripts', 'speech-test-evidence', `${ARTICLE_ID}-hamed-final-production-v3.mp3`);
-const REPORT_FILE = path.join(ROOT, 'scripts', 'speech-transcript-evidence', `${ARTICLE_ID}-hamed-final-production-v3.json`);
+const DEFAULT_REPORT_FILE = path.join(ROOT, 'scripts', 'speech-transcript-evidence', `${ARTICLE_ID}-hamed-final-production-v3.json`);
+const REPORT_FILE = process.env.QA_REPORT_FILE ? path.resolve(ROOT, process.env.QA_REPORT_FILE) : DEFAULT_REPORT_FILE;
+const SEAL_ALLOWED = REPORT_FILE === DEFAULT_REPORT_FILE;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY?.trim();
 if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY is required.');
 
@@ -168,6 +170,7 @@ report.schema = 'bareeq.hamed-final-production-cross-model-per-part.v2';
 report.requiredModels = REQUIRED_MODELS;
 report.verificationMode = 'ten-immutable-production-parts-two-distinct-models-exact-checkpointed';
 report.lastRequestedModels = requestedModels;
+report.reportMode = SEAL_ALLOWED ? 'canonical-sealable' : 'isolated-model-checkpoint';
 
 for (const part of partInputs) {
   let partReport = report.parts.find((entry) => entry.part === part.part && entry.audioSha256 === part.audioSha256);
@@ -250,14 +253,14 @@ const allPassed = partInputs.every((part) => {
   return REQUIRED_MODELS.every((model) => partReport?.models.find((entry) => entry.model === model && entry.status === 'passed' && entry.attempts.some((attempt) => attempt.attempt === entry.selectedAttempt && attempt.exact === true)));
 });
 report.selectedExactPasses = selectedExactPasses;
-report.requiredExactPasses = partInputs.length * REQUIRED_MODELS.length;
-report.progressPercent = Number(((selectedExactPasses / report.requiredExactPasses) * 100).toFixed(1));
+report.requiredExactPasses = 20;
+report.progressPercent = Number(((selectedExactPasses / 20) * 100).toFixed(1));
 report.pendingModelParts = partInputs.flatMap((part) => REQUIRED_MODELS.filter((model) => !report.parts.find((entry) => entry.part === part.part && entry.audioSha256 === part.audioSha256)?.models.find((entry) => entry.model === model && entry.status === 'passed')).map((model) => ({ part: part.part, model })));
 report.status = allPassed ? 'passed' : (report.status === 'pending-quota' ? 'pending-quota' : 'pending');
 report.verifiedAt = allPassed ? new Date().toISOString() : null;
 await writeFile(REPORT_FILE, `${JSON.stringify(report, null, 2)}\n`);
 
-if (allPassed) {
+if (allPassed && SEAL_ALLOWED) {
   manifest.verifiedStaticAudio = true;
   manifest.automatedTranscriptReview = {
     status: 'passed',
@@ -284,7 +287,7 @@ if (allPassed) {
   meta.verifiedAt = report.verifiedAt;
   await writeFile(MANIFEST_FILE, `${JSON.stringify(manifest, null, 2)}\n`);
   await writeFile(META_FILE, `${JSON.stringify(meta, null, 2)}\n`);
-  console.log(`HAMED_FINAL_V3_CROSS_MODEL_ZERO_ERROR=PASS exact=${selectedExactPasses}/${report.requiredExactPasses}`);
+  console.log(`HAMED_FINAL_V3_CROSS_MODEL_ZERO_ERROR=PASS exact=${selectedExactPasses}/20`);
 } else {
-  console.log(`HAMED_FINAL_V3_CHECKPOINT status=${report.status} exact=${selectedExactPasses}/${report.requiredExactPasses} progress=${report.progressPercent}%`);
+  console.log(`HAMED_FINAL_V3_CHECKPOINT status=${report.status} exact=${selectedExactPasses}/20 progress=${report.progressPercent}% report=${path.relative(ROOT, REPORT_FILE)}`);
 }
