@@ -1,0 +1,228 @@
+name: Audio Transcription QA Gate
+
+on:
+  push:
+    branches:
+      - qa/gemini-transcribe-poc-20260828
+    paths:
+      - scripts/audio-transcription-qa-core.mjs
+      - scripts/audio-transcription-qa-cli.mjs
+      - scripts/audio-transcription-equivalences.json
+      - scripts/test-audio-transcription-qa-core.mjs
+      - .github/workflows/audio-transcription-qa.yml
+  workflow_dispatch:
+    inputs:
+      article_id:
+        description: Article ID / markdown filename without .md
+        required: false
+        default: لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون
+      audio_hash:
+        description: Live audio article hash
+        required: false
+        default: d15e87706b55a08d
+      voice:
+        description: Manifest voice key
+        required: false
+        default: sadaltager
+      part_index:
+        description: Zero-based manifest part index
+        required: false
+        default: '0'
+
+permissions:
+  contents: read
+
+env:
+  ARTICLE_ID: ${{ github.event.inputs.article_id || 'لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون' }}
+  AUDIO_HASH: ${{ github.event.inputs.audio_hash || 'd15e87706b55a08d' }}
+  VOICE: ${{ github.event.inputs.voice || 'sadaltager' }}
+  PART_INDEX: ${{ github.event.inputs.part_index || '0' }}
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Syntax and deterministic QA tests
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-transcription-qa-core.mjs
+          node --check scripts/audio-transcription-qa-cli.mjs
+          node --check scripts/test-audio-transcription-qa-core.mjs
+          node scripts/test-audio-transcription-qa-core.mjs
+
+  live-smoke:
+    needs: unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Prepare exact expected speech and current live audio
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="qa/audio-transcription-live"
+          mkdir -p "$root"
+          curl -fsSL "https://bareeqworld.com/audio/articles/${AUDIO_HASH}/manifest.json" -o "$root/manifest.json"
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+          import { extractArticleSpeechModel } from './scripts/speech-script-core.mjs';
+          const id = process.env.ARTICLE_ID;
+          const root = 'qa/audio-transcription-live';
+          const articleFile = `src/content/posts/${id}.md`;
+          const scriptFile = `scripts/speech-scripts/${id}.json`;
+          const article = await readFile(articleFile, 'utf8');
+          const script = JSON.parse(await readFile(scriptFile, 'utf8'));
+          const manifest = JSON.parse(await readFile(`${root}/manifest.json`, 'utf8'));
+          if (!/Gemini/i.test(String(manifest.provider ?? ''))) throw new Error(`Live provider is not Gemini: ${manifest.provider}`);
+          const partIndex = Number(process.env.PART_INDEX);
+          const part = manifest.parts?.[partIndex];
+          const audio = part?.audio?.[process.env.VOICE];
+          if (!audio?.src) throw new Error(`Missing live audio for ${process.env.VOICE}, part ${partIndex + 1}`);
+          const model = extractArticleSpeechModel({ articleId: id, source: article, filename: articleFile });
+          const runtimeToSegment = new Map(model.segments.filter((s) => s.runtimeId).map((s) => [s.runtimeId, s.segmentId]));
+          const byId = new Map((script.segments ?? []).map((s) => [s.segmentId, s]));
+          const title = (script.segments ?? []).find((s) => s.type === 'title')?.spokenText?.trim() || manifest.title || model.title;
+          const expected = [title];
+          for (const sync of part.sync ?? []) {
+            const segmentId = runtimeToSegment.get(sync.id);
+            const record = segmentId ? byId.get(segmentId) : null;
+            if (!record?.spokenText) throw new Error(`Speech Script mapping is stale for live sync block ${sync.id}`);
+            expected.push(record.spokenText.trim());
+          }
+          await writeFile(`${root}/expected.txt`, `${expected.join('\n')}\n`);
+          await writeFile(`${root}/meta.json`, JSON.stringify({
+            articleId: id,
+            title: manifest.title,
+            provider: manifest.provider,
+            ttsModel: manifest.model,
+            voice: process.env.VOICE,
+            partIndex,
+            durationSeconds: audio.durationSeconds ?? null,
+            audioSrc: audio.src,
+          }, null, 2));
+          NODE
+          src=$(node -p "JSON.parse(require('fs').readFileSync('$root/meta.json','utf8')).audioSrc")
+          curl -fsSL "https://bareeqworld.com${src}" -o "$root/sample.mp3"
+          test -s "$root/sample.mp3"
+
+      - name: Install Gemini SDK
+        run: python -m pip install --quiet --disable-pip-version-check --upgrade google-genai
+
+      - name: Pass 1 — unbiased verbatim transcription
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GEMINI_API_KEY"
+          python <<'PY'
+          import os
+          from pathlib import Path
+          from google import genai
+          root = Path('qa/audio-transcription-live')
+          client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
+          uploaded = client.files.upload(file=str(root / 'sample.mp3'))
+          response = client.interactions.create(
+              model='gemini-3.5-transcribe',
+              input=[{'type':'audio','uri':uploaded.uri,'mime_type':uploaded.mime_type}],
+              generation_config={'transcription_config': {'language_codes': [], 'mode': {'type':'verbatim'}}},
+          )
+          text = (response.output_text or '').strip()
+          if not text:
+              raise RuntimeError('Gemini Transcribe returned an empty pass-1 transcript')
+          (root / 'transcript-pass1.txt').write_text(text + '\n', encoding='utf-8')
+          PY
+          node scripts/audio-transcription-qa-cli.mjs \
+            --expected "$root/expected.txt" \
+            --pass1 "$root/transcript-pass1.txt" \
+            --output "$root/result-pass1.json"
+
+      - name: Pass 2 — only when Arabic differences need targeted verification
+        if: always()
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="qa/audio-transcription-live"
+          status=$(node -p "JSON.parse(require('fs').readFileSync('$root/result-pass1.json','utf8')).status")
+          if [ "$status" != "NEEDS_TARGETED_VERIFICATION" ]; then
+            echo "Targeted pass not required: $status"
+            exit 0
+          fi
+          test -n "$GEMINI_API_KEY"
+          python <<'PY'
+          import json, os
+          from pathlib import Path
+          from google import genai
+          root = Path('qa/audio-transcription-live')
+          result = json.loads((root / 'result-pass1.json').read_text(encoding='utf-8'))
+          vocab = result.get('verificationVocabulary') or []
+          if not vocab:
+              raise RuntimeError('Targeted verification requested without vocabulary')
+          client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
+          uploaded = client.files.upload(file=str(root / 'sample.mp3'))
+          response = client.interactions.create(
+              model='gemini-3.5-transcribe',
+              input=[{'type':'audio','uri':uploaded.uri,'mime_type':uploaded.mime_type}],
+              generation_config={'transcription_config': {
+                  'language_codes': [],
+                  'custom_vocabulary': vocab,
+                  'mode': {'type':'verbatim'},
+              }},
+          )
+          text = (response.output_text or '').strip()
+          if not text:
+              raise RuntimeError('Gemini Transcribe returned an empty targeted transcript')
+          (root / 'transcript-pass2.txt').write_text(text + '\n', encoding='utf-8')
+          PY
+
+      - name: Final QA verdict
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="qa/audio-transcription-live"
+          args=(--expected "$root/expected.txt" --pass1 "$root/transcript-pass1.txt" --output "$root/final.json")
+          if [ -s "$root/transcript-pass2.txt" ]; then args+=(--pass2 "$root/transcript-pass2.txt"); fi
+          node scripts/audio-transcription-qa-cli.mjs "${args[@]}"
+          node --input-type=module <<'NODE'
+          import { readFile, appendFile } from 'node:fs/promises';
+          const root = 'qa/audio-transcription-live';
+          const meta = JSON.parse(await readFile(`${root}/meta.json`, 'utf8'));
+          const result = JSON.parse(await readFile(`${root}/final.json`, 'utf8'));
+          const lines = [
+            `## Audio Transcription QA — ${meta.title}`,
+            '',
+            `- TTS: ${meta.provider} / ${meta.ttsModel} / ${meta.voice}`,
+            `- STT: gemini-3.5-transcribe / verbatim`,
+            `- Verdict: **${result.status}**`,
+            `- Similarity: **${result.final.similarityPercent}%**`,
+            `- Persistent edits: **${result.final.editDistance}**`,
+            `- Publication allowed: **${result.publicationAllowed}**`,
+            `- Human review required: **${result.humanReviewRequired}**`,
+            `- Automatic regeneration allowed: **${result.automaticRegenerationAllowed}**`,
+          ];
+          await appendFile(process.env.GITHUB_STEP_SUMMARY, `${lines.join('\n')}\n`);
+          if (!result.publicationAllowed) {
+            console.error('QA gate blocked publication. Human review is required. Automatic TTS regeneration remains disabled.');
+            process.exitCode = 2;
+          }
+          NODE
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audio-transcription-qa-live-${{ github.run_id }}
+          path: qa/audio-transcription-live/
+          retention-days: 14
