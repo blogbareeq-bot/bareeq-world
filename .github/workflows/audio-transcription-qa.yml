@@ -124,24 +124,44 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          root="qa/audio-transcription-live"
           test -n "$GEMINI_API_KEY"
           python <<'PY'
-          import os
+          import os, time
           from pathlib import Path
           from google import genai
+
           root = Path('qa/audio-transcription-live')
           client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
           uploaded = client.files.upload(file=str(root / 'sample.mp3'))
-          response = client.interactions.create(
-              model='gemini-3.5-transcribe',
-              input=[{'type':'audio','uri':uploaded.uri,'mime_type':uploaded.mime_type}],
-              generation_config={'transcription_config': {'language_codes': [], 'mode': {'type':'verbatim'}}},
-          )
-          text = (response.output_text or '').strip()
-          if not text:
-              raise RuntimeError('Gemini Transcribe returned an empty pass-1 transcript')
-          (root / 'transcript-pass1.txt').write_text(text + '\n', encoding='utf-8')
+          last_error = None
+          for attempt, delay in enumerate((0, 12, 24), start=1):
+              if delay:
+                  time.sleep(delay)
+              try:
+                  response = client.interactions.create(
+                      model='gemini-3.5-transcribe',
+                      input=[{'type':'audio','uri':uploaded.uri,'mime_type':uploaded.mime_type}],
+                      generation_config={'transcription_config': {'language_codes': [], 'mode': {'type':'verbatim'}}},
+                  )
+                  text = (response.output_text or '').strip()
+                  if not text:
+                      raise RuntimeError('Gemini Transcribe returned an empty pass-1 transcript')
+                  (root / 'transcript-pass1.txt').write_text(text + '\n', encoding='utf-8')
+                  print(f'Pass 1 succeeded on attempt {attempt}.')
+                  break
+              except Exception as exc:
+                  last_error = exc
+                  message = str(exc).lower()
+                  transient = ('429' in message or 'too_many_requests' in message or 'rate limit' in message or 'quota exceeded' in message)
+                  if not transient or attempt == 3:
+                      (root / 'transcribe-infrastructure-error.txt').write_text(f'pass1 attempt={attempt}\n{type(exc).__name__}: {exc}\n', encoding='utf-8')
+                      raise
+                  print(f'Transient Gemini limit on attempt {attempt}; retrying.', flush=True)
+          else:
+              raise last_error or RuntimeError('Pass 1 failed without an exception')
           PY
+          test -s "$root/transcript-pass1.txt"
           node scripts/audio-transcription-qa-cli.mjs \
             --expected "$root/expected.txt" \
             --pass1 "$root/transcript-pass1.txt" \
@@ -155,6 +175,10 @@ jobs:
         run: |
           set -euo pipefail
           root="qa/audio-transcription-live"
+          if [ ! -s "$root/result-pass1.json" ]; then
+            echo "No pass-1 QA result exists; targeted verification is skipped because the upstream transcription step failed."
+            exit 0
+          fi
           status=$(node -p "JSON.parse(require('fs').readFileSync('$root/result-pass1.json','utf8')).status")
           if [ "$status" != "NEEDS_TARGETED_VERIFICATION" ]; then
             echo "Targeted pass not required: $status"
@@ -162,9 +186,10 @@ jobs:
           fi
           test -n "$GEMINI_API_KEY"
           python <<'PY'
-          import json, os
+          import json, os, time
           from pathlib import Path
           from google import genai
+
           root = Path('qa/audio-transcription-live')
           result = json.loads((root / 'result-pass1.json').read_text(encoding='utf-8'))
           vocab = result.get('verificationVocabulary') or []
@@ -172,19 +197,36 @@ jobs:
               raise RuntimeError('Targeted verification requested without vocabulary')
           client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
           uploaded = client.files.upload(file=str(root / 'sample.mp3'))
-          response = client.interactions.create(
-              model='gemini-3.5-transcribe',
-              input=[{'type':'audio','uri':uploaded.uri,'mime_type':uploaded.mime_type}],
-              generation_config={'transcription_config': {
-                  'language_codes': [],
-                  'custom_vocabulary': vocab,
-                  'mode': {'type':'verbatim'},
-              }},
-          )
-          text = (response.output_text or '').strip()
-          if not text:
-              raise RuntimeError('Gemini Transcribe returned an empty targeted transcript')
-          (root / 'transcript-pass2.txt').write_text(text + '\n', encoding='utf-8')
+          last_error = None
+          for attempt, delay in enumerate((0, 12, 24), start=1):
+              if delay:
+                  time.sleep(delay)
+              try:
+                  response = client.interactions.create(
+                      model='gemini-3.5-transcribe',
+                      input=[{'type':'audio','uri':uploaded.uri,'mime_type':uploaded.mime_type}],
+                      generation_config={'transcription_config': {
+                          'language_codes': [],
+                          'custom_vocabulary': vocab,
+                          'mode': {'type':'verbatim'},
+                      }},
+                  )
+                  text = (response.output_text or '').strip()
+                  if not text:
+                      raise RuntimeError('Gemini Transcribe returned an empty targeted transcript')
+                  (root / 'transcript-pass2.txt').write_text(text + '\n', encoding='utf-8')
+                  print(f'Pass 2 succeeded on attempt {attempt}; vocabulary={vocab}.')
+                  break
+              except Exception as exc:
+                  last_error = exc
+                  message = str(exc).lower()
+                  transient = ('429' in message or 'too_many_requests' in message or 'rate limit' in message or 'quota exceeded' in message)
+                  if not transient or attempt == 3:
+                      (root / 'transcribe-infrastructure-error.txt').write_text(f'pass2 attempt={attempt}\n{type(exc).__name__}: {exc}\n', encoding='utf-8')
+                      raise
+                  print(f'Transient Gemini limit on targeted attempt {attempt}; retrying.', flush=True)
+          else:
+              raise last_error or RuntimeError('Pass 2 failed without an exception')
           PY
 
       - name: Final QA verdict
@@ -193,6 +235,10 @@ jobs:
         run: |
           set -euo pipefail
           root="qa/audio-transcription-live"
+          if [ ! -s "$root/transcript-pass1.txt" ] || [ ! -s "$root/result-pass1.json" ]; then
+            echo "Audio QA has no valid pass-1 evidence; this is an infrastructure/transcription failure, not a content verdict." | tee "$root/final-infrastructure-status.txt"
+            exit 3
+          fi
           args=(--expected "$root/expected.txt" --pass1 "$root/transcript-pass1.txt" --output "$root/final.json")
           if [ -s "$root/transcript-pass2.txt" ]; then args+=(--pass2 "$root/transcript-pass2.txt"); fi
           node scripts/audio-transcription-qa-cli.mjs "${args[@]}"
