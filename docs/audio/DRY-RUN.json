@@ -1,6 +1,6 @@
 {
-  "schema": "bareeq.audio-production-dry-run.v2",
-  "generatedAt": "2026-08-28T22:04:08.871Z",
+  "schema": "bareeq.audio-production-dry-run.v3",
+  "generatedAt": "2026-08-28T22:38:46.745Z",
   "mode": "dry-run",
   "narrator": {
     "role": "primary",
@@ -27,6 +27,28 @@
     "language": "ar-SA",
     "note": "Hamed/Fahed remain rollback voices. They are not competing production narrators."
   },
+  "geminiTtsContract": {
+    "provider": "gemini-interactions",
+    "model": "gemini-3.1-flash-tts-preview",
+    "inputTokenLimit": 8192,
+    "outputTokenLimit": 16384,
+    "qualityCapSeconds": 180,
+    "sampleRateHz": 24000,
+    "channels": 1,
+    "pcmEncoding": "s16le",
+    "tokenEstimateDivisorBytes": 3,
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/interactions",
+    "apiRevision": "2026-05-20"
+  },
+  "cloudTtsContract": {
+    "provider": "cloud-tts",
+    "status": "inactive-until-BAREEQ_CLOUD_TTS_ACTIVATE",
+    "officialMaxTranscriptBytes": 4000,
+    "officialMaxPromptBytes": 4000,
+    "officialCombinedBytes": 8000,
+    "officialOutputSeconds": 655,
+    "note": "Cloud TTS byte/duration caps are not the official Gemini Interactions TTS contract."
+  },
   "asr": {
     "models": [
       "gemini-3.5-transcribe",
@@ -35,7 +57,8 @@
     "forbidden": [
       "gemini-3.6-transcribe"
     ],
-    "file": "full merged MP3 only"
+    "file": "full merged MP3 only",
+    "filesApi": "resumable start → X-Goog-Upload-URL → upload, finalize"
   },
   "candidatePath": "audio-candidates/<articleId>/<fingerprint>/",
   "livePath": "public/audio/articles/<key>/",
@@ -52,18 +75,17 @@
     },
     "after": {
       "settings": {
-        "version": 2,
-        "name": "sentence-duration-quota",
+        "version": 3,
+        "name": "gemini-8192-token-duration",
         "targetSeconds": 165,
         "minSeconds": 90,
         "maxSeconds": 180,
         "maxTranscriptBytes": 6500,
-        "officialTextLimitBytes": 4000,
-        "officialPromptLimitBytes": 4000,
-        "officialCombinedLimitBytes": 8000,
-        "officialOutputSeconds": 655,
-        "driftCapSeconds": 180,
-        "defaultCharsPerSecond": 10
+        "geminiInputTokenLimit": 8192,
+        "geminiTokenEstimateDivisorBytes": 3,
+        "defaultCharsPerSecond": 10,
+        "rebalanceFloorSeconds": 45,
+        "generatorVersion": 8
       },
       "ttsRequests": 44
     }
@@ -94,6 +116,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -102,6 +126,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -113,10 +139,13 @@
       "ttsRequestsBefore": 7,
       "ttsRequestsAfter": 6,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "maxPartBytes": 3199,
       "maxPartEstimatedSeconds": 179.38,
-      "officialTextLimitBytes": 4000,
-      "officialOutputSeconds": 655,
+      "maxPartEstimatedTokens": 1548,
+      "geminiInputTokenLimit": 8192,
+      "geminiQualityCapSeconds": 180,
       "justification": null,
       "parts": [
         {
@@ -124,42 +153,139 @@
           "chars": 1565,
           "bytes": 2825,
           "estimatedSeconds": 160.05,
-          "promptBytes": 4270
+          "estimatedTokens": 1424,
+          "promptBytes": 4270,
+          "syncIds": [
+            "b0001",
+            "b0002",
+            "b0003",
+            "b0004",
+            "b0005",
+            "b0006",
+            "b0007",
+            "b0008",
+            "b0009",
+            "b0010",
+            "b0011",
+            "b0012"
+          ]
         },
         {
           "partIndex": 1,
           "chars": 1676,
           "bytes": 3050,
           "estimatedSeconds": 171.4,
-          "promptBytes": 4495
+          "estimatedTokens": 1499,
+          "promptBytes": 4495,
+          "syncIds": [
+            "b0013",
+            "b0014",
+            "b0015",
+            "b0016",
+            "b0017",
+            "b0018",
+            "b0019",
+            "b0020",
+            "b0021",
+            "b0022",
+            "b0023",
+            "b0024"
+          ]
         },
         {
           "partIndex": 2,
           "chars": 1754,
           "bytes": 3199,
           "estimatedSeconds": 179.38,
-          "promptBytes": 4644
+          "estimatedTokens": 1548,
+          "promptBytes": 4644,
+          "syncIds": [
+            "b0025",
+            "b0026",
+            "b0027",
+            "b0028",
+            "b0029",
+            "b0030",
+            "b0031",
+            "b0032",
+            "b0033",
+            "b0034",
+            "b0035",
+            "b0036",
+            "b0037",
+            "b0038",
+            "b0039"
+          ]
         },
         {
           "partIndex": 3,
           "chars": 1700,
           "bytes": 3075,
           "estimatedSeconds": 173.85,
-          "promptBytes": 4520
+          "estimatedTokens": 1507,
+          "promptBytes": 4520,
+          "syncIds": [
+            "b0040",
+            "b0041",
+            "b0042",
+            "b0043",
+            "b0044",
+            "b0045",
+            "b0046",
+            "b0047",
+            "b0048",
+            "b0049",
+            "b0050",
+            "b0051",
+            "b0052",
+            "b0053",
+            "b0054",
+            "b0055",
+            "b0056",
+            "b0057",
+            "b0058",
+            "b0059"
+          ]
         },
         {
           "partIndex": 4,
-          "chars": 1657,
-          "bytes": 3021,
-          "estimatedSeconds": 169.46,
-          "promptBytes": 4466
+          "chars": 1305,
+          "bytes": 2379,
+          "estimatedSeconds": 133.46,
+          "estimatedTokens": 1275,
+          "promptBytes": 3824,
+          "syncIds": [
+            "b0060",
+            "b0061",
+            "b0062",
+            "b0063",
+            "b0064",
+            "b0065",
+            "b0066",
+            "b0067",
+            "b0068",
+            "b0069",
+            "b0070",
+            "b0071",
+            "b0072",
+            "b0073",
+            "b0074"
+          ]
         },
         {
           "partIndex": 5,
-          "chars": 117,
-          "bytes": 213,
-          "estimatedSeconds": 11.97,
-          "promptBytes": 1658
+          "chars": 469,
+          "bytes": 855,
+          "estimatedSeconds": 47.96,
+          "estimatedTokens": 767,
+          "promptBytes": 2300,
+          "syncIds": [
+            "b0075",
+            "b0076",
+            "b0077",
+            "b0078",
+            "b0079"
+          ]
         }
       ]
     },
@@ -172,10 +298,13 @@
       "ttsRequestsBefore": 14,
       "ttsRequestsAfter": 6,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "maxPartBytes": 5423,
       "maxPartEstimatedSeconds": 179.83,
-      "officialTextLimitBytes": 4000,
-      "officialOutputSeconds": 655,
+      "maxPartEstimatedTokens": 2289,
+      "geminiInputTokenLimit": 8192,
+      "geminiQualityCapSeconds": 180,
       "justification": null,
       "parts": [
         {
@@ -183,42 +312,128 @@
           "chars": 2785,
           "bytes": 5265,
           "estimatedSeconds": 174.32,
-          "promptBytes": 6709
+          "estimatedTokens": 2237,
+          "promptBytes": 6709,
+          "syncIds": [
+            "b0001",
+            "b0002",
+            "b0003",
+            "b0004",
+            "b0005",
+            "b0006",
+            "b0007",
+            "b0008",
+            "b0009",
+            "b0010",
+            "b0011",
+            "b0012",
+            "b0013"
+          ]
         },
         {
           "partIndex": 1,
           "chars": 2602,
           "bytes": 4928,
           "estimatedSeconds": 162.86,
-          "promptBytes": 6372
+          "estimatedTokens": 2124,
+          "promptBytes": 6372,
+          "syncIds": [
+            "b0014",
+            "b0015",
+            "b0016",
+            "b0017",
+            "b0018",
+            "b0019",
+            "b0020",
+            "b0021",
+            "b0022",
+            "b0023",
+            "b0024",
+            "b0025",
+            "b0026",
+            "b0027"
+          ]
         },
         {
           "partIndex": 2,
           "chars": 2873,
           "bytes": 5423,
           "estimatedSeconds": 179.83,
-          "promptBytes": 6867
+          "estimatedTokens": 2289,
+          "promptBytes": 6867,
+          "syncIds": [
+            "b0028",
+            "b0029",
+            "b0030",
+            "b0031",
+            "b0032",
+            "b0033",
+            "b0034",
+            "b0035",
+            "b0036",
+            "b0037",
+            "b0038",
+            "b0039"
+          ]
         },
         {
           "partIndex": 3,
           "chars": 2674,
           "bytes": 5062,
           "estimatedSeconds": 167.37,
-          "promptBytes": 6506
+          "estimatedTokens": 2169,
+          "promptBytes": 6506,
+          "syncIds": [
+            "b0040",
+            "b0041",
+            "b0042",
+            "b0043",
+            "b0044",
+            "b0045",
+            "b0046",
+            "b0047",
+            "b0048",
+            "b0049",
+            "b0050",
+            "b0051",
+            "b0052"
+          ]
         },
         {
           "partIndex": 4,
           "chars": 2843,
           "bytes": 5381,
           "estimatedSeconds": 177.95,
-          "promptBytes": 6825
+          "estimatedTokens": 2275,
+          "promptBytes": 6825,
+          "syncIds": [
+            "b0053",
+            "b0054",
+            "b0055",
+            "b0056",
+            "b0057",
+            "b0058",
+            "b0059",
+            "b0060",
+            "b0061",
+            "b0062",
+            "b0063",
+            "b0064"
+          ]
         },
         {
           "partIndex": 5,
           "chars": 942,
           "bytes": 1774,
           "estimatedSeconds": 58.96,
-          "promptBytes": 3218
+          "estimatedTokens": 1073,
+          "promptBytes": 3218,
+          "syncIds": [
+            "b0065",
+            "b0066",
+            "b0067",
+            "b0068"
+          ]
         }
       ]
     },
@@ -231,60 +446,164 @@
       "ttsRequestsBefore": 7,
       "ttsRequestsAfter": 7,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "maxPartBytes": 2505,
       "maxPartEstimatedSeconds": 178.98,
-      "officialTextLimitBytes": 4000,
-      "officialOutputSeconds": 655,
-      "justification": "Article spoken length 8668 chars / live 1118.52s needs 7 parts at ≤180s and ≤6500 transcript bytes (official text limit 4000).",
+      "maxPartEstimatedTokens": 1329,
+      "geminiInputTokenLimit": 8192,
+      "geminiQualityCapSeconds": 180,
+      "justification": "Article spoken length 8668 chars / live 1118.52s needs 7 parts at ≤180s Gemini quality cap and ≤8192 input tokens.",
       "parts": [
         {
           "partIndex": 0,
           "chars": 1382,
           "bytes": 2488,
           "estimatedSeconds": 178.33,
-          "promptBytes": 3970
+          "estimatedTokens": 1324,
+          "promptBytes": 3970,
+          "syncIds": [
+            "b0001",
+            "b0002",
+            "b0003",
+            "b0004",
+            "b0005",
+            "b0006",
+            "b0007",
+            "b0008",
+            "b0009",
+            "b0010",
+            "b0011"
+          ]
         },
         {
           "partIndex": 1,
           "chars": 1366,
           "bytes": 2464,
           "estimatedSeconds": 176.27,
-          "promptBytes": 3946
+          "estimatedTokens": 1316,
+          "promptBytes": 3946,
+          "syncIds": [
+            "b0012",
+            "b0013",
+            "b0014",
+            "b0015",
+            "b0016",
+            "b0017",
+            "b0018",
+            "b0019",
+            "b0020",
+            "b0021"
+          ]
         },
         {
           "partIndex": 2,
           "chars": 1315,
           "bytes": 2369,
           "estimatedSeconds": 169.69,
-          "promptBytes": 3851
+          "estimatedTokens": 1284,
+          "promptBytes": 3851,
+          "syncIds": [
+            "b0022",
+            "b0023",
+            "b0024",
+            "b0025",
+            "b0026",
+            "b0027",
+            "b0028",
+            "b0029",
+            "b0030",
+            "b0031",
+            "b0032"
+          ]
         },
         {
           "partIndex": 3,
           "chars": 1382,
           "bytes": 2483,
           "estimatedSeconds": 178.33,
-          "promptBytes": 3965
+          "estimatedTokens": 1322,
+          "promptBytes": 3965,
+          "syncIds": [
+            "b0033",
+            "b0034",
+            "b0035",
+            "b0036",
+            "b0037",
+            "b0038",
+            "b0039",
+            "b0040",
+            "b0041",
+            "b0042",
+            "b0043",
+            "b0044"
+          ]
         },
         {
           "partIndex": 4,
           "chars": 1387,
           "bytes": 2505,
           "estimatedSeconds": 178.98,
-          "promptBytes": 3987
+          "estimatedTokens": 1329,
+          "promptBytes": 3987,
+          "syncIds": [
+            "b0045",
+            "b0046",
+            "b0047",
+            "b0048",
+            "b0049",
+            "b0050",
+            "b0051",
+            "b0052",
+            "b0053",
+            "b0054",
+            "b0055",
+            "b0056",
+            "b0057",
+            "b0058",
+            "b0059",
+            "b0060",
+            "b0061"
+          ]
         },
         {
           "partIndex": 5,
           "chars": 1206,
           "bytes": 2173,
           "estimatedSeconds": 155.62,
-          "promptBytes": 3655
+          "estimatedTokens": 1219,
+          "promptBytes": 3655,
+          "syncIds": [
+            "b0062",
+            "b0063",
+            "b0064",
+            "b0065",
+            "b0066",
+            "b0067",
+            "b0068",
+            "b0069",
+            "b0070",
+            "b0071",
+            "b0072",
+            "b0073",
+            "b0074",
+            "b0075"
+          ]
         },
         {
           "partIndex": 6,
           "chars": 623,
           "bytes": 1133,
           "estimatedSeconds": 80.39,
-          "promptBytes": 2615
+          "estimatedTokens": 872,
+          "promptBytes": 2615,
+          "syncIds": [
+            "b0076",
+            "b0077",
+            "b0078",
+            "b0079",
+            "b0080"
+          ]
         }
       ]
     },
@@ -297,60 +616,168 @@
       "ttsRequestsBefore": 9,
       "ttsRequestsAfter": 7,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "maxPartBytes": 3160,
       "maxPartEstimatedSeconds": 179.03,
-      "officialTextLimitBytes": 4000,
-      "officialOutputSeconds": 655,
-      "justification": "Article spoken length 10611 chars / live 1092.432s needs 7 parts at ≤180s and ≤6500 transcript bytes (official text limit 4000).",
+      "maxPartEstimatedTokens": 1546,
+      "geminiInputTokenLimit": 8192,
+      "geminiQualityCapSeconds": 180,
+      "justification": "Article spoken length 10611 chars / live 1092.432s needs 7 parts at ≤180s Gemini quality cap and ≤8192 input tokens.",
       "parts": [
         {
           "partIndex": 0,
           "chars": 1548,
           "bytes": 2812,
           "estimatedSeconds": 159.37,
-          "promptBytes": 4289
+          "estimatedTokens": 1430,
+          "promptBytes": 4289,
+          "syncIds": [
+            "b0001",
+            "b0002",
+            "b0003",
+            "b0004",
+            "b0005",
+            "b0006",
+            "b0007",
+            "b0008",
+            "b0009",
+            "b0010",
+            "b0011",
+            "b0012",
+            "b0013",
+            "b0014",
+            "b0015"
+          ]
         },
         {
           "partIndex": 1,
           "chars": 1530,
           "bytes": 2788,
           "estimatedSeconds": 157.52,
-          "promptBytes": 4265
+          "estimatedTokens": 1422,
+          "promptBytes": 4265,
+          "syncIds": [
+            "b0016",
+            "b0017",
+            "b0018",
+            "b0019",
+            "b0020",
+            "b0021",
+            "b0022",
+            "b0023",
+            "b0024",
+            "b0025"
+          ]
         },
         {
           "partIndex": 2,
           "chars": 1732,
           "bytes": 3160,
           "estimatedSeconds": 178.31,
-          "promptBytes": 4637
+          "estimatedTokens": 1546,
+          "promptBytes": 4637,
+          "syncIds": [
+            "b0026",
+            "b0027",
+            "b0028",
+            "b0029",
+            "b0030",
+            "b0031",
+            "b0032",
+            "b0033",
+            "b0034"
+          ]
         },
         {
           "partIndex": 3,
           "chars": 1533,
           "bytes": 2781,
           "estimatedSeconds": 157.83,
-          "promptBytes": 4258
+          "estimatedTokens": 1420,
+          "promptBytes": 4258,
+          "syncIds": [
+            "b0035",
+            "b0036",
+            "b0037",
+            "b0038",
+            "b0039",
+            "b0040",
+            "b0041",
+            "b0042",
+            "b0043",
+            "b0044",
+            "b0045",
+            "b0046"
+          ]
         },
         {
           "partIndex": 4,
           "chars": 1739,
           "bytes": 3159,
           "estimatedSeconds": 179.03,
-          "promptBytes": 4636
+          "estimatedTokens": 1546,
+          "promptBytes": 4636,
+          "syncIds": [
+            "b0047",
+            "b0048",
+            "b0049",
+            "b0050",
+            "b0051",
+            "b0052",
+            "b0053",
+            "b0054",
+            "b0055",
+            "b0056",
+            "b0057",
+            "b0058"
+          ]
         },
         {
           "partIndex": 5,
           "chars": 1673,
           "bytes": 3041,
           "estimatedSeconds": 172.24,
-          "promptBytes": 4518
+          "estimatedTokens": 1506,
+          "promptBytes": 4518,
+          "syncIds": [
+            "b0059",
+            "b0060",
+            "b0061",
+            "b0062",
+            "b0063",
+            "b0064",
+            "b0065",
+            "b0066",
+            "b0067",
+            "b0068",
+            "b0069",
+            "b0070",
+            "b0071",
+            "b0072",
+            "b0073",
+            "b0074",
+            "b0075",
+            "b0076",
+            "b0077"
+          ]
         },
         {
           "partIndex": 6,
           "chars": 850,
           "bytes": 1556,
           "estimatedSeconds": 87.51,
-          "promptBytes": 3033
+          "estimatedTokens": 1011,
+          "promptBytes": 3033,
+          "syncIds": [
+            "b0078",
+            "b0079",
+            "b0080",
+            "b0081",
+            "b0082",
+            "b0083",
+            "b0084"
+          ]
         }
       ]
     },
@@ -363,67 +790,162 @@
       "ttsRequestsBefore": 11,
       "ttsRequestsAfter": 8,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "maxPartBytes": 3249,
       "maxPartEstimatedSeconds": 175.77,
-      "officialTextLimitBytes": 4000,
-      "officialOutputSeconds": 655,
-      "justification": "Article spoken length 12649 chars / live 1246.248s needs 8 parts at ≤180s and ≤6500 transcript bytes (official text limit 4000).",
+      "maxPartEstimatedTokens": 1577,
+      "geminiInputTokenLimit": 8192,
+      "geminiQualityCapSeconds": 180,
+      "justification": "Article spoken length 12649 chars / live 1246.248s needs 8 parts at ≤180s Gemini quality cap and ≤8192 input tokens.",
       "parts": [
         {
           "partIndex": 0,
           "chars": 1730,
           "bytes": 3170,
           "estimatedSeconds": 170.45,
-          "promptBytes": 4651
+          "estimatedTokens": 1551,
+          "promptBytes": 4651,
+          "syncIds": [
+            "b0001",
+            "b0002",
+            "b0003",
+            "b0004",
+            "b0005",
+            "b0006",
+            "b0007",
+            "b0008",
+            "b0009"
+          ]
         },
         {
           "partIndex": 1,
           "chars": 1725,
           "bytes": 3151,
           "estimatedSeconds": 169.96,
-          "promptBytes": 4632
+          "estimatedTokens": 1544,
+          "promptBytes": 4632,
+          "syncIds": [
+            "b0010",
+            "b0011",
+            "b0012",
+            "b0013",
+            "b0014",
+            "b0015",
+            "b0016",
+            "b0017",
+            "b0018"
+          ]
         },
         {
           "partIndex": 2,
           "chars": 1634,
           "bytes": 3013,
           "estimatedSeconds": 160.99,
-          "promptBytes": 4494
+          "estimatedTokens": 1498,
+          "promptBytes": 4494,
+          "syncIds": [
+            "b0019",
+            "b0020",
+            "b0021",
+            "b0022",
+            "b0023",
+            "b0024",
+            "b0025",
+            "b0026",
+            "b0027"
+          ]
         },
         {
           "partIndex": 3,
           "chars": 1683,
           "bytes": 3064,
           "estimatedSeconds": 165.82,
-          "promptBytes": 4545
+          "estimatedTokens": 1515,
+          "promptBytes": 4545,
+          "syncIds": [
+            "b0028",
+            "b0029",
+            "b0030",
+            "b0031",
+            "b0032",
+            "b0033",
+            "b0034",
+            "b0035"
+          ]
         },
         {
           "partIndex": 4,
           "chars": 1554,
           "bytes": 2838,
           "estimatedSeconds": 153.11,
-          "promptBytes": 4319
+          "estimatedTokens": 1440,
+          "promptBytes": 4319,
+          "syncIds": [
+            "b0036",
+            "b0037",
+            "b0038",
+            "b0039",
+            "b0040",
+            "b0041"
+          ]
         },
         {
           "partIndex": 5,
           "chars": 1784,
           "bytes": 3249,
           "estimatedSeconds": 175.77,
-          "promptBytes": 4730
+          "estimatedTokens": 1577,
+          "promptBytes": 4730,
+          "syncIds": [
+            "b0042",
+            "b0043",
+            "b0044",
+            "b0045",
+            "b0046",
+            "b0047",
+            "b0048",
+            "b0049",
+            "b0050"
+          ]
         },
         {
           "partIndex": 6,
           "chars": 1685,
           "bytes": 3078,
           "estimatedSeconds": 166.02,
-          "promptBytes": 4559
+          "estimatedTokens": 1520,
+          "promptBytes": 4559,
+          "syncIds": [
+            "b0051",
+            "b0052",
+            "b0053",
+            "b0054",
+            "b0055",
+            "b0056",
+            "b0057",
+            "b0058",
+            "b0059",
+            "b0060",
+            "b0061",
+            "b0062",
+            "b0063"
+          ]
         },
         {
           "partIndex": 7,
           "chars": 846,
           "bytes": 1545,
           "estimatedSeconds": 83.35,
-          "promptBytes": 3026
+          "estimatedTokens": 1009,
+          "promptBytes": 3026,
+          "syncIds": [
+            "b0064",
+            "b0065",
+            "b0066",
+            "b0067",
+            "b0068"
+          ]
         }
       ]
     },
@@ -433,6 +955,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -444,81 +968,229 @@
       "ttsRequestsBefore": 15,
       "ttsRequestsAfter": 10,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "maxPartBytes": 3240,
       "maxPartEstimatedSeconds": 179.79,
-      "officialTextLimitBytes": 4000,
-      "officialOutputSeconds": 655,
-      "justification": "Article spoken length 17264 chars / live 1741.824s needs 10 parts at ≤180s and ≤6500 transcript bytes (official text limit 4000).",
+      "maxPartEstimatedTokens": 1574,
+      "geminiInputTokenLimit": 8192,
+      "geminiQualityCapSeconds": 180,
+      "justification": "Article spoken length 17264 chars / live 1741.824s needs 10 parts at ≤180s Gemini quality cap and ≤8192 input tokens.",
       "parts": [
         {
           "partIndex": 0,
           "chars": 1712,
           "bytes": 3090,
           "estimatedSeconds": 172.73,
-          "promptBytes": 4571
+          "estimatedTokens": 1524,
+          "promptBytes": 4571,
+          "syncIds": [
+            "b0001",
+            "b0002",
+            "b0003",
+            "b0004",
+            "b0005",
+            "b0006",
+            "b0007"
+          ]
         },
         {
           "partIndex": 1,
           "chars": 1782,
           "bytes": 3233,
           "estimatedSeconds": 179.79,
-          "promptBytes": 4714
+          "estimatedTokens": 1572,
+          "promptBytes": 4714,
+          "syncIds": [
+            "b0008",
+            "b0009",
+            "b0010",
+            "b0011",
+            "b0012",
+            "b0013",
+            "b0014",
+            "b0015",
+            "b0016",
+            "b0017",
+            "b0018",
+            "b0019",
+            "b0020",
+            "b0021",
+            "b0022"
+          ]
         },
         {
           "partIndex": 2,
           "chars": 1751,
           "bytes": 3172,
           "estimatedSeconds": 176.66,
-          "promptBytes": 4653
+          "estimatedTokens": 1551,
+          "promptBytes": 4653,
+          "syncIds": [
+            "b0023",
+            "b0024",
+            "b0025",
+            "b0026",
+            "b0027",
+            "b0028",
+            "b0029",
+            "b0030",
+            "b0031",
+            "b0032"
+          ]
         },
         {
           "partIndex": 3,
           "chars": 1706,
           "bytes": 3087,
           "estimatedSeconds": 172.12,
-          "promptBytes": 4568
+          "estimatedTokens": 1523,
+          "promptBytes": 4568,
+          "syncIds": [
+            "b0033",
+            "b0034",
+            "b0035",
+            "b0036",
+            "b0037",
+            "b0038",
+            "b0039",
+            "b0040",
+            "b0041"
+          ]
         },
         {
           "partIndex": 4,
           "chars": 1600,
           "bytes": 2889,
           "estimatedSeconds": 161.43,
-          "promptBytes": 4370
+          "estimatedTokens": 1457,
+          "promptBytes": 4370,
+          "syncIds": [
+            "b0042",
+            "b0043",
+            "b0044",
+            "b0045",
+            "b0046",
+            "b0047",
+            "b0048",
+            "b0049"
+          ]
         },
         {
           "partIndex": 5,
           "chars": 1776,
           "bytes": 3207,
           "estimatedSeconds": 179.19,
-          "promptBytes": 4688
+          "estimatedTokens": 1563,
+          "promptBytes": 4688,
+          "syncIds": [
+            "b0050",
+            "b0051",
+            "b0052",
+            "b0053",
+            "b0054",
+            "b0055",
+            "b0056",
+            "b0057",
+            "b0058",
+            "b0059",
+            "b0060"
+          ]
         },
         {
           "partIndex": 6,
           "chars": 1662,
           "bytes": 3016,
           "estimatedSeconds": 167.68,
-          "promptBytes": 4497
+          "estimatedTokens": 1499,
+          "promptBytes": 4497,
+          "syncIds": [
+            "b0061",
+            "b0062",
+            "b0063",
+            "b0064",
+            "b0065",
+            "b0066",
+            "b0067",
+            "b0068",
+            "b0069",
+            "b0070",
+            "b0071",
+            "b0072",
+            "b0073"
+          ]
         },
         {
           "partIndex": 7,
           "chars": 1781,
           "bytes": 3240,
           "estimatedSeconds": 179.69,
-          "promptBytes": 4721
+          "estimatedTokens": 1574,
+          "promptBytes": 4721,
+          "syncIds": [
+            "b0074",
+            "b0075",
+            "b0076",
+            "b0077",
+            "b0078",
+            "b0079",
+            "b0080",
+            "b0081",
+            "b0082"
+          ]
         },
         {
           "partIndex": 8,
           "chars": 1765,
           "bytes": 3164,
           "estimatedSeconds": 178.08,
-          "promptBytes": 4645
+          "estimatedTokens": 1549,
+          "promptBytes": 4645,
+          "syncIds": [
+            "b0083",
+            "b0084",
+            "b0085",
+            "b0086",
+            "b0087",
+            "b0088",
+            "b0089",
+            "b0090",
+            "b0091",
+            "b0092",
+            "b0093",
+            "b0094",
+            "b0095",
+            "b0096",
+            "b0097",
+            "b0098"
+          ]
         },
         {
           "partIndex": 9,
           "chars": 1719,
           "bytes": 3125,
           "estimatedSeconds": 173.44,
-          "promptBytes": 4607
+          "estimatedTokens": 1536,
+          "promptBytes": 4607,
+          "syncIds": [
+            "b0099",
+            "b0100",
+            "b0101",
+            "b0102",
+            "b0103",
+            "b0104",
+            "b0105",
+            "b0106",
+            "b0107",
+            "b0108",
+            "b0109",
+            "b0110",
+            "b0111",
+            "b0112",
+            "b0113",
+            "b0114",
+            "b0115"
+          ]
         }
       ]
     },
@@ -528,6 +1200,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -536,6 +1210,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -544,6 +1220,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -552,6 +1230,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -560,6 +1240,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -568,6 +1250,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
+      "filesApiUploads": 2,
+      "asrProviderCalls": 4,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     }
   ],
@@ -575,13 +1259,15 @@
     "ttsRequestsBefore": 63,
     "ttsRequestsAfter": 44,
     "asrRequests": 30,
+    "filesApiUploads": 30,
+    "asrProviderCalls": 60,
     "asrModels": [
       "gemini-3.5-transcribe",
       "gemini-3.6-flash"
     ]
   },
   "resume": {
-    "storage": "audio-candidates/<articleId>/<fingerprint>/parts with per-part fingerprint",
+    "storage": "audio-candidates/<articleId>/<fingerprint>/parts with per-part fingerprint; atomic write + orphan MP3 recovery",
     "quotaExitCode": 75,
     "github": "actions/cache + always() upload-artifact of audio-candidates/"
   }

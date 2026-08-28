@@ -37,7 +37,10 @@
     "test:audio-lifecycle": "node scripts/test-audio-lifecycle.mjs",
     "test:audio-production-safety": "node scripts/test-audio-production-safety.mjs",
     "audio:inventory": "node scripts/audio-inventory.mjs",
-    "audio:production:dry-run": "node scripts/audio-production.mjs --dry-run",
+    "audio:production:dry-run": "node scripts/audio-production.mjs --mode=dry-run",
+    "audio:production:generate": "node scripts/audio-production.mjs --mode=generate-candidate",
+    "audio:production:validate": "node scripts/audio-production.mjs --mode=validate-candidate",
+    "audio:production:publish": "node scripts/audio-production.mjs --mode=publish-approved",
     "audio:listening-packs": "node scripts/audio-listening-packs.mjs",
     "typecheck": "astro check"
   },

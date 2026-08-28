@@ -1,4 +1,3 @@
-import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
 import {
@@ -8,8 +7,9 @@ import {
   EXIT_USAGE,
   liveAudioDir,
   PERFORMANCE_INSTRUCTIONS,
+  QUOTA_SPLIT,
 } from './audio-constants.mjs';
-import { loadSpokenArticle, splitSpokenArticle, QUOTA_SPLIT, partFingerprint } from './audio-split.mjs';
+import { loadSpokenArticle, splitSpokenArticle, partFingerprint } from './audio-split.mjs';
 import {
   appendRequestLog,
   initCheckpoint,
@@ -18,6 +18,7 @@ import {
   saveCompletedPart,
   writeJson,
 } from './audio-checkpoint.mjs';
+import { resolveProductionSynthesizer } from './audio-gemini-tts.mjs';
 
 export class QuotaError extends Error {
   constructor(message = 'HTTP 429') {
@@ -50,7 +51,7 @@ export async function generateCandidate({
     throw error;
   }
   if (typeof synthesize !== 'function') {
-    const error = new Error('generate-candidate requires an injected synthesize function in this environment');
+    const error = new Error('generate-candidate requires a synthesize function');
     error.exitCode = EXIT_USAGE;
     throw error;
   }
@@ -69,6 +70,9 @@ export async function generateCandidate({
     ttsRequestsPlanned: splitPlan.parts.length,
     ttsRequestsSent: 0,
     ttsRequestsResumed: 0,
+    providerAttempts: 0,
+    successfulRequests: 0,
+    quotaRejectedRequests: 0,
     completedParts: Object.keys(checkpoint.completedParts || {}).length,
     status: 'in-progress',
     liveUntouched: true,
@@ -83,10 +87,12 @@ export async function generateCandidate({
         fingerprint: existing.fingerprint,
         action: 'resume-skip',
         providerCalls: 0,
+        providerAttempts: 0,
       });
       continue;
     }
     try {
+      result.providerAttempts += 1;
       const audio = await synthesize({
         article,
         part,
@@ -98,21 +104,25 @@ export async function generateCandidate({
       });
       if (!audio || audio.length < 100) throw new Error(`synthesized part ${part.partIndex} is too small`);
       result.ttsRequestsSent += 1;
+      result.successfulRequests += 1;
       await saveCompletedPart(paths, article, splitPlan, part, audio, { resumed: false });
       await appendRequestLog(paths, {
         partIndex: part.partIndex,
         fingerprint: partFingerprint(article, splitPlan, part),
         action: 'synthesize',
         providerCalls: 1,
+        providerAttempts: 1,
         bytes: audio.length,
       });
     } catch (error) {
       if (error?.httpStatus === 429 || error?.code === 'BAREEQ_QUOTA') {
+        result.quotaRejectedRequests += 1;
         await markQuotaPause(paths, part.partIndex, error);
         await appendRequestLog(paths, {
           partIndex: part.partIndex,
           action: 'quota-pause',
           providerCalls: 1,
+          providerAttempts: 1,
           httpStatus: 429,
         });
         const quota = new QuotaError(error.message);
@@ -139,6 +149,8 @@ export async function generateCandidate({
         chars: part.chars,
         bytes: part.bytes,
         estimatedSeconds: part.estimatedSeconds,
+        estimatedTokens: part.estimatedTokens,
+        syncIds: part.syncIds,
       })),
     },
   });
@@ -152,10 +164,13 @@ if (isCli) {
     console.error('Usage: node scripts/audio-generate-candidate.mjs --article=<id>');
     process.exit(EXIT_USAGE);
   }
-  if (!process.env.GEMINI_API_KEY?.trim() && process.env.BAREEQ_TTS_CONTRACT_TEST !== '1') {
-    console.error('GEMINI_API_KEY is absent. Candidate generation did not start. No TTS request was sent.');
-    process.exit(78);
+  try {
+    const synthesize = await resolveProductionSynthesizer();
+    const result = await generateCandidate({ articleId, synthesize });
+    console.log(JSON.stringify({ status: result.status, fingerprint: result.fingerprint, ttsRequestsSent: result.ttsRequestsSent }, null, 2));
+    process.exit(result.exitCode || EXIT_OK);
+  } catch (error) {
+    console.error(error.message);
+    process.exit(error.exitCode || EXIT_HARD);
   }
-  console.error('CLI candidate generation without an injected synthesizer is reserved for the locked production workflow.');
-  process.exit(78);
 }

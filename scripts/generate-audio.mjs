@@ -1071,6 +1071,10 @@ if (MAX_MISSING_ARTICLES_PER_BUILD > 0 && missing.length > MAX_MISSING_ARTICLES_
   console.log(`Progressive article cap: selected ${missing.length} of ${unresolvedBeforeArticleCap} unresolved article(s) for this build; the remainder keep their approved fallback audio.`);
 }
 
+if (PROVIDER === 'gemini' && missing.length && !CONTRACT_TEST && process.env.BAREEQ_LEGACY_GEMINI_GENERATOR !== '1') {
+  console.warn('Competing generator disabled: production Sadaltager TTS is scripts/audio-production.mjs. generate-audio.mjs sent 0 TTS requests.');
+  process.exit(0);
+}
 if (PROVIDER === 'google-cloud' && missing.length) assertCloudTtsActivation(process.env, CONTRACT_TEST);
 if (PROVIDER !== 'bundled' && missing.length) assertSynthesisAllowed(missing, process.env);
 

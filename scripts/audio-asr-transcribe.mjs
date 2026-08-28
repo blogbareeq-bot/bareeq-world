@@ -9,7 +9,9 @@ import {
   EXIT_HARD,
   EXIT_QUOTA,
   EXIT_USAGE,
+  sha256,
 } from './audio-constants.mjs';
+import { uploadResumableFile } from './audio-files-api.mjs';
 
 export const GEMINI_INTERACTIONS = 'https://generativelanguage.googleapis.com/v1beta/interactions';
 export const GEMINI_FILES_UPLOAD = 'https://generativelanguage.googleapis.com/upload/v1beta/files';
@@ -58,29 +60,15 @@ function headers(apiKey) {
 }
 
 export async function uploadAudioFile({ apiKey, bytes, mimeType = 'audio/mpeg', displayName = 'bareeq-full.mp3', fetchImpl = fetch }) {
-  const response = await fetchImpl(GEMINI_FILES_UPLOAD, {
-    method: 'POST',
-    headers: {
-      ...headers(apiKey),
-      'Content-Type': mimeType,
-      'X-Goog-Upload-Protocol': 'raw',
-      'X-Goog-Upload-Command': 'upload, finalize',
-      'X-Goog-Upload-Header-Content-Length': String(bytes.length),
-      'X-Goog-Upload-Header-Content-Type': mimeType,
-    },
-    body: bytes,
-  });
-  const body = await response.text();
-  if (response.status === 429) {
-    throw Object.assign(new Error('Files API HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA });
+  try {
+    return await uploadResumableFile({ apiKey, bytes, mimeType, displayName, fetchImpl });
+  } catch (error) {
+    if (error?.httpStatus === 429) {
+      throw Object.assign(error, { exitCode: EXIT_QUOTA });
+    }
+    error.exitCode = error.exitCode || EXIT_HARD;
+    throw error;
   }
-  if (!response.ok) {
-    throw Object.assign(new Error(`Files API upload failed (${response.status}): ${body.slice(0, 400)}`), { httpStatus: response.status, exitCode: EXIT_HARD });
-  }
-  const payload = JSON.parse(body);
-  const file = payload.file || payload;
-  if (!file?.uri) throw Object.assign(new Error('Files API response is missing uri'), { exitCode: EXIT_HARD });
-  return { uri: file.uri, mimeType: file.mimeType || file.mime_type || mimeType, name: file.name || displayName, raw: payload };
 }
 
 export function buildInteractionBody(model, file) {
@@ -114,16 +102,22 @@ export async function transcribeFullAudio({
   fetchImpl = fetch,
   outputPath,
   dryRun = false,
+  fingerprint = null,
+  fullSha256 = null,
 }) {
   assertAsrModel(model);
   const report = {
-    schema: 'bareeq.audio-asr.v2',
+    schema: 'bareeq.audio-asr.v3',
     generatedAt: new Date().toISOString(),
     model,
     audio: audioPath || null,
+    fingerprint,
+    fullSha256,
     transport: ASR_MODEL_TRANSPORT[model],
     independentModels: INDEPENDENT_ASR_MODELS,
     forbiddenModels: FORBIDDEN_ASR_MODELS,
+    filesApiUploads: 0,
+    asrInteractions: 0,
   };
   if (dryRun) {
     report.status = 'not-run';
@@ -142,7 +136,13 @@ export async function transcribeFullAudio({
   }
 
   const bytes = await readFile(audioPath);
+  const digest = sha256(bytes);
+  if (fullSha256 && digest !== fullSha256) {
+    throw Object.assign(new Error('ASR audio SHA-256 does not match the candidate fingerprint full.mp3'), { exitCode: EXIT_HARD });
+  }
+  report.fullSha256 = digest;
   const file = await uploadAudioFile({ apiKey, bytes, fetchImpl });
+  report.filesApiUploads = 1;
   const response = await fetchImpl(GEMINI_INTERACTIONS, {
     method: 'POST',
     headers: { ...headers(apiKey), 'Content-Type': 'application/json' },
@@ -181,12 +181,16 @@ export async function transcribeFullAudio({
     httpStatus: 200,
     responseModel: responseModel || model,
     fileUri: file.uri,
+    asrInteractions: 1,
+    filesApiUploads: report.filesApiUploads || 1,
     substitutions: comparison.substitutions,
     deletions: comparison.deletions,
     insertions: comparison.insertions,
     transcript,
     rawTranscript: transcript,
     differences: comparison.differences,
+    fingerprint,
+    fullSha256: digest,
   };
   if (outputPath) {
     await mkdir(path.dirname(outputPath), { recursive: true });

@@ -11,6 +11,7 @@ export const EXIT_CONFIG = 78;
 export const PRODUCTION_TTS_MODEL = 'gemini-3.1-flash-tts-preview';
 export const PRODUCTION_VOICE = 'Sadaltager';
 export const PRODUCTION_VOICE_ID = 'sadaltager';
+export const GENERATOR_VERSION = 8;
 
 export const INDEPENDENT_ASR_MODELS = Object.freeze([
   'gemini-3.5-transcribe',
@@ -36,6 +37,30 @@ export const ASR_MODEL_TRANSPORT = Object.freeze({
   },
 });
 
+export const GEMINI_TTS_CONTRACT = Object.freeze({
+  provider: 'gemini-interactions',
+  model: PRODUCTION_TTS_MODEL,
+  inputTokenLimit: 8192,
+  outputTokenLimit: 16384,
+  qualityCapSeconds: 180,
+  sampleRateHz: 24000,
+  channels: 1,
+  pcmEncoding: 's16le',
+  tokenEstimateDivisorBytes: 3,
+  endpoint: 'https://generativelanguage.googleapis.com/v1beta/interactions',
+  apiRevision: '2026-05-20',
+});
+
+export const CLOUD_TTS_CONTRACT = Object.freeze({
+  provider: 'cloud-tts',
+  status: 'inactive-until-BAREEQ_CLOUD_TTS_ACTIVATE',
+  officialMaxTranscriptBytes: 4000,
+  officialMaxPromptBytes: 4000,
+  officialCombinedBytes: 8000,
+  officialOutputSeconds: 655,
+  note: 'Cloud TTS byte/duration caps are not the official Gemini Interactions TTS contract.',
+});
+
 export const LEGACY_SPLIT = Object.freeze({
   version: 1,
   name: 'byte-cap-2400',
@@ -45,29 +70,32 @@ export const LEGACY_SPLIT = Object.freeze({
 });
 
 export const QUOTA_SPLIT = Object.freeze({
-  version: 2,
-  name: 'sentence-duration-quota',
+  version: 3,
+  name: 'gemini-8192-token-duration',
   targetSeconds: 165,
   minSeconds: 90,
-  maxSeconds: 180,
+  maxSeconds: GEMINI_TTS_CONTRACT.qualityCapSeconds,
   maxTranscriptBytes: 6500,
-  officialTextLimitBytes: 4000,
-  officialPromptLimitBytes: 4000,
-  officialCombinedLimitBytes: 8000,
-  officialOutputSeconds: 655,
-  driftCapSeconds: 180,
+  geminiInputTokenLimit: GEMINI_TTS_CONTRACT.inputTokenLimit,
+  geminiTokenEstimateDivisorBytes: GEMINI_TTS_CONTRACT.tokenEstimateDivisorBytes,
   defaultCharsPerSecond: 10,
+  rebalanceFloorSeconds: 45,
+  generatorVersion: GENERATOR_VERSION,
 });
 
 export const PERFORMANCE_INSTRUCTIONS = GEMINI_STYLE;
 
-export const CANDIDATE_SCHEMA = 'bareeq.audio-candidate.v2';
-export const CHECKPOINT_SCHEMA = 'bareeq.audio-checkpoint.v2';
+export const CANDIDATE_SCHEMA = 'bareeq.audio-candidate.v3';
+export const CHECKPOINT_SCHEMA = 'bareeq.audio-checkpoint.v3';
 
 export const encoder = new TextEncoder();
 export const utf8Bytes = (value) => encoder.encode(String(value ?? '')).byteLength;
 export const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 export const audioKeyFor = (articleId) => sha256(articleId).slice(0, 16);
+
+export function estimateGeminiTokens(text) {
+  return Math.ceil(utf8Bytes(text) / GEMINI_TTS_CONTRACT.tokenEstimateDivisorBytes);
+}
 
 export function candidateRoot(root = process.cwd()) {
   return path.join(root, 'audio-candidates');

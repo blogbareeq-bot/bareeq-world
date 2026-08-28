@@ -91,6 +91,7 @@ export async function runTechnicalQa({
   candidatePath,
   expectedSyncIds,
   liveBefore = null,
+  fullSha256 = null,
 }) {
   const failures = [];
   if (!articleId) {
@@ -122,9 +123,10 @@ export async function runTechnicalQa({
     if (peak(pcm) >= 0.99) failures.push('clipping detected (peak ≥ 0.99)');
     const silence = longestSilenceSeconds(pcm);
     if (silence > 3) failures.push(`internal silence ${silence.toFixed(2)}s`);
-    const edges = edgeEnergy(pcm, 80);
-    if (edges.start < 0.0005) failures.push('truncated or silent start');
-    if (edges.end < 0.0005) failures.push('truncated or silent end');
+    const head = edgeEnergy(pcm, 400);
+    const lastSample = Math.abs(pcm.readInt16LE(pcm.length - 2)) / 32768;
+    if (head.start < 0.0003) failures.push('silent start (likely truncated or missing audio)');
+    if (lastSample >= 0.99) failures.push('high energy at last sample (possible mid-word truncation)');
   }
 
   const partsDir = path.join(dir, 'parts');
@@ -159,11 +161,13 @@ export async function runTechnicalQa({
     if (liveBefore.voiceId === 'hamed' && liveNow.voiceId !== 'hamed') failures.push('live Hamed voice was replaced before publish-approved');
   }
 
+  const digest = sha256(full);
+  if (fullSha256 && digest !== fullSha256) failures.push('technical QA full.mp3 SHA-256 does not match bound fingerprint');
   const report = {
-    schema: 'bareeq.audio-technical-qa.v2',
+    schema: 'bareeq.audio-technical-qa.v3',
     articleId,
     fingerprint: fingerprint || manifest.fingerprint,
-    fullSha256: sha256(full),
+    fullSha256: digest,
     durationSeconds: duration || null,
     probe,
     narrator: PRODUCTION_NARRATOR,

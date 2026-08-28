@@ -97,7 +97,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          echo 'validate-candidate: merge full.mp3, technical QA, ASR gemini-3.5-transcribe, ASR gemini-3.6-flash, 0/0/0, listening pack. Does not publish.'
+          echo 'validate-candidate: merge full.mp3, technical QA, ASR gemini-3.5-transcribe, ASR gemini-3.6-flash, Files API resumable upload, 0/0/0, listening pack. Does not publish.'
           node scripts/audio-production.mjs --mode=validate-candidate --article=${{ inputs.article }}
 
       - name: Publish approved

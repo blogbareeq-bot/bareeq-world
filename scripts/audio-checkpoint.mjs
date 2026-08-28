@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
+import { mkdir, readFile, readdir, access } from 'node:fs/promises';
 import path from 'node:path';
 import {
   CHECKPOINT_SCHEMA,
@@ -6,8 +6,11 @@ import {
   EXIT_QUOTA,
   candidateDir,
   sha256,
+  audioKeyFor,
 } from './audio-constants.mjs';
 import { candidateFingerprint, partFingerprint } from './audio-split.mjs';
+import { atomicWriteFile, atomicWriteJson } from './audio-io.mjs';
+import { buildCandidateManifest } from './audio-manifest.mjs';
 
 export function checkpointPaths(articleId, fingerprint, root) {
   const dir = candidateDir(articleId, fingerprint, root);
@@ -16,6 +19,7 @@ export function checkpointPaths(articleId, fingerprint, root) {
     partsDir: path.join(dir, 'parts'),
     checkpointFile: path.join(dir, 'checkpoint.json'),
     manifestFile: path.join(dir, 'manifest.candidate.json'),
+    playerManifestFile: path.join(dir, 'manifest.json'),
     requestLogFile: path.join(dir, 'request-log.json'),
     fullFile: path.join(dir, 'full.mp3'),
     reportsDir: path.join(dir, 'reports'),
@@ -31,8 +35,24 @@ export async function readCheckpoint(paths) {
 }
 
 export async function writeJson(file, value) {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, `${JSON.stringify(value, null, 2)}\n`);
+  await atomicWriteJson(file, value);
+}
+
+export function partFileName(partIndex, partFingerprintValue) {
+  return `part-${String(partIndex + 1).padStart(3, '0')}-${partFingerprintValue.slice(0, 12)}.mp3`;
+}
+
+function candidatePartRecords(article, splitPlan) {
+  return splitPlan.parts.map((part) => ({
+    partIndex: part.partIndex,
+    fingerprint: partFingerprint(article, splitPlan, part),
+    chars: part.chars,
+    bytes: part.bytes,
+    estimatedSeconds: part.estimatedSeconds,
+    estimatedTokens: part.estimatedTokens,
+    sync: part.sync || [],
+    syncIds: part.syncIds || (part.sync || []).map((entry) => entry.id),
+  }));
 }
 
 export async function initCheckpoint({ article, splitPlan, root }) {
@@ -56,42 +76,86 @@ export async function initCheckpoint({ article, splitPlan, root }) {
       };
   checkpoint.updatedAt = new Date().toISOString();
   checkpoint.partCount = splitPlan.parts.length;
+  checkpoint.fingerprint = fingerprint;
+  await recoverOrphanParts(paths, article, splitPlan, checkpoint);
   await writeJson(paths.checkpointFile, checkpoint);
-  await writeJson(paths.manifestFile, {
+  const candidateManifest = {
     schema: CANDIDATE_SCHEMA,
     articleId: article.articleId,
     title: article.title,
+    audioKey: audioKeyFor(article.articleId),
     fingerprint,
     speechScriptHash: article.speechScriptHash,
     split: splitPlan.settings,
-    parts: splitPlan.parts.map((part) => ({
-      partIndex: part.partIndex,
-      fingerprint: partFingerprint(article, splitPlan, part),
-      chars: part.chars,
-      bytes: part.bytes,
-      estimatedSeconds: part.estimatedSeconds,
-    })),
+    parts: candidatePartRecords(article, splitPlan),
     livePathUntouched: true,
-  });
+  };
+  await writeJson(paths.manifestFile, candidateManifest);
   return { fingerprint, paths, checkpoint };
 }
 
-export function partFileName(partIndex, partFingerprintValue) {
-  return `part-${String(partIndex + 1).padStart(3, '0')}-${partFingerprintValue.slice(0, 12)}.mp3`;
+export async function recoverOrphanParts(paths, article, splitPlan, checkpoint) {
+  checkpoint.completedParts = checkpoint.completedParts || {};
+  let names = [];
+  try { names = await readdir(paths.partsDir); } catch { return checkpoint; }
+  for (const part of splitPlan.parts) {
+    const fingerprint = partFingerprint(article, splitPlan, part);
+    const file = partFileName(part.partIndex, fingerprint);
+    const record = checkpoint.completedParts[String(part.partIndex)];
+    if (record?.fingerprint === fingerprint) continue;
+    if (!names.includes(file)) continue;
+    try {
+      const bytes = await readFile(path.join(paths.partsDir, file));
+      if (bytes.length < 100) continue;
+      checkpoint.completedParts[String(part.partIndex)] = {
+        partIndex: part.partIndex,
+        fingerprint,
+        file,
+        sha256: sha256(bytes),
+        bytes: bytes.length,
+        savedAt: new Date().toISOString(),
+        recovered: true,
+      };
+    } catch { /* ignore unreadable orphans */ }
+  }
+  return checkpoint;
 }
 
 export async function loadCompletedPart(paths, article, splitPlan, part) {
   const fingerprint = partFingerprint(article, splitPlan, part);
-  const record = (await readCheckpoint(paths))?.completedParts?.[String(part.partIndex)];
-  if (!record || record.fingerprint !== fingerprint) return null;
-  const file = path.join(paths.partsDir, record.file);
-  try {
-    const bytes = await readFile(file);
-    if (sha256(bytes) !== record.sha256) return null;
-    return { bytes, record, fingerprint, file };
-  } catch {
-    return null;
+  const expected = partFileName(part.partIndex, fingerprint);
+  const checkpoint = await readCheckpoint(paths);
+  const record = checkpoint?.completedParts?.[String(part.partIndex)];
+  const tryFile = async (file, extra = {}) => {
+    try {
+      const bytes = await readFile(path.join(paths.partsDir, file));
+      if (bytes.length < 100) return null;
+      const digest = sha256(bytes);
+      if (extra.sha256 && extra.sha256 !== digest) return null;
+      return { bytes, record: { ...extra, file, sha256: digest, bytes: bytes.length, fingerprint }, fingerprint, file: path.join(paths.partsDir, file) };
+    } catch {
+      return null;
+    }
+  };
+  if (record?.fingerprint === fingerprint) {
+    const hit = await tryFile(record.file, record);
+    if (hit) return hit;
   }
+  const orphan = await tryFile(expected, { partIndex: part.partIndex, recovered: true });
+  if (!orphan) return null;
+  const next = checkpoint || { completedParts: {} };
+  next.completedParts = next.completedParts || {};
+  next.completedParts[String(part.partIndex)] = {
+    partIndex: part.partIndex,
+    fingerprint,
+    file: expected,
+    sha256: orphan.record.sha256,
+    bytes: orphan.bytes.length,
+    savedAt: new Date().toISOString(),
+    recovered: true,
+  };
+  await writeJson(paths.checkpointFile, next);
+  return orphan;
 }
 
 export async function saveCompletedPart(paths, article, splitPlan, part, bytes, extra = {}) {
@@ -99,10 +163,11 @@ export async function saveCompletedPart(paths, article, splitPlan, part, bytes, 
   const file = partFileName(part.partIndex, fingerprint);
   const absolute = path.join(paths.partsDir, file);
   await mkdir(paths.partsDir, { recursive: true });
-  await writeFile(absolute, bytes);
+  await atomicWriteFile(absolute, bytes);
   const checkpoint = await readCheckpoint(paths) || { completedParts: {} };
   checkpoint.schema = CHECKPOINT_SCHEMA;
   checkpoint.articleId = article.articleId;
+  checkpoint.fingerprint = checkpoint.fingerprint || candidateFingerprint(article, splitPlan);
   checkpoint.completedParts = checkpoint.completedParts || {};
   checkpoint.completedParts[String(part.partIndex)] = {
     partIndex: part.partIndex,
@@ -139,4 +204,10 @@ export async function appendRequestLog(paths, entry) {
 
 export async function pathExists(file) {
   try { await access(file); return true; } catch { return false; }
+}
+
+export async function writePlayerCompatibleCandidateManifest({ article, splitPlan, paths, partAssets, fingerprint }) {
+  const manifest = buildCandidateManifest({ article, splitPlan, partAssets, fingerprint });
+  await writeJson(paths.playerManifestFile, manifest);
+  return manifest;
 }

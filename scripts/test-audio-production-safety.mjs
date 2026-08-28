@@ -8,10 +8,13 @@ import {
   FORBIDDEN_ASR_MODELS,
   EXIT_QUOTA,
   EXIT_HARD,
+  EXIT_USAGE,
+  EXIT_OK,
   liveAudioDir,
   sha256,
   QUOTA_SPLIT,
-  LEGACY_SPLIT,
+  GEMINI_TTS_CONTRACT,
+  CLOUD_TTS_CONTRACT,
 } from './audio-constants.mjs';
 import { assertIndependentAsrModels } from './audio-exact-match.mjs';
 import { evaluateAsr, evaluatePublishability } from './audio-lifecycle.mjs';
@@ -19,20 +22,19 @@ import { loadSpokenArticle, splitSpokenArticle } from './audio-split.mjs';
 import { generateCandidate, QuotaError } from './audio-generate-candidate.mjs';
 import { mergeCandidateParts } from './audio-merge.mjs';
 import { runTechnicalQa, inspectLiveSnapshot } from './audio-technical-qa.mjs';
-import { publishApprovedCandidate, listeningMatchesFingerprint } from './audio-publish.mjs';
+import { publishApprovedCandidate, listeningMatchesFingerprint, atomicReplaceDir } from './audio-publish.mjs';
 import {
   assertAsrModel,
   transcribeFullAudio,
-  buildInteractionBody,
   GEMINI_FILES_UPLOAD,
   GEMINI_INTERACTIONS,
-  extractTranscript,
 } from './audio-asr-transcribe.mjs';
-import { buildDryRun } from './audio-production.mjs';
+import { buildDryRun, runProductionMode, MODES } from './audio-production.mjs';
 import { assertFfmpeg, runCommand } from './audio-ffmpeg.mjs';
 import { readCheckpoint } from './audio-checkpoint.mjs';
-import { partFileName } from './audio-checkpoint.mjs';
-import { candidateFingerprint, partFingerprint } from './audio-split.mjs';
+import { isValidProductionManifest } from './audio-manifest.mjs';
+import { expectedSyncIds } from './audio-sync.mjs';
+import { uploadResumableFile } from './audio-files-api.mjs';
 
 const ROOT = process.cwd();
 const { ffmpeg } = await assertFfmpeg();
@@ -72,12 +74,68 @@ const tinySplit = {
   maxSeconds: 600,
   targetSeconds: 1,
   minSeconds: 0,
+  rebalanceFloorSeconds: 0,
 };
+
+function mockGeminiTransport(expectedSpoken) {
+  const calls = [];
+  const fetchImpl = async (url, options = {}) => {
+    const headers = options.headers || {};
+    const header = (name) => headers[name] || headers[name.toLowerCase()] || '';
+    calls.push({
+      url: String(url),
+      command: header('X-Goog-Upload-Command'),
+      offset: header('X-Goog-Upload-Offset'),
+      protocol: header('X-Goog-Upload-Protocol'),
+      body: options.body && !(options.body instanceof Buffer) && typeof options.body !== 'object'
+        ? String(options.body).slice(0, 500)
+        : `[${options.body?.length || 0} bytes]`,
+    });
+    if (String(url).startsWith(GEMINI_FILES_UPLOAD)) {
+      assert.equal(header('X-Goog-Upload-Protocol'), 'resumable');
+      assert.equal(header('X-Goog-Upload-Command'), 'start');
+      return {
+        ok: true,
+        status: 200,
+        headers: {
+          get: (name) => (String(name).toLowerCase() === 'x-goog-upload-url'
+            ? 'https://generativelanguage.googleapis.com/upload/session/test'
+            : ''),
+        },
+      };
+    }
+    if (String(url).includes('/upload/session/')) {
+      assert.equal(header('X-Goog-Upload-Offset'), '0');
+      assert.equal(header('X-Goog-Upload-Command'), 'upload, finalize');
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ file: { uri: 'https://generativelanguage.googleapis.com/v1beta/files/abc', mimeType: 'audio/mpeg' } }),
+        text: async () => JSON.stringify({ file: { uri: 'https://generativelanguage.googleapis.com/v1beta/files/abc', mimeType: 'audio/mpeg' } }),
+      };
+    }
+    if (String(url) === GEMINI_INTERACTIONS) {
+      const payload = JSON.parse(options.body);
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({ model: payload.model, output_text: expectedSpoken }),
+      };
+    }
+    throw new Error(`unexpected URL ${url}`);
+  };
+  return { calls, fetchImpl };
+}
 
 assert.throws(() => assertAsrModel('gemini-3.6-transcribe'));
 assert.throws(() => assertIndependentAsrModels(['gemini-3.5-transcribe', 'gemini-3.6-transcribe']));
 assert.deepEqual(assertIndependentAsrModels(INDEPENDENT_ASR_MODELS), [...INDEPENDENT_ASR_MODELS]);
 assert.equal(FORBIDDEN_ASR_MODELS.includes('gemini-3.6-transcribe'), true);
+assert.equal(GEMINI_TTS_CONTRACT.inputTokenLimit, 8192);
+assert.equal(GEMINI_TTS_CONTRACT.qualityCapSeconds, 180);
+assert.equal(CLOUD_TTS_CONTRACT.status.includes('inactive'), true);
+assert.equal(QUOTA_SPLIT.geminiInputTokenLimit, 8192);
+assert.equal('officialTextLimitBytes' in QUOTA_SPLIT, false);
 
 const pending = evaluateAsr({
   asrStatus: 'pending-independent-asr',
@@ -87,11 +145,13 @@ assert.equal(pending.passed, false);
 
 const tmp = await mkdtemp(path.join(os.tmpdir(), 'bareeq-audio-safety-'));
 const liveTmp = await mkdtemp(path.join(os.tmpdir(), 'bareeq-live-'));
+const resumeB = await mkdtemp(path.join(os.tmpdir(), 'bareeq-resume-b-'));
 try {
   await writeFixtureArticle(tmp);
   const article = await loadSpokenArticle('resume-fixture', tmp);
   const splitPlan = splitSpokenArticle(article, { settings: tinySplit, liveDurationSeconds: 40 });
   assert.ok(splitPlan.ttsRequests >= 4, `expected ≥4 tiny parts, got ${splitPlan.ttsRequests}`);
+  assert.ok(splitPlan.parts.every((part) => Array.isArray(part.syncIds)), 'parts must store syncIds');
 
   const toneCache = new Map();
   async function toneFor(part) {
@@ -121,6 +181,8 @@ try {
   });
   assert.equal(first.status, 'paused-quota');
   assert.equal(first.ttsRequestsSent, 2);
+  assert.equal(first.providerAttempts, 3);
+  assert.equal(first.quotaRejectedRequests, 1);
   assert.equal(first.pausedAtPart, 2);
   const checkpoint = await readCheckpoint({ checkpointFile: path.join(first.candidateDir, 'checkpoint.json') });
   assert.equal(Object.keys(checkpoint.completedParts).length, 2);
@@ -147,6 +209,25 @@ try {
   assert.equal(second.liveUntouched, true);
   assert.ok(second.candidateDir.includes('audio-candidates'));
   assert.ok(second.liveDir.includes(path.join('public', 'audio', 'articles')));
+
+  await writeFixtureArticle(resumeB);
+  await cp(path.join(tmp, 'audio-candidates'), path.join(resumeB, 'audio-candidates'), { recursive: true });
+  for (let index = 0; index < splitPlan.ttsRequests; index += 1) {
+    await cp(path.join(tmp, `tone-${index}.mp3`), path.join(resumeB, `tone-${index}.mp3`));
+  }
+  const childEnv = {
+    ...process.env,
+    BAREEQ_RESUME_ROOT: resumeB,
+    BAREEQ_RESUME_STORE: resumeB,
+    BAREEQ_RESUME_ARTICLE: 'resume-fixture',
+    BAREEQ_RESUME_FAIL_AT: '-1',
+  };
+  const child = spawnSync(process.execPath, ['scripts/audio-resume-child.mjs'], { encoding: 'utf8', env: childEnv, cwd: ROOT });
+  assert.equal(child.status, 0, `two-checkout resume failed: ${child.stderr}\n${child.stdout}`);
+  const childResult = JSON.parse(child.stdout.trim().split('\n').at(-1));
+  assert.equal(childResult.status, 'generated');
+  assert.ok(childResult.ttsRequestsResumed >= 2, 'second checkout must restore completed parts');
+  assert.equal(childResult.childSent, splitPlan.ttsRequests - childResult.ttsRequestsResumed);
 
   const liveId = 'altadakhom-explained-simply';
   const liveDir = liveAudioDir(liveId, liveTmp);
@@ -190,26 +271,7 @@ try {
   assert.equal(qaMissing, true);
 
   const expectedSpoken = 'كيف تعرف الشاشة';
-  const asrCalls = [];
-  const fetchImpl = async (url, options = {}) => {
-    asrCalls.push({ url: String(url), body: options.body && !(options.body instanceof Buffer) ? String(options.body).slice(0, 500) : `[${options.body?.length || 0} bytes]` });
-    if (String(url).startsWith(GEMINI_FILES_UPLOAD)) {
-      return {
-        ok: true,
-        status: 200,
-        text: async () => JSON.stringify({ file: { uri: 'https://generativelanguage.googleapis.com/v1beta/files/abc', mime_type: 'audio/mpeg' } }),
-      };
-    }
-    if (String(url) === GEMINI_INTERACTIONS) {
-      const payload = JSON.parse(options.body);
-      return {
-        ok: true,
-        status: 200,
-        text: async () => JSON.stringify({ model: payload.model, output_text: expectedSpoken }),
-      };
-    }
-    throw new Error(`unexpected URL ${url}`);
-  };
+  const { calls: asrCalls, fetchImpl } = mockGeminiTransport(expectedSpoken);
   const audioFile = path.join(tmp, 'asr.mp3');
   await makeToneMp3(audioFile, 0.4);
   const asr35 = await transcribeFullAudio({
@@ -222,7 +284,9 @@ try {
   });
   assert.equal(asr35.status, 'passed');
   assert.equal(asr35.httpStatus, 200);
-  assert.ok(asrCalls.some((item) => item.url.startsWith(GEMINI_FILES_UPLOAD)));
+  assert.equal(asr35.filesApiUploads, 1);
+  assert.ok(asrCalls.some((item) => item.url.startsWith(GEMINI_FILES_UPLOAD) && item.command === 'start'));
+  assert.ok(asrCalls.some((item) => item.url.includes('/upload/session/') && item.command === 'upload, finalize' && item.offset === '0'));
   const body35 = JSON.parse(asrCalls.find((item) => item.url === GEMINI_INTERACTIONS).body);
   assert.equal(body35.model, 'gemini-3.5-transcribe');
   assert.equal(body35.input[0].type, 'audio');
@@ -250,19 +314,50 @@ try {
       audioPath: audioFile,
       expectedText: expectedSpoken,
       apiKey: 'test-key',
-      fetchImpl: async (url) => ({
-        ok: true,
-        status: 200,
-        text: async () => String(url).includes('upload')
-          ? JSON.stringify({ file: { uri: 'files/x', mime_type: 'audio/mpeg' } })
-          : JSON.stringify({ model: 'gemini-3.5-transcribe', output_text: '' }),
-      }),
+      fetchImpl: async (url, options = {}) => {
+        const headers = options.headers || {};
+        if (String(url).startsWith(GEMINI_FILES_UPLOAD)) {
+          return {
+            ok: true,
+            status: 200,
+            headers: { get: (name) => String(name).toLowerCase() === 'x-goog-upload-url' ? 'https://generativelanguage.googleapis.com/upload/session/empty' : '' },
+          };
+        }
+        if (String(url).includes('/upload/session/')) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({ file: { uri: 'files/x', mimeType: 'audio/mpeg' } }),
+          };
+        }
+        return {
+          ok: true,
+          status: 200,
+          text: async () => JSON.stringify({ model: 'gemini-3.5-transcribe', output_text: '' }),
+        };
+      },
     });
   } catch (error) {
     emptyFailed = true;
     assert.equal(error.emptyTranscript, true);
   }
   assert.equal(emptyFailed, true);
+
+  const filesProbe = [];
+  await uploadResumableFile({
+    apiKey: 'test-key',
+    bytes: Buffer.from('hello-audio-bytes-hello-audio-bytes'),
+    fetchImpl: async (url, options = {}) => {
+      filesProbe.push({ url: String(url), headers: options.headers });
+      if (String(url).startsWith(GEMINI_FILES_UPLOAD)) {
+        return { ok: true, status: 200, headers: { get: () => 'https://example.test/upload' } };
+      }
+      return { ok: true, status: 200, json: async () => ({ file: { uri: 'files/z', mimeType: 'audio/mpeg' } }) };
+    },
+  });
+  assert.equal(filesProbe[0].headers['X-Goog-Upload-Command'], 'start');
+  assert.equal(filesProbe[1].headers['X-Goog-Upload-Command'], 'upload, finalize');
+  assert.equal(filesProbe[1].headers['X-Goog-Upload-Offset'], '0');
 
   const fullSha = merged.sha256;
   assert.equal(listeningMatchesFingerprint({ status: 'passed', reviewedBy: 'x', reviewedAt: '2026-08-29', evidence: { sha256: 'nope' } }, fullSha, 'fp'), false);
@@ -280,6 +375,151 @@ try {
     assert.equal(error.exitCode, EXIT_HARD);
   }
   assert.equal(publishBlocked, true);
+
+  const validate = await runProductionMode({
+    mode: 'validate-candidate',
+    articleId: 'resume-fixture',
+    fingerprint: second.fingerprint,
+    root: tmp,
+    storeRoot: tmp,
+    settings: tinySplit,
+    liveDurationSeconds: 40,
+    fetchImpl: mockGeminiTransport(article.spokenText).fetchImpl,
+  });
+  assert.equal(validate.status, 'validated');
+  assert.equal(validate.filesApiUploads, 2);
+  assert.equal(validate.asrInteractions, 2);
+  assert.equal(validate.asrProviderCalls, 4);
+  assert.equal(validate.fullSha256, sha256(await readFile(path.join(second.candidateDir, 'full.mp3'))));
+  const playerManifest = JSON.parse(await readFile(path.join(second.candidateDir, 'manifest.json'), 'utf8'));
+  assert.equal(isValidProductionManifest(playerManifest), true);
+  assert.ok(playerManifest.parts.every((part) => Array.isArray(part.sync) && Array.isArray(part.syncIds)));
+
+  const qa = await runTechnicalQa({
+    articleId: 'resume-fixture',
+    fingerprint: second.fingerprint,
+    root: tmp,
+    expectedSyncIds: expectedSyncIds(article),
+    fullSha256: validate.fullSha256,
+  });
+  assert.equal(qa.passed, true);
+  assert.equal(qa.fullSha256, validate.fullSha256);
+
+  const publishRecord = {
+    generated: true,
+    provider: 'Google Gemini API',
+    model: 'gemini-3.1-flash-tts-preview',
+    voiceId: 'sadaltager',
+    asrReports: validate.asrReports.map((item) => ({
+      model: item.model,
+      substitutions: 0,
+      deletions: 0,
+      insertions: 0,
+    })),
+    humanListening: {
+      status: 'passed',
+      reviewedBy: 'safety-test',
+      reviewedAt: '2026-08-29T00:00:00.000Z',
+      evidence: { sha256: validate.fullSha256, candidateFingerprint: second.fingerprint },
+    },
+    technicalStatus: 'passed',
+    syncStatus: 'passed',
+  };
+  const post = {
+    speechApproval: {
+      validation: { valid: true, approved: true },
+      script: { scriptHash: article.speechScriptHash || 'fixture' },
+      testClipPlan: { speechScriptHash: article.speechScriptHash || 'fixture' },
+    },
+  };
+  assert.equal(evaluatePublishability(post, publishRecord).passed, true);
+
+  const publishedLive = liveAudioDir('resume-fixture', tmp);
+  await mkdir(publishedLive, { recursive: true });
+  await writeFile(path.join(publishedLive, 'hamed.mp3'), Buffer.from('LIVE-HAMED'));
+  await writeFile(path.join(publishedLive, 'manifest.json'), `${JSON.stringify({
+    articleId: 'resume-fixture',
+    defaultVoice: 'hamed',
+    parts: [{ audio: { hamed: { src: '/audio/articles/x/hamed.mp3', durationSeconds: 1 } }, sync: [] }],
+    voices: [{ id: 'hamed' }],
+  }, null, 2)}\n`);
+
+  let persistCalls = 0;
+  const published = await runProductionMode({
+    mode: 'publish-approved',
+    articleId: 'resume-fixture',
+    fingerprint: second.fingerprint,
+    root: tmp,
+    storeRoot: tmp,
+    post,
+    record: publishRecord,
+    persistGit: async () => {
+      persistCalls += 1;
+      return { committed: true };
+    },
+  });
+  assert.equal(published.exitCode, EXIT_OK);
+  assert.equal(persistCalls, 1);
+  assert.equal(await pathExistsSafe(path.join(published.liveDir, 'manifest.json')), true);
+  const liveManifest = JSON.parse(await readFile(path.join(published.liveDir, 'manifest.json'), 'utf8'));
+  assert.equal(isValidProductionManifest(liveManifest), true);
+  assert.equal(liveManifest.defaultVoice, 'sadaltager');
+  assert.ok(published.rollbackDir);
+  assert.equal(await readFile(path.join(published.rollbackDir, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED');
+
+  const staging = path.join(tmp, 'staging-swap');
+  const liveSwap = path.join(tmp, 'live-swap');
+  await mkdir(staging, { recursive: true });
+  await mkdir(liveSwap, { recursive: true });
+  await writeFile(path.join(liveSwap, 'keep.txt'), 'ORIGINAL');
+  await writeFile(path.join(staging, 'keep.txt'), 'NEW');
+  let rolled = false;
+  try {
+    await atomicReplaceDir(liveSwap, staging, {
+      afterLiveMoved: async () => {
+        throw new Error('injected swap failure');
+      },
+    });
+  } catch (error) {
+    rolled = true;
+    assert.match(error.message, /injected swap failure/);
+  }
+  assert.equal(rolled, true);
+  assert.equal(await readFile(path.join(liveSwap, 'keep.txt'), 'utf8'), 'ORIGINAL');
+
+  const executedModes = [];
+  for (const mode of MODES) {
+    if (mode === 'dry-run') {
+      const dryMode = await runProductionMode({ mode, root: ROOT });
+      assert.equal(dryMode.mode, 'dry-run');
+      executedModes.push(mode);
+      continue;
+    }
+    if (mode === 'generate-candidate') {
+      const generated = await runProductionMode({
+        mode,
+        articleId: 'resume-fixture',
+        root: tmp,
+        storeRoot: tmp,
+        settings: tinySplit,
+        liveDurationSeconds: 40,
+        synthesize: async ({ part }) => toneFor(part),
+      });
+      assert.equal(generated.status, 'generated');
+      executedModes.push(mode);
+      continue;
+    }
+    if (mode === 'validate-candidate') {
+      assert.equal(validate.status, 'validated');
+      executedModes.push(mode);
+      continue;
+    }
+    if (mode === 'publish-approved') {
+      assert.equal(published.exitCode, EXIT_OK);
+      executedModes.push(mode);
+    }
+  }
+  assert.deepEqual(executedModes, MODES);
 
   const workflow = await readFile(path.join(ROOT, 'docs', 'audio', 'github-audio-production.yml'), 'utf8');
   for (const token of [
@@ -304,20 +544,43 @@ try {
   const dry = await buildDryRun(ROOT);
   assert.equal(dry.expected.ttsRequestsBefore, 63);
   assert.ok(dry.expected.ttsRequestsAfter < dry.expected.ttsRequestsBefore, 'quota split must reduce TTS requests');
+  assert.equal(dry.expected.filesApiUploads, dry.expected.asrRequests);
+  assert.equal(dry.expected.asrProviderCalls, dry.expected.asrRequests + dry.expected.filesApiUploads);
   assert.deepEqual(dry.asr.models, INDEPENDENT_ASR_MODELS);
+  assert.equal(dry.geminiTtsContract.inputTokenLimit, 8192);
   for (const plan of dry.plans.filter((item) => item.action === 'generate-sadaltager-candidate')) {
     assert.ok(plan.maxPartBytes <= QUOTA_SPLIT.maxTranscriptBytes, `${plan.articleId} exceeds transcript byte cap`);
-    assert.ok(plan.parts.every((part) => part.promptBytes <= QUOTA_SPLIT.officialCombinedLimitBytes), `${plan.articleId} exceeds combined input limit`);
-    assert.ok(plan.maxPartEstimatedSeconds <= QUOTA_SPLIT.driftCapSeconds + 1e-6, `${plan.articleId} exceeds drift cap`);
-    assert.ok(plan.maxPartEstimatedSeconds <= QUOTA_SPLIT.officialOutputSeconds);
+    assert.ok(plan.maxPartEstimatedTokens <= GEMINI_TTS_CONTRACT.inputTokenLimit, `${plan.articleId} exceeds Gemini 8192-token contract`);
+    assert.ok(plan.maxPartEstimatedSeconds <= GEMINI_TTS_CONTRACT.qualityCapSeconds + 1e-6, `${plan.articleId} exceeds Gemini 180s quality cap`);
+    assert.ok(plan.parts.every((part) => Array.isArray(part.syncIds)), `${plan.articleId} missing syncIds`);
+    assert.ok(plan.parts.some((part) => part.syncIds.length), `${plan.articleId} has no synchronized blocks`);
     if (plan.ttsRequestsAfter > 6) assert.ok(plan.justification);
   }
+
+  const dryCli = spawnSync(process.execPath, ['scripts/audio-production.mjs', '--mode=dry-run'], { encoding: 'utf8', cwd: ROOT });
+  assert.equal(dryCli.status, EXIT_OK, dryCli.stderr);
+  const generateCli = spawnSync(process.execPath, ['scripts/audio-production.mjs', '--mode=generate-candidate'], { encoding: 'utf8', cwd: ROOT });
+  assert.equal(generateCli.status, EXIT_USAGE);
+  const validateCli = spawnSync(process.execPath, ['scripts/audio-production.mjs', '--mode=validate-candidate'], { encoding: 'utf8', cwd: ROOT });
+  assert.equal(validateCli.status, EXIT_USAGE);
+  const publishCli = spawnSync(process.execPath, ['scripts/audio-production.mjs', '--mode=publish-approved'], { encoding: 'utf8', cwd: ROOT });
+  assert.equal(publishCli.status, EXIT_USAGE);
 
   const qaCli = spawnSync(process.execPath, ['scripts/audio-technical-qa.mjs', '--article=does-not-exist'], { encoding: 'utf8' });
   assert.notEqual(qaCli.status, 0);
 
-  console.log(`Audio production safety tests passed. TTS plan ${dry.expected.ttsRequestsBefore} → ${dry.expected.ttsRequestsAfter}. Resume kept 2 parts after simulated 429. Zero real provider calls.`);
+  console.log(`Audio production safety tests passed. TTS plan ${dry.expected.ttsRequestsBefore} → ${dry.expected.ttsRequestsAfter}. ASR provider calls ${dry.expected.asrProviderCalls}. Two-checkout resume restored parts. Four modes executed. Zero real provider calls.`);
 } finally {
   await rm(tmp, { recursive: true, force: true });
   await rm(liveTmp, { recursive: true, force: true });
+  await rm(resumeB, { recursive: true, force: true });
+}
+
+async function pathExistsSafe(file) {
+  try {
+    await readFile(file);
+    return true;
+  } catch {
+    return false;
+  }
 }

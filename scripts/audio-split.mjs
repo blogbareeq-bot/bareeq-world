@@ -8,10 +8,13 @@ import {
   PERFORMANCE_INSTRUCTIONS,
   PRODUCTION_TTS_MODEL,
   PRODUCTION_VOICE,
+  GENERATOR_VERSION,
   utf8Bytes,
   sha256,
   joinSpeechPieces,
+  estimateGeminiTokens,
 } from './audio-constants.mjs';
+import { attachSync } from './audio-sync.mjs';
 
 function splitOversizedText(text, maxBytes) {
   if (utf8Bytes(text) <= maxBytes) return [text];
@@ -105,19 +108,75 @@ function estimateSeconds(text, charsPerSecond) {
 
 function wouldExceed(text, settings, charsPerSecond, articleTitle, partIndex, partCount) {
   const transcriptBytes = utf8Bytes(text);
-  if (transcriptBytes > settings.maxTranscriptBytes) return true;
+  if (settings.maxTranscriptBytes && transcriptBytes > settings.maxTranscriptBytes) return true;
   if (settings.maxSeconds && estimateSeconds(text, charsPerSecond) > settings.maxSeconds) return true;
-  if (settings.officialCombinedLimitBytes) {
+  if (settings.geminiInputTokenLimit) {
     const prompt = buildGeminiPrompt({ text }, { articleTitle, partIndex, partCount });
-    if (utf8Bytes(prompt) > settings.officialCombinedLimitBytes) return true;
+    if (estimateGeminiTokens(prompt) > settings.geminiInputTokenLimit) return true;
   }
   return false;
+}
+
+function makePart(items, charsPerSecond, articleTitle, partIndex, partCount) {
+  const text = joinSpeechPieces(items);
+  const prompt = buildGeminiPrompt({ text }, { articleTitle, partIndex, partCount });
+  return attachSync({
+    text,
+    items,
+    chars: [...text].length,
+    bytes: utf8Bytes(text),
+    estimatedSeconds: Number(estimateSeconds(text, charsPerSecond).toFixed(2)),
+    promptBytes: utf8Bytes(prompt),
+    estimatedTokens: estimateGeminiTokens(prompt),
+    partIndex,
+    partCount,
+  });
+}
+
+function reindex(parts, charsPerSecond, articleTitle) {
+  return parts.map((part, index) => makePart(part.items, charsPerSecond, articleTitle, index, parts.length));
+}
+
+function rebalanceParts(parts, settings, charsPerSecond, articleTitle) {
+  if (parts.length < 2) return parts;
+  const floor = settings.rebalanceFloorSeconds ?? 45;
+  const last = parts[parts.length - 1];
+  if (!(last.estimatedSeconds < floor)) return parts;
+
+  const prev = parts[parts.length - 2];
+  const mergedItems = [...prev.items, ...last.items];
+  const mergedText = joinSpeechPieces(mergedItems);
+  if (!wouldExceed(mergedText, settings, charsPerSecond, articleTitle, parts.length - 2, parts.length - 1)) {
+    return reindex([...parts.slice(0, -2), { items: mergedItems }], charsPerSecond, articleTitle);
+  }
+
+  const stolen = [...last.items];
+  const remain = [...prev.items];
+  while (remain.length > 1) {
+    const candidate = remain.pop();
+    const nextStolen = [candidate, ...stolen];
+    const prevText = joinSpeechPieces(remain);
+    const lastText = joinSpeechPieces(nextStolen);
+    if (wouldExceed(lastText, settings, charsPerSecond, articleTitle, parts.length - 1, parts.length)) {
+      remain.push(candidate);
+      break;
+    }
+    if (settings.minSeconds && estimateSeconds(prevText, charsPerSecond) < settings.minSeconds) {
+      remain.push(candidate);
+      break;
+    }
+    stolen.unshift(candidate);
+    const lastSeconds = estimateSeconds(joinSpeechPieces(stolen), charsPerSecond);
+    if (lastSeconds >= floor) break;
+  }
+  if (stolen.length === last.items.length) return parts;
+  return reindex([...parts.slice(0, -2), { items: remain }, { items: stolen }], charsPerSecond, articleTitle);
 }
 
 function packItems(items, settings, charsPerSecond, articleTitle) {
   const units = [];
   for (const item of items) {
-    const pieces = splitOversizedText(item.text, settings.maxTranscriptBytes);
+    const pieces = splitOversizedText(item.text, settings.maxTranscriptBytes || utf8Bytes(item.text));
     for (const text of pieces) units.push({ ...item, text });
   }
 
@@ -125,14 +184,7 @@ function packItems(items, settings, charsPerSecond, articleTitle) {
   let current = [];
   const flush = () => {
     if (!current.length) return;
-    const text = joinSpeechPieces(current);
-    parts.push({
-      text,
-      items: current,
-      chars: [...text].length,
-      bytes: utf8Bytes(text),
-      estimatedSeconds: Number(estimateSeconds(text, charsPerSecond).toFixed(2)),
-    });
+    parts.push({ items: current });
     current = [];
   };
 
@@ -150,19 +202,28 @@ function packItems(items, settings, charsPerSecond, articleTitle) {
     }
   }
   flush();
-  return parts.map((part, index) => ({
-    ...part,
-    partIndex: index,
-    partCount: parts.length,
-    promptBytes: utf8Bytes(buildGeminiPrompt(part, { articleTitle, partIndex: index, partCount: parts.length })),
-  }));
+  const folded = [];
+  for (let index = 0; index < parts.length; index += 1) {
+    const part = parts[index];
+    const hasBody = (part.items || []).some((item) => item.type !== 'title');
+    if (!hasBody && index + 1 < parts.length) {
+      const combined = { items: [...part.items, ...parts[index + 1].items] };
+      const combinedText = joinSpeechPieces(combined.items);
+      if (!wouldExceed(combinedText, settings, charsPerSecond, articleTitle, folded.length, Math.max(1, parts.length - 1))) {
+        parts[index + 1] = combined;
+        continue;
+      }
+    }
+    folded.push(part);
+  }
+  return rebalanceParts(reindex(folded, charsPerSecond, articleTitle), settings, charsPerSecond, articleTitle);
 }
 
 export function splitSpokenArticle(article, { settings = QUOTA_SPLIT, liveDurationSeconds = null } = {}) {
   const charsPerSecond = estimateCharsPerSecond(article, liveDurationSeconds);
   const parts = packItems(article.items, settings, charsPerSecond, article.title);
   const justification = parts.length > 6
-    ? `Article spoken length ${article.spokenChars} chars / live ${liveDurationSeconds ?? 'n/a'}s needs ${parts.length} parts at ≤${settings.maxSeconds || 'n/a'}s and ≤${settings.maxTranscriptBytes} transcript bytes (official text limit ${settings.officialTextLimitBytes || settings.maxTranscriptBytes}).`
+    ? `Article spoken length ${article.spokenChars} chars / live ${liveDurationSeconds ?? 'n/a'}s needs ${parts.length} parts at ≤${settings.maxSeconds || 'n/a'}s Gemini quality cap and ≤${settings.geminiInputTokenLimit || 'n/a'} input tokens.`
     : null;
   return {
     articleId: article.articleId,
@@ -173,7 +234,23 @@ export function splitSpokenArticle(article, { settings = QUOTA_SPLIT, liveDurati
     ttsRequests: parts.length,
     maxPartBytes: Math.max(0, ...parts.map((part) => part.bytes)),
     maxPartEstimatedSeconds: Math.max(0, ...parts.map((part) => part.estimatedSeconds)),
+    maxPartEstimatedTokens: Math.max(0, ...parts.map((part) => part.estimatedTokens || 0)),
     justification,
+  };
+}
+
+function splitFingerprintPayload(splitPlan) {
+  return {
+    version: splitPlan.settings.version,
+    name: splitPlan.settings.name,
+    maxTranscriptBytes: splitPlan.settings.maxTranscriptBytes,
+    targetSeconds: splitPlan.settings.targetSeconds,
+    maxSeconds: splitPlan.settings.maxSeconds,
+    minSeconds: splitPlan.settings.minSeconds,
+    geminiInputTokenLimit: splitPlan.settings.geminiInputTokenLimit,
+    geminiTokenEstimateDivisorBytes: splitPlan.settings.geminiTokenEstimateDivisorBytes,
+    rebalanceFloorSeconds: splitPlan.settings.rebalanceFloorSeconds,
+    generatorVersion: splitPlan.settings.generatorVersion || GENERATOR_VERSION,
   };
 }
 
@@ -184,14 +261,10 @@ export function candidateFingerprint(article, splitPlan) {
     speechScriptHash: article.speechScriptHash,
     model: PRODUCTION_TTS_MODEL,
     voice: PRODUCTION_VOICE,
+    generatorVersion: GENERATOR_VERSION,
     performanceInstructions: PERFORMANCE_INSTRUCTIONS,
-    split: {
-      version: splitPlan.settings.version,
-      name: splitPlan.settings.name,
-      maxTranscriptBytes: splitPlan.settings.maxTranscriptBytes,
-      targetSeconds: splitPlan.settings.targetSeconds,
-      maxSeconds: splitPlan.settings.maxSeconds,
-    },
+    split: splitFingerprintPayload(splitPlan),
+    partTexts: splitPlan.parts.map((part) => part.text),
   }));
 }
 
@@ -201,14 +274,9 @@ export function partFingerprint(article, splitPlan, part) {
     spokenText: part.text,
     model: PRODUCTION_TTS_MODEL,
     voice: PRODUCTION_VOICE,
+    generatorVersion: GENERATOR_VERSION,
     performanceInstructions: PERFORMANCE_INSTRUCTIONS,
-    split: {
-      version: splitPlan.settings.version,
-      name: splitPlan.settings.name,
-      maxTranscriptBytes: splitPlan.settings.maxTranscriptBytes,
-      targetSeconds: splitPlan.settings.targetSeconds,
-      maxSeconds: splitPlan.settings.maxSeconds,
-    },
+    split: splitFingerprintPayload(splitPlan),
     partIndex: part.partIndex,
   }));
 }
