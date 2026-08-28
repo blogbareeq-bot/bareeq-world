@@ -1,0 +1,127 @@
+name: Gemini Transcribe QA proof of concept v2
+
+on:
+  push:
+    branches: [qa/gemini-transcribe-poc-20260828]
+    paths: [.github/workflows/gemini-transcribe-poc-v2.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  transcribe-qa-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ARTICLE_ID: "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء"
+      ARTICLE_FILE: "src/content/posts/عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء.md"
+      SCRIPT_FILE: "scripts/speech-scripts/عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء.json"
+      AUDIO_HASH: "0d7d16713d3cea31"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify secret and live Gemini sample
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GEMINI_API_KEY"
+          mkdir -p qa/gemini-transcribe-poc-v2
+          base="https://bareeqworld.com/audio/articles/${AUDIO_HASH}"
+          curl -fsSL "$base/manifest.json" -o qa/gemini-transcribe-poc-v2/manifest.json
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';
+          const m=JSON.parse(await readFile('qa/gemini-transcribe-poc-v2/manifest.json','utf8'));
+          if(!/Gemini/i.test(m.provider??'')) throw new Error(`not Gemini: ${m.provider}`);
+          if(String(m.defaultVoice??'').toLowerCase()!=='sadaltager') throw new Error(`not Sadaltager: ${m.defaultVoice}`);
+          const i=m.parts.findIndex(p=>p?.audio?.sadaltager?.src);
+          if(i<0) throw new Error('no Sadaltager part');
+          const p=m.parts[i];
+          const meta={articleId:m.articleId,title:m.title,provider:m.provider,model:m.model,voice:m.defaultVoice,sourceHash:m.sourceHash,partIndex:i,durationSeconds:p.audio.sadaltager.durationSeconds,audioSrc:p.audio.sadaltager.src};
+          await writeFile('qa/gemini-transcribe-poc-v2/meta.json',JSON.stringify(meta,null,2));
+          console.log(`verified ${meta.provider} / ${meta.model} / ${meta.voice}; part=${i+1}`);
+          NODE
+          src=$(node -p "JSON.parse(require('fs').readFileSync('qa/gemini-transcribe-poc-v2/meta.json')).audioSrc")
+          curl -fsSL "https://bareeqworld.com${src}" -o qa/gemini-transcribe-poc-v2/sample.mp3
+
+      - name: Build exact expected text including spoken title
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';
+          import {extractArticleSpeechModel,normalizeArabicForComparison} from './scripts/speech-script-core.mjs';
+          const root='qa/gemini-transcribe-poc-v2';
+          const article=await readFile(process.env.ARTICLE_FILE,'utf8');
+          const script=JSON.parse(await readFile(process.env.SCRIPT_FILE,'utf8'));
+          const manifest=JSON.parse(await readFile(`${root}/manifest.json`,'utf8'));
+          const meta=JSON.parse(await readFile(`${root}/meta.json`,'utf8'));
+          const model=extractArticleSpeechModel({articleId:process.env.ARTICLE_ID,source:article,filename:process.env.ARTICLE_FILE});
+          const runtime=new Map(model.segments.filter(s=>s.runtimeId).map(s=>[s.runtimeId,s.segmentId]));
+          const byId=new Map(script.segments.map(s=>[s.segmentId,s]));
+          const expected=[meta.title];
+          const missing=[];
+          for(const s of manifest.parts[meta.partIndex].sync??[]){const id=runtime.get(s.id);const rec=id?byId.get(id):null;if(rec?.spokenText)expected.push(rec.spokenText.trim());else missing.push(s.id);}
+          if(missing.length) throw new Error(`stale source mapping: ${missing.join(',')}`);
+          const text=expected.join('\n');
+          await writeFile(`${root}/expected.txt`,text+'\n');
+          await writeFile(`${root}/expected-normalized.txt`,normalizeArabicForComparison(text)+'\n');
+          console.log(`expected includes title + ${expected.length-1} sync blocks`);
+          NODE
+
+      - name: Transcribe with Gemini 3.5 Transcribe verbatim
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        shell: bash
+        run: |
+          python -m pip install --quiet --disable-pip-version-check --upgrade google-genai
+          python <<'PY'
+          import os
+          from pathlib import Path
+          from google import genai
+          root=Path('qa/gemini-transcribe-poc-v2')
+          c=genai.Client(api_key=os.environ['GEMINI_API_KEY'])
+          f=c.files.upload(file=str(root/'sample.mp3'))
+          r=c.interactions.create(model='gemini-3.5-transcribe',input=[{'type':'audio','uri':f.uri,'mime_type':f.mime_type}],generation_config={'transcription_config':{'language_codes':[],'custom_vocabulary':['بريق','النودلز','الرامن','الأودون','السوبا','الساونا','اليونسكو','الهونغي','الماورية','ماراي','الدلة'],'mode':{'type':'verbatim'}}})
+          text=(r.output_text or '').strip()
+          if not text: raise RuntimeError('empty transcript')
+          (root/'transcript.txt').write_text(text+'\n',encoding='utf-8')
+          print('transcribed',len(text),'characters')
+          PY
+
+      - name: Calculate normalized word error rate
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';
+          import {normalizeArabicForComparison} from './scripts/speech-script-core.mjs';
+          const root='qa/gemini-transcribe-poc-v2';
+          const meta=JSON.parse(await readFile(`${root}/meta.json`,'utf8'));
+          const E=normalizeArabicForComparison(await readFile(`${root}/expected.txt`,'utf8')).split(/\s+/).filter(Boolean);
+          const A=normalizeArabicForComparison(await readFile(`${root}/transcript.txt`,'utf8')).split(/\s+/).filter(Boolean);
+          const dp=Array.from({length:E.length+1},()=>new Uint32Array(A.length+1));
+          for(let i=0;i<=E.length;i++)dp[i][0]=i;for(let j=0;j<=A.length;j++)dp[0][j]=j;
+          for(let i=1;i<=E.length;i++)for(let j=1;j<=A.length;j++)dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(E[i-1]===A[j-1]?0:1));
+          let i=E.length,j=A.length;const ops=[];
+          while(i||j){if(i&&j&&E[i-1]===A[j-1]&&dp[i][j]===dp[i-1][j-1]){i--;j--;continue;}if(i&&j&&dp[i][j]===dp[i-1][j-1]+1){ops.push({type:'substitution',expected:E[i-1],actual:A[j-1]});i--;j--;continue;}if(i&&dp[i][j]===dp[i-1][j]+1){ops.push({type:'deletion',expected:E[i-1],actual:null});i--;continue;}ops.push({type:'insertion',expected:null,actual:A[j-1]});j--;}
+          ops.reverse();const edits=dp[E.length][A.length],wer=edits/E.length,similarity=100*(1-Math.min(1,wer));
+          const result={model:'gemini-3.5-transcribe',mode:'verbatim',ttsProvider:meta.provider,ttsModel:meta.model,ttsVoice:meta.voice,articleId:meta.articleId,part:meta.partIndex+1,durationSeconds:meta.durationSeconds,expectedTokens:E.length,transcriptTokens:A.length,editDistance:edits,wer:Number(wer.toFixed(6)),similarityPercent:Number(similarity.toFixed(2)),exactNormalizedMatch:edits===0,differences:ops};
+          await writeFile(`${root}/result.json`,JSON.stringify(result,null,2)+'\n');
+          const verdict=edits===0?'PASS — exact normalized match':wer<=.01?'PASS WITH MINOR ASR VARIANCE — ≤1% WER':wer<=.03?'REVIEW — 1–3% WER':'FAIL/INVESTIGATE — >3% WER';
+          await writeFile(`${root}/report.md`,`# Gemini Transcribe QA POC v2\n\n- TTS: ${meta.provider} / ${meta.model} / ${meta.voice}\n- Sample: part ${meta.partIndex+1}, ${meta.durationSeconds}s\n- STT: gemini-3.5-transcribe / verbatim\n- Expected tokens: ${E.length}\n- Transcript tokens: ${A.length}\n- Edits: ${edits}\n- WER: ${(wer*100).toFixed(2)}%\n- Similarity: ${similarity.toFixed(2)}%\n\n## Verdict\n${verdict}\n\n## Differences\n\`\`\`json\n${JSON.stringify(ops,null,2)}\n\`\`\`\n`);
+          console.log(verdict);console.log(`WER=${(wer*100).toFixed(2)}%; expected=${E.length}; actual=${A.length}; edits=${edits}`);console.log(JSON.stringify(ops));
+          NODE
+
+      - name: Upload corrected QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-transcribe-poc-v2
+          path: qa/gemini-transcribe-poc-v2/
+          retention-days: 7
