@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "groups": [
+    {
+      "id": "google",
+      "canonical": "google",
+      "forms": ["google", "جوجل"]
+    }
+  ]
+}
