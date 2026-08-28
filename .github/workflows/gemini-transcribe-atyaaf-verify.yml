@@ -1,0 +1,100 @@
+name: Gemini Transcribe QA — Atiaf targeted verification
+
+on:
+  push:
+    branches:
+      - qa/gemini-transcribe-poc-20260828
+    paths:
+      - .github/workflows/gemini-transcribe-atyaaf-verify.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      ARTICLE_ID: "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا"
+      AUDIO_HASH: "cf933330ca485220"
+      VOICE: "sadaltager"
+      PART_INDEX: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare live sample and exact expected text
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="qa/gemini-atyaaf-verify"
+          mkdir -p "$root"
+          curl -fsSL "https://bareeqworld.com/audio/articles/${AUDIO_HASH}/manifest.json" -o "$root/manifest.json"
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';
+          import {extractArticleSpeechModel,normalizeArabicForComparison} from './scripts/speech-script-core.mjs';
+          const id=process.env.ARTICLE_ID, root='qa/gemini-atyaaf-verify';
+          const articleFile=`src/content/posts/${id}.md`, scriptFile=`scripts/speech-scripts/${id}.json`;
+          const article=await readFile(articleFile,'utf8'), script=JSON.parse(await readFile(scriptFile,'utf8')), m=JSON.parse(await readFile(`${root}/manifest.json`,'utf8'));
+          if(!/Gemini/i.test(String(m.provider??''))) throw new Error(`not Gemini: ${m.provider}`);
+          const p=m.parts?.[Number(process.env.PART_INDEX)], a=p?.audio?.[process.env.VOICE];
+          if(!a?.src) throw new Error('live Sadaltager part missing');
+          const model=extractArticleSpeechModel({articleId:id,source:article,filename:articleFile});
+          const runtime=new Map(model.segments.filter(s=>s.runtimeId).map(s=>[s.runtimeId,s.segmentId]));
+          const byId=new Map(script.segments.map(s=>[s.segmentId,s]));
+          const title=script.segments.find(s=>s.type==='title')?.spokenText?.trim() || m.title || model.title;
+          const expected=[title];
+          for(const sync of p.sync??[]){const seg=runtime.get(sync.id), rec=seg?byId.get(seg):null;if(!rec?.spokenText)throw new Error(`stale mapping: ${sync.id}`);expected.push(rec.spokenText.trim());}
+          const text=expected.join('\n');
+          await writeFile(`${root}/expected.txt`,text+'\n');
+          await writeFile(`${root}/expected-normalized.txt`,normalizeArabicForComparison(text)+'\n');
+          await writeFile(`${root}/meta.json`,JSON.stringify({title:m.title,provider:m.provider,ttsModel:m.model,voice:process.env.VOICE,durationSeconds:a.durationSeconds,audioSrc:a.src},null,2));
+          NODE
+          src=$(node -p "JSON.parse(require('fs').readFileSync('$root/meta.json','utf8')).audioSrc")
+          curl -fsSL "https://bareeqworld.com${src}" -o "$root/sample.mp3"
+      - name: Install Gemini SDK
+        run: python -m pip install --quiet --disable-pip-version-check --upgrade google-genai
+      - name: Targeted verification transcription
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GEMINI_API_KEY"
+          python <<'PY'
+          import os
+          from pathlib import Path
+          from google import genai
+          root=Path('qa/gemini-atyaaf-verify')
+          c=genai.Client(api_key=os.environ['GEMINI_API_KEY'])
+          f=c.files.upload(file=str(root/'sample.mp3'))
+          r=c.interactions.create(model='gemini-3.5-transcribe',input=[{'type':'audio','uri':f.uri,'mime_type':f.mime_type}],generation_config={'transcription_config':{'language_codes':[],'custom_vocabulary':['إذن','لكنهما'],'mode':{'type':'verbatim'}}})
+          text=(r.output_text or '').strip()
+          if not text: raise RuntimeError('empty transcript')
+          (root/'transcript.txt').write_text(text+'\n',encoding='utf-8')
+          print('transcript characters=',len(text))
+          PY
+      - name: Compare targeted verification
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';
+          import {normalizeArabicForComparison} from './scripts/speech-script-core.mjs';
+          const root='qa/gemini-atyaaf-verify';
+          const E=normalizeArabicForComparison(await readFile(`${root}/expected.txt`,'utf8')).split(/\s+/).filter(Boolean), A=normalizeArabicForComparison(await readFile(`${root}/transcript.txt`,'utf8')).split(/\s+/).filter(Boolean);
+          const dp=Array.from({length:E.length+1},()=>new Uint32Array(A.length+1));for(let i=0;i<=E.length;i++)dp[i][0]=i;for(let j=0;j<=A.length;j++)dp[0][j]=j;for(let i=1;i<=E.length;i++)for(let j=1;j<=A.length;j++)dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(E[i-1]===A[j-1]?0:1));
+          let i=E.length,j=A.length;const ops=[];while(i||j){if(i&&j&&E[i-1]===A[j-1]&&dp[i][j]===dp[i-1][j-1]){i--;j--;continue;}if(i&&j&&dp[i][j]===dp[i-1][j-1]+1){ops.push({type:'substitution',expected:E[i-1],actual:A[j-1]});i--;j--;continue;}if(i&&dp[i][j]===dp[i-1][j]+1){ops.push({type:'deletion',expected:E[i-1],actual:null});i--;continue;}ops.push({type:'insertion',expected:null,actual:A[j-1]});j--;}ops.reverse();const edits=dp[E.length][A.length],wer=edits/E.length;
+          const result={expectedTokens:E.length,transcriptTokens:A.length,editDistance:edits,wer:Number(wer.toFixed(6)),similarityPercent:Number(((1-Math.min(1,wer))*100).toFixed(2)),differences:ops};
+          await writeFile(`${root}/result.json`,JSON.stringify(result,null,2)+'\n');
+          console.log(`TARGETED WER=${(wer*100).toFixed(2)}%; similarity=${result.similarityPercent}%; edits=${edits}`);console.log(JSON.stringify(ops));
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gemini-atyaaf-targeted-verify
+          path: qa/gemini-atyaaf-verify/
+          retention-days: 7
