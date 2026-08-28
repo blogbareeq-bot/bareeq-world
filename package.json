@@ -32,8 +32,12 @@
     "test:audio:ui": "node scripts/test-audio-ui-v4210.mjs",
     "smoke:audio:cloud:live": "node scripts/smoke-cloud-tts-live.mjs --live",
     "audio:gemini:resume:prepare": "node scripts/prepare-v4215-gemini-resume.mjs",
-    "audit:speech-scripts": "node scripts/test-speech-script-quality-gate.mjs && node scripts/check-speech-scripts.mjs",
+    "audit:speech-scripts": "node scripts/test-speech-script-quality-gate.mjs && node scripts/check-speech-scripts.mjs && node scripts/test-audio-lifecycle.mjs",
     "test:speech-scripts": "node scripts/test-speech-script-quality-gate.mjs",
+    "test:audio-lifecycle": "node scripts/test-audio-lifecycle.mjs",
+    "audio:inventory": "node scripts/audio-inventory.mjs",
+    "audio:production:dry-run": "node scripts/audio-production.mjs --dry-run",
+    "audio:listening-packs": "node scripts/audio-listening-packs.mjs",
     "typecheck": "astro check"
   },
   "dependencies": {

@@ -1,0 +1,91 @@
+# Copy this file to .github/workflows/audio-production.yml with workflows permission.
+name: Bareeq audio production
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: dry-run never calls a provider. execute-one synthesizes one Hamed article to Sadaltager after printing the request count.
+        required: true
+        type: choice
+        default: dry-run
+        options:
+          - dry-run
+          - execute-one
+      article:
+        description: Required for execute-one. Must be one of the six live Hamed articles unless certifying a reused Sadaltager file.
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bareeq-audio-production
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      BAREEQ_CLOUD_TTS_ACTIVATE: '0'
+      BAREEQ_GEMINI_FREE_ROLLOUT: '0'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Inventory and dry-run (zero provider requests)
+        run: |
+          node scripts/test-audio-lifecycle.mjs
+          node scripts/test-speech-script-quality-gate.mjs
+          node scripts/check-speech-scripts.mjs
+          node scripts/audio-inventory.mjs
+          node scripts/audio-listening-packs.mjs
+          node scripts/audio-production.mjs --dry-run
+          node scripts/audio-asr-transcribe.mjs --dry-run --model=gemini-3.5-transcribe
+          node scripts/audio-asr-transcribe.mjs --dry-run --model=gemini-3.6-transcribe
+          echo 'Dry-run complete. No TTS/ASR request was sent.'
+
+      - name: Stop after dry-run
+        if: inputs.mode == 'dry-run'
+        run: echo 'Mode=dry-run. Execute is a separate dispatch after this log is reviewed.'
+
+      - name: Require article and secret for execute-one
+        if: inputs.mode == 'execute-one'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "${{ inputs.article }}" ]; then
+            echo '::error::execute-one requires inputs.article'
+            exit 2
+          fi
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo '::error::GEMINI_API_KEY repository secret is unavailable. Add it, then re-dispatch. No request was sent.'
+            exit 78
+          fi
+
+      - name: Generate one Sadaltager candidate
+        if: inputs.mode == 'execute-one'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+        run: |
+          echo "Expected request count is in docs/audio/DRY-RUN.json from the previous step."
+          node scripts/audio-production.mjs --execute --article=${{ inputs.article }}
+
+      - name: Technical QA on local candidate
+        if: inputs.mode == 'execute-one'
+        run: node scripts/audio-technical-qa.mjs --article=${{ inputs.article }}

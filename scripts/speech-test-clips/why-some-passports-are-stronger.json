@@ -1,7 +1,7 @@
 {
   "version": 1,
   "articleId": "why-some-passports-are-stronger",
-  "speechScriptHash": "1e50637f8f3647d382d82d6f0b3790a73446cb5630112a6803ff1646368b62e3",
+  "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
   "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
@@ -57,5 +57,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "fc89941f5482306b843a7d4c2665bf4a2e9cad2a2938fa4c4476c15588d31f3a"
+  "planHash": "857faff2b233b7849135520d31274de7da586fb660d54ddb0c6a6aa6376fa0cc"
 }

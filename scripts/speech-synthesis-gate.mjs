@@ -1,3 +1,5 @@
+import { evaluateGenerationAuthorization, evaluatePublishability } from './audio-lifecycle.mjs';
+
 const TEST_BYPASS_VALUE = 'I_ACKNOWLEDGE_LOCAL_CONTRACT_ONLY';
 
 function isLocalContractEndpoint(value) {
@@ -14,22 +16,35 @@ export function testBypassAllowed(env = process.env) {
   return [env.GEMINI_TTS_ENDPOINT, env.OPENAI_TTS_ENDPOINT].some(isLocalContractEndpoint);
 }
 
+/**
+ * Generation authorization only. Listening/ASR evidence is a later gate and
+ * must not block the first TTS request — that would be circular.
+ */
 export function evaluateSynthesisReadiness(post) {
-  const validation = post?.speechApproval?.validation;
+  const generation = evaluateGenerationAuthorization(post);
   const plan = post?.speechApproval?.testClipPlan;
   const audioEvidencePassed = plan?.audioReview?.status === 'passed'
     && Boolean(plan.audioReview.evidence)
     && Boolean(plan.audioReview.reviewedBy)
     && Boolean(plan.audioReview.reviewedAt)
     && post?.speechApproval?.testClipEvidenceVerified === true;
-  const reasons = [];
-  if (!validation?.approved) reasons.push('Speech Script is missing, stale, ambiguous, or not fully linguistically/pronunciation reviewed');
-  if (!plan) reasons.push('test clip plan is missing');
-  if (plan && plan.speechScriptHash !== post?.speechApproval?.script?.scriptHash) reasons.push('test clip plan targets a stale Speech Script hash');
-  if (!plan?.testClipPassed) reasons.push('test clip is not passed');
-  if (!audioEvidencePassed) reasons.push('test clip has no actual listening-review evidence');
-  if (!plan?.fullSynthesisAllowed) reasons.push('full synthesis is not explicitly allowed');
-  return { allowed: reasons.length === 0, reasons, audioEvidencePassed };
+  return {
+    allowed: generation.passed,
+    reasons: generation.reasons,
+    audioEvidencePassed,
+    textReady: generation.textReady,
+    generationAuthorized: generation.passed,
+    publishable: false,
+  };
+}
+
+export function evaluatePublicationReadiness(post, record = {}) {
+  const publication = evaluatePublishability(post, record);
+  return {
+    allowed: publication.passed,
+    reasons: publication.reasons,
+    parts: publication.parts,
+  };
 }
 
 export function assertSynthesisAllowed(posts, env = process.env) {
@@ -42,6 +57,20 @@ export function assertSynthesisAllowed(posts, env = process.env) {
   if (blocked.length) {
     const details = blocked.map(({ post, readiness }) => `- ${post.id}: ${readiness.reasons.join('; ')}`).join('\n');
     throw new Error(`Speech synthesis blocked before provider access for ${blocked.length} article(s).\n${details}\nNo TTS provider request was sent.`);
+  }
+  return { bypassed: false };
+}
+
+export function assertPublicationAllowed(posts, recordsById = {}, env = process.env) {
+  if (!posts.length) return { bypassed: false };
+  if (testBypassAllowed(env)) return { bypassed: true };
+  const blocked = posts.map((post) => ({
+    post,
+    readiness: evaluatePublicationReadiness(post, recordsById[post.id] || {}),
+  })).filter(({ readiness }) => !readiness.allowed);
+  if (blocked.length) {
+    const details = blocked.map(({ post, readiness }) => `- ${post.id}: ${readiness.reasons.join('; ')}`).join('\n');
+    throw new Error(`Publication blocked for ${blocked.length} article(s).\n${details}\nExisting live audio was left in place.`);
   }
   return { bypassed: false };
 }

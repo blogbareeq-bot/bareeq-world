@@ -96,7 +96,7 @@ async function countGeminiCoverage() {
   return count;
 }
 
-const freeRolloutRaw = process.env.BAREEQ_GEMINI_FREE_ROLLOUT?.trim() || '1';
+const freeRolloutRaw = process.env.BAREEQ_GEMINI_FREE_ROLLOUT?.trim() || '0';
 if (!['0', '1'].includes(freeRolloutRaw)) throw new Error('BAREEQ_GEMINI_FREE_ROLLOUT must be 0 or 1.');
 const freeRolloutEnabled = freeRolloutRaw === '1';
 const freeArticleLimitRaw = process.env.BAREEQ_GEMINI_FREE_ARTICLES_PER_BUILD?.trim() || '1';

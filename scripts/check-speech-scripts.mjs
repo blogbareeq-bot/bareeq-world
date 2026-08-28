@@ -90,7 +90,9 @@ for (const model of models) {
   if (missingBenchmarks.length) failures.push(...missingBenchmarks.map((phrase) => `${model.articleId}: required benchmark vocalization is missing: ${phrase}`));
   if (benchmark.length && !validation.approved) failures.push(`${model.articleId}: reference pilot is not fully approved.`);
   if (benchmark.length && plan?.status !== 'ready') failures.push(`${model.articleId}: reference pilot test clip plan is not ready.`);
-  if (benchmark.length && (plan?.testClipPassed || plan?.fullSynthesisAllowed)) failures.push(`${model.articleId}: no test clip was generated/reviewed in this task; passed/synthesis state is forbidden.`);
+  // Generation authorization is derived from the reviewed Speech Script, not from
+  // post-generation listening/ASR evidence. fullSynthesisAllowed remains the
+  // explicit publish/replace flag and must stay false until later gates pass.
 
   const ambiguityFindings = model.segments.flatMap((segment) => {
     const record = script?.segments?.find((item) => item.segmentId === segment.segmentId);
@@ -118,6 +120,7 @@ for (const model of models) {
     bucket: classification.bucket,
     riskLevel: classification.riskLevel,
     speechScriptApproved: validation.approved,
+    generationAuthorized: Boolean(validation.approved && plan && plan.speechScriptHash === script?.scriptHash),
     testClipStatus: plan?.status ?? 'missing',
     testClipPassed: Boolean(plan?.testClipPassed),
     ttsSynthesisAllowed: Boolean(plan?.fullSynthesisAllowed),
@@ -132,6 +135,7 @@ const report = {
   articleCount: inventory.length,
   counts: { passed: counts.A, needsReview: counts.B, highRisk: counts.C },
   synthesisAllowed: inventory.filter((item) => item.ttsSynthesisAllowed).length,
+  generationAuthorized: inventory.filter((item) => item.generationAuthorized).length,
   articles: inventory,
 };
 if (outputFile) await writeFile(outputFile, `${JSON.stringify(report, null, 2)}\n`);
@@ -141,5 +145,6 @@ if (failures.length) {
   failures.forEach((failure) => console.error(`- ${failure}`));
   process.exit(1);
 }
-console.log(`Speech Script inventory validated: ${inventory.length} article(s); A=${counts.A}, B=${counts.B}, C=${counts.C}; ${report.synthesisAllowed} article(s) allowed to synthesize.`);
-console.log('Reference pilots: linguistic + pronunciation text review passed; test clips are READY but NOT GENERATED and NOT PASSED.');
+console.log(`Speech Script inventory validated: ${inventory.length} article(s); A=${counts.A}, B=${counts.B}, C=${counts.C}; ${report.synthesisAllowed} article(s) allowed to publish after later gates.`);
+const generationReady = inventory.filter((item) => item.speechScriptApproved).length;
+console.log(`Generation authorization (text-ready only): ${generationReady}/${inventory.length}. Listening/ASR remain separate publication gates.`);

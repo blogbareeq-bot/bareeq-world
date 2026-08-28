@@ -1,0 +1,185 @@
+{
+  "schema": "bareeq.live-audio-observed.v1",
+  "observedAt": "2026-08-28T21:30:00.000Z",
+  "origin": "https://bareeqworld.com",
+  "method": "HTTPS GET of each /audio/articles/<key>/manifest.json",
+  "note": "Observed from the live origin during the V4.22.1 closure inventory. Local git on main does not contain these Gemini files because public/audio/ is gitignored except the committed touchscreen Hamed bundle.",
+  "totals": {
+    "articles": 15,
+    "sadaltager": 9,
+    "hamed": 6,
+    "durationSeconds": 13883.664,
+    "durationLabel": "3h 51m 24s"
+  },
+  "articles": [
+    {
+      "articleId": "ai-agents-future-now",
+      "audioKey": "84f9f6b53f7ce503",
+      "provider": "Google Gemini API",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voiceId": "sadaltager",
+      "durationSeconds": 1019.712,
+      "class": "live-sadaltager",
+      "reusePrimary": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/84f9f6b53f7ce503/manifest.json"
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "audioKey": "263e3d148e6386a8",
+      "provider": "Google Gemini API",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voiceId": "sadaltager",
+      "durationSeconds": 1209.696,
+      "class": "live-sadaltager",
+      "reusePrimary": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/263e3d148e6386a8/manifest.json"
+    },
+    {
+      "articleId": "altadakhom-explained-simply",
+      "audioKey": "3fe4cd044730c91d",
+      "provider": "Microsoft Azure AI Speech",
+      "model": "Neural TTS",
+      "voiceId": "hamed",
+      "durationSeconds": 866.712,
+      "class": "live-fallback",
+      "reusePrimary": false,
+      "bundled": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/3fe4cd044730c91d/manifest.json"
+    },
+    {
+      "articleId": "how-touchscreens-work",
+      "audioKey": "de93f3d9f91c8b8b",
+      "provider": "Microsoft Azure AI Speech",
+      "model": "Neural TTS",
+      "voiceId": "hamed",
+      "durationSeconds": 921.6,
+      "class": "live-fallback",
+      "reusePrimary": false,
+      "committedInGit": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/de93f3d9f91c8b8b/manifest.json"
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "audioKey": "1d1b681593122b59",
+      "provider": "Microsoft Azure AI Speech",
+      "model": "Neural TTS",
+      "voiceId": "hamed",
+      "durationSeconds": 1118.52,
+      "class": "live-fallback",
+      "reusePrimary": false,
+      "liveUrl": "https://bareeqworld.com/audio/articles/1d1b681593122b59/manifest.json"
+    },
+    {
+      "articleId": "language-soft-power-politics",
+      "audioKey": "b19e29e785a22c73",
+      "provider": "Microsoft Azure AI Speech",
+      "model": "Neural TTS",
+      "voiceId": "hamed",
+      "durationSeconds": 1092.432,
+      "class": "live-fallback",
+      "reusePrimary": false,
+      "bundled": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/b19e29e785a22c73/manifest.json"
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "audioKey": "34e34b6f4633d928",
+      "provider": "Microsoft Azure AI Speech",
+      "model": "Neural TTS",
+      "voiceId": "hamed",
+      "durationSeconds": 1246.248,
+      "class": "live-fallback",
+      "reusePrimary": false,
+      "liveUrl": "https://bareeqworld.com/audio/articles/34e34b6f4633d928/manifest.json"
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "audioKey": "cf933330ca485220",
+      "provider": "Google Gemini API",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voiceId": "sadaltager",
+      "durationSeconds": 719.928,
+      "class": "live-sadaltager",
+      "reusePrimary": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/cf933330ca485220/manifest.json"
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "audioKey": "8f0fcef1d803164a",
+      "provider": "Microsoft Azure AI Speech",
+      "model": "Neural TTS",
+      "voiceId": "hamed",
+      "durationSeconds": 1741.824,
+      "class": "live-fallback",
+      "reusePrimary": false,
+      "bundled": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/8f0fcef1d803164a/manifest.json"
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "audioKey": "43993d7a722d81d4",
+      "provider": "Google Gemini API",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voiceId": "sadaltager",
+      "durationSeconds": 659.088,
+      "class": "live-sadaltager",
+      "reusePrimary": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/43993d7a722d81d4/manifest.json"
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "audioKey": "0d7d16713d3cea31",
+      "provider": "Google Gemini API",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voiceId": "sadaltager",
+      "durationSeconds": 507.168,
+      "class": "live-sadaltager",
+      "reusePrimary": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/0d7d16713d3cea31/manifest.json"
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "audioKey": "9d04080d1962a365",
+      "provider": "Google Gemini API",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voiceId": "sadaltager",
+      "durationSeconds": 796.08,
+      "class": "live-sadaltager",
+      "reusePrimary": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/9d04080d1962a365/manifest.json"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "audioKey": "4d194dd1e6a739a8",
+      "provider": "Google Gemini API",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voiceId": "sadaltager",
+      "durationSeconds": 446.016,
+      "class": "live-sadaltager",
+      "reusePrimary": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/4d194dd1e6a739a8/manifest.json"
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "audioKey": "d15e87706b55a08d",
+      "provider": "Google Gemini API",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voiceId": "sadaltager",
+      "durationSeconds": 589.44,
+      "class": "live-sadaltager",
+      "reusePrimary": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/d15e87706b55a08d/manifest.json"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "audioKey": "45d512425faa533a",
+      "provider": "Google Gemini API",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voiceId": "sadaltager",
+      "durationSeconds": 949.2,
+      "class": "live-sadaltager",
+      "reusePrimary": true,
+      "liveUrl": "https://bareeqworld.com/audio/articles/45d512425faa533a/manifest.json"
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
-  "speechScriptHash": "5c6abff36c79f30aa06e53cffb7ea27fdf59594bd37b66e516aba333f69b98b1",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "7602bbfe834118a6c23b8a9b0d92220389fa0aeeb0761075801ab8d6be89c49e",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "f1a6e54a18efcf3c79f1c1410f6ba25e5fd5d4932db90fa1a0cc40eb4eab8ebb"
+  "planHash": "ec5d8673850542736c0a19aa8c83ffa022711cd1aafabe3475c1fa461d3c4fa3"
 }

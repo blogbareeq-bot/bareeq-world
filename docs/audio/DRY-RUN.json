@@ -1,0 +1,212 @@
+{
+  "schema": "bareeq.audio-production-dry-run.v1",
+  "generatedAt": "2026-08-28T21:35:21.552Z",
+  "mode": "dry-run",
+  "narrator": {
+    "role": "primary",
+    "provider": "Google Gemini API",
+    "providerId": "gemini",
+    "model": "gemini-3.1-flash-tts-preview",
+    "voiceId": "sadaltager",
+    "providerVoice": "Sadaltager",
+    "language": "ar",
+    "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+    "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+    "encodingTool": "ffmpeg-libmp3lame",
+    "generatorVersion": 8
+  },
+  "fallback": {
+    "role": "fallback-only",
+    "provider": "Microsoft Azure AI Speech",
+    "providerId": "azure",
+    "model": "Neural TTS",
+    "voiceId": "hamed",
+    "providerVoice": "ar-SA-HamedNeural",
+    "alternateVoiceId": "fahed",
+    "alternateProviderVoice": "ar-KW-FahedNeural",
+    "language": "ar-SA",
+    "note": "Hamed/Fahed remain rollback voices. They are not competing production narrators."
+  },
+  "lockedSettingsFromAcceptedNine": {
+    "model": "gemini-3.1-flash-tts-preview",
+    "voice": "Sadaltager",
+    "language": "ar",
+    "style": "legacy-gemini-style-from-live-manifests",
+    "maxRequestBytes": 2400,
+    "generatorVersion": 8
+  },
+  "reusableSadaltager": [
+    "ai-agents-future-now",
+    "ai-as-coworker-future-of-human-work",
+    "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+    "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+    "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+    "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+    "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+    "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+    "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء"
+  ],
+  "replaceWithSadaltager": [
+    "altadakhom-explained-simply",
+    "how-touchscreens-work",
+    "intuition-first-impression-decisions-signature",
+    "language-soft-power-politics",
+    "why-some-passports-are-stronger",
+    "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع"
+  ],
+  "plans": [
+    {
+      "articleId": "ai-agents-future-now",
+      "action": "reuse-live-sadaltager",
+      "ttsRequests": 0,
+      "asrRequests": 2,
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "action": "reuse-live-sadaltager",
+      "ttsRequests": 0,
+      "asrRequests": 2,
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+    },
+    {
+      "articleId": "altadakhom-explained-simply",
+      "action": "generate-sadaltager-candidate",
+      "ttsRequests": 7,
+      "asrRequests": 2,
+      "chars": 8475,
+      "generationAuthorized": true,
+      "planLine": "- altadakhom-explained-simply: 7 part(s) × 1 voice(s), 79 sync block(s), 8475 source chars; SYNTHESIS ALLOWED",
+      "ok": true,
+      "error": null
+    },
+    {
+      "articleId": "how-touchscreens-work",
+      "action": "generate-sadaltager-candidate",
+      "ttsRequests": 14,
+      "asrRequests": 2,
+      "chars": 14724,
+      "generationAuthorized": true,
+      "planLine": "- how-touchscreens-work: 14 part(s) × 1 voice(s), 68 sync block(s), 14724 source chars; SYNTHESIS ALLOWED",
+      "ok": true,
+      "error": null
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "action": "generate-sadaltager-candidate",
+      "ttsRequests": 7,
+      "asrRequests": 2,
+      "chars": 8668,
+      "generationAuthorized": true,
+      "planLine": "- intuition-first-impression-decisions-signature: 7 part(s) × 1 voice(s), 80 sync block(s), 8668 source chars; SYNTHESIS ALLOWED",
+      "ok": true,
+      "error": null
+    },
+    {
+      "articleId": "language-soft-power-politics",
+      "action": "generate-sadaltager-candidate",
+      "ttsRequests": 9,
+      "asrRequests": 2,
+      "chars": 10611,
+      "generationAuthorized": true,
+      "planLine": "- language-soft-power-politics: 9 part(s) × 1 voice(s), 84 sync block(s), 10611 source chars; SYNTHESIS ALLOWED",
+      "ok": true,
+      "error": null
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "action": "generate-sadaltager-candidate",
+      "ttsRequests": 11,
+      "asrRequests": 2,
+      "chars": 12649,
+      "generationAuthorized": true,
+      "planLine": "- why-some-passports-are-stronger: 11 part(s) × 1 voice(s), 68 sync block(s), 12649 source chars; SYNTHESIS ALLOWED",
+      "ok": true,
+      "error": null
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "action": "reuse-live-sadaltager",
+      "ttsRequests": 0,
+      "asrRequests": 2,
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "action": "generate-sadaltager-candidate",
+      "ttsRequests": 15,
+      "asrRequests": 2,
+      "chars": 17264,
+      "generationAuthorized": true,
+      "planLine": "- اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع: 15 part(s) × 1 voice(s), 115 sync block(s), 17264 source chars; SYNTHESIS ALLOWED",
+      "ok": true,
+      "error": null
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "action": "reuse-live-sadaltager",
+      "ttsRequests": 0,
+      "asrRequests": 2,
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "action": "reuse-live-sadaltager",
+      "ttsRequests": 0,
+      "asrRequests": 2,
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "action": "reuse-live-sadaltager",
+      "ttsRequests": 0,
+      "asrRequests": 2,
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "action": "reuse-live-sadaltager",
+      "ttsRequests": 0,
+      "asrRequests": 2,
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "action": "reuse-live-sadaltager",
+      "ttsRequests": 0,
+      "asrRequests": 2,
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "action": "reuse-live-sadaltager",
+      "ttsRequests": 0,
+      "asrRequests": 2,
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+    }
+  ],
+  "expected": {
+    "ttsRequests": 63,
+    "asrRequests": 30,
+    "asrModels": [
+      "gemini-3.5-transcribe",
+      "gemini-3.6-transcribe"
+    ],
+    "articlesTouched": 15
+  },
+  "quota": {
+    "geminiKeyPresent": false,
+    "measuredRemaining": null,
+    "note": "Free-tier remaining quota cannot be read without a live API probe. No probe was sent during dry-run."
+  },
+  "resume": {
+    "command": "node scripts/audio-production.mjs --execute --article=<id>",
+    "afterQuotaExhaustion": "Re-run the same command. Completed parts in .bareeq-audio-checkpoints/ are reused by fingerprint."
+  },
+  "executeBlockedUnless": [
+    "dry-run has been reviewed",
+    "GEMINI_API_KEY is present",
+    "only one production audio workflow is running",
+    "the targeted article is generation_authorized"
+  ]
+}

@@ -1207,7 +1207,7 @@ for (const post of missing) {
       speechScriptVersion: post.speechApproval?.script?.version,
       speechScriptHash: post.speechScriptHash,
       speechInput: post.speechInput,
-      speechQualityState: 'tts-synthesis-allowed-after-reviewed-test-clip',
+      speechQualityState: 'generated-from-reviewed-speech-script-publication-pending',
       provider: PROVIDER_NAME,
       model: MODEL,
       language: LANGUAGE,
