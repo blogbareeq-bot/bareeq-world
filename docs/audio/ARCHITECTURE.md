@@ -2,36 +2,30 @@
 
 One production path. Cloudflare Pages builds must not synthesize.
 
-The GitHub App used to push this branch cannot write `.github/workflows/` (`workflows` permission missing). The production workflow therefore lives at `docs/audio/github-audio-production.yml` until a repo admin copies it to `.github/workflows/audio-production.yml`. After that copy, it is the only workflow allowed to spend Gemini quota (`concurrency` group `bareeq-audio-production`). Existing passport/touchscreen generate workflows remain in the repo as rollback history; do not dispatch them.
+Canonical workflow: `docs/audio/github-audio-production.yml` (cannot push `.github/workflows/` from this app). Modes:
 
-## Stages
+1. `dry-run` — zero provider requests
+2. `generate-candidate` — writes `audio-candidates/<articleId>/<fingerprint>/` only. Never publishes. HTTP 429 exits **75** after saving completed parts.
+3. `validate-candidate` — merge full.mp3, technical QA, ASR `gemini-3.5-transcribe` (Interactions + Files API), ASR `gemini-3.6-flash` (Interactions + audio), 0/0/0, listening pack. Never publishes.
+4. `publish-approved` — copies a candidate over live audio only after dual ASR, technical QA, sync QA, and **human listening bound to the same file SHA-256**.
 
-`text_ready` → `generation_authorized` → `generated` → `asr_passed` → `human_approved` → `technical_passed` → `publishable` → `published`
+Live Hamed/Sadaltager under `public/audio/articles/<key>/` is not modified by generate-candidate or validate-candidate.
 
-Generation authorization comes from a reviewed Speech Script plus a current test-clip *plan file*. It does **not** require listening evidence, ASR, or `fullSynthesisAllowed`. Those are later publication gates. Requiring them before the first TTS request is circular and forbidden.
+## Resume
 
-## Narrator
-
-- Primary: Google Gemini API / `gemini-3.1-flash-tts-preview` / Sadaltager / `ar` / generatorVersion 8 / pcm-s16le-24000hz-mono → mp3 48 kHz 96 kbps.
-- Fallback/rollback only: Azure `ar-SA-HamedNeural` or `ar-KW-FahedNeural`.
-- Live 2026-08-28: 9 Sadaltager + 6 Hamed. Reuse the 9. Generate candidates only for the 6. Keep live Hamed until the candidate is publishable.
-
-## Conflicting Fahed decision
-
-`docs/قرار-وتنفيذ-صوت-فهد-v4.22.0.md` on `audio/fahed-v4220` (2026-08-25) selected Azure Fahed as an immediate production narrator. The later 2026-08-28 closure instruction selects Sadaltager as primary. No Fahed corpus was generated in this closure path. Speech Scripts from that branch are reused as text, not as a Fahed production order.
+Each part is stored immediately under `audio-candidates/` with a fingerprint of article + spoken text + model + voice + performance instructions + split settings + part index. GitHub restores that directory with `actions/cache` and always uploads artifacts, including on 429.
 
 ## Dual ASR
 
-Independent models: `gemini-3.5-transcribe` and `gemini-3.6-transcribe`. Same model twice is a failure. Exact match after NFC/diacritic-strip/tatweel/punctuation/whitespace only. Pass = 0 substitutions / 0 deletions / 0 insertions on the full merged file.
+- Allowed: `gemini-3.5-transcribe`, `gemini-3.6-flash`
+- Forbidden: `gemini-3.6-transcribe`
+- Same model twice is a failure
+- Empty transcript is a failure
+- Missing model → `pending-independent-asr`, not publishable
+- ASR runs on the merged full file only
 
-## Commands
+## Chunking
 
-```
-node scripts/audio-inventory.mjs
-node scripts/audio-production.mjs --dry-run
-node scripts/audio-production.mjs --execute --article=<id>   # requires BAREEQ_AUDIO_PRODUCTION_LOCK=1
-node scripts/audio-asr-transcribe.mjs --dry-run --model=gemini-3.5-transcribe
-node scripts/audio-technical-qa.mjs --article=<id>
-```
+Legacy 2400-byte cap produced 63 TTS requests. Quota pack uses sentence/paragraph boundaries, live-duration estimates, target 2.5–3 minutes, official 4000-byte text / 655s output caps, and a 180s drift cap.
 
-`BAREEQ_CLOUD_TTS_ACTIVATE` stays `0`. `BAREEQ_GEMINI_FREE_ROLLOUT` stays `0` on Cloudflare so the Pages build cannot compete for quota.
+`BAREEQ_CLOUD_TTS_ACTIVATE` stays `0`. `BAREEQ_GEMINI_FREE_ROLLOUT` stays `0`.

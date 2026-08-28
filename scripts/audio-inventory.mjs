@@ -102,7 +102,7 @@ for (const filename of files) {
     } : null,
     asr: {
       first: { model: 'gemini-3.5-transcribe', substitutions: null, deletions: null, insertions: null, status: 'not-run' },
-      second: { model: 'gemini-3.6-transcribe', substitutions: null, deletions: null, insertions: null, status: 'not-run' },
+      second: { model: 'gemini-3.6-flash', substitutions: null, deletions: null, insertions: null, status: 'not-run' },
     },
     humanListening: { status: 'not-performed', reviewer: '', reviewedAt: '', result: 'pending' },
     technical: { status: 'pending', report: null },

@@ -1,67 +1,204 @@
-import { access, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
+import { EXIT_HARD, EXIT_USAGE, sha256, liveAudioDir, candidateDir } from './audio-constants.mjs';
+import { assertFfmpeg, runCommand } from './audio-ffmpeg.mjs';
+import { decodePcm } from './audio-merge.mjs';
+import { pathExists } from './audio-checkpoint.mjs';
 
-const ROOT = process.cwd();
-const articleId = process.argv.find((arg) => arg.startsWith('--article='))?.slice('--article='.length);
-if (!articleId) {
-  console.log('Technical QA: pass --article=<id> after candidate files exist locally. This command never synthesizes.');
-  process.exit(0);
+function rms(pcm) {
+  if (pcm.length < 2) return 0;
+  let sum = 0;
+  const samples = Math.floor(pcm.length / 2);
+  for (let i = 0; i < pcm.length; i += 2) {
+    const sample = pcm.readInt16LE(i);
+    sum += sample * sample;
+  }
+  return Math.sqrt(sum / samples) / 32768;
 }
 
-const { createHash } = await import('node:crypto');
-const key = createHash('sha256').update(articleId).digest('hex').slice(0, 16);
-const dir = path.join(ROOT, 'public', 'audio', 'articles', key);
-const manifestPath = path.join(dir, 'manifest.json');
-try { await access(manifestPath); } catch {
-  console.log(`Technical QA pending for ${articleId}: local candidate is not present at ${path.relative(ROOT, manifestPath)}. Live audio was not modified.`);
-  process.exit(0);
+function peak(pcm) {
+  let max = 0;
+  for (let i = 0; i < pcm.length; i += 2) max = Math.max(max, Math.abs(pcm.readInt16LE(i)));
+  return max / 32768;
 }
 
-const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
-const failures = [];
-if (manifest.articleId !== articleId) failures.push(`articleId ${manifest.articleId}`);
-if (manifest.provider !== PRODUCTION_NARRATOR.provider) failures.push(`provider ${manifest.provider}`);
-if (manifest.model !== PRODUCTION_NARRATOR.model) failures.push(`model ${manifest.model}`);
-if (manifest.defaultVoice !== PRODUCTION_NARRATOR.voiceId) failures.push(`voice ${manifest.defaultVoice}`);
-if (manifest.language !== PRODUCTION_NARRATOR.language) failures.push(`language ${manifest.language}`);
-if (manifest.generatorVersion !== PRODUCTION_NARRATOR.generatorVersion) failures.push(`generatorVersion ${manifest.generatorVersion}`);
-if (!Array.isArray(manifest.parts) || !manifest.parts.length) failures.push('missing parts');
-
-const syncIds = new Set();
-let totalDuration = 0;
-for (const part of manifest.parts || []) {
-  if (!Array.isArray(part?.sync) || !part.sync.length) failures.push('a part has no sync map');
-  let previous = -1;
-  for (const entry of part.sync || []) {
-    if (!entry?.id || syncIds.has(entry.id)) failures.push(`invalid sync id ${entry?.id}`);
-    if (!(entry.start >= 0 && entry.end <= 1 && entry.start < entry.end) || entry.start < previous) failures.push(`sync range ${entry?.id}`);
-    syncIds.add(entry.id);
-    previous = entry.start;
-  }
-  const asset = part.audio?.[PRODUCTION_NARRATOR.voiceId];
-  if (!asset?.src) {
-    failures.push('missing Sadaltager asset');
-    continue;
-  }
-  const file = path.join(ROOT, 'public', asset.src.replace(/^\//, ''));
-  let bytes;
-  try { bytes = await readFile(file); } catch {
-    failures.push(`missing file ${asset.src}`);
-    continue;
-  }
-  if (bytes.length !== asset.bytes) failures.push(`byte mismatch ${asset.src}`);
-  const sha = createHash('sha256').update(bytes).digest('hex');
-  if (asset.sha256 && sha !== asset.sha256) failures.push(`sha256 mismatch ${asset.src}`);
-  const duration = mp3DurationSeconds(bytes);
-  if (!(asset.durationSeconds > 0) || Math.abs(duration - asset.durationSeconds) > 0.1) failures.push(`duration mismatch ${asset.src}`);
-  totalDuration += asset.durationSeconds;
+function edgeEnergy(pcm, ms, sampleRate = 48000) {
+  const samples = Math.min(Math.floor(pcm.length / 2), Math.floor((ms / 1000) * sampleRate));
+  if (samples < 8) return 0;
+  const head = pcm.subarray(0, samples * 2);
+  const tail = pcm.subarray(pcm.length - samples * 2);
+  return { start: rms(head), end: rms(tail) };
 }
 
-if (failures.length) {
-  console.error(`Technical QA failed for ${articleId}:`);
+function longestSilenceSeconds(pcm, sampleRate = 48000, threshold = 0.008) {
+  let longest = 0;
+  let run = 0;
+  for (let i = 0; i < pcm.length; i += 2) {
+    const sample = Math.abs(pcm.readInt16LE(i)) / 32768;
+    if (sample < threshold) {
+      run += 1;
+      longest = Math.max(longest, run);
+    } else run = 0;
+  }
+  return longest / sampleRate;
+}
+
+export async function probeAudio(file) {
+  const { ffmpeg } = await assertFfmpeg();
+  const result = await runCommand(ffmpeg, ['-hide_banner', '-i', file, '-f', 'null', '-']);
+  const text = `${result.stderr}\n${result.stdout.toString('utf8')}`;
+  const stream = text.match(/Audio: ([^,]+), (\d+) Hz, ([^,]+), ([^,]+)/);
+  if (!stream) throw new Error(`ffprobe/ffmpeg could not describe ${file}`);
+  return {
+    codec: stream[1].trim(),
+    sampleRate: Number(stream[2]),
+    channelsLabel: stream[3].trim(),
+    sampleFmt: stream[4].trim(),
+    decoded: result.code === 0 || /Output #0/.test(text) || /Audio:/.test(text),
+  };
+}
+
+export async function inspectLiveSnapshot(articleId, root) {
+  const dir = liveAudioDir(articleId, root);
+  const manifestPath = path.join(dir, 'manifest.json');
+  if (!await pathExists(manifestPath)) return { exists: false, dir, fingerprint: null };
+  const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  const files = [];
+  for (const part of manifest.parts || []) {
+    const asset = part.audio?.[manifest.defaultVoice];
+    if (!asset?.src) continue;
+    const file = path.join(root, 'public', asset.src.replace(/^\//, ''));
+    if (!await pathExists(file)) continue;
+    const bytes = await readFile(file);
+    files.push({ file, sha256: sha256(bytes), bytes: bytes.length });
+  }
+  return {
+    exists: true,
+    dir,
+    provider: manifest.provider,
+    voiceId: manifest.defaultVoice,
+    fingerprint: sha256(JSON.stringify(files)),
+    files,
+  };
+}
+
+export async function runTechnicalQa({
+  articleId,
+  fingerprint,
+  root = process.cwd(),
+  candidatePath,
+  expectedSyncIds,
+  liveBefore = null,
+}) {
+  const failures = [];
+  if (!articleId) {
+    failures.push('article id is required');
+    return fail(failures);
+  }
+  const dir = candidatePath || (fingerprint ? candidateDir(articleId, fingerprint, root) : null);
+  if (!dir) return fail(['candidate path/fingerprint is required']);
+  const manifestPath = path.join(dir, 'manifest.candidate.json');
+  const fullFile = path.join(dir, 'full.mp3');
+  if (!await pathExists(manifestPath)) return fail([`candidate manifest missing at ${path.relative(root, manifestPath)}`]);
+  if (!await pathExists(fullFile)) return fail([`merged full.mp3 missing at ${path.relative(root, fullFile)}`]);
+
+  const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  if (manifest.articleId !== articleId) failures.push(`articleId ${manifest.articleId}`);
+  const full = await readFile(fullFile);
+  let duration;
+  try { duration = mp3DurationSeconds(full); } catch (error) { failures.push(error.message); }
+  let probe;
+  try { probe = await probeAudio(fullFile); } catch (error) { failures.push(error.message); }
+  if (probe) {
+    if (!/mp3|mp3float/i.test(probe.codec) && !/lame/i.test(probe.codec)) failures.push(`codec ${probe.codec}`);
+    if (probe.sampleRate !== 48000) failures.push(`sampleRate ${probe.sampleRate}`);
+    if (!/mono/i.test(probe.channelsLabel)) failures.push(`channels ${probe.channelsLabel}`);
+  }
+  let pcm;
+  try { pcm = await decodePcm(fullFile); } catch (error) { failures.push(error.message); }
+  if (pcm) {
+    if (peak(pcm) >= 0.99) failures.push('clipping detected (peak ≥ 0.99)');
+    const silence = longestSilenceSeconds(pcm);
+    if (silence > 3) failures.push(`internal silence ${silence.toFixed(2)}s`);
+    const edges = edgeEnergy(pcm, 80);
+    if (edges.start < 0.0005) failures.push('truncated or silent start');
+    if (edges.end < 0.0005) failures.push('truncated or silent end');
+  }
+
+  const partsDir = path.join(dir, 'parts');
+  const partFiles = (manifest.parts || []).map((part) => path.join(partsDir, `part-${String(part.partIndex + 1).padStart(3, '0')}-${part.fingerprint.slice(0, 12)}.mp3`));
+  const levels = [];
+  for (const file of partFiles) {
+    if (!await pathExists(file)) {
+      failures.push(`missing part file ${path.basename(file)}`);
+      continue;
+    }
+    try {
+      const partPcm = await decodePcm(file);
+      levels.push(rms(partPcm));
+    } catch (error) {
+      failures.push(`${path.basename(file)}: ${error.message}`);
+    }
+  }
+  if (levels.length >= 2) {
+    const max = Math.max(...levels);
+    const min = Math.min(...levels.filter((value) => value > 0));
+    if (min > 0 && 20 * Math.log10(max / min) > 12) failures.push('inconsistent loudness across parts (>12 dB)');
+  }
+
+  if (expectedSyncIds && manifest.parts) {
+    const ids = new Set(manifest.parts.flatMap((part) => part.syncIds || []));
+    for (const id of expectedSyncIds) if (!ids.has(id) && ids.size) failures.push(`sync missing ${id}`);
+  }
+
+  const liveNow = await inspectLiveSnapshot(articleId, root);
+  if (liveBefore?.exists) {
+    if (liveNow.fingerprint !== liveBefore.fingerprint) failures.push('live audio changed while a candidate was being validated');
+    if (liveBefore.voiceId === 'hamed' && liveNow.voiceId !== 'hamed') failures.push('live Hamed voice was replaced before publish-approved');
+  }
+
+  const report = {
+    schema: 'bareeq.audio-technical-qa.v2',
+    articleId,
+    fingerprint: fingerprint || manifest.fingerprint,
+    fullSha256: sha256(full),
+    durationSeconds: duration || null,
+    probe,
+    narrator: PRODUCTION_NARRATOR,
+    liveUntouched: !liveBefore || liveNow.fingerprint === liveBefore.fingerprint,
+    failures,
+    passed: failures.length === 0,
+  };
+  if (failures.length) return fail(failures, report);
+  console.log(`Technical QA passed for ${articleId}: full ${duration?.toFixed(3)}s, ${partFiles.length} part(s).`);
+  return report;
+}
+
+function fail(failures, report = null) {
+  console.error('Technical QA failed:');
   failures.forEach((item) => console.error(`- ${item}`));
-  process.exit(1);
+  const error = new Error(`Technical QA failed (${failures.length})`);
+  error.exitCode = EXIT_HARD;
+  error.failures = failures;
+  error.report = report;
+  throw error;
 }
-console.log(`Technical QA passed for ${articleId}: ${manifest.parts.length} part(s), ${syncIds.size} sync block(s), ${totalDuration.toFixed(3)}s.`);
+
+const isCli = process.argv[1] && path.basename(process.argv[1]) === 'audio-technical-qa.mjs';
+if (isCli) {
+  const articleId = process.argv.find((arg) => arg.startsWith('--article='))?.slice('--article='.length);
+  const fingerprint = process.argv.find((arg) => arg.startsWith('--fingerprint='))?.slice('--fingerprint='.length);
+  const candidatePath = process.argv.find((arg) => arg.startsWith('--candidate='))?.slice('--candidate='.length);
+  if (!articleId) {
+    console.error('Technical QA: --article is required. Missing candidate is a failure.');
+    process.exit(EXIT_USAGE);
+  }
+  try {
+    await runTechnicalQa({ articleId, fingerprint, candidatePath });
+  } catch (error) {
+    if (!error.failures) console.error(error.message);
+    process.exit(error.exitCode || EXIT_HARD);
+  }
+}

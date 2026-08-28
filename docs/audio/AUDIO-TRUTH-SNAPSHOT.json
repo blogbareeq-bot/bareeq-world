@@ -1,6 +1,6 @@
 {
   "schema": "bareeq.audio-truth.v1",
-  "generatedAt": "2026-08-28T21:34:46.126Z",
+  "generatedAt": "2026-08-28T22:04:08.752Z",
   "narratorPolicy": {
     "primary": {
       "role": "primary",
@@ -80,7 +80,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -151,7 +151,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -217,7 +217,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -283,7 +283,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -349,7 +349,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -415,7 +415,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -481,7 +481,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -552,7 +552,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -618,7 +618,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -689,7 +689,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -760,7 +760,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -831,7 +831,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -902,7 +902,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -973,7 +973,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,
@@ -1044,7 +1044,7 @@
           "status": "not-run"
         },
         "second": {
-          "model": "gemini-3.6-transcribe",
+          "model": "gemini-3.6-flash",
           "substitutions": null,
           "deletions": null,
           "insertions": null,

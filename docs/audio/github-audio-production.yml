@@ -1,19 +1,23 @@
-# Copy this file to .github/workflows/audio-production.yml with workflows permission.
+# Canonical production audio workflow. Copy to .github/workflows/audio-production.yml
+# only after offline safety tests pass. This file is the source of truth for mode
+# checks in scripts/test-audio-production-safety.mjs.
 name: Bareeq audio production
 
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: dry-run never calls a provider. execute-one synthesizes one Hamed article to Sadaltager after printing the request count.
+        description: dry-run never calls a provider. generate-candidate never publishes. validate-candidate never publishes. publish-approved requires listening tied to the file fingerprint.
         required: true
         type: choice
         default: dry-run
         options:
           - dry-run
-          - execute-one
+          - generate-candidate
+          - validate-candidate
+          - publish-approved
       article:
-        description: Required for execute-one. Must be one of the six live Hamed articles unless certifying a reused Sadaltager file.
+        description: Required except dry-run.
         required: false
         type: string
         default: ''
@@ -47,45 +51,74 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Inventory and dry-run (zero provider requests)
+      - name: Offline safety tests
         run: |
           node scripts/test-audio-lifecycle.mjs
+          node scripts/test-audio-production-safety.mjs
           node scripts/test-speech-script-quality-gate.mjs
           node scripts/check-speech-scripts.mjs
-          node scripts/audio-inventory.mjs
-          node scripts/audio-listening-packs.mjs
-          node scripts/audio-production.mjs --dry-run
-          node scripts/audio-asr-transcribe.mjs --dry-run --model=gemini-3.5-transcribe
-          node scripts/audio-asr-transcribe.mjs --dry-run --model=gemini-3.6-transcribe
-          echo 'Dry-run complete. No TTS/ASR request was sent.'
 
-      - name: Stop after dry-run
+      - name: Restore candidate cache
+        uses: actions/cache/restore@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-candidate-${{ inputs.article || 'none' }}-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}
+          restore-keys: |
+            bareeq-audio-candidate-${{ inputs.article || 'none' }}-
+
+      - name: Dry-run
         if: inputs.mode == 'dry-run'
-        run: echo 'Mode=dry-run. Execute is a separate dispatch after this log is reviewed.'
-
-      - name: Require article and secret for execute-one
-        if: inputs.mode == 'execute-one'
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          if [ -z "${{ inputs.article }}" ]; then
-            echo '::error::execute-one requires inputs.article'
-            exit 2
-          fi
-          if [ -z "$GEMINI_API_KEY" ]; then
-            echo '::error::GEMINI_API_KEY repository secret is unavailable. Add it, then re-dispatch. No request was sent.'
-            exit 78
-          fi
+          node scripts/audio-inventory.mjs
+          node scripts/audio-production.mjs --mode=dry-run
+          echo 'Dry-run complete. No TTS/ASR request was sent. generate-candidate does not publish.'
 
-      - name: Generate one Sadaltager candidate
-        if: inputs.mode == 'execute-one'
+      - name: Generate candidate
+        id: generate
+        if: inputs.mode == 'generate-candidate'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
         run: |
-          echo "Expected request count is in docs/audio/DRY-RUN.json from the previous step."
-          node scripts/audio-production.mjs --execute --article=${{ inputs.article }}
+          set +e
+          node scripts/audio-production.mjs --mode=generate-candidate --article=${{ inputs.article }}
+          status=$?
+          set -e
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          if [ "$status" = "75" ]; then
+            echo 'Quota pause HTTP 429. Completed fingerprint parts were saved. This step is not a success.'
+            exit 75
+          fi
+          exit "$status"
 
-      - name: Technical QA on local candidate
-        if: inputs.mode == 'execute-one'
-        run: node scripts/audio-technical-qa.mjs --article=${{ inputs.article }}
+      - name: Validate candidate
+        id: validate
+        if: inputs.mode == 'validate-candidate'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo 'validate-candidate: merge full.mp3, technical QA, ASR gemini-3.5-transcribe, ASR gemini-3.6-flash, 0/0/0, listening pack. Does not publish.'
+          node scripts/audio-production.mjs --mode=validate-candidate --article=${{ inputs.article }}
+
+      - name: Publish approved
+        if: inputs.mode == 'publish-approved'
+        run: |
+          echo 'publish-approved refuses without human listening evidence bound to the candidate file SHA-256.'
+          node scripts/audio-production.mjs --mode=publish-approved --article=${{ inputs.article }}
+
+      - name: Save candidate cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-candidate-${{ inputs.article || 'none' }}-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
+
+      - name: Upload candidate artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audio-candidate-${{ inputs.article || 'dry-run' }}-${{ github.run_id }}
+          path: |
+            audio-candidates/
+            docs/audio/DRY-RUN.json
+          if-no-files-found: warn

@@ -1,3 +1,5 @@
+import { INDEPENDENT_ASR_MODELS as ASR_MODELS, FORBIDDEN_ASR_MODELS } from './audio-constants.mjs';
+
 /**
  * Bareeq V4.22.1 audio lifecycle gates.
  *
@@ -48,10 +50,8 @@ export const FALLBACK_NARRATOR = {
   note: 'Hamed/Fahed remain rollback voices. They are not competing production narrators.',
 };
 
-export const INDEPENDENT_ASR_MODELS = [
-  'gemini-3.5-transcribe',
-  'gemini-3.6-transcribe',
-];
+export const INDEPENDENT_ASR_MODELS = ASR_MODELS;
+export { FORBIDDEN_ASR_MODELS };
 
 const STAGE_INDEX = Object.fromEntries(AUDIO_LIFECYCLE_STAGES.map((stage, index) => [stage, index]));
 
@@ -109,6 +109,9 @@ export function evaluateAsr(record = {}) {
   if (models.length < 2) reasons.push('independent dual-ASR is incomplete; two distinct model IDs are required');
   for (const expected of INDEPENDENT_ASR_MODELS) {
     if (!models.includes(expected)) reasons.push(`missing ASR model ${expected}`);
+  }
+  for (const model of models) {
+    if (FORBIDDEN_ASR_MODELS.includes(model)) reasons.push(`forbidden ASR model ${model}`);
   }
   if (models.length === 2 && models[0] === models[1]) {
     reasons.push('the same ASR model was used twice; that is not an independent check');

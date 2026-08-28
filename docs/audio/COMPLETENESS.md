@@ -1,6 +1,6 @@
 # Bareeq audio completeness
 
-Generated: 2026-08-28T21:34:46.126Z
+Generated: 2026-08-28T22:04:08.752Z
 
 Primary narrator: Gemini `gemini-3.1-flash-tts-preview` / Sadaltager.
 Fallback only: Azure Hamed or Fahed. Live Hamed remains until a candidate is publishable.

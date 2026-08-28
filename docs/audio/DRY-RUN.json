@@ -1,6 +1,6 @@
 {
-  "schema": "bareeq.audio-production-dry-run.v1",
-  "generatedAt": "2026-08-28T21:35:21.552Z",
+  "schema": "bareeq.audio-production-dry-run.v2",
+  "generatedAt": "2026-08-28T22:04:08.871Z",
   "mode": "dry-run",
   "narrator": {
     "role": "primary",
@@ -27,13 +27,46 @@
     "language": "ar-SA",
     "note": "Hamed/Fahed remain rollback voices. They are not competing production narrators."
   },
-  "lockedSettingsFromAcceptedNine": {
-    "model": "gemini-3.1-flash-tts-preview",
-    "voice": "Sadaltager",
-    "language": "ar",
-    "style": "legacy-gemini-style-from-live-manifests",
-    "maxRequestBytes": 2400,
-    "generatorVersion": 8
+  "asr": {
+    "models": [
+      "gemini-3.5-transcribe",
+      "gemini-3.6-flash"
+    ],
+    "forbidden": [
+      "gemini-3.6-transcribe"
+    ],
+    "file": "full merged MP3 only"
+  },
+  "candidatePath": "audio-candidates/<articleId>/<fingerprint>/",
+  "livePath": "public/audio/articles/<key>/",
+  "chunking": {
+    "before": {
+      "settings": {
+        "version": 1,
+        "name": "byte-cap-2400",
+        "maxTranscriptBytes": 2400,
+        "targetSeconds": null,
+        "maxSeconds": null
+      },
+      "ttsRequests": 63
+    },
+    "after": {
+      "settings": {
+        "version": 2,
+        "name": "sentence-duration-quota",
+        "targetSeconds": 165,
+        "minSeconds": 90,
+        "maxSeconds": 180,
+        "maxTranscriptBytes": 6500,
+        "officialTextLimitBytes": 4000,
+        "officialPromptLimitBytes": 4000,
+        "officialCombinedLimitBytes": 8000,
+        "officialOutputSeconds": 655,
+        "driftCapSeconds": 180,
+        "defaultCharsPerSecond": 10
+      },
+      "ttsRequests": 44
+    }
   },
   "reusableSadaltager": [
     "ai-agents-future-now",
@@ -58,155 +91,498 @@
     {
       "articleId": "ai-agents-future-now",
       "action": "reuse-live-sadaltager",
-      "ttsRequests": 0,
+      "ttsRequestsBefore": 0,
+      "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
       "articleId": "ai-as-coworker-future-of-human-work",
       "action": "reuse-live-sadaltager",
-      "ttsRequests": 0,
+      "ttsRequestsBefore": 0,
+      "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
       "articleId": "altadakhom-explained-simply",
       "action": "generate-sadaltager-candidate",
-      "ttsRequests": 7,
+      "liveDurationSeconds": 866.712,
+      "spokenChars": 8475,
+      "charsPerSecond": 9.778,
+      "ttsRequestsBefore": 7,
+      "ttsRequestsAfter": 6,
       "asrRequests": 2,
-      "chars": 8475,
-      "generationAuthorized": true,
-      "planLine": "- altadakhom-explained-simply: 7 part(s) × 1 voice(s), 79 sync block(s), 8475 source chars; SYNTHESIS ALLOWED",
-      "ok": true,
-      "error": null
+      "maxPartBytes": 3199,
+      "maxPartEstimatedSeconds": 179.38,
+      "officialTextLimitBytes": 4000,
+      "officialOutputSeconds": 655,
+      "justification": null,
+      "parts": [
+        {
+          "partIndex": 0,
+          "chars": 1565,
+          "bytes": 2825,
+          "estimatedSeconds": 160.05,
+          "promptBytes": 4270
+        },
+        {
+          "partIndex": 1,
+          "chars": 1676,
+          "bytes": 3050,
+          "estimatedSeconds": 171.4,
+          "promptBytes": 4495
+        },
+        {
+          "partIndex": 2,
+          "chars": 1754,
+          "bytes": 3199,
+          "estimatedSeconds": 179.38,
+          "promptBytes": 4644
+        },
+        {
+          "partIndex": 3,
+          "chars": 1700,
+          "bytes": 3075,
+          "estimatedSeconds": 173.85,
+          "promptBytes": 4520
+        },
+        {
+          "partIndex": 4,
+          "chars": 1657,
+          "bytes": 3021,
+          "estimatedSeconds": 169.46,
+          "promptBytes": 4466
+        },
+        {
+          "partIndex": 5,
+          "chars": 117,
+          "bytes": 213,
+          "estimatedSeconds": 11.97,
+          "promptBytes": 1658
+        }
+      ]
     },
     {
       "articleId": "how-touchscreens-work",
       "action": "generate-sadaltager-candidate",
-      "ttsRequests": 14,
+      "liveDurationSeconds": 921.6,
+      "spokenChars": 14724,
+      "charsPerSecond": 15.977,
+      "ttsRequestsBefore": 14,
+      "ttsRequestsAfter": 6,
       "asrRequests": 2,
-      "chars": 14724,
-      "generationAuthorized": true,
-      "planLine": "- how-touchscreens-work: 14 part(s) × 1 voice(s), 68 sync block(s), 14724 source chars; SYNTHESIS ALLOWED",
-      "ok": true,
-      "error": null
+      "maxPartBytes": 5423,
+      "maxPartEstimatedSeconds": 179.83,
+      "officialTextLimitBytes": 4000,
+      "officialOutputSeconds": 655,
+      "justification": null,
+      "parts": [
+        {
+          "partIndex": 0,
+          "chars": 2785,
+          "bytes": 5265,
+          "estimatedSeconds": 174.32,
+          "promptBytes": 6709
+        },
+        {
+          "partIndex": 1,
+          "chars": 2602,
+          "bytes": 4928,
+          "estimatedSeconds": 162.86,
+          "promptBytes": 6372
+        },
+        {
+          "partIndex": 2,
+          "chars": 2873,
+          "bytes": 5423,
+          "estimatedSeconds": 179.83,
+          "promptBytes": 6867
+        },
+        {
+          "partIndex": 3,
+          "chars": 2674,
+          "bytes": 5062,
+          "estimatedSeconds": 167.37,
+          "promptBytes": 6506
+        },
+        {
+          "partIndex": 4,
+          "chars": 2843,
+          "bytes": 5381,
+          "estimatedSeconds": 177.95,
+          "promptBytes": 6825
+        },
+        {
+          "partIndex": 5,
+          "chars": 942,
+          "bytes": 1774,
+          "estimatedSeconds": 58.96,
+          "promptBytes": 3218
+        }
+      ]
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
       "action": "generate-sadaltager-candidate",
-      "ttsRequests": 7,
+      "liveDurationSeconds": 1118.52,
+      "spokenChars": 8668,
+      "charsPerSecond": 7.75,
+      "ttsRequestsBefore": 7,
+      "ttsRequestsAfter": 7,
       "asrRequests": 2,
-      "chars": 8668,
-      "generationAuthorized": true,
-      "planLine": "- intuition-first-impression-decisions-signature: 7 part(s) × 1 voice(s), 80 sync block(s), 8668 source chars; SYNTHESIS ALLOWED",
-      "ok": true,
-      "error": null
+      "maxPartBytes": 2505,
+      "maxPartEstimatedSeconds": 178.98,
+      "officialTextLimitBytes": 4000,
+      "officialOutputSeconds": 655,
+      "justification": "Article spoken length 8668 chars / live 1118.52s needs 7 parts at ≤180s and ≤6500 transcript bytes (official text limit 4000).",
+      "parts": [
+        {
+          "partIndex": 0,
+          "chars": 1382,
+          "bytes": 2488,
+          "estimatedSeconds": 178.33,
+          "promptBytes": 3970
+        },
+        {
+          "partIndex": 1,
+          "chars": 1366,
+          "bytes": 2464,
+          "estimatedSeconds": 176.27,
+          "promptBytes": 3946
+        },
+        {
+          "partIndex": 2,
+          "chars": 1315,
+          "bytes": 2369,
+          "estimatedSeconds": 169.69,
+          "promptBytes": 3851
+        },
+        {
+          "partIndex": 3,
+          "chars": 1382,
+          "bytes": 2483,
+          "estimatedSeconds": 178.33,
+          "promptBytes": 3965
+        },
+        {
+          "partIndex": 4,
+          "chars": 1387,
+          "bytes": 2505,
+          "estimatedSeconds": 178.98,
+          "promptBytes": 3987
+        },
+        {
+          "partIndex": 5,
+          "chars": 1206,
+          "bytes": 2173,
+          "estimatedSeconds": 155.62,
+          "promptBytes": 3655
+        },
+        {
+          "partIndex": 6,
+          "chars": 623,
+          "bytes": 1133,
+          "estimatedSeconds": 80.39,
+          "promptBytes": 2615
+        }
+      ]
     },
     {
       "articleId": "language-soft-power-politics",
       "action": "generate-sadaltager-candidate",
-      "ttsRequests": 9,
+      "liveDurationSeconds": 1092.432,
+      "spokenChars": 10611,
+      "charsPerSecond": 9.713,
+      "ttsRequestsBefore": 9,
+      "ttsRequestsAfter": 7,
       "asrRequests": 2,
-      "chars": 10611,
-      "generationAuthorized": true,
-      "planLine": "- language-soft-power-politics: 9 part(s) × 1 voice(s), 84 sync block(s), 10611 source chars; SYNTHESIS ALLOWED",
-      "ok": true,
-      "error": null
+      "maxPartBytes": 3160,
+      "maxPartEstimatedSeconds": 179.03,
+      "officialTextLimitBytes": 4000,
+      "officialOutputSeconds": 655,
+      "justification": "Article spoken length 10611 chars / live 1092.432s needs 7 parts at ≤180s and ≤6500 transcript bytes (official text limit 4000).",
+      "parts": [
+        {
+          "partIndex": 0,
+          "chars": 1548,
+          "bytes": 2812,
+          "estimatedSeconds": 159.37,
+          "promptBytes": 4289
+        },
+        {
+          "partIndex": 1,
+          "chars": 1530,
+          "bytes": 2788,
+          "estimatedSeconds": 157.52,
+          "promptBytes": 4265
+        },
+        {
+          "partIndex": 2,
+          "chars": 1732,
+          "bytes": 3160,
+          "estimatedSeconds": 178.31,
+          "promptBytes": 4637
+        },
+        {
+          "partIndex": 3,
+          "chars": 1533,
+          "bytes": 2781,
+          "estimatedSeconds": 157.83,
+          "promptBytes": 4258
+        },
+        {
+          "partIndex": 4,
+          "chars": 1739,
+          "bytes": 3159,
+          "estimatedSeconds": 179.03,
+          "promptBytes": 4636
+        },
+        {
+          "partIndex": 5,
+          "chars": 1673,
+          "bytes": 3041,
+          "estimatedSeconds": 172.24,
+          "promptBytes": 4518
+        },
+        {
+          "partIndex": 6,
+          "chars": 850,
+          "bytes": 1556,
+          "estimatedSeconds": 87.51,
+          "promptBytes": 3033
+        }
+      ]
     },
     {
       "articleId": "why-some-passports-are-stronger",
       "action": "generate-sadaltager-candidate",
-      "ttsRequests": 11,
+      "liveDurationSeconds": 1246.248,
+      "spokenChars": 12649,
+      "charsPerSecond": 10.15,
+      "ttsRequestsBefore": 11,
+      "ttsRequestsAfter": 8,
       "asrRequests": 2,
-      "chars": 12649,
-      "generationAuthorized": true,
-      "planLine": "- why-some-passports-are-stronger: 11 part(s) × 1 voice(s), 68 sync block(s), 12649 source chars; SYNTHESIS ALLOWED",
-      "ok": true,
-      "error": null
+      "maxPartBytes": 3249,
+      "maxPartEstimatedSeconds": 175.77,
+      "officialTextLimitBytes": 4000,
+      "officialOutputSeconds": 655,
+      "justification": "Article spoken length 12649 chars / live 1246.248s needs 8 parts at ≤180s and ≤6500 transcript bytes (official text limit 4000).",
+      "parts": [
+        {
+          "partIndex": 0,
+          "chars": 1730,
+          "bytes": 3170,
+          "estimatedSeconds": 170.45,
+          "promptBytes": 4651
+        },
+        {
+          "partIndex": 1,
+          "chars": 1725,
+          "bytes": 3151,
+          "estimatedSeconds": 169.96,
+          "promptBytes": 4632
+        },
+        {
+          "partIndex": 2,
+          "chars": 1634,
+          "bytes": 3013,
+          "estimatedSeconds": 160.99,
+          "promptBytes": 4494
+        },
+        {
+          "partIndex": 3,
+          "chars": 1683,
+          "bytes": 3064,
+          "estimatedSeconds": 165.82,
+          "promptBytes": 4545
+        },
+        {
+          "partIndex": 4,
+          "chars": 1554,
+          "bytes": 2838,
+          "estimatedSeconds": 153.11,
+          "promptBytes": 4319
+        },
+        {
+          "partIndex": 5,
+          "chars": 1784,
+          "bytes": 3249,
+          "estimatedSeconds": 175.77,
+          "promptBytes": 4730
+        },
+        {
+          "partIndex": 6,
+          "chars": 1685,
+          "bytes": 3078,
+          "estimatedSeconds": 166.02,
+          "promptBytes": 4559
+        },
+        {
+          "partIndex": 7,
+          "chars": 846,
+          "bytes": 1545,
+          "estimatedSeconds": 83.35,
+          "promptBytes": 3026
+        }
+      ]
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
       "action": "reuse-live-sadaltager",
-      "ttsRequests": 0,
+      "ttsRequestsBefore": 0,
+      "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
       "action": "generate-sadaltager-candidate",
-      "ttsRequests": 15,
+      "liveDurationSeconds": 1741.824,
+      "spokenChars": 17264,
+      "charsPerSecond": 9.911,
+      "ttsRequestsBefore": 15,
+      "ttsRequestsAfter": 10,
       "asrRequests": 2,
-      "chars": 17264,
-      "generationAuthorized": true,
-      "planLine": "- اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع: 15 part(s) × 1 voice(s), 115 sync block(s), 17264 source chars; SYNTHESIS ALLOWED",
-      "ok": true,
-      "error": null
+      "maxPartBytes": 3240,
+      "maxPartEstimatedSeconds": 179.79,
+      "officialTextLimitBytes": 4000,
+      "officialOutputSeconds": 655,
+      "justification": "Article spoken length 17264 chars / live 1741.824s needs 10 parts at ≤180s and ≤6500 transcript bytes (official text limit 4000).",
+      "parts": [
+        {
+          "partIndex": 0,
+          "chars": 1712,
+          "bytes": 3090,
+          "estimatedSeconds": 172.73,
+          "promptBytes": 4571
+        },
+        {
+          "partIndex": 1,
+          "chars": 1782,
+          "bytes": 3233,
+          "estimatedSeconds": 179.79,
+          "promptBytes": 4714
+        },
+        {
+          "partIndex": 2,
+          "chars": 1751,
+          "bytes": 3172,
+          "estimatedSeconds": 176.66,
+          "promptBytes": 4653
+        },
+        {
+          "partIndex": 3,
+          "chars": 1706,
+          "bytes": 3087,
+          "estimatedSeconds": 172.12,
+          "promptBytes": 4568
+        },
+        {
+          "partIndex": 4,
+          "chars": 1600,
+          "bytes": 2889,
+          "estimatedSeconds": 161.43,
+          "promptBytes": 4370
+        },
+        {
+          "partIndex": 5,
+          "chars": 1776,
+          "bytes": 3207,
+          "estimatedSeconds": 179.19,
+          "promptBytes": 4688
+        },
+        {
+          "partIndex": 6,
+          "chars": 1662,
+          "bytes": 3016,
+          "estimatedSeconds": 167.68,
+          "promptBytes": 4497
+        },
+        {
+          "partIndex": 7,
+          "chars": 1781,
+          "bytes": 3240,
+          "estimatedSeconds": 179.69,
+          "promptBytes": 4721
+        },
+        {
+          "partIndex": 8,
+          "chars": 1765,
+          "bytes": 3164,
+          "estimatedSeconds": 178.08,
+          "promptBytes": 4645
+        },
+        {
+          "partIndex": 9,
+          "chars": 1719,
+          "bytes": 3125,
+          "estimatedSeconds": 173.44,
+          "promptBytes": 4607
+        }
+      ]
     },
     {
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
       "action": "reuse-live-sadaltager",
-      "ttsRequests": 0,
+      "ttsRequestsBefore": 0,
+      "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
       "action": "reuse-live-sadaltager",
-      "ttsRequests": 0,
+      "ttsRequestsBefore": 0,
+      "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
       "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
       "action": "reuse-live-sadaltager",
-      "ttsRequests": 0,
+      "ttsRequestsBefore": 0,
+      "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
       "action": "reuse-live-sadaltager",
-      "ttsRequests": 0,
+      "ttsRequestsBefore": 0,
+      "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
       "action": "reuse-live-sadaltager",
-      "ttsRequests": 0,
+      "ttsRequestsBefore": 0,
+      "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
       "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
       "action": "reuse-live-sadaltager",
-      "ttsRequests": 0,
+      "ttsRequestsBefore": 0,
+      "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "reason": "Live Gemini/Sadaltager already exists; do not regenerate. Dual ASR still required for certification of the merged file."
+      "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     }
   ],
   "expected": {
-    "ttsRequests": 63,
+    "ttsRequestsBefore": 63,
+    "ttsRequestsAfter": 44,
     "asrRequests": 30,
     "asrModels": [
       "gemini-3.5-transcribe",
-      "gemini-3.6-transcribe"
-    ],
-    "articlesTouched": 15
-  },
-  "quota": {
-    "geminiKeyPresent": false,
-    "measuredRemaining": null,
-    "note": "Free-tier remaining quota cannot be read without a live API probe. No probe was sent during dry-run."
+      "gemini-3.6-flash"
+    ]
   },
   "resume": {
-    "command": "node scripts/audio-production.mjs --execute --article=<id>",
-    "afterQuotaExhaustion": "Re-run the same command. Completed parts in .bareeq-audio-checkpoints/ are reused by fingerprint."
-  },
-  "executeBlockedUnless": [
-    "dry-run has been reviewed",
-    "GEMINI_API_KEY is present",
-    "only one production audio workflow is running",
-    "the targeted article is generation_authorized"
-  ]
+    "storage": "audio-candidates/<articleId>/<fingerprint>/parts with per-part fingerprint",
+    "quotaExitCode": 75,
+    "github": "actions/cache + always() upload-artifact of audio-candidates/"
+  }
 }
