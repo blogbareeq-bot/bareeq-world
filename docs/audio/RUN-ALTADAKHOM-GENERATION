@@ -1,1 +1,0 @@
-one-shot targeted correction diagnostic: preserve candidate 58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45; regenerate only parts 3 and 4 via Gemini 3.1 generateContent with strict correction hints; if 429, record safe quota metric/retry detail; do not publish or touch live audio.
