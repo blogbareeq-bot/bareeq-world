@@ -22,6 +22,11 @@ import { partFileName } from './audio-checkpoint.mjs';
 import { boundIdentity } from './audio-report.mjs';
 import { ORIGINAL_REPORTS } from './audio-evidence.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
+import {
+  TRANSITION_NORMALIZATION,
+  normalizeCandidatePart,
+  normalizedPartFileName,
+} from './audio-normalize-parts.mjs';
 
 export async function resolveLatestCandidateDir(articleId, root) {
   throw Object.assign(new Error('validate-candidate will not pick the latest candidate'), { exitCode: EXIT_USAGE });
@@ -69,20 +74,35 @@ export async function validateCandidate({
 
   const partFiles = [];
   const partAssets = [];
-  for (const part of splitPlan.parts) {
+  const normalizationParts = [];
+  for (const [index, part] of splitPlan.parts.entries()) {
     const digest = partFingerprint(article, splitPlan, part);
-    const file = path.join(paths.partsDir, partFileName(part.partIndex, digest));
-    if (!await pathExists(file)) {
-      throw Object.assign(new Error(`validate-candidate refused: missing ${path.basename(file)}`), { exitCode: EXIT_HARD });
+    const rawFile = path.join(paths.partsDir, partFileName(part.partIndex, digest));
+    if (!await pathExists(rawFile)) {
+      throw Object.assign(new Error(`validate-candidate refused: missing ${path.basename(rawFile)}`), { exitCode: EXIT_HARD });
     }
-    const bytes = await readFile(file);
-    partFiles.push(file);
+    const cleanFile = path.join(paths.partsDir, normalizedPartFileName(rawFile));
+    const normalized = await normalizeCandidatePart({
+      inputFile: rawFile,
+      outputFile: cleanFile,
+      isFirst: index === 0,
+      isLast: index === splitPlan.parts.length - 1,
+      settings: TRANSITION_NORMALIZATION,
+    });
+    const bytes = await readFile(cleanFile);
+    partFiles.push(cleanFile);
     partAssets.push({
-      src: publicPartSrc(articleId, path.basename(file)),
+      src: publicPartSrc(articleId, path.basename(cleanFile)),
       bytes: bytes.length,
       durationSeconds: mp3DurationSeconds(bytes),
       sha256: sha256(bytes),
-      file: path.basename(file),
+      file: path.basename(cleanFile),
+      rawFile: path.basename(rawFile),
+      rawSha256: normalized.rawSha256,
+    });
+    normalizationParts.push({
+      partIndex: part.partIndex,
+      ...normalized,
     });
   }
 
@@ -100,6 +120,16 @@ export async function validateCandidate({
   merge.sha256 = merge.sha256 || fullSha256;
   merge.speechScriptHash = article.speechScriptHash;
   await writeJson(path.join(paths.reportsDir, 'merge.json'), merge);
+
+  const normalizationReport = {
+    ...stamp(article, resolvedFingerprint, fullSha256, 'passed', 'bareeq.audio-transition-normalization.v1'),
+    status: 'passed',
+    settings: TRANSITION_NORMALIZATION,
+    rawPartsPreserved: true,
+    playbackUsesNormalizedParts: true,
+    parts: normalizationParts,
+  };
+  await writeJson(path.join(paths.reportsDir, 'normalization.json'), normalizationReport);
 
   const playerManifest = await writePlayerCompatibleCandidateManifest({
     article,
@@ -119,6 +149,12 @@ export async function validateCandidate({
     ...(await pathExists(paths.manifestFile) ? JSON.parse(await readFile(paths.manifestFile, 'utf8')) : {}),
     ...stamp(article, resolvedFingerprint, fullSha256, 'validated', 'bareeq.audio-candidate.v3'),
     title: article.title,
+    transitionNormalization: {
+      schema: normalizationReport.schema,
+      settings: TRANSITION_NORMALIZATION,
+      rawPartsPreserved: true,
+      playbackUsesNormalizedParts: true,
+    },
     parts: splitPlan.parts.map((part, index) => ({
       partIndex: part.partIndex,
       fingerprint: partFingerprint(article, splitPlan, part),
@@ -128,8 +164,20 @@ export async function validateCandidate({
       estimatedTokens: part.estimatedTokens,
       sync: part.sync || [],
       syncIds: part.syncIds || [],
+      rawFile: partAssets[index].rawFile,
+      rawSha256: partAssets[index].rawSha256,
       file: partAssets[index].file,
       sha256: partAssets[index].sha256,
+      normalizedBytes: partAssets[index].bytes,
+      normalizedDurationSeconds: partAssets[index].durationSeconds,
+      normalization: {
+        trimStartMs: normalizationParts[index].trimStartMs,
+        trimEndMs: normalizationParts[index].trimEndMs,
+        rawLeadingSilenceMs: normalizationParts[index].rawLeadingSilenceMs,
+        rawTrailingSilenceMs: normalizationParts[index].rawTrailingSilenceMs,
+        normalizedLeadingSilenceMs: normalizationParts[index].normalizedLeadingSilenceMs,
+        normalizedTrailingSilenceMs: normalizationParts[index].normalizedTrailingSilenceMs,
+      },
     })),
   };
   await writeJson(paths.manifestFile, candidateManifest);
@@ -224,6 +272,11 @@ export async function validateCandidate({
   await writeJson(path.join(paths.dir, 'generation-report.json'), {
     ...stamp(article, resolvedFingerprint, fullSha256, 'generated', 'bareeq.audio-generation.v2'),
     liveDurationSeconds: duration,
+    transitionNormalization: {
+      rawPartsPreserved: true,
+      playbackUsesNormalizedParts: true,
+      settings: TRANSITION_NORMALIZATION,
+    },
     split: {
       version: splitPlan.settings.version,
       ttsRequests: splitPlan.ttsRequests,
@@ -246,11 +299,13 @@ export async function validateCandidate({
     const file = path.join(paths.dir, item.file);
     if (await pathExists(file)) reportDigests[item.file] = sha256(await readFile(file));
   }
+  reportDigests['reports/normalization.json'] = sha256(await readFile(path.join(paths.reportsDir, 'normalization.json')));
 
   const report = {
     ...stamp(article, resolvedFingerprint, fullSha256, 'validated', 'bareeq.audio-validate.v2'),
     reportDigests,
     merge,
+    normalization: normalizationReport,
     technical,
     sync: syncReport,
     asrReports,
