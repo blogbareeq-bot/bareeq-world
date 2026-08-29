@@ -35,12 +35,12 @@ jobs:
           import { synthesizeGeminiGenerateContentPart } from './scripts/audio-gemini-tts.mjs';
 
           const text = 'قد نختصر المشهد بقولنا إن الأسعار ارتفعت، لكن هذا الاختصار لا يكفي. فارتفاع سعر البن بعد موسم سيئ لا يساوي تضخمًا في الاقتصاد كله، وبقاء الأسعار مرتفعة لا يعني أن التضخم ما زال يتسارع. لفهم الأخبار الاقتصادية بوعي، نحتاج إلى فصل ثلاثة أشياء: مستوى الأسعار، ومُعَدَّلَ تَغَيُّرِهِ، والقوة الشرائية للنقود.';
-          const voices = ['Charon', 'Gacrux', 'Sulafat'];
+          const voices = ['Gacrux', 'Sulafat'];
           const failures = [];
           const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
           async function generateVoice(voice) {
-            for (let attempt = 1; attempt <= 4; attempt += 1) {
+            for (let attempt = 1; attempt <= 5; attempt += 1) {
               try {
                 console.log(`Generating ${voice}, attempt ${attempt}...`);
                 const result = await synthesizeGeminiGenerateContentPart({
@@ -54,13 +54,15 @@ jobs:
                 return true;
               } catch (error) {
                 const quota = error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
+                const overloaded = error?.httpStatus === 503 || /high demand|UNAVAILABLE/i.test(error?.message || '');
                 console.error(`Attempt ${attempt} failed for ${voice}: ${error.message}`);
-                if (!quota || attempt === 4) {
+                if ((!quota && !overloaded) || attempt === 5) {
                   failures.push({ voice, message: error.message, exitCode: error.exitCode || null });
                   return false;
                 }
-                console.log(`Quota window hit for ${voice}; waiting before retry.`);
-                await sleep(65000);
+                const delay = quota ? 65000 : 30000;
+                console.log(`Transient provider limit for ${voice}; waiting ${delay / 1000}s before retry.`);
+                await sleep(delay);
               }
             }
             return false;
