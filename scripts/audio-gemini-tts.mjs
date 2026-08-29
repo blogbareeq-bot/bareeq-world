@@ -251,24 +251,26 @@ export async function resolveProductionSynthesizer({
     return process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK;
   }
   if (process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1') {
-    return async ({ article, part, splitPlan }) => synthesizeGeminiGenerateContentPart({
+    return async ({ article, part, splitPlan, correctionHint }) => synthesizeGeminiGenerateContentPart({
       apiKey,
       part,
       context: {
         articleTitle: article.title,
         partIndex: part.partIndex,
         partCount: splitPlan.parts.length,
+        correctionHint,
       },
       fetchImpl,
     });
   }
-  return async ({ article, part, splitPlan }) => synthesizeGeminiPart({
+  return async ({ article, part, splitPlan, correctionHint }) => synthesizeGeminiPart({
     apiKey,
     part,
     context: {
       articleTitle: article.title,
       partIndex: part.partIndex,
       partCount: splitPlan.parts.length,
+      correctionHint,
     },
     fetchImpl,
   });
