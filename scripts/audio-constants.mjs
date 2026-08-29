@@ -11,7 +11,7 @@ export const EXIT_CONFIG = 78;
 export const PRODUCTION_TTS_MODEL = 'gemini-3.1-flash-tts-preview';
 export const PRODUCTION_VOICE = 'Sadaltager';
 export const PRODUCTION_VOICE_ID = 'sadaltager';
-export const GENERATOR_VERSION = 9;
+export const GENERATOR_VERSION = 10;
 
 export const INDEPENDENT_ASR_MODELS = Object.freeze([
   'gemini-3.5-transcribe',
