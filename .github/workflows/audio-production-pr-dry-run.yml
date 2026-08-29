@@ -15,7 +15,7 @@ concurrency:
 jobs:
   dry-run:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 50
     env:
       BAREEQ_CLOUD_TTS_ACTIVATE: '0'
       BAREEQ_GEMINI_FREE_ROLLOUT: '0'
@@ -58,3 +58,40 @@ jobs:
           else
             echo 'GEMINI_API_KEY_PRESENT=no'
           fi
+
+      - name: Restore first-candidate cache
+        if: hashFiles('docs/audio/RUN-ALTADAKHOM-GENERATION') != ''
+        uses: actions/cache/restore@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-candidate-altadakhom-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}
+          restore-keys: |
+            bareeq-audio-candidate-altadakhom-
+
+      - name: Generate first candidate only
+        if: hashFiles('docs/audio/RUN-ALTADAKHOM-GENERATION') != ''
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+        run: |
+          set +e
+          node scripts/audio-production.mjs --mode=generate-candidate --article=altadakhom-explained-simply
+          status=$?
+          set -e
+          echo "GENERATION_EXIT_STATUS=${status}"
+          exit "$status"
+
+      - name: Save first-candidate cache
+        if: always() && hashFiles('docs/audio/RUN-ALTADAKHOM-GENERATION') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-candidate-altadakhom-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
+
+      - name: Upload first-candidate artifact
+        if: always() && hashFiles('docs/audio/RUN-ALTADAKHOM-GENERATION') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: altadakhom-candidate-${{ github.run_id }}
+          path: audio-candidates/
+          if-no-files-found: warn
