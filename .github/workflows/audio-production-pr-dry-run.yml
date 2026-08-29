@@ -41,6 +41,7 @@ jobs:
           node scripts/test-speech-script-quality-gate.mjs
           node scripts/check-speech-scripts.mjs
           node scripts/test-audio-engine-final.mjs
+          node scripts/test-audio-transition-normalization.mjs
 
       - name: Production dry-run (zero provider calls)
         run: |
