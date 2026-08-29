@@ -1,9 +1,6 @@
-# Canonical production audio workflow. Copy to .github/workflows/audio-production.yml
-# only after an admin with workflows permission can push it. This file is the
-# source of truth for mode checks in scripts/test-audio-production-safety.mjs.
-# The GitHub App cannot update .github/workflows/*. Until workflows permission
-# exists, leftover Azure jobs in generate-passport-audio.yml and
-# generate-touchscreen-temp-audio.yml must be disabled with `if: false` by an admin.
+# Canonical production audio workflow installed under .github/workflows.
+# The mirrored copy in docs/audio/github-audio-production.yml is kept for
+# review and for mode/safety contract tests.
 name: Bareeq audio production
 
 on:
@@ -83,6 +80,7 @@ jobs:
           node scripts/test-speech-script-quality-gate.mjs
           node scripts/check-speech-scripts.mjs
           node scripts/test-audio-engine-final.mjs
+          node scripts/test-audio-transition-normalization.mjs
 
       - name: Guard inputs
         run: |
@@ -158,7 +156,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          echo 'validate-candidate: merge full.mp3, technical QA, ASR gemini-3.5-transcribe, ASR gemini-3.6-flash, Files API resumable upload, 0/0/0, listening pack. Does not publish.'
+          echo 'validate-candidate: normalize playback transitions, merge full.mp3, technical QA, ASR gemini-3.5-transcribe, ASR gemini-3.6-flash, Files API resumable upload, 0/0/0, listening pack. Does not publish.'
           node scripts/audio-production.mjs --mode=validate-candidate --article="${BAREEQ_AUDIO_ARTICLE}" --fingerprint="${BAREEQ_AUDIO_FINGERPRINT}"
 
       - name: Publish approved
