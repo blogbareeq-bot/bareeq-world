@@ -81,8 +81,8 @@ jobs:
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_GEMINI_GENERATE_CONTENT: '1'
           BAREEQ_RESUMED_TTS_TRANSPORT: 'developer-interactions'
-          BAREEQ_FORCE_TTS_PARTS: '3,4'
-          BAREEQ_TTS_CORRECTION_HINTS_JSON: '{"3":"The previous audio omitted the exact Arabic token «بدء» in the phrase «بعد بدء الصدمة الأولى». Pronounce «بدء» clearly and do not omit any token.","4":"The previous audio incorrectly added «والأثمان» after «الأوزان والجودة والعروض». The approved transcript ends that phrase at «والعروض»; do not add «والأثمان» or any other word."}'
+          BAREEQ_FORCE_TTS_PARTS: '4'
+          BAREEQ_TTS_CORRECTION_HINTS_JSON: '{"4":"The previous audio incorrectly added «والأثمان» after «الأوزان والجودة والعروض». The approved transcript ends that phrase at «والعروض»; do not add «والأثمان» or any other word."}'
         run: |
           set +e
           node scripts/audio-production.mjs --mode=generate-candidate --article=altadakhom-explained-simply
