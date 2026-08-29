@@ -1,6 +1,6 @@
 {
-  "schema": "bareeq.audio-production-dry-run.v3",
-  "generatedAt": "2026-08-29T03:34:56.811Z",
+  "schema": "bareeq.audio-production-dry-run.v4",
+  "generatedAt": "2026-08-29T04:26:07.892Z",
   "mode": "dry-run",
   "narrator": {
     "role": "primary",
@@ -13,7 +13,7 @@
     "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
     "sourceAudioFormat": "pcm-s16le-24000hz-mono",
     "encodingTool": "ffmpeg-libmp3lame",
-    "generatorVersion": 8
+    "generatorVersion": 9
   },
   "fallback": {
     "role": "fallback-only",
@@ -58,7 +58,7 @@
       "gemini-3.6-transcribe"
     ],
     "file": "full merged MP3 only",
-    "filesApi": "resumable start → X-Goog-Upload-URL → upload, finalize"
+    "filesApi": "resumable start → X-Goog-Upload-URL → upload, finalize → optional metadata GET → delete"
   },
   "candidatePath": "audio-candidates/<articleId>/<fingerprint>/",
   "livePath": "public/audio/articles/<key>/",
@@ -75,7 +75,8 @@
     },
     "after": {
       "settings": {
-        "version": 3,
+        "version": 4,
+        "algorithmVersion": 4,
         "name": "gemini-8192-token-duration",
         "targetSeconds": 165,
         "minSeconds": 90,
@@ -84,10 +85,10 @@
         "geminiInputTokenLimit": 8192,
         "geminiTokenEstimateDivisorBytes": 3,
         "defaultCharsPerSecond": 10,
-        "rebalanceFloorSeconds": 45,
-        "generatorVersion": 8
+        "rebalanceFloorSeconds": 90,
+        "generatorVersion": 9
       },
-      "ttsRequests": 44
+      "ttsRequests": 45
     }
   },
   "reusableSadaltager": [
@@ -117,7 +118,14 @@
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -127,7 +135,14 @@
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -140,10 +155,17 @@
       "ttsRequestsAfter": 6,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
-      "maxPartBytes": 3199,
-      "maxPartEstimatedSeconds": 179.38,
-      "maxPartEstimatedTokens": 1548,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
+      "maxPartBytes": 2983,
+      "maxPartEstimatedSeconds": 168.64,
+      "maxPartEstimatedTokens": 1476,
       "geminiInputTokenLimit": 8192,
       "geminiQualityCapSeconds": 180,
       "justification": null,
@@ -168,15 +190,16 @@
             "b0010",
             "b0011",
             "b0012"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 1,
-          "chars": 1676,
-          "bytes": 3050,
-          "estimatedSeconds": 171.4,
-          "estimatedTokens": 1499,
-          "promptBytes": 4495,
+          "chars": 1622,
+          "bytes": 2951,
+          "estimatedSeconds": 165.88,
+          "estimatedTokens": 1466,
+          "promptBytes": 4396,
           "syncIds": [
             "b0013",
             "b0014",
@@ -188,18 +211,19 @@
             "b0020",
             "b0021",
             "b0022",
-            "b0023",
-            "b0024"
-          ]
+            "b0023"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 2,
-          "chars": 1754,
-          "bytes": 3199,
-          "estimatedSeconds": 179.38,
-          "estimatedTokens": 1548,
-          "promptBytes": 4644,
+          "chars": 1622,
+          "bytes": 2960,
+          "estimatedSeconds": 165.88,
+          "estimatedTokens": 1469,
+          "promptBytes": 4405,
           "syncIds": [
+            "b0024",
             "b0025",
             "b0026",
             "b0027",
@@ -211,20 +235,21 @@
             "b0033",
             "b0034",
             "b0035",
-            "b0036",
-            "b0037",
-            "b0038",
-            "b0039"
-          ]
+            "b0036"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 3,
-          "chars": 1700,
-          "bytes": 3075,
-          "estimatedSeconds": 173.85,
-          "estimatedTokens": 1507,
-          "promptBytes": 4520,
+          "chars": 1649,
+          "bytes": 2983,
+          "estimatedSeconds": 168.64,
+          "estimatedTokens": 1476,
+          "promptBytes": 4428,
           "syncIds": [
+            "b0037",
+            "b0038",
+            "b0039",
             "b0040",
             "b0041",
             "b0042",
@@ -239,22 +264,23 @@
             "b0051",
             "b0052",
             "b0053",
-            "b0054",
+            "b0054"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 4,
+          "chars": 1115,
+          "bytes": 2028,
+          "estimatedSeconds": 114.03,
+          "estimatedTokens": 1158,
+          "promptBytes": 3473,
+          "syncIds": [
             "b0055",
             "b0056",
             "b0057",
             "b0058",
-            "b0059"
-          ]
-        },
-        {
-          "partIndex": 4,
-          "chars": 1305,
-          "bytes": 2379,
-          "estimatedSeconds": 133.46,
-          "estimatedTokens": 1275,
-          "promptBytes": 3824,
-          "syncIds": [
+            "b0059",
             "b0060",
             "b0061",
             "b0062",
@@ -264,28 +290,30 @@
             "b0066",
             "b0067",
             "b0068",
-            "b0069",
+            "b0069"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 5,
+          "chars": 896,
+          "bytes": 1636,
+          "estimatedSeconds": 91.63,
+          "estimatedTokens": 1027,
+          "promptBytes": 3081,
+          "syncIds": [
             "b0070",
             "b0071",
             "b0072",
             "b0073",
-            "b0074"
-          ]
-        },
-        {
-          "partIndex": 5,
-          "chars": 469,
-          "bytes": 855,
-          "estimatedSeconds": 47.96,
-          "estimatedTokens": 767,
-          "promptBytes": 2300,
-          "syncIds": [
+            "b0074",
             "b0075",
             "b0076",
             "b0077",
             "b0078",
             "b0079"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         }
       ]
     },
@@ -299,21 +327,28 @@
       "ttsRequestsAfter": 6,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
-      "maxPartBytes": 5423,
-      "maxPartEstimatedSeconds": 179.83,
-      "maxPartEstimatedTokens": 2289,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
+      "maxPartBytes": 4747,
+      "maxPartEstimatedSeconds": 156.98,
+      "maxPartEstimatedTokens": 2064,
       "geminiInputTokenLimit": 8192,
       "geminiQualityCapSeconds": 180,
       "justification": null,
       "parts": [
         {
           "partIndex": 0,
-          "chars": 2785,
-          "bytes": 5265,
-          "estimatedSeconds": 174.32,
-          "estimatedTokens": 2237,
-          "promptBytes": 6709,
+          "chars": 2496,
+          "bytes": 4720,
+          "estimatedSeconds": 156.23,
+          "estimatedTokens": 2055,
+          "promptBytes": 6164,
           "syncIds": [
             "b0001",
             "b0002",
@@ -324,20 +359,21 @@
             "b0007",
             "b0008",
             "b0009",
-            "b0010",
-            "b0011",
-            "b0012",
-            "b0013"
-          ]
+            "b0010"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 1,
-          "chars": 2602,
-          "bytes": 4928,
-          "estimatedSeconds": 162.86,
-          "estimatedTokens": 2124,
-          "promptBytes": 6372,
+          "chars": 2508,
+          "bytes": 4747,
+          "estimatedSeconds": 156.98,
+          "estimatedTokens": 2064,
+          "promptBytes": 6191,
           "syncIds": [
+            "b0011",
+            "b0012",
+            "b0013",
             "b0014",
             "b0015",
             "b0016",
@@ -350,40 +386,42 @@
             "b0023",
             "b0024",
             "b0025",
-            "b0026",
-            "b0027"
-          ]
+            "b0026"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 2,
-          "chars": 2873,
-          "bytes": 5423,
-          "estimatedSeconds": 179.83,
-          "estimatedTokens": 2289,
-          "promptBytes": 6867,
+          "chars": 2378,
+          "bytes": 4487,
+          "estimatedSeconds": 148.84,
+          "estimatedTokens": 1977,
+          "promptBytes": 5931,
           "syncIds": [
+            "b0027",
             "b0028",
             "b0029",
             "b0030",
             "b0031",
             "b0032",
             "b0033",
-            "b0034",
+            "b0034"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 3,
+          "chars": 2476,
+          "bytes": 4686,
+          "estimatedSeconds": 154.98,
+          "estimatedTokens": 2044,
+          "promptBytes": 6130,
+          "syncIds": [
             "b0035",
             "b0036",
             "b0037",
             "b0038",
-            "b0039"
-          ]
-        },
-        {
-          "partIndex": 3,
-          "chars": 2674,
-          "bytes": 5062,
-          "estimatedSeconds": 167.37,
-          "estimatedTokens": 2169,
-          "promptBytes": 6506,
-          "syncIds": [
+            "b0039",
             "b0040",
             "b0041",
             "b0042",
@@ -391,49 +429,52 @@
             "b0044",
             "b0045",
             "b0046",
-            "b0047",
+            "b0047"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 4,
+          "chars": 2378,
+          "bytes": 4506,
+          "estimatedSeconds": 148.84,
+          "estimatedTokens": 1984,
+          "promptBytes": 5950,
+          "syncIds": [
             "b0048",
             "b0049",
             "b0050",
             "b0051",
-            "b0052"
-          ]
-        },
-        {
-          "partIndex": 4,
-          "chars": 2843,
-          "bytes": 5381,
-          "estimatedSeconds": 177.95,
-          "estimatedTokens": 2275,
-          "promptBytes": 6825,
-          "syncIds": [
+            "b0052",
             "b0053",
             "b0054",
             "b0055",
             "b0056",
-            "b0057",
+            "b0057"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 5,
+          "chars": 2483,
+          "bytes": 4687,
+          "estimatedSeconds": 155.42,
+          "estimatedTokens": 2044,
+          "promptBytes": 6131,
+          "syncIds": [
             "b0058",
             "b0059",
             "b0060",
             "b0061",
             "b0062",
             "b0063",
-            "b0064"
-          ]
-        },
-        {
-          "partIndex": 5,
-          "chars": 942,
-          "bytes": 1774,
-          "estimatedSeconds": 58.96,
-          "estimatedTokens": 1073,
-          "promptBytes": 3218,
-          "syncIds": [
+            "b0064",
             "b0065",
             "b0066",
             "b0067",
             "b0068"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         }
       ]
     },
@@ -447,21 +488,28 @@
       "ttsRequestsAfter": 7,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
-      "maxPartBytes": 2505,
-      "maxPartEstimatedSeconds": 178.98,
-      "maxPartEstimatedTokens": 1329,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
+      "maxPartBytes": 2423,
+      "maxPartEstimatedSeconds": 173.95,
+      "maxPartEstimatedTokens": 1302,
       "geminiInputTokenLimit": 8192,
       "geminiQualityCapSeconds": 180,
       "justification": "Article spoken length 8668 chars / live 1118.52s needs 7 parts at ≤180s Gemini quality cap and ≤8192 input tokens.",
       "parts": [
         {
           "partIndex": 0,
-          "chars": 1382,
-          "bytes": 2488,
-          "estimatedSeconds": 178.33,
-          "estimatedTokens": 1324,
-          "promptBytes": 3970,
+          "chars": 1212,
+          "bytes": 2178,
+          "estimatedSeconds": 156.4,
+          "estimatedTokens": 1220,
+          "promptBytes": 3660,
           "syncIds": [
             "b0001",
             "b0002",
@@ -472,18 +520,19 @@
             "b0007",
             "b0008",
             "b0009",
-            "b0010",
-            "b0011"
-          ]
+            "b0010"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 1,
-          "chars": 1366,
-          "bytes": 2464,
-          "estimatedSeconds": 176.27,
-          "estimatedTokens": 1316,
-          "promptBytes": 3946,
+          "chars": 1282,
+          "bytes": 2314,
+          "estimatedSeconds": 165.43,
+          "estimatedTokens": 1266,
+          "promptBytes": 3796,
           "syncIds": [
+            "b0011",
             "b0012",
             "b0013",
             "b0014",
@@ -491,19 +540,20 @@
             "b0016",
             "b0017",
             "b0018",
-            "b0019",
-            "b0020",
-            "b0021"
-          ]
+            "b0019"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 2,
-          "chars": 1315,
-          "bytes": 2369,
-          "estimatedSeconds": 169.69,
-          "estimatedTokens": 1284,
-          "promptBytes": 3851,
+          "chars": 1141,
+          "bytes": 2061,
+          "estimatedSeconds": 147.23,
+          "estimatedTokens": 1181,
+          "promptBytes": 3543,
           "syncIds": [
+            "b0020",
+            "b0021",
             "b0022",
             "b0023",
             "b0024",
@@ -511,20 +561,21 @@
             "b0026",
             "b0027",
             "b0028",
-            "b0029",
-            "b0030",
-            "b0031",
-            "b0032"
-          ]
+            "b0029"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 3,
-          "chars": 1382,
-          "bytes": 2483,
-          "estimatedSeconds": 178.33,
-          "estimatedTokens": 1322,
-          "promptBytes": 3965,
+          "chars": 1348,
+          "bytes": 2423,
+          "estimatedSeconds": 173.95,
+          "estimatedTokens": 1302,
+          "promptBytes": 3905,
           "syncIds": [
+            "b0030",
+            "b0031",
+            "b0032",
             "b0033",
             "b0034",
             "b0035",
@@ -532,21 +583,22 @@
             "b0037",
             "b0038",
             "b0039",
-            "b0040",
-            "b0041",
-            "b0042",
-            "b0043",
-            "b0044"
-          ]
+            "b0040"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 4,
-          "chars": 1387,
-          "bytes": 2505,
-          "estimatedSeconds": 178.98,
-          "estimatedTokens": 1329,
-          "promptBytes": 3987,
+          "chars": 1225,
+          "bytes": 2201,
+          "estimatedSeconds": 158.07,
+          "estimatedTokens": 1228,
+          "promptBytes": 3683,
           "syncIds": [
+            "b0041",
+            "b0042",
+            "b0043",
+            "b0044",
             "b0045",
             "b0046",
             "b0047",
@@ -555,7 +607,18 @@
             "b0050",
             "b0051",
             "b0052",
-            "b0053",
+            "b0053"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 5,
+          "chars": 1202,
+          "bytes": 2173,
+          "estimatedSeconds": 155.11,
+          "estimatedTokens": 1219,
+          "promptBytes": 3655,
+          "syncIds": [
             "b0054",
             "b0055",
             "b0056",
@@ -563,23 +626,24 @@
             "b0058",
             "b0059",
             "b0060",
-            "b0061"
-          ]
-        },
-        {
-          "partIndex": 5,
-          "chars": 1206,
-          "bytes": 2173,
-          "estimatedSeconds": 155.62,
-          "estimatedTokens": 1219,
-          "promptBytes": 3655,
-          "syncIds": [
+            "b0061",
             "b0062",
             "b0063",
             "b0064",
             "b0065",
             "b0066",
-            "b0067",
+            "b0067"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 6,
+          "chars": 1251,
+          "bytes": 2265,
+          "estimatedSeconds": 161.43,
+          "estimatedTokens": 1249,
+          "promptBytes": 3747,
+          "syncIds": [
             "b0068",
             "b0069",
             "b0070",
@@ -587,23 +651,14 @@
             "b0072",
             "b0073",
             "b0074",
-            "b0075"
-          ]
-        },
-        {
-          "partIndex": 6,
-          "chars": 623,
-          "bytes": 1133,
-          "estimatedSeconds": 80.39,
-          "estimatedTokens": 872,
-          "promptBytes": 2615,
-          "syncIds": [
+            "b0075",
             "b0076",
             "b0077",
             "b0078",
             "b0079",
             "b0080"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         }
       ]
     },
@@ -617,10 +672,17 @@
       "ttsRequestsAfter": 7,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
-      "maxPartBytes": 3160,
-      "maxPartEstimatedSeconds": 179.03,
-      "maxPartEstimatedTokens": 1546,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
+      "maxPartBytes": 2846,
+      "maxPartEstimatedSeconds": 160.92,
+      "maxPartEstimatedTokens": 1441,
       "geminiInputTokenLimit": 8192,
       "geminiQualityCapSeconds": 180,
       "justification": "Article spoken length 10611 chars / live 1092.432s needs 7 parts at ≤180s Gemini quality cap and ≤8192 input tokens.",
@@ -648,7 +710,8 @@
             "b0013",
             "b0014",
             "b0015"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 1,
@@ -668,15 +731,16 @@
             "b0023",
             "b0024",
             "b0025"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 2,
-          "chars": 1732,
-          "bytes": 3160,
-          "estimatedSeconds": 178.31,
-          "estimatedTokens": 1546,
-          "promptBytes": 4637,
+          "chars": 1474,
+          "bytes": 2688,
+          "estimatedSeconds": 151.75,
+          "estimatedTokens": 1389,
+          "promptBytes": 4165,
           "syncIds": [
             "b0026",
             "b0027",
@@ -685,18 +749,19 @@
             "b0030",
             "b0031",
             "b0032",
-            "b0033",
-            "b0034"
-          ]
+            "b0033"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 3,
-          "chars": 1533,
-          "bytes": 2781,
-          "estimatedSeconds": 157.83,
-          "estimatedTokens": 1420,
-          "promptBytes": 4258,
+          "chars": 1487,
+          "bytes": 2696,
+          "estimatedSeconds": 153.09,
+          "estimatedTokens": 1391,
+          "promptBytes": 4173,
           "syncIds": [
+            "b0034",
             "b0035",
             "b0036",
             "b0037",
@@ -705,20 +770,21 @@
             "b0040",
             "b0041",
             "b0042",
-            "b0043",
-            "b0044",
-            "b0045",
-            "b0046"
-          ]
+            "b0043"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 4,
-          "chars": 1739,
-          "bytes": 3159,
-          "estimatedSeconds": 179.03,
-          "estimatedTokens": 1546,
-          "promptBytes": 4636,
+          "chars": 1563,
+          "bytes": 2846,
+          "estimatedSeconds": 160.92,
+          "estimatedTokens": 1441,
+          "promptBytes": 4323,
           "syncIds": [
+            "b0044",
+            "b0045",
+            "b0046",
             "b0047",
             "b0048",
             "b0049",
@@ -726,21 +792,22 @@
             "b0051",
             "b0052",
             "b0053",
-            "b0054",
-            "b0055",
-            "b0056",
-            "b0057",
-            "b0058"
-          ]
+            "b0054"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 5,
-          "chars": 1673,
-          "bytes": 3041,
-          "estimatedSeconds": 172.24,
-          "estimatedTokens": 1506,
-          "promptBytes": 4518,
+          "chars": 1548,
+          "bytes": 2812,
+          "estimatedSeconds": 159.37,
+          "estimatedTokens": 1430,
+          "promptBytes": 4289,
           "syncIds": [
+            "b0055",
+            "b0056",
+            "b0057",
+            "b0058",
             "b0059",
             "b0060",
             "b0061",
@@ -752,24 +819,25 @@
             "b0067",
             "b0068",
             "b0069",
-            "b0070",
+            "b0070"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 6,
+          "chars": 1454,
+          "bytes": 2654,
+          "estimatedSeconds": 149.69,
+          "estimatedTokens": 1377,
+          "promptBytes": 4131,
+          "syncIds": [
             "b0071",
             "b0072",
             "b0073",
             "b0074",
             "b0075",
             "b0076",
-            "b0077"
-          ]
-        },
-        {
-          "partIndex": 6,
-          "chars": 850,
-          "bytes": 1556,
-          "estimatedSeconds": 87.51,
-          "estimatedTokens": 1011,
-          "promptBytes": 3033,
-          "syncIds": [
+            "b0077",
             "b0078",
             "b0079",
             "b0080",
@@ -777,7 +845,8 @@
             "b0082",
             "b0083",
             "b0084"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         }
       ]
     },
@@ -791,21 +860,28 @@
       "ttsRequestsAfter": 8,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
-      "maxPartBytes": 3249,
-      "maxPartEstimatedSeconds": 175.77,
-      "maxPartEstimatedTokens": 1577,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
+      "maxPartBytes": 3139,
+      "maxPartEstimatedSeconds": 167.89,
+      "maxPartEstimatedTokens": 1540,
       "geminiInputTokenLimit": 8192,
       "geminiQualityCapSeconds": 180,
       "justification": "Article spoken length 12649 chars / live 1246.248s needs 8 parts at ≤180s Gemini quality cap and ≤8192 input tokens.",
       "parts": [
         {
           "partIndex": 0,
-          "chars": 1730,
-          "bytes": 3170,
-          "estimatedSeconds": 170.45,
-          "estimatedTokens": 1551,
-          "promptBytes": 4651,
+          "chars": 1674,
+          "bytes": 3065,
+          "estimatedSeconds": 164.93,
+          "estimatedTokens": 1516,
+          "promptBytes": 4546,
           "syncIds": [
             "b0001",
             "b0002",
@@ -814,114 +890,131 @@
             "b0005",
             "b0006",
             "b0007",
-            "b0008",
-            "b0009"
-          ]
+            "b0008"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 1,
-          "chars": 1725,
-          "bytes": 3151,
-          "estimatedSeconds": 169.96,
-          "estimatedTokens": 1544,
-          "promptBytes": 4632,
+          "chars": 1487,
+          "bytes": 2716,
+          "estimatedSeconds": 146.51,
+          "estimatedTokens": 1399,
+          "promptBytes": 4197,
           "syncIds": [
+            "b0009",
             "b0010",
             "b0011",
             "b0012",
             "b0013",
             "b0014",
             "b0015",
-            "b0016",
-            "b0017",
-            "b0018"
-          ]
+            "b0016"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 2,
-          "chars": 1634,
-          "bytes": 3013,
-          "estimatedSeconds": 160.99,
-          "estimatedTokens": 1498,
-          "promptBytes": 4494,
+          "chars": 1704,
+          "bytes": 3139,
+          "estimatedSeconds": 167.89,
+          "estimatedTokens": 1540,
+          "promptBytes": 4620,
           "syncIds": [
+            "b0017",
+            "b0018",
             "b0019",
             "b0020",
             "b0021",
             "b0022",
             "b0023",
             "b0024",
-            "b0025",
-            "b0026",
-            "b0027"
-          ]
+            "b0025"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 3,
-          "chars": 1683,
-          "bytes": 3064,
-          "estimatedSeconds": 165.82,
-          "estimatedTokens": 1515,
-          "promptBytes": 4545,
+          "chars": 1563,
+          "bytes": 2869,
+          "estimatedSeconds": 154,
+          "estimatedTokens": 1450,
+          "promptBytes": 4350,
           "syncIds": [
+            "b0026",
+            "b0027",
             "b0028",
             "b0029",
             "b0030",
             "b0031",
             "b0032",
             "b0033",
-            "b0034",
-            "b0035"
-          ]
+            "b0034"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 4,
-          "chars": 1554,
-          "bytes": 2838,
-          "estimatedSeconds": 153.11,
-          "estimatedTokens": 1440,
-          "promptBytes": 4319,
+          "chars": 1454,
+          "bytes": 2633,
+          "estimatedSeconds": 143.26,
+          "estimatedTokens": 1372,
+          "promptBytes": 4114,
           "syncIds": [
+            "b0035",
             "b0036",
             "b0037",
-            "b0038",
-            "b0039",
-            "b0040",
-            "b0041"
-          ]
+            "b0038"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 5,
-          "chars": 1784,
-          "bytes": 3249,
-          "estimatedSeconds": 175.77,
-          "estimatedTokens": 1577,
-          "promptBytes": 4730,
+          "chars": 1655,
+          "bytes": 3024,
+          "estimatedSeconds": 163.06,
+          "estimatedTokens": 1502,
+          "promptBytes": 4505,
           "syncIds": [
+            "b0039",
+            "b0040",
+            "b0041",
             "b0042",
             "b0043",
             "b0044",
             "b0045",
-            "b0046",
-            "b0047",
-            "b0048",
-            "b0049",
-            "b0050"
-          ]
+            "b0046"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 6,
-          "chars": 1685,
-          "bytes": 3078,
-          "estimatedSeconds": 166.02,
-          "estimatedTokens": 1520,
-          "promptBytes": 4559,
+          "chars": 1506,
+          "bytes": 2736,
+          "estimatedSeconds": 148.38,
+          "estimatedTokens": 1406,
+          "promptBytes": 4217,
           "syncIds": [
+            "b0047",
+            "b0048",
+            "b0049",
+            "b0050",
             "b0051",
             "b0052",
             "b0053",
             "b0054",
-            "b0055",
+            "b0055"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 7,
+          "chars": 1598,
+          "bytes": 2926,
+          "estimatedSeconds": 157.44,
+          "estimatedTokens": 1469,
+          "promptBytes": 4407,
+          "syncIds": [
             "b0056",
             "b0057",
             "b0058",
@@ -929,23 +1022,14 @@
             "b0060",
             "b0061",
             "b0062",
-            "b0063"
-          ]
-        },
-        {
-          "partIndex": 7,
-          "chars": 846,
-          "bytes": 1545,
-          "estimatedSeconds": 83.35,
-          "estimatedTokens": 1009,
-          "promptBytes": 3026,
-          "syncIds": [
+            "b0063",
             "b0064",
             "b0065",
             "b0066",
             "b0067",
             "b0068"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         }
       ]
     },
@@ -956,7 +1040,14 @@
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -966,16 +1057,23 @@
       "spokenChars": 17264,
       "charsPerSecond": 9.911,
       "ttsRequestsBefore": 15,
-      "ttsRequestsAfter": 10,
+      "ttsRequestsAfter": 11,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
-      "maxPartBytes": 3240,
-      "maxPartEstimatedSeconds": 179.79,
-      "maxPartEstimatedTokens": 1574,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
+      "maxPartBytes": 3115,
+      "maxPartEstimatedSeconds": 173.64,
+      "maxPartEstimatedTokens": 1532,
       "geminiInputTokenLimit": 8192,
       "geminiQualityCapSeconds": 180,
-      "justification": "Article spoken length 17264 chars / live 1741.824s needs 10 parts at ≤180s Gemini quality cap and ≤8192 input tokens.",
+      "justification": "Article spoken length 17264 chars / live 1741.824s needs 11 parts at ≤180s Gemini quality cap and ≤8192 input tokens.",
       "parts": [
         {
           "partIndex": 0,
@@ -992,15 +1090,16 @@
             "b0005",
             "b0006",
             "b0007"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 1,
-          "chars": 1782,
-          "bytes": 3233,
-          "estimatedSeconds": 179.79,
-          "estimatedTokens": 1572,
-          "promptBytes": 4714,
+          "chars": 1642,
+          "bytes": 2979,
+          "estimatedSeconds": 165.67,
+          "estimatedTokens": 1487,
+          "promptBytes": 4460,
           "syncIds": [
             "b0008",
             "b0009",
@@ -1013,20 +1112,21 @@
             "b0016",
             "b0017",
             "b0018",
-            "b0019",
-            "b0020",
-            "b0021",
-            "b0022"
-          ]
+            "b0019"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 2,
-          "chars": 1751,
-          "bytes": 3172,
-          "estimatedSeconds": 176.66,
-          "estimatedTokens": 1551,
-          "promptBytes": 4653,
+          "chars": 1631,
+          "bytes": 2951,
+          "estimatedSeconds": 164.56,
+          "estimatedTokens": 1478,
+          "promptBytes": 4432,
           "syncIds": [
+            "b0020",
+            "b0021",
+            "b0022",
             "b0023",
             "b0024",
             "b0025",
@@ -1035,18 +1135,19 @@
             "b0028",
             "b0029",
             "b0030",
-            "b0031",
-            "b0032"
-          ]
+            "b0031"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 3,
-          "chars": 1706,
-          "bytes": 3087,
-          "estimatedSeconds": 172.12,
-          "estimatedTokens": 1523,
-          "promptBytes": 4568,
+          "chars": 1721,
+          "bytes": 3115,
+          "estimatedSeconds": 173.64,
+          "estimatedTokens": 1532,
+          "promptBytes": 4596,
           "syncIds": [
+            "b0032",
             "b0033",
             "b0034",
             "b0035",
@@ -1054,57 +1155,60 @@
             "b0037",
             "b0038",
             "b0039",
-            "b0040",
-            "b0041"
-          ]
+            "b0040"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 4,
-          "chars": 1600,
-          "bytes": 2889,
-          "estimatedSeconds": 161.43,
-          "estimatedTokens": 1457,
-          "promptBytes": 4370,
+          "chars": 1553,
+          "bytes": 2810,
+          "estimatedSeconds": 156.69,
+          "estimatedTokens": 1431,
+          "promptBytes": 4291,
           "syncIds": [
+            "b0041",
             "b0042",
             "b0043",
             "b0044",
             "b0045",
             "b0046",
             "b0047",
-            "b0048",
-            "b0049"
-          ]
+            "b0048"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 5,
-          "chars": 1776,
-          "bytes": 3207,
-          "estimatedSeconds": 179.19,
-          "estimatedTokens": 1563,
-          "promptBytes": 4688,
+          "chars": 1684,
+          "bytes": 3042,
+          "estimatedSeconds": 169.9,
+          "estimatedTokens": 1508,
+          "promptBytes": 4523,
           "syncIds": [
+            "b0049",
             "b0050",
             "b0051",
             "b0052",
             "b0053",
             "b0054",
-            "b0055",
+            "b0055"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 6,
+          "chars": 1428,
+          "bytes": 2585,
+          "estimatedSeconds": 144.08,
+          "estimatedTokens": 1356,
+          "promptBytes": 4066,
+          "syncIds": [
             "b0056",
             "b0057",
             "b0058",
             "b0059",
-            "b0060"
-          ]
-        },
-        {
-          "partIndex": 6,
-          "chars": 1662,
-          "bytes": 3016,
-          "estimatedSeconds": 167.68,
-          "estimatedTokens": 1499,
-          "promptBytes": 4497,
-          "syncIds": [
+            "b0060",
             "b0061",
             "b0062",
             "b0063",
@@ -1113,40 +1217,42 @@
             "b0066",
             "b0067",
             "b0068",
-            "b0069",
-            "b0070",
-            "b0071",
-            "b0072",
-            "b0073"
-          ]
+            "b0069"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 7,
-          "chars": 1781,
-          "bytes": 3240,
-          "estimatedSeconds": 179.69,
-          "estimatedTokens": 1574,
-          "promptBytes": 4721,
+          "chars": 1672,
+          "bytes": 3042,
+          "estimatedSeconds": 168.69,
+          "estimatedTokens": 1508,
+          "promptBytes": 4523,
           "syncIds": [
+            "b0070",
+            "b0071",
+            "b0072",
+            "b0073",
             "b0074",
             "b0075",
             "b0076",
             "b0077",
-            "b0078",
-            "b0079",
-            "b0080",
-            "b0081",
-            "b0082"
-          ]
+            "b0078"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         },
         {
           "partIndex": 8,
-          "chars": 1765,
-          "bytes": 3164,
-          "estimatedSeconds": 178.08,
-          "estimatedTokens": 1549,
-          "promptBytes": 4645,
+          "chars": 1636,
+          "bytes": 2943,
+          "estimatedSeconds": 165.06,
+          "estimatedTokens": 1475,
+          "promptBytes": 4424,
           "syncIds": [
+            "b0079",
+            "b0080",
+            "b0081",
+            "b0082",
             "b0083",
             "b0084",
             "b0085",
@@ -1155,30 +1261,42 @@
             "b0088",
             "b0089",
             "b0090",
-            "b0091",
+            "b0091"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 9,
+          "chars": 1577,
+          "bytes": 2841,
+          "estimatedSeconds": 159.11,
+          "estimatedTokens": 1441,
+          "promptBytes": 4323,
+          "syncIds": [
             "b0092",
             "b0093",
             "b0094",
             "b0095",
             "b0096",
             "b0097",
-            "b0098"
-          ]
-        },
-        {
-          "partIndex": 9,
-          "chars": 1719,
-          "bytes": 3125,
-          "estimatedSeconds": 173.44,
-          "estimatedTokens": 1536,
-          "promptBytes": 4607,
-          "syncIds": [
+            "b0098",
             "b0099",
             "b0100",
             "b0101",
             "b0102",
             "b0103",
-            "b0104",
+            "b0104"
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
+        },
+        {
+          "partIndex": 10,
+          "chars": 998,
+          "bytes": 1825,
+          "estimatedSeconds": 100.69,
+          "estimatedTokens": 1103,
+          "promptBytes": 3307,
+          "syncIds": [
             "b0105",
             "b0106",
             "b0107",
@@ -1190,7 +1308,8 @@
             "b0113",
             "b0114",
             "b0115"
-          ]
+          ],
+          "splitReason": "even-pack-target-165s-cap-180s"
         }
       ]
     },
@@ -1201,7 +1320,14 @@
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1211,7 +1337,14 @@
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1221,7 +1354,14 @@
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1231,7 +1371,14 @@
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1241,7 +1388,14 @@
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1251,16 +1405,30 @@
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
       "filesApiUploads": 1,
-      "asrProviderCalls": 3,
+      "logicalUploads": 1,
+      "filesApiStartRequests": 1,
+      "filesApiFinalizeRequests": 1,
+      "filesApiMetadataRequests": 0,
+      "filesApiDeleteRequests": 1,
+      "interactionsRequests": 2,
+      "totalHttpRequests": 5,
+      "asrProviderCalls": 5,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     }
   ],
   "expected": {
     "ttsRequestsBefore": 63,
-    "ttsRequestsAfter": 44,
+    "ttsRequestsAfter": 45,
     "asrRequests": 30,
     "filesApiUploads": 15,
-    "asrProviderCalls": 45,
+    "logicalUploads": 15,
+    "filesApiStartRequests": 15,
+    "filesApiFinalizeRequests": 15,
+    "filesApiMetadataRequests": 0,
+    "filesApiDeleteRequests": 15,
+    "interactionsRequests": 30,
+    "totalHttpRequests": 75,
+    "asrProviderCalls": 75,
     "asrModels": [
       "gemini-3.5-transcribe",
       "gemini-3.6-flash"

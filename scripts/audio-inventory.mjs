@@ -30,6 +30,63 @@ function spokenFingerprint(script) {
   };
 }
 
+async function readJsonSafe(file) {
+  try { return JSON.parse(await readFile(file, 'utf8')); } catch { return null; }
+}
+
+async function observeArticleArtifacts(articleId, root, script) {
+  const emptyAsr = {
+    first: { model: 'gemini-3.5-transcribe', substitutions: null, deletions: null, insertions: null, status: 'not-run' },
+    second: { model: 'gemini-3.6-flash', substitutions: null, deletions: null, insertions: null, status: 'not-run' },
+  };
+  const base = {
+    generated: false,
+    asrReports: [],
+    asr: emptyAsr,
+    humanListening: { status: 'not-performed', reviewer: '', reviewedAt: '', result: 'pending' },
+    technical: { status: 'pending', report: null },
+    sync: { status: 'pending' },
+    technicalStatus: 'pending',
+    syncStatus: 'pending',
+    candidateFingerprint: null,
+    fullSha256: null,
+    parts: [],
+  };
+  const parent = path.join(root, 'audio-candidates', articleId);
+  let names = [];
+  try { names = (await readdir(parent, { withFileTypes: true })).filter((entry) => entry.isDirectory()).map((entry) => entry.name); } catch { return base; }
+  if (!names.length) return base;
+  names.sort();
+  const fingerprint = names[names.length - 1];
+  const dir = path.join(parent, fingerprint);
+  const validate = await readJsonSafe(path.join(dir, 'reports', 'validate.json'));
+  const technical = await readJsonSafe(path.join(dir, 'reports', 'technical-qa.json'));
+  const sync = await readJsonSafe(path.join(dir, 'reports', 'sync.json'));
+  const asrFirst = await readJsonSafe(path.join(dir, 'reports', 'asr-gemini-3.5-transcribe.json'));
+  const asrSecond = await readJsonSafe(path.join(dir, 'reports', 'asr-gemini-3.6-flash.json'));
+  const listening = await readJsonSafe(path.join(dir, 'reports', 'human-listening.json'));
+  const generation = await readJsonSafe(path.join(dir, 'generation-report.json'));
+  const candidate = await readJsonSafe(path.join(dir, 'manifest.candidate.json'));
+  const asrReports = [asrFirst, asrSecond].filter(Boolean);
+  return {
+    generated: Boolean(generation || validate),
+    asrReports,
+    asr: {
+      first: asrFirst ? { model: asrFirst.requestedModel || asrFirst.model, substitutions: asrFirst.substitutions, deletions: asrFirst.deletions, insertions: asrFirst.insertions, status: asrFirst.status } : emptyAsr.first,
+      second: asrSecond ? { model: asrSecond.requestedModel || asrSecond.model, substitutions: asrSecond.substitutions, deletions: asrSecond.deletions, insertions: asrSecond.insertions, status: asrSecond.status } : emptyAsr.second,
+    },
+    humanListening: listening || { status: 'not-performed', reviewer: '', reviewedAt: '', result: 'pending' },
+    technical: { status: technical?.passed ? 'passed' : technical ? 'failed' : 'pending', report: technical },
+    sync: { status: sync?.passed ? 'passed' : sync ? 'failed' : 'pending' },
+    technicalStatus: technical?.passed ? 'passed' : 'pending',
+    syncStatus: sync?.passed ? 'passed' : 'pending',
+    candidateFingerprint: validate?.candidateFingerprint || candidate?.candidateFingerprint || fingerprint,
+    fullSha256: validate?.fullSha256 || candidate?.fullSha256 || null,
+    speechScriptHash: script?.scriptHash ?? null,
+    parts: candidate?.parts || [],
+  };
+}
+
 const rules = await readAmbiguityRules(ROOT);
 const live = JSON.parse(await readFile(LIVE_SNAPSHOT, 'utf8'));
 const liveById = new Map((live.articles || []).map((item) => [item.articleId, item]));
@@ -57,15 +114,16 @@ for (const filename of files) {
     defaultVoice: liveAudio.voiceId,
   } : null);
   const spoken = spokenFingerprint(script);
+  const observed = await observeArticleArtifacts(articleId, ROOT, script);
   const record = {
-    generated: Boolean(liveClass.reusablePrimary),
+    generated: Boolean(liveClass.reusablePrimary || observed.generated),
     provider: liveAudio?.provider,
     model: liveAudio?.model,
     voiceId: liveAudio?.voiceId,
-    asrReports: [],
-    humanListening: { status: 'not-performed' },
-    technicalStatus: 'pending',
-    syncStatus: 'pending',
+    asrReports: observed.asrReports,
+    humanListening: observed.humanListening,
+    technicalStatus: observed.technicalStatus,
+    syncStatus: observed.syncStatus,
   };
   const stage = currentStage({
     textReady: validation.approved,
@@ -100,15 +158,16 @@ for (const filename of files) {
       voiceId: PRODUCTION_NARRATOR.voiceId,
       version: PRODUCTION_NARRATOR.model,
     } : null,
-    asr: {
-      first: { model: 'gemini-3.5-transcribe', substitutions: null, deletions: null, insertions: null, status: 'not-run' },
-      second: { model: 'gemini-3.6-flash', substitutions: null, deletions: null, insertions: null, status: 'not-run' },
-    },
-    humanListening: { status: 'not-performed', reviewer: '', reviewedAt: '', result: 'pending' },
-    technical: { status: 'pending', report: null },
-    sync: { status: 'pending' },
+    asr: observed.asr,
+    humanListening: observed.humanListening,
+    technical: observed.technical,
+    sync: observed.sync,
+    candidateFingerprint: observed.candidateFingerprint,
+    fullSha256: observed.fullSha256,
+    speechScriptHash: script?.scriptHash ?? null,
+    parts: observed.parts,
     preview: { url: `https://bareeqworld.com/posts/${encodeURIComponent(articleId)}/`, status: 'live-site-has-current-audio' },
-    production: { url: liveAudio?.liveUrl || null, fingerprint: spoken.spokenSha256, status: liveAudio ? 'live-audio-present' : 'missing' },
+    production: { url: liveAudio?.liveUrl || null, fingerprint: observed.fullSha256 || liveAudio?.fingerprint || null, spokenSha256: spoken.spokenSha256, status: liveAudio ? 'live-audio-present' : 'missing' },
     rollback: liveAudio ? `keep current ${liveAudio.voiceId} manifest ${liveAudio.audioKey}` : 'none',
     status: liveClass.reusablePrimary ? 'pending' : liveClass.class === 'live-fallback' ? 'blocked' : 'pending',
     nextAction: liveClass.reusablePrimary
@@ -139,9 +198,9 @@ const snapshot = {
     generationAuthorized: articles.filter((item) => item.generationAuthorized).length,
     liveSadaltager: articles.filter((item) => item.reusePrimary).length,
     liveFallback: articles.filter((item) => item.previousVoice?.voiceId === 'hamed').length,
-    asrCertified: 0,
-    humanApproved: 0,
-    publishable: 0,
+    asrCertified: articles.filter((item) => item.asr.first.status === 'passed' && item.asr.second.status === 'passed').length,
+    humanApproved: articles.filter((item) => item.humanListening.status === 'passed').length,
+    publishable: articles.filter((item) => item.stage === 'publishable').length,
   },
   articles,
 };

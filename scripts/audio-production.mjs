@@ -21,15 +21,31 @@ import { validateCandidate } from './audio-validate.mjs';
 import { publishApprovedCandidate } from './audio-publish.mjs';
 import { resolveProductionSynthesizer } from './audio-gemini-tts.mjs';
 import { pathExists } from './audio-checkpoint.mjs';
+import { loadPublicationPost, loadPublishRecord } from './audio-approval.mjs';
+import { assertSafeArticleId, assertSha256Fingerprint } from './audio-report.mjs';
+import { snapshotLiveSadaltager } from './audio-verify-live.mjs';
+import { sha256 } from './audio-constants.mjs';
 
 const ROOT = process.cwd();
 const MODE = process.argv.find((arg) => arg.startsWith('--mode='))?.slice('--mode='.length)
   || (process.argv.includes('--dry-run') ? 'dry-run' : process.argv.includes('--execute') ? 'generate-candidate' : 'dry-run');
-const ARTICLE = process.argv.find((arg) => arg.startsWith('--article='))?.slice('--article='.length) || '';
-const FINGERPRINT = process.argv.find((arg) => arg.startsWith('--fingerprint='))?.slice('--fingerprint='.length) || '';
+const ARTICLE = process.argv.find((arg) => arg.startsWith('--article='))?.slice('--article='.length) || process.env.BAREEQ_AUDIO_ARTICLE || '';
+const FINGERPRINT = process.argv.find((arg) => arg.startsWith('--fingerprint='))?.slice('--fingerprint='.length) || process.env.BAREEQ_AUDIO_FINGERPRINT || '';
+const LISTENING = process.argv.find((arg) => arg.startsWith('--listening='))?.slice('--listening='.length) || process.env.BAREEQ_AUDIO_LISTENING || '';
+const RECORD = process.argv.find((arg) => arg.startsWith('--record='))?.slice('--record='.length) || process.env.BAREEQ_AUDIO_RECORD || '';
 const OUT = path.join(ROOT, 'docs', 'audio', 'DRY-RUN.json');
 
-export const MODES = ['dry-run', 'generate-candidate', 'validate-candidate', 'publish-approved'];
+export const MODES = ['dry-run', 'generate-candidate', 'validate-candidate', 'publish-approved', 'verify-live'];
+
+const HTTP_PER_ARTICLE = {
+  logicalUploads: 1,
+  filesApiStartRequests: 1,
+  filesApiFinalizeRequests: 1,
+  filesApiMetadataRequests: 0,
+  filesApiDeleteRequests: 1,
+  interactionsRequests: INDEPENDENT_ASR_MODELS.length,
+  totalHttpRequests: 1 + 1 + INDEPENDENT_ASR_MODELS.length + 1,
+};
 
 export async function buildDryRun(root = ROOT) {
   const snapshot = JSON.parse(await readFile(path.join(root, 'docs', 'audio', 'AUDIO-TRUTH-SNAPSHOT.json'), 'utf8'));
@@ -39,6 +55,7 @@ export async function buildDryRun(root = ROOT) {
   const replace = snapshot.articles.filter((item) => !item.reusePrimary);
   const plans = [];
   for (const item of snapshot.articles) {
+    const http = { ...HTTP_PER_ARTICLE };
     if (item.reusePrimary) {
       plans.push({
         articleId: item.articleId,
@@ -46,8 +63,9 @@ export async function buildDryRun(root = ROOT) {
         ttsRequestsBefore: 0,
         ttsRequestsAfter: 0,
         asrRequests: INDEPENDENT_ASR_MODELS.length,
-        filesApiUploads: 1,
-        asrProviderCalls: 1 + INDEPENDENT_ASR_MODELS.length,
+        filesApiUploads: http.logicalUploads,
+        ...http,
+        asrProviderCalls: http.totalHttpRequests,
         reason: 'Live Gemini/Sadaltager already exists; do not regenerate.',
       });
       continue;
@@ -65,8 +83,9 @@ export async function buildDryRun(root = ROOT) {
       ttsRequestsBefore: before.ttsRequests,
       ttsRequestsAfter: after.ttsRequests,
       asrRequests: INDEPENDENT_ASR_MODELS.length,
-      filesApiUploads: 1,
-      asrProviderCalls: 1 + INDEPENDENT_ASR_MODELS.length,
+      filesApiUploads: http.logicalUploads,
+      ...http,
+      asrProviderCalls: http.totalHttpRequests,
       maxPartBytes: after.maxPartBytes,
       maxPartEstimatedSeconds: after.maxPartEstimatedSeconds,
       maxPartEstimatedTokens: after.maxPartEstimatedTokens,
@@ -81,11 +100,13 @@ export async function buildDryRun(root = ROOT) {
         estimatedTokens: part.estimatedTokens,
         promptBytes: part.promptBytes,
         syncIds: part.syncIds,
+        splitReason: part.splitReason,
       })),
     });
   }
+  const sum = (key) => plans.reduce((total, item) => total + (item[key] || 0), 0);
   const report = {
-    schema: 'bareeq.audio-production-dry-run.v3',
+    schema: 'bareeq.audio-production-dry-run.v4',
     generatedAt: new Date().toISOString(),
     mode: 'dry-run',
     narrator: PRODUCTION_NARRATOR,
@@ -96,23 +117,30 @@ export async function buildDryRun(root = ROOT) {
       models: INDEPENDENT_ASR_MODELS,
       forbidden: FORBIDDEN_ASR_MODELS,
       file: 'full merged MP3 only',
-      filesApi: 'resumable start → X-Goog-Upload-URL → upload, finalize',
+      filesApi: 'resumable start → X-Goog-Upload-URL → upload, finalize → optional metadata GET → delete',
     },
     candidatePath: 'audio-candidates/<articleId>/<fingerprint>/',
     livePath: 'public/audio/articles/<key>/',
     chunking: {
-      before: { settings: LEGACY_SPLIT, ttsRequests: plans.reduce((sum, item) => sum + (item.ttsRequestsBefore || 0), 0) },
-      after: { settings: QUOTA_SPLIT, ttsRequests: plans.reduce((sum, item) => sum + (item.ttsRequestsAfter || 0), 0) },
+      before: { settings: LEGACY_SPLIT, ttsRequests: sum('ttsRequestsBefore') },
+      after: { settings: QUOTA_SPLIT, ttsRequests: sum('ttsRequestsAfter') },
     },
     reusableSadaltager: reusable.map((item) => item.articleId),
     replaceWithSadaltager: replace.map((item) => item.articleId),
     plans,
     expected: {
-      ttsRequestsBefore: plans.reduce((sum, item) => sum + (item.ttsRequestsBefore || 0), 0),
-      ttsRequestsAfter: plans.reduce((sum, item) => sum + (item.ttsRequestsAfter || 0), 0),
-      asrRequests: plans.reduce((sum, item) => sum + (item.asrRequests || 0), 0),
-      filesApiUploads: plans.reduce((sum, item) => sum + (item.filesApiUploads || 0), 0),
-      asrProviderCalls: plans.reduce((sum, item) => sum + (item.asrProviderCalls || 0), 0),
+      ttsRequestsBefore: sum('ttsRequestsBefore'),
+      ttsRequestsAfter: sum('ttsRequestsAfter'),
+      asrRequests: sum('asrRequests'),
+      filesApiUploads: sum('filesApiUploads'),
+      logicalUploads: sum('logicalUploads'),
+      filesApiStartRequests: sum('filesApiStartRequests'),
+      filesApiFinalizeRequests: sum('filesApiFinalizeRequests'),
+      filesApiMetadataRequests: sum('filesApiMetadataRequests'),
+      filesApiDeleteRequests: sum('filesApiDeleteRequests'),
+      interactionsRequests: sum('interactionsRequests'),
+      totalHttpRequests: sum('totalHttpRequests'),
+      asrProviderCalls: sum('totalHttpRequests'),
       asrModels: INDEPENDENT_ASR_MODELS,
     },
     resume: {
@@ -128,6 +156,8 @@ export async function runProductionMode({
   mode,
   articleId,
   fingerprint,
+  listeningPath,
+  recordPath,
   root = ROOT,
   storeRoot,
   synthesize,
@@ -151,6 +181,9 @@ export async function runProductionMode({
   if (!articleId) {
     throw Object.assign(new Error(`${mode} requires --article`), { exitCode: EXIT_USAGE });
   }
+  if (!assertSafeArticleId(articleId)) {
+    throw Object.assign(new Error('article id contains forbidden path characters'), { exitCode: EXIT_USAGE });
+  }
   if (mode === 'generate-candidate') {
     const injected = typeof synthesize === 'function';
     if (!injected && process.env.BAREEQ_AUDIO_PRODUCTION_LOCK !== '1' && process.env.BAREEQ_TTS_CONTRACT_TEST !== '1') {
@@ -167,6 +200,12 @@ export async function runProductionMode({
     });
   }
   if (mode === 'validate-candidate') {
+    if (!fingerprint) {
+      throw Object.assign(new Error('validate-candidate requires --fingerprint; it will not pick the latest candidate'), { exitCode: EXIT_USAGE });
+    }
+    if (process.env.BAREEQ_TTS_CONTRACT_TEST !== '1' && !assertSha256Fingerprint(fingerprint)) {
+      throw Object.assign(new Error('fingerprint must be a 64-character SHA-256 hex digest'), { exitCode: EXIT_USAGE });
+    }
     return validateCandidate({
       articleId,
       fingerprint,
@@ -177,37 +216,48 @@ export async function runProductionMode({
       fetchImpl,
     });
   }
+  if (mode === 'verify-live') {
+    return snapshotLiveSadaltager({ articleId, root: storeRoot || root, fetchImpl, skipAsr: !fetchImpl });
+  }
   if (mode === 'publish-approved') {
     if (!fingerprint) {
       throw Object.assign(new Error('publish-approved requires --fingerprint; it will not pick the latest candidate'), { exitCode: EXIT_USAGE });
+    }
+    if (process.env.BAREEQ_TTS_CONTRACT_TEST !== '1' && !assertSha256Fingerprint(fingerprint)) {
+      throw Object.assign(new Error('fingerprint must be a 64-character SHA-256 hex digest'), { exitCode: EXIT_USAGE });
     }
     const resolvedFingerprint = fingerprint;
     const candidatePath = candidateDir(articleId, resolvedFingerprint, storeRoot || root);
     if (!await pathExists(candidatePath)) {
       throw Object.assign(new Error('publish-approved refused: candidate files are missing'), { exitCode: EXIT_HARD });
     }
-    let publicationRecord = record;
-    if (!publicationRecord) {
-      try {
-        publicationRecord = JSON.parse(await readFile(path.join(candidatePath, 'reports', 'publish-record.json'), 'utf8'));
-      } catch {
-        publicationRecord = {};
-      }
+    if (!listeningPath && !recordPath && !record) {
+      throw Object.assign(new Error('publish-approved requires --listening=<file> or --record=<file>; generic listening is refused'), { exitCode: EXIT_USAGE });
     }
-    let publicationPost = post;
-    if (!publicationPost) {
-      publicationPost = {
-        speechApproval: {
-          validation: { valid: false, approved: false },
-        },
-      };
+    const publicationPost = post || await loadPublicationPost(articleId, root);
+    const article = await loadSpokenArticle(articleId, root);
+    let fullSha256 = null;
+    try {
+      const { readFile: read } = await import('node:fs/promises');
+      fullSha256 = sha256(await read(path.join(candidatePath, 'full.mp3')));
+    } catch {
+      fullSha256 = null;
     }
+    const publicationRecord = record || await loadPublishRecord({
+      candidateDir: candidatePath,
+      listeningPath,
+      recordPath,
+      fingerprint: resolvedFingerprint,
+      fullSha256,
+      article,
+    });
     return publishApprovedCandidate({
       articleId,
       fingerprint: resolvedFingerprint,
       root: storeRoot || root,
       post: publicationPost,
       record: publicationRecord,
+      listening: publicationRecord.humanListening,
       persistGit,
     });
   }
@@ -225,17 +275,20 @@ if (isCli) {
       mode: MODE,
       articleId: ARTICLE,
       fingerprint: FINGERPRINT,
+      listeningPath: LISTENING,
+      recordPath: RECORD,
       root: ROOT,
     });
     if (MODE === 'dry-run') {
       console.log(`Audio production dry-run: reuse ${result.reusableSadaltager.length}; replace ${result.replaceWithSadaltager.length}.`);
       console.log(`TTS requests before (2400-byte cap): ${result.expected.ttsRequestsBefore}. After Gemini 8192-token / 180s pack: ${result.expected.ttsRequestsAfter}.`);
-      console.log(`ASR interactions: ${result.expected.asrRequests}. Files API uploads: ${result.expected.filesApiUploads}. Combined ASR provider calls: ${result.expected.asrProviderCalls}.`);
+      console.log(`ASR interactions: ${result.expected.asrRequests}. Files start/finalize/delete: ${result.expected.filesApiStartRequests}/${result.expected.filesApiFinalizeRequests}/${result.expected.filesApiDeleteRequests}. Total HTTP: ${result.expected.totalHttpRequests}.`);
       for (const item of result.plans) {
         if (item.action === 'reuse-live-sadaltager') {
-          console.log(`- ${item.articleId}: reuse; TTS 0; ASR ${item.asrRequests}; Files ${item.filesApiUploads}`);
+          console.log(`- ${item.articleId}: reuse; TTS 0; ASR ${item.asrRequests}; HTTP ${item.totalHttpRequests}`);
         } else {
-          console.log(`- ${item.articleId}: candidate TTS ${item.ttsRequestsBefore} → ${item.ttsRequestsAfter}; ASR ${item.asrRequests}; Files ${item.filesApiUploads}${item.justification ? ` (${item.justification})` : ''}`);
+          const short = item.parts?.filter((part) => part.estimatedSeconds < QUOTA_SPLIT.minSeconds) || [];
+          console.log(`- ${item.articleId}: candidate TTS ${item.ttsRequestsBefore} → ${item.ttsRequestsAfter}; ASR ${item.asrRequests}; HTTP ${item.totalHttpRequests}${item.justification ? ` (${item.justification})` : ''}${short.length ? ` short-parts=${short.map((part) => part.estimatedSeconds).join(',')}` : ''}`);
         }
       }
       console.log(`Dry-run written to ${path.relative(ROOT, OUT)}. Zero provider requests were sent.`);

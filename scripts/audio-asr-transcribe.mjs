@@ -10,8 +10,13 @@ import {
   EXIT_QUOTA,
   EXIT_USAGE,
   sha256,
+  PRODUCTION_TTS_MODEL,
+  PRODUCTION_VOICE,
+  GENERATOR_VERSION,
 } from './audio-constants.mjs';
-import { deleteUploadedFile, uploadResumableFile } from './audio-files-api.mjs';
+import { deleteUploadedFile, uploadResumableFile, addHttp, emptyHttp } from './audio-files-api.mjs';
+import { boundIdentity } from './audio-report.mjs';
+import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
 
 export function geminiInteractionsUrl() {
   const override = process.env.GEMINI_INTERACTIONS_ENDPOINT?.trim() || process.env.GEMINI_TTS_ENDPOINT?.trim();
@@ -62,12 +67,40 @@ export function extractResponseModel(payload) {
   return payload?.model || payload?.model_version || payload?.response_model || null;
 }
 
+export function extractResponseId(payload) {
+  return payload?.id || payload?.response_id || payload?.responseId || null;
+}
+
 function headers(apiKey) {
   return {
     'x-goog-api-key': apiKey,
     'Api-Revision': GEMINI_API_REVISION,
     Accept: 'application/json',
   };
+}
+
+async function persistReport(outputPath, result) {
+  if (!outputPath) return;
+  await mkdir(path.dirname(outputPath), { recursive: true });
+  await writeFile(outputPath, `${JSON.stringify(result, null, 2)}\n`);
+}
+
+function asrIdentity({ article, fingerprint, fullSha256, model, status, extra }) {
+  return boundIdentity({
+    article: article || { articleId: extra?.articleId, speechScriptHash: extra?.speechScriptHash },
+    fingerprint,
+    fullSha256,
+    status,
+    schema: 'bareeq.audio-asr.v4',
+    model,
+    extra: {
+      provider: PRODUCTION_NARRATOR.provider,
+      voice: PRODUCTION_VOICE,
+      generatorVersion: GENERATOR_VERSION,
+      ttsModel: PRODUCTION_TTS_MODEL,
+      ...extra,
+    },
+  });
 }
 
 export async function uploadAudioFile({ apiKey, bytes, mimeType = 'audio/mpeg', displayName = 'bareeq-full.mp3', fetchImpl = fetch }) {
@@ -117,28 +150,46 @@ export async function transcribeFullAudio({
   fullSha256 = null,
   file = null,
   skipUpload = false,
+  article = null,
+  speechScriptHash = null,
 }) {
   assertAsrModel(model);
-  const report = {
-    schema: 'bareeq.audio-asr.v3',
-    generatedAt: new Date().toISOString(),
+  const startedAt = new Date().toISOString();
+  const endpoint = geminiInteractionsUrl();
+  const base = {
+    schema: 'bareeq.audio-asr.v4',
+    generatedAt: startedAt,
+    startedAt,
     model,
+    requestedModel: model,
     audio: audioPath || null,
+    candidateFingerprint: fingerprint,
     fingerprint,
     fullSha256,
+    speechScriptHash: speechScriptHash ?? article?.speechScriptHash ?? null,
+    articleId: article?.articleId || null,
     transport: ASR_MODEL_TRANSPORT[model],
     independentModels: INDEPENDENT_ASR_MODELS,
     forbiddenModels: FORBIDDEN_ASR_MODELS,
+    apiRevision: GEMINI_API_REVISION,
+    endpoint,
+    provider: PRODUCTION_NARRATOR.provider,
+    voice: PRODUCTION_VOICE,
+    generatorVersion: GENERATOR_VERSION,
+    toolVersion: 9,
     filesApiUploads: 0,
     asrInteractions: 0,
+    logicalUploads: 0,
+    filesApiStartRequests: 0,
+    filesApiFinalizeRequests: 0,
+    filesApiMetadataRequests: 0,
+    filesApiDeleteRequests: 0,
+    interactionsRequests: 0,
+    totalHttpRequests: 0,
   };
   if (dryRun) {
-    report.status = 'not-run';
-    report.note = 'Dry-run only. No audio bytes were uploaded and no transcription API was called.';
-    if (outputPath) {
-      await mkdir(path.dirname(outputPath), { recursive: true });
-      await writeFile(outputPath, `${JSON.stringify(report, null, 2)}\n`);
-    }
+    const report = { ...base, status: 'not-run', note: 'Dry-run only. No audio bytes were uploaded and no transcription API was called.', endedAt: new Date().toISOString() };
+    await persistReport(outputPath, report);
     return report;
   }
   if (!apiKey?.trim()) {
@@ -153,67 +204,140 @@ export async function transcribeFullAudio({
   if (fullSha256 && digest !== fullSha256) {
     throw Object.assign(new Error('ASR audio SHA-256 does not match the candidate fingerprint full.mp3'), { exitCode: EXIT_HARD });
   }
-  report.fullSha256 = digest;
-  const uploaded = file || (skipUpload ? null : await uploadAudioFile({ apiKey, bytes, fetchImpl }));
-  if (!uploaded?.uri) {
-    throw Object.assign(new Error('ASR requires a Files API URI'), { exitCode: EXIT_HARD });
+  let http = emptyHttp();
+  let uploaded = file || null;
+  if (!uploaded && !skipUpload) {
+    uploaded = await uploadAudioFile({ apiKey, bytes, fetchImpl });
+    http = { ...http, ...uploaded.http };
   }
-  report.filesApiUploads = skipUpload || file ? 0 : 1;
-  const response = await fetchImpl(geminiInteractionsUrl(), {
-    method: 'POST',
-    headers: { ...headers(apiKey), 'Content-Type': 'application/json' },
-    body: JSON.stringify(buildInteractionBody(model, uploaded)),
-  });
-  const body = await response.text();
+  if (!uploaded?.uri) {
+    const failed = asrIdentity({
+      article,
+      fingerprint,
+      fullSha256: digest,
+      model,
+      status: 'failed',
+      extra: { ...base, fullSha256: digest, endedAt: new Date().toISOString(), error: 'ASR requires a Files API URI' },
+    });
+    await persistReport(outputPath, failed);
+    throw Object.assign(new Error('ASR requires a Files API URI'), { exitCode: EXIT_HARD, result: failed });
+  }
+
+  let response;
+  let body = '';
+  try {
+    http = addHttp(http, 'interactionsRequests');
+    response = await fetchImpl(endpoint, {
+      method: 'POST',
+      headers: { ...headers(apiKey), 'Content-Type': 'application/json' },
+      body: JSON.stringify(buildInteractionBody(model, uploaded)),
+    });
+    body = await response.text();
+  } catch (error) {
+    const failed = {
+      ...asrIdentity({
+        article,
+        fingerprint,
+        fullSha256: digest,
+        model,
+        status: 'failed',
+        extra: { ...base, fullSha256: digest, httpStatus: 0, endedAt: new Date().toISOString(), error: error.message, ...http },
+      }),
+    };
+    await persistReport(outputPath, failed);
+    throw Object.assign(error, { exitCode: EXIT_HARD, result: failed });
+  }
+
+  const fail = async (message, extra = {}) => {
+    const failed = asrIdentity({
+      article,
+      fingerprint,
+      fullSha256: digest,
+      model,
+      status: extra.status || 'failed',
+      extra: {
+        ...base,
+        fullSha256: digest,
+        httpStatus: response.status,
+        rawTranscript: body.slice(0, 4000),
+        endedAt: new Date().toISOString(),
+        error: message,
+        actualResponseModel: extra.actualResponseModel ?? null,
+        actualResponseModelSource: extra.actualResponseModel ? 'response.model' : 'not-returned-by-api',
+        responseId: extra.responseId ?? null,
+        filesApiUploads: skipUpload || file ? 0 : 1,
+        asrInteractions: 1,
+        ...http,
+        ...extra,
+      },
+    });
+    await persistReport(outputPath, failed);
+    const error = new Error(message);
+    error.exitCode = extra.exitCode || EXIT_HARD;
+    error.httpStatus = response.status;
+    error.result = failed;
+    if (extra.emptyTranscript) error.emptyTranscript = true;
+    throw error;
+  };
+
   if (response.status === 404) {
-    throw Object.assign(new Error(`ASR model ${model} is not available (HTTP 404). Status remains pending-independent-asr; no substitute model was used.`), {
-      httpStatus: 404,
+    await fail(`ASR model ${model} is not available (HTTP 404). Status remains pending-independent-asr; no substitute model was used.`, {
+      status: 'pending-independent-asr',
       asrStatus: 'pending-independent-asr',
-      exitCode: EXIT_HARD,
     });
   }
   if (response.status === 429) {
-    throw Object.assign(new Error(`ASR quota exhausted for ${model}`), { httpStatus: 429, exitCode: EXIT_QUOTA });
+    await fail(`ASR quota exhausted for ${model}`, { exitCode: EXIT_QUOTA, status: 'quota' });
   }
   if (!response.ok) {
-    throw Object.assign(new Error(`ASR ${model} failed (${response.status}): ${body.slice(0, 700)}`), { httpStatus: response.status, exitCode: EXIT_HARD });
+    await fail(`ASR ${model} failed (${response.status}): ${body.slice(0, 700)}`);
   }
   let payload;
   try { payload = JSON.parse(body); } catch {
-    throw Object.assign(new Error('ASR response is not JSON'), { exitCode: EXIT_HARD });
+    await fail('ASR response is not JSON');
   }
   const responseModel = extractResponseModel(payload);
+  const responseId = extractResponseId(payload);
   if (responseModel && !String(responseModel).includes(model)) {
-    throw Object.assign(new Error(`ASR response model ${responseModel} does not match requested ${model}. Silent substitution is forbidden.`), { exitCode: EXIT_HARD });
+    await fail(`ASR response model ${responseModel} does not match requested ${model}. Silent substitution is forbidden.`, {
+      actualResponseModel: responseModel,
+      responseId,
+    });
   }
   const transcript = extractTranscript(payload);
   if (!transcript) {
-    throw Object.assign(new Error(`ASR ${model} returned an empty transcript`), { exitCode: EXIT_HARD, emptyTranscript: true });
+    await fail(`ASR ${model} returned an empty transcript`, { emptyTranscript: true, actualResponseModel: responseModel, responseId });
   }
   const comparison = compareExactSpokenText(expectedText, transcript);
-  const result = {
-    ...report,
-    status: comparison.passed ? 'passed' : 'failed',
-    httpStatus: 200,
-    requestedModel: model,
-    actualResponseModel: responseModel || null,
-    actualResponseModelSource: responseModel ? 'response.model' : 'not-returned-by-api',
-    fileUri: uploaded.uri,
-    asrInteractions: 1,
-    filesApiUploads: report.filesApiUploads,
-    substitutions: comparison.substitutions,
-    deletions: comparison.deletions,
-    insertions: comparison.insertions,
-    transcript,
-    rawTranscript: transcript,
-    differences: comparison.differences,
+  const result = asrIdentity({
+    article,
     fingerprint,
     fullSha256: digest,
-  };
-  if (outputPath) {
-    await mkdir(path.dirname(outputPath), { recursive: true });
-    await writeFile(outputPath, `${JSON.stringify(result, null, 2)}\n`);
-  }
+    model,
+    status: comparison.passed ? 'passed' : 'failed',
+    extra: {
+      ...base,
+      fullSha256: digest,
+      httpStatus: 200,
+      requestedModel: model,
+      actualResponseModel: responseModel || null,
+      actualResponseModelSource: responseModel ? 'response.model' : 'not-returned-by-api',
+      responseId,
+      fileUri: uploaded.uri,
+      asrInteractions: 1,
+      filesApiUploads: skipUpload || file ? 0 : 1,
+      substitutions: comparison.substitutions,
+      deletions: comparison.deletions,
+      insertions: comparison.insertions,
+      transcript,
+      rawTranscript: transcript,
+      normalizedTranscript: comparison.expectedTokens ? transcript : transcript,
+      differences: comparison.differences,
+      endedAt: new Date().toISOString(),
+      ...http,
+    },
+  });
+  await persistReport(outputPath, result);
   if (!comparison.passed) {
     const error = new Error(`ASR ${model} failed exact match: S=${comparison.substitutions} D=${comparison.deletions} I=${comparison.insertions}`);
     error.exitCode = EXIT_HARD;
@@ -231,6 +355,7 @@ export async function transcribeDualAsr({
   reportsDir,
   fingerprint = null,
   fullSha256 = null,
+  article = null,
 }) {
   const bytes = await readFile(audioPath);
   const digest = sha256(bytes);
@@ -239,34 +364,69 @@ export async function transcribeDualAsr({
   }
   const uploaded = await uploadAudioFile({ apiKey, bytes, fetchImpl });
   const asrReports = [];
+  const failures = [];
+  let http = { ...emptyHttp(), ...uploaded.http };
   try {
     for (const model of INDEPENDENT_ASR_MODELS) {
-      const report = await transcribeFullAudio({
-        model,
-        audioPath,
-        expectedText,
-        apiKey,
-        fetchImpl,
-        outputPath: reportsDir ? path.join(reportsDir, `asr-${model}.json`) : undefined,
-        fingerprint,
-        fullSha256: digest,
-        file: uploaded,
-        skipUpload: true,
-      });
-      asrReports.push(report);
+      try {
+        const report = await transcribeFullAudio({
+          model,
+          audioPath,
+          expectedText,
+          apiKey,
+          fetchImpl,
+          outputPath: reportsDir ? path.join(reportsDir, `asr-${model}.json`) : undefined,
+          fingerprint,
+          fullSha256: digest,
+          file: uploaded,
+          skipUpload: true,
+          article,
+          speechScriptHash: article?.speechScriptHash,
+        });
+        asrReports.push(report);
+        http = addHttp(http, 'interactionsRequests');
+      } catch (error) {
+        if (error.result) asrReports.push(error.result);
+        failures.push(error);
+        http = addHttp(http, 'interactionsRequests');
+      }
     }
   } finally {
-    await deleteUploadedFile({ apiKey, name: uploaded.name, fetchImpl }).catch(() => ({ deleted: false }));
+    const deletion = await deleteUploadedFile({ apiKey, name: uploaded.name, fetchImpl }).catch((error) => ({ deleted: false, error: error.message, http: emptyHttp() }));
+    http = addHttp(http, 'filesApiDeleteRequests');
+    http.deleteResult = deletion;
+    for (const report of asrReports) {
+      report.filesApiDeleteRequests = 1;
+      report.deleteResult = deletion;
+      if (reportsDir) {
+        await persistReport(path.join(reportsDir, `asr-${report.requestedModel || report.model}.json`), report);
+      }
+    }
   }
-  return {
+  const dual = {
     asrReports,
     filesApiUploads: 1,
     asrInteractions: asrReports.length,
-    asrProviderCalls: 1 + asrReports.length,
+    asrProviderCalls: http.totalHttpRequests,
     fullSha256: digest,
     fingerprint,
+    candidateFingerprint: fingerprint,
     fileUri: uploaded.uri,
+    deleteResult: http.deleteResult,
+    logicalUploads: http.logicalUploads || 1,
+    filesApiStartRequests: http.filesApiStartRequests || 1,
+    filesApiFinalizeRequests: http.filesApiFinalizeRequests || 1,
+    filesApiMetadataRequests: http.filesApiMetadataRequests || 0,
+    filesApiDeleteRequests: 1,
+    interactionsRequests: asrReports.length,
+    totalHttpRequests: http.totalHttpRequests,
   };
+  if (failures.length) {
+    const error = failures[0];
+    error.dual = dual;
+    throw error;
+  }
+  return dual;
 }
 
 const isCli = process.argv[1] && path.basename(process.argv[1]) === 'audio-asr-transcribe.mjs';

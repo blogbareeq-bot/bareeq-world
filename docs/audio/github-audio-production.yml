@@ -19,6 +19,7 @@ on:
           - generate-candidate
           - validate-candidate
           - publish-approved
+          - verify-live
       article:
         description: Required except dry-run.
         required: false
@@ -26,6 +27,11 @@ on:
         default: ''
       fingerprint:
         description: Required for validate-candidate and publish-approved. Never implied as latest.
+        required: false
+        type: string
+        default: ''
+      listening:
+        description: Path to fingerprint-bound human listening JSON. Required for publish-approved.
         required: false
         type: string
         default: ''
@@ -44,6 +50,9 @@ jobs:
     env:
       BAREEQ_CLOUD_TTS_ACTIVATE: '0'
       BAREEQ_GEMINI_FREE_ROLLOUT: '0'
+      BAREEQ_AUDIO_ARTICLE: ${{ inputs.article }}
+      BAREEQ_AUDIO_FINGERPRINT: ${{ inputs.fingerprint }}
+      BAREEQ_AUDIO_LISTENING: ${{ inputs.listening }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,6 +75,41 @@ jobs:
           node scripts/test-audio-production-integration.mjs
           node scripts/test-speech-script-quality-gate.mjs
           node scripts/check-speech-scripts.mjs
+
+      - name: Guard inputs
+        run: |
+          set -euo pipefail
+          article="${BAREEQ_AUDIO_ARTICLE}"
+          fingerprint="${BAREEQ_AUDIO_FINGERPRINT}"
+          listening="${BAREEQ_AUDIO_LISTENING}"
+          mode="${{ inputs.mode }}"
+          if [ "$mode" != "dry-run" ]; then
+            if [ -z "$article" ]; then
+              echo 'article is required'
+              exit 2
+            fi
+            case "$article" in
+              */*|*..*|*\\*) echo 'article path traversal refused'; exit 2 ;;
+            esac
+            if [ ! -f "src/content/posts/${article}.md" ]; then
+              echo "article is not in the inventory: ${article}"
+              exit 2
+            fi
+          fi
+          if [ "$mode" = "validate-candidate" ] || [ "$mode" = "publish-approved" ]; then
+            if [ -z "$fingerprint" ]; then
+              echo 'validate-candidate/publish-approved requires fingerprint. Refusing to pick latest.'
+              exit 2
+            fi
+            if ! printf '%s' "$fingerprint" | grep -Eq '^[a-f0-9]{64}$'; then
+              echo 'fingerprint must be a 64-character SHA-256 hex digest'
+              exit 2
+            fi
+          fi
+          if [ "$mode" = "publish-approved" ] && [ -z "$listening" ]; then
+            echo 'publish-approved requires a listening evidence path'
+            exit 2
+          fi
 
       - name: Restore candidate cache
         uses: actions/cache/restore@v4
@@ -90,7 +134,7 @@ jobs:
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
         run: |
           set +e
-          node scripts/audio-production.mjs --mode=generate-candidate --article=${{ inputs.article }}
+          node scripts/audio-production.mjs --mode=generate-candidate --article="${BAREEQ_AUDIO_ARTICLE}"
           status=$?
           set -e
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -106,24 +150,21 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          if [ -z "${{ inputs.fingerprint }}" ]; then
-            echo 'validate-candidate requires fingerprint. Refusing to pick latest.'
-            exit 2
-          fi
           echo 'validate-candidate: merge full.mp3, technical QA, ASR gemini-3.5-transcribe, ASR gemini-3.6-flash, Files API resumable upload, 0/0/0, listening pack. Does not publish.'
-          node scripts/audio-production.mjs --mode=validate-candidate --article=${{ inputs.article }} --fingerprint=${{ inputs.fingerprint }}
+          node scripts/audio-production.mjs --mode=validate-candidate --article="${BAREEQ_AUDIO_ARTICLE}" --fingerprint="${BAREEQ_AUDIO_FINGERPRINT}"
 
       - name: Publish approved
         if: inputs.mode == 'publish-approved'
         env:
           BAREEQ_AUDIO_PUBLISH_GIT: '1'
         run: |
-          if [ -z "${{ inputs.fingerprint }}" ]; then
-            echo 'publish-approved requires fingerprint. Refusing to pick latest.'
-            exit 2
-          fi
           echo 'publish-approved refuses without human listening evidence bound to the candidate file SHA-256.'
-          node scripts/audio-production.mjs --mode=publish-approved --article=${{ inputs.article }} --fingerprint=${{ inputs.fingerprint }}
+          node scripts/audio-production.mjs --mode=publish-approved --article="${BAREEQ_AUDIO_ARTICLE}" --fingerprint="${BAREEQ_AUDIO_FINGERPRINT}" --listening="${BAREEQ_AUDIO_LISTENING}"
+
+      - name: Verify live
+        if: inputs.mode == 'verify-live'
+        run: |
+          node scripts/audio-production.mjs --mode=verify-live --article="${BAREEQ_AUDIO_ARTICLE}"
 
       - name: Save candidate cache
         if: always()

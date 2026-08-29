@@ -143,6 +143,19 @@ export async function generateCandidate({
   result.completedParts = splitPlan.parts.length;
   result.exitCode = EXIT_OK;
   await writeJson(path.join(paths.dir, 'generation-report.json'), {
+    schema: 'bareeq.audio-generation.v2',
+    articleId,
+    candidateFingerprint: fingerprint,
+    fingerprint,
+    fullSha256: 'pending-merge',
+    speechScriptHash: article.speechScriptHash,
+    provider: PRODUCTION_NARRATOR.provider,
+    model: PRODUCTION_NARRATOR.model,
+    voice: PRODUCTION_NARRATOR.providerVoice,
+    generatorVersion: 9,
+    toolVersion: 9,
+    status: 'generated',
+    generatedAt: new Date().toISOString(),
     ...result,
     split: {
       version: splitPlan.settings.version,

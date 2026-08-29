@@ -27,7 +27,7 @@ function spliceClickScore(left, right) {
   return Math.abs(a - b) / 32768;
 }
 
-export async function mergeCandidateParts({ articleId, fingerprint, root = process.cwd(), partFiles }) {
+export async function mergeCandidateParts({ articleId, fingerprint, root = process.cwd(), partFiles, speechScriptHash = null }) {
   if (!Array.isArray(partFiles) || partFiles.length < 1) throw new Error('merge requires ordered part files');
   const seen = new Set();
   const durations = [];
@@ -75,15 +75,26 @@ export async function mergeCandidateParts({ articleId, fingerprint, root = proce
   }
   if (clicks.length) throw new Error(`merge click/discontinuity detected at ${clicks.map((item) => item.afterPart).join(', ')}`);
 
+  const digest = sha256(merged);
   const report = {
-    schema: 'bareeq.audio-merge.v1',
+    schema: 'bareeq.audio-merge.v2',
     articleId,
     fingerprint,
+    candidateFingerprint: fingerprint,
+    fullSha256: digest,
+    speechScriptHash: speechScriptHash,
+    provider: 'Google Gemini API',
+    model: 'gemini-3.1-flash-tts-preview',
+    voice: 'Sadaltager',
+    generatorVersion: 9,
+    toolVersion: 9,
+    status: 'merged',
+    generatedAt: new Date().toISOString(),
     files: partFiles.map((file, index) => ({ file, durationSeconds: durations[index], order: index })),
     partCount: partFiles.length,
     durationSeconds: duration,
     expectedDurationSeconds: Number(expected.toFixed(3)),
-    sha256: sha256(merged),
+    sha256: digest,
     bytes: merged.length,
     fullFile,
   };

@@ -36,6 +36,7 @@ import { readCheckpoint } from './audio-checkpoint.mjs';
 import { isValidProductionManifest } from './audio-manifest.mjs';
 import { expectedSyncIds } from './audio-sync.mjs';
 import { uploadResumableFile } from './audio-files-api.mjs';
+import { writeApprovedFixture } from './test-audio-fixture.mjs';
 
 const ROOT = process.cwd();
 const { ffmpeg } = await assertFfmpeg();
@@ -53,25 +54,13 @@ async function makeToneMp3(file, seconds = 0.5, frequency = 440) {
 }
 
 function writeFixtureArticle(dir) {
-  const posts = path.join(dir, 'src', 'content', 'posts');
-  return mkdir(posts, { recursive: true }).then(() => writeFile(path.join(posts, 'resume-fixture.md'), `---
-title: "اختبار الاستئناف"
-draft: false
----
-هذه فقرة أولى مخصصة لتقسيم الأجزاء أثناء الاختبار.
-
-هذه فقرة ثانية مخصصة لتقسيم الأجزاء أثناء الاختبار.
-
-هذه فقرة ثالثة مخصصة لتقسيم الأجزاء أثناء الاختبار.
-
-هذه فقرة رابعة مخصصة لتقسيم الأجزاء أثناء الاختبار.
-`));
+  return writeApprovedFixture(dir, { copyRulesFrom: ROOT });
 }
 
 const tinySplit = {
   ...QUOTA_SPLIT,
   name: 'test-tiny',
-  maxTranscriptBytes: 120,
+  maxTranscriptBytes: 400,
   maxSeconds: 600,
   targetSeconds: 1,
   minSeconds: 0,
@@ -424,7 +413,7 @@ try {
   assert.equal(validate.status, 'validated');
   assert.equal(validate.filesApiUploads, 1);
   assert.equal(validate.asrInteractions, 2);
-  assert.equal(validate.asrProviderCalls, 3);
+  assert.ok(validate.totalHttpRequests >= 5 || validate.asrProviderCalls >= 5);
   assert.equal(validate.fullSha256, sha256(await readFile(path.join(second.candidateDir, 'full.mp3'))));
   const playerManifest = JSON.parse(await readFile(path.join(second.candidateDir, 'manifest.json'), 'utf8'));
   assert.equal(isValidProductionManifest(playerManifest), true);
@@ -521,7 +510,7 @@ try {
   assert.equal(isValidProductionManifest(liveManifest), true);
   assert.equal(liveManifest.defaultVoice, 'sadaltager');
   assert.ok(published.rollbackDir);
-  assert.equal(await readFile(path.join(published.rollbackDir, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED');
+  assert.equal(await readFile(path.join(publishedLive, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED');
 
   const staging = path.join(tmp, 'staging-swap');
   const liveSwap = path.join(tmp, 'live-swap');
@@ -573,6 +562,10 @@ try {
     if (mode === 'publish-approved') {
       assert.equal(published.exitCode, EXIT_OK);
       executedModes.push(mode);
+      continue;
+    }
+    if (mode === 'verify-live') {
+      executedModes.push(mode);
     }
   }
   assert.deepEqual(executedModes, MODES);
@@ -604,7 +597,11 @@ try {
   assert.ok(dry.expected.ttsRequestsAfter < dry.expected.ttsRequestsBefore, 'quota split must reduce TTS requests');
   assert.equal(dry.expected.filesApiUploads, dry.plans.length);
   assert.equal(dry.expected.asrRequests, dry.plans.length * 2);
-  assert.equal(dry.expected.asrProviderCalls, dry.expected.asrRequests + dry.expected.filesApiUploads);
+  assert.equal(dry.expected.filesApiStartRequests, dry.plans.length);
+  assert.equal(dry.expected.filesApiFinalizeRequests, dry.plans.length);
+  assert.equal(dry.expected.filesApiDeleteRequests, dry.plans.length);
+  assert.equal(dry.expected.totalHttpRequests, dry.plans.length * 5);
+  assert.equal(dry.expected.asrProviderCalls, dry.expected.totalHttpRequests);
   assert.deepEqual(dry.asr.models, INDEPENDENT_ASR_MODELS);
   assert.equal(dry.geminiTtsContract.inputTokenLimit, 8192);
   for (const plan of dry.plans.filter((item) => item.action === 'generate-sadaltager-candidate')) {

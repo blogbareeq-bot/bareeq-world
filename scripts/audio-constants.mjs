@@ -11,7 +11,7 @@ export const EXIT_CONFIG = 78;
 export const PRODUCTION_TTS_MODEL = 'gemini-3.1-flash-tts-preview';
 export const PRODUCTION_VOICE = 'Sadaltager';
 export const PRODUCTION_VOICE_ID = 'sadaltager';
-export const GENERATOR_VERSION = 8;
+export const GENERATOR_VERSION = 9;
 
 export const INDEPENDENT_ASR_MODELS = Object.freeze([
   'gemini-3.5-transcribe',
@@ -70,7 +70,8 @@ export const LEGACY_SPLIT = Object.freeze({
 });
 
 export const QUOTA_SPLIT = Object.freeze({
-  version: 3,
+  version: 4,
+  algorithmVersion: 4,
   name: 'gemini-8192-token-duration',
   targetSeconds: 165,
   minSeconds: 90,
@@ -79,7 +80,7 @@ export const QUOTA_SPLIT = Object.freeze({
   geminiInputTokenLimit: GEMINI_TTS_CONTRACT.inputTokenLimit,
   geminiTokenEstimateDivisorBytes: GEMINI_TTS_CONTRACT.tokenEstimateDivisorBytes,
   defaultCharsPerSecond: 10,
-  rebalanceFloorSeconds: 45,
+  rebalanceFloorSeconds: 90,
   generatorVersion: GENERATOR_VERSION,
 });
 

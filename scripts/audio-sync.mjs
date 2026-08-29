@@ -43,11 +43,13 @@ export function expectedSyncIds(article) {
 }
 
 export function validateSyncMap(article, parts) {
-  const expected = new Set(expectedSyncIds(article));
-  const seen = new Set();
+  const expected = expectedSyncIds(article);
+  const expectedSet = new Set(expected);
   const failures = [];
-  if (!expected.size) failures.push('article has no expected sync ids');
+  if (!expected.length) failures.push('article has no expected sync ids');
   if (!Array.isArray(parts) || !parts.length) failures.push('sync is mandatory; no parts were provided');
+  const seenOrder = [];
+  const seen = new Set();
   for (const part of parts || []) {
     if (!Array.isArray(part.sync)) {
       failures.push(`part ${part.partIndex ?? '?'} is missing a sync map`);
@@ -58,25 +60,40 @@ export function validateSyncMap(article, parts) {
       failures.push(`part ${part.partIndex ?? '?'} is missing a sync map`);
       continue;
     }
-    if (!Array.isArray(part.syncIds) || part.syncIds.length !== part.sync.length) {
-      failures.push(`part ${part.partIndex ?? '?'} is missing syncIds`);
+    const syncIds = Array.isArray(part.syncIds) ? part.syncIds : [];
+    if (syncIds.length !== part.sync.length) {
+      failures.push(`part ${part.partIndex ?? '?'} syncIds length does not match sync`);
+    }
+    for (let index = 0; index < part.sync.length; index += 1) {
+      if (syncIds[index] !== part.sync[index]?.id) {
+        failures.push(`part ${part.partIndex ?? '?'} syncIds[${index}] does not match sync`);
+      }
     }
     let previousStart = -1;
+    let previousEnd = -1;
     for (const entry of part.sync) {
-      if (!expected.has(entry.id) && entry.type !== 'title') failures.push(`sync entry references unknown ${entry.id}`);
+      if (!expectedSet.has(entry.id) && entry.type !== 'title') failures.push(`sync entry references unknown ${entry.id}`);
       if (!(entry.start >= 0 && entry.end <= 1 && entry.start < entry.end)) failures.push(`invalid sync ratio for ${entry.id}`);
       if (entry.start < previousStart) failures.push(`sync entries are not ordered in part ${part.partIndex ?? '?'}`);
+      if (previousEnd > 0 && entry.start + 1e-9 < previousEnd) failures.push(`sync overlap for ${entry.id}`);
       previousStart = entry.start;
+      previousEnd = entry.end;
+      if (seen.has(entry.id)) failures.push(`duplicate sync id ${entry.id}`);
       seen.add(entry.id);
+      seenOrder.push(entry.id);
     }
   }
   for (const id of expected) {
     if (!seen.has(id)) failures.push(`segment ${id} is never synchronized to audio`);
   }
+  const expectedFiltered = expected.filter((id) => seen.has(id));
+  if (JSON.stringify(seenOrder) !== JSON.stringify(expectedFiltered) && seenOrder.length && expectedFiltered.length) {
+    failures.push('global sync order does not match article order');
+  }
   return {
     passed: failures.length === 0,
     failures,
-    expectedIds: [...expected],
+    expectedIds: expected,
     seenIds: [...seen],
     method: 'paragraph-weighted',
   };

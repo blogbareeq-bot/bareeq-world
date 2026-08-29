@@ -32,17 +32,44 @@ function edgeEnergy(pcm, ms, sampleRate = 48000) {
   return { start: rms(head), end: rms(tail) };
 }
 
-function longestSilenceSeconds(pcm, sampleRate = 48000, threshold = 0.008) {
+export const PRODUCTION_LOUDNESS = Object.freeze({
+  maxTruePeakDbTP: 1.0,
+  integratedMinLufs: -32,
+  integratedMaxLufs: -6,
+  maxInternalSilenceSeconds: 3,
+  edgeSilenceIgnoreMs: 250,
+  silentStartFailMs: 1000,
+});
+
+function longestInternalSilenceSeconds(pcm, sampleRate = 48000, threshold = 0.008) {
+  const samples = Math.floor(pcm.length / 2);
+  if (samples < 16) return 0;
+  let first = 0;
+  let last = samples - 1;
+  while (first < samples && Math.abs(pcm.readInt16LE(first * 2)) / 32768 < threshold) first += 1;
+  while (last > first && Math.abs(pcm.readInt16LE(last * 2)) / 32768 < threshold) last -= 1;
+  const ignore = Math.floor((PRODUCTION_LOUDNESS.edgeSilenceIgnoreMs / 1000) * sampleRate);
+  const start = Math.min(last, first + ignore);
+  const end = Math.max(start, last - ignore);
   let longest = 0;
   let run = 0;
-  for (let i = 0; i < pcm.length; i += 2) {
-    const sample = Math.abs(pcm.readInt16LE(i)) / 32768;
+  for (let i = start; i <= end; i += 1) {
+    const sample = Math.abs(pcm.readInt16LE(i * 2)) / 32768;
     if (sample < threshold) {
       run += 1;
       longest = Math.max(longest, run);
     } else run = 0;
   }
   return longest / sampleRate;
+}
+
+function edgeSilenceMs(pcm, sampleRate = 48000, threshold = 0.008) {
+  const samples = Math.floor(pcm.length / 2);
+  let head = 0;
+  let tail = 0;
+  while (head < samples && Math.abs(pcm.readInt16LE(head * 2)) / 32768 < threshold) head += 1;
+  while (tail < samples && Math.abs(pcm.readInt16LE((samples - 1 - tail) * 2)) / 32768 < threshold) tail += 1;
+  return { startMs: (head / sampleRate) * 1000, endMs: (tail / sampleRate) * 1000 };
 }
 
 export async function measureLoudness(file) {
@@ -85,13 +112,22 @@ export async function inspectLiveSnapshot(articleId, root) {
   if (!await pathExists(manifestPath)) return { exists: false, dir, fingerprint: null };
   const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
   const files = [];
+  const missing = [];
   for (const part of manifest.parts || []) {
     const asset = part.audio?.[manifest.defaultVoice];
-    if (!asset?.src) continue;
+    if (!asset?.src) {
+      missing.push('manifest part missing src');
+      continue;
+    }
     const file = path.join(root, 'public', asset.src.replace(/^\//, ''));
-    if (!await pathExists(file)) continue;
+    if (!await pathExists(file)) {
+      missing.push(asset.src);
+      continue;
+    }
     const bytes = await readFile(file);
-    files.push({ file, sha256: sha256(bytes), bytes: bytes.length });
+    let durationSeconds = null;
+    try { durationSeconds = mp3DurationSeconds(bytes); } catch { durationSeconds = null; }
+    files.push({ file, sha256: sha256(bytes), bytes: bytes.length, durationSeconds });
   }
   return {
     exists: true,
@@ -100,6 +136,8 @@ export async function inspectLiveSnapshot(articleId, root) {
     voiceId: manifest.defaultVoice,
     fingerprint: sha256(JSON.stringify(files)),
     files,
+    missing,
+    manifest,
   };
 }
 
@@ -140,13 +178,16 @@ export async function runTechnicalQa({
   try { pcm = await decodePcm(fullFile); } catch (error) { failures.push(error.message); }
   if (pcm) {
     if (peak(pcm) >= 0.99) failures.push('clipping detected (peak ≥ 0.99)');
-    const silence = longestSilenceSeconds(pcm);
-    if (silence > 3) failures.push(`internal silence ${silence.toFixed(2)}s`);
+    const silence = longestInternalSilenceSeconds(pcm);
+    if (silence > PRODUCTION_LOUDNESS.maxInternalSilenceSeconds) failures.push(`internal silence ${silence.toFixed(2)}s`);
+    const edges = edgeSilenceMs(pcm);
     const head = edgeEnergy(pcm, 400);
     const tail80 = edgeEnergy(pcm, 80);
     const tail20 = edgeEnergy(pcm, 20);
     const lastSample = Math.abs(pcm.readInt16LE(pcm.length - 2)) / 32768;
-    if (head.start < 0.0003) failures.push('silent start lasting 400ms (likely truncated or missing audio)');
+    if (edges.startMs > PRODUCTION_LOUDNESS.silentStartFailMs && head.start < 0.0003) {
+      failures.push(`silent start lasting ${edges.startMs.toFixed(0)}ms (likely truncated or missing audio)`);
+    }
     if (tail80.end < 0.0005) {
       /* short trailing silence is a fade, not truncation */
     } else if (lastSample >= 0.99 && tail20.end > 0.25) {

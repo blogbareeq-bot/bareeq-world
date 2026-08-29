@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, rm, cp } from 'node:fs/promises';
+import { mkdir, readFile, rename, rm, cp, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { evaluatePublishability } from './audio-lifecycle.mjs';
@@ -13,15 +13,14 @@ import {
 } from './audio-constants.mjs';
 import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { isValidProductionManifest } from './audio-manifest.mjs';
-import { loadBoundEvidence } from './audio-evidence.mjs';
+import { loadBoundEvidence, listeningMatchesFingerprint as listeningBound } from './audio-evidence.mjs';
+import { boundIdentity } from './audio-report.mjs';
+import { atomicWriteFile } from './audio-io.mjs';
+import { mp3DurationSeconds } from './mp3-duration.mjs';
+import { loadSpokenArticle } from './audio-split.mjs';
 
 export function listeningMatchesFingerprint(review, fullSha256, candidateFingerprint) {
-  const evidence = review?.evidence || {};
-  return review?.status === 'passed'
-    && Boolean(review.reviewedBy)
-    && Boolean(review.reviewedAt)
-    && evidence.sha256 === fullSha256
-    && (!evidence.candidateFingerprint || evidence.candidateFingerprint === candidateFingerprint);
+  return listeningBound(review, fullSha256, candidateFingerprint);
 }
 
 export async function atomicReplaceDir(liveDir, stagingDir, { afterLiveMoved } = {}) {
@@ -46,17 +45,55 @@ export async function atomicReplaceDir(liveDir, stagingDir, { afterLiveMoved } =
   return { backup: hadLive ? backup : null, hadLive };
 }
 
-export function persistPublishedAudio({ root, liveDir, articleId, message }) {
-  const rel = path.relative(root, liveDir);
-  const add = spawnSync('git', ['add', '-f', '--', rel], { cwd: root, encoding: 'utf8' });
+export function persistPublishedAudio({
+  root,
+  liveDir,
+  articleId,
+  fingerprint,
+  evidencePaths = [],
+  message,
+  push = process.env.BAREEQ_AUDIO_PUBLISH_PUSH === '1',
+  waitPreview,
+}) {
+  const identity = spawnSync('git', ['config', 'user.name'], { cwd: root, encoding: 'utf8' });
+  if (identity.status !== 0 || !identity.stdout.trim()) {
+    const name = spawnSync('git', ['config', 'user.name', process.env.GIT_AUTHOR_NAME || 'bareeq-audio'], { cwd: root, encoding: 'utf8' });
+    if (name.status !== 0) throw Object.assign(new Error(`git config user.name failed: ${name.stderr}`), { exitCode: EXIT_HARD });
+  }
+  const email = spawnSync('git', ['config', 'user.email'], { cwd: root, encoding: 'utf8' });
+  if (email.status !== 0 || !email.stdout.trim()) {
+    const setEmail = spawnSync('git', ['config', 'user.email', process.env.GIT_AUTHOR_EMAIL || 'audio@bareeq.local'], { cwd: root, encoding: 'utf8' });
+    if (setEmail.status !== 0) throw Object.assign(new Error(`git config user.email failed: ${setEmail.stderr}`), { exitCode: EXIT_HARD });
+  }
+  const relLive = path.relative(root, liveDir);
+  const addArgs = ['add', '-f', '--', relLive, ...evidencePaths.map((item) => path.relative(root, item))];
+  const add = spawnSync('git', addArgs, { cwd: root, encoding: 'utf8' });
   if (add.status !== 0) {
     throw Object.assign(new Error(`git add failed: ${add.stderr || add.stdout}`), { exitCode: EXIT_HARD });
   }
-  const commit = spawnSync('git', ['commit', '-m', message || `audio: publish ${articleId}`], { cwd: root, encoding: 'utf8' });
+  const commit = spawnSync('git', ['commit', '-m', message || `audio: publish ${articleId} ${String(fingerprint || '').slice(0, 12)}`], { cwd: root, encoding: 'utf8' });
   if (commit.status !== 0) {
     throw Object.assign(new Error(`git commit failed: ${commit.stderr || commit.stdout}`), { exitCode: EXIT_HARD });
   }
-  return { committed: true, relativeDir: rel };
+  const sha = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
+  let pushed = false;
+  if (push) {
+    const remote = spawnSync('git', ['push', 'origin', 'HEAD'], { cwd: root, encoding: 'utf8' });
+    if (remote.status !== 0) {
+      throw Object.assign(new Error(`git push failed: ${remote.stderr || remote.stdout}`), { exitCode: EXIT_HARD });
+    }
+    pushed = true;
+  }
+  const preview = typeof waitPreview === 'function' ? waitPreview({ sha: sha.stdout.trim(), articleId }) : { skipped: true };
+  return { committed: true, sha: sha.stdout.trim(), relativeDir: relLive, pushed, preview };
+}
+
+async function restoreManifest(liveDir, previous) {
+  if (!previous) {
+    await rm(path.join(liveDir, 'manifest.json'), { force: true }).catch(() => {});
+    return;
+  }
+  await atomicWriteFile(path.join(liveDir, 'manifest.json'), `${JSON.stringify(previous, null, 2)}\n`);
 }
 
 export async function publishApprovedCandidate({
@@ -65,8 +102,9 @@ export async function publishApprovedCandidate({
   root = process.cwd(),
   post,
   record,
+  listening,
   persistGit = process.env.BAREEQ_AUDIO_PUBLISH_GIT === '1',
-  afterLiveMoved,
+  afterManifestWrite,
 }) {
   if (!articleId || !fingerprint) {
     throw Object.assign(new Error('publish-approved requires article and candidate fingerprint'), { exitCode: EXIT_USAGE });
@@ -74,16 +112,13 @@ export async function publishApprovedCandidate({
   const dir = candidateDir(articleId, fingerprint, root);
   const fullFile = path.join(dir, 'full.mp3');
   const playerManifestPath = path.join(dir, 'manifest.json');
-  const candidateManifestPath = path.join(dir, 'manifest.candidate.json');
   if (!await pathExists(fullFile) || !await pathExists(playerManifestPath)) {
     throw Object.assign(new Error('publish-approved refused: candidate files are missing'), { exitCode: EXIT_HARD });
   }
+  const article = await loadSpokenArticle(articleId, root).catch(() => ({ articleId, speechScriptHash: record?.speechScriptHash || null }));
   const fullSha256 = sha256(await readFile(fullFile));
   const playerManifest = JSON.parse(await readFile(playerManifestPath, 'utf8'));
-  const candidateMeta = await pathExists(candidateManifestPath)
-    ? JSON.parse(await readFile(candidateManifestPath, 'utf8'))
-    : playerManifest;
-  if ((candidateMeta.fingerprint || playerManifest.fingerprint) !== fingerprint) {
+  if ((playerManifest.candidateFingerprint || playerManifest.fingerprint) !== fingerprint) {
     throw Object.assign(new Error('candidate fingerprint mismatch'), { exitCode: EXIT_HARD });
   }
   if (playerManifest.fullSha256 && playerManifest.fullSha256 !== fullSha256) {
@@ -92,10 +127,19 @@ export async function publishApprovedCandidate({
   if (!isValidProductionManifest(playerManifest)) {
     throw Object.assign(new Error('publish-approved refused: candidate manifest is not player-compatible'), { exitCode: EXIT_HARD });
   }
-  if (!listeningMatchesFingerprint(record?.humanListening, fullSha256, fingerprint)) {
+  const human = listening || record?.humanListening;
+  if (!listeningMatchesFingerprint(human, fullSha256, fingerprint)) {
     throw Object.assign(new Error('publish-approved refused: human listening is missing or not tied to this file fingerprint'), { exitCode: EXIT_HARD });
   }
-  await loadBoundEvidence({ dir, fingerprint, fullSha256 });
+  await loadBoundEvidence({
+    dir,
+    fingerprint,
+    fullSha256,
+    articleId,
+    speechScriptHash: article.speechScriptHash,
+    listening: human,
+    record,
+  });
   const publication = evaluatePublishability(post, record);
   if (!publication.passed) {
     throw Object.assign(new Error(`publish-approved refused:\n${publication.reasons.map((reason) => `- ${reason}`).join('\n')}`), {
@@ -105,66 +149,120 @@ export async function publishApprovedCandidate({
   }
 
   const liveDir = liveAudioDir(articleId, root);
-  const rollbackDir = path.join(root, 'audio-rollback', `${articleId}-${fingerprint.slice(0, 12)}`);
-  const staging = `${liveDir}.next-${process.pid}`;
-  await rm(staging, { recursive: true, force: true });
-  await mkdir(staging, { recursive: true });
+  await mkdir(liveDir, { recursive: true });
+  const liveManifestPath = path.join(liveDir, 'manifest.json');
+  const previousManifest = await pathExists(liveManifestPath)
+    ? JSON.parse(await readFile(liveManifestPath, 'utf8'))
+    : null;
+  const previousFingerprint = previousManifest?.fingerprint || previousManifest?.publishedFromCandidate || 'none';
+  const rollbackDir = path.join(root, 'audio-rollback', `${articleId}-${String(previousFingerprint).slice(0, 12)}`);
+  await mkdir(rollbackDir, { recursive: true });
+  if (previousManifest) {
+    await writeJson(path.join(rollbackDir, 'manifest.json'), previousManifest);
+    await writeJson(path.join(rollbackDir, 'rollback.json'), {
+      articleId,
+      previousFingerprint,
+      restoredFrom: liveManifestPath,
+      savedAt: new Date().toISOString(),
+    });
+  }
 
+  const publishedAt = new Date().toISOString();
   const publishedManifest = {
     ...playerManifest,
+    ...boundIdentity({
+      article,
+      fingerprint,
+      fullSha256,
+      status: 'published',
+      schema: playerManifest.schema || 'bareeq.audio-production-manifest.v3',
+      extra: {
+        generatedAt: publishedAt,
+        speechScriptHash: article.speechScriptHash,
+      },
+    }),
     fullSha256,
     fingerprint,
+    candidateFingerprint: fingerprint,
     publishedFromCandidate: fingerprint,
-    publishedAt: new Date().toISOString(),
+    publishedAt,
   };
-  const copied = new Set();
-  for (const part of publishedManifest.parts) {
-    const asset = part.audio?.[publishedManifest.defaultVoice];
-    const filename = path.basename(asset.src);
-    const source = path.join(dir, 'parts', filename);
-    if (!await pathExists(source)) {
-      throw Object.assign(new Error(`publish-approved refused: missing part ${filename}`), { exitCode: EXIT_HARD });
+
+  const copied = [];
+  try {
+    for (const part of publishedManifest.parts) {
+      const asset = part.audio?.[publishedManifest.defaultVoice];
+      const filename = path.basename(asset.src);
+      const source = path.join(dir, 'parts', filename);
+      if (!await pathExists(source)) {
+        throw Object.assign(new Error(`publish-approved refused: missing part ${filename}`), { exitCode: EXIT_HARD });
+      }
+      const bytes = await readFile(source);
+      if (sha256(bytes) !== asset.sha256) {
+        throw Object.assign(new Error(`publish-approved refused: part ${filename} SHA-256 changed`), { exitCode: EXIT_HARD });
+      }
+      if (asset.bytes && asset.bytes !== bytes.length) {
+        throw Object.assign(new Error(`publish-approved refused: part ${filename} size changed`), { exitCode: EXIT_HARD });
+      }
+      const duration = mp3DurationSeconds(bytes);
+      if (asset.durationSeconds && Math.abs(duration - Number(asset.durationSeconds)) > 0.35) {
+        throw Object.assign(new Error(`publish-approved refused: part ${filename} duration changed`), { exitCode: EXIT_HARD });
+      }
+      const dest = path.join(liveDir, filename);
+      await cp(source, dest);
+      copied.push(dest);
+      asset.src = `/audio/articles/${audioKeyFor(articleId)}/${filename}`;
     }
-    await cp(source, path.join(staging, filename));
-    copied.add(filename);
-    asset.src = `/audio/articles/${audioKeyFor(articleId)}/${filename}`;
+    const tempManifest = path.join(liveDir, `manifest.${fingerprint.slice(0, 12)}.tmp.json`);
+    await atomicWriteFile(tempManifest, `${JSON.stringify(publishedManifest, null, 2)}\n`);
+    if (afterManifestWrite) await afterManifestWrite({ liveDir, tempManifest, previousManifest });
+    await rename(tempManifest, liveManifestPath);
+  } catch (error) {
+    await restoreManifest(liveDir, previousManifest);
+    throw error;
   }
-  await writeJson(path.join(staging, 'manifest.json'), publishedManifest);
-  await writeJson(path.join(staging, 'published-from.json'), {
-    articleId,
+
+  await writeJson(path.join(dir, 'reports', 'publish-record.json'), boundIdentity({
+    article,
     fingerprint,
     fullSha256,
-    publishedAt: publishedManifest.publishedAt,
-  });
-
-  const swap = await atomicReplaceDir(liveDir, staging, { afterLiveMoved });
-  if (swap.hadLive && swap.backup) {
-    await mkdir(path.dirname(rollbackDir), { recursive: true });
-    await rm(rollbackDir, { recursive: true, force: true });
-    await cp(swap.backup, rollbackDir, { recursive: true });
-    await rm(swap.backup, { recursive: true, force: true });
-  }
+    status: 'published',
+    schema: 'bareeq.audio-publish.v1',
+    extra: {
+      generatedAt: publishedAt,
+      liveDir,
+      rollbackDir,
+      previousFingerprint,
+      humanListening: human,
+    },
+  }));
 
   let git = null;
   if (persistGit) {
-    const persist = typeof persistGit === 'function'
-      ? persistGit
-      : persistPublishedAudio;
+    const persist = typeof persistGit === 'function' ? persistGit : persistPublishedAudio;
     git = await persist({
       root,
       liveDir,
       articleId,
+      fingerprint,
+      evidencePaths: [
+        path.join(dir, 'reports', 'publish-record.json'),
+        path.join(rollbackDir, 'manifest.json'),
+      ].filter(Boolean),
       message: `audio: publish ${articleId} ${fingerprint.slice(0, 12)}`,
     });
   }
 
   return {
     liveDir,
-    rollbackDir: await pathExists(rollbackDir) ? rollbackDir : null,
+    rollbackDir,
     fullSha256,
     fingerprint,
-    manifestPath: path.join(liveDir, 'manifest.json'),
+    manifestPath: liveManifestPath,
+    previousManifestKept: Boolean(previousManifest),
+    oldFilesPreserved: true,
     git,
     exitCode: EXIT_OK,
+    status: 'published',
   };
 }

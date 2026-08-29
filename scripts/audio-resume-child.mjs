@@ -10,7 +10,7 @@ const articleId = process.env.BAREEQ_RESUME_ARTICLE || 'resume-fixture';
 const settings = {
   ...QUOTA_SPLIT,
   name: 'test-tiny',
-  maxTranscriptBytes: 120,
+  maxTranscriptBytes: 400,
   maxSeconds: 600,
   targetSeconds: 1,
   minSeconds: 0,
