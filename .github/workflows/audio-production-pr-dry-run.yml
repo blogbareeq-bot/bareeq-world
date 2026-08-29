@@ -53,15 +53,17 @@ jobs:
           test -f docs/audio/DRY-RUN.json
           echo 'PASS: dry-run completed with synthesis disabled.'
 
-      - name: Check Gemini production secret presence
+      - name: Check provider credential presence
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_CLOUD_ACCESS_TOKEN: ${{ secrets.GOOGLE_CLOUD_ACCESS_TOKEN }}
+          GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
         run: |
-          if [ -n "${GEMINI_API_KEY}" ]; then
-            echo 'GEMINI_API_KEY_PRESENT=yes'
-          else
-            echo 'GEMINI_API_KEY_PRESENT=no'
-          fi
+          [ -n "${GEMINI_API_KEY}" ] && echo 'GEMINI_API_KEY_PRESENT=yes' || echo 'GEMINI_API_KEY_PRESENT=no'
+          [ -n "${GOOGLE_SERVICE_ACCOUNT_JSON}" ] && echo 'GOOGLE_SERVICE_ACCOUNT_JSON_PRESENT=yes' || echo 'GOOGLE_SERVICE_ACCOUNT_JSON_PRESENT=no'
+          [ -n "${GOOGLE_CLOUD_ACCESS_TOKEN}" ] && echo 'GOOGLE_CLOUD_ACCESS_TOKEN_PRESENT=yes' || echo 'GOOGLE_CLOUD_ACCESS_TOKEN_PRESENT=no'
+          [ -n "${GOOGLE_CLOUD_PROJECT}" ] && echo 'GOOGLE_CLOUD_PROJECT_PRESENT=yes' || echo 'GOOGLE_CLOUD_PROJECT_PRESENT=no'
 
       - name: Restore first-candidate cache
         if: hashFiles('docs/audio/RUN-ALTADAKHOM-GENERATION') != ''
