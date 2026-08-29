@@ -63,6 +63,28 @@ export function extractGenerateContentAudio(payload) {
   return null;
 }
 
+function safeQuotaDetail(body) {
+  if (!body) return 'no response body';
+  try {
+    const payload = JSON.parse(body);
+    const message = String(payload?.error?.message || '').replace(/[\r\n]+/g, ' ').slice(0, 500);
+    const details = Array.isArray(payload?.error?.details) ? payload.error.details : [];
+    const retryInfo = details.find((item) => String(item?.['@type'] || '').includes('RetryInfo'));
+    const quota = details
+      .flatMap((item) => Array.isArray(item?.violations) ? item.violations : [])
+      .map((item) => ({
+        metric: String(item?.quotaMetric || '').slice(0, 160),
+        id: String(item?.quotaId || '').slice(0, 160),
+        value: item?.quotaValue ?? null,
+        dimensions: item?.quotaDimensions || null,
+      }))
+      .slice(0, 6);
+    return JSON.stringify({ message, retryDelay: retryInfo?.retryDelay || null, quota });
+  } catch {
+    return String(body).replace(/[\r\n]+/g, ' ').slice(0, 500);
+  }
+}
+
 export function encodeGeminiPcmToMp3(pcm, ffmpegPath) {
   return new Promise((resolve, reject) => {
     const child = spawn(ffmpegPath, [
@@ -126,152 +148,78 @@ async function decodeAndEncodePcmAudio(outputAudio, ffmpegPath, label) {
   return encodeGeminiPcmToMp3(pcm, ffmpeg);
 }
 
-export async function synthesizeGeminiPart({
-  apiKey,
-  part,
-  context,
-  voice = PRODUCTION_VOICE,
-  model = PRODUCTION_TTS_MODEL,
-  fetchImpl = globalThis.fetch,
-  ffmpegPath,
-}) {
-  if (!apiKey?.trim()) {
-    throw Object.assign(new Error('GEMINI_API_KEY is absent. No TTS request was sent.'), { exitCode: EXIT_CONFIG });
-  }
+export async function synthesizeGeminiPart({ apiKey, part, context, voice = PRODUCTION_VOICE, model = PRODUCTION_TTS_MODEL, fetchImpl = globalThis.fetch, ffmpegPath }) {
+  if (!apiKey?.trim()) throw Object.assign(new Error('GEMINI_API_KEY is absent. No TTS request was sent.'), { exitCode: EXIT_CONFIG });
   const endpoint = geminiTtsEndpoint();
   let response;
   try {
     response = await fetchImpl(endpoint, {
       method: 'POST',
-      headers: {
-        'x-goog-api-key': apiKey,
-        'Api-Revision': GEMINI_TTS_CONTRACT.apiRevision,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        input: buildGeminiPrompt(part, context),
-        response_format: { type: 'audio' },
-        generation_config: {
-          speech_config: [{ voice }],
-        },
-      }),
+      headers: { 'x-goog-api-key': apiKey, 'Api-Revision': GEMINI_TTS_CONTRACT.apiRevision, 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ model, input: buildGeminiPrompt(part, context), response_format: { type: 'audio' }, generation_config: { speech_config: [{ voice }] } }),
     });
   } catch (error) {
     throw Object.assign(new Error(`Gemini TTS transport failed (${endpoint}): ${error.cause?.code || error.cause?.message || error.message}`), { exitCode: EXIT_HARD });
   }
   if (response.status === 429) {
-    throw Object.assign(new Error('Gemini TTS HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
+    const body = await response.text().catch(() => '');
+    throw Object.assign(new Error(`Gemini TTS HTTP 429: ${safeQuotaDetail(body)}`), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
   }
   if (!response.ok) {
     const body = await response.text().catch(() => '');
-    throw Object.assign(new Error(`Gemini TTS failed (${response.status}): ${body.slice(0, 700)}`), {
-      httpStatus: response.status,
-      exitCode: EXIT_HARD,
-    });
+    throw Object.assign(new Error(`Gemini TTS failed (${response.status}): ${body.slice(0, 700)}`), { httpStatus: response.status, exitCode: EXIT_HARD });
   }
   let payload;
   try { payload = await response.json(); }
   catch (error) { throw Object.assign(new Error(`Gemini TTS returned invalid JSON: ${error.message}`), { exitCode: EXIT_HARD }); }
-  const outputAudio = extractGeminiAudio(payload);
-  return decodeAndEncodePcmAudio(outputAudio, ffmpegPath, 'Gemini Interactions TTS');
+  return decodeAndEncodePcmAudio(extractGeminiAudio(payload), ffmpegPath, 'Gemini Interactions TTS');
 }
 
-export async function synthesizeGeminiGenerateContentPart({
-  apiKey,
-  part,
-  context,
-  voice = PRODUCTION_VOICE,
-  model = PRODUCTION_TTS_MODEL,
-  fetchImpl = globalThis.fetch,
-  ffmpegPath,
-}) {
-  if (!apiKey?.trim()) {
-    throw Object.assign(new Error('GEMINI_API_KEY is absent. No generateContent TTS request was sent.'), { exitCode: EXIT_CONFIG });
-  }
+export async function synthesizeGeminiGenerateContentPart({ apiKey, part, context, voice = PRODUCTION_VOICE, model = PRODUCTION_TTS_MODEL, fetchImpl = globalThis.fetch, ffmpegPath }) {
+  if (!apiKey?.trim()) throw Object.assign(new Error('GEMINI_API_KEY is absent. No generateContent TTS request was sent.'), { exitCode: EXIT_CONFIG });
   const endpoint = geminiGenerateContentEndpoint(model);
   let response;
   try {
     response = await fetchImpl(endpoint, {
       method: 'POST',
-      headers: {
-        'x-goog-api-key': apiKey,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
+      headers: { 'x-goog-api-key': apiKey, 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({
-        contents: [{
-          role: 'user',
-          parts: [{ text: buildGeminiPrompt(part, context) }],
-        }],
-        generationConfig: {
-          responseModalities: ['AUDIO'],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: { voiceName: voice },
-            },
-          },
-        },
+        contents: [{ role: 'user', parts: [{ text: buildGeminiPrompt(part, context) }] }],
+        generationConfig: { responseModalities: ['AUDIO'], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } } },
       }),
     });
   } catch (error) {
     throw Object.assign(new Error(`Gemini generateContent TTS transport failed (${endpoint}): ${error.cause?.code || error.cause?.message || error.message}`), { exitCode: EXIT_HARD });
   }
   if (response.status === 429) {
-    throw Object.assign(new Error('Gemini generateContent TTS HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
+    const body = await response.text().catch(() => '');
+    throw Object.assign(new Error(`Gemini generateContent TTS HTTP 429: ${safeQuotaDetail(body)}`), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
   }
   if (!response.ok) {
     const body = await response.text().catch(() => '');
-    throw Object.assign(new Error(`Gemini generateContent TTS failed (${response.status}): ${body.slice(0, 700)}`), {
-      httpStatus: response.status,
-      exitCode: EXIT_HARD,
-    });
+    throw Object.assign(new Error(`Gemini generateContent TTS failed (${response.status}): ${body.slice(0, 700)}`), { httpStatus: response.status, exitCode: EXIT_HARD });
   }
   let payload;
   try { payload = await response.json(); }
   catch (error) { throw Object.assign(new Error(`Gemini generateContent TTS returned invalid JSON: ${error.message}`), { exitCode: EXIT_HARD }); }
-  const outputAudio = extractGenerateContentAudio(payload);
-  const audio = await decodeAndEncodePcmAudio(outputAudio, ffmpegPath, 'Gemini generateContent TTS');
-  return {
-    audio,
-    transport: 'developer-generate-content',
-    endpoint,
-    projectId: null,
-    model,
-    voice,
-  };
+  const audio = await decodeAndEncodePcmAudio(extractGenerateContentAudio(payload), ffmpegPath, 'Gemini generateContent TTS');
+  return { audio, transport: 'developer-generate-content', endpoint, projectId: null, model, voice };
 }
 
-export async function resolveProductionSynthesizer({
-  apiKey = process.env.GEMINI_API_KEY,
-  fetchImpl = globalThis.fetch,
-} = {}) {
-  if (typeof process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK === 'function') {
-    return process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK;
-  }
+export async function resolveProductionSynthesizer({ apiKey = process.env.GEMINI_API_KEY, fetchImpl = globalThis.fetch } = {}) {
+  if (typeof process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK === 'function') return process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK;
   if (process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1') {
     return async ({ article, part, splitPlan, correctionHint }) => synthesizeGeminiGenerateContentPart({
       apiKey,
       part,
-      context: {
-        articleTitle: article.title,
-        partIndex: part.partIndex,
-        partCount: splitPlan.parts.length,
-        correctionHint,
-      },
+      context: { articleTitle: article.title, partIndex: part.partIndex, partCount: splitPlan.parts.length, correctionHint },
       fetchImpl,
     });
   }
   return async ({ article, part, splitPlan, correctionHint }) => synthesizeGeminiPart({
     apiKey,
     part,
-    context: {
-      articleTitle: article.title,
-      partIndex: part.partIndex,
-      partCount: splitPlan.parts.length,
-      correctionHint,
-    },
+    context: { articleTitle: article.title, partIndex: part.partIndex, partCount: splitPlan.parts.length, correctionHint },
     fetchImpl,
   });
 }
