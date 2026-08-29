@@ -196,7 +196,11 @@ export async function runTechnicalQa({
   }
 
   const partsDir = path.join(dir, 'parts');
-  const partFiles = (manifest.parts || []).map((part) => path.join(partsDir, `part-${String(part.partIndex + 1).padStart(3, '0')}-${part.fingerprint.slice(0, 12)}.mp3`));
+  const partFiles = (manifest.parts || []).map((part) => {
+    if (part.file) return path.join(partsDir, path.basename(part.file));
+    const digest = String(part.fingerprint || '');
+    return path.join(partsDir, `part-${String(part.partIndex + 1).padStart(3, '0')}-${digest.slice(0, 12)}.mp3`);
+  });
   const levels = [];
   for (const file of partFiles) {
     if (!await pathExists(file)) {
@@ -251,7 +255,7 @@ export async function runTechnicalQa({
     passed: failures.length === 0,
   };
   if (failures.length) return fail(failures, report);
-  console.log(`Technical QA passed for ${articleId}: full ${duration?.toFixed(3)}s, ${partFiles.length} part(s).`);
+  console.error(`Technical QA passed for ${articleId}: full ${duration?.toFixed(3)}s, ${partFiles.length} part(s).`);
   return report;
 }
 

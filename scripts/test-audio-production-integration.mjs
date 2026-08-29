@@ -119,6 +119,12 @@ function startMockServer({ failTtsAt = -1, spoken = 'اختبار الاستئن
   });
 }
 
+function lastJson(text) {
+  const start = text.lastIndexOf('{');
+  if (start < 0) throw new Error(`no JSON in output: ${text}`);
+  return JSON.parse(text.slice(start));
+}
+
 function runCli(args, { cwd, env = {} } = {}) {
   return spawnSync(process.execPath, [path.join(ROOT, 'scripts', 'audio-production.mjs'), ...args], {
     cwd: cwd || ROOT,

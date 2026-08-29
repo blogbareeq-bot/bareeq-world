@@ -512,6 +512,19 @@ try {
   assert.ok(published.rollbackDir);
   assert.equal(await readFile(path.join(publishedLive, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED');
 
+  const verifiedLive = await runProductionMode({
+    mode: 'verify-live',
+    articleId: 'resume-fixture',
+    root: tmp,
+    storeRoot: tmp,
+  });
+  assert.equal(verifiedLive.status, 'live-snapshot');
+  assert.match(verifiedLive.fingerprint, /^[a-f0-9]{64}$/);
+  assert.equal(verifiedLive.liveUntouched, true);
+  assert.equal(await readFile(path.join(publishedLive, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED');
+  const liveAfterVerify = JSON.parse(await readFile(path.join(published.liveDir, 'manifest.json'), 'utf8'));
+  assert.equal(liveAfterVerify.defaultVoice, 'sadaltager');
+
   const staging = path.join(tmp, 'staging-swap');
   const liveSwap = path.join(tmp, 'live-swap');
   await mkdir(staging, { recursive: true });

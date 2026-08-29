@@ -57,8 +57,22 @@ async function observeArticleArtifacts(articleId, root, script) {
   try { names = (await readdir(parent, { withFileTypes: true })).filter((entry) => entry.isDirectory()).map((entry) => entry.name); } catch { return base; }
   if (!names.length) return base;
   names.sort();
-  const fingerprint = names[names.length - 1];
-  const dir = path.join(parent, fingerprint);
+  const ranked = [];
+  for (const name of names) {
+    const dirName = path.join(parent, name);
+    ranked.push({
+      name,
+      dir: dirName,
+      snapshot: await readJsonSafe(path.join(dirName, 'live-snapshot.json')),
+      validate: await readJsonSafe(path.join(dirName, 'reports', 'validate.json')),
+      generation: await readJsonSafe(path.join(dirName, 'generation-report.json')),
+    });
+  }
+  const generated = ranked.filter((item) => !item.snapshot && (item.validate || item.generation));
+  const chosen = generated.at(-1) || ranked.filter((item) => !item.snapshot).at(-1);
+  if (!chosen) return base;
+  const fingerprint = chosen.validate?.candidateFingerprint || chosen.generation?.candidateFingerprint || chosen.name;
+  const dir = chosen.dir;
   const validate = await readJsonSafe(path.join(dir, 'reports', 'validate.json'));
   const technical = await readJsonSafe(path.join(dir, 'reports', 'technical-qa.json'));
   const sync = await readJsonSafe(path.join(dir, 'reports', 'sync.json'));
@@ -125,14 +139,25 @@ for (const filename of files) {
     technicalStatus: observed.technicalStatus,
     syncStatus: observed.syncStatus,
   };
+  const asrPassed = observed.asr.first.status === 'passed'
+    && observed.asr.second.status === 'passed'
+    && Number(observed.asr.first.substitutions) === 0
+    && Number(observed.asr.second.substitutions) === 0
+    && Number(observed.asr.first.deletions) === 0
+    && Number(observed.asr.second.deletions) === 0
+    && Number(observed.asr.first.insertions) === 0
+    && Number(observed.asr.second.insertions) === 0;
+  const humanApproved = observed.humanListening.status === 'passed';
+  const technicalPassed = observed.technicalStatus === 'passed' && observed.syncStatus === 'passed';
+  const publishable = generation.passed && record.generated && asrPassed && humanApproved && technicalPassed;
   const stage = currentStage({
     textReady: validation.approved,
     generationAuthorized: generation.passed,
     generated: record.generated,
-    asrPassed: false,
-    humanApproved: false,
-    technicalPassed: false,
-    publishable: false,
+    asrPassed,
+    humanApproved,
+    technicalPassed,
+    publishable,
     published: false,
   });
   articles.push({
@@ -226,13 +251,18 @@ await writeFile(path.join(OUT_DIR, 'AUDIO-CLOSURE-LEDGER.json'), `${JSON.stringi
     preview: item.preview,
     production: item.production,
     rollback: item.rollback,
+    candidateFingerprint: item.candidateFingerprint,
+    fullSha256: item.fullSha256,
+    speechScriptHash: item.speechScriptHash,
+    parts: item.parts,
     status: item.status,
     next: item.nextAction,
     stage: item.stage,
   })),
 }, null, 2)}\n`);
 
-const rows = articles.map((item) => `| \`${item.articleId}\` | ${item.previousVoice?.voiceId || 'missing'} | ${item.textReady ? 'yes' : 'no'} | ${item.generationAuthorized ? 'yes' : 'no'} | ${item.reusePrimary ? 'reuse live' : 'generate candidate'} | not-run | not-run | not-performed | pending | pending | ${item.stage} | ${item.status} | ${item.nextAction} |`).join('\n');
+const cell = (value) => (value == null || value === '' ? 'pending' : String(value));
+const rows = articles.map((item) => `| \`${item.articleId}\` | ${item.previousVoice?.voiceId || 'missing'} | ${item.textReady ? 'yes' : 'no'} | ${item.generationAuthorized ? 'yes' : 'no'} | ${item.reusePrimary ? 'reuse live' : (item.candidateFingerprint ? 'candidate' : 'generate candidate')} | ${cell(item.asr.first.status)} | ${cell(item.asr.second.status)} | ${cell(item.humanListening.status)} | ${cell(item.technical.status)} | ${cell(item.sync.status)} | ${item.stage} | ${item.status} | ${item.nextAction} |`).join('\n');
 await writeFile(path.join(OUT_DIR, 'COMPLETENESS.md'), `# Bareeq audio completeness
 
 Generated: ${snapshot.generatedAt}
