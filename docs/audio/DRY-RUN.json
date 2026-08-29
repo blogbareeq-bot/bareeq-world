@@ -1,6 +1,6 @@
 {
   "schema": "bareeq.audio-production-dry-run.v3",
-  "generatedAt": "2026-08-28T22:38:46.745Z",
+  "generatedAt": "2026-08-29T03:34:56.811Z",
   "mode": "dry-run",
   "narrator": {
     "role": "primary",
@@ -116,8 +116,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -126,8 +126,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -139,8 +139,8 @@
       "ttsRequestsBefore": 7,
       "ttsRequestsAfter": 6,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "maxPartBytes": 3199,
       "maxPartEstimatedSeconds": 179.38,
       "maxPartEstimatedTokens": 1548,
@@ -298,8 +298,8 @@
       "ttsRequestsBefore": 14,
       "ttsRequestsAfter": 6,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "maxPartBytes": 5423,
       "maxPartEstimatedSeconds": 179.83,
       "maxPartEstimatedTokens": 2289,
@@ -446,8 +446,8 @@
       "ttsRequestsBefore": 7,
       "ttsRequestsAfter": 7,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "maxPartBytes": 2505,
       "maxPartEstimatedSeconds": 178.98,
       "maxPartEstimatedTokens": 1329,
@@ -616,8 +616,8 @@
       "ttsRequestsBefore": 9,
       "ttsRequestsAfter": 7,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "maxPartBytes": 3160,
       "maxPartEstimatedSeconds": 179.03,
       "maxPartEstimatedTokens": 1546,
@@ -790,8 +790,8 @@
       "ttsRequestsBefore": 11,
       "ttsRequestsAfter": 8,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "maxPartBytes": 3249,
       "maxPartEstimatedSeconds": 175.77,
       "maxPartEstimatedTokens": 1577,
@@ -955,8 +955,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -968,8 +968,8 @@
       "ttsRequestsBefore": 15,
       "ttsRequestsAfter": 10,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "maxPartBytes": 3240,
       "maxPartEstimatedSeconds": 179.79,
       "maxPartEstimatedTokens": 1574,
@@ -1200,8 +1200,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1210,8 +1210,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1220,8 +1220,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1230,8 +1230,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1240,8 +1240,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     },
     {
@@ -1250,8 +1250,8 @@
       "ttsRequestsBefore": 0,
       "ttsRequestsAfter": 0,
       "asrRequests": 2,
-      "filesApiUploads": 2,
-      "asrProviderCalls": 4,
+      "filesApiUploads": 1,
+      "asrProviderCalls": 3,
       "reason": "Live Gemini/Sadaltager already exists; do not regenerate."
     }
   ],
@@ -1259,8 +1259,8 @@
     "ttsRequestsBefore": 63,
     "ttsRequestsAfter": 44,
     "asrRequests": 30,
-    "filesApiUploads": 30,
-    "asrProviderCalls": 60,
+    "filesApiUploads": 15,
+    "asrProviderCalls": 45,
     "asrModels": [
       "gemini-3.5-transcribe",
       "gemini-3.6-flash"

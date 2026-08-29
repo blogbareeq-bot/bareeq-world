@@ -9,7 +9,7 @@ import {
   PERFORMANCE_INSTRUCTIONS,
   QUOTA_SPLIT,
 } from './audio-constants.mjs';
-import { loadSpokenArticle, splitSpokenArticle, partFingerprint } from './audio-split.mjs';
+import { loadSpokenArticle, splitSpokenArticle, partFingerprint, activeSplitSettings } from './audio-split.mjs';
 import {
   appendRequestLog,
   initCheckpoint,
@@ -43,7 +43,7 @@ export async function generateCandidate({
   storeRoot,
   synthesize,
   liveDurationSeconds = undefined,
-  settings = QUOTA_SPLIT,
+  settings,
 }) {
   if (!articleId) {
     const error = new Error('generate-candidate requires --article');
@@ -58,7 +58,7 @@ export async function generateCandidate({
 
   const article = await loadSpokenArticle(articleId, root);
   const duration = liveDurationSeconds === undefined ? await defaultLiveDuration(articleId, root) : liveDurationSeconds;
-  const splitPlan = splitSpokenArticle(article, { settings, liveDurationSeconds: duration });
+  const splitPlan = splitSpokenArticle(article, { settings: activeSplitSettings(settings), liveDurationSeconds: duration });
   const { fingerprint, paths, checkpoint } = await initCheckpoint({ article, splitPlan, root: storeRoot || root });
   const liveDir = liveAudioDir(articleId, root);
 
@@ -73,6 +73,8 @@ export async function generateCandidate({
     providerAttempts: 0,
     successfulRequests: 0,
     quotaRejectedRequests: 0,
+    failedRequests: 0,
+    resumedParts: 0,
     completedParts: Object.keys(checkpoint.completedParts || {}).length,
     status: 'in-progress',
     liveUntouched: true,
@@ -82,6 +84,7 @@ export async function generateCandidate({
     const existing = await loadCompletedPart(paths, article, splitPlan, part);
     if (existing) {
       result.ttsRequestsResumed += 1;
+      result.resumedParts += 1;
       await appendRequestLog(paths, {
         partIndex: part.partIndex,
         fingerprint: existing.fingerprint,
@@ -130,6 +133,7 @@ export async function generateCandidate({
         quota.result = { ...result, status: 'paused-quota', pausedAtPart: part.partIndex, exitCode: EXIT_QUOTA };
         throw quota;
       }
+      result.failedRequests += 1;
       error.exitCode = error.exitCode || EXIT_HARD;
       throw error;
     }

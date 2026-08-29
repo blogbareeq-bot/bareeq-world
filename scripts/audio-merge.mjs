@@ -59,8 +59,9 @@ export async function mergeCandidateParts({ articleId, fingerprint, root = proce
   const merged = await readFile(fullFile);
   const duration = mp3DurationSeconds(merged);
   const expected = durations.reduce((sum, value) => sum + value, 0);
-  if (Math.abs(duration - expected) > Math.max(0.35, expected * 0.02)) {
-    throw new Error(`merged duration ${duration}s does not match part sum ${expected.toFixed(3)}s`);
+  const durationSlack = Math.max(0.35, 0.08 * partFiles.length);
+  if (Math.abs(duration - expected) > durationSlack) {
+    throw new Error(`merged duration ${duration}s does not match part sum ${expected.toFixed(3)}s (slack ${durationSlack.toFixed(3)}s)`);
   }
   const fullPcm = await decodePcm(fullFile);
   const expectedPcmBytes = pcmParts.reduce((sum, part) => sum + part.length, 0);

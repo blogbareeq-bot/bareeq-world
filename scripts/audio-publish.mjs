@@ -13,6 +13,7 @@ import {
 } from './audio-constants.mjs';
 import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { isValidProductionManifest } from './audio-manifest.mjs';
+import { loadBoundEvidence } from './audio-evidence.mjs';
 
 export function listeningMatchesFingerprint(review, fullSha256, candidateFingerprint) {
   const evidence = review?.evidence || {};
@@ -47,7 +48,7 @@ export async function atomicReplaceDir(liveDir, stagingDir, { afterLiveMoved } =
 
 export function persistPublishedAudio({ root, liveDir, articleId, message }) {
   const rel = path.relative(root, liveDir);
-  const add = spawnSync('git', ['add', '--', rel], { cwd: root, encoding: 'utf8' });
+  const add = spawnSync('git', ['add', '-f', '--', rel], { cwd: root, encoding: 'utf8' });
   if (add.status !== 0) {
     throw Object.assign(new Error(`git add failed: ${add.stderr || add.stdout}`), { exitCode: EXIT_HARD });
   }
@@ -94,6 +95,7 @@ export async function publishApprovedCandidate({
   if (!listeningMatchesFingerprint(record?.humanListening, fullSha256, fingerprint)) {
     throw Object.assign(new Error('publish-approved refused: human listening is missing or not tied to this file fingerprint'), { exitCode: EXIT_HARD });
   }
+  await loadBoundEvidence({ dir, fingerprint, fullSha256 });
   const publication = evaluatePublishability(post, record);
   if (!publication.passed) {
     throw Object.assign(new Error(`publish-approved refused:\n${publication.reasons.map((reason) => `- ${reason}`).join('\n')}`), {

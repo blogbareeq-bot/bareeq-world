@@ -219,6 +219,21 @@ function packItems(items, settings, charsPerSecond, articleTitle) {
   return rebalanceParts(reindex(folded, charsPerSecond, articleTitle), settings, charsPerSecond, articleTitle);
 }
 
+export function activeSplitSettings(settings) {
+  if (process.env.BAREEQ_AUDIO_TEST_SPLIT === 'tiny' && process.env.BAREEQ_TTS_CONTRACT_TEST === '1') {
+    return {
+      ...QUOTA_SPLIT,
+      name: 'test-tiny',
+      maxTranscriptBytes: 80,
+      maxSeconds: 600,
+      minSeconds: 0,
+      rebalanceFloorSeconds: 0,
+      targetSeconds: 1,
+    };
+  }
+  return settings || QUOTA_SPLIT;
+}
+
 export function splitSpokenArticle(article, { settings = QUOTA_SPLIT, liveDurationSeconds = null } = {}) {
   const charsPerSecond = estimateCharsPerSecond(article, liveDurationSeconds);
   const parts = packItems(article.items, settings, charsPerSecond, article.title);

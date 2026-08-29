@@ -11,7 +11,18 @@ import {
   EXIT_USAGE,
   sha256,
 } from './audio-constants.mjs';
-import { uploadResumableFile } from './audio-files-api.mjs';
+import { deleteUploadedFile, uploadResumableFile } from './audio-files-api.mjs';
+
+export function geminiInteractionsUrl() {
+  const override = process.env.GEMINI_INTERACTIONS_ENDPOINT?.trim() || process.env.GEMINI_TTS_ENDPOINT?.trim();
+  if (override) {
+    if (process.env.BAREEQ_TTS_CONTRACT_TEST !== '1') {
+      throw Object.assign(new Error('Gemini endpoint overrides are restricted to BAREEQ_TTS_CONTRACT_TEST=1'), { exitCode: EXIT_HARD });
+    }
+    return override.replace(/\/$/, '');
+  }
+  return 'https://generativelanguage.googleapis.com/v1beta/interactions';
+}
 
 export const GEMINI_INTERACTIONS = 'https://generativelanguage.googleapis.com/v1beta/interactions';
 export const GEMINI_FILES_UPLOAD = 'https://generativelanguage.googleapis.com/upload/v1beta/files';
@@ -104,6 +115,8 @@ export async function transcribeFullAudio({
   dryRun = false,
   fingerprint = null,
   fullSha256 = null,
+  file = null,
+  skipUpload = false,
 }) {
   assertAsrModel(model);
   const report = {
@@ -141,12 +154,15 @@ export async function transcribeFullAudio({
     throw Object.assign(new Error('ASR audio SHA-256 does not match the candidate fingerprint full.mp3'), { exitCode: EXIT_HARD });
   }
   report.fullSha256 = digest;
-  const file = await uploadAudioFile({ apiKey, bytes, fetchImpl });
-  report.filesApiUploads = 1;
-  const response = await fetchImpl(GEMINI_INTERACTIONS, {
+  const uploaded = file || (skipUpload ? null : await uploadAudioFile({ apiKey, bytes, fetchImpl }));
+  if (!uploaded?.uri) {
+    throw Object.assign(new Error('ASR requires a Files API URI'), { exitCode: EXIT_HARD });
+  }
+  report.filesApiUploads = skipUpload || file ? 0 : 1;
+  const response = await fetchImpl(geminiInteractionsUrl(), {
     method: 'POST',
     headers: { ...headers(apiKey), 'Content-Type': 'application/json' },
-    body: JSON.stringify(buildInteractionBody(model, file)),
+    body: JSON.stringify(buildInteractionBody(model, uploaded)),
   });
   const body = await response.text();
   if (response.status === 404) {
@@ -179,10 +195,12 @@ export async function transcribeFullAudio({
     ...report,
     status: comparison.passed ? 'passed' : 'failed',
     httpStatus: 200,
-    responseModel: responseModel || model,
-    fileUri: file.uri,
+    requestedModel: model,
+    actualResponseModel: responseModel || null,
+    actualResponseModelSource: responseModel ? 'response.model' : 'not-returned-by-api',
+    fileUri: uploaded.uri,
     asrInteractions: 1,
-    filesApiUploads: report.filesApiUploads || 1,
+    filesApiUploads: report.filesApiUploads,
     substitutions: comparison.substitutions,
     deletions: comparison.deletions,
     insertions: comparison.insertions,
@@ -203,6 +221,52 @@ export async function transcribeFullAudio({
     throw error;
   }
   return result;
+}
+
+export async function transcribeDualAsr({
+  audioPath,
+  expectedText,
+  apiKey = process.env.GEMINI_API_KEY,
+  fetchImpl = fetch,
+  reportsDir,
+  fingerprint = null,
+  fullSha256 = null,
+}) {
+  const bytes = await readFile(audioPath);
+  const digest = sha256(bytes);
+  if (fullSha256 && digest !== fullSha256) {
+    throw Object.assign(new Error('ASR audio SHA-256 does not match the candidate fingerprint full.mp3'), { exitCode: EXIT_HARD });
+  }
+  const uploaded = await uploadAudioFile({ apiKey, bytes, fetchImpl });
+  const asrReports = [];
+  try {
+    for (const model of INDEPENDENT_ASR_MODELS) {
+      const report = await transcribeFullAudio({
+        model,
+        audioPath,
+        expectedText,
+        apiKey,
+        fetchImpl,
+        outputPath: reportsDir ? path.join(reportsDir, `asr-${model}.json`) : undefined,
+        fingerprint,
+        fullSha256: digest,
+        file: uploaded,
+        skipUpload: true,
+      });
+      asrReports.push(report);
+    }
+  } finally {
+    await deleteUploadedFile({ apiKey, name: uploaded.name, fetchImpl }).catch(() => ({ deleted: false }));
+  }
+  return {
+    asrReports,
+    filesApiUploads: 1,
+    asrInteractions: asrReports.length,
+    asrProviderCalls: 1 + asrReports.length,
+    fullSha256: digest,
+    fingerprint,
+    fileUri: uploaded.uri,
+  };
 }
 
 const isCli = process.argv[1] && path.basename(process.argv[1]) === 'audio-asr-transcribe.mjs';

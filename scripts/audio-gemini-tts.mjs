@@ -10,6 +10,17 @@ import {
 } from './audio-constants.mjs';
 import { assertFfmpeg } from './audio-ffmpeg.mjs';
 
+export function geminiTtsEndpoint() {
+  const override = process.env.GEMINI_TTS_ENDPOINT?.trim();
+  if (override) {
+    if (process.env.BAREEQ_TTS_CONTRACT_TEST !== '1') {
+      throw Object.assign(new Error('GEMINI_TTS_ENDPOINT is restricted to BAREEQ_TTS_CONTRACT_TEST=1'), { exitCode: EXIT_HARD });
+    }
+    return override.replace(/\/$/, '');
+  }
+  return GEMINI_TTS_CONTRACT.endpoint;
+}
+
 export const GEMINI_TTS_ENDPOINT = GEMINI_TTS_CONTRACT.endpoint;
 
 export function extractGeminiAudio(payload) {
@@ -78,23 +89,29 @@ export async function synthesizeGeminiPart({
     throw Object.assign(new Error('GEMINI_API_KEY is absent. No TTS request was sent.'), { exitCode: EXIT_CONFIG });
   }
   const { ffmpeg } = ffmpegPath ? { ffmpeg: ffmpegPath } : await assertFfmpeg();
-  const response = await fetchImpl(GEMINI_TTS_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'x-goog-api-key': apiKey,
-      'Api-Revision': GEMINI_TTS_CONTRACT.apiRevision,
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      model,
-      input: buildGeminiPrompt(part, context),
-      response_format: { type: 'audio' },
-      generation_config: {
-        speech_config: [{ voice }],
+  const endpoint = geminiTtsEndpoint();
+  let response;
+  try {
+    response = await fetchImpl(endpoint, {
+      method: 'POST',
+      headers: {
+        'x-goog-api-key': apiKey,
+        'Api-Revision': GEMINI_TTS_CONTRACT.apiRevision,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
-    }),
-  });
+      body: JSON.stringify({
+        model,
+        input: buildGeminiPrompt(part, context),
+        response_format: { type: 'audio' },
+        generation_config: {
+          speech_config: [{ voice }],
+        },
+      }),
+    });
+  } catch (error) {
+    throw Object.assign(new Error(`Gemini TTS transport failed (${endpoint}): ${error.cause?.code || error.cause?.message || error.message}`), { exitCode: EXIT_HARD });
+  }
   if (response.status === 429) {
     throw Object.assign(new Error('Gemini TTS HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
   }

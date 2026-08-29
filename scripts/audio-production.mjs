@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { FALLBACK_NARRATOR, PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
 import {
+  EXIT_CONFIG,
   EXIT_HARD,
   EXIT_OK,
   EXIT_QUOTA,
@@ -14,7 +15,7 @@ import {
   CLOUD_TTS_CONTRACT,
   candidateDir,
 } from './audio-constants.mjs';
-import { loadSpokenArticle, splitSpokenArticle, candidateFingerprint } from './audio-split.mjs';
+import { loadSpokenArticle, splitSpokenArticle } from './audio-split.mjs';
 import { generateCandidate } from './audio-generate-candidate.mjs';
 import { validateCandidate } from './audio-validate.mjs';
 import { publishApprovedCandidate } from './audio-publish.mjs';
@@ -45,8 +46,8 @@ export async function buildDryRun(root = ROOT) {
         ttsRequestsBefore: 0,
         ttsRequestsAfter: 0,
         asrRequests: INDEPENDENT_ASR_MODELS.length,
-        filesApiUploads: INDEPENDENT_ASR_MODELS.length,
-        asrProviderCalls: INDEPENDENT_ASR_MODELS.length * 2,
+        filesApiUploads: 1,
+        asrProviderCalls: 1 + INDEPENDENT_ASR_MODELS.length,
         reason: 'Live Gemini/Sadaltager already exists; do not regenerate.',
       });
       continue;
@@ -64,8 +65,8 @@ export async function buildDryRun(root = ROOT) {
       ttsRequestsBefore: before.ttsRequests,
       ttsRequestsAfter: after.ttsRequests,
       asrRequests: INDEPENDENT_ASR_MODELS.length,
-      filesApiUploads: INDEPENDENT_ASR_MODELS.length,
-      asrProviderCalls: INDEPENDENT_ASR_MODELS.length * 2,
+      filesApiUploads: 1,
+      asrProviderCalls: 1 + INDEPENDENT_ASR_MODELS.length,
       maxPartBytes: after.maxPartBytes,
       maxPartEstimatedSeconds: after.maxPartEstimatedSeconds,
       maxPartEstimatedTokens: after.maxPartEstimatedTokens,
@@ -151,6 +152,10 @@ export async function runProductionMode({
     throw Object.assign(new Error(`${mode} requires --article`), { exitCode: EXIT_USAGE });
   }
   if (mode === 'generate-candidate') {
+    const injected = typeof synthesize === 'function';
+    if (!injected && process.env.BAREEQ_AUDIO_PRODUCTION_LOCK !== '1' && process.env.BAREEQ_TTS_CONTRACT_TEST !== '1') {
+      throw Object.assign(new Error('generate-candidate requires BAREEQ_AUDIO_PRODUCTION_LOCK=1. No TTS request was sent.'), { exitCode: EXIT_CONFIG });
+    }
     const synth = synthesize || await resolveProductionSynthesizer({ fetchImpl });
     return generateCandidate({
       articleId,
@@ -173,12 +178,10 @@ export async function runProductionMode({
     });
   }
   if (mode === 'publish-approved') {
-    let resolvedFingerprint = fingerprint;
-    if (!resolvedFingerprint) {
-      const article = await loadSpokenArticle(articleId, root);
-      const splitPlan = splitSpokenArticle(article, { settings, liveDurationSeconds });
-      resolvedFingerprint = candidateFingerprint(article, splitPlan);
+    if (!fingerprint) {
+      throw Object.assign(new Error('publish-approved requires --fingerprint; it will not pick the latest candidate'), { exitCode: EXIT_USAGE });
     }
+    const resolvedFingerprint = fingerprint;
     const candidatePath = candidateDir(articleId, resolvedFingerprint, storeRoot || root);
     if (!await pathExists(candidatePath)) {
       throw Object.assign(new Error('publish-approved refused: candidate files are missing'), { exitCode: EXIT_HARD });

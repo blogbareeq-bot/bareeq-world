@@ -1,4 +1,26 @@
-const FILES_START_URL = 'https://generativelanguage.googleapis.com/upload/v1beta/files';
+import { EXIT_HARD, EXIT_QUOTA } from './audio-constants.mjs';
+
+export function filesApiStartUrl() {
+  const override = process.env.GEMINI_FILES_ENDPOINT?.trim();
+  if (override) {
+    if (process.env.BAREEQ_TTS_CONTRACT_TEST !== '1') {
+      throw Object.assign(new Error('GEMINI_FILES_ENDPOINT is restricted to BAREEQ_TTS_CONTRACT_TEST=1'), { exitCode: EXIT_HARD });
+    }
+    return override.replace(/\/$/, '');
+  }
+  return 'https://generativelanguage.googleapis.com/upload/v1beta/files';
+}
+
+export function filesApiRestBase() {
+  const override = process.env.GEMINI_FILES_REST_ENDPOINT?.trim();
+  if (override) {
+    if (process.env.BAREEQ_TTS_CONTRACT_TEST !== '1') {
+      throw Object.assign(new Error('GEMINI_FILES_REST_ENDPOINT is restricted to BAREEQ_TTS_CONTRACT_TEST=1'), { exitCode: EXIT_HARD });
+    }
+    return override.replace(/\/$/, '');
+  }
+  return 'https://generativelanguage.googleapis.com/v1beta';
+}
 
 function header(headers, name) {
   if (!headers) return '';
@@ -15,7 +37,7 @@ export async function uploadResumableFile({
 }) {
   if (!apiKey) throw new Error('Files API upload requires an API key');
   if (!bytes?.length) throw new Error('Files API upload requires bytes');
-  const start = await fetchImpl(FILES_START_URL, {
+  const start = await fetchImpl(filesApiStartUrl(), {
     method: 'POST',
     headers: {
       'x-goog-api-key': apiKey,
@@ -27,13 +49,17 @@ export async function uploadResumableFile({
     },
     body: JSON.stringify({ file: { display_name: displayName } }),
   });
+  if (start.status === 429) {
+    throw Object.assign(new Error('Files API start HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA });
+  }
   if (!start.ok) {
     const error = new Error(`Files API start failed HTTP ${start.status}`);
     error.httpStatus = start.status;
+    error.exitCode = EXIT_HARD;
     throw error;
   }
   const uploadUrl = header(start.headers, 'X-Goog-Upload-URL') || header(start.headers, 'x-goog-upload-url');
-  if (!uploadUrl) throw new Error('Files API start did not return X-Goog-Upload-URL');
+  if (!uploadUrl) throw Object.assign(new Error('Files API start did not return X-Goog-Upload-URL'), { exitCode: EXIT_HARD });
 
   const finish = await fetchImpl(uploadUrl, {
     method: 'POST',
@@ -45,14 +71,37 @@ export async function uploadResumableFile({
     },
     body: bytes,
   });
+  if (finish.status === 429) {
+    throw Object.assign(new Error('Files API finalize HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA });
+  }
   if (!finish.ok) {
     const error = new Error(`Files API finalize failed HTTP ${finish.status}`);
     error.httpStatus = finish.status;
+    error.exitCode = EXIT_HARD;
     throw error;
   }
   const payload = await finish.json();
   const file = payload.file || payload;
   const uri = file.uri || file.name;
-  if (!uri) throw new Error('Files API finalize did not return a file URI');
-  return { uri, mimeType: file.mimeType || mimeType, name: file.name || displayName, raw: payload };
+  if (!uri) throw Object.assign(new Error('Files API finalize did not return a file URI'), { exitCode: EXIT_HARD });
+  return {
+    uri,
+    mimeType: file.mimeType || file.mime_type || mimeType,
+    name: file.name || displayName,
+    bytes: bytes.length,
+    raw: payload,
+  };
+}
+
+export async function deleteUploadedFile({ apiKey, name, fetchImpl = globalThis.fetch }) {
+  if (!name) return { deleted: false, reason: 'missing-name' };
+  const resource = String(name).startsWith('files/') ? name : `files/${String(name).split('/').pop()}`;
+  const response = await fetchImpl(`${filesApiRestBase()}/${resource}`, {
+    method: 'DELETE',
+    headers: { 'x-goog-api-key': apiKey },
+  });
+  if (!response.ok && response.status !== 404) {
+    return { deleted: false, httpStatus: response.status };
+  }
+  return { deleted: true, httpStatus: response.status };
 }

@@ -10,6 +10,7 @@ import {
   EXIT_HARD,
   EXIT_USAGE,
   EXIT_OK,
+  EXIT_CONFIG,
   liveAudioDir,
   sha256,
   QUOTA_SPLIT,
@@ -114,13 +115,16 @@ function mockGeminiTransport(expectedSpoken) {
         text: async () => JSON.stringify({ file: { uri: 'https://generativelanguage.googleapis.com/v1beta/files/abc', mimeType: 'audio/mpeg' } }),
       };
     }
-    if (String(url) === GEMINI_INTERACTIONS) {
+    if (String(url) === GEMINI_INTERACTIONS || String(url).includes('/v1beta/interactions')) {
       const payload = JSON.parse(options.body);
       return {
         ok: true,
         status: 200,
         text: async () => JSON.stringify({ model: payload.model, output_text: expectedSpoken }),
       };
+    }
+    if (options.method === 'DELETE' || String(url).includes('/v1beta/files/')) {
+      return { ok: true, status: 200, json: async () => ({}), text: async () => '{}' };
     }
     throw new Error(`unexpected URL ${url}`);
   };
@@ -146,6 +150,7 @@ assert.equal(pending.passed, false);
 const tmp = await mkdtemp(path.join(os.tmpdir(), 'bareeq-audio-safety-'));
 const liveTmp = await mkdtemp(path.join(os.tmpdir(), 'bareeq-live-'));
 const resumeB = await mkdtemp(path.join(os.tmpdir(), 'bareeq-resume-b-'));
+const resumePause = await mkdtemp(path.join(os.tmpdir(), 'bareeq-resume-pause-'));
 try {
   await writeFixtureArticle(tmp);
   const article = await loadSpokenArticle('resume-fixture', tmp);
@@ -188,6 +193,33 @@ try {
   assert.equal(Object.keys(checkpoint.completedParts).length, 2);
   assert.equal(checkpoint.status, 'paused-quota');
   assert.equal(checkpoint.exitCode, EXIT_QUOTA);
+
+  await writeFixtureArticle(resumePause);
+  await cp(path.join(tmp, 'audio-candidates'), path.join(resumePause, 'audio-candidates'), { recursive: true });
+  for (let index = 0; index < splitPlan.ttsRequests; index += 1) {
+    const tone = path.join(tmp, `tone-${index}.mp3`);
+    try { await cp(tone, path.join(resumePause, `tone-${index}.mp3`)); } catch { /* later parts may not exist yet */ }
+  }
+  for (let index = 0; index < splitPlan.ttsRequests; index += 1) {
+    if (!toneCache.has(index)) toneCache.set(index, await makeToneMp3(path.join(tmp, `tone-${index}.mp3`), 0.45, 420 + index * 20));
+    await cp(path.join(tmp, `tone-${index}.mp3`), path.join(resumePause, `tone-${index}.mp3`));
+  }
+  const pauseChild = spawnSync(process.execPath, ['scripts/audio-resume-child.mjs'], {
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      BAREEQ_RESUME_ROOT: resumePause,
+      BAREEQ_RESUME_STORE: resumePause,
+      BAREEQ_RESUME_ARTICLE: 'resume-fixture',
+      BAREEQ_RESUME_FAIL_AT: '-1',
+    },
+    cwd: ROOT,
+  });
+  assert.equal(pauseChild.status, 0, `two-checkout 429 resume failed: ${pauseChild.stderr}\n${pauseChild.stdout}`);
+  const pauseResult = JSON.parse(pauseChild.stdout.trim().split('\n').at(-1));
+  assert.equal(pauseResult.status, 'generated');
+  assert.ok(pauseResult.ttsRequestsResumed >= 2, 'second checkout after 429 must skip completed parts');
+  assert.equal(pauseResult.childSent, splitPlan.ttsRequests - pauseResult.ttsRequestsResumed);
 
   let resentFirstTwo = 0;
   const second = await generateCandidate({
@@ -285,6 +317,9 @@ try {
   assert.equal(asr35.status, 'passed');
   assert.equal(asr35.httpStatus, 200);
   assert.equal(asr35.filesApiUploads, 1);
+  assert.equal(asr35.requestedModel, 'gemini-3.5-transcribe');
+  assert.equal(asr35.actualResponseModel, 'gemini-3.5-transcribe');
+  assert.equal(asr35.actualResponseModelSource, 'response.model');
   assert.ok(asrCalls.some((item) => item.url.startsWith(GEMINI_FILES_UPLOAD) && item.command === 'start'));
   assert.ok(asrCalls.some((item) => item.url.includes('/upload/session/') && item.command === 'upload, finalize' && item.offset === '0'));
   const body35 = JSON.parse(asrCalls.find((item) => item.url === GEMINI_INTERACTIONS).body);
@@ -387,9 +422,9 @@ try {
     fetchImpl: mockGeminiTransport(article.spokenText).fetchImpl,
   });
   assert.equal(validate.status, 'validated');
-  assert.equal(validate.filesApiUploads, 2);
+  assert.equal(validate.filesApiUploads, 1);
   assert.equal(validate.asrInteractions, 2);
-  assert.equal(validate.asrProviderCalls, 4);
+  assert.equal(validate.asrProviderCalls, 3);
   assert.equal(validate.fullSha256, sha256(await readFile(path.join(second.candidateDir, 'full.mp3'))));
   const playerManifest = JSON.parse(await readFile(path.join(second.candidateDir, 'manifest.json'), 'utf8'));
   assert.equal(isValidProductionManifest(playerManifest), true);
@@ -433,6 +468,27 @@ try {
     },
   };
   assert.equal(evaluatePublishability(post, publishRecord).passed, true);
+
+  const validatePath = path.join(second.candidateDir, 'reports', 'validate.json');
+  const originalValidate = await readFile(validatePath, 'utf8');
+  await writeFile(validatePath, originalValidate.replaceAll(second.fingerprint, 'ab'.repeat(32)));
+  let flipped = false;
+  try {
+    await runProductionMode({
+      mode: 'publish-approved',
+      articleId: 'resume-fixture',
+      fingerprint: second.fingerprint,
+      root: tmp,
+      storeRoot: tmp,
+      post,
+      record: publishRecord,
+    });
+  } catch (error) {
+    flipped = true;
+    assert.equal(error.exitCode, EXIT_HARD);
+  }
+  assert.equal(flipped, true, 'publish must fail when a bound report fingerprint is altered');
+  await writeFile(validatePath, originalValidate);
 
   const publishedLive = liveAudioDir('resume-fixture', tmp);
   await mkdir(publishedLive, { recursive: true });
@@ -535,6 +591,8 @@ try {
     'gemini-3.6-flash',
     'Does not publish',
     'human listening evidence bound to the candidate file SHA-256',
+    '--fingerprint=',
+    'Refusing to pick latest',
   ]) {
     assert.ok(workflow.includes(token), `workflow missing ${token}`);
   }
@@ -544,7 +602,8 @@ try {
   const dry = await buildDryRun(ROOT);
   assert.equal(dry.expected.ttsRequestsBefore, 63);
   assert.ok(dry.expected.ttsRequestsAfter < dry.expected.ttsRequestsBefore, 'quota split must reduce TTS requests');
-  assert.equal(dry.expected.filesApiUploads, dry.expected.asrRequests);
+  assert.equal(dry.expected.filesApiUploads, dry.plans.length);
+  assert.equal(dry.expected.asrRequests, dry.plans.length * 2);
   assert.equal(dry.expected.asrProviderCalls, dry.expected.asrRequests + dry.expected.filesApiUploads);
   assert.deepEqual(dry.asr.models, INDEPENDENT_ASR_MODELS);
   assert.equal(dry.geminiTtsContract.inputTokenLimit, 8192);

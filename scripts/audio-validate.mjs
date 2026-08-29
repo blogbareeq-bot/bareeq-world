@@ -5,17 +5,16 @@ import {
   EXIT_HARD,
   EXIT_OK,
   EXIT_USAGE,
-  INDEPENDENT_ASR_MODELS,
   QUOTA_SPLIT,
   candidateDir,
   sha256,
 } from './audio-constants.mjs';
-import { loadSpokenArticle, splitSpokenArticle, partFingerprint } from './audio-split.mjs';
+import { loadSpokenArticle, splitSpokenArticle, partFingerprint, activeSplitSettings } from './audio-split.mjs';
 import { expectedSyncIds, validateSyncMap } from './audio-sync.mjs';
 import { checkpointPaths, pathExists, writeJson, writePlayerCompatibleCandidateManifest } from './audio-checkpoint.mjs';
 import { mergeCandidateParts } from './audio-merge.mjs';
 import { runTechnicalQa, inspectLiveSnapshot } from './audio-technical-qa.mjs';
-import { transcribeFullAudio } from './audio-asr-transcribe.mjs';
+import { transcribeDualAsr } from './audio-asr-transcribe.mjs';
 import { publicPartSrc } from './audio-manifest.mjs';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { partFileName } from './audio-checkpoint.mjs';
@@ -44,9 +43,12 @@ export async function validateCandidate({
   if (!articleId) {
     throw Object.assign(new Error('validate-candidate requires --article'), { exitCode: EXIT_USAGE });
   }
+  if (!fingerprint) {
+    throw Object.assign(new Error('validate-candidate requires --fingerprint; it will not pick the latest candidate'), { exitCode: EXIT_USAGE });
+  }
   const article = await loadSpokenArticle(articleId, root);
-  const splitPlan = splitSpokenArticle(article, { settings, liveDurationSeconds });
-  const resolvedFingerprint = fingerprint || (await import('./audio-split.mjs')).candidateFingerprint(article, splitPlan);
+  const splitPlan = splitSpokenArticle(article, { settings: activeSplitSettings(settings), liveDurationSeconds });
+  const resolvedFingerprint = fingerprint;
   const dir = candidateDir(articleId, resolvedFingerprint, storeRoot || root);
   const paths = checkpointPaths(articleId, resolvedFingerprint, storeRoot || root);
   if (!await pathExists(dir)) {
@@ -130,21 +132,18 @@ export async function validateCandidate({
     if (!apiKey?.trim() && !fetchImpl) {
       throw Object.assign(new Error('GEMINI_API_KEY is absent. Dual ASR did not start. No transcription request was sent.'), { exitCode: EXIT_CONFIG });
     }
-    for (const model of INDEPENDENT_ASR_MODELS) {
-      const report = await transcribeFullAudio({
-        model,
-        audioPath: paths.fullFile,
-        expectedText: article.spokenText,
-        apiKey: apiKey || 'test-key',
-        fetchImpl,
-        outputPath: path.join(paths.reportsDir, `asr-${model}.json`),
-        fingerprint: resolvedFingerprint,
-        fullSha256,
-      });
-      filesApiUploads += Number(report.filesApiUploads || 1);
-      asrInteractions += Number(report.asrInteractions || 1);
-      asrReports.push(report);
-    }
+    const dual = await transcribeDualAsr({
+      audioPath: paths.fullFile,
+      expectedText: article.spokenText,
+      apiKey: apiKey || 'test-key',
+      fetchImpl,
+      reportsDir: paths.reportsDir,
+      fingerprint: resolvedFingerprint,
+      fullSha256,
+    });
+    filesApiUploads = dual.filesApiUploads;
+    asrInteractions = dual.asrInteractions;
+    asrReports.push(...dual.asrReports);
   }
 
   const listeningPack = [

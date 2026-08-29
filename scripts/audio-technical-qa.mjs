@@ -45,6 +45,25 @@ function longestSilenceSeconds(pcm, sampleRate = 48000, threshold = 0.008) {
   return longest / sampleRate;
 }
 
+export async function measureLoudness(file) {
+  const { ffmpeg } = await assertFfmpeg();
+  const result = await runCommand(ffmpeg, [
+    '-hide_banner', '-nostats',
+    '-i', file,
+    '-af', 'ebur128=peak=true',
+    '-f', 'null', '-',
+  ]);
+  const text = `${result.stderr}\n${result.stdout.toString('utf8')}`;
+  const integrated = text.match(/I:\s+([+-]?\d+(?:\.\d+)?)\s+LUFS/);
+  const truePeak = text.match(/True peak:\s+([+-]?\d+(?:\.\d+)?)\s+dBTP/i)
+    || text.match(/Peak:\s+([+-]?\d+(?:\.\d+)?)\s+dBFS/i);
+  return {
+    integratedLufs: integrated ? Number(integrated[1]) : null,
+    truePeakDbTP: truePeak ? Number(truePeak[1]) : null,
+    raw: text.slice(-800),
+  };
+}
+
 export async function probeAudio(file) {
   const { ffmpeg } = await assertFfmpeg();
   const result = await runCommand(ffmpeg, ['-hide_banner', '-i', file, '-f', 'null', '-']);
@@ -124,9 +143,15 @@ export async function runTechnicalQa({
     const silence = longestSilenceSeconds(pcm);
     if (silence > 3) failures.push(`internal silence ${silence.toFixed(2)}s`);
     const head = edgeEnergy(pcm, 400);
+    const tail80 = edgeEnergy(pcm, 80);
+    const tail20 = edgeEnergy(pcm, 20);
     const lastSample = Math.abs(pcm.readInt16LE(pcm.length - 2)) / 32768;
-    if (head.start < 0.0003) failures.push('silent start (likely truncated or missing audio)');
-    if (lastSample >= 0.99) failures.push('high energy at last sample (possible mid-word truncation)');
+    if (head.start < 0.0003) failures.push('silent start lasting 400ms (likely truncated or missing audio)');
+    if (tail80.end < 0.0005) {
+      /* short trailing silence is a fade, not truncation */
+    } else if (lastSample >= 0.99 && tail20.end > 0.25) {
+      failures.push('high energy across the last 20ms (possible mid-word truncation)');
+    }
   }
 
   const partsDir = path.join(dir, 'parts');
@@ -150,9 +175,12 @@ export async function runTechnicalQa({
     if (min > 0 && 20 * Math.log10(max / min) > 12) failures.push('inconsistent loudness across parts (>12 dB)');
   }
 
-  if (expectedSyncIds && manifest.parts) {
-    const ids = new Set(manifest.parts.flatMap((part) => part.syncIds || []));
-    for (const id of expectedSyncIds) if (!ids.has(id) && ids.size) failures.push(`sync missing ${id}`);
+  const ids = new Set((manifest.parts || []).flatMap((part) => part.syncIds || (part.sync || []).map((entry) => entry.id)));
+  if (!expectedSyncIds || !expectedSyncIds.length) {
+    failures.push('sync is mandatory; expectedSyncIds were not provided');
+  } else {
+    if (!ids.size) failures.push('sync is mandatory; candidate parts have no syncIds');
+    for (const id of expectedSyncIds) if (!ids.has(id)) failures.push(`sync missing ${id}`);
   }
 
   const liveNow = await inspectLiveSnapshot(articleId, root);
@@ -161,6 +189,11 @@ export async function runTechnicalQa({
     if (liveBefore.voiceId === 'hamed' && liveNow.voiceId !== 'hamed') failures.push('live Hamed voice was replaced before publish-approved');
   }
 
+  let loudness = null;
+  try { loudness = await measureLoudness(fullFile); } catch { loudness = null; }
+  if (loudness?.truePeakDbTP != null && loudness.truePeakDbTP > 1.0) {
+    failures.push(`true peak ${loudness.truePeakDbTP} dBTP exceeds +1.0 (clipping)`);
+  }
   const digest = sha256(full);
   if (fullSha256 && digest !== fullSha256) failures.push('technical QA full.mp3 SHA-256 does not match bound fingerprint');
   const report = {
@@ -170,6 +203,7 @@ export async function runTechnicalQa({
     fullSha256: digest,
     durationSeconds: duration || null,
     probe,
+    loudness,
     narrator: PRODUCTION_NARRATOR,
     liveUntouched: !liveBefore || liveNow.fingerprint === liveBefore.fingerprint,
     failures,

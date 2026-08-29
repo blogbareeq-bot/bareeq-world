@@ -1,6 +1,9 @@
 # Canonical production audio workflow. Copy to .github/workflows/audio-production.yml
-# only after offline safety tests pass. This file is the source of truth for mode
-# checks in scripts/test-audio-production-safety.mjs.
+# only after an admin with workflows permission can push it. This file is the
+# source of truth for mode checks in scripts/test-audio-production-safety.mjs.
+# The GitHub App cannot update .github/workflows/*. Until workflows permission
+# exists, leftover Azure jobs in generate-passport-audio.yml and
+# generate-touchscreen-temp-audio.yml must be disabled with `if: false` by an admin.
 name: Bareeq audio production
 
 on:
@@ -18,6 +21,11 @@ on:
           - publish-approved
       article:
         description: Required except dry-run.
+        required: false
+        type: string
+        default: ''
+      fingerprint:
+        description: Required for validate-candidate and publish-approved. Never implied as latest.
         required: false
         type: string
         default: ''
@@ -55,6 +63,7 @@ jobs:
         run: |
           node scripts/test-audio-lifecycle.mjs
           node scripts/test-audio-production-safety.mjs
+          node scripts/test-audio-production-integration.mjs
           node scripts/test-speech-script-quality-gate.mjs
           node scripts/check-speech-scripts.mjs
 
@@ -97,14 +106,24 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
+          if [ -z "${{ inputs.fingerprint }}" ]; then
+            echo 'validate-candidate requires fingerprint. Refusing to pick latest.'
+            exit 2
+          fi
           echo 'validate-candidate: merge full.mp3, technical QA, ASR gemini-3.5-transcribe, ASR gemini-3.6-flash, Files API resumable upload, 0/0/0, listening pack. Does not publish.'
-          node scripts/audio-production.mjs --mode=validate-candidate --article=${{ inputs.article }}
+          node scripts/audio-production.mjs --mode=validate-candidate --article=${{ inputs.article }} --fingerprint=${{ inputs.fingerprint }}
 
       - name: Publish approved
         if: inputs.mode == 'publish-approved'
+        env:
+          BAREEQ_AUDIO_PUBLISH_GIT: '1'
         run: |
+          if [ -z "${{ inputs.fingerprint }}" ]; then
+            echo 'publish-approved requires fingerprint. Refusing to pick latest.'
+            exit 2
+          fi
           echo 'publish-approved refuses without human listening evidence bound to the candidate file SHA-256.'
-          node scripts/audio-production.mjs --mode=publish-approved --article=${{ inputs.article }}
+          node scripts/audio-production.mjs --mode=publish-approved --article=${{ inputs.article }} --fingerprint=${{ inputs.fingerprint }}
 
       - name: Save candidate cache
         if: always()
