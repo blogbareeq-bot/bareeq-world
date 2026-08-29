@@ -1,0 +1,68 @@
+name: Temporary Bareeq voice comparison
+
+on:
+  push:
+    branches:
+      - 'arena/01a04a3c-bareeq-world'
+
+permissions:
+  contents: read
+
+jobs:
+  voice-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate comparison samples
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          mkdir -p voice-samples
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import { synthesizeGeminiGenerateContentPart } from './scripts/audio-gemini-tts.mjs';
+
+          const text = 'قد نختصر المشهد بقولنا إن الأسعار ارتفعت، لكن هذا الاختصار لا يكفي. فارتفاع سعر البن بعد موسم سيئ لا يساوي تضخمًا في الاقتصاد كله، وبقاء الأسعار مرتفعة لا يعني أن التضخم ما زال يتسارع. لفهم الأخبار الاقتصادية بوعي، نحتاج إلى فصل ثلاثة أشياء: مستوى الأسعار، ومُعَدَّلَ تَغَيُّرِهِ، والقوة الشرائية للنقود.';
+          const voices = ['Sadaltager', 'Charon', 'Gacrux', 'Sulafat'];
+          const failures = [];
+
+          for (const voice of voices) {
+            try {
+              console.log(`Generating ${voice}...`);
+              const result = await synthesizeGeminiGenerateContentPart({
+                apiKey: process.env.GEMINI_API_KEY,
+                part: { text },
+                context: { articleTitle: 'التضخم ببساطة: لماذا ترتفع الأسعار؟' },
+                voice,
+              });
+              fs.writeFileSync(`voice-samples/${voice}.mp3`, result.audio);
+              console.log(`Generated ${voice}: ${result.audio.length} bytes`);
+            } catch (error) {
+              console.error(`FAILED ${voice}: ${error.message}`);
+              failures.push({ voice, message: error.message, exitCode: error.exitCode || null });
+            }
+          }
+
+          fs.writeFileSync('voice-samples/manifest.json', JSON.stringify({ text, voices, failures }, null, 2));
+          if (failures.length) process.exitCode = 1;
+          NODE
+
+      - name: Upload voice samples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-voice-comparison-${{ github.run_id }}
+          path: voice-samples/
+          if-no-files-found: error
