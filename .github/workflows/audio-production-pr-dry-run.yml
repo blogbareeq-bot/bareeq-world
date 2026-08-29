@@ -43,6 +43,7 @@ jobs:
           node scripts/test-audio-engine-final.mjs
           node scripts/test-audio-transition-normalization.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
+          node scripts/test-gemini-generate-content-tts.mjs
 
       - name: Production dry-run (zero provider calls)
         run: |
@@ -75,6 +76,8 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+          BAREEQ_GEMINI_GENERATE_CONTENT: '1'
+          BAREEQ_RESUMED_TTS_TRANSPORT: 'developer-interactions'
         run: |
           set +e
           node scripts/audio-production.mjs --mode=generate-candidate --article=altadakhom-explained-simply
@@ -112,7 +115,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          node scripts/audio-production.mjs --mode=validate-candidate --article=altadakhom-explained-simply --fingerprint=ceed158f32e7db07f15f9c40c1248efe7bfed7627539d812033581f7d6baf5e4
+          node scripts/audio-production.mjs --mode=validate-candidate --article=altadakhom-explained-simply --fingerprint=58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45
 
       - name: Save validated candidate cache
         if: always() && hashFiles('docs/audio/RUN-ALTADAKHOM-VALIDATION') != ''
