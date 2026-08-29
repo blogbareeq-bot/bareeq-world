@@ -34,7 +34,7 @@ export const PRODUCTION_NARRATOR = {
   outputFormat: 'audio-48khz-96kbitrate-mono-mp3',
   sourceAudioFormat: 'pcm-s16le-24000hz-mono',
   encodingTool: 'ffmpeg-libmp3lame',
-  generatorVersion: 9,
+  generatorVersion: 10,
 };
 
 export const FALLBACK_NARRATOR = {
