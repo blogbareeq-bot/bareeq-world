@@ -8,7 +8,6 @@ import {
   GENERATOR_VERSION,
   liveAudioDir,
   PERFORMANCE_INSTRUCTIONS,
-  QUOTA_SPLIT,
 } from './audio-constants.mjs';
 import { loadSpokenArticle, splitSpokenArticle, partFingerprint, activeSplitSettings } from './audio-split.mjs';
 import {
@@ -55,6 +54,29 @@ function unpackSynthesis(value) {
   return { audio: null, transport: 'unknown', metadata: {} };
 }
 
+export function parseForcedParts(value, partCount) {
+  const forced = new Set();
+  for (const token of String(value || '').split(',').map((item) => item.trim()).filter(Boolean)) {
+    const oneBased = Number(token);
+    if (!Number.isInteger(oneBased) || oneBased < 1 || oneBased > partCount) {
+      throw Object.assign(new Error(`BAREEQ_FORCE_TTS_PARTS must contain 1-based part numbers between 1 and ${partCount}; received ${token}`), { exitCode: EXIT_USAGE });
+    }
+    forced.add(oneBased - 1);
+  }
+  return forced;
+}
+
+export function parseCorrectionHints(value) {
+  if (!String(value || '').trim()) return new Map();
+  let parsed;
+  try { parsed = JSON.parse(value); }
+  catch (error) { throw Object.assign(new Error(`BAREEQ_TTS_CORRECTION_HINTS_JSON is invalid JSON: ${error.message}`), { exitCode: EXIT_USAGE }); }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    throw Object.assign(new Error('BAREEQ_TTS_CORRECTION_HINTS_JSON must be an object keyed by 1-based part number.'), { exitCode: EXIT_USAGE });
+  }
+  return new Map(Object.entries(parsed).map(([key, hint]) => [Number(key) - 1, String(hint || '').trim()]));
+}
+
 export async function generateCandidate({
   articleId,
   root = process.cwd(),
@@ -77,6 +99,8 @@ export async function generateCandidate({
   const article = await loadSpokenArticle(articleId, root);
   const duration = liveDurationSeconds === undefined ? await defaultLiveDuration(articleId, root) : liveDurationSeconds;
   const splitPlan = splitSpokenArticle(article, { settings: activeSplitSettings(settings), liveDurationSeconds: duration });
+  const forcedParts = parseForcedParts(process.env.BAREEQ_FORCE_TTS_PARTS, splitPlan.parts.length);
+  const correctionHints = parseCorrectionHints(process.env.BAREEQ_TTS_CORRECTION_HINTS_JSON);
   const { fingerprint, paths, checkpoint } = await initCheckpoint({ article, splitPlan, root: storeRoot || root });
   const liveDir = liveAudioDir(articleId, root);
   const transportsUsed = new Set();
@@ -95,6 +119,7 @@ export async function generateCandidate({
     quotaRejectedRequests: 0,
     failedRequests: 0,
     resumedParts: 0,
+    forceRegeneratedParts: [],
     completedParts: Object.keys(checkpoint.completedParts || {}).length,
     status: 'in-progress',
     liveUntouched: true,
@@ -102,7 +127,8 @@ export async function generateCandidate({
 
   for (const part of splitPlan.parts) {
     const existing = await loadCompletedPart(paths, article, splitPlan, part);
-    if (existing) {
+    const forced = forcedParts.has(part.partIndex);
+    if (existing && !forced) {
       const transport = existing.record?.transport || resumedTransportDefault;
       transportsUsed.add(transport);
       result.ttsRequestsResumed += 1;
@@ -117,6 +143,20 @@ export async function generateCandidate({
       });
       continue;
     }
+    if (existing && forced) {
+      result.forceRegeneratedParts.push(part.partIndex + 1);
+      await appendRequestLog(paths, {
+        partIndex: part.partIndex,
+        fingerprint: existing.fingerprint,
+        action: 'targeted-regeneration-replace',
+        providerCalls: 0,
+        providerAttempts: 0,
+        previousSha256: existing.record?.sha256 || null,
+        previousBytes: existing.record?.bytes || existing.bytes?.length || null,
+        previousTransport: existing.record?.transport || resumedTransportDefault,
+        correctionHint: correctionHints.get(part.partIndex) || null,
+      });
+    }
     try {
       result.providerAttempts += 1;
       const synthesized = unpackSynthesis(await synthesize({
@@ -127,21 +167,28 @@ export async function generateCandidate({
         performanceInstructions: PERFORMANCE_INSTRUCTIONS,
         model: PRODUCTION_NARRATOR.model,
         voice: PRODUCTION_NARRATOR.providerVoice,
+        correctionHint: correctionHints.get(part.partIndex) || '',
       }));
       const { audio, transport, metadata } = synthesized;
       if (!audio || audio.length < 100) throw new Error(`synthesized part ${part.partIndex} is too small`);
       transportsUsed.add(transport);
       result.ttsRequestsSent += 1;
       result.successfulRequests += 1;
-      await saveCompletedPart(paths, article, splitPlan, part, audio, { resumed: false, transport });
+      await saveCompletedPart(paths, article, splitPlan, part, audio, {
+        resumed: false,
+        transport,
+        targetedRegeneration: forced,
+        correctionHintApplied: forced && Boolean(correctionHints.get(part.partIndex)),
+      });
       await appendRequestLog(paths, {
         partIndex: part.partIndex,
         fingerprint: partFingerprint(article, splitPlan, part),
-        action: 'synthesize',
+        action: forced ? 'targeted-regeneration-synthesize' : 'synthesize',
         providerCalls: 1,
         providerAttempts: 1,
         bytes: audio.length,
         transport,
+        correctionHintApplied: forced && Boolean(correctionHints.get(part.partIndex)),
         ...metadata,
       });
     } catch (error) {
@@ -171,9 +218,11 @@ export async function generateCandidate({
   result.completedParts = splitPlan.parts.length;
   result.exitCode = EXIT_OK;
   result.transportsUsed = [...transportsUsed].sort();
-  result.transportPolicy = process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1'
-    ? 'generate-content-completion-with-resumed-checkpoint'
-    : 'developer-interactions';
+  result.transportPolicy = forcedParts.size
+    ? 'targeted-generate-content-regeneration-with-resumed-checkpoint'
+    : process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1'
+      ? 'generate-content-completion-with-resumed-checkpoint'
+      : 'developer-interactions';
   await writeJson(path.join(paths.dir, 'generation-report.json'), {
     schema: 'bareeq.audio-generation.v2',
     articleId,
@@ -221,6 +270,7 @@ if (isCli) {
       fingerprint: result.fingerprint,
       ttsRequestsSent: result.ttsRequestsSent,
       resumedParts: result.resumedParts,
+      forceRegeneratedParts: result.forceRegeneratedParts,
       transportsUsed: result.transportsUsed,
     }, null, 2));
     process.exit(result.exitCode || EXIT_OK);
