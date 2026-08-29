@@ -27,5 +27,9 @@ export function buildGeminiPrompt(part, context) {
   const sequence = Number.isInteger(context?.partIndex) && Number.isInteger(context?.partCount)
     ? `This is continuity segment ${context.partIndex + 1} of ${context.partCount}. Keep the same narrator identity and recording distance as the other segments.`
     : '';
-  return `${GEMINI_STYLE}\n\n### CONTEXT (DO NOT READ ALOUD)\nArticle topic: ${topic}\n${sequence}\n\n### TRANSCRIPT\n${part.text}`;
+  const correction = String(context?.correctionHint || '').replace(/[\r\n]+/g, ' ').trim();
+  const correctionLine = correction
+    ? `Previous synthesis QA found a specific verbatim error in this segment. Correction note (DO NOT READ ALOUD): ${correction}`
+    : '';
+  return `${GEMINI_STYLE}\n\n### CONTEXT (DO NOT READ ALOUD)\nArticle topic: ${topic}\n${sequence}\n${correctionLine}\n\n### TRANSCRIPT\n${part.text}`;
 }
