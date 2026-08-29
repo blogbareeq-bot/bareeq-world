@@ -1,0 +1,1 @@
+one-shot solution-two completion: restore v10 candidate 58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45; preserve completed parts 1-5 from developer-interactions; synthesize only missing part 6 via non-streaming Gemini generateContent using gemini-3.1-flash-tts-preview / Sadaltager; do not publish or modify live audio.
