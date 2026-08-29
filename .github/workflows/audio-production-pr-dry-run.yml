@@ -42,6 +42,7 @@ jobs:
           node scripts/check-speech-scripts.mjs
           node scripts/test-audio-engine-final.mjs
           node scripts/test-audio-transition-normalization.mjs
+          node scripts/test-audio-dual-asr-adjudicate.mjs
 
       - name: Production dry-run (zero provider calls)
         run: |
