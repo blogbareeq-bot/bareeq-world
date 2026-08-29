@@ -154,7 +154,7 @@ export async function generateCandidate({
           providerCalls: 1,
           providerAttempts: 1,
           httpStatus: 429,
-          transport: process.env.BAREEQ_CLOUD_TTS_PREFER === '1' ? 'google-cloud-text-to-speech' : 'developer-interactions',
+          transport: process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1' ? 'developer-generate-content' : 'developer-interactions',
         });
         const quota = new QuotaError(error.message);
         quota.exitCode = EXIT_QUOTA;
@@ -171,8 +171,8 @@ export async function generateCandidate({
   result.completedParts = splitPlan.parts.length;
   result.exitCode = EXIT_OK;
   result.transportsUsed = [...transportsUsed].sort();
-  result.transportPolicy = process.env.BAREEQ_CLOUD_TTS_PREFER === '1'
-    ? 'cloud-completion-with-resumed-checkpoint'
+  result.transportPolicy = process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1'
+    ? 'generate-content-completion-with-resumed-checkpoint'
     : 'developer-interactions';
   await writeJson(path.join(paths.dir, 'generation-report.json'), {
     schema: 'bareeq.audio-generation.v2',
