@@ -48,3 +48,13 @@ jobs:
           node scripts/audio-production.mjs --mode=dry-run
           test -f docs/audio/DRY-RUN.json
           echo 'PASS: dry-run completed with synthesis disabled.'
+
+      - name: Check Gemini production secret presence
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -n "${GEMINI_API_KEY}" ]; then
+            echo 'GEMINI_API_KEY_PRESENT=yes'
+          else
+            echo 'GEMINI_API_KEY_PRESENT=no'
+          fi
