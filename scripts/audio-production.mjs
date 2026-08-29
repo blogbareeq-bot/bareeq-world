@@ -25,6 +25,7 @@ import { loadPublicationPost, loadPublishRecord } from './audio-approval.mjs';
 import { assertSafeArticleId, assertSha256Fingerprint } from './audio-report.mjs';
 import { snapshotLiveSadaltager } from './audio-verify-live.mjs';
 import { sha256 } from './audio-constants.mjs';
+import { assertSafeEvidencePath } from './audio-paths.mjs';
 
 const ROOT = process.cwd();
 const MODE = process.argv.find((arg) => arg.startsWith('--mode='))?.slice('--mode='.length)
@@ -101,6 +102,7 @@ export async function buildDryRun(root = ROOT) {
         promptBytes: part.promptBytes,
         syncIds: part.syncIds,
         splitReason: part.splitReason,
+        unavoidableReason: part.unavoidableReason || null,
       })),
     });
   }
@@ -167,6 +169,8 @@ export async function runProductionMode({
   persistGit,
   liveDurationSeconds,
   settings = QUOTA_SPLIT,
+  snapshotOnly = true,
+  withAsr = false,
 }) {
   if (!MODES.includes(mode)) {
     throw Object.assign(new Error(`Unknown mode ${mode}. Use ${MODES.join(' | ')}`), { exitCode: EXIT_USAGE });
@@ -217,7 +221,13 @@ export async function runProductionMode({
     });
   }
   if (mode === 'verify-live') {
-    return snapshotLiveSadaltager({ articleId, root: storeRoot || root, fetchImpl, skipAsr: !fetchImpl });
+    return snapshotLiveSadaltager({
+      articleId,
+      root: storeRoot || root,
+      fetchImpl,
+      skipAsr: !withAsr,
+      withAsr: Boolean(withAsr),
+    });
   }
   if (mode === 'publish-approved') {
     if (!fingerprint) {
@@ -271,6 +281,12 @@ if (isCli) {
       console.error(`Unknown mode ${MODE}. Use ${MODES.join(' | ')}`);
       process.exit(EXIT_USAGE);
     }
+    const withAsr = process.argv.includes('--with-asr');
+    const snapshotOnly = process.argv.includes('--snapshot-only') || !withAsr;
+    if (withAsr && process.argv.includes('--snapshot-only')) {
+      console.error('verify-live cannot combine --snapshot-only and --with-asr');
+      process.exit(EXIT_USAGE);
+    }
     const result = await runProductionMode({
       mode: MODE,
       articleId: ARTICLE,
@@ -278,6 +294,8 @@ if (isCli) {
       listeningPath: LISTENING,
       recordPath: RECORD,
       root: ROOT,
+      snapshotOnly,
+      withAsr,
     });
     if (MODE === 'dry-run') {
       console.log(`Audio production dry-run: reuse ${result.reusableSadaltager.length}; replace ${result.replaceWithSadaltager.length}.`);

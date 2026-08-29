@@ -18,6 +18,7 @@ import { boundIdentity } from './audio-report.mjs';
 import { atomicWriteFile } from './audio-io.mjs';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { loadSpokenArticle } from './audio-split.mjs';
+import { confirmRemoteSha, resolvePublishRef, waitAndVerifyPublished } from './audio-publish-verify.mjs';
 
 export function listeningMatchesFingerprint(review, fullSha256, candidateFingerprint) {
   return listeningBound(review, fullSha256, candidateFingerprint);
@@ -45,47 +46,91 @@ export async function atomicReplaceDir(liveDir, stagingDir, { afterLiveMoved } =
   return { backup: hadLive ? backup : null, hadLive };
 }
 
-export function persistPublishedAudio({
+export async function persistPublishedAudio({
   root,
   liveDir,
   articleId,
   fingerprint,
+  fullSha256 = null,
+  parts = [],
+  defaultVoice = null,
   evidencePaths = [],
   message,
   push = process.env.BAREEQ_AUDIO_PUBLISH_PUSH === '1',
   waitPreview,
+  spawn = spawnSync,
+  fetchImpl = globalThis.fetch,
+  productionOrigin = process.env.BAREEQ_AUDIO_VERIFY_ORIGIN || '',
+  env = process.env,
 }) {
-  const identity = spawnSync('git', ['config', 'user.name'], { cwd: root, encoding: 'utf8' });
+  const identity = spawn('git', ['config', 'user.name'], { cwd: root, encoding: 'utf8' });
   if (identity.status !== 0 || !identity.stdout.trim()) {
-    const name = spawnSync('git', ['config', 'user.name', process.env.GIT_AUTHOR_NAME || 'bareeq-audio'], { cwd: root, encoding: 'utf8' });
+    const name = spawn('git', ['config', 'user.name', env.GIT_AUTHOR_NAME || 'bareeq-audio'], { cwd: root, encoding: 'utf8' });
     if (name.status !== 0) throw Object.assign(new Error(`git config user.name failed: ${name.stderr}`), { exitCode: EXIT_HARD });
   }
-  const email = spawnSync('git', ['config', 'user.email'], { cwd: root, encoding: 'utf8' });
+  const email = spawn('git', ['config', 'user.email'], { cwd: root, encoding: 'utf8' });
   if (email.status !== 0 || !email.stdout.trim()) {
-    const setEmail = spawnSync('git', ['config', 'user.email', process.env.GIT_AUTHOR_EMAIL || 'audio@bareeq.local'], { cwd: root, encoding: 'utf8' });
+    const setEmail = spawn('git', ['config', 'user.email', env.GIT_AUTHOR_EMAIL || 'audio@bareeq.local'], { cwd: root, encoding: 'utf8' });
     if (setEmail.status !== 0) throw Object.assign(new Error(`git config user.email failed: ${setEmail.stderr}`), { exitCode: EXIT_HARD });
   }
   const relLive = path.relative(root, liveDir);
   const addArgs = ['add', '-f', '--', relLive, ...evidencePaths.map((item) => path.relative(root, item))];
-  const add = spawnSync('git', addArgs, { cwd: root, encoding: 'utf8' });
+  const add = spawn('git', addArgs, { cwd: root, encoding: 'utf8' });
   if (add.status !== 0) {
     throw Object.assign(new Error(`git add failed: ${add.stderr || add.stdout}`), { exitCode: EXIT_HARD });
   }
-  const commit = spawnSync('git', ['commit', '-m', message || `audio: publish ${articleId} ${String(fingerprint || '').slice(0, 12)}`], { cwd: root, encoding: 'utf8' });
+  const commit = spawn('git', ['commit', '-m', message || `audio: publish ${articleId} ${String(fingerprint || '').slice(0, 12)}`], { cwd: root, encoding: 'utf8' });
   if (commit.status !== 0) {
     throw Object.assign(new Error(`git commit failed: ${commit.stderr || commit.stdout}`), { exitCode: EXIT_HARD });
   }
-  const sha = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
+  const shaResult = spawn('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
+  if (shaResult.status !== 0 || !shaResult.stdout.trim()) {
+    throw Object.assign(new Error(`git rev-parse HEAD failed: ${shaResult.stderr || shaResult.stdout}`), { exitCode: EXIT_HARD });
+  }
+  const sha = shaResult.stdout.trim();
   let pushed = false;
+  let remote = null;
+  let ref = null;
   if (push) {
-    const remote = spawnSync('git', ['push', 'origin', 'HEAD'], { cwd: root, encoding: 'utf8' });
-    if (remote.status !== 0) {
-      throw Object.assign(new Error(`git push failed: ${remote.stderr || remote.stdout}`), { exitCode: EXIT_HARD });
+    ref = resolvePublishRef(root, env, spawn);
+    const remotePush = spawn('git', ['push', 'origin', `HEAD:${ref}`], { cwd: root, encoding: 'utf8' });
+    if (remotePush.status !== 0) {
+      throw Object.assign(new Error(`git push origin HEAD:${ref} failed: ${remotePush.stderr || remotePush.stdout}`), { exitCode: EXIT_HARD });
     }
+    remote = confirmRemoteSha({ root, ref, expectedSha: sha, spawn });
     pushed = true;
   }
-  const preview = typeof waitPreview === 'function' ? waitPreview({ sha: sha.stdout.trim(), articleId }) : { skipped: true };
-  return { committed: true, sha: sha.stdout.trim(), relativeDir: relLive, pushed, preview };
+  let preview;
+  if (typeof waitPreview === 'function') {
+    preview = waitPreview({ sha, articleId, fingerprint, fullSha256, pushed, ref, remoteSha: remote?.remoteSha || null });
+  } else if (pushed && productionOrigin) {
+    preview = waitAndVerifyPublished({
+      origin: productionOrigin,
+      articleId,
+      fingerprint,
+      fullSha256,
+      parts,
+      defaultVoice,
+      fetchImpl,
+    });
+  } else {
+    preview = {
+      skipped: true,
+      cloudflareVerified: false,
+      note: pushed
+        ? 'BAREEQ_AUDIO_VERIFY_ORIGIN unset; Cloudflare was not verified'
+        : 'push disabled; Cloudflare was not verified',
+    };
+  }
+  return {
+    committed: true,
+    sha,
+    relativeDir: relLive,
+    pushed,
+    ref,
+    remoteSha: remote?.remoteSha || null,
+    preview,
+  };
 }
 
 async function restoreManifest(liveDir, previous) {

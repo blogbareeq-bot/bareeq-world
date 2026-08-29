@@ -19,12 +19,57 @@ export async function decodePcm(file) {
   return result.stdout;
 }
 
+function rmsBuffer(pcm) {
+  if (pcm.length < 2) return 0;
+  let sum = 0;
+  const samples = Math.floor(pcm.length / 2);
+  for (let i = 0; i < pcm.length; i += 2) {
+    const sample = pcm.readInt16LE(i);
+    sum += sample * sample;
+  }
+  return Math.sqrt(sum / samples) / 32768;
+}
+
+export function spliceWindowMetrics(left, right, sampleRate = 48000, windowMs = 10) {
+  const n = Math.min(Math.floor(sampleRate * windowMs / 1000), Math.floor(left.length / 2), Math.floor(right.length / 2));
+  if (n < 8) return { windowSamples: n, step: 0, leftRms: 0, rightRms: 0, gap: false, click: false, overlap: false };
+  const leftTail = left.subarray(left.length - n * 2);
+  const rightHead = right.subarray(0, n * 2);
+  const leftRms = rmsBuffer(leftTail);
+  const rightRms = rmsBuffer(rightHead);
+  let maxStep = 0;
+  for (let i = 2; i < leftTail.length; i += 2) {
+    maxStep = Math.max(maxStep, Math.abs(leftTail.readInt16LE(i) - leftTail.readInt16LE(i - 2)) / 32768);
+  }
+  for (let i = 2; i < rightHead.length; i += 2) {
+    maxStep = Math.max(maxStep, Math.abs(rightHead.readInt16LE(i) - rightHead.readInt16LE(i - 2)) / 32768);
+  }
+  const boundaryStep = Math.abs(left.readInt16LE(left.length - 2) - right.readInt16LE(0)) / 32768;
+  const interior = Math.max(maxStep, 0.02);
+  const gapMs = 80;
+  const gapN = Math.min(Math.floor(sampleRate * gapMs / 1000), Math.floor(left.length / 2), Math.floor(right.length / 2));
+  const leftGap = rmsBuffer(left.subarray(left.length - gapN * 2));
+  const rightGap = rmsBuffer(right.subarray(0, gapN * 2));
+  const gap = gapN >= Math.floor(sampleRate * 0.06) && leftGap < 0.008 && rightGap < 0.008;
+  const click = boundaryStep > interior * 8 && boundaryStep > 0.85;
+  const overlap = leftRms > 0.2 && rightRms > 0.2 && boundaryStep > 0.85;
+  return {
+    windowSamples: n,
+    windowMs,
+    step: boundaryStep,
+    leftRms,
+    rightRms,
+    gap,
+    click,
+    overlap,
+    gapMs,
+    leftGapRms: leftGap,
+    rightGapRms: rightGap,
+  };
+}
+
 function spliceClickScore(left, right) {
-  const window = Math.min(480, Math.floor(left.length / 2), Math.floor(right.length / 2));
-  if (window < 8) return 0;
-  const a = left.readInt16LE(left.length - 2);
-  const b = right.readInt16LE(0);
-  return Math.abs(a - b) / 32768;
+  return spliceWindowMetrics(left, right).step;
 }
 
 export async function mergeCandidateParts({ articleId, fingerprint, root = process.cwd(), partFiles, speechScriptHash = null }) {
@@ -69,11 +114,14 @@ export async function mergeCandidateParts({ articleId, fingerprint, root = proce
     throw new Error('merged PCM length does not match concatenated parts');
   }
   const clicks = [];
+  const gaps = [];
   for (let index = 1; index < pcmParts.length; index += 1) {
-    const score = spliceClickScore(pcmParts[index - 1], pcmParts[index]);
-    if (score > 0.95) clicks.push({ afterPart: index - 1, score });
+    const metrics = spliceWindowMetrics(pcmParts[index - 1], pcmParts[index]);
+    if (metrics.step > 0.95) clicks.push({ afterPart: index - 1, ...metrics });
+    if (metrics.gap) gaps.push({ afterPart: index - 1, ...metrics });
   }
   if (clicks.length) throw new Error(`merge click/discontinuity detected at ${clicks.map((item) => item.afterPart).join(', ')}`);
+  if (gaps.length) throw new Error(`merge gap/silence at splice ${gaps.map((item) => item.afterPart).join(', ')}`);
 
   const digest = sha256(merged);
   const report = {

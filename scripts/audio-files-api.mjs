@@ -93,13 +93,13 @@ export async function uploadResumableFile({
     body: JSON.stringify({ file: { display_name: displayName } }),
   });
   if (start.status === 429) {
-    throw Object.assign(new Error('Files API start HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, http });
+    throw Object.assign(new Error('Files API start HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, http, stage: 'start' });
   }
   if (!start.ok) {
-    throw Object.assign(new Error(`Files API start failed HTTP ${start.status}`), { httpStatus: start.status, exitCode: EXIT_HARD, http });
+    throw Object.assign(new Error(`Files API start failed HTTP ${start.status}`), { httpStatus: start.status, exitCode: EXIT_HARD, http, stage: 'start' });
   }
   const uploadUrl = header(start.headers, 'X-Goog-Upload-URL') || header(start.headers, 'x-goog-upload-url');
-  if (!uploadUrl) throw Object.assign(new Error('Files API start did not return X-Goog-Upload-URL'), { exitCode: EXIT_HARD, http });
+  if (!uploadUrl) throw Object.assign(new Error('Files API start did not return X-Goog-Upload-URL'), { exitCode: EXIT_HARD, http, stage: 'start' });
 
   http = addHttp(http, 'filesApiFinalizeRequests');
   const finish = await fetchImpl(uploadUrl, {
@@ -113,10 +113,10 @@ export async function uploadResumableFile({
     body: bytes,
   });
   if (finish.status === 429) {
-    throw Object.assign(new Error('Files API finalize HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, http });
+    throw Object.assign(new Error('Files API finalize HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, http, stage: 'finalize' });
   }
   if (!finish.ok) {
-    throw Object.assign(new Error(`Files API finalize failed HTTP ${finish.status}`), { httpStatus: finish.status, exitCode: EXIT_HARD, http });
+    throw Object.assign(new Error(`Files API finalize failed HTTP ${finish.status}`), { httpStatus: finish.status, exitCode: EXIT_HARD, http, stage: 'finalize' });
   }
   const payload = await finish.json();
   const file = payload.file || payload;
@@ -124,22 +124,27 @@ export async function uploadResumableFile({
   const name = file.name || null;
   if (!uri) {
     if (!name) {
-      throw Object.assign(new Error('Files API finalize did not return a file URI or name; refusing to invent a URI'), { exitCode: EXIT_HARD, http });
+      throw Object.assign(new Error('Files API finalize did not return a file URI or name; refusing to invent a URI'), { exitCode: EXIT_HARD, http, stage: 'finalize' });
     }
     http = addHttp(http, 'filesApiMetadataRequests');
-    const meta = await getUploadedFileMetadata({ apiKey, name, fetchImpl });
+    let meta;
+    try {
+      meta = await getUploadedFileMetadata({ apiKey, name, fetchImpl });
+    } catch (error) {
+      throw Object.assign(error, { http, stage: 'metadata' });
+    }
     uri = typeof meta.file?.uri === 'string' && meta.file.uri.trim() ? meta.file.uri.trim() : null;
     if (!uri) {
-      throw Object.assign(new Error('Files API metadata did not return a URI; refusing to invent one from file.name'), { exitCode: EXIT_HARD, http });
+      throw Object.assign(new Error('Files API metadata did not return a URI; refusing to invent one from file.name'), { exitCode: EXIT_HARD, http, stage: 'metadata' });
     }
   }
   const actualMime = file.mimeType || file.mime_type || mimeType;
   const actualSize = Number(file.sizeBytes || file.size || bytes.length);
   if (actualMime && actualMime !== mimeType && !String(actualMime).includes('mpeg') && !String(actualMime).includes('mp3')) {
-    throw Object.assign(new Error(`Files API MIME mismatch: ${actualMime}`), { exitCode: EXIT_HARD, http });
+    throw Object.assign(new Error(`Files API MIME mismatch: ${actualMime}`), { exitCode: EXIT_HARD, http, stage: 'metadata' });
   }
   if (actualSize && Math.abs(actualSize - bytes.length) > 0 && file.sizeBytes) {
-    throw Object.assign(new Error(`Files API size mismatch: ${actualSize} != ${bytes.length}`), { exitCode: EXIT_HARD, http });
+    throw Object.assign(new Error(`Files API size mismatch: ${actualSize} != ${bytes.length}`), { exitCode: EXIT_HARD, http, stage: 'metadata' });
   }
   return {
     uri,

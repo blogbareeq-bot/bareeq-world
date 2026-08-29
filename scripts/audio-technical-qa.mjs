@@ -4,7 +4,7 @@ import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
 import { EXIT_HARD, EXIT_USAGE, sha256, liveAudioDir, candidateDir } from './audio-constants.mjs';
 import { assertFfmpeg, runCommand } from './audio-ffmpeg.mjs';
-import { decodePcm } from './audio-merge.mjs';
+import { decodePcm, spliceWindowMetrics } from './audio-merge.mjs';
 import { pathExists } from './audio-checkpoint.mjs';
 
 function rms(pcm) {
@@ -33,15 +33,28 @@ function edgeEnergy(pcm, ms, sampleRate = 48000) {
 }
 
 export const PRODUCTION_LOUDNESS = Object.freeze({
-  maxTruePeakDbTP: 1.0,
+  maxTruePeakDbTP: 0.0,
   integratedMinLufs: -32,
   integratedMaxLufs: -6,
   maxInternalSilenceSeconds: 3,
   edgeSilenceIgnoreMs: 250,
   silentStartFailMs: 1000,
+  liveBaselineMaxDeltaDb: 12,
+  spliceWindowMs: 10,
 });
 
-function longestInternalSilenceSeconds(pcm, sampleRate = 48000, threshold = 0.008) {
+export function parseEbur128(text) {
+  const summary = /Summary:/i.test(text) ? text.split(/Summary:/i).pop() : text;
+  const integrated = summary.match(/I:\s+([+-]?\d+(?:\.\d+)?)\s+LUFS/);
+  const truePeak = summary.match(/True peak:[\s\S]{0,120}?Peak:\s+([+-]?\d+(?:\.\d+)?)\s+dB(?:TP|FS)/i)
+    || summary.match(/Peak:\s+([+-]?\d+(?:\.\d+)?)\s+dBTP/i);
+  return {
+    integratedLufs: integrated ? Number(integrated[1]) : null,
+    truePeakDbTP: truePeak ? Number(truePeak[1]) : null,
+  };
+}
+
+export function longestInternalSilenceSeconds(pcm, sampleRate = 48000, threshold = 0.008) {
   const samples = Math.floor(pcm.length / 2);
   if (samples < 16) return 0;
   let first = 0;
@@ -63,7 +76,7 @@ function longestInternalSilenceSeconds(pcm, sampleRate = 48000, threshold = 0.00
   return longest / sampleRate;
 }
 
-function edgeSilenceMs(pcm, sampleRate = 48000, threshold = 0.008) {
+export function edgeSilenceMs(pcm, sampleRate = 48000, threshold = 0.008) {
   const samples = Math.floor(pcm.length / 2);
   let head = 0;
   let tail = 0;
@@ -80,14 +93,11 @@ export async function measureLoudness(file) {
     '-af', 'ebur128=peak=true',
     '-f', 'null', '-',
   ]);
-  const text = `${result.stderr}\n${result.stdout.toString('utf8')}`;
-  const integrated = text.match(/I:\s+([+-]?\d+(?:\.\d+)?)\s+LUFS/);
-  const truePeak = text.match(/True peak:\s+([+-]?\d+(?:\.\d+)?)\s+dBTP/i)
-    || text.match(/Peak:\s+([+-]?\d+(?:\.\d+)?)\s+dBFS/i);
+  const rawText = `${result.stderr}\n${result.stdout.toString('utf8')}`;
+  const parsed = parseEbur128(rawText);
   return {
-    integratedLufs: integrated ? Number(integrated[1]) : null,
-    truePeakDbTP: truePeak ? Number(truePeak[1]) : null,
-    raw: text.slice(-800),
+    ...parsed,
+    raw: rawText.slice(-1200),
   };
 }
 
@@ -202,6 +212,7 @@ export async function runTechnicalQa({
     return path.join(partsDir, `part-${String(part.partIndex + 1).padStart(3, '0')}-${digest.slice(0, 12)}.mp3`);
   });
   const levels = [];
+  const partPcmBuffers = [];
   for (const file of partFiles) {
     if (!await pathExists(file)) {
       failures.push(`missing part file ${path.basename(file)}`);
@@ -209,6 +220,7 @@ export async function runTechnicalQa({
     }
     try {
       const partPcm = await decodePcm(file);
+      partPcmBuffers.push(partPcm);
       levels.push(rms(partPcm));
     } catch (error) {
       failures.push(`${path.basename(file)}: ${error.message}`);
@@ -218,6 +230,12 @@ export async function runTechnicalQa({
     const max = Math.max(...levels);
     const min = Math.min(...levels.filter((value) => value > 0));
     if (min > 0 && 20 * Math.log10(max / min) > 12) failures.push('inconsistent loudness across parts (>12 dB)');
+  }
+  for (let index = 1; index < partPcmBuffers.length; index += 1) {
+    const metrics = spliceWindowMetrics(partPcmBuffers[index - 1], partPcmBuffers[index], 48000, PRODUCTION_LOUDNESS.spliceWindowMs);
+    if (metrics.gap) failures.push(`merge gap/silence in ${PRODUCTION_LOUDNESS.spliceWindowMs}ms window after part ${index - 1}`);
+    if (metrics.click || metrics.step > 0.95) failures.push(`merge click in ${PRODUCTION_LOUDNESS.spliceWindowMs}ms window after part ${index - 1} (step ${metrics.step.toFixed(3)})`);
+    if (metrics.overlap) failures.push(`merge overlap/discontinuity after part ${index - 1}`);
   }
 
   const ids = new Set((manifest.parts || []).flatMap((part) => part.syncIds || (part.sync || []).map((entry) => entry.id)));
@@ -234,10 +252,39 @@ export async function runTechnicalQa({
     if (liveBefore.voiceId === 'hamed' && liveNow.voiceId !== 'hamed') failures.push('live Hamed voice was replaced before publish-approved');
   }
 
+  if (liveBefore?.exists && liveBefore.files?.length && levels.length) {
+    const liveLevels = [];
+    for (const item of liveBefore.files) {
+      try { liveLevels.push(rms(await decodePcm(item.file))); } catch { /* live file may not be decodable */ }
+    }
+    if (liveLevels.length) {
+      const liveMean = liveLevels.reduce((sum, value) => sum + value, 0) / liveLevels.length;
+      const candMean = levels.reduce((sum, value) => sum + value, 0) / levels.length;
+      if (liveMean > 0.01 && candMean > 0) {
+        const delta = Math.abs(20 * Math.log10(candMean / liveMean));
+        if (delta > PRODUCTION_LOUDNESS.liveBaselineMaxDeltaDb) {
+          failures.push(`candidate loudness vs live baseline ${delta.toFixed(1)} dB exceeds ${PRODUCTION_LOUDNESS.liveBaselineMaxDeltaDb} dB`);
+        }
+      }
+    }
+  }
+
   let loudness = null;
   try { loudness = await measureLoudness(fullFile); } catch { loudness = null; }
-  if (loudness?.truePeakDbTP != null && loudness.truePeakDbTP > 1.0) {
-    failures.push(`true peak ${loudness.truePeakDbTP} dBTP exceeds +1.0 (clipping)`);
+  if (loudness?.integratedLufs == null) {
+    failures.push('loudness measurement missing (integrated LUFS)');
+  } else {
+    if (loudness.integratedLufs < PRODUCTION_LOUDNESS.integratedMinLufs) {
+      failures.push(`integrated LUFS ${loudness.integratedLufs} below ${PRODUCTION_LOUDNESS.integratedMinLufs}`);
+    }
+    if (loudness.integratedLufs > PRODUCTION_LOUDNESS.integratedMaxLufs) {
+      failures.push(`integrated LUFS ${loudness.integratedLufs} above ${PRODUCTION_LOUDNESS.integratedMaxLufs}`);
+    }
+  }
+  if (loudness?.truePeakDbTP == null) {
+    failures.push('true-peak measurement missing');
+  } else if (loudness.truePeakDbTP > PRODUCTION_LOUDNESS.maxTruePeakDbTP) {
+    failures.push(`true peak ${loudness.truePeakDbTP} dBTP exceeds ${PRODUCTION_LOUDNESS.maxTruePeakDbTP} dBTP`);
   }
   const digest = sha256(full);
   if (fullSha256 && digest !== fullSha256) failures.push('technical QA full.mp3 SHA-256 does not match bound fingerprint');

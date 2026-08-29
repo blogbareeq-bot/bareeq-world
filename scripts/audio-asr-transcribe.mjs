@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { compareExactSpokenText } from './audio-exact-match.mjs';
+import { compareExactSpokenText, normalizeForVerbalComparison } from './audio-exact-match.mjs';
 import {
   FORBIDDEN_ASR_MODELS,
   INDEPENDENT_ASR_MODELS,
@@ -331,7 +331,8 @@ export async function transcribeFullAudio({
       insertions: comparison.insertions,
       transcript,
       rawTranscript: transcript,
-      normalizedTranscript: comparison.expectedTokens ? transcript : transcript,
+      normalizedTranscript: normalizeForVerbalComparison(transcript),
+      expectedNormalized: normalizeForVerbalComparison(expectedText),
       differences: comparison.differences,
       endedAt: new Date().toISOString(),
       ...http,
@@ -362,10 +363,59 @@ export async function transcribeDualAsr({
   if (fullSha256 && digest !== fullSha256) {
     throw Object.assign(new Error('ASR audio SHA-256 does not match the candidate fingerprint full.mp3'), { exitCode: EXIT_HARD });
   }
-  const uploaded = await uploadAudioFile({ apiKey, bytes, fetchImpl });
+  let uploaded = null;
+  try {
+    uploaded = await uploadAudioFile({ apiKey, bytes, fetchImpl });
+  } catch (error) {
+    const failedUpload = {
+      schema: 'bareeq.audio-files-api.v1',
+      status: 'failed',
+      stage: error.stage || 'upload',
+      error: error.message,
+      httpStatus: error.httpStatus || null,
+      http: error.http || emptyHttp(),
+      fingerprint,
+      fullSha256: digest,
+      generatedAt: new Date().toISOString(),
+    };
+    if (reportsDir) await persistReport(path.join(reportsDir, 'files-api.json'), failedUpload);
+    const asrReports = [];
+    for (const model of INDEPENDENT_ASR_MODELS) {
+      const failed = asrIdentity({
+        article,
+        fingerprint,
+        fullSha256: digest,
+        model,
+        status: 'failed',
+        extra: {
+          error: `files-api-${error.stage || 'upload'}-failed`,
+          httpStatus: error.httpStatus || null,
+          ...emptyHttp(),
+          ...(error.http || {}),
+        },
+      });
+      if (reportsDir) await persistReport(path.join(reportsDir, `asr-${model}.json`), failed);
+      asrReports.push(failed);
+    }
+    throw Object.assign(error, { dual: { asrReports, filesApi: failedUpload, totalHttpRequests: error.http?.totalHttpRequests || 0 } });
+  }
   const asrReports = [];
   const failures = [];
   let http = { ...emptyHttp(), ...uploaded.http };
+  if (reportsDir) {
+    await persistReport(path.join(reportsDir, 'files-api.json'), {
+      schema: 'bareeq.audio-files-api.v1',
+      status: 'uploaded',
+      uri: uploaded.uri,
+      mimeType: uploaded.mimeType,
+      sizeBytes: uploaded.sizeBytes,
+      name: uploaded.name,
+      http: uploaded.http,
+      fingerprint,
+      fullSha256: digest,
+      generatedAt: new Date().toISOString(),
+    });
+  }
   try {
     for (const model of INDEPENDENT_ASR_MODELS) {
       try {
@@ -387,16 +437,61 @@ export async function transcribeDualAsr({
         http = addHttp(http, 'interactionsRequests');
       } catch (error) {
         if (error.result) asrReports.push(error.result);
+        else {
+          const failed = asrIdentity({
+            article,
+            fingerprint,
+            fullSha256: digest,
+            model,
+            status: 'failed',
+            extra: { error: error.message, httpStatus: error.httpStatus || null },
+          });
+          if (reportsDir) await persistReport(path.join(reportsDir, `asr-${model}.json`), failed);
+          asrReports.push(failed);
+        }
         failures.push(error);
         http = addHttp(http, 'interactionsRequests');
       }
     }
   } finally {
-    const deletion = await deleteUploadedFile({ apiKey, name: uploaded.name, fetchImpl }).catch((error) => ({ deleted: false, error: error.message, http: emptyHttp() }));
-    http = addHttp(http, 'filesApiDeleteRequests');
+    const deletion = await deleteUploadedFile({ apiKey, name: uploaded.name, fetchImpl }).catch((error) => ({
+      deleted: false,
+      error: error.message,
+      http: emptyHttp(),
+      stage: 'delete',
+    }));
+    const deleteCount = deletion.http?.filesApiDeleteRequests || 0;
+    if (deleteCount) {
+      http = {
+        ...http,
+        filesApiDeleteRequests: (http.filesApiDeleteRequests || 0) + deleteCount,
+        totalHttpRequests: (http.totalHttpRequests || 0) + (deletion.http.totalHttpRequests || 0),
+      };
+    } else {
+      http = addHttp(http, 'filesApiDeleteRequests');
+    }
     http.deleteResult = deletion;
+    if (!deletion.deleted) {
+      if (reportsDir) {
+        await persistReport(path.join(reportsDir, 'files-api-delete.json'), {
+          schema: 'bareeq.audio-files-api.v1',
+          status: 'failed',
+          stage: 'delete',
+          error: deletion.error || `HTTP ${deletion.httpStatus}`,
+          httpStatus: deletion.httpStatus || null,
+          http: deletion.http || emptyHttp(),
+          fingerprint,
+          fullSha256: digest,
+          generatedAt: new Date().toISOString(),
+        });
+      }
+      failures.push(Object.assign(new Error(`Files API delete failed HTTP ${deletion.httpStatus || 0}`), {
+        stage: 'delete',
+        httpStatus: deletion.httpStatus,
+      }));
+    }
     for (const report of asrReports) {
-      report.filesApiDeleteRequests = 1;
+      report.filesApiDeleteRequests = http.filesApiDeleteRequests;
       report.deleteResult = deletion;
       if (reportsDir) {
         await persistReport(path.join(reportsDir, `asr-${report.requestedModel || report.model}.json`), report);
@@ -417,7 +512,7 @@ export async function transcribeDualAsr({
     filesApiStartRequests: http.filesApiStartRequests || 1,
     filesApiFinalizeRequests: http.filesApiFinalizeRequests || 1,
     filesApiMetadataRequests: http.filesApiMetadataRequests || 0,
-    filesApiDeleteRequests: 1,
+    filesApiDeleteRequests: http.filesApiDeleteRequests || 1,
     interactionsRequests: asrReports.length,
     totalHttpRequests: http.totalHttpRequests,
   };
@@ -428,6 +523,7 @@ export async function transcribeDualAsr({
   }
   return dual;
 }
+
 
 const isCli = process.argv[1] && path.basename(process.argv[1]) === 'audio-asr-transcribe.mjs';
 if (isCli) {

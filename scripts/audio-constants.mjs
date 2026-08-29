@@ -76,6 +76,8 @@ export const QUOTA_SPLIT = Object.freeze({
   targetSeconds: 165,
   minSeconds: 90,
   maxSeconds: GEMINI_TTS_CONTRACT.qualityCapSeconds,
+  targetBandMinSeconds: 150,
+  targetBandMaxSeconds: GEMINI_TTS_CONTRACT.qualityCapSeconds,
   maxTranscriptBytes: 6500,
   geminiInputTokenLimit: GEMINI_TTS_CONTRACT.inputTokenLimit,
   geminiTokenEstimateDivisorBytes: GEMINI_TTS_CONTRACT.tokenEstimateDivisorBytes,

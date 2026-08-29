@@ -146,7 +146,7 @@ function rebalanceAllParts(parts, settings, charsPerSecond, articleTitle) {
   if (parts.length < 2 || min <= 0) return parts;
   let current = parts;
   for (let guard = 0; guard < 24; guard += 1) {
-    const shortIndex = current.findIndex((part) => part.estimatedSeconds < min);
+    const shortIndex = current.findIndex((part) => part.estimatedSeconds < min && !part.unavoidableReason);
     if (shortIndex === -1) return current;
     const tryMerge = (left, right) => {
       const mergedItems = [...current[left].items, ...current[right].items];
@@ -177,8 +177,10 @@ function rebalanceAllParts(parts, settings, charsPerSecond, articleTitle) {
       current[shortIndex] = {
         ...current[shortIndex],
         splitReason: current[shortIndex].splitReason || `short-part-unavoidable:${current[shortIndex].estimatedSeconds}s`,
+        unavoidableReason: current[shortIndex].unavoidableReason
+          || `short-part-${current[shortIndex].estimatedSeconds}s-cannot-merge-without-exceeding-${settings.maxSeconds || 'cap'}s`,
       };
-      return current;
+      continue;
     }
     const fromLeft = donor < shortIndex;
     const remain = [...current[donor].items];
@@ -206,8 +208,10 @@ function rebalanceAllParts(parts, settings, charsPerSecond, articleTitle) {
       current[shortIndex] = {
         ...current[shortIndex],
         splitReason: current[shortIndex].splitReason || `short-part-unavoidable:${current[shortIndex].estimatedSeconds}s`,
+        unavoidableReason: current[shortIndex].unavoidableReason
+          || `short-part-${current[shortIndex].estimatedSeconds}s-cannot-steal-without-dropping-neighbor-below-${min}s`,
       };
-      return current;
+      continue;
     }
     const rebuilt = asItemParts(current);
     rebuilt[donor] = { items: remain };
@@ -217,8 +221,74 @@ function rebalanceAllParts(parts, settings, charsPerSecond, articleTitle) {
   return current;
 }
 
+function rebalanceTowardBand(parts, settings, charsPerSecond, articleTitle) {
+  const bandMin = settings.targetBandMinSeconds;
+  const bandMax = settings.targetBandMaxSeconds || settings.maxSeconds || Infinity;
+  if (!bandMin || (settings.minSeconds ?? 0) < 90 || parts.length < 2) return parts;
+  let current = parts;
+  for (let guard = 0; guard < 24; guard += 1) {
+    const shortIndex = current.findIndex((part) => part.estimatedSeconds < bandMin && !part.unavoidableReason);
+    if (shortIndex === -1) return current;
+    const tryMerge = (left, right) => {
+      const mergedItems = [...current[left].items, ...current[right].items];
+      const text = joinSpeechPieces(mergedItems);
+      const seconds = estimateSeconds(text, charsPerSecond);
+      if (seconds > bandMax) return null;
+      if (wouldExceed(text, settings, charsPerSecond, articleTitle, left, current.length - 1)) return null;
+      return reindex([
+        ...asItemParts(current.slice(0, left)),
+        { items: mergedItems },
+        ...asItemParts(current.slice(right + 1)),
+      ], charsPerSecond, articleTitle);
+    };
+    if (shortIndex > 0) {
+      const merged = tryMerge(shortIndex - 1, shortIndex);
+      if (merged) {
+        current = merged;
+        continue;
+      }
+    }
+    if (shortIndex < current.length - 1) {
+      const merged = tryMerge(shortIndex, shortIndex + 1);
+      if (merged) {
+        current = merged;
+        continue;
+      }
+    }
+    current[shortIndex] = {
+      ...current[shortIndex],
+      unavoidableReason: current[shortIndex].unavoidableReason
+        || `short-part-${current[shortIndex].estimatedSeconds}s-merge-would-exceed-${Number.isFinite(bandMax) ? bandMax : 'cap'}s-target-band-${bandMin}-${bandMax}`,
+    };
+  }
+  return current;
+}
+
+function annotateUnavoidable(parts, settings) {
+  const bandMin = (settings.minSeconds ?? 0) >= 90 ? (settings.targetBandMinSeconds || settings.minSeconds) : (settings.minSeconds || 0);
+  if (!bandMin) {
+    return parts.map((part) => ({ ...part, unavoidableReason: part.unavoidableReason || null }));
+  }
+  const max = settings.maxSeconds || settings.targetBandMaxSeconds || Infinity;
+  return parts.map((part) => {
+    if (part.estimatedSeconds >= bandMin) {
+      return { ...part, unavoidableReason: part.unavoidableReason || null };
+    }
+    return {
+      ...part,
+      unavoidableReason: part.unavoidableReason || (
+        parts.length === 1
+          ? `single-part-article-${part.estimatedSeconds}s-below-band-${bandMin}s`
+          : `short-part-${part.estimatedSeconds}s-cannot-fit-target-band-${bandMin}-${Number.isFinite(max) ? max : 'cap'}`
+      ),
+    };
+  });
+}
+
 function rebalanceParts(parts, settings, charsPerSecond, articleTitle) {
-  return rebalanceAllParts(parts, settings, charsPerSecond, articleTitle);
+  const minBalanced = rebalanceAllParts(parts, settings, charsPerSecond, articleTitle);
+  const bandBalanced = rebalanceTowardBand(minBalanced, settings, charsPerSecond, articleTitle);
+  return annotateUnavoidable(bandBalanced, settings);
 }
 
 function packEven(units, settings, charsPerSecond, articleTitle) {
@@ -363,6 +433,7 @@ function packItems(items, settings, charsPerSecond, articleTitle) {
           ? `below-min-${settings.minSeconds}s-unavoidable`
           : `even-pack-target-${settings.targetSeconds}s-cap-${settings.maxSeconds}s`
     ),
+    unavoidableReason: part.unavoidableReason || null,
   }));
 }
 

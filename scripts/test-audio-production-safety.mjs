@@ -518,7 +518,8 @@ try {
     root: tmp,
     storeRoot: tmp,
   });
-  assert.equal(verifiedLive.status, 'live-snapshot');
+  assert.equal(verifiedLive.status, 'live-snapshot-unverified');
+  assert.equal(verifiedLive.certified, false);
   assert.match(verifiedLive.fingerprint, /^[a-f0-9]{64}$/);
   assert.equal(verifiedLive.liveUntouched, true);
   assert.equal(await readFile(path.join(publishedLive, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED');
@@ -599,6 +600,9 @@ try {
     'human listening evidence bound to the candidate file SHA-256',
     '--fingerprint=',
     'Refusing to pick latest',
+    'BAREEQ_AUDIO_MODE',
+    'BAREEQ_AUDIO_PUBLISH_PUSH',
+    '--snapshot-only',
   ]) {
     assert.ok(workflow.includes(token), `workflow missing ${token}`);
   }
@@ -624,6 +628,11 @@ try {
     assert.ok(plan.parts.every((part) => Array.isArray(part.syncIds)), `${plan.articleId} missing syncIds`);
     assert.ok(plan.parts.some((part) => part.syncIds.length), `${plan.articleId} has no synchronized blocks`);
     if (plan.ttsRequestsAfter > 6) assert.ok(plan.justification);
+    for (const part of plan.parts) {
+      if (part.estimatedSeconds < 150 && plan.ttsRequestsAfter > 1) {
+        assert.ok(part.unavoidableReason, `${plan.articleId} part ${part.partIndex} is ${part.estimatedSeconds}s without unavoidableReason`);
+      }
+    }
   }
 
   const dryCli = spawnSync(process.execPath, ['scripts/audio-production.mjs', '--mode=dry-run'], { encoding: 'utf8', cwd: ROOT });

@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: dry-run never calls a provider. generate-candidate never publishes. validate-candidate never publishes. publish-approved requires listening tied to the file fingerprint.
+        description: dry-run never calls a provider. generate-candidate never publishes. validate-candidate never publishes. publish-approved requires listening tied to the file fingerprint. verify-live --snapshot-only is uncertified.
         required: true
         type: choice
         default: dry-run
@@ -35,6 +35,11 @@ on:
         required: false
         type: string
         default: ''
+      verifyAsr:
+        description: verify-live --with-asr. Requires GEMINI_API_KEY. Default snapshot-only is uncertified.
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -50,9 +55,11 @@ jobs:
     env:
       BAREEQ_CLOUD_TTS_ACTIVATE: '0'
       BAREEQ_GEMINI_FREE_ROLLOUT: '0'
+      BAREEQ_AUDIO_MODE: ${{ inputs.mode }}
       BAREEQ_AUDIO_ARTICLE: ${{ inputs.article }}
       BAREEQ_AUDIO_FINGERPRINT: ${{ inputs.fingerprint }}
       BAREEQ_AUDIO_LISTENING: ${{ inputs.listening }}
+      BAREEQ_AUDIO_VERIFY_ASR: ${{ inputs.verifyAsr }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -75,6 +82,7 @@ jobs:
           node scripts/test-audio-production-integration.mjs
           node scripts/test-speech-script-quality-gate.mjs
           node scripts/check-speech-scripts.mjs
+          node scripts/test-audio-engine-final.mjs
 
       - name: Guard inputs
         run: |
@@ -82,7 +90,7 @@ jobs:
           article="${BAREEQ_AUDIO_ARTICLE}"
           fingerprint="${BAREEQ_AUDIO_FINGERPRINT}"
           listening="${BAREEQ_AUDIO_LISTENING}"
-          mode="${{ inputs.mode }}"
+          mode="${BAREEQ_AUDIO_MODE}"
           if [ "$mode" != "dry-run" ]; then
             if [ -z "$article" ]; then
               echo 'article is required'
@@ -157,14 +165,26 @@ jobs:
         if: inputs.mode == 'publish-approved'
         env:
           BAREEQ_AUDIO_PUBLISH_GIT: '1'
+          BAREEQ_AUDIO_PUBLISH_PUSH: '1'
+          BAREEQ_AUDIO_PUBLISH_REF: ${{ github.ref_name }}
+          BAREEQ_AUDIO_VERIFY_ORIGIN: https://bareeqworld.com
         run: |
           echo 'publish-approved refuses without human listening evidence bound to the candidate file SHA-256.'
           node scripts/audio-production.mjs --mode=publish-approved --article="${BAREEQ_AUDIO_ARTICLE}" --fingerprint="${BAREEQ_AUDIO_FINGERPRINT}" --listening="${BAREEQ_AUDIO_LISTENING}"
 
-      - name: Verify live
-        if: inputs.mode == 'verify-live'
+      - name: Verify live snapshot-only
+        if: inputs.mode == 'verify-live' && inputs.verifyAsr != true
         run: |
-          node scripts/audio-production.mjs --mode=verify-live --article="${BAREEQ_AUDIO_ARTICLE}"
+          echo 'verify-live --snapshot-only: uncertified read-only snapshot. Dual ASR skipped. Live files are not modified.'
+          node scripts/audio-production.mjs --mode=verify-live --article="${BAREEQ_AUDIO_ARTICLE}" --snapshot-only
+
+      - name: Verify live with ASR
+        if: inputs.mode == 'verify-live' && inputs.verifyAsr == true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo 'verify-live --with-asr: merge+QA+sync+dual ASR on a copied snapshot. Live files are not modified. Not certified without human listening.'
+          node scripts/audio-production.mjs --mode=verify-live --article="${BAREEQ_AUDIO_ARTICLE}" --with-asr
 
       - name: Save candidate cache
         if: always()

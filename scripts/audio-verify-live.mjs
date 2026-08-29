@@ -1,6 +1,6 @@
 import { mkdir, readFile, cp, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { EXIT_HARD, EXIT_OK, EXIT_USAGE, candidateDir, sha256 } from './audio-constants.mjs';
+import { EXIT_CONFIG, EXIT_HARD, EXIT_OK, EXIT_USAGE, candidateDir, sha256 } from './audio-constants.mjs';
 import { inspectLiveSnapshot, runTechnicalQa } from './audio-technical-qa.mjs';
 import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
@@ -10,12 +10,15 @@ import { mergeCandidateParts } from './audio-merge.mjs';
 import { boundIdentity } from './audio-report.mjs';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { partFileName } from './audio-checkpoint.mjs';
+import { transcribeDualAsr } from './audio-asr-transcribe.mjs';
 
 export async function snapshotLiveSadaltager({
   articleId,
   root = process.cwd(),
   fetchImpl,
   skipAsr = true,
+  withAsr = false,
+  apiKey = process.env.GEMINI_API_KEY,
 }) {
   if (!articleId) throw Object.assign(new Error('verify-live requires --article'), { exitCode: EXIT_USAGE });
   const live = await inspectLiveSnapshot(articleId, root);
@@ -152,15 +155,78 @@ export async function snapshotLiveSadaltager({
     '',
   ].filter(Boolean).join('\n');
   await writeFile(path.join(dir, 'reports', 'listening-pack.md'), listeningPack);
+  const runAsr = Boolean(withAsr) && !skipAsr;
+  let asr = {
+    skipped: true,
+    certified: false,
+    note: 'snapshot-only is not a certified live verification. Dual ASR was not run.',
+  };
+  if (runAsr) {
+    if (!apiKey?.trim() && !fetchImpl) {
+      throw Object.assign(new Error('verify-live --with-asr requires GEMINI_API_KEY. No transcription request was sent.'), { exitCode: EXIT_CONFIG });
+    }
+    try {
+      const dual = await transcribeDualAsr({
+        audioPath: path.join(dir, 'full.mp3'),
+        expectedText: article.spokenText,
+        apiKey: apiKey || 'test-key',
+        fetchImpl,
+        reportsDir: path.join(dir, 'reports'),
+        fingerprint,
+        fullSha256,
+        article,
+      });
+      asr = {
+        skipped: false,
+        certified: false,
+        status: 'passed',
+        note: 'Dual ASR ran against a copied snapshot. Live public/audio was not modified. Human listening is still required; this is not production certification.',
+        ...dual,
+      };
+    } catch (error) {
+      asr = {
+        skipped: false,
+        certified: false,
+        status: 'failed',
+        error: error.message,
+        dual: error.dual || null,
+      };
+      await writeJson(path.join(dir, 'live-snapshot.json'), boundIdentity({
+        article,
+        fingerprint,
+        fullSha256,
+        status: 'live-asr-failed',
+        schema: 'bareeq.audio-live-snapshot.v2',
+        extra: {
+          liveFingerprint: live.fingerprint,
+          liveUntouched: true,
+          skipAsr: false,
+          asr,
+          certified: false,
+          note: 'verify-live --with-asr failed. Not certified.',
+        },
+      }));
+      const liveAfterFail = await inspectLiveSnapshot(articleId, root);
+      if (liveAfterFail.fingerprint !== live.fingerprint) {
+        throw Object.assign(new Error(`${articleId}: verify-live changed live audio`), { exitCode: EXIT_HARD });
+      }
+      throw Object.assign(error, { asr, liveUntouched: true });
+    }
+  }
+  const status = runAsr ? 'live-asr-checked' : 'live-snapshot-unverified';
   const snapshot = {
-    ...boundIdentity({ article, fingerprint, fullSha256, status: 'live-snapshot', schema: 'bareeq.audio-live-snapshot.v2' }),
+    ...boundIdentity({ article, fingerprint, fullSha256, status, schema: 'bareeq.audio-live-snapshot.v2' }),
     liveFingerprint: live.fingerprint,
     provider: live.provider,
     voiceId: live.voiceId,
     liveUntouched: true,
     scriptConflict,
-    skipAsr: Boolean(skipAsr) || !fetchImpl,
-    note: 'Read-only snapshot. Live public/audio was not modified. Do not treat this as generated-from-current-speech-script unless hashes match.',
+    skipAsr: !runAsr,
+    certified: false,
+    asr,
+    note: runAsr
+      ? 'Read-only snapshot with dual ASR. Live public/audio was not modified. Not certified without fingerprint-bound human listening.'
+      : 'Read-only snapshot-only. Uncertified. Live public/audio was not modified. Dual ASR was skipped.',
   };
   await writeJson(path.join(dir, 'live-snapshot.json'), snapshot);
   const liveAfter = await inspectLiveSnapshot(articleId, root);
@@ -178,7 +244,9 @@ export async function snapshotLiveSadaltager({
     technical,
     sync,
     merge,
-    status: 'live-snapshot',
+    asr,
+    certified: false,
+    status,
     exitCode: EXIT_OK,
   };
 }

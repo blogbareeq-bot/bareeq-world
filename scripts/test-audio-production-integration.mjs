@@ -344,7 +344,7 @@ try {
   const verifyLive = await runCliAsync(['--mode=verify-live', '--article=resume-fixture'], { cwd: tmp2, env });
   assert.equal(verifyLive.status, EXIT_OK, `verify-live failed: ${verifyLive.stderr}\\n${verifyLive.stdout}`);
   const verifyPayload = JSON.parse(verifyLive.stdout);
-  assert.equal(verifyPayload.status, 'live-snapshot');
+  assert.equal(verifyPayload.status, 'live-snapshot-unverified');
   assert.equal(await readFile(path.join(liveDir, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED-KEEP');
   assert.equal(liveManifest.defaultVoice, 'sadaltager');
 

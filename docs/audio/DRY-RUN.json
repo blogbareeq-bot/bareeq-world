@@ -1,6 +1,6 @@
 {
   "schema": "bareeq.audio-production-dry-run.v4",
-  "generatedAt": "2026-08-29T05:19:41.366Z",
+  "generatedAt": "2026-08-29T08:31:28.962Z",
   "mode": "dry-run",
   "narrator": {
     "role": "primary",
@@ -81,6 +81,8 @@
         "targetSeconds": 165,
         "minSeconds": 90,
         "maxSeconds": 180,
+        "targetBandMinSeconds": 150,
+        "targetBandMaxSeconds": 180,
         "maxTranscriptBytes": 6500,
         "geminiInputTokenLimit": 8192,
         "geminiTokenEstimateDivisorBytes": 3,
@@ -191,7 +193,8 @@
             "b0011",
             "b0012"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 1,
@@ -213,7 +216,8 @@
             "b0022",
             "b0023"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 2,
@@ -237,7 +241,8 @@
             "b0035",
             "b0036"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 3,
@@ -266,7 +271,8 @@
             "b0053",
             "b0054"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 4,
@@ -292,7 +298,8 @@
             "b0068",
             "b0069"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-114.03s-merge-would-exceed-180s-target-band-150-180"
         },
         {
           "partIndex": 5,
@@ -313,7 +320,8 @@
             "b0078",
             "b0079"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-91.63s-merge-would-exceed-180s-target-band-150-180"
         }
       ]
     },
@@ -361,7 +369,8 @@
             "b0009",
             "b0010"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 1,
@@ -388,7 +397,8 @@
             "b0025",
             "b0026"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 2,
@@ -407,7 +417,8 @@
             "b0033",
             "b0034"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-148.84s-merge-would-exceed-180s-target-band-150-180"
         },
         {
           "partIndex": 3,
@@ -431,7 +442,8 @@
             "b0046",
             "b0047"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 4,
@@ -452,7 +464,8 @@
             "b0056",
             "b0057"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-148.84s-merge-would-exceed-180s-target-band-150-180"
         },
         {
           "partIndex": 5,
@@ -474,7 +487,8 @@
             "b0067",
             "b0068"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         }
       ]
     },
@@ -522,7 +536,8 @@
             "b0009",
             "b0010"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 1,
@@ -542,7 +557,8 @@
             "b0018",
             "b0019"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 2,
@@ -563,7 +579,8 @@
             "b0028",
             "b0029"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-147.23s-merge-would-exceed-180s-target-band-150-180"
         },
         {
           "partIndex": 3,
@@ -585,7 +602,8 @@
             "b0039",
             "b0040"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 4,
@@ -609,7 +627,8 @@
             "b0052",
             "b0053"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 5,
@@ -634,7 +653,8 @@
             "b0066",
             "b0067"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 6,
@@ -658,7 +678,8 @@
             "b0079",
             "b0080"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         }
       ]
     },
@@ -711,7 +732,8 @@
             "b0014",
             "b0015"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 1,
@@ -732,7 +754,8 @@
             "b0024",
             "b0025"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 2,
@@ -751,7 +774,8 @@
             "b0032",
             "b0033"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 3,
@@ -772,7 +796,8 @@
             "b0042",
             "b0043"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 4,
@@ -794,7 +819,8 @@
             "b0053",
             "b0054"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 5,
@@ -821,7 +847,8 @@
             "b0069",
             "b0070"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 6,
@@ -846,7 +873,8 @@
             "b0083",
             "b0084"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-149.69s-merge-would-exceed-180s-target-band-150-180"
         }
       ]
     },
@@ -892,7 +920,8 @@
             "b0007",
             "b0008"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 1,
@@ -911,7 +940,8 @@
             "b0015",
             "b0016"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-146.51s-merge-would-exceed-180s-target-band-150-180"
         },
         {
           "partIndex": 2,
@@ -931,7 +961,8 @@
             "b0024",
             "b0025"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 3,
@@ -951,7 +982,8 @@
             "b0033",
             "b0034"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 4,
@@ -966,7 +998,8 @@
             "b0037",
             "b0038"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-143.26s-merge-would-exceed-180s-target-band-150-180"
         },
         {
           "partIndex": 5,
@@ -985,7 +1018,8 @@
             "b0045",
             "b0046"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 6,
@@ -1005,7 +1039,8 @@
             "b0054",
             "b0055"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-148.38s-merge-would-exceed-180s-target-band-150-180"
         },
         {
           "partIndex": 7,
@@ -1029,7 +1064,8 @@
             "b0067",
             "b0068"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         }
       ]
     },
@@ -1091,7 +1127,8 @@
             "b0006",
             "b0007"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 1,
@@ -1114,7 +1151,8 @@
             "b0018",
             "b0019"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 2,
@@ -1137,7 +1175,8 @@
             "b0030",
             "b0031"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 3,
@@ -1157,7 +1196,8 @@
             "b0039",
             "b0040"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 4,
@@ -1176,7 +1216,8 @@
             "b0047",
             "b0048"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 5,
@@ -1194,7 +1235,8 @@
             "b0054",
             "b0055"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 6,
@@ -1219,7 +1261,8 @@
             "b0068",
             "b0069"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-144.08s-merge-would-exceed-180s-target-band-150-180"
         },
         {
           "partIndex": 7,
@@ -1239,7 +1282,8 @@
             "b0077",
             "b0078"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 8,
@@ -1263,7 +1307,8 @@
             "b0090",
             "b0091"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 9,
@@ -1287,7 +1332,8 @@
             "b0103",
             "b0104"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": null
         },
         {
           "partIndex": 10,
@@ -1309,7 +1355,8 @@
             "b0114",
             "b0115"
           ],
-          "splitReason": "even-pack-target-165s-cap-180s"
+          "splitReason": "even-pack-target-165s-cap-180s",
+          "unavoidableReason": "short-part-100.69s-merge-would-exceed-180s-target-band-150-180"
         }
       ]
     },
