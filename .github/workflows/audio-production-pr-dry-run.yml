@@ -1,0 +1,50 @@
+name: Bareeq audio PR dry-run
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bareeq-audio-pr-dry-run-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BAREEQ_CLOUD_TTS_ACTIVATE: '0'
+      BAREEQ_GEMINI_FREE_ROLLOUT: '0'
+      BAREEQ_AUDIO_MODE: dry-run
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Offline audio safety gates
+        run: |
+          node scripts/test-audio-lifecycle.mjs
+          node scripts/test-audio-production-safety.mjs
+          node scripts/test-audio-production-integration.mjs
+          node scripts/test-speech-script-quality-gate.mjs
+          node scripts/check-speech-scripts.mjs
+          node scripts/test-audio-engine-final.mjs
+
+      - name: Production dry-run (zero provider calls)
+        run: |
+          node scripts/audio-inventory.mjs
+          node scripts/audio-production.mjs --mode=dry-run
+          test -f docs/audio/DRY-RUN.json
+          echo 'PASS: dry-run completed with synthesis disabled.'
