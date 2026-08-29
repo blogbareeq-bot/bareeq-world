@@ -27,6 +27,15 @@ export async function resolveLatestCandidateDir(articleId, root) {
   throw Object.assign(new Error('validate-candidate will not pick the latest candidate'), { exitCode: EXIT_USAGE });
 }
 
+async function defaultLiveDuration(articleId, root) {
+  try {
+    const live = JSON.parse(await readFile(path.join(root, 'docs', 'audio', 'LIVE-AUDIO-OBSERVED-20260828.json'), 'utf8'));
+    return live.articles.find((item) => item.articleId === articleId)?.durationSeconds ?? null;
+  } catch {
+    return null;
+  }
+}
+
 function stamp(article, fingerprint, fullSha256, status, schema, extra = {}) {
   return boundIdentity({ article, fingerprint, fullSha256, status, schema, extra });
 }
@@ -37,7 +46,7 @@ export async function validateCandidate({
   root = process.cwd(),
   storeRoot,
   settings = QUOTA_SPLIT,
-  liveDurationSeconds = null,
+  liveDurationSeconds = undefined,
   fetchImpl,
   apiKey = process.env.GEMINI_API_KEY,
   skipAsr = false,
@@ -49,7 +58,8 @@ export async function validateCandidate({
     throw Object.assign(new Error('validate-candidate requires --fingerprint; it will not pick the latest candidate'), { exitCode: EXIT_USAGE });
   }
   const article = await loadSpokenArticle(articleId, root);
-  const splitPlan = splitSpokenArticle(article, { settings: activeSplitSettings(settings), liveDurationSeconds });
+  const duration = liveDurationSeconds === undefined ? await defaultLiveDuration(articleId, root) : liveDurationSeconds;
+  const splitPlan = splitSpokenArticle(article, { settings: activeSplitSettings(settings), liveDurationSeconds: duration });
   const resolvedFingerprint = fingerprint;
   const dir = candidateDir(articleId, resolvedFingerprint, storeRoot || root);
   const paths = checkpointPaths(articleId, resolvedFingerprint, storeRoot || root);
@@ -213,6 +223,7 @@ export async function validateCandidate({
 
   await writeJson(path.join(paths.dir, 'generation-report.json'), {
     ...stamp(article, resolvedFingerprint, fullSha256, 'generated', 'bareeq.audio-generation.v2'),
+    liveDurationSeconds: duration,
     split: {
       version: splitPlan.settings.version,
       ttsRequests: splitPlan.ttsRequests,
