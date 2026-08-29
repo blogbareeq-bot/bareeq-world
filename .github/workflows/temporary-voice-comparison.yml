@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate comparison samples
+      - name: Generate remaining comparison samples
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
@@ -35,25 +35,38 @@ jobs:
           import { synthesizeGeminiGenerateContentPart } from './scripts/audio-gemini-tts.mjs';
 
           const text = 'قد نختصر المشهد بقولنا إن الأسعار ارتفعت، لكن هذا الاختصار لا يكفي. فارتفاع سعر البن بعد موسم سيئ لا يساوي تضخمًا في الاقتصاد كله، وبقاء الأسعار مرتفعة لا يعني أن التضخم ما زال يتسارع. لفهم الأخبار الاقتصادية بوعي، نحتاج إلى فصل ثلاثة أشياء: مستوى الأسعار، ومُعَدَّلَ تَغَيُّرِهِ، والقوة الشرائية للنقود.';
-          const voices = ['Sadaltager', 'Charon', 'Gacrux', 'Sulafat'];
+          const voices = ['Charon', 'Gacrux', 'Sulafat'];
           const failures = [];
+          const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-          for (const voice of voices) {
-            try {
-              console.log(`Generating ${voice}...`);
-              const result = await synthesizeGeminiGenerateContentPart({
-                apiKey: process.env.GEMINI_API_KEY,
-                part: { text },
-                context: { articleTitle: 'التضخم ببساطة: لماذا ترتفع الأسعار؟' },
-                voice,
-              });
-              fs.writeFileSync(`voice-samples/${voice}.mp3`, result.audio);
-              console.log(`Generated ${voice}: ${result.audio.length} bytes`);
-            } catch (error) {
-              console.error(`FAILED ${voice}: ${error.message}`);
-              failures.push({ voice, message: error.message, exitCode: error.exitCode || null });
+          async function generateVoice(voice) {
+            for (let attempt = 1; attempt <= 4; attempt += 1) {
+              try {
+                console.log(`Generating ${voice}, attempt ${attempt}...`);
+                const result = await synthesizeGeminiGenerateContentPart({
+                  apiKey: process.env.GEMINI_API_KEY,
+                  part: { text },
+                  context: { articleTitle: 'التضخم ببساطة: لماذا ترتفع الأسعار؟' },
+                  voice,
+                });
+                fs.writeFileSync(`voice-samples/${voice}.mp3`, result.audio);
+                console.log(`Generated ${voice}: ${result.audio.length} bytes`);
+                return true;
+              } catch (error) {
+                const quota = error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
+                console.error(`Attempt ${attempt} failed for ${voice}: ${error.message}`);
+                if (!quota || attempt === 4) {
+                  failures.push({ voice, message: error.message, exitCode: error.exitCode || null });
+                  return false;
+                }
+                console.log(`Quota window hit for ${voice}; waiting before retry.`);
+                await sleep(65000);
+              }
             }
+            return false;
           }
+
+          for (const voice of voices) await generateVoice(voice);
 
           fs.writeFileSync('voice-samples/manifest.json', JSON.stringify({ text, voices, failures }, null, 2));
           if (failures.length) process.exitCode = 1;
