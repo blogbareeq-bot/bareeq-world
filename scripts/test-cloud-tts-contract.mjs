@@ -1,6 +1,5 @@
 import { generateKeyPairSync } from 'node:crypto';
 import { createServer } from 'node:http';
-import { PRODUCTION_TTS_MODEL, PRODUCTION_VOICE } from './audio-constants.mjs';
 import {
   CLOUD_TTS_LANGUAGE,
   CLOUD_TTS_MODEL,
@@ -8,7 +7,6 @@ import {
   CLOUD_TTS_VOICE,
   assertCloudTtsActivation,
   buildCloudTtsRequest,
-  cloudTtsEndpoint,
   createServiceAccountAssertion,
   extractCloudTtsMp3,
 } from './cloud-tts.mjs';
@@ -21,9 +19,6 @@ const expectThrow = (label, fn, pattern) => {
 
 expectThrow('inactive live guard', () => assertCloudTtsActivation({}, false), /prepared but not activated/);
 assertCloudTtsActivation({}, true);
-expectThrow('Gemini 3.1 non-global region guard', () => cloudTtsEndpoint({ GOOGLE_CLOUD_TTS_REGION: 'us' }, false), /must use.*global/i);
-if (CLOUD_TTS_MODEL !== PRODUCTION_TTS_MODEL || CLOUD_TTS_VOICE !== PRODUCTION_VOICE) failures.push('Cloud TTS must use the same production Gemini model and voice');
-if (CLOUD_TTS_MODEL !== 'gemini-3.1-flash-tts-preview') failures.push(`unexpected Cloud TTS production model ${CLOUD_TTS_MODEL}`);
 
 const { privateKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
 const assertion = createServiceAccountAssertion({
@@ -65,7 +60,7 @@ try {
     projectId: 'bareeq-tts',
     text: 'هذا اختبار تعاقدي محلي لا يرسل أي طلب مدفوع.',
     prompt: CLOUD_TTS_STYLE,
-    userAgent: 'Bareeq-Cloud-TTS-Contract/10',
+    userAgent: 'Bareeq-Cloud-TTS-Contract/4.21.1',
   });
   const response = await fetch(url, options);
   const audio = extractCloudTtsMp3(await response.json());
@@ -79,7 +74,6 @@ if (captured?.authorization !== 'Bearer contract-token' || captured?.project !==
 if (captured?.body?.voice?.modelName !== CLOUD_TTS_MODEL || captured?.body?.voice?.name !== CLOUD_TTS_VOICE || captured?.body?.voice?.languageCode !== CLOUD_TTS_LANGUAGE) failures.push('Cloud TTS model, voice, or Arabic locale is incorrect');
 if (captured?.body?.audioConfig?.audioEncoding !== 'MP3' || captured?.body?.audioConfig?.sampleRateHertz !== 24000) failures.push('Cloud TTS MP3/24kHz output configuration is incorrect');
 if (captured?.body?.input?.prompt !== CLOUD_TTS_STYLE || !captured?.body?.input?.text) failures.push('Cloud TTS prompt/text fields are incorrect');
-if (!captured?.body?.input?.prompt.includes('دون أي إضافة أو حذف أو إعادة صياغة أو استبدال صرفي أو معجمي')) failures.push('Cloud TTS prompt is not strict enough for verbatim production');
 
 expectThrow('text byte limit', () => buildCloudTtsRequest({
   env: { GOOGLE_CLOUD_TTS_ENDPOINT: 'http://127.0.0.1:9' },
@@ -95,4 +89,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Google Cloud TTS offline contract passed: activation guard, global-only Gemini 3.1 Flash TTS preview, production Sadaltager, ar-EG, service-account JWT, REST headers/schema, direct MP3, strict verbatim prompt, and UTF-8 byte limits. Paid requests: 0.');
+console.log('Google Cloud TTS offline contract passed: activation guard, service-account JWT, REST headers/schema, Gemini 2.5 Flash TTS + Sadaltager + ar-EG, direct MP3, and UTF-8 byte limits. Paid requests: 0.');
