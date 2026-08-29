@@ -9,7 +9,7 @@ assert.equal(representationEquivalent('3', 'ثالثا'), true);
 assert.equal(representationEquivalent('تصعد', 'تصاعد'), false);
 assert.equal(representationEquivalent('يتأثر', 'يتاثر'), false);
 
-const expectedText = 'هذا سيئ ثم 3 فتظهر ضغوط تصعد بالأسعار ثم عشرة أجهزة ومئة شخص والنتيجة تعتمد على النص';
+const expectedText = 'هذا سيئ ثم 3 فتظهر ضغوط تصعد بالأسعار ثم عشرة أجهزة مئة شخص النتيجة تعتمد على النص';
 const tokens = tokenizeVerbal(expectedText);
 const idx = (word) => {
   const value = tokens.indexOf(word);
