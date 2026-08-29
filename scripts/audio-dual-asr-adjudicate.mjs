@@ -52,6 +52,25 @@ export function representationEquivalent(expected, actual) {
   return Boolean(en && an && en === an);
 }
 
+function lamNumericCanonical(value) {
+  const token = normalizeForVerbalComparison(value);
+  if (!token.startsWith('ل') || token.length < 2) return null;
+  const number = NUMBER_CANONICAL.get(token.slice(1));
+  return number ? `ل:${number}` : null;
+}
+
+function representationWithBoundaryEquivalent(expected, diff, boundaryInsertions = []) {
+  if (representationEquivalent(expected, diff?.actual)) return true;
+  const expectedCanonical = lamNumericCanonical(expected);
+  if (!expectedCanonical) return false;
+  if (lamNumericCanonical(diff?.actual) === expectedCanonical) return true;
+  if (boundaryInsertions.length !== 1) return false;
+  const insertedPrefix = normalizeForVerbalComparison(boundaryInsertions[0]?.actual || '');
+  if (insertedPrefix !== 'ل') return false;
+  const numeric = NUMBER_CANONICAL.get(normalizeForVerbalComparison(diff?.actual || ''));
+  return Boolean(numeric && `ل:${numeric}` === expectedCanonical);
+}
+
 function nonInsertionByIndex(report) {
   const map = new Map();
   for (const diff of report?.differences || []) {
@@ -113,8 +132,18 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       continue;
     }
     if (a.type === 'substitution' && b.type === 'substitution') {
-      if (representationEquivalent(expected, a.actual) && representationEquivalent(expected, b.actual)) {
-        representationOnly.push({ expectedIndex: index, expected, firstActual: a.actual, secondActual: b.actual, type: 'representation-only' });
+      const aRepresentation = representationWithBoundaryEquivalent(expected, a, insertions[0].get(index) || []);
+      const bRepresentation = representationWithBoundaryEquivalent(expected, b, insertions[1].get(index) || []);
+      if (aRepresentation && bRepresentation) {
+        representationOnly.push({
+          expectedIndex: index,
+          expected,
+          firstActual: a.actual,
+          secondActual: b.actual,
+          firstBoundaryInsertions: (insertions[0].get(index) || []).map((item) => item.actual),
+          secondBoundaryInsertions: (insertions[1].get(index) || []).map((item) => item.actual),
+          type: 'representation-only',
+        });
         continue;
       }
       if (normalizedActual(a) === normalizedActual(b)) {
@@ -181,7 +210,7 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       rawReportsImmutable: true,
       oneModelDivergence: 'recorded-as-asr-disagreement; not counted as an audio error when the other independent model matches expected text',
       bothModelsSameNonEquivalentDivergence: 'counted as a substantive spoken error',
-      representationEquivalence: ['same normalized token', 'final hamza carrier only', 'explicit numeric/cardinal/ordinal verbalization for 0-10, 100, 1000'],
+      representationEquivalence: ['same normalized token', 'final hamza carrier only', 'explicit numeric/cardinal/ordinal verbalization for 0-10, 100, 1000', 'lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)'],
       fuzzyMatching: false,
       stemming: false,
       synonyms: false,
