@@ -38,6 +38,23 @@ async function defaultLiveDuration(articleId, root) {
   }
 }
 
+function unpackSynthesis(value) {
+  if (Buffer.isBuffer(value)) return { audio: value, transport: 'developer-interactions', metadata: {} };
+  if (Buffer.isBuffer(value?.audio)) {
+    return {
+      audio: value.audio,
+      transport: value.transport || 'unknown',
+      metadata: {
+        endpoint: value.endpoint || null,
+        projectId: value.projectId || null,
+        model: value.model || null,
+        voice: value.voice || null,
+      },
+    };
+  }
+  return { audio: null, transport: 'unknown', metadata: {} };
+}
+
 export async function generateCandidate({
   articleId,
   root = process.cwd(),
@@ -62,6 +79,8 @@ export async function generateCandidate({
   const splitPlan = splitSpokenArticle(article, { settings: activeSplitSettings(settings), liveDurationSeconds: duration });
   const { fingerprint, paths, checkpoint } = await initCheckpoint({ article, splitPlan, root: storeRoot || root });
   const liveDir = liveAudioDir(articleId, root);
+  const transportsUsed = new Set();
+  const resumedTransportDefault = process.env.BAREEQ_RESUMED_TTS_TRANSPORT?.trim() || 'checkpoint-unspecified';
 
   const result = {
     articleId,
@@ -84,6 +103,8 @@ export async function generateCandidate({
   for (const part of splitPlan.parts) {
     const existing = await loadCompletedPart(paths, article, splitPlan, part);
     if (existing) {
+      const transport = existing.record?.transport || resumedTransportDefault;
+      transportsUsed.add(transport);
       result.ttsRequestsResumed += 1;
       result.resumedParts += 1;
       await appendRequestLog(paths, {
@@ -92,12 +113,13 @@ export async function generateCandidate({
         action: 'resume-skip',
         providerCalls: 0,
         providerAttempts: 0,
+        transport,
       });
       continue;
     }
     try {
       result.providerAttempts += 1;
-      const audio = await synthesize({
+      const synthesized = unpackSynthesis(await synthesize({
         article,
         part,
         splitPlan,
@@ -105,11 +127,13 @@ export async function generateCandidate({
         performanceInstructions: PERFORMANCE_INSTRUCTIONS,
         model: PRODUCTION_NARRATOR.model,
         voice: PRODUCTION_NARRATOR.providerVoice,
-      });
+      }));
+      const { audio, transport, metadata } = synthesized;
       if (!audio || audio.length < 100) throw new Error(`synthesized part ${part.partIndex} is too small`);
+      transportsUsed.add(transport);
       result.ttsRequestsSent += 1;
       result.successfulRequests += 1;
-      await saveCompletedPart(paths, article, splitPlan, part, audio, { resumed: false });
+      await saveCompletedPart(paths, article, splitPlan, part, audio, { resumed: false, transport });
       await appendRequestLog(paths, {
         partIndex: part.partIndex,
         fingerprint: partFingerprint(article, splitPlan, part),
@@ -117,6 +141,8 @@ export async function generateCandidate({
         providerCalls: 1,
         providerAttempts: 1,
         bytes: audio.length,
+        transport,
+        ...metadata,
       });
     } catch (error) {
       if (error?.httpStatus === 429 || error?.code === 'BAREEQ_QUOTA') {
@@ -128,6 +154,7 @@ export async function generateCandidate({
           providerCalls: 1,
           providerAttempts: 1,
           httpStatus: 429,
+          transport: process.env.BAREEQ_CLOUD_TTS_PREFER === '1' ? 'google-cloud-text-to-speech' : 'developer-interactions',
         });
         const quota = new QuotaError(error.message);
         quota.exitCode = EXIT_QUOTA;
@@ -143,6 +170,10 @@ export async function generateCandidate({
   result.status = 'generated';
   result.completedParts = splitPlan.parts.length;
   result.exitCode = EXIT_OK;
+  result.transportsUsed = [...transportsUsed].sort();
+  result.transportPolicy = process.env.BAREEQ_CLOUD_TTS_PREFER === '1'
+    ? 'cloud-completion-with-resumed-checkpoint'
+    : 'developer-interactions';
   await writeJson(path.join(paths.dir, 'generation-report.json'), {
     schema: 'bareeq.audio-generation.v2',
     articleId,
@@ -185,7 +216,13 @@ if (isCli) {
   try {
     const synthesize = await resolveProductionSynthesizer();
     const result = await generateCandidate({ articleId, synthesize });
-    console.log(JSON.stringify({ status: result.status, fingerprint: result.fingerprint, ttsRequestsSent: result.ttsRequestsSent }, null, 2));
+    console.log(JSON.stringify({
+      status: result.status,
+      fingerprint: result.fingerprint,
+      ttsRequestsSent: result.ttsRequestsSent,
+      resumedParts: result.resumedParts,
+      transportsUsed: result.transportsUsed,
+    }, null, 2));
     process.exit(result.exitCode || EXIT_OK);
   } catch (error) {
     console.error(error.message);
