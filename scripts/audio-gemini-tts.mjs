@@ -9,6 +9,16 @@ import {
   PRODUCTION_VOICE,
 } from './audio-constants.mjs';
 import { assertFfmpeg } from './audio-ffmpeg.mjs';
+import {
+  CLOUD_TTS_MODEL,
+  CLOUD_TTS_STYLE,
+  CLOUD_TTS_VOICE,
+  assertCloudTtsActivation,
+  buildCloudTtsRequest,
+  extractCloudTtsMp3,
+  getCloudTtsAccessToken,
+  hasCloudTtsCredentials,
+} from './cloud-tts.mjs';
 
 export function geminiTtsEndpoint() {
   const override = process.env.GEMINI_TTS_ENDPOINT?.trim();
@@ -146,12 +156,64 @@ export async function synthesizeGeminiPart({
   return encodeGeminiPcmToMp3(pcm, ffmpeg);
 }
 
+export async function synthesizeCloudGeminiPart({
+  part,
+  fetchImpl = globalThis.fetch,
+  env = process.env,
+  projectId = env.GOOGLE_CLOUD_PROJECT?.trim() || 'bareeq-tts',
+}) {
+  assertCloudTtsActivation(env, false);
+  if (!hasCloudTtsCredentials(env)) {
+    throw Object.assign(new Error('Google Cloud TTS credentials are absent. No Cloud TTS request was sent.'), { exitCode: EXIT_CONFIG });
+  }
+  if (CLOUD_TTS_MODEL !== PRODUCTION_TTS_MODEL || CLOUD_TTS_VOICE !== PRODUCTION_VOICE) {
+    throw Object.assign(new Error(`Cloud TTS production contract mismatch: ${CLOUD_TTS_MODEL}/${CLOUD_TTS_VOICE}`), { exitCode: EXIT_HARD });
+  }
+  const accessToken = await getCloudTtsAccessToken(env, fetchImpl);
+  const request = buildCloudTtsRequest({
+    env,
+    accessToken,
+    projectId,
+    text: part.text,
+    prompt: CLOUD_TTS_STYLE,
+    userAgent: 'Bareeq-Audio-Cloud-Completion/10',
+  });
+  let response;
+  try {
+    response = await fetchImpl(request.url, request.options);
+  } catch (error) {
+    throw Object.assign(new Error(`Google Cloud TTS transport failed: ${error.cause?.code || error.cause?.message || error.message}`), { exitCode: EXIT_HARD });
+  }
+  let payload;
+  try { payload = await response.json(); }
+  catch { payload = null; }
+  if (response.status === 429) {
+    throw Object.assign(new Error('Google Cloud TTS HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
+  }
+  if (!response.ok) {
+    const detail = String(payload?.error?.message || `HTTP ${response.status}`).slice(0, 700);
+    throw Object.assign(new Error(`Google Cloud TTS failed (${response.status}): ${detail}`), { httpStatus: response.status, exitCode: EXIT_HARD });
+  }
+  const audio = extractCloudTtsMp3(payload);
+  return {
+    audio,
+    transport: 'google-cloud-text-to-speech',
+    endpoint: request.url,
+    projectId,
+    model: CLOUD_TTS_MODEL,
+    voice: CLOUD_TTS_VOICE,
+  };
+}
+
 export async function resolveProductionSynthesizer({
   apiKey = process.env.GEMINI_API_KEY,
   fetchImpl = globalThis.fetch,
 } = {}) {
   if (typeof process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK === 'function') {
     return process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK;
+  }
+  if (process.env.BAREEQ_CLOUD_TTS_PREFER === '1') {
+    return async ({ part }) => synthesizeCloudGeminiPart({ part, fetchImpl });
   }
   return async ({ article, part, splitPlan }) => synthesizeGeminiPart({
     apiKey,
