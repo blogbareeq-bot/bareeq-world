@@ -9,16 +9,6 @@ import {
   PRODUCTION_VOICE,
 } from './audio-constants.mjs';
 import { assertFfmpeg } from './audio-ffmpeg.mjs';
-import {
-  CLOUD_TTS_MODEL,
-  CLOUD_TTS_STYLE,
-  CLOUD_TTS_VOICE,
-  assertCloudTtsActivation,
-  buildCloudTtsRequest,
-  extractCloudTtsMp3,
-  getCloudTtsAccessToken,
-  hasCloudTtsCredentials,
-} from './cloud-tts.mjs';
 
 export function geminiTtsEndpoint() {
   const override = process.env.GEMINI_TTS_ENDPOINT?.trim();
@@ -29,6 +19,17 @@ export function geminiTtsEndpoint() {
     return override.replace(/\/$/, '');
   }
   return GEMINI_TTS_CONTRACT.endpoint;
+}
+
+export function geminiGenerateContentEndpoint(model = PRODUCTION_TTS_MODEL) {
+  const override = process.env.GEMINI_GENERATE_CONTENT_ENDPOINT?.trim();
+  if (override) {
+    if (process.env.BAREEQ_TTS_CONTRACT_TEST !== '1') {
+      throw Object.assign(new Error('GEMINI_GENERATE_CONTENT_ENDPOINT is restricted to BAREEQ_TTS_CONTRACT_TEST=1'), { exitCode: EXIT_HARD });
+    }
+    return override.replace(/\/$/, '');
+  }
+  return `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
 }
 
 export const GEMINI_TTS_ENDPOINT = GEMINI_TTS_CONTRACT.endpoint;
@@ -44,6 +45,22 @@ export function extractGeminiAudio(payload) {
     || payload?.output_audio
     || payload?.outputAudio
     || null;
+}
+
+export function extractGenerateContentAudio(payload) {
+  const parts = Array.isArray(payload?.candidates)
+    ? payload.candidates.flatMap((candidate) => Array.isArray(candidate?.content?.parts) ? candidate.content.parts : [])
+    : [];
+  for (const part of parts) {
+    const inline = part?.inlineData || part?.inline_data;
+    if (typeof inline?.data === 'string' && inline.data.trim()) {
+      return {
+        data: inline.data,
+        mimeType: inline.mimeType || inline.mime_type || '',
+      };
+    }
+  }
+  return null;
 }
 
 export function encodeGeminiPcmToMp3(pcm, ffmpegPath) {
@@ -86,6 +103,29 @@ export function encodeGeminiPcmToMp3(pcm, ffmpegPath) {
   });
 }
 
+async function decodeAndEncodePcmAudio(outputAudio, ffmpegPath, label) {
+  const encoded = typeof outputAudio?.data === 'string' ? outputAudio.data.replace(/\s+/g, '') : '';
+  if (!encoded || !/^[A-Za-z0-9+/]+={0,2}$/.test(encoded)) {
+    throw Object.assign(new Error(`${label} response has no valid audio content`), { exitCode: EXIT_HARD });
+  }
+  const mimeType = String(outputAudio?.mime_type || outputAudio?.mimeType || '').toLowerCase();
+  if (mimeType && !mimeType.includes('l16') && !mimeType.includes('pcm') && !mimeType.includes('audio/raw')) {
+    throw Object.assign(new Error(`${label} returned unsupported audio MIME type ${mimeType}`), { exitCode: EXIT_HARD });
+  }
+  const sampleRateMatch = mimeType.match(/(?:rate=|rate%3d)(\d+)/i);
+  const sampleRate = Number(outputAudio?.sample_rate || outputAudio?.sampleRate || sampleRateMatch?.[1] || 24000);
+  const channels = Number(outputAudio?.channels || 1);
+  if (sampleRate !== 24000 || channels !== 1) {
+    throw Object.assign(new Error(`${label} returned unsupported PCM layout (${sampleRate} Hz, ${channels} channel(s))`), { exitCode: EXIT_HARD });
+  }
+  const pcm = Buffer.from(encoded, 'base64');
+  if (pcm.length < 100 || pcm.length % 2 !== 0) {
+    throw Object.assign(new Error(`${label} returned invalid 16-bit PCM (${pcm.length} bytes)`), { exitCode: EXIT_HARD });
+  }
+  const { ffmpeg } = ffmpegPath ? { ffmpeg: ffmpegPath } : await assertFfmpeg();
+  return encodeGeminiPcmToMp3(pcm, ffmpeg);
+}
+
 export async function synthesizeGeminiPart({
   apiKey,
   part,
@@ -98,7 +138,6 @@ export async function synthesizeGeminiPart({
   if (!apiKey?.trim()) {
     throw Object.assign(new Error('GEMINI_API_KEY is absent. No TTS request was sent.'), { exitCode: EXIT_CONFIG });
   }
-  const { ffmpeg } = ffmpegPath ? { ffmpeg: ffmpegPath } : await assertFfmpeg();
   const endpoint = geminiTtsEndpoint();
   let response;
   try {
@@ -136,72 +175,71 @@ export async function synthesizeGeminiPart({
   try { payload = await response.json(); }
   catch (error) { throw Object.assign(new Error(`Gemini TTS returned invalid JSON: ${error.message}`), { exitCode: EXIT_HARD }); }
   const outputAudio = extractGeminiAudio(payload);
-  const encoded = typeof outputAudio?.data === 'string' ? outputAudio.data.replace(/\s+/g, '') : '';
-  if (!encoded || !/^[A-Za-z0-9+/]+={0,2}$/.test(encoded)) {
-    throw Object.assign(new Error('Gemini TTS response has no valid REST audio content'), { exitCode: EXIT_HARD });
-  }
-  const mimeType = String(outputAudio?.mime_type || outputAudio?.mimeType || '').toLowerCase();
-  if (mimeType && !mimeType.includes('l16') && !mimeType.includes('pcm')) {
-    throw Object.assign(new Error(`Gemini TTS returned unsupported audio MIME type ${mimeType}`), { exitCode: EXIT_HARD });
-  }
-  const sampleRate = Number(outputAudio?.sample_rate || outputAudio?.sampleRate || 24000);
-  const channels = Number(outputAudio?.channels || 1);
-  if (sampleRate !== 24000 || channels !== 1) {
-    throw Object.assign(new Error(`Gemini TTS returned unsupported PCM layout (${sampleRate} Hz, ${channels} channel(s))`), { exitCode: EXIT_HARD });
-  }
-  const pcm = Buffer.from(encoded, 'base64');
-  if (pcm.length < 100 || pcm.length % 2 !== 0) {
-    throw Object.assign(new Error(`Gemini TTS returned invalid 16-bit PCM (${pcm.length} bytes)`), { exitCode: EXIT_HARD });
-  }
-  return encodeGeminiPcmToMp3(pcm, ffmpeg);
+  return decodeAndEncodePcmAudio(outputAudio, ffmpegPath, 'Gemini Interactions TTS');
 }
 
-export async function synthesizeCloudGeminiPart({
+export async function synthesizeGeminiGenerateContentPart({
+  apiKey,
   part,
+  context,
+  voice = PRODUCTION_VOICE,
+  model = PRODUCTION_TTS_MODEL,
   fetchImpl = globalThis.fetch,
-  env = process.env,
-  projectId = env.GOOGLE_CLOUD_PROJECT?.trim() || 'bareeq-tts',
+  ffmpegPath,
 }) {
-  assertCloudTtsActivation(env, false);
-  if (!hasCloudTtsCredentials(env)) {
-    throw Object.assign(new Error('Google Cloud TTS credentials are absent. No Cloud TTS request was sent.'), { exitCode: EXIT_CONFIG });
+  if (!apiKey?.trim()) {
+    throw Object.assign(new Error('GEMINI_API_KEY is absent. No generateContent TTS request was sent.'), { exitCode: EXIT_CONFIG });
   }
-  if (CLOUD_TTS_MODEL !== PRODUCTION_TTS_MODEL || CLOUD_TTS_VOICE !== PRODUCTION_VOICE) {
-    throw Object.assign(new Error(`Cloud TTS production contract mismatch: ${CLOUD_TTS_MODEL}/${CLOUD_TTS_VOICE}`), { exitCode: EXIT_HARD });
-  }
-  const accessToken = await getCloudTtsAccessToken(env, fetchImpl);
-  const request = buildCloudTtsRequest({
-    env,
-    accessToken,
-    projectId,
-    text: part.text,
-    prompt: CLOUD_TTS_STYLE,
-    userAgent: 'Bareeq-Audio-Cloud-Completion/10',
-  });
+  const endpoint = geminiGenerateContentEndpoint(model);
   let response;
   try {
-    response = await fetchImpl(request.url, request.options);
+    response = await fetchImpl(endpoint, {
+      method: 'POST',
+      headers: {
+        'x-goog-api-key': apiKey,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        contents: [{
+          role: 'user',
+          parts: [{ text: buildGeminiPrompt(part, context) }],
+        }],
+        generationConfig: {
+          responseModalities: ['AUDIO'],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: voice },
+            },
+          },
+        },
+      }),
+    });
   } catch (error) {
-    throw Object.assign(new Error(`Google Cloud TTS transport failed: ${error.cause?.code || error.cause?.message || error.message}`), { exitCode: EXIT_HARD });
+    throw Object.assign(new Error(`Gemini generateContent TTS transport failed (${endpoint}): ${error.cause?.code || error.cause?.message || error.message}`), { exitCode: EXIT_HARD });
+  }
+  if (response.status === 429) {
+    throw Object.assign(new Error('Gemini generateContent TTS HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
+  }
+  if (!response.ok) {
+    const body = await response.text().catch(() => '');
+    throw Object.assign(new Error(`Gemini generateContent TTS failed (${response.status}): ${body.slice(0, 700)}`), {
+      httpStatus: response.status,
+      exitCode: EXIT_HARD,
+    });
   }
   let payload;
   try { payload = await response.json(); }
-  catch { payload = null; }
-  if (response.status === 429) {
-    throw Object.assign(new Error('Google Cloud TTS HTTP 429'), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
-  }
-  if (!response.ok) {
-    const detail = String(payload?.error?.message || `HTTP ${response.status}`).slice(0, 700);
-    throw Object.assign(new Error(`Google Cloud TTS failed (${response.status}): ${detail}`), { httpStatus: response.status, exitCode: EXIT_HARD });
-  }
-  const audio = extractCloudTtsMp3(payload);
+  catch (error) { throw Object.assign(new Error(`Gemini generateContent TTS returned invalid JSON: ${error.message}`), { exitCode: EXIT_HARD }); }
+  const outputAudio = extractGenerateContentAudio(payload);
+  const audio = await decodeAndEncodePcmAudio(outputAudio, ffmpegPath, 'Gemini generateContent TTS');
   return {
     audio,
-    transport: 'google-cloud-text-to-speech',
-    endpoint: request.url,
-    projectId,
-    model: CLOUD_TTS_MODEL,
-    voice: CLOUD_TTS_VOICE,
+    transport: 'developer-generate-content',
+    endpoint,
+    projectId: null,
+    model,
+    voice,
   };
 }
 
@@ -212,8 +250,17 @@ export async function resolveProductionSynthesizer({
   if (typeof process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK === 'function') {
     return process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK;
   }
-  if (process.env.BAREEQ_CLOUD_TTS_PREFER === '1') {
-    return async ({ part }) => synthesizeCloudGeminiPart({ part, fetchImpl });
+  if (process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1') {
+    return async ({ article, part, splitPlan }) => synthesizeGeminiGenerateContentPart({
+      apiKey,
+      part,
+      context: {
+        articleTitle: article.title,
+        partIndex: part.partIndex,
+        partCount: splitPlan.parts.length,
+      },
+      fetchImpl,
+    });
   }
   return async ({ article, part, splitPlan }) => synthesizeGeminiPart({
     apiKey,
