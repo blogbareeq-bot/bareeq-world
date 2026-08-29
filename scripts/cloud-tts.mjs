@@ -1,12 +1,11 @@
 import { createSign } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { PRODUCTION_TTS_MODEL, PRODUCTION_VOICE } from './audio-constants.mjs';
 
-export const CLOUD_TTS_MODEL = PRODUCTION_TTS_MODEL;
+export const CLOUD_TTS_MODEL = 'gemini-2.5-flash-tts';
 export const CLOUD_TTS_LANGUAGE = 'ar-EG';
-export const CLOUD_TTS_VOICE = PRODUCTION_VOICE;
+export const CLOUD_TTS_VOICE = 'Sadaltager';
 export const CLOUD_TTS_AUDIO_ENCODING = 'MP3';
-export const CLOUD_TTS_STYLE = 'النص التالي هو Speech Script العربي المعتمد لبريق. انطق النص فقط، كلمةً بكلمة، بالترتيب نفسه ومن دون أي إضافة أو حذف أو إعادة صياغة أو استبدال صرفي أو معجمي. كل حركة عربية مكتوبة ملزمة، ولا تغيّر صيغة أي فعل أو اسم. استخدم العربية الفصحى الطبيعية بصوت معرفي ناضج ودافئ، وبإيقاع متوسط مريح، مع وضوح النطق وثبات شخصية الراوي، ومن دون همس أو مبالغة تمثيلية أو نبرة إعلانية.';
+export const CLOUD_TTS_STYLE = 'اقرأ النص العربي بالفصحى الطبيعية بصوت معرفي ناضج ودافئ، وبإيقاع متوسط مريح. حافظ على وضوح النطق ووحدة شخصية الراوي بين المقاطع، وتجنب الهمس والمبالغة التمثيلية والنبرة الإعلانية. انطق النص فقط دون إضافة أو تعليق.';
 
 const CLOUD_PLATFORM_SCOPE = 'https://www.googleapis.com/auth/cloud-platform';
 const OFFICIAL_TOKEN_HOSTS = new Set(['oauth2.googleapis.com', 'accounts.google.com']);
@@ -39,9 +38,6 @@ export function cloudTtsEndpoint(env = process.env, contractTest = false) {
   if (!SUPPORTED_REGIONS.has(region)) {
     throw new Error(`GOOGLE_CLOUD_TTS_REGION must be one of: ${[...SUPPORTED_REGIONS].join(', ')}.`);
   }
-  if (CLOUD_TTS_MODEL === 'gemini-3.1-flash-tts-preview' && region !== 'global') {
-    throw new Error('gemini-3.1-flash-tts-preview on Google Cloud TTS must use GOOGLE_CLOUD_TTS_REGION=global.');
-  }
   return region === 'global'
     ? 'https://texttospeech.googleapis.com'
     : `https://${region}-texttospeech.googleapis.com`;
@@ -49,7 +45,7 @@ export function cloudTtsEndpoint(env = process.env, contractTest = false) {
 
 export function assertCloudTtsActivation(env = process.env, contractTest = false) {
   if (!contractTest && env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
-    throw new Error('Google Cloud TTS is prepared but not activated. Set BAREEQ_CLOUD_TTS_ACTIVATE=1 only after billing, API, IAM, and credentials are confirmed. No Cloud TTS request was sent.');
+    throw new Error('Google Cloud TTS is prepared but not activated. Set BAREEQ_CLOUD_TTS_ACTIVATE=1 only after CNTXT billing is linked, the API is enabled, IAM is verified, and the paid smoke test is approved. No Cloud TTS request was sent.');
   }
 }
 
@@ -108,7 +104,7 @@ export async function getCloudTtsAccessToken(env = process.env, fetchImpl = fetc
 
   const serviceAccount = await readServiceAccount(env);
   if (!serviceAccount) {
-    throw new Error('Google Cloud TTS authentication is missing. Provide GOOGLE_CLOUD_ACCESS_TOKEN or GOOGLE_SERVICE_ACCOUNT_JSON.');
+    throw new Error('Google Cloud TTS authentication is missing. Provide GOOGLE_SERVICE_ACCOUNT_JSON (recommended for Cloudflare) or GOOGLE_APPLICATION_CREDENTIALS.');
   }
   const assertion = createServiceAccountAssertion(serviceAccount);
   const response = await fetchImpl(serviceAccount.tokenUri, {
