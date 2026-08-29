@@ -95,3 +95,34 @@ jobs:
           name: altadakhom-candidate-${{ github.run_id }}
           path: audio-candidates/
           if-no-files-found: warn
+
+      - name: Restore generated candidate for validation
+        if: hashFiles('docs/audio/RUN-ALTADAKHOM-VALIDATION') != ''
+        uses: actions/cache/restore@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-candidate-altadakhom-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}
+          restore-keys: |
+            bareeq-audio-candidate-altadakhom-
+
+      - name: Validate first candidate only
+        if: hashFiles('docs/audio/RUN-ALTADAKHOM-VALIDATION') != ''
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node scripts/audio-production.mjs --mode=validate-candidate --article=altadakhom-explained-simply --fingerprint=ceed158f32e7db07f15f9c40c1248efe7bfed7627539d812033581f7d6baf5e4
+
+      - name: Save validated candidate cache
+        if: always() && hashFiles('docs/audio/RUN-ALTADAKHOM-VALIDATION') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-validated-altadakhom-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
+
+      - name: Upload validated candidate artifact
+        if: always() && hashFiles('docs/audio/RUN-ALTADAKHOM-VALIDATION') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: altadakhom-validated-${{ github.run_id }}
+          path: audio-candidates/
+          if-no-files-found: error
