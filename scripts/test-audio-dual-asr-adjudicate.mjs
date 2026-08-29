@@ -8,6 +8,7 @@ assert.equal(representationEquivalent('عشرة', '10'), true);
 assert.equal(representationEquivalent('3', 'ثالثا'), true);
 assert.equal(representationEquivalent('تصعد', 'تصاعد'), false);
 assert.equal(representationEquivalent('يتأثر', 'يتاثر'), false);
+assert.equal(representationEquivalent('لألف', 'ل1000'), false, 'lam-prefixed numeric equivalence must stay in recorded boundary adjudication, not generic token equivalence');
 
 const expectedText = 'هذا سيئ ثم 3 فتظهر ضغوط تصعد بالأسعار ثم عشرة أجهزة مئة شخص النتيجة تعتمد على النص';
 const tokens = tokenizeVerbal(expectedText);
@@ -84,4 +85,36 @@ const sharedDeletion = adjudicateDualAsr({ expectedText, reports: [deleteA, dele
 assert.equal(sharedDeletion.passed, false);
 assert.equal(sharedDeletion.consensus.deletions, 1);
 
-console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; representation-only forms do not become audio errors; human listening stays mandatory.');
+const numericExpected = 'لألف ريال';
+const numericFirst = {
+  model: INDEPENDENT_ASR_MODELS[0],
+  requestedModel: INDEPENDENT_ASR_MODELS[0],
+  substitutions: 1,
+  deletions: 0,
+  insertions: 0,
+  status: 'failed',
+  differences: [
+    { type: 'substitution', expected: 'لألف', actual: 'ل1000', expectedIndex: 0, actualIndex: 0 },
+  ],
+};
+const numericSecond = {
+  model: INDEPENDENT_ASR_MODELS[1],
+  requestedModel: INDEPENDENT_ASR_MODELS[1],
+  substitutions: 1,
+  deletions: 0,
+  insertions: 1,
+  status: 'failed',
+  differences: [
+    { type: 'insertion', expected: null, actual: 'ل', expectedIndex: 0, actualIndex: 0 },
+    { type: 'substitution', expected: 'لألف', actual: '1000', expectedIndex: 0, actualIndex: 1 },
+  ],
+};
+const numericTokenization = adjudicateDualAsr({ expectedText: numericExpected, reports: [numericFirst, numericSecond] });
+assert.equal(numericTokenization.passed, true);
+assert.deepEqual(numericTokenization.consensus, { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 });
+assert.equal(numericTokenization.representationOnly.length, 1);
+assert.equal(numericTokenization.representationOnly[0].expected, 'لألف');
+assert.deepEqual(numericTokenization.representationOnly[0].secondBoundaryInsertions, ['ل']);
+assert.equal(numericTokenization.modelDisagreements.length, 1, 'the one-model token split stays recorded as a raw ASR disagreement');
+
+console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; representation-only forms including narrow lam+numeric tokenization do not become audio errors; human listening stays mandatory.');
