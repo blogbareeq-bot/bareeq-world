@@ -15,11 +15,12 @@ concurrency:
 jobs:
   dry-run:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 300
     env:
       BAREEQ_CLOUD_TTS_ACTIVATE: '0'
       BAREEQ_GEMINI_FREE_ROLLOUT: '0'
       BAREEQ_AUDIO_MODE: dry-run
+      BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-all-20260831-v1
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
@@ -45,13 +46,15 @@ jobs:
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node scripts/test-gemini-generate-content-tts.mjs
           node --check scripts/audio-validate-consensus.mjs
+          node --check scripts/audio-batch-campaign.mjs
 
-      - name: Production dry-run (zero provider calls)
+      - name: Production dry-run and all-article plan
         run: |
           node scripts/audio-inventory.mjs
           node scripts/audio-production.mjs --mode=dry-run
+          node scripts/audio-batch-campaign.mjs --mode=plan
           test -f docs/audio/DRY-RUN.json
-          echo 'PASS: dry-run completed with synthesis disabled.'
+          echo 'PASS: dry-run and 15-article regeneration plan completed with synthesis disabled.'
 
       - name: Check provider credential presence
         env:
@@ -65,75 +68,61 @@ jobs:
           [ -n "${GOOGLE_CLOUD_ACCESS_TOKEN}" ] && echo 'GOOGLE_CLOUD_ACCESS_TOKEN_PRESENT=yes' || echo 'GOOGLE_CLOUD_ACCESS_TOKEN_PRESENT=no'
           [ -n "${GOOGLE_CLOUD_PROJECT}" ] && echo 'GOOGLE_CLOUD_PROJECT_PRESENT=yes' || echo 'GOOGLE_CLOUD_PROJECT_PRESENT=no'
 
-      - name: Restore first-candidate cache
-        if: hashFiles('docs/audio/RUN-ALTADAKHOM-GENERATION') != ''
+      - name: Restore all-article regeneration checkpoint
+        if: hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-candidate-altadakhom-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}
+          key: bareeq-audio-all-sadaltager-v1-${{ hashFiles('scripts/audio-batch-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/audio-gemini-tts.mjs', 'scripts/speech-prompt.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
           restore-keys: |
-            bareeq-audio-candidate-altadakhom-
+            bareeq-audio-all-sadaltager-v1-${{ hashFiles('scripts/audio-batch-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/audio-gemini-tts.mjs', 'scripts/speech-prompt.mjs', 'scripts/speech-scripts/**') }}-
 
-      - name: Generate first candidate only
-        if: hashFiles('docs/audio/RUN-ALTADAKHOM-GENERATION') != ''
+      - name: Regenerate all 15 article candidates
+        if: hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_GEMINI_GENERATE_CONTENT: '1'
-          BAREEQ_RESUMED_TTS_TRANSPORT: 'developer-interactions'
-          BAREEQ_FORCE_TTS_PARTS: '4'
-          BAREEQ_TTS_CORRECTION_HINTS_JSON: '{"4":"The previous audio incorrectly added «والأثمان» after «الأوزان والجودة والعروض». The approved transcript ends that phrase at «والعروض»; do not add «والأثمان» or any other word."}'
+          BAREEQ_RESUMED_TTS_TRANSPORT: 'developer-generate-content'
         run: |
           set +e
-          node scripts/audio-production.mjs --mode=generate-candidate --article=altadakhom-explained-simply
+          node scripts/audio-batch-campaign.mjs --mode=generate
           status=$?
           set -e
-          echo "GENERATION_EXIT_STATUS=${status}"
+          echo "ALL_ARTICLE_GENERATION_EXIT_STATUS=${status}"
           exit "$status"
 
-      - name: Save first-candidate cache
-        if: always() && hashFiles('docs/audio/RUN-ALTADAKHOM-GENERATION') != ''
+      - name: Save generation checkpoint
+        if: always() && hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-candidate-altadakhom-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
+          key: bareeq-audio-all-sadaltager-v1-${{ hashFiles('scripts/audio-batch-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/audio-gemini-tts.mjs', 'scripts/speech-prompt.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-generated
 
-      - name: Upload first-candidate artifact
-        if: always() && hashFiles('docs/audio/RUN-ALTADAKHOM-GENERATION') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: altadakhom-candidate-${{ github.run_id }}
-          path: audio-candidates/
-          if-no-files-found: warn
-
-      - name: Restore generated candidate for validation
-        if: hashFiles('docs/audio/RUN-ALTADAKHOM-VALIDATION') != ''
-        uses: actions/cache/restore@v4
-        with:
-          path: audio-candidates
-          key: bareeq-audio-candidate-altadakhom-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}
-          restore-keys: |
-            bareeq-audio-validated-altadakhom-
-            bareeq-audio-candidate-altadakhom-
-
-      - name: Validate first candidate only
-        if: hashFiles('docs/audio/RUN-ALTADAKHOM-VALIDATION') != ''
+      - name: Validate all generated candidates with independent dual ASR
+        if: hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          node scripts/audio-validate-consensus.mjs --article=altadakhom-explained-simply --fingerprint=58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45
+          set +e
+          node scripts/audio-batch-campaign.mjs --mode=validate
+          status=$?
+          set -e
+          echo "ALL_ARTICLE_VALIDATION_EXIT_STATUS=${status}"
+          exit "$status"
 
-      - name: Save validated candidate cache
-        if: always() && hashFiles('docs/audio/RUN-ALTADAKHOM-VALIDATION') != ''
+      - name: Save validated checkpoint
+        if: always() && hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-validated-altadakhom-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
+          key: bareeq-audio-all-sadaltager-v1-${{ hashFiles('scripts/audio-batch-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/audio-gemini-tts.mjs', 'scripts/speech-prompt.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-validated
 
-      - name: Upload validated candidate artifact
-        if: always() && hashFiles('docs/audio/RUN-ALTADAKHOM-VALIDATION') != ''
+      - name: Upload all-article campaign artifact
+        if: always() && hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
         uses: actions/upload-artifact@v4
         with:
-          name: altadakhom-validated-${{ github.run_id }}
+          name: bareeq-all-sadaltager-candidates
           path: audio-candidates/
           if-no-files-found: error
+          retention-days: 90
