@@ -6,11 +6,11 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: bareeq-audio-pr-dry-run-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   dry-run:
@@ -18,9 +18,13 @@ jobs:
     timeout-minutes: 300
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
+      BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
     steps:
-      - name: Checkout PR
+      - name: Checkout PR head
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -46,7 +50,41 @@ jobs:
           node --check scripts/audio-openrouter-campaign.mjs
           node scripts/audio-inventory.mjs
 
+      - name: Detect already-published campaign tree
+        id: campaign
+        run: |
+          if [ -f "${BAREEQ_AUDIO_PUBLISHED_MARKER}" ]; then
+            echo 'published=yes' >> "$GITHUB_OUTPUT"
+            echo 'PUBLISHED_TREE_MARKER=present'
+          else
+            echo 'published=no' >> "$GITHUB_OUTPUT"
+            echo 'PUBLISHED_TREE_MARKER=absent'
+          fi
+
+      - name: Verify already-published tree marker
+        if: steps.campaign.outputs.published == 'yes'
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const crypto = require('crypto');
+          const marker = JSON.parse(fs.readFileSync(process.env.BAREEQ_AUDIO_PUBLISHED_MARKER, 'utf8'));
+          if (marker.campaignId !== 'sadaltager-openrouter-20260901-v1') throw new Error('wrong campaign marker');
+          if (marker.articleCount !== 15 || !Array.isArray(marker.articles) || marker.articles.length !== 15) throw new Error('published marker is not 15/15');
+          for (const item of marker.articles) {
+            if (!/^[a-f0-9]{64}$/.test(item.fingerprint || '')) throw new Error(`bad fingerprint ${item.articleId}`);
+            if (!/^[a-f0-9]{64}$/.test(item.fullSha256 || '')) throw new Error(`bad full SHA ${item.articleId}`);
+            const key = crypto.createHash('sha256').update(item.articleId).digest('hex').slice(0, 16);
+            const manifest = path.join('public', 'audio', 'articles', key, 'manifest.json');
+            if (!fs.existsSync(manifest)) throw new Error(`missing live manifest ${item.articleId}`);
+            const payload = JSON.parse(fs.readFileSync(manifest, 'utf8'));
+            if (payload.fingerprint !== item.fingerprint || payload.fullSha256 !== item.fullSha256) throw new Error(`live manifest mismatch ${item.articleId}`);
+          }
+          console.log('PUBLISHED_TREE_LOCAL_VERIFY=PASS articles=15');
+          NODE
+
       - name: Verify provider credentials
+        if: steps.campaign.outputs.published != 'yes'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -56,6 +94,10 @@ jobs:
             exit 78
           fi
           echo 'OPENROUTER_API_KEY_PRESENT=yes'
+          case "${OPENROUTER_API_KEY}" in
+            sk-or-v1-*) echo 'OPENROUTER_API_KEY_FORMAT=valid' ;;
+            *) echo 'OPENROUTER_API_KEY_FORMAT=invalid_expected_sk-or-v1-prefix'; exit 78 ;;
+          esac
           if [ -z "${GEMINI_API_KEY}" ]; then
             echo 'GEMINI_API_KEY_PRESENT=no'
             exit 78
@@ -63,6 +105,7 @@ jobs:
           echo 'GEMINI_API_KEY_PRESENT=yes'
 
       - name: Smoke-test OpenRouter Sadaltager
+        if: steps.campaign.outputs.published != 'yes'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
@@ -89,6 +132,7 @@ jobs:
           echo 'OPENROUTER_SADALTAGER_SMOKE=PASS'
 
       - name: Restore OpenRouter campaign checkpoint
+        if: steps.campaign.outputs.published != 'yes'
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
@@ -97,6 +141,7 @@ jobs:
             bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-
 
       - name: Generate all 15 Sadaltager candidates through OpenRouter
+        if: steps.campaign.outputs.published != 'yes'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
@@ -108,13 +153,14 @@ jobs:
           exit "$status"
 
       - name: Save generation checkpoint
-        if: always()
+        if: always() && steps.campaign.outputs.published != 'yes'
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
           key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-generated
 
       - name: Validate all candidates with technical QA and independent dual ASR
+        if: steps.campaign.outputs.published != 'yes'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
@@ -126,14 +172,45 @@ jobs:
           exit "$status"
 
       - name: Save validated checkpoint
-        if: always()
+        if: always() && steps.campaign.outputs.published != 'yes'
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
           key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-validated
 
+      - name: Publish validated candidates into PR tree
+        if: steps.campaign.outputs.published != 'yes'
+        run: |
+          node scripts/audio-openrouter-campaign.mjs --mode=publish
+          test -f "${BAREEQ_AUDIO_PUBLISHED_MARKER}"
+          echo 'OPENROUTER_PUBLICATION_TREE=PASS'
+
+      - name: Save publication checkpoint
+        if: always() && steps.campaign.outputs.published != 'yes'
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-published
+
+      - name: Commit validated audio tree to PR branch
+        if: steps.campaign.outputs.published != 'yes'
+        env:
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          git config user.name 'bareeq-audio'
+          git config user.email 'audio@bareeq.local'
+          git add -f public/audio docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json docs/audio/PUBLICATION-POLICY-20260901.json
+          if git diff --cached --quiet; then
+            echo 'PUBLISHED_AUDIO_COMMIT=no_changes'
+          else
+            git commit -m 'audio: publish validated Sadaltager corpus via OpenRouter'
+            git push origin "HEAD:${PR_BRANCH}"
+            echo 'PUBLISHED_AUDIO_COMMIT=pushed'
+          fi
+
       - name: Upload all OpenRouter Sadaltager candidates
-        if: always()
+        if: always() && steps.campaign.outputs.published != 'yes'
         uses: actions/upload-artifact@v4
         with:
           name: bareeq-openrouter-sadaltager-candidates
