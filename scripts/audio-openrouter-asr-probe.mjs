@@ -34,14 +34,20 @@ const STORE = process.env.BAREEQ_AUDIO_STORE || path.join(ROOT, 'audio-candidate
 const CAMPAIGN = process.env.BAREEQ_AUDIO_CAMPAIGN_ID || 'sadaltager-openrouter-20260901-v1';
 const ARTICLE = process.env.BAREEQ_PROBE_ARTICLE || 'ai-agents-future-now';
 const OUT = process.env.BAREEQ_PROBE_OUTPUT || path.join(ROOT, 'docs', 'audio', 'asr-probe', 'openrouter-probe.json');
-const MAX_PARTS = Number(process.env.BAREEQ_PROBE_MAX_PARTS || 3);
+const MAX_PARTS = Number(process.env.BAREEQ_PROBE_MAX_PARTS || 1);
 
+// Only models that OpenRouter actually exposes for transcription, biased to
+// the cheap-but-accurate end. Expensive per-second models (grok-stt-1.0,
+// microsoft/mai-transcribe-1.5, deepgram/nova-3, google/chirp-3) are left out
+// of the default sweep so a probe cannot run up a surprise bill.
 const STT_CANDIDATES = (process.env.BAREEQ_PROBE_STT_MODELS
-  || 'openai/whisper-large-v3,openai/whisper-large-v3-turbo,mistralai/voxtral-mini-transcribe,openai/gpt-4o-transcribe'
+  || 'openai/whisper-large-v3-turbo,openai/whisper-large-v3,qwen/qwen3-asr-flash-2026-02-10,mistralai/voxtral-mini-transcribe'
 ).split(',').map((value) => value.trim()).filter(Boolean);
 
+// gemini-3.6-flash is the pipeline's already-approved second ASR model; via
+// OpenRouter it runs on a different quota pool than the exhausted direct API.
 const CHAT_CANDIDATES = (process.env.BAREEQ_PROBE_CHAT_MODELS
-  || 'google/gemini-2.5-flash,google/gemini-2.5-pro,openai/gpt-4o-audio-preview'
+  || 'google/gemini-3.6-flash,google/gemini-3.5-flash'
 ).split(',').map((value) => value.trim()).filter(Boolean);
 
 const apiKey = process.env.OPENROUTER_API_KEY;
@@ -60,7 +66,9 @@ async function loadCandidate() {
   if (!/^[a-f0-9]{64}$/.test(fingerprint || '')) {
     throw new Error(`no generated fingerprint for ${ARTICLE}; known articles: ${Object.keys(state?.articles || {}).join(', ')}`);
   }
-  const dir = candidateDir(ARTICLE, fingerprint, STORE);
+  // candidateDir() appends the "audio-candidates" segment itself, so it must
+  // be given the repo root, not the store directory.
+  const dir = candidateDir(ARTICLE, fingerprint, ROOT);
   let checkpoint = null;
   try {
     checkpoint = JSON.parse(await readFile(path.join(dir, 'checkpoint.json'), 'utf8'));
