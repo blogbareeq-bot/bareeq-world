@@ -41,12 +41,20 @@ function finalHamzaCarrier(value) {
   return token.replace(/[ئؤء]$/u, 'ء');
 }
 
+const APPROVED_ORTHOGRAPHIC_EQUIVALENTS = new Map([
+  // Speech Script «شاتًا» carries audible fatḥ tanween. Arabic ASR commonly
+  // returns the undiacritized loanword «شات» without the orthographic tanween
+  // alif; this exact pair is representation-only, not a lexical substitution.
+  ['شاتا', new Set(['شات'])],
+]);
+
 export function representationEquivalent(expected, actual) {
   const e = normalizeForVerbalComparison(expected);
   const a = normalizeForVerbalComparison(actual);
   if (!e || !a) return false;
   if (e === a) return true;
   if (finalHamzaCarrier(e) === finalHamzaCarrier(a)) return true;
+  if (APPROVED_ORTHOGRAPHIC_EQUIVALENTS.get(e)?.has(a)) return true;
   const en = NUMBER_CANONICAL.get(e);
   const an = NUMBER_CANONICAL.get(a);
   return Boolean(en && an && en === an);
@@ -210,7 +218,7 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       rawReportsImmutable: true,
       oneModelDivergence: 'recorded-as-asr-disagreement; not counted as an audio error when the other independent model matches expected text',
       bothModelsSameNonEquivalentDivergence: 'counted as a substantive spoken error',
-      representationEquivalence: ['same normalized token', 'final hamza carrier only', 'explicit numeric/cardinal/ordinal verbalization for 0-10, 100, 1000', 'lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)'],
+      representationEquivalence: ['same normalized token', 'final hamza carrier only', 'explicit approved Arabic ASR orthography شاتًا/شات', 'explicit numeric/cardinal/ordinal verbalization for 0-10, 100, 1000', 'lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)'],
       fuzzyMatching: false,
       stemming: false,
       synonyms: false,

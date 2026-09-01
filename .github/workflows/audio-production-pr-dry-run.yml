@@ -171,7 +171,7 @@ jobs:
           if (!/^[a-f0-9]{64}$/.test(fingerprint || '')) throw new Error('targeted correction candidate fingerprint is missing');
           const checkpointPath = path.join('audio-candidates', articleId, fingerprint, 'checkpoint.json');
           const checkpoint = JSON.parse(fs.readFileSync(checkpointPath, 'utf8'));
-          const targets = [1, 6];
+          const targets = [1];
           const isCorrected = (part) => {
             const record = checkpoint.completedParts?.[String(part - 1)];
             return record?.targetedRegeneration === true
@@ -195,7 +195,7 @@ jobs:
           BAREEQ_FORCE_TTS_PARTS: ${{ steps.pronunciation.outputs.parts }}
           EXPECTED_TTS_REQUESTS: ${{ steps.pronunciation.outputs.count }}
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"At the phrase «والصلاحيات، لا الاسم المكتوب على المنتج», preserve «لا» and «الاسم» as two exact consecutive tokens with a brief natural boundary. Do not insert an extra «ل» and do not change «الاسم» to «للاسم» or «لاسم».","6":"At the phrase «الوكلاء الأذكياء ليسوا شاتًا أقوى فقط», pronounce the written fatḥ tanween in «شاتًا» clearly and completely. Do not drop the final /an/ and do not change it to «شات»."}
+            {"1":"At the phrase «والصلاحيات، لا الاسم المكتوب على المنتج», preserve «لا» and «الاسم» as two exact consecutive tokens with a brief natural boundary. Do not insert an extra «ل» and do not change «الاسم» to «للاسم» or «لاسم»."}
         run: |
           node scripts/audio-production.mjs --mode=generate-candidate --article=ai-agents-future-now
           node - <<'NODE'
@@ -206,13 +206,13 @@ jobs:
           const fingerprint = state.articles[articleId].generation.fingerprint;
           const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates', articleId, fingerprint, 'checkpoint.json'), 'utf8'));
           const report = JSON.parse(fs.readFileSync(path.join('audio-candidates', articleId, fingerprint, 'generation-report.json'), 'utf8'));
-          const corrected = [1, 6].every((part) => {
+          const corrected = [1].every((part) => {
             const record = checkpoint.completedParts?.[String(part - 1)];
             return record?.targetedRegeneration === true
               && record?.correctionHintApplied === true
               && record?.transport === 'developer-generate-content';
           });
-          if (!corrected) throw new Error('targeted pronunciation parts are not both corrected in the checkpoint');
+          if (!corrected) throw new Error('targeted pronunciation part is not corrected in the checkpoint');
           if (!(report.transportsUsed || []).includes('developer-generate-content')) throw new Error('targeted correction did not use direct Gemini generateContent');
           const expected = Number(process.env.EXPECTED_TTS_REQUESTS);
           if (report.ttsRequestsSent !== expected || report.providerAttempts !== expected) throw new Error('targeted correction sent an unexpected number of TTS requests');

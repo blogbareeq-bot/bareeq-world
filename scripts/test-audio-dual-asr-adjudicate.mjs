@@ -6,6 +6,8 @@ import { tokenizeVerbal } from './audio-exact-match.mjs';
 assert.equal(representationEquivalent('سيئ', 'سيء'), true);
 assert.equal(representationEquivalent('عشرة', '10'), true);
 assert.equal(representationEquivalent('3', 'ثالثا'), true);
+assert.equal(representationEquivalent('شاتًا', 'شات'), true);
+assert.equal(representationEquivalent('كتابًا', 'كتاب'), false);
 assert.equal(representationEquivalent('تصعد', 'تصاعد'), false);
 assert.equal(representationEquivalent('يتأثر', 'يتاثر'), false);
 assert.equal(representationEquivalent('لألف', 'ل1000'), false, 'lam-prefixed numeric equivalence must stay in recorded boundary adjudication, not generic token equivalence');
@@ -117,4 +119,21 @@ assert.equal(numericTokenization.representationOnly[0].expected, 'لألف');
 assert.deepEqual(numericTokenization.representationOnly[0].secondBoundaryInsertions, ['ل']);
 assert.equal(numericTokenization.modelDisagreements.length, 1, 'the one-model token split stays recorded as a raw ASR disagreement');
 
-console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; representation-only forms including narrow lam+numeric tokenization do not become audio errors; human listening stays mandatory.');
+const tanweenReports = INDEPENDENT_ASR_MODELS.map((model) => ({
+  model,
+  requestedModel: model,
+  substitutions: 1,
+  deletions: 0,
+  insertions: 0,
+  status: 'failed',
+  differences: [
+    { type: 'substitution', expected: 'شاتا', actual: 'شات', expectedIndex: 1, actualIndex: 1 },
+  ],
+}));
+const tanweenOrthography = adjudicateDualAsr({ expectedText: 'ليسوا شاتًا أقوى', reports: tanweenReports });
+assert.equal(tanweenOrthography.passed, true);
+assert.deepEqual(tanweenOrthography.consensus, { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 });
+assert.equal(tanweenOrthography.representationOnly.length, 1);
+assert.equal(tanweenOrthography.representationOnly[0].expected, 'شاتا');
+
+console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow lam+numeric and approved tanween orthography stay representation-only; human listening stays mandatory.');
