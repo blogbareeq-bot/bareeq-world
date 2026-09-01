@@ -1,16 +1,12 @@
 {
   "schema": "bareeq.openrouter-asr-probe.v1",
-  "generatedAt": "2026-09-01T21:09:10.090Z",
+  "generatedAt": "2026-09-01T21:11:16.723Z",
   "gateway": "openrouter",
   "article": "ai-agents-future-now",
   "campaignId": "sadaltager-openrouter-20260901-v1",
   "note": "Probe only. No TTS was performed and no audio was regenerated.",
-  "stage": "load-candidate",
-  "fatalError": {
-    "stage": "load-candidate",
-    "message": "cannot read parts dir /home/runner/work/bareeq-world/bareeq-world/audio-candidates/audio-candidates/ai-agents-future-now/7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488/parts: ENOENT: no such file or directory, scandir '/home/runner/work/bareeq-world/bareeq-world/audio-candidates/audio-candidates/ai-agents-future-now/7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488/parts'; candidate dir contains: ",
-    "stack": "Error: cannot read parts dir /home/runner/work/bareeq-world/bareeq-world/audio-candidates/audio-candidates/ai-agents-future-now/7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488/parts: ENOENT: no such file or directory, scandir '/home/runner/work/bareeq-world/bareeq-world/audio-candidates/audio-candidates/ai-agents-future-now/7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488/parts'; candidate dir contains: \n    at loadCandidate (file:///home/runner/work/bareeq-world/bareeq-world/scripts/audio-openrouter-asr-probe.mjs:75:11)\n    at async main (file:///home/runner/work/bareeq-world/bareeq-world/scripts/audio-openrouter-asr-probe.mjs:197:23)"
-  },
+  "stage": "complete",
+  "fatalError": null,
   "discovery": {
     "transcriptionModels": [
       {
@@ -1155,5 +1151,507 @@
       }
     ]
   },
-  "probes": []
+  "probes": [
+    {
+      "kind": "stt",
+      "model": "openai/whisper-large-v3-turbo",
+      "usable": true,
+      "partsProbed": 1,
+      "partsScored": 1,
+      "totals": {
+        "substitutions": 6,
+        "deletions": 0,
+        "insertions": 0,
+        "expectedTokens": 284
+      },
+      "tokenErrorRate": 0.02113,
+      "runs": [
+        {
+          "part": 1,
+          "ok": true,
+          "httpStatus": 200,
+          "requestId": null,
+          "responseModel": null,
+          "usage": {
+            "seconds": 162.6,
+            "inputTokens": null,
+            "outputTokens": null,
+            "totalTokens": null,
+            "cost": 0.000541458
+          },
+          "audioSha256": "87d46d978f96727ebe957bee9ba1bee60a9bd714b43795414df44fedc0061d0d",
+          "audioBytes": 1951245,
+          "error": null,
+          "transcript": "الوكلاء الأذكياء  من الإجابة إلى التنفيذ  اعتدنا أن نسأل الذكاء الاصطناعي فيجيب  يشرح فكرة  يصوغ رسالة  أو يلخص ملفاً  لكن ماذا لو لم تنتهي المهمة عند الإجابة؟  ماذا لو استطاع النظام ضمن صلاحيات محددة أن يبحث في عدة مصادر؟  ويستخدم التقويم ويجهز التقرير، ثم يتوقف قبل الإرسال طالبا موافقتك.  هنا يظهر مصطلح الوكلاء الأذكياء  وهو من أكثر مصطلحات التقنية تداولاً ومن أكثرها تعرضاً للمبالغة أيضاً  فالمنتج قد يسمى وكيلاً وهو في الحقيقة سلسلة أتمتة مع خطوة ذكاء اصطناعي  وقد يبدو النظام مستقلا بينما تحيط به قواعد وبرامج كتبها البشر  ببساطة، الوكيل الذكي نظام يستخدم نموذج ذكاء اصطناعي مع أدوات وتعليمات وحلقة تنفيذ، ليحاول إنجاز هدف متعدد الخطوات بدل الاكتفاء بإجابة واحدة.  كلمة يحاول مهمة فالوكالة لا تجعل النظام معصوما ولا تعني أنه يفهم هدفك كما يفهمه إنسان أو أنه يستحق صلاحيات مفتوحة  من الشات إلى الفعل  روبوت المحادثة التقليدي يتلقى رسالة ويعيد رداً  قد يكون الرد ممتازا لكنه يبقى نصا ما لم ينقله المستخدم إلى برنامج آخر  أما الوكيل فيمكن أن يربط بأدوات تسمح له بإجراء عمليات ضمن بيئة  البحث في ملفات، قراءة تقويم، تشغيل اختبار برمجي، تحديث سجل أو تجهيز مسودة إجراء  وتكرر بعض الأنظمة دورة من الملاحظة والاختيار والتنفيذ والمراجعة حتى تصل إلى نتيجة أو تتوقف عند حد مقرر.  مقارنة سريعة  هذه الحدود ليست معياراً عالمياً صارماً فالسوق يستخدم المصطلحات بمرونة  الأهم أن تسأل عن السلوك الفعلي والصلاحيات  لا لسم المكتوب على المنتج  مما يتكون الوكيل الذكي  غارباً لا يكون الوكيل نموذجاً وحده، بل نظاماً مركباً من عدة طبقات.  واحد  هدف وصياق  يبدأ بطلب مثل  اجمع تحديثات المشروع وحدد المهام المتأخرة وجهز ملخصا لاجتماع الغد  يحتاج النظام إلى سياق يوضح المشروع والفريق والمدة وشكل المخرج المطلوب  كلما كان الهدف غامضا زادت مساحة التخمين وقد يبدو الوكيل نشيطا لكنه ينفذ تفسيرا لم تقصده",
+          "expectedTokens": 284,
+          "transcriptTokens": 284,
+          "substitutions": 6,
+          "deletions": 0,
+          "insertions": 0,
+          "exact": false,
+          "sampleDifferences": [
+            {
+              "type": "substitution",
+              "expected": "تنته",
+              "actual": "تنتهي",
+              "expectedIndex": 23,
+              "actualIndex": 23
+            },
+            {
+              "type": "substitution",
+              "expected": "الاسم",
+              "actual": "لسم",
+              "expectedIndex": 221,
+              "actualIndex": 221
+            },
+            {
+              "type": "substitution",
+              "expected": "مم",
+              "actual": "مما",
+              "expectedIndex": 225,
+              "actualIndex": 225
+            },
+            {
+              "type": "substitution",
+              "expected": "غالبا",
+              "actual": "غاربا",
+              "expectedIndex": 229,
+              "actualIndex": 229
+            },
+            {
+              "type": "substitution",
+              "expected": "1",
+              "actual": "واحد",
+              "expectedIndex": 241,
+              "actualIndex": 241
+            },
+            {
+              "type": "substitution",
+              "expected": "وسياق",
+              "actual": "وصياق",
+              "expectedIndex": 243,
+              "actualIndex": 243
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "stt",
+      "model": "openai/whisper-large-v3",
+      "usable": true,
+      "partsProbed": 1,
+      "partsScored": 1,
+      "totals": {
+        "substitutions": 6,
+        "deletions": 0,
+        "insertions": 0,
+        "expectedTokens": 284
+      },
+      "tokenErrorRate": 0.02113,
+      "runs": [
+        {
+          "part": 1,
+          "ok": true,
+          "httpStatus": 200,
+          "requestId": null,
+          "responseModel": null,
+          "usage": {
+            "seconds": 162.6,
+            "inputTokens": null,
+            "outputTokens": null,
+            "totalTokens": null,
+            "cost": 0.0012195
+          },
+          "audioSha256": "87d46d978f96727ebe957bee9ba1bee60a9bd714b43795414df44fedc0061d0d",
+          "audioBytes": 1951245,
+          "error": null,
+          "transcript": "الوكلاء الأذكياء  من الإجابة إلى التنفيذ.  اعتدنا أن نسأل الذكاء الاصطناعي فيجيب  يشرح فكرة  يصوغ رسالة  أو يلخص ملفاً.  لكن ماذا لو لم تنتهي المهمة عند الإجابة؟  ماذا لو استطاع النظام ضمن صلاحيات محددة أن يبحث في عدة مصادر؟  ويستخدم التقويم ويجهز التقرير، ثم يتوقف قبل الإرسال طالباً موافقتك.  هنا يظهر مصطلح الوكلاء الأذكياء  وهو من أكثر مصطلحات التقنية تداولاً ومن أكثرها تعرضاً للمبالغة أيضاً  فالمنتج قد يسمى وكيلاً وهو في الحقيقة سلسلة أتمتة مع خطوة ذكاء اصطناعي  وقد يبدو النظام مستقلا بينما تحيط به قواعد وبرامج كتبها البشر  ببساطة، الوكيل الذكي نظام يستخدم نموذج ذكاء اصطناعي مع أدوات وتعليمات وحلقة تنفيذ، ليحاول إنجاز هدف متعدد الخطوات بدل الاكتفاء بإجابة واحدة.  كلمة يحاول مهمة، فالوكالة لا تجعل النظام معصوماً، ولا تعني أنه يفهم هدفك كما يفهمه إنسان أو أنه يستحق صلاحيات مفتوحة.  من الشات إلى الفعل  روبوت المحادثة التقليدي يتلقى رسالة ويعيد ردا  قد يكون الرد ممتازاً لكنه يبقى نصاً ما لم ينقله المستخدم إلى برنامج آخر  أما الوكيل فيمكن أن يربط بأدوات تسمح له بإجراء عمليات ضمن بيئة  البحث في ملفات، قراءة تقويم، تشغيل اختبار برمجي، تحديث سجل أو تجهيز مسودة إجراء.  وتكرر بعض الأنظمة دورة من الملاحظة والاختيار والتنفيذ والمراجعة حتى تصل إلى نتيجة أو تتوقف عند حد مقرر.  مقارنة سريعة  هذه الحدود ليست معياراً عالمياً صارماً، فالسوق يستخدم المصطلحات بمرونة  الأهم أن تسأل عن السلوك الفعلي والصلاحيات  لا لسم المكتوب على المنتج.  مما يتكون الوكيل الذكي  غارباً لا يكون الوكيل نموذجاً وحده، بل نظاماً مركباً من عدة طبقات.  واحد  هدف وصياق  يبدأ بطلب مثل  اجمع تحديثات المشروع وحدد المهام المتأخرة وجهز ملخصاً لاجتماع الغد  يحتاج النظام إلى سياق يوضح المشروع والفريق والمدة وشكل المخرج المطلوب  كلما كان الهدف غامضا زادت مساحة التخمين وقد يبدو الوكيل نشيطا لكنه ينفذ تفسيرا لم تقصده",
+          "expectedTokens": 284,
+          "transcriptTokens": 284,
+          "substitutions": 6,
+          "deletions": 0,
+          "insertions": 0,
+          "exact": false,
+          "sampleDifferences": [
+            {
+              "type": "substitution",
+              "expected": "تنته",
+              "actual": "تنتهي",
+              "expectedIndex": 23,
+              "actualIndex": 23
+            },
+            {
+              "type": "substitution",
+              "expected": "الاسم",
+              "actual": "لسم",
+              "expectedIndex": 221,
+              "actualIndex": 221
+            },
+            {
+              "type": "substitution",
+              "expected": "مم",
+              "actual": "مما",
+              "expectedIndex": 225,
+              "actualIndex": 225
+            },
+            {
+              "type": "substitution",
+              "expected": "غالبا",
+              "actual": "غاربا",
+              "expectedIndex": 229,
+              "actualIndex": 229
+            },
+            {
+              "type": "substitution",
+              "expected": "1",
+              "actual": "واحد",
+              "expectedIndex": 241,
+              "actualIndex": 241
+            },
+            {
+              "type": "substitution",
+              "expected": "وسياق",
+              "actual": "وصياق",
+              "expectedIndex": 243,
+              "actualIndex": 243
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "stt",
+      "model": "qwen/qwen3-asr-flash-2026-02-10",
+      "usable": true,
+      "partsProbed": 1,
+      "partsScored": 1,
+      "totals": {
+        "substitutions": 3,
+        "deletions": 0,
+        "insertions": 0,
+        "expectedTokens": 284
+      },
+      "tokenErrorRate": 0.01056,
+      "runs": [
+        {
+          "part": 1,
+          "ok": true,
+          "httpStatus": 200,
+          "requestId": null,
+          "responseModel": null,
+          "usage": {
+            "seconds": 162,
+            "inputTokens": null,
+            "outputTokens": null,
+            "totalTokens": null,
+            "cost": 0.00567
+          },
+          "audioSha256": "87d46d978f96727ebe957bee9ba1bee60a9bd714b43795414df44fedc0061d0d",
+          "audioBytes": 1951245,
+          "error": null,
+          "transcript": "الوكلاء الأذكياء: من الإجابة إلى التنفيذ اعتدنا أن نسأل الذكاء الاصطناعي فيجيب، يشرح فكرة، يصوغ رسالة، أو يلخص ملفاً. لكن ماذا لو لم تنته المهمة عند الإجابة؟ ماذا لو استطاع النظام، ضمن صلاحيات محددة، أن يبحث في عدة مصادر، ويستخدم التقويم، ويجهز التقرير، ثم يتوقف قبل الإرسال طالباً موافقتك؟ هنا يظهر مصطلح الوكلاء الأذكياء، وهو من أكثر مصطلحات التقنية تداولاً، ومن أكثرها تعرضاً للمبالغة أيضاً. فالمنتج قد يسمى وكيلًا، وهو في الحقيقة سلسلة أتمتة مع خطوة ذكاء اصطناعي، وقد يبدو النظام مستقلاً بينما تحيط به قواعد وبرامج كتبها البشر. ببساطة، الوكيل الذكي نظام يستخدم نموذج ذكاء اصطناعي مع أدوات وتعليمات وحلقة تنفيذ، ليحاول إنجاز هدف متعدد الخطوات بدلاً الاكتفاء بإجابة واحدة. كلمة يحاول مهمة، فالوكالة لا تجعل النظام معصوماً، ولا تعني أنه يفهم هدفك كما يفهمه إنسان، أو أنه يستحق صلاحيات مفتوحة. من الشات إلى الفعل روبوت المحادثة التقليدي يتلقى رسالة ويُعيد ردًا. قد يكون الرد ممتازاً، لكنه يبقى نصاً ما لم ينقله المستخدم إلى برنامج آخر. أما الوكيل فيمكن أن يربط بأدوات تسمح له بإجراء عمليات ضمن بيئة: البحث في ملفات، قراءة تقويم، تشغيل اختبار برمجي، تحديث سجل، أو تجهيز مسودة إجراء. وتكرر بعض الأنظمة دورة من الملاحظة والاختيار والتنفيذ والمراجعة حتى تصل إلى نتيجة أو تتوقف عند حد مقرر. مقارنة سريعة هذه الحدود ليست معياراً عالمياً صارماً، فالسوق يستخدم المصطلحات بمرونة. الأهم أن تسأل عن السلوك الفعلي والصلاحيات، لا الاسم المكتوب على المنتج. مما يتكون الوكيل الذكي؟ غالباً لا يكون الوكيل نموذجاً وحده، بل نظاماً مركباً من عدة طبقات. واحد: هدف وسياق يبدأ بطلب مثل: اجمع تحديثات المشروع، وحدد المهام المتأخرة، وجهز ملخصاً لاجتماع الغد. يحتاج النظام إلى سياق يوضح المشروع والفريق والمدة وشكل المخرج المطلوب. كلما كان الهدف غامضاً، زادت مساحة التخمين. وقد يبدو الوكيل نشيطاً، لكنه ينفذ تفسيراً لم تقصده.",
+          "expectedTokens": 284,
+          "transcriptTokens": 284,
+          "substitutions": 3,
+          "deletions": 0,
+          "insertions": 0,
+          "exact": false,
+          "sampleDifferences": [
+            {
+              "type": "substitution",
+              "expected": "بدل",
+              "actual": "بدلا",
+              "expectedIndex": 107,
+              "actualIndex": 107
+            },
+            {
+              "type": "substitution",
+              "expected": "مم",
+              "actual": "مما",
+              "expectedIndex": 225,
+              "actualIndex": 225
+            },
+            {
+              "type": "substitution",
+              "expected": "1",
+              "actual": "واحد",
+              "expectedIndex": 241,
+              "actualIndex": 241
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "stt",
+      "model": "mistralai/voxtral-mini-transcribe",
+      "usable": true,
+      "partsProbed": 1,
+      "partsScored": 1,
+      "totals": {
+        "substitutions": 6,
+        "deletions": 1,
+        "insertions": 0,
+        "expectedTokens": 284
+      },
+      "tokenErrorRate": 0.02465,
+      "runs": [
+        {
+          "part": 1,
+          "ok": true,
+          "httpStatus": 200,
+          "requestId": null,
+          "responseModel": null,
+          "usage": {
+            "seconds": 162,
+            "inputTokens": 10,
+            "outputTokens": 452,
+            "totalTokens": 462,
+            "cost": 0.0081
+          },
+          "audioSha256": "87d46d978f96727ebe957bee9ba1bee60a9bd714b43795414df44fedc0061d0d",
+          "audioBytes": 1951245,
+          "error": null,
+          "transcript": "الوكلااء الأذكياء من الإجابة إلى التنفيذ اعتدنا أن نسأل الذكاء الاصطناعي فيجيب يشرح فكرة يصوغ رسالة أو يلخص ملفا لكن ماذا لو لم تنتهي المهمة عند الإجابة؟ ماذا لو استطاع النظام ضمن صلاحيات محددة أن يبحث في عدة مصادر ويستخدم التقويم ويجهز التقرير ثم يتوقف قبل الإرسال طالبا موافقتك؟ هنا يظهر مصطلح الوكلاء الأذكياء وهو من أكثر مصطلحات التقنية تداولا ومن أكثرها تعرضا للمبالغة أيضا فالمنتج قد يسمى وكيلا وهو في الحقيقة سلسلة أتمتة مع خطوة ذكاء اصطناعي وقد يبدو النظام مستقلا بينما تحيط به قواعد وبرامج كتبها البشر ببساطة الوكيل الذكي نظام يستخدم نموذج ذكاء اصطناعي مع أدوات وتعليمات وحلقة تنفيذ ليحاول إنجاز هدف متعدد الخطوات بدل الاكتفاء بإجابة واحدة كلمة يحاول مهمة فالوكالة لا تجعل النظام معصوما ولا تعني أنه يفهم هدفك كما يفهمه إنسان أو أنه يستحق صلاحيات مفتوحة من الشاتي إلى الفعل روبوت المحادثة التقليدي يتلقى رسالة ويعيد ردا قد يكون الرد ممتازا لكنه يبقى نصاما لم ينقله المستخدم إلى برنامج آخر أما الوكيل فيمكن أن يربط بأدوات تسمح له بإجراء عمليات ضمن بيئة البحث في ملفات قراءة تقويم تشغيل اختبار برمجي تحديث سجل أو تجهيز مسودة إجراء وتكرر بعض الأنظمة دورة من الملاحظة والاختيار والتنفيذ والمراجعة حتى تصل إلى نتيجة أو تتوقف عند حد مقرر مقارنة سريعة هذه الحدود ليست معيارا عالميا صارما فالسوق يستخدم المصطلحات بمرونة الأهم أن تسأل عن السلوك الفعلي والصلاحيات لا لاسم المكتوب على المنتج مما يتكون الوكيل الذكي غالبا لا يكون الوكيل نموذجا وحده بل نظاما مركبا من عدة طبقات 1- هدف وسياق يبدأ بطلب مثل اجمع تحديثات المشروع وحدد المهام المتأخرة وجهز ملخصا لاجتماع الغد يحتاج النظام إلى سياق يوضح المشروع والفريق والمدة وشكل المخرج المطلوب كلما كان الهدف غامضا زادت مساحة التخمين وقد يبدو الوكيل نشيطا لكنه ينفذ تفسيرا لم تقصده",
+          "expectedTokens": 284,
+          "transcriptTokens": 283,
+          "substitutions": 6,
+          "deletions": 1,
+          "insertions": 0,
+          "exact": false,
+          "sampleDifferences": [
+            {
+              "type": "substitution",
+              "expected": "الوكلاء",
+              "actual": "الوكلااء",
+              "expectedIndex": 0,
+              "actualIndex": 0
+            },
+            {
+              "type": "substitution",
+              "expected": "تنته",
+              "actual": "تنتهي",
+              "expectedIndex": 23,
+              "actualIndex": 23
+            },
+            {
+              "type": "substitution",
+              "expected": "الشات",
+              "actual": "الشاتي",
+              "expectedIndex": 133,
+              "actualIndex": 133
+            },
+            {
+              "type": "deletion",
+              "expected": "نصا",
+              "actual": null,
+              "expectedIndex": 149,
+              "actualIndex": 149
+            },
+            {
+              "type": "substitution",
+              "expected": "ما",
+              "actual": "نصاما",
+              "expectedIndex": 150,
+              "actualIndex": 149
+            },
+            {
+              "type": "substitution",
+              "expected": "الاسم",
+              "actual": "لاسم",
+              "expectedIndex": 221,
+              "actualIndex": 220
+            },
+            {
+              "type": "substitution",
+              "expected": "مم",
+              "actual": "مما",
+              "expectedIndex": 225,
+              "actualIndex": 224
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "chat",
+      "model": "google/gemini-3.6-flash",
+      "usable": true,
+      "partsProbed": 1,
+      "partsScored": 1,
+      "totals": {
+        "substitutions": 5,
+        "deletions": 0,
+        "insertions": 1,
+        "expectedTokens": 284
+      },
+      "tokenErrorRate": 0.02113,
+      "runs": [
+        {
+          "part": 1,
+          "ok": true,
+          "httpStatus": 200,
+          "requestId": "gen-1788297105-QOoHMiBeFMMhG4INUcNi",
+          "responseModel": "google/gemini-3.6-flash",
+          "usage": {
+            "seconds": null,
+            "inputTokens": 4120,
+            "outputTokens": 2998,
+            "totalTokens": 7118,
+            "cost": 0.0143325
+          },
+          "audioSha256": "87d46d978f96727ebe957bee9ba1bee60a9bd714b43795414df44fedc0061d0d",
+          "audioBytes": 1951245,
+          "error": null,
+          "transcript": "الوكلاء الأذكياء من الإجابة إلى التنفيذ\nاعتدنا أن نسأل الذكاء الاصطناعي فيجيب يشرح فكرة يصوغ رسالة أو يلخص ملفا\nلكن ماذا لو لم تنته المهمة عند الإجابة\nماذا لو استطاع النظام ضمن صلاحيات محددة أن يبحث في عدة مصادر ويستخدم التقويم ويجهز التقرير ثم يتوقف قبل الإرسال طالبا موافقتك\nهنا يظهر مصطلح الوكلاء الأذكياء\nوهو من أكثر مصطلحات التقنية تداولا ومن أكثرها تعرضا للمبالغة أيضا\nفالمنتج قد يسمى وكيلا وهو في الحقيقة سلسلة أتمتة مع خطوة ذكاء اصطناعي\nوقد يبدو النظام مستقلا بينما تحيط به قواعد وبرامج كتبها البشر\nببساطة الوكيل الذكي نظام يستخدم نموذج ذكاء اصطناعي مع أدوات وتعليمات وحلقة تنفيذ ليحاول إنجاز هدف متعدد الخطوات بدلا من الاكتفاء بإجابة واحدة\nكلمة يحاول مهمة فالوكالة لا تجعل النظام معصوما ولا تعني أنه يفهم هدفك كما يفهمه إنسان أو أنه يستحق صلاحيات مفتوحة\nمن الشات إلى الفعل\nروبوت المحادثة التقليدي يتلقى رسالة ويعيد ردا\nقد يكون الرد ممتازا لكنه يبقى نصا ما لم ينقله المستخدم إلى برنامج آخر\nأما الوكيل فيمكن أن يربط بأدوات تسمح له بإجراء عمليات ضمن بيئته البحث في ملفات قراءة تقويم تشغيل اختبار برمجي تحديث سجل أو تجهيز مسودة إجراء\nوتكرر بعض الأنظمة دورة من الملاحظة والاختيار والتنفيذ والمراجعة حتى تصل إلى نتيجة أو تتوقف عند حد مقرر\nمقارنة سريعة\nهذه الحدود ليست معيارا عالميا صارما فالسوق يستخدم المصطلحات بمرونة\nالأهم أن تسأل عن السلوك الفعلي والصلاحيات لا الاسم المكتوب على المنتج\nمما يتكون الوكيل الذكي\nغالبا لا يكون الوكيل نموذجا واحدا بل نظاما مركبا من عدة طبقات\nواحد هدف وسياق\nيبدأ بطلب مثل اجمع تحديثات المشروع وحدد المهام المتأخرة وجهز ملخصا لاجتماع الغد\nيحتاج النظام إلى سياق يوضح المشروع والفريق والمدة وشكل المخرج المطلوب\nكلما كان الهدف غامضا زادت مساحة التخمين وقد يبدو الوكيل نشيطا لكنه ينفذ تفسيرا لم تقصده",
+          "expectedTokens": 284,
+          "transcriptTokens": 285,
+          "substitutions": 5,
+          "deletions": 0,
+          "insertions": 1,
+          "exact": false,
+          "sampleDifferences": [
+            {
+              "type": "insertion",
+              "expected": null,
+              "actual": "بدلا",
+              "expectedIndex": 107,
+              "actualIndex": 107
+            },
+            {
+              "type": "substitution",
+              "expected": "بدل",
+              "actual": "من",
+              "expectedIndex": 107,
+              "actualIndex": 108
+            },
+            {
+              "type": "substitution",
+              "expected": "بيئة",
+              "actual": "بيئته",
+              "expectedIndex": 168,
+              "actualIndex": 169
+            },
+            {
+              "type": "substitution",
+              "expected": "مم",
+              "actual": "مما",
+              "expectedIndex": 225,
+              "actualIndex": 226
+            },
+            {
+              "type": "substitution",
+              "expected": "وحده",
+              "actual": "واحدا",
+              "expectedIndex": 234,
+              "actualIndex": 235
+            },
+            {
+              "type": "substitution",
+              "expected": "1",
+              "actual": "واحد",
+              "expectedIndex": 241,
+              "actualIndex": 242
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "chat",
+      "model": "google/gemini-3.5-flash",
+      "usable": true,
+      "partsProbed": 1,
+      "partsScored": 1,
+      "totals": {
+        "substitutions": 3,
+        "deletions": 0,
+        "insertions": 0,
+        "expectedTokens": 284
+      },
+      "tokenErrorRate": 0.01056,
+      "runs": [
+        {
+          "part": 1,
+          "ok": true,
+          "httpStatus": 200,
+          "requestId": "gen-1788297121-LPtNKXHl850yamikcg1J",
+          "responseModel": "google/gemini-3.5-flash",
+          "usage": {
+            "seconds": null,
+            "inputTokens": 4120,
+            "outputTokens": 2190,
+            "totalTokens": 6310,
+            "cost": 0.0319875
+          },
+          "audioSha256": "87d46d978f96727ebe957bee9ba1bee60a9bd714b43795414df44fedc0061d0d",
+          "audioBytes": 1951245,
+          "error": null,
+          "transcript": "الوكلاء الأذكياء من الإجابة إلى التنفيذ\n\nاعتدنا أن نسأل الذكاء الاصطناعي فيجيب يشرح فكرة يصوغ رسالة أو يلخص ملفا\n\nلكن ماذا لو لم تنتهي المهمة عند الإجابة\n\nماذا لو استطاع النظام ضمن صلاحيات محددة أن يبحث في عدة مصادر ويستخدم التقويم ويجهز التقرير ثم يتوقف قبل الإرسال طالبا موافقتك\n\nهنا يظهر مصطلح الوكلاء الأذكياء وهو من أكثر مصطلحات التقنية تداولا ومن أكثرها تعرضا للمبالغة أيضا\n\nفالمنتج قد يسمى وكيلا وهو في الحقيقة سلسلة أتمتة مع خطوة ذكاء اصطناعي\n\nوقد يبدو النظام مستقلا بينما تحيط به قواعد وبرامج كتبها البشر\n\nببساطة الوكيل الذكي نظام يستخدم نموذج ذكاء اصطناعي مع أدوات وتعليمات وحلقة تنفيذ ليحاول إنجاز هدف متعدد الخطوات بدل الاكتفاء بإجابة واحدة\n\nكلمة يحاول مهمة فالوكالة لا تجعل النظام معصوما ولا تعني أنه يفهم هدفك كما يفهمه إنسان أو أنه يستحق صلاحيات مفتوحة\n\nمن الشات إلى الفعل\n\nروبوت المحادثة التقليدي يتلقى رسالة ويعيد ردا قد يكون الرد ممتازا لكنه يبقى نصا ما لم ينقله المستخدم إلى برنامج آخر\n\nأما الوكيل فيمكن أن يربط بأدوات تسمح له بإجراء عمليات ضمن بيئة البحث في ملفات قراءة تقويم تشغيل اختبار برمجي تحديث سجل أو تجهيز مسودة إجراء\n\nوتكرر بعض الأنظمة دورة من الملاحظة والاختيار والتنفيذ والمراجعة حتى تصل إلى نتيجة أو تتوقف عند حد مقرر\n\nمقارنة سريعة\n\nهذه الحدود ليست معيارا عالميا صارما فالسوق يستخدم المصطلحات بمرونة الأهم أن تسأل عن السلوك الفعلي والصلاحيات لا الاسم المكتوب على المنتج\n\nمما يتكون الوكيل الذكي\n\nغالبا لا يكون الوكيل نموذجا وحده بل نظاما مركبا من عدة طبقات\n\nواحد هدف وسياق\n\nيبدأ بطلب مثل اجمع تحديثات المشروع وحدد المهام المتأخرة وجهز ملخصا لاجتماع الغد\n\nيحتاج النظام إلى سياق يوضح المشروع والفريق والمدة وشكل المخرج المطلوب\n\nكلما كان الهدف غامضا زادت مساحة التخمين وقد يبدو الوكيل نشيطا لكنه ينفذ تفسيرا لم تقصده",
+          "expectedTokens": 284,
+          "transcriptTokens": 284,
+          "substitutions": 3,
+          "deletions": 0,
+          "insertions": 0,
+          "exact": false,
+          "sampleDifferences": [
+            {
+              "type": "substitution",
+              "expected": "تنته",
+              "actual": "تنتهي",
+              "expectedIndex": 23,
+              "actualIndex": 23
+            },
+            {
+              "type": "substitution",
+              "expected": "مم",
+              "actual": "مما",
+              "expectedIndex": 225,
+              "actualIndex": 225
+            },
+            {
+              "type": "substitution",
+              "expected": "1",
+              "actual": "واحد",
+              "expectedIndex": 241,
+              "actualIndex": 241
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fingerprint": "7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488",
+  "totalParts": 14,
+  "partFiles": [
+    "part-001-b6cdd7d6b82d.clean.mp3",
+    "part-001-b6cdd7d6b82d.mp3",
+    "part-002-c394d7e3596a.clean.mp3",
+    "part-002-c394d7e3596a.mp3",
+    "part-003-e1108dd818e5.clean.mp3",
+    "part-003-e1108dd818e5.mp3",
+    "part-004-ac9ff13ef815.clean.mp3",
+    "part-004-ac9ff13ef815.mp3",
+    "part-005-e8817ab3c9c8.clean.mp3",
+    "part-005-e8817ab3c9c8.mp3",
+    "part-006-38975dc84f8e.clean.mp3",
+    "part-006-38975dc84f8e.mp3",
+    "part-007-2291aeabeb61.clean.mp3",
+    "part-007-2291aeabeb61.mp3"
+  ],
+  "speechScriptHash": "8844b531d744699e492f28c15315279cac00d6bad22b697ffa6fb82339f7a153",
+  "splitParts": 6,
+  "partCountMismatch": {
+    "splitPlan": 6,
+    "candidateFiles": 14
+  },
+  "samples": [
+    {
+      "part": 1,
+      "file": "part-001-b6cdd7d6b82d.clean.mp3",
+      "hasExpectedText": true,
+      "expectedChars": 1707
+    }
+  ]
 }
