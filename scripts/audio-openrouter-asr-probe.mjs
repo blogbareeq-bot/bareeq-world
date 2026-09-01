@@ -48,15 +48,33 @@ const apiKey = process.env.OPENROUTER_API_KEY;
 
 async function loadCandidate() {
   const statePath = path.join(STORE, '_campaigns', CAMPAIGN, 'state.json');
-  const state = JSON.parse(await readFile(statePath, 'utf8'));
+  let state;
+  try {
+    state = JSON.parse(await readFile(statePath, 'utf8'));
+  } catch (error) {
+    let topLevel = [];
+    try { topLevel = await readdir(STORE); } catch { /* store missing */ }
+    throw new Error(`cannot read campaign state at ${statePath}: ${error.message}; store contains: ${topLevel.slice(0, 40).join(', ')}`);
+  }
   const fingerprint = state?.articles?.[ARTICLE]?.generation?.fingerprint;
   if (!/^[a-f0-9]{64}$/.test(fingerprint || '')) {
-    throw new Error(`no generated fingerprint for ${ARTICLE}`);
+    throw new Error(`no generated fingerprint for ${ARTICLE}; known articles: ${Object.keys(state?.articles || {}).join(', ')}`);
   }
   const dir = candidateDir(ARTICLE, fingerprint, STORE);
-  const checkpoint = JSON.parse(await readFile(path.join(dir, 'checkpoint.json'), 'utf8'));
+  let checkpoint = null;
+  try {
+    checkpoint = JSON.parse(await readFile(path.join(dir, 'checkpoint.json'), 'utf8'));
+  } catch { /* checkpoint is optional for the probe */ }
   const partsDir = path.join(dir, 'parts');
-  const files = (await readdir(partsDir)).filter((name) => name.endsWith('.mp3')).sort();
+  let files = [];
+  try {
+    files = (await readdir(partsDir)).filter((name) => name.endsWith('.mp3')).sort();
+  } catch (error) {
+    let dirEntries = [];
+    try { dirEntries = await readdir(dir); } catch { /* candidate dir missing */ }
+    throw new Error(`cannot read parts dir ${partsDir}: ${error.message}; candidate dir contains: ${dirEntries.join(', ')}`);
+  }
+  if (!files.length) throw new Error(`no part mp3 files under ${partsDir}`);
   return { fingerprint, dir, partsDir, files, checkpoint };
 }
 
@@ -131,11 +149,6 @@ async function probeModel({ kind, model, samples }) {
 }
 
 async function main() {
-  if (!apiKey?.trim()) {
-    console.error('OPENROUTER_API_KEY_PRESENT=no');
-    process.exit(78);
-  }
-
   const report = {
     schema: 'bareeq.openrouter-asr-probe.v1',
     generatedAt: new Date().toISOString(),
@@ -143,74 +156,116 @@ async function main() {
     article: ARTICLE,
     campaignId: CAMPAIGN,
     note: 'Probe only. No TTS was performed and no audio was regenerated.',
+    stage: 'start',
+    fatalError: null,
     discovery: {},
     probes: [],
   };
 
-  try {
-    report.discovery.transcriptionModels = await listTranscriptionModels({ apiKey });
-  } catch (error) {
-    report.discovery.transcriptionModelsError = String(error?.message || error).slice(0, 500);
-  }
-  try {
-    report.discovery.audioInputModels = await listAudioInputModels({ apiKey });
-  } catch (error) {
-    report.discovery.audioInputModelsError = String(error?.message || error).slice(0, 500);
-  }
+  // Actions logs and artifacts are not readable from the release workspace, so
+  // the report is flushed to disk after every stage. Whatever fails, the
+  // committed JSON explains why.
+  const flush = async () => {
+    await mkdir(path.dirname(OUT), { recursive: true });
+    await writeFile(OUT, `${JSON.stringify(report, null, 2)}\n`);
+  };
 
-  const candidate = await loadCandidate();
-  report.fingerprint = candidate.fingerprint;
-  report.totalParts = candidate.files.length;
+  try {
+    if (!apiKey?.trim()) {
+      report.stage = 'missing-credential';
+      report.fatalError = 'OPENROUTER_API_KEY is absent';
+      await flush();
+      console.error('OPENROUTER_API_KEY_PRESENT=no');
+      process.exit(78);
+    }
 
-  const article = await loadSpokenArticle(ARTICLE, ROOT);
-  const splitPlan = splitSpokenArticle(article);
-  report.speechScriptHash = article.speechScriptHash;
-  report.splitParts = splitPlan.parts.length;
-  if (splitPlan.parts.length !== candidate.files.length) {
-    report.partCountMismatch = {
-      splitPlan: splitPlan.parts.length,
-      candidateFiles: candidate.files.length,
+    report.stage = 'discovery';
+    await flush();
+    try {
+      report.discovery.transcriptionModels = await listTranscriptionModels({ apiKey });
+    } catch (error) {
+      report.discovery.transcriptionModelsError = String(error?.message || error).slice(0, 800);
+    }
+    try {
+      report.discovery.audioInputModels = await listAudioInputModels({ apiKey });
+    } catch (error) {
+      report.discovery.audioInputModelsError = String(error?.message || error).slice(0, 800);
+    }
+    await flush();
+
+    report.stage = 'load-candidate';
+    const candidate = await loadCandidate();
+    report.fingerprint = candidate.fingerprint;
+    report.totalParts = candidate.files.length;
+    report.partFiles = candidate.files;
+    await flush();
+
+    report.stage = 'load-article';
+    const article = await loadSpokenArticle(ARTICLE, ROOT);
+    const splitPlan = splitSpokenArticle(article);
+    report.speechScriptHash = article.speechScriptHash;
+    report.splitParts = splitPlan.parts.length;
+    if (splitPlan.parts.length !== candidate.files.length) {
+      report.partCountMismatch = {
+        splitPlan: splitPlan.parts.length,
+        candidateFiles: candidate.files.length,
+      };
+    }
+
+    // Probe part 1, part 5 (the confirmed «المشكلة» singular correction) and
+    // part 3, so the probe covers both corrected and untouched audio.
+    const wanted = [...new Set([0, 4, 2])]
+      .filter((index) => index < candidate.files.length && index < splitPlan.parts.length)
+      .slice(0, MAX_PARTS);
+    const samples = wanted.map((partIndex) => ({
+      partIndex,
+      file: path.join(candidate.partsDir, candidate.files[partIndex]),
+      expected: expectedForPart(splitPlan, partIndex),
+    }));
+    report.samples = samples.map((sample) => ({
+      part: sample.partIndex + 1,
+      file: path.basename(sample.file),
+      hasExpectedText: Boolean(sample.expected),
+      expectedChars: sample.expected ? sample.expected.length : 0,
+    }));
+    await flush();
+
+    report.stage = 'probing';
+    for (const model of STT_CANDIDATES) {
+      console.log(`probing STT ${model}`);
+      report.probes.push(await probeModel({ kind: 'stt', model, samples }));
+      await flush();
+    }
+    for (const model of CHAT_CANDIDATES) {
+      console.log(`probing CHAT ${model}`);
+      report.probes.push(await probeModel({ kind: 'chat', model, samples }));
+      await flush();
+    }
+
+    report.stage = 'complete';
+    await flush();
+
+    console.log('--- PROBE SUMMARY ---');
+    for (const probe of report.probes) {
+      console.log([
+        probe.kind,
+        probe.model,
+        `scored=${probe.partsScored}/${probe.partsProbed}`,
+        `S/D/I=${probe.totals.substitutions}/${probe.totals.deletions}/${probe.totals.insertions}`,
+        `tokens=${probe.totals.expectedTokens}`,
+        `errRate=${probe.tokenErrorRate}`,
+      ].join(' '));
+    }
+    console.log(`PROBE_OUTPUT=${OUT}`);
+  } catch (error) {
+    report.fatalError = {
+      stage: report.stage,
+      message: String(error?.message || error).slice(0, 1200),
+      stack: String(error?.stack || '').slice(0, 3000),
     };
+    await flush();
+    throw error;
   }
-
-  // Probe the first parts plus part 5 (the part that carried the confirmed
-  // «المشكلة» singular correction) so the probe covers the corrected audio.
-  const wanted = [...new Set([0, 4, 2])].filter((index) => index < candidate.files.length).slice(0, MAX_PARTS);
-  const samples = wanted.map((partIndex) => ({
-    partIndex,
-    file: path.join(candidate.partsDir, candidate.files[partIndex]),
-    expected: expectedForPart(splitPlan, partIndex),
-  }));
-  report.samples = samples.map((sample) => ({
-    part: sample.partIndex + 1,
-    file: path.basename(sample.file),
-    hasExpectedText: Boolean(sample.expected),
-  }));
-
-  for (const model of STT_CANDIDATES) {
-    console.log(`probing STT ${model}`);
-    report.probes.push(await probeModel({ kind: 'stt', model, samples }));
-  }
-  for (const model of CHAT_CANDIDATES) {
-    console.log(`probing CHAT ${model}`);
-    report.probes.push(await probeModel({ kind: 'chat', model, samples }));
-  }
-
-  await mkdir(path.dirname(OUT), { recursive: true });
-  await writeFile(OUT, `${JSON.stringify(report, null, 2)}\n`);
-
-  console.log('--- PROBE SUMMARY ---');
-  for (const probe of report.probes) {
-    console.log([
-      probe.kind,
-      probe.model,
-      `scored=${probe.partsScored}/${probe.partsProbed}`,
-      `S/D/I=${probe.totals.substitutions}/${probe.totals.deletions}/${probe.totals.insertions}`,
-      `tokens=${probe.totals.expectedTokens}`,
-      `errRate=${probe.tokenErrorRate}`,
-    ].join(' '));
-  }
-  console.log(`PROBE_OUTPUT=${OUT}`);
 }
 
 main().catch((error) => {
