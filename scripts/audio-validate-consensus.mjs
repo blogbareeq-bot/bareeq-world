@@ -18,7 +18,10 @@ import { writeJson } from './audio-checkpoint.mjs';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const TRANSIENT_HTTP = new Set([500, 502, 503, 504]);
-const RETRY_DELAYS_MS = [5000, 15000];
+// Gemini transcription can return temporary 500 high-demand responses. Keep
+// retries bounded, but span several minutes so a healthy campaign is not
+// discarded during a short provider spike.
+const RETRY_DELAYS_MS = [15000, 45000, 90000, 180000];
 
 export function isTransientAsrFailure(error) {
   const status = Number(error?.httpStatus || error?.result?.httpStatus || 0);

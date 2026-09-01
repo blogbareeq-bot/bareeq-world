@@ -6,6 +6,7 @@ on:
       - main
 
 permissions:
+  actions: read
   contents: write
 
 concurrency:
@@ -19,6 +20,8 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
+      BAREEQ_AUDIO_COMPLETE_ARTIFACT_ID: '9812647428'
+      BAREEQ_AUDIO_COMPLETE_ARTIFACT_SHA256: 13e207fd041669345a8ab841aab026ff3f25050d74c423f71297ddacb0ac3fdd
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -86,78 +89,87 @@ jobs:
       - name: Verify provider credentials
         if: steps.campaign.outputs.published != 'yes'
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          if [ -z "${OPENROUTER_API_KEY}" ]; then
-            echo 'OPENROUTER_API_KEY_PRESENT=no'
-            exit 78
-          fi
-          echo 'OPENROUTER_API_KEY_PRESENT=yes'
-          case "${OPENROUTER_API_KEY}" in
-            sk-or-v1-*) echo 'OPENROUTER_API_KEY_FORMAT=valid' ;;
-            *) echo 'OPENROUTER_API_KEY_FORMAT=invalid_expected_sk-or-v1-prefix'; exit 78 ;;
-          esac
           if [ -z "${GEMINI_API_KEY}" ]; then
             echo 'GEMINI_API_KEY_PRESENT=no'
             exit 78
           fi
           echo 'GEMINI_API_KEY_PRESENT=yes'
-
-      - name: Smoke-test OpenRouter Sadaltager
-        if: steps.campaign.outputs.published != 'yes'
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: |
-          set -euo pipefail
-          http_code=$(curl --silent --show-error \
-            --output /tmp/bareeq-smoke.pcm \
-            --write-out '%{http_code}' \
-            --request POST 'https://openrouter.ai/api/v1/audio/speech' \
-            --header "Authorization: Bearer ${OPENROUTER_API_KEY}" \
-            --header 'Content-Type: application/json' \
-            --header 'Accept: audio/pcm' \
-            --header 'HTTP-Referer: https://bareeqworld.com' \
-            --header 'X-Title: Bareeq' \
-            --data '{"model":"google/gemini-3.1-flash-tts-preview","input":"بريق، نافذتك إلى المعرفة.","voice":"Sadaltager","response_format":"pcm"}')
-          echo "OPENROUTER_HTTP_STATUS=${http_code}"
-          if [ "${http_code}" != '200' ]; then
-            cat /tmp/bareeq-smoke.pcm
-            exit 1
-          fi
-          bytes=$(wc -c < /tmp/bareeq-smoke.pcm)
-          echo "OPENROUTER_PCM_BYTES=${bytes}"
-          test "${bytes}" -gt 100
-          test $((bytes % 2)) -eq 0
-          echo 'OPENROUTER_SADALTAGER_SMOKE=PASS'
+          echo 'OPENROUTER_TTS_REQUIRED=no_complete_15_of_15_artifact'
 
       - name: Restore OpenRouter campaign checkpoint
+        id: cache
         if: steps.campaign.outputs.published != 'yes'
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
+          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-${{ github.run_attempt }}-restore
           restore-keys: |
             bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-
 
-      - name: Generate all 15 Sadaltager candidates through OpenRouter
+      - name: Inspect restored campaign checkpoint
+        id: restored
         if: steps.campaign.outputs.published != 'yes'
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          set +e
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const statePath = path.join('audio-candidates', '_campaigns', process.env.BAREEQ_AUDIO_CAMPAIGN_ID, 'state.json');
+          let complete = false;
+          try {
+            const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+            const articles = Object.entries(state.articles || {});
+            complete = state.generationComplete === true
+              && articles.length === 15
+              && articles.every(([articleId, item]) => item.generation?.status === 'generated'
+                && /^[a-f0-9]{64}$/.test(item.generation?.fingerprint || '')
+                && fs.existsSync(path.join('audio-candidates', articleId, item.generation.fingerprint, 'generation-report.json')));
+          } catch {}
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `complete=${complete ? 'yes' : 'no'}\n`);
+          console.log(`RESTORED_GENERATION_15_OF_15=${complete ? 'yes' : 'no'}`);
+          NODE
+
+      - name: Restore pinned complete 15/15 campaign artifact
+        if: steps.campaign.outputs.published != 'yes' && steps.restored.outputs.complete != 'yes'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          archive="${RUNNER_TEMP}/bareeq-sadaltager-15-of-15.zip"
+          gh api "/repos/${GITHUB_REPOSITORY}/actions/artifacts/${BAREEQ_AUDIO_COMPLETE_ARTIFACT_ID}/zip" > "${archive}"
+          printf '%s  %s\n' "${BAREEQ_AUDIO_COMPLETE_ARTIFACT_SHA256}" "${archive}" | sha256sum --check --strict
+          rm -rf audio-candidates
+          mkdir -p audio-candidates
+          unzip -q "${archive}" -d audio-candidates
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const statePath = path.join('audio-candidates', '_campaigns', process.env.BAREEQ_AUDIO_CAMPAIGN_ID, 'state.json');
+          const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+          const articles = Object.entries(state.articles || {});
+          if (state.generationComplete !== true || articles.length !== 15
+            || articles.some(([articleId, item]) => item.generation?.status !== 'generated'
+              || !/^[a-f0-9]{64}$/.test(item.generation?.fingerprint || '')
+              || !fs.existsSync(path.join('audio-candidates', articleId, item.generation.fingerprint, 'generation-report.json')))) {
+            throw new Error('Pinned artifact is not a complete 15/15 generated campaign.');
+          }
+          console.log('PINNED_GENERATION_ARTIFACT=PASS articles=15');
+          NODE
+
+      - name: Verify restored 15/15 generation without TTS calls
+        if: steps.campaign.outputs.published != 'yes'
+        run: |
           node scripts/audio-openrouter-campaign.mjs --mode=generate
-          status=$?
-          set -e
-          echo "OPENROUTER_GENERATION_EXIT_STATUS=${status}"
-          exit "$status"
+          echo 'OPENROUTER_GENERATION_EXIT_STATUS=0'
+          echo 'OPENROUTER_TTS_REQUESTS_SENT=0'
 
       - name: Save generation checkpoint
         if: always() && steps.campaign.outputs.published != 'yes'
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-generated
+          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-${{ github.run_attempt }}-generated
 
       - name: Validate all candidates with technical QA and independent dual ASR
         if: steps.campaign.outputs.published != 'yes'
@@ -176,7 +188,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-validated
+          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-${{ github.run_attempt }}-validated
 
       - name: Publish validated candidates into PR tree
         if: steps.campaign.outputs.published != 'yes'
@@ -190,7 +202,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-published
+          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-${{ github.run_attempt }}-published
 
       - name: Commit validated audio tree to PR branch
         if: steps.campaign.outputs.published != 'yes'
