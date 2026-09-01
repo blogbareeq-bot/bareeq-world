@@ -1,11 +1,14 @@
 import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
-import { EXIT_HARD, EXIT_OK, EXIT_QUOTA, candidateDir } from './audio-constants.mjs';
+import { EXIT_HARD, EXIT_OK, EXIT_QUOTA, candidateDir, sha256 } from './audio-constants.mjs';
 import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { runProductionMode } from './audio-production.mjs';
 import { validateWithConsensus } from './audio-validate-consensus.mjs';
 import { synthesizeOpenRouterPart } from './audio-openrouter-tts.mjs';
+import { loadPublicationPost, loadPublishRecord } from './audio-approval.mjs';
+import { publishApprovedCandidate } from './audio-publish.mjs';
+import { loadSpokenArticle } from './audio-split.mjs';
 
 const ROOT = process.cwd();
 const CAMPAIGN_ID = process.env.BAREEQ_AUDIO_CAMPAIGN_ID?.trim() || 'sadaltager-openrouter-20260901-v1';
@@ -13,6 +16,8 @@ const MODE = process.argv.find((arg) => arg.startsWith('--mode='))?.slice('--mod
 const CAMPAIGN_DIR = path.join(ROOT, 'audio-candidates', '_campaigns', CAMPAIGN_ID);
 const STATE_PATH = path.join(CAMPAIGN_DIR, 'state.json');
 const SNAPSHOT_PATH = path.join(ROOT, 'docs', 'audio', 'AUDIO-TRUTH-SNAPSHOT.json');
+const POLICY_PATH = path.join(ROOT, 'docs', 'audio', 'PUBLICATION-POLICY-20260901.json');
+const PUBLISHED_MARKER_PATH = path.join(ROOT, 'docs', 'audio', 'PUBLISHED-SADALTAGER-OPENROUTER-20260901.json');
 
 async function readJson(file, fallback = null) {
   try {
@@ -35,6 +40,29 @@ async function inventory() {
   return snapshot.articles;
 }
 
+async function publicationPolicy() {
+  const policy = await readJson(POLICY_PATH);
+  if (!policy) throw Object.assign(new Error('Publication policy is missing.'), { exitCode: EXIT_HARD });
+  if (policy.scope?.campaignId !== CAMPAIGN_ID) {
+    throw Object.assign(new Error(`Publication policy targets ${policy.scope?.campaignId || 'unknown'}, expected ${CAMPAIGN_ID}.`), { exitCode: EXIT_HARD });
+  }
+  if (policy.scope?.model !== PRODUCTION_NARRATOR.model || policy.scope?.voice !== PRODUCTION_NARRATOR.providerVoice) {
+    throw Object.assign(new Error('Publication policy narrator does not match the production narrator.'), { exitCode: EXIT_HARD });
+  }
+  if (policy.decision?.ownerWaiverForFullFileListening !== true || policy.decision?.sampleListeningAccepted !== true) {
+    throw Object.assign(new Error('Publication policy does not authorize the sample-listening waiver.'), { exitCode: EXIT_HARD });
+  }
+  const gates = policy.mandatoryAutomatedGates || {};
+  if (!gates.reviewedSpeechScript || !gates.independentDualAsr || !gates.technicalQa || !gates.syncQa || !gates.fingerprintBoundEvidence || !gates.manifestAndPartSha256) {
+    throw Object.assign(new Error('Publication policy is missing one or more mandatory automated gates.'), { exitCode: EXIT_HARD });
+  }
+  const consensus = gates.asrConsensus || {};
+  for (const key of ['substitutions', 'deletions', 'insertions', 'unresolved']) {
+    if (Number(consensus[key]) !== 0) throw Object.assign(new Error(`Publication policy requires ${key}=0.`), { exitCode: EXIT_HARD });
+  }
+  return policy;
+}
+
 async function loadState() {
   const existing = await readJson(STATE_PATH);
   if (existing) return existing;
@@ -52,6 +80,7 @@ async function loadState() {
     updatedAt: new Date().toISOString(),
     generationComplete: false,
     validationComplete: false,
+    publicationComplete: false,
     liveUntouched: true,
     articles: {},
   };
@@ -59,7 +88,6 @@ async function loadState() {
 
 async function saveState(state) {
   state.updatedAt = new Date().toISOString();
-  state.liveUntouched = true;
   await mkdir(CAMPAIGN_DIR, { recursive: true });
   await writeJson(STATE_PATH, state);
 }
@@ -72,6 +100,10 @@ async function evidenceExists(articleId, fingerprint) {
 async function generateAll() {
   const items = await inventory();
   const state = await loadState();
+  if (state.publicationComplete) {
+    console.log(`OPENROUTER_GENERATION_ALREADY_PUBLISHED articles=${items.length}`);
+    return state;
+  }
   for (const item of items) {
     const previous = state.articles[item.articleId] || {};
     if (previous.generation?.status === 'generated' && await evidenceExists(item.articleId, previous.generation.fingerprint)) {
@@ -135,6 +167,10 @@ async function validateAll() {
   if (!state.generationComplete) {
     throw Object.assign(new Error('Validation refused: OpenRouter generation is incomplete.'), { exitCode: EXIT_HARD });
   }
+  if (state.publicationComplete) {
+    console.log(`OPENROUTER_VALIDATION_ALREADY_PUBLISHED articles=${items.length}`);
+    return state;
+  }
   for (const item of items) {
     const previous = state.articles[item.articleId] || {};
     const fingerprint = previous.generation?.fingerprint;
@@ -183,10 +219,119 @@ async function validateAll() {
   return state;
 }
 
+function exactConsensusZero(consensus = {}) {
+  return ['substitutions', 'deletions', 'insertions', 'unresolved'].every((key) => Number(consensus[key]) === 0);
+}
+
+async function publishAll() {
+  const items = await inventory();
+  const policy = await publicationPolicy();
+  const state = await loadState();
+  if (!state.validationComplete) {
+    throw Object.assign(new Error('Publication refused: OpenRouter validation is incomplete.'), { exitCode: EXIT_HARD });
+  }
+  for (const item of items) {
+    const previous = state.articles[item.articleId] || {};
+    const fingerprint = previous.generation?.fingerprint;
+    const validation = previous.validation || {};
+    if (!fingerprint || validation.status !== 'validated' || validation.fingerprint !== fingerprint || !validation.fullSha256) {
+      throw Object.assign(new Error(`Publication refused: ${item.articleId} has no matching validated candidate.`), { exitCode: EXIT_HARD });
+    }
+    if (!exactConsensusZero(validation.consensus)) {
+      throw Object.assign(new Error(`Publication refused: ${item.articleId} consensus is not exact 0/0/0/0.`), { exitCode: EXIT_HARD });
+    }
+    if (previous.publication?.status === 'published' && previous.publication?.fingerprint === fingerprint) {
+      console.log(`OPENROUTER_PUBLICATION_RESUME_SKIP ${item.articleId} ${fingerprint}`);
+      continue;
+    }
+
+    const dir = candidateDir(item.articleId, fingerprint, ROOT);
+    const fullFile = path.join(dir, 'full.mp3');
+    if (!await pathExists(fullFile)) {
+      throw Object.assign(new Error(`Publication refused: ${item.articleId} full.mp3 is missing.`), { exitCode: EXIT_HARD });
+    }
+    const actualFullSha = sha256(await readFile(fullFile));
+    if (actualFullSha !== validation.fullSha256) {
+      throw Object.assign(new Error(`Publication refused: ${item.articleId} full-file SHA-256 changed after validation.`), { exitCode: EXIT_HARD });
+    }
+
+    const article = await loadSpokenArticle(item.articleId, ROOT);
+    const post = await loadPublicationPost(item.articleId, ROOT);
+    const record = await loadPublishRecord({
+      candidateDir: dir,
+      fingerprint,
+      fullSha256: actualFullSha,
+      article,
+    });
+    record.humanListening = {
+      status: 'passed',
+      reviewedBy: 'project-owner-sample-approval',
+      reviewedAt: policy.effectiveAt,
+      evidence: {
+        sha256: actualFullSha,
+        candidateFingerprint: fingerprint,
+      },
+      scope: 'sample-listening-plus-strict-automated-verification',
+      fullFileListening: false,
+      fullFileListeningWaived: true,
+      policyFile: 'docs/audio/PUBLICATION-POLICY-20260901.json',
+      note: 'Full-length per-article listening was explicitly waived by the project owner; accepted Sadaltager samples plus exact dual-ASR, technical QA, sync QA and fingerprint-bound evidence are required.',
+    };
+
+    console.log(`OPENROUTER_PUBLICATION_START ${item.articleId} ${fingerprint}`);
+    const result = await publishApprovedCandidate({
+      articleId: item.articleId,
+      fingerprint,
+      root: ROOT,
+      post,
+      record,
+      listening: record.humanListening,
+      persistGit: false,
+    });
+    state.articles[item.articleId] = {
+      ...previous,
+      publication: {
+        status: result.status,
+        fingerprint,
+        fullSha256: result.fullSha256,
+        liveDir: result.liveDir,
+        completedAt: new Date().toISOString(),
+        policy: 'docs/audio/PUBLICATION-POLICY-20260901.json',
+      },
+    };
+    state.liveUntouched = false;
+    await saveState(state);
+    console.log(`OPENROUTER_PUBLICATION_DONE ${item.articleId} ${fingerprint}`);
+  }
+
+  state.publicationComplete = true;
+  state.liveUntouched = false;
+  await saveState(state);
+  const marker = {
+    schema: 'bareeq.audio-openrouter-published-tree.v1',
+    campaignId: CAMPAIGN_ID,
+    model: PRODUCTION_NARRATOR.model,
+    voice: PRODUCTION_NARRATOR.providerVoice,
+    gateway: 'OpenRouter',
+    articleCount: items.length,
+    publicationPolicy: 'docs/audio/PUBLICATION-POLICY-20260901.json',
+    generatedAt: new Date().toISOString(),
+    articles: items.map((item) => ({
+      articleId: item.articleId,
+      fingerprint: state.articles[item.articleId]?.publication?.fingerprint,
+      fullSha256: state.articles[item.articleId]?.publication?.fullSha256,
+    })),
+  };
+  await writeJson(PUBLISHED_MARKER_PATH, marker);
+  console.log(`OPENROUTER_PUBLICATION_ALL_DONE articles=${items.length}`);
+  return state;
+}
+
 try {
   if (MODE === 'generate') await generateAll();
   else if (MODE === 'validate') await validateAll();
-  else throw Object.assign(new Error(`Unknown mode ${MODE}; use generate | validate.`), { exitCode: 2 });
+  else if (MODE === 'publish') await publishAll();
+  else throw Object.assign(new Error(`Unknown mode ${MODE}; use generate | validate | publish.`), { exitCode: 2 });
   process.exit(EXIT_OK);
 } catch (error) {
   console.error(error.message);
