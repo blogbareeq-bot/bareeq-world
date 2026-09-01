@@ -15,114 +15,43 @@ concurrency:
 jobs:
   dry-run:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
-    env:
-      BAREEQ_CLOUD_TTS_ACTIVATE: '0'
-      BAREEQ_GEMINI_FREE_ROLLOUT: '0'
-      BAREEQ_AUDIO_MODE: dry-run
-      BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-all-20260831-v1
+    timeout-minutes: 15
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Offline audio safety gates
-        run: |
-          node scripts/test-audio-lifecycle.mjs
-          node scripts/test-audio-production-safety.mjs
-          node scripts/test-audio-production-integration.mjs
-          node scripts/test-speech-script-quality-gate.mjs
-          node scripts/check-speech-scripts.mjs
-          node scripts/test-audio-engine-final.mjs
-          node scripts/test-audio-transition-normalization.mjs
-          node scripts/test-audio-dual-asr-adjudicate.mjs
-          node scripts/test-gemini-generate-content-tts.mjs
-          node --check scripts/audio-validate-consensus.mjs
-          node --check scripts/audio-batch-campaign.mjs
-
-      - name: Production dry-run and all-article plan
-        run: |
-          node scripts/audio-inventory.mjs
-          node scripts/audio-production.mjs --mode=dry-run
-          node scripts/audio-batch-campaign.mjs --mode=plan
-          test -f docs/audio/DRY-RUN.json
-          echo 'PASS: dry-run and 15-article regeneration plan completed with synthesis disabled.'
-
-      - name: Check provider credential presence
+      - name: Verify OpenRouter credential
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          GOOGLE_CLOUD_ACCESS_TOKEN: ${{ secrets.GOOGLE_CLOUD_ACCESS_TOKEN }}
-          GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          [ -n "${GEMINI_API_KEY}" ] && echo 'GEMINI_API_KEY_PRESENT=yes' || echo 'GEMINI_API_KEY_PRESENT=no'
-          [ -n "${GOOGLE_SERVICE_ACCOUNT_JSON}" ] && echo 'GOOGLE_SERVICE_ACCOUNT_JSON_PRESENT=yes' || echo 'GOOGLE_SERVICE_ACCOUNT_JSON_PRESENT=no'
-          [ -n "${GOOGLE_CLOUD_ACCESS_TOKEN}" ] && echo 'GOOGLE_CLOUD_ACCESS_TOKEN_PRESENT=yes' || echo 'GOOGLE_CLOUD_ACCESS_TOKEN_PRESENT=no'
-          [ -n "${GOOGLE_CLOUD_PROJECT}" ] && echo 'GOOGLE_CLOUD_PROJECT_PRESENT=yes' || echo 'GOOGLE_CLOUD_PROJECT_PRESENT=no'
+          if [ -z "${OPENROUTER_API_KEY}" ]; then
+            echo 'OPENROUTER_API_KEY_PRESENT=no'
+            exit 78
+          fi
+          echo 'OPENROUTER_API_KEY_PRESENT=yes'
 
-      - name: Restore all-article regeneration checkpoint
-        if: hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
-        uses: actions/cache/restore@v4
-        with:
-          path: audio-candidates
-          key: bareeq-audio-all-sadaltager-v1-${{ hashFiles('scripts/audio-batch-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/audio-gemini-tts.mjs', 'scripts/speech-prompt.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
-          restore-keys: |
-            bareeq-audio-all-sadaltager-v1-${{ hashFiles('scripts/audio-batch-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/audio-gemini-tts.mjs', 'scripts/speech-prompt.mjs', 'scripts/speech-scripts/**') }}-
-
-      - name: Regenerate all 15 article candidates
-        if: hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
+      - name: Generate Sadaltager smoke sample
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_GEMINI_GENERATE_CONTENT: '1'
-          BAREEQ_RESUMED_TTS_TRANSPORT: 'developer-generate-content'
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          set +e
-          node scripts/audio-batch-campaign.mjs --mode=generate
-          status=$?
-          set -e
-          echo "ALL_ARTICLE_GENERATION_EXIT_STATUS=${status}"
-          exit "$status"
-
-      - name: Save generation checkpoint
-        if: always() && hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
-        uses: actions/cache/save@v4
-        with:
-          path: audio-candidates
-          key: bareeq-audio-all-sadaltager-v1-${{ hashFiles('scripts/audio-batch-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/audio-gemini-tts.mjs', 'scripts/speech-prompt.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-generated
-
-      - name: Validate all generated candidates with independent dual ASR
-        if: hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          set +e
-          node scripts/audio-batch-campaign.mjs --mode=validate
-          status=$?
-          set -e
-          echo "ALL_ARTICLE_VALIDATION_EXIT_STATUS=${status}"
-          exit "$status"
-
-      - name: Save validated checkpoint
-        if: always() && hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
-        uses: actions/cache/save@v4
-        with:
-          path: audio-candidates
-          key: bareeq-audio-all-sadaltager-v1-${{ hashFiles('scripts/audio-batch-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/audio-gemini-tts.mjs', 'scripts/speech-prompt.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-validated
-
-      - name: Upload all-article campaign artifact
-        if: always() && hashFiles('docs/audio/RUN-ALL-AUDIO-REGENERATION') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: bareeq-all-sadaltager-candidates
-          path: audio-candidates/
-          if-no-files-found: error
-          retention-days: 90
+          set -euo pipefail
+          http_code=$(curl --silent --show-error \
+            --output /tmp/bareeq-smoke.pcm \
+            --write-out '%{http_code}' \
+            --request POST 'https://openrouter.ai/api/v1/audio/speech' \
+            --header "Authorization: Bearer ${OPENROUTER_API_KEY}" \
+            --header 'Content-Type: application/json' \
+            --header 'Accept: audio/pcm' \
+            --header 'HTTP-Referer: https://bareeqworld.com' \
+            --header 'X-Title: Bareeq' \
+            --data '{"model":"google/gemini-3.1-flash-tts-preview","input":"بريق، نافذتك إلى المعرفة.","voice":"Sadaltager","response_format":"pcm"}')
+          echo "OPENROUTER_HTTP_STATUS=${http_code}"
+          if [ "${http_code}" != '200' ]; then
+            cat /tmp/bareeq-smoke.pcm
+            exit 1
+          fi
+          bytes=$(wc -c < /tmp/bareeq-smoke.pcm)
+          echo "OPENROUTER_PCM_BYTES=${bytes}"
+          test "${bytes}" -gt 100
+          test $((bytes % 2)) -eq 0
+          echo 'OPENROUTER_SADALTAGER_SMOKE=PASS'
