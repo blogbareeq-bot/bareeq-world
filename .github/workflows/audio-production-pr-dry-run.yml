@@ -171,7 +171,7 @@ jobs:
           if (!/^[a-f0-9]{64}$/.test(fingerprint || '')) throw new Error('targeted correction candidate fingerprint is missing');
           const checkpointPath = path.join('audio-candidates', articleId, fingerprint, 'checkpoint.json');
           const checkpoint = JSON.parse(fs.readFileSync(checkpointPath, 'utf8'));
-          const targets = [1];
+          const targets = [1, 5];
           const isCorrected = (part) => {
             const record = checkpoint.completedParts?.[String(part - 1)];
             return record?.targetedRegeneration === true
@@ -195,7 +195,7 @@ jobs:
           BAREEQ_FORCE_TTS_PARTS: ${{ steps.pronunciation.outputs.parts }}
           EXPECTED_TTS_REQUESTS: ${{ steps.pronunciation.outputs.count }}
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"At the phrase «والصلاحيات، لا الاسم المكتوب على المنتج», preserve «لا» and «الاسم» as two exact consecutive tokens with a brief natural boundary. Do not insert an extra «ل» and do not change «الاسم» to «للاسم» or «لاسم»."}
+            {"1":"At the phrase «والصلاحيات، لا الاسم المكتوب على المنتج», preserve «لا» and «الاسم» as two exact consecutive tokens with a brief natural boundary. Do not insert an extra «ل» and do not change «الاسم» to «للاسم» or «لاسم».","5":"At the phrase «تحديد المشكلة والمراجعة والتواصل وتحمل القرار», pronounce the singular word «المشكلة» exactly as written. Do not pluralize it to «المشكلات» and do not add a final «ات»."}
         run: |
           node scripts/audio-production.mjs --mode=generate-candidate --article=ai-agents-future-now
           node - <<'NODE'
@@ -206,7 +206,7 @@ jobs:
           const fingerprint = state.articles[articleId].generation.fingerprint;
           const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates', articleId, fingerprint, 'checkpoint.json'), 'utf8'));
           const report = JSON.parse(fs.readFileSync(path.join('audio-candidates', articleId, fingerprint, 'generation-report.json'), 'utf8'));
-          const corrected = [1].every((part) => {
+          const corrected = [1, 5].every((part) => {
             const record = checkpoint.completedParts?.[String(part - 1)];
             return record?.targetedRegeneration === true
               && record?.correctionHintApplied === true
