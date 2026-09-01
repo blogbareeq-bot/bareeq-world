@@ -40,6 +40,7 @@ jobs:
       # Pinned complete 15/15 generated campaign that already contains the
       # confirmed «المشكلة» singular correction for ai-agents-future-now part 5.
       BAREEQ_AUDIO_COMPLETE_ARTIFACT_ID: '9818366136'
+      BAREEQ_SKIP_PROBE: "1"
       BAREEQ_AUDIO_COMPLETE_ARTIFACT_SHA256: 8099b6a764ff121334df37845cfbd2c6f9418a56885014bb24032e7477c1b644
     steps:
       - name: Checkout
@@ -90,7 +91,12 @@ jobs:
           console.log('PINNED_GENERATION_ARTIFACT=PASS articles=15');
           NODE
 
+      - name: Audit candidate staleness against current code
+        if: always()
+        run: node scripts/audio-candidate-staleness-audit.mjs
+
       - name: Run OpenRouter ASR probe
+        if: env.BAREEQ_SKIP_PROBE != '1'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           BAREEQ_PROBE_ARTICLE: ${{ github.event.inputs.article }}
@@ -102,17 +108,13 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
-          if [ ! -f docs/audio/asr-probe/openrouter-probe.json ]; then
-            echo 'PROBE_EVIDENCE=absent'
-            exit 0
-          fi
           git config user.name 'bareeq-audio'
           git config user.email 'audio@bareeq.local'
-          git add -f docs/audio/asr-probe/openrouter-probe.json
+          git add -f docs/audio/asr-probe/ 2>/dev/null || true
           if git diff --cached --quiet; then
             echo 'PROBE_EVIDENCE=unchanged'
           else
-            git commit -m 'audio: record OpenRouter ASR capability probe evidence'
+            git commit -m 'audio: record OpenRouter ASR probe and candidate staleness evidence'
             git push origin "HEAD:${GITHUB_REF_NAME}"
             echo 'PROBE_EVIDENCE=pushed'
           fi
