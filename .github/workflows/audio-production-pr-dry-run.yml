@@ -227,6 +227,63 @@ jobs:
           console.log(`TARGETED_PRONUNCIATION_REGENERATION=PASS requests=${expected} model=gemini-3.1-flash-tts-preview voice=Sadaltager gateway=OpenRouter`);
           NODE
 
+      - name: Inspect coworker dual-ASR corrections
+        id: coworker_pronunciation
+        if: steps.campaign.outputs.published != 'yes'
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const articleId = 'ai-as-coworker-future-of-human-work';
+          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates', '_campaigns', process.env.BAREEQ_AUDIO_CAMPAIGN_ID, 'state.json'), 'utf8'));
+          const fingerprint = state.articles?.[articleId]?.generation?.fingerprint;
+          if (!/^[a-f0-9]{64}$/.test(fingerprint || '')) throw new Error('coworker correction candidate fingerprint is missing');
+          const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates', articleId, fingerprint, 'checkpoint.json'), 'utf8'));
+          const targets = [1, 6, 7];
+          const pending = targets.filter((part) => {
+            const record = checkpoint.completedParts?.[String(part - 1)];
+            return !(record?.targetedRegeneration === true
+              && record?.correctionHintApplied === true
+              && record?.transport === 'openrouter-speech');
+          });
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `applied=${pending.length === 0 ? 'yes' : 'no'}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `parts=${pending.join(',')}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `count=${pending.length}\n`);
+          console.log(`COWORKER_TARGETED_CORRECTION=${pending.length === 0 ? 'present' : 'required'} pending=${pending.join(',') || 'none'}`);
+          NODE
+
+      - name: Regenerate only coworker parts with confirmed shared ASR errors
+        if: steps.campaign.outputs.published != 'yes' && steps.coworker_pronunciation.outputs.applied != 'yes'
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+          BAREEQ_FORCE_TTS_PARTS: ${{ steps.coworker_pronunciation.outputs.parts }}
+          EXPECTED_TTS_REQUESTS: ${{ steps.coworker_pronunciation.outputs.count }}
+          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
+            {"1":"Preserve the exact lexical forms «أنثروبك» and «كلود»; do not insert an extra ي in «أنثروبك» and do not insert an extra ا in «كلود».","6":"Pronounce «بروكتر» exactly as written; do not insert an extra و to make «بروكتور».","7":"At «في ما ترمز إليه», preserve «في» and «ما» as two consecutive tokens with a brief natural boundary; do not merge them into «فيما»."}
+        run: |
+          node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const articleId = 'ai-as-coworker-future-of-human-work';
+          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates', '_campaigns', process.env.BAREEQ_AUDIO_CAMPAIGN_ID, 'state.json'), 'utf8'));
+          const fingerprint = state.articles[articleId].generation.fingerprint;
+          const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates', articleId, fingerprint, 'checkpoint.json'), 'utf8'));
+          const report = JSON.parse(fs.readFileSync(path.join('audio-candidates', articleId, fingerprint, 'generation-report.json'), 'utf8'));
+          const corrected = [1, 6, 7].every((part) => {
+            const record = checkpoint.completedParts?.[String(part - 1)];
+            return record?.targetedRegeneration === true
+              && record?.correctionHintApplied === true
+              && record?.transport === 'openrouter-speech';
+          });
+          if (!corrected) throw new Error('coworker targeted correction did not bind all required parts');
+          if (!(report.transportsUsed || []).includes('openrouter-speech')) throw new Error('coworker correction did not use OpenRouter speech');
+          const expected = Number(process.env.EXPECTED_TTS_REQUESTS);
+          if (report.ttsRequestsSent !== expected || report.providerAttempts !== expected) throw new Error('coworker correction sent an unexpected number of TTS requests');
+          console.log(`COWORKER_TARGETED_REGENERATION=PASS requests=${expected} model=gemini-3.1-flash-tts-preview voice=Sadaltager gateway=OpenRouter`);
+          NODE
+
       - name: Verify restored 15/15 generation without TTS calls
         if: steps.campaign.outputs.published != 'yes'
         run: |
