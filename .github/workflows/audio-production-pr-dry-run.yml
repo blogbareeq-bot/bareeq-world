@@ -15,22 +15,54 @@ concurrency:
 jobs:
   dry-run:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 300
+    env:
+      BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
 
-      - name: Verify OpenRouter credential
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Offline audio safety gates
+        run: |
+          node scripts/test-audio-lifecycle.mjs
+          node scripts/test-audio-production-safety.mjs
+          node scripts/test-audio-production-integration.mjs
+          node scripts/test-speech-script-quality-gate.mjs
+          node scripts/check-speech-scripts.mjs
+          node scripts/test-audio-engine-final.mjs
+          node scripts/test-audio-transition-normalization.mjs
+          node scripts/test-audio-dual-asr-adjudicate.mjs
+          node scripts/test-gemini-generate-content-tts.mjs
+          node --check scripts/audio-openrouter-tts.mjs
+          node --check scripts/audio-openrouter-campaign.mjs
+          node scripts/audio-inventory.mjs
+
+      - name: Verify provider credentials
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           if [ -z "${OPENROUTER_API_KEY}" ]; then
             echo 'OPENROUTER_API_KEY_PRESENT=no'
             exit 78
           fi
           echo 'OPENROUTER_API_KEY_PRESENT=yes'
+          if [ -z "${GEMINI_API_KEY}" ]; then
+            echo 'GEMINI_API_KEY_PRESENT=no'
+            exit 78
+          fi
+          echo 'GEMINI_API_KEY_PRESENT=yes'
 
-      - name: Generate Sadaltager smoke sample
+      - name: Smoke-test OpenRouter Sadaltager
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
@@ -55,3 +87,56 @@ jobs:
           test "${bytes}" -gt 100
           test $((bytes % 2)) -eq 0
           echo 'OPENROUTER_SADALTAGER_SMOKE=PASS'
+
+      - name: Restore OpenRouter campaign checkpoint
+        uses: actions/cache/restore@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
+          restore-keys: |
+            bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-
+
+      - name: Generate all 15 Sadaltager candidates through OpenRouter
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          set +e
+          node scripts/audio-openrouter-campaign.mjs --mode=generate
+          status=$?
+          set -e
+          echo "OPENROUTER_GENERATION_EXIT_STATUS=${status}"
+          exit "$status"
+
+      - name: Save generation checkpoint
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-generated
+
+      - name: Validate all candidates with technical QA and independent dual ASR
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set +e
+          node scripts/audio-openrouter-campaign.mjs --mode=validate
+          status=$?
+          set -e
+          echo "OPENROUTER_VALIDATION_EXIT_STATUS=${status}"
+          exit "$status"
+
+      - name: Save validated checkpoint
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-openrouter-sadaltager-v1-${{ hashFiles('scripts/audio-openrouter-tts.mjs', 'scripts/audio-openrouter-campaign.mjs', 'scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}-validated
+
+      - name: Upload all OpenRouter Sadaltager candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-openrouter-sadaltager-candidates
+          path: audio-candidates/
+          if-no-files-found: warn
+          retention-days: 90
