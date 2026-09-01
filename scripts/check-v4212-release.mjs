@@ -32,7 +32,7 @@ requireAll('start-here.astro', startHere, ['getSignaturePost', 'مقال توق�
 requireAll('search.astro', searchPage, ['excerpt: postSearchExcerpt(post)']);
 requireAll('search.js', searchScript, ['item.excerpt']);
 requireAll('saved.astro', saved, ['noindex']);
-requireAll('HomeIntro.astro', intro, ['اقرأ بعمق، أو استمع إلى النص، أو اخرج بالخلاصة في أقل من دقيقة.']);
+requireAll('HomeIntro.astro', intro, ['اقرأ عبر سطور، أو استمع إلى النص عبر صدى، أو افتح نافذة بصرية على الفكرة.']);
 requireAll('Header.astro', header, ['header-design-one', 'data-header-design="one"', 'data-ticker-primary', 'ticker-copy', 'aria-hidden="true"', 'compactTickerTitle']);
 requireAll('BaseLayout.astro', layout, ['stepMobileTicker', 'dataset.tickerOffset', 'translateX', 'is-manual', 'measureTicker', 'visibilitychange']);
 requireAll('global.css', css, ['.ticker.is-manual .ticker-viewport{overflow-x:auto', '.ticker-set>a{display:inline-flex', '.ticker-set{gap:28px;padding-inline-end:28px']);

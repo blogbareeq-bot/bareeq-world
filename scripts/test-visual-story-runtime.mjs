@@ -1,0 +1,25 @@
+import { readFile } from 'node:fs/promises';
+import { JSDOM } from 'jsdom';
+
+const runtime = await readFile('public/scripts/visual-story.js', 'utf8');
+const cards = Array.from({ length: 9 }, (_, index) => `<article data-visual-card data-card-id="card-${index}" aria-hidden="${index ? 'true' : 'false'}"><h2>بطاقة ${index + 1}</h2></article>`).join('');
+const dots = Array.from({ length: 9 }, (_, index) => `<button data-visual-dot data-index="${index}" aria-selected="${index === 0}"></button>`).join('');
+const dom = new JSDOM(`<!doctype html><html dir="rtl"><body><main><button data-reading-mode="read"></button><button data-reading-mode="window"></button></main><div data-visual-story data-story-key="test" data-story-title="اختبار" hidden><div data-visual-close></div><section data-visual-dialog tabindex="-1"><span data-visual-position></span><button data-visual-share></button><button data-visual-close></button><div>${cards}</div><button data-visual-next><span>التالي</span></button><button data-visual-prev></button><div>${dots}</div><p data-visual-status></p></section></div></body></html>`, { url: 'https://bareeqworld.com/posts/test/', runScripts: 'outside-only' });
+const { window } = dom;
+window.requestAnimationFrame = (callback) => { callback(Date.now()); return 1; };
+window.navigator.share = async () => {};
+window.eval(runtime);
+const root = window.document.querySelector('[data-visual-story]');
+const trigger = window.document.querySelector('[data-reading-mode="window"]');
+trigger.click();
+if (root.hidden || !window.document.body.classList.contains('visual-story-open')) throw new Error('نافذة لا تفتح من طريقة القراءة.');
+window.document.querySelector('[data-visual-next]').click();
+if (window.document.querySelector('[data-visual-position]').textContent !== '2' || window.location.hash !== '#visual=card-1') throw new Error('التنقل أو الرابط العميق لا يعمل.');
+const saved = JSON.parse(window.localStorage.getItem('bareeq-visual-progress-v1:test'));
+if (saved.index !== 1 || saved.completed) throw new Error('حفظ التقدم غير صحيح.');
+window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+if (window.document.querySelector('[data-visual-position]').textContent !== '9') throw new Error('مفتاح End لا يصل إلى البطاقة الأخيرة.');
+window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+if (!root.hidden || window.location.hash) throw new Error('Escape لا يغلق النافذة أو ينظف الرابط.');
+dom.window.close();
+console.log('نافذة بريق: runtime navigation, deep-link, progress, End, and Escape passed.');
