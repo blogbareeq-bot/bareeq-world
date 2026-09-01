@@ -26,28 +26,56 @@ function countOccurrences(text, needle) {
   }
 }
 
+function replaceExactlyOnce(text, needle, replacement, label) {
+  const occurrences = countOccurrences(text, needle);
+  if (occurrences !== 1) {
+    throw new Error(`Targeted OpenRouter correction expected exactly one ${label}; found ${occurrences}.`);
+  }
+  return text.replace(needle, replacement);
+}
+
 function correctionInput(part, correctionHint) {
   const hint = String(correctionHint || '').trim();
   if (!hint) return part;
 
   // OpenRouter's /audio/speech endpoint accepts speech text rather than a
-  // director-instruction prompt. For the confirmed ASR substitution in part 5,
-  // preserve the lexical content and add Arabic diacritics only to the exact
-  // singular token. The ASR lexical normalizer removes diacritics, so the
-  // expected transcript remains unchanged while the TTS pronunciation is made
-  // unambiguous.
-  if (part.partIndex === 4 && hint.includes('المشكلة')) {
-    const occurrences = countOccurrences(part.text, SINGULAR_PHRASE);
-    if (occurrences !== 1) {
-      throw new Error(`Targeted OpenRouter correction expected exactly one singular phrase in part 5; found ${occurrences}.`);
-    }
+  // director-instruction prompt. Keep lexical content unchanged and use only
+  // Arabic diacritics or punctuation boundaries that disappear under the ASR
+  // lexical normalizer, so the authoritative Speech Script remains identical.
+  if (articleId === 'ai-agents-future-now' && part.partIndex === 4 && hint.includes('المشكلة')) {
     return {
       ...part,
-      text: part.text.replace(SINGULAR_PHRASE, SINGULAR_PHRASE_VOCALIZED),
+      text: replaceExactlyOnce(
+        part.text,
+        SINGULAR_PHRASE,
+        SINGULAR_PHRASE_VOCALIZED,
+        'singular phrase in ai-agents part 5',
+      ),
     };
   }
 
-  throw new Error(`Unsupported OpenRouter targeted correction for part ${part.partIndex + 1}; refusing an unverified rewrite.`);
+  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 0) {
+    let text = part.text;
+    text = replaceExactlyOnce(text, 'أنثروبك', 'أَنْثْرُوبْك', 'أنثروبك token in coworker part 1');
+    text = replaceExactlyOnce(text, 'كلود', 'كْلُود', 'كلود token in coworker part 1');
+    return { ...part, text };
+  }
+
+  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 5) {
+    return {
+      ...part,
+      text: replaceExactlyOnce(part.text, 'بروكتر', 'بْرُوكْتَر', 'بروكتر token in coworker part 6'),
+    };
+  }
+
+  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 6) {
+    return {
+      ...part,
+      text: replaceExactlyOnce(part.text, 'في ما', 'في، ما', 'في ما boundary in coworker part 7'),
+    };
+  }
+
+  throw new Error(`Unsupported OpenRouter targeted correction for ${articleId} part ${part.partIndex + 1}; refusing an unverified rewrite.`);
 }
 
 try {
