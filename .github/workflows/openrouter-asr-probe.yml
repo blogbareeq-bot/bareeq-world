@@ -1,0 +1,118 @@
+name: Bareeq OpenRouter ASR probe
+
+# Manual-only capability probe. Performs NO text-to-speech and regenerates no
+# audio: it restores the pinned 15/15 candidate checkpoint read-only and asks
+# OpenRouter which models can transcribe Arabic accurately enough for the
+# existing exact 0/0/0 consensus gate.
+on:
+  workflow_dispatch:
+    inputs:
+      article:
+        description: Article id to probe
+        required: false
+        default: ai-agents-future-now
+      stt_models:
+        description: Comma-separated OpenRouter STT model ids
+        required: false
+        default: ''
+      chat_models:
+        description: Comma-separated OpenRouter audio-capable chat model ids
+        required: false
+        default: ''
+  # workflow_dispatch only appears once the file is on the default branch, so
+  # the release branch drives the probe with an explicit opt-in marker in the
+  # commit message. Without "[probe]" nothing runs and no credits are spent.
+  push:
+    branches:
+      - 'arena/01a05ec2-bareeq-world'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  probe:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[probe]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
+      # Pinned complete 15/15 generated campaign that already contains the
+      # confirmed «المشكلة» singular correction for ai-agents-future-now part 5.
+      BAREEQ_AUDIO_COMPLETE_ARTIFACT_ID: '9818366136'
+      BAREEQ_AUDIO_COMPLETE_ARTIFACT_SHA256: 8099b6a764ff121334df37845cfbd2c6f9418a56885014bb24032e7477c1b644
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify OpenRouter credential
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          if [ -z "${OPENROUTER_API_KEY}" ]; then
+            echo 'OPENROUTER_API_KEY_PRESENT=no'
+            exit 78
+          fi
+          echo 'OPENROUTER_API_KEY_PRESENT=yes'
+
+      - name: Restore pinned complete 15/15 campaign artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          archive="${RUNNER_TEMP}/bareeq-sadaltager-15-of-15.zip"
+          gh api "/repos/${GITHUB_REPOSITORY}/actions/artifacts/${BAREEQ_AUDIO_COMPLETE_ARTIFACT_ID}/zip" > "${archive}"
+          printf '%s  %s\n' "${BAREEQ_AUDIO_COMPLETE_ARTIFACT_SHA256}" "${archive}" | sha256sum --check --strict
+          rm -rf audio-candidates
+          mkdir -p audio-candidates
+          unzip -q "${archive}" -d audio-candidates
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const statePath = path.join('audio-candidates', '_campaigns', process.env.BAREEQ_AUDIO_CAMPAIGN_ID, 'state.json');
+          const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+          const articles = Object.entries(state.articles || {});
+          if (state.generationComplete !== true || articles.length !== 15) {
+            throw new Error('Pinned artifact is not a complete 15/15 generated campaign.');
+          }
+          console.log('PINNED_GENERATION_ARTIFACT=PASS articles=15');
+          NODE
+
+      - name: Run OpenRouter ASR probe
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          BAREEQ_PROBE_ARTICLE: ${{ github.event.inputs.article }}
+          BAREEQ_PROBE_STT_MODELS: ${{ github.event.inputs.stt_models }}
+          BAREEQ_PROBE_CHAT_MODELS: ${{ github.event.inputs.chat_models }}
+        run: node scripts/audio-openrouter-asr-probe.mjs
+
+      - name: Commit probe evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ ! -f docs/audio/asr-probe/openrouter-probe.json ]; then
+            echo 'PROBE_EVIDENCE=absent'
+            exit 0
+          fi
+          git config user.name 'bareeq-audio'
+          git config user.email 'audio@bareeq.local'
+          git add -f docs/audio/asr-probe/openrouter-probe.json
+          if git diff --cached --quiet; then
+            echo 'PROBE_EVIDENCE=unchanged'
+          else
+            git commit -m 'audio: record OpenRouter ASR capability probe evidence'
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+            echo 'PROBE_EVIDENCE=pushed'
+          fi

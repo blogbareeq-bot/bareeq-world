@@ -1,9 +1,11 @@
 name: Temporary Bareeq voice comparison
 
+# Manual-only. This temporary Gacrux/Sulafat comparison must never run on push:
+# it consumes Gemini TTS quota that the Sadaltager production release depends on.
+# It does not touch the approved production voice/model
+# (gemini-3.1-flash-tts-preview / Sadaltager).
 on:
-  push:
-    branches:
-      - 'arena/01a04a3c-bareeq-world'
+  workflow_dispatch:
 
 permissions:
   contents: read
