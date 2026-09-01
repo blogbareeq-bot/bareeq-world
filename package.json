@@ -34,7 +34,9 @@
     "audio:gemini:resume:prepare": "node scripts/prepare-v4215-gemini-resume.mjs",
     "audit:speech-scripts": "node scripts/test-speech-script-quality-gate.mjs && node scripts/check-speech-scripts.mjs",
     "test:speech-scripts": "node scripts/test-speech-script-quality-gate.mjs",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "window:generate": "node scripts/generate-visual-stories.mjs",
+    "window:check": "node scripts/generate-visual-stories.mjs --check && node scripts/check-visual-stories.mjs && node scripts/test-visual-story-runtime.mjs"
   },
   "dependencies": {
     "@fontsource/cairo": "5.3.0",
