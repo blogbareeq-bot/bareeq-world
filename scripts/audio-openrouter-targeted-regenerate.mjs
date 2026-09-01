@@ -56,7 +56,11 @@ function correctionInput(part, correctionHint) {
 
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 0) {
     let text = part.text;
-    text = replaceExactlyOnce(text, 'أنثروبك', 'أَنْثْرُوبْك', 'أنثروبك token in coworker part 1');
+    // The reviewed Speech Script already carries Anthropic as أَنْثْرُوبِك.
+    // Tighten only its diacritics (lexically identical after normalization) so
+    // the targeted retry cannot drift to أنثروبيك; Claude remains unvocalized
+    // in the reviewed script and gets the same lexical-preserving treatment.
+    text = replaceExactlyOnce(text, 'أَنْثْرُوبِك', 'أَنْثْرُوبْك', 'reviewed Anthropic token in coworker part 1');
     text = replaceExactlyOnce(text, 'كلود', 'كْلُود', 'كلود token in coworker part 1');
     return { ...part, text };
   }
