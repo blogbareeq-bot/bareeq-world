@@ -169,21 +169,31 @@ jobs:
           const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
           const fingerprint = state.articles?.[articleId]?.generation?.fingerprint;
           if (!/^[a-f0-9]{64}$/.test(fingerprint || '')) throw new Error('targeted correction candidate fingerprint is missing');
-          const reportPath = path.join('audio-candidates', articleId, fingerprint, 'generation-report.json');
-          const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-          const corrected = [1, 6].every((part) => (report.forceRegeneratedParts || []).includes(part))
-            && (report.transportsUsed || []).includes('developer-generate-content');
+          const checkpointPath = path.join('audio-candidates', articleId, fingerprint, 'checkpoint.json');
+          const checkpoint = JSON.parse(fs.readFileSync(checkpointPath, 'utf8'));
+          const targets = [1, 6];
+          const isCorrected = (part) => {
+            const record = checkpoint.completedParts?.[String(part - 1)];
+            return record?.targetedRegeneration === true
+              && record?.correctionHintApplied === true
+              && record?.transport === 'developer-generate-content';
+          };
+          const pending = targets.filter((part) => !isCorrected(part));
+          const corrected = pending.length === 0;
           fs.appendFileSync(process.env.GITHUB_OUTPUT, `applied=${corrected ? 'yes' : 'no'}\n`);
-          console.log(`TARGETED_PRONUNCIATION_CORRECTION=${corrected ? 'present' : 'required'} parts=1,6`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `parts=${pending.join(',')}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `count=${pending.length}\n`);
+          console.log(`TARGETED_PRONUNCIATION_CORRECTION=${corrected ? 'present' : 'required'} pending=${pending.join(',') || 'none'}`);
           NODE
 
-      - name: Regenerate only the two confirmed pronunciation parts
+      - name: Regenerate only pending confirmed pronunciation parts
         if: steps.campaign.outputs.published != 'yes' && steps.pronunciation.outputs.applied != 'yes'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_GEMINI_GENERATE_CONTENT: '1'
-          BAREEQ_FORCE_TTS_PARTS: '1,6'
+          BAREEQ_FORCE_TTS_PARTS: ${{ steps.pronunciation.outputs.parts }}
+          EXPECTED_TTS_REQUESTS: ${{ steps.pronunciation.outputs.count }}
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
             {"1":"At the phrase «والصلاحيات، لا الاسم المكتوب على المنتج», preserve «لا» and «الاسم» as two exact consecutive tokens with a brief natural boundary. Do not insert an extra «ل» and do not change «الاسم» to «للاسم» or «لاسم».","6":"At the phrase «الوكلاء الأذكياء ليسوا شاتًا أقوى فقط», pronounce the written fatḥ tanween in «شاتًا» clearly and completely. Do not drop the final /an/ and do not change it to «شات»."}
         run: |
@@ -194,11 +204,19 @@ jobs:
           const articleId = 'ai-agents-future-now';
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates', '_campaigns', process.env.BAREEQ_AUDIO_CAMPAIGN_ID, 'state.json'), 'utf8'));
           const fingerprint = state.articles[articleId].generation.fingerprint;
+          const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates', articleId, fingerprint, 'checkpoint.json'), 'utf8'));
           const report = JSON.parse(fs.readFileSync(path.join('audio-candidates', articleId, fingerprint, 'generation-report.json'), 'utf8'));
-          if (![1, 6].every((part) => (report.forceRegeneratedParts || []).includes(part))) throw new Error('targeted parts were not both regenerated');
+          const corrected = [1, 6].every((part) => {
+            const record = checkpoint.completedParts?.[String(part - 1)];
+            return record?.targetedRegeneration === true
+              && record?.correctionHintApplied === true
+              && record?.transport === 'developer-generate-content';
+          });
+          if (!corrected) throw new Error('targeted pronunciation parts are not both corrected in the checkpoint');
           if (!(report.transportsUsed || []).includes('developer-generate-content')) throw new Error('targeted correction did not use direct Gemini generateContent');
-          if (report.ttsRequestsSent !== 2 || report.providerAttempts !== 2) throw new Error('targeted correction sent an unexpected number of TTS requests');
-          console.log('TARGETED_PRONUNCIATION_REGENERATION=PASS requests=2 parts=1,6 model=gemini-3.1-flash-tts-preview voice=Sadaltager');
+          const expected = Number(process.env.EXPECTED_TTS_REQUESTS);
+          if (report.ttsRequestsSent !== expected || report.providerAttempts !== expected) throw new Error('targeted correction sent an unexpected number of TTS requests');
+          console.log(`TARGETED_PRONUNCIATION_REGENERATION=PASS requests=${expected} model=gemini-3.1-flash-tts-preview voice=Sadaltager`);
           NODE
 
       - name: Verify restored 15/15 generation without TTS calls
