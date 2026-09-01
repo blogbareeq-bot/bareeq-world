@@ -1,0 +1,32 @@
+{
+  "schema": "bareeq.audio-publication-policy.v1",
+  "effectiveAt": "2026-09-01T08:40:00Z",
+  "scope": {
+    "campaignId": "sadaltager-openrouter-20260901-v1",
+    "articleCount": 15,
+    "model": "gemini-3.1-flash-tts-preview",
+    "voice": "Sadaltager",
+    "gateway": "OpenRouter"
+  },
+  "approvedBy": "project-owner",
+  "decision": {
+    "fullFileHumanListeningRequired": false,
+    "sampleListeningAccepted": true,
+    "ownerWaiverForFullFileListening": true
+  },
+  "mandatoryAutomatedGates": {
+    "reviewedSpeechScript": true,
+    "independentDualAsr": true,
+    "asrConsensus": {
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "unresolved": 0
+    },
+    "technicalQa": true,
+    "syncQa": true,
+    "fingerprintBoundEvidence": true,
+    "manifestAndPartSha256": true
+  },
+  "note": "Project owner explicitly approved publication based on strict automated verification plus accepted Sadaltager samples, waiving full-length human listening for every article. The waiver must be bound to each validated candidate fingerprint and full-file SHA-256 at publication time."
+}
