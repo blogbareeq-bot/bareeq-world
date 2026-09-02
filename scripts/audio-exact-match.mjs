@@ -4,6 +4,7 @@
  * Allowed normalization is intentionally narrow and documented:
  *   - Unicode NFC then NFKC
  *   - strip Arabic diacritics for *verbal* comparison only
+ *   - join thousands separators inside numeric groups (5,172 -> 5172)
  *   - remove tatweel
  *   - ignore punctuation
  *   - collapse whitespace
@@ -13,13 +14,15 @@
  */
 
 const DIACRITICS_PATTERN = /[\u064B-\u065F\u0670\u06D6-\u06ED]/gu;
+const THOUSANDS_SEPARATOR_PATTERN = /(?<=[0-9٠-٩])[,،٬](?=[0-9٠-٩]{3}(?:\D|$))/gu;
 
 export const EXACT_MATCH_NORMALIZATION = {
-  version: 1,
+  version: 2,
   steps: [
     'unicode-nfc',
     'strip-arabic-diacritics',
     'unicode-nfkc',
+    'join-thousands-separators',
     'remove-tatweel',
     'drop-punctuation',
     'collapse-whitespace',
@@ -39,6 +42,7 @@ export function normalizeForVerbalComparison(value) {
     .normalize('NFC')
     .replace(DIACRITICS_PATTERN, '')
     .normalize('NFKC')
+    .replace(THOUSANDS_SEPARATOR_PATTERN, '')
     .replace(/[“”«»"'`]/g, '')
     .replace(/[،؛:,.!?؟…()[\]{}\-–—/\\|]/g, ' ')
     .replace(/ـ/g, '')
