@@ -21,7 +21,7 @@ jobs:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
       BAREEQ_CACHE_PREFIX: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-33613102646-1-final-recovery
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-33613589769-1-final-recovery
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -64,14 +64,18 @@ jobs:
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node scripts/test-gemini-generate-content-tts.mjs
           node --check scripts/audio-openrouter-targeted-regenerate.mjs
+          node --check scripts/audio-openrouter-asr.mjs
+          node --check scripts/audio-openrouter-asr-recovery.mjs
 
       - name: Verify ASR credential
         if: steps.campaign.outputs.published != 'yes'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           test -n "${GEMINI_API_KEY}"
-          echo 'ASR_CREDENTIAL=present'
+          test -n "${OPENROUTER_API_KEY}"
+          echo 'ASR_CREDENTIALS=present'
 
       - name: Restore corrected Sadaltager checkpoint
         if: steps.campaign.outputs.published != 'yes'
@@ -121,11 +125,11 @@ jobs:
           node scripts/audio-openrouter-campaign.mjs --mode=generate
           echo 'GENERATION_REVERIFY=PASS articles=15 TTS_REQUESTS_SENT=0'
 
-      - name: Revalidate all candidates with technical QA and independent dual ASR
+      - name: Recover only the failed candidate with independent OpenRouter ASR
         if: steps.campaign.outputs.published != 'yes'
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/audio-openrouter-campaign.mjs --mode=validate
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: node scripts/audio-openrouter-asr-recovery.mjs --article=ai-as-coworker-future-of-human-work
 
       - name: Require exact publication gates
         if: steps.campaign.outputs.published != 'yes'
