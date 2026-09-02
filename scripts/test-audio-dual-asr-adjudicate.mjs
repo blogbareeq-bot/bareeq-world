@@ -11,6 +11,8 @@ assert.equal(representationEquivalent('كتابًا', 'كتاب'), false);
 assert.equal(representationEquivalent('تصعد', 'تصاعد'), false);
 assert.equal(representationEquivalent('يتأثر', 'يتاثر'), false);
 assert.equal(representationEquivalent('لألف', 'ل1000'), false, 'lam-prefixed numeric equivalence must stay in recorded boundary adjudication, not generic token equivalence');
+assert.deepEqual(tokenizeVerbal('على 5,172 موظف'), ['على', '5172', 'موظف'], 'thousands punctuation must not create a false deletion/substitution pair');
+assert.deepEqual(tokenizeVerbal('بين 776 و777 مشاركا'), ['بين', '776', 'و777', 'مشاركا'], 'distinct numbers must remain distinct');
 
 const expectedText = 'هذا سيئ ثم 3 فتظهر ضغوط تصعد بالأسعار ثم عشرة أجهزة مئة شخص النتيجة تعتمد على النص';
 const tokens = tokenizeVerbal(expectedText);
@@ -136,4 +138,4 @@ assert.deepEqual(tanweenOrthography.consensus, { substitutions: 0, deletions: 0,
 assert.equal(tanweenOrthography.representationOnly.length, 1);
 assert.equal(tanweenOrthography.representationOnly[0].expected, 'شاتا');
 
-console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow lam+numeric and approved tanween orthography stay representation-only; human listening stays mandatory.');
+console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation and approved tanween orthography stay representation-only; human listening stays mandatory.');
