@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-dual-asr-final-33659325241-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-direct-gemini-final-33662275066-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -49,7 +49,6 @@ jobs:
           node scripts/test-audio-engine-final.mjs
           node scripts/test-audio-transition-normalization.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
-          node --check scripts/audio-openrouter-targeted-regenerate.mjs
           node --check scripts/audio-openrouter-campaign.mjs
           node --check scripts/audio-validate-consensus.mjs
 
@@ -60,14 +59,14 @@ jobs:
           test -n "${GEMINI_API_KEY}"
           echo 'GEMINI_CREDENTIAL=present'
 
-      - name: Restore newest checkpoint with coworker exact 0-0-0-0
+      - name: Restore corrected checkpoint after inflation repair
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
           key: ${{ env.BAREEQ_CORRECTED_CACHE_KEY }}
           fail-on-cache-miss: true
 
-      - name: Require generation complete 15/15
+      - name: Require generation complete 15/15 and preserved exact coworker
         run: |
           node - <<'NODE'
           const fs = require('fs');
@@ -79,38 +78,10 @@ jobs:
           const c = coworker?.validation?.consensus || {};
           const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
           if (coworker?.validation?.status !== 'validated' || !exact) throw new Error('checkpoint lost coworker exact dual-ASR evidence');
-          console.log('GENERATION_CHECKPOINT=BOUND articles=15 coworker=0/0/0/0');
+          console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 inflationRepair=preserved');
           NODE
 
-      - name: Regenerate only inflation parts with resilient direct Gemini TTS
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"3":"At «ولهذا يوازن صانعو السياسة بين مخاطر متعددة» pronounce the plural «صانعو» completely, including the final واو; do not change it to singular «صانع».","5":"At «وفهم الفرق بين ارتفاع الأسعار وارتفاع معدل التضخم وتباطؤه» pronounce «وتباطؤه» exactly as written, with the correct hamza and vowels; do not change it to «وتباطئه»."}
-        run: |
-          set -euo pipefail
-          for part in 3 5; do
-            success=0
-            for transport in developer-interactions developer-generate-content; do
-              for attempt in 1 2 3; do
-                echo "DIRECT_GEMINI_TTS article=altadakhom-explained-simply part=${part} transport=${transport} attempt=${attempt}"
-                if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-openrouter-targeted-regenerate.mjs --article=altadakhom-explained-simply; then
-                  success=1
-                  break 2
-                fi
-                sleep $((attempt * 20))
-              done
-            done
-            if [ "${success}" -ne 1 ]; then
-              echo "DIRECT_GEMINI_TTS_EXHAUSTED part=${part}" >&2
-              exit 75
-            fi
-          done
-          node scripts/audio-openrouter-campaign.mjs --mode=generate
-          echo 'TARGETED_REGENERATION=PASS article=altadakhom-explained-simply parts=3,5 transport=direct-gemini corpus_regenerated=no'
-
-      - name: Validate remaining articles with direct Gemini dual ASR
+      - name: Validate remaining articles with fresh independent Gemini pair
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/audio-openrouter-campaign.mjs --mode=validate
@@ -162,13 +133,13 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-direct-gemini-final-${{ github.run_id }}-${{ github.run_attempt }}
+          key: bareeq-audio-final-validation-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload final evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: bareeq-direct-gemini-final-${{ github.run_id }}
+          name: bareeq-final-validation-${{ github.run_id }}
           path: audio-candidates/
           if-no-files-found: error
           retention-days: 90

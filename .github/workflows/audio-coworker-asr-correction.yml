@@ -1,21 +1,13 @@
-name: Bareeq coworker ASR correction (superseded)
+name: Bareeq coworker ASR correction (retired)
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/audio-coworker-asr-correction.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
 
-concurrency:
-  group: bareeq-coworker-asr-correction-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
-  stop-legacy-resynthesis:
+  retired:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'Legacy resynthesis recovery is superseded by checkpoint-only audio-final-recovery.yml.'
+      - run: echo 'Retired after coworker exact dual-ASR closure; no automatic provider calls remain here.'

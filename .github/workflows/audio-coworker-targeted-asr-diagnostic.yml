@@ -1,127 +1,13 @@
-name: Bareeq coworker targeted ASR diagnostic
+name: Bareeq coworker targeted ASR diagnostic (retired)
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/audio-coworker-targeted-asr-diagnostic.yml'
+  workflow_dispatch:
 
 permissions:
-  actions: read
   contents: read
 
 jobs:
-  targeted-asr:
+  retired:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
-    env:
-      BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
     steps:
-      - name: Checkout PR head
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Restore latest Sadaltager checkpoint
-        uses: actions/cache/restore@v4
-        with:
-          path: audio-candidates
-          key: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-${{ github.run_id }}-${{ github.run_attempt }}-targeted-asr
-          restore-keys: |
-            bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-
-
-      - name: Dual-ASR disputed parts independently
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';
-          import path from 'node:path';
-          import { mkdir, readFile, writeFile } from 'node:fs/promises';
-          import { loadSpokenArticle, splitSpokenArticle } from './scripts/audio-split.mjs';
-          import { transcribeDualAsr } from './scripts/audio-asr-transcribe.mjs';
-
-          const articleId = 'ai-as-coworker-future-of-human-work';
-          const statePath = path.join('audio-candidates', '_campaigns', process.env.BAREEQ_AUDIO_CAMPAIGN_ID, 'state.json');
-          const state = JSON.parse(await readFile(statePath, 'utf8'));
-          const fingerprint = state.articles?.[articleId]?.generation?.fingerprint;
-          if (!/^[a-f0-9]{64}$/.test(fingerprint || '')) throw new Error('coworker campaign fingerprint missing');
-          const candidate = path.join('audio-candidates', articleId, fingerprint);
-          const checkpoint = JSON.parse(await readFile(path.join(candidate, 'checkpoint.json'), 'utf8'));
-          const article = await loadSpokenArticle(articleId, process.cwd());
-          const splitPlan = splitSpokenArticle(article);
-          const targetParts = [1, 4, 5, 8];
-          const outRoot = 'targeted-asr-diagnostic';
-          await mkdir(outRoot, { recursive: true });
-          const summary = {
-            schema: 'bareeq.targeted-asr-diagnostic.v1',
-            articleId,
-            fingerprint,
-            generatedAt: new Date().toISOString(),
-            purpose: 'Distinguish full-file ASR alignment/canonicalization artifacts from actual spoken errors without changing audio.',
-            parts: [],
-          };
-
-          for (const oneBased of targetParts) {
-            const idx = oneBased - 1;
-            const record = checkpoint.completedParts?.[String(idx)];
-            const part = splitPlan.parts[idx];
-            if (!record?.file || !part?.text) throw new Error(`missing checkpoint/split data for part ${oneBased}`);
-            const audioPath = path.join(candidate, 'parts', record.file);
-            if (!fs.existsSync(audioPath)) throw new Error(`missing audio ${audioPath}`);
-            const reportsDir = path.join(outRoot, `part-${String(oneBased).padStart(2, '0')}`);
-            await mkdir(reportsDir, { recursive: true });
-            let dual = null;
-            let errorMessage = null;
-            try {
-              dual = await transcribeDualAsr({
-                audioPath,
-                expectedText: part.text,
-                apiKey: process.env.GEMINI_API_KEY,
-                reportsDir,
-                fingerprint,
-                article,
-              });
-            } catch (error) {
-              dual = error.dual || null;
-              errorMessage = error.message;
-            }
-            const reports = dual?.asrReports || [];
-            summary.parts.push({
-              part: oneBased,
-              expectedText: part.text,
-              error: errorMessage,
-              models: reports.map((report) => ({
-                model: report.requestedModel || report.model,
-                status: report.status,
-                substitutions: report.substitutions ?? null,
-                deletions: report.deletions ?? null,
-                insertions: report.insertions ?? null,
-                transcript: report.transcript || report.rawTranscript || null,
-                differences: report.differences || [],
-              })),
-            });
-          }
-
-          await writeFile(path.join(outRoot, 'summary.json'), `${JSON.stringify(summary, null, 2)}\n`);
-          console.log(JSON.stringify(summary, null, 2));
-          NODE
-
-      - name: Upload targeted ASR evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: bareeq-coworker-targeted-asr-${{ github.run_id }}
-          path: targeted-asr-diagnostic/
-          if-no-files-found: error
-          retention-days: 90
+      - run: echo 'Retired after coworker exact dual-ASR closure to protect provider quota.'
