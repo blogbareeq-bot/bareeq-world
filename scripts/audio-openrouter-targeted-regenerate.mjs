@@ -86,7 +86,8 @@ function correctionInput(part, correctionHint) {
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 3) {
     let text = part.text;
     text = replaceExactlyOnce(text, 'موزعًا', 'مُوَزَّعًا', 'موزعًا token in coworker part 4');
-    text = replaceExactlyOnce(text, 'مطورون', 'مُطَوِّرُونَ', 'مطورون token in coworker part 4');
+    // Preserve the reviewed spelling here as well; the explicitly bound
+    // correction note controls the final نون without a fragile text rewrite.
     return { ...part, text };
   }
 
