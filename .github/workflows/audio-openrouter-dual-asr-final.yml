@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33668231787-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33674647902-2
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -38,6 +38,86 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Apply narrow lam-numeric adjudication repair
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const file = 'scripts/audio-dual-asr-adjudicate.mjs';
+          let source = fs.readFileSync(file, 'utf8');
+          const markerA = `  const substantiveDifferences = [];
+          const unresolved = [];
+`;
+          const replacementA = `  const substantiveDifferences = [];
+          const unresolved = [];
+          // Track insertion boundaries that are not extra spoken tokens: they are
+          // the detached lam prefix already consumed by a strictly accepted
+          // lam+numeric representation (for example لألف = ل + 1000).
+          const representationConsumedInsertionBoundaries = [new Set(), new Set()];
+`;
+          if (!source.includes(replacementA)) {
+            if (!source.includes(markerA)) throw new Error('adjudicator patch anchor A not found');
+            source = source.replace(markerA, replacementA);
+          }
+          const markerB = `      if (aRepresentation && bRepresentation) {
+                representationOnly.push({`;
+          const replacementB = `      if (aRepresentation && bRepresentation) {
+                const expectedLamNumeric = lamNumericCanonical(expected);
+                for (const [modelIndex, diff] of [[0, a], [1, b]]) {
+                  const boundaryItems = insertions[modelIndex].get(index) || [];
+                  const actualNumeric = NUMBER_CANONICAL.get(normalizedActual(diff));
+                  if (expectedLamNumeric && boundaryItems.length === 1 && normalizedActual(boundaryItems[0]) === 'ل' && actualNumeric && \`ل:\${actualNumeric}\` === expectedLamNumeric) {
+                    representationConsumedInsertionBoundaries[modelIndex].add(index);
+                  }
+                }
+                representationOnly.push({`;
+          if (!source.includes(replacementB)) {
+            if (!source.includes(markerB)) throw new Error('adjudicator patch anchor B not found');
+            source = source.replace(markerB, replacementB);
+          }
+          const markerC = `    const a = insertions[0].get(boundary) || [];
+              const b = insertions[1].get(boundary) || [];
+              if (!a.length || !b.length) {`;
+          const replacementC = `    const a = insertions[0].get(boundary) || [];
+              const b = insertions[1].get(boundary) || [];
+              if (representationConsumedInsertionBoundaries[0].has(boundary) && representationConsumedInsertionBoundaries[1].has(boundary)) {
+                continue;
+              }
+              if (!a.length || !b.length) {`;
+          if (!source.includes(replacementC)) {
+            if (!source.includes(markerC)) throw new Error('adjudicator patch anchor C not found');
+            source = source.replace(markerC, replacementC);
+          }
+          fs.writeFileSync(file, source);
+          NODE
+          node --input-type=module - <<'NODE'
+          import assert from 'node:assert/strict';
+          import { adjudicateDualAsr } from './scripts/audio-dual-asr-adjudicate.mjs';
+          import { INDEPENDENT_ASR_MODELS } from './scripts/audio-constants.mjs';
+          const reports = INDEPENDENT_ASR_MODELS.map((model) => ({
+            model,
+            requestedModel: model,
+            substitutions: 1,
+            deletions: 0,
+            insertions: 1,
+            status: 'failed',
+            differences: [
+              { type: 'insertion', expected: null, actual: 'ل', expectedIndex: 0, actualIndex: 0 },
+              { type: 'substitution', expected: 'لألف', actual: '1000', expectedIndex: 0, actualIndex: 1 },
+            ],
+          }));
+          const result = adjudicateDualAsr({ expectedText: 'لألف ريال', reports });
+          assert.equal(result.passed, true);
+          assert.deepEqual(result.consensus, { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 });
+          assert.equal(result.representationOnly.length, 1);
+          assert.equal(result.substantiveDifferences.length, 0);
+          const stray = structuredClone(reports);
+          for (const report of stray) report.differences.push({ type: 'insertion', expected: null, actual: 'ل', expectedIndex: 1, actualIndex: 2 });
+          const strayResult = adjudicateDualAsr({ expectedText: 'لألف ريال', reports: stray });
+          assert.equal(strayResult.passed, false);
+          assert.equal(strayResult.consensus.insertions, 1);
+          console.log('LAM_NUMERIC_BOUNDARY_REGRESSION=PASS exact_representation_only=yes stray_insertion_still_fails=yes');
+          NODE
 
       - name: Offline safety gates
         run: |
@@ -59,7 +139,7 @@ jobs:
           test -n "${GEMINI_API_KEY}"
           echo 'GEMINI_CREDENTIAL=present'
 
-      - name: Restore corrected checkpoint after inflation repair
+      - name: Restore latest corrected checkpoint
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
@@ -78,34 +158,33 @@ jobs:
           const c = coworker?.validation?.consensus || {};
           const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
           if (coworker?.validation?.status !== 'validated' || !exact) throw new Error('checkpoint lost coworker exact dual-ASR evidence');
-          console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 inflationRepair=preserved');
+          console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 prior_repairs=preserved');
           NODE
 
-      - name: Regenerate only inflation parts with resilient Gemini transports
+      - name: Regenerate only inflation part 3 for confirmed shared lexical error
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"2":"At the phrase containing «تصعد», pronounce exactly the written word «تصعد». Do not change it to «تصاعد» or any other form. Preserve every written lexical token exactly.","5":"At the phrase «خريطة بريق المختصرة», pronounce the brand name exactly as «بريق» with initial ب. Do not pronounce it as «طريق». Preserve every written lexical token exactly."}
+            {"3":"At the phrase containing «متعطلا», pronounce exactly the written word «متعطلا», including the initial ت after م. Do not change it to «معطلا» or any other form. Preserve every written lexical token exactly."}
         run: |
           set -euo pipefail
-          for part in 2 5; do
-            success=0
-            for transport in developer-interactions developer-generate-content; do
-              for attempt in 1 2 3; do
-                echo "TARGETED_TTS article=altadakhom-explained-simply part=${part} transport=${transport} attempt=${attempt}"
-                if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-openrouter-targeted-regenerate.mjs --article=altadakhom-explained-simply; then
-                  success=1
-                  break 2
-                fi
-                sleep $((attempt * 20))
-              done
+          part=3
+          success=0
+          for transport in developer-interactions developer-generate-content; do
+            for attempt in 1 2 3; do
+              echo "TARGETED_TTS article=altadakhom-explained-simply part=${part} transport=${transport} attempt=${attempt}"
+              if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-openrouter-targeted-regenerate.mjs --article=altadakhom-explained-simply; then
+                success=1
+                break 2
+              fi
+              sleep $((attempt * 20))
             done
-            if [ "${success}" -ne 1 ]; then
-              echo "TARGETED_TTS_EXHAUSTED part=${part}" >&2
-              exit 75
-            fi
           done
+          if [ "${success}" -ne 1 ]; then
+            echo "TARGETED_TTS_EXHAUSTED part=${part}" >&2
+            exit 75
+          fi
           node scripts/audio-openrouter-campaign.mjs --mode=generate
           node - <<'NODE'
           const fs = require('fs');
@@ -114,11 +193,9 @@ jobs:
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
           const fp = state.articles[articleId].generation.fingerprint;
           const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates',articleId,fp,'checkpoint.json'),'utf8'));
-          for (const part of [2,5]) {
-            const rec = checkpoint.completedParts?.[String(part - 1)];
-            if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error(`targeted correction missing for part ${part}`);
-          }
-          console.log('TARGETED_INFLATION_REGENERATION=PASS parts=2,5 model=gemini-3.1-flash-tts-preview voice=Sadaltager corpus_regenerated=no');
+          const rec = checkpoint.completedParts?.['2'];
+          if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error('targeted correction missing for part 3');
+          console.log('TARGETED_INFLATION_REGENERATION=PASS parts=3 model=gemini-3.1-flash-tts-preview voice=Sadaltager corpus_regenerated=no');
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
@@ -163,7 +240,7 @@ jobs:
           set -euo pipefail
           git config user.name 'bareeq-audio'
           git config user.email 'audio@bareeq.local'
-          git add -f public/audio docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json docs/audio/PUBLICATION-POLICY-20260901.json
+          git add -f public/audio docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json docs/audio/PUBLICATION-POLICY-20260901.json scripts/audio-dual-asr-adjudicate.mjs
           git commit -m 'audio: publish validated Sadaltager corpus via exact dual ASR'
           git push origin "HEAD:${PR_BRANCH}"
           echo 'PUBLISHED_AUDIO_COMMIT=pushed'
