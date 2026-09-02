@@ -12,7 +12,7 @@ export const TRANSITION_NORMALIZATION = Object.freeze({
   windowMs: 10,
   consecutiveActiveWindows: 2,
   internalLeadPaddingMs: 10,
-  internalTrailPaddingMs: 110,
+  internalTrailPaddingMs: 10,
   outerLeadPaddingMs: 180,
   outerTrailPaddingMs: 180,
   minimumAudioMs: 120,
