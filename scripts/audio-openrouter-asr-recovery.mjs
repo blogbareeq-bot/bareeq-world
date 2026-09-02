@@ -3,7 +3,6 @@ import path from 'node:path';
 import {
   EXIT_HARD,
   EXIT_OK,
-  INDEPENDENT_ASR_MODELS,
   QUOTA_SPLIT,
   candidateDir,
   sha256,
@@ -13,7 +12,7 @@ import { validateCandidate } from './audio-validate.mjs';
 import { adjudicateCandidate } from './audio-dual-asr-adjudicate.mjs';
 import { activeSplitSettings, loadSpokenArticle, splitSpokenArticle } from './audio-split.mjs';
 import {
-  OPENROUTER_RECOVERY_ASR_MODEL,
+  OPENROUTER_DUAL_ASR_MODELS,
   transcribeOpenRouterParts,
 } from './audio-openrouter-asr.mjs';
 
@@ -22,17 +21,13 @@ const CAMPAIGN_ID = process.env.BAREEQ_AUDIO_CAMPAIGN_ID?.trim() || 'sadaltager-
 const ARTICLE_ID = process.argv.find((arg) => arg.startsWith('--article='))?.slice('--article='.length)
   || 'ai-as-coworker-future-of-human-work';
 const STATE_PATH = path.join(ROOT, 'audio-candidates', '_campaigns', CAMPAIGN_ID, 'state.json');
-const FIRST_MODEL = INDEPENDENT_ASR_MODELS[0];
-const RECOVERY_MODELS = Object.freeze([FIRST_MODEL, OPENROUTER_RECOVERY_ASR_MODEL]);
-
-function exactZero(value = {}) {
-  return Number(value.substitutions) === 0
-    && Number(value.deletions) === 0
-    && Number(value.insertions) === 0;
-}
+const RECOVERY_MODELS = OPENROUTER_DUAL_ASR_MODELS;
 
 function consensusZero(value = {}) {
-  return exactZero(value) && Number(value.unresolved) === 0;
+  return Number(value.substitutions) === 0
+    && Number(value.deletions) === 0
+    && Number(value.insertions) === 0
+    && Number(value.unresolved) === 0;
 }
 
 async function main() {
@@ -59,22 +54,6 @@ async function main() {
   const reportsDir = path.join(dir, 'reports');
   const fullPath = path.join(dir, 'full.mp3');
   const fullSha256 = sha256(await readFile(fullPath));
-  const firstPath = path.join(reportsDir, `asr-${FIRST_MODEL}.json`);
-  if (!await pathExists(firstPath)) {
-    throw Object.assign(new Error(`checkpoint is missing the successful first ASR report ${FIRST_MODEL}`), { exitCode: EXIT_HARD });
-  }
-  const first = JSON.parse(await readFile(firstPath, 'utf8'));
-  if ((first.requestedModel || first.model) !== FIRST_MODEL
-    || first.httpStatus !== 200
-    || first.candidateFingerprint !== fingerprint
-    || first.fullSha256 !== fullSha256
-    || typeof first.transcript !== 'string'
-    || !Array.isArray(first.differences)
-    || !['substitutions', 'deletions', 'insertions'].every((key) => Number.isFinite(Number(first[key])))) {
-    throw Object.assign(new Error('cached first ASR report is not usable HTTP-200 evidence bound to the corrected candidate'), { exitCode: EXIT_HARD });
-  }
-  console.log(`CACHED_FIRST_ASR=BOUND model=${FIRST_MODEL} raw=S${first.substitutions}/D${first.deletions}/I${first.insertions}`);
-
   const generation = JSON.parse(await readFile(path.join(dir, 'generation-report.json'), 'utf8'));
   const manifest = JSON.parse(await readFile(path.join(dir, 'manifest.candidate.json'), 'utf8'));
   const splitPlan = splitSpokenArticle(article, {
@@ -95,34 +74,47 @@ async function main() {
     };
   });
 
-  const secondPath = path.join(reportsDir, `asr-${OPENROUTER_RECOVERY_ASR_MODEL}.json`);
-  let second;
-  try {
-    second = await transcribeOpenRouterParts({
-      model: OPENROUTER_RECOVERY_ASR_MODEL,
-      audioPath: fullPath,
-      parts,
-      expectedText: article.spokenText,
-      article,
-      fingerprint,
-      fullSha256,
-      outputPath: secondPath,
-    });
-  } catch (error) {
-    if (error?.httpStatus === 200 && error?.result?.transcript && Array.isArray(error.result.differences)) {
-      second = error.result;
-      console.log(`OPENROUTER_RAW_ASR_DISAGREEMENTS S=${second.substitutions} D=${second.deletions} I=${second.insertions}`);
-    } else {
-      throw error;
+  for (const model of RECOVERY_MODELS) {
+    const outputPath = path.join(reportsDir, `asr-${model}.json`);
+    let report;
+    try {
+      report = await transcribeOpenRouterParts({
+        model,
+        audioPath: fullPath,
+        parts,
+        expectedText: article.spokenText,
+        article,
+        fingerprint,
+        fullSha256,
+        outputPath,
+      });
+    } catch (error) {
+      if (error?.httpStatus === 200 && error?.result?.transcript && Array.isArray(error.result.differences)) {
+        report = error.result;
+      } else {
+        throw error;
+      }
     }
+    console.log(`OPENROUTER_ASR_EVIDENCE model=${model} raw=S${report.substitutions}/D${report.deletions}/I${report.insertions} requests=${report.transcriptionsRequests || parts.length} cost=${report.usageCost || 0}`);
   }
 
-  const adjudication = await adjudicateCandidate({
-    articleId: ARTICLE_ID,
-    fingerprint,
-    root: ROOT,
-    models: RECOVERY_MODELS,
-  });
+  let adjudication;
+  try {
+    adjudication = await adjudicateCandidate({
+      articleId: ARTICLE_ID,
+      fingerprint,
+      root: ROOT,
+      models: RECOVERY_MODELS,
+    });
+  } catch (error) {
+    const a = error?.result;
+    if (a?.consensus) {
+      console.error(`OPENROUTER_DUAL_ASR_FAIL S=${a.consensus.substitutions} D=${a.consensus.deletions} I=${a.consensus.insertions} U=${a.consensus.unresolved}`);
+      console.error(`OPENROUTER_DUAL_ASR_SUBSTANTIVE=${JSON.stringify(a.substantiveDifferences || [])}`);
+      console.error(`OPENROUTER_DUAL_ASR_UNRESOLVED=${JSON.stringify(a.unresolved || [])}`);
+    }
+    throw error;
+  }
   if (!adjudication.passed || !consensusZero(adjudication.consensus)) {
     throw Object.assign(new Error('recovery dual-ASR did not reach exact consensus 0/0/0/0'), { exitCode: EXIT_HARD });
   }
@@ -136,7 +128,7 @@ async function main() {
       consensus: adjudication.consensus,
       representationOnly: adjudication.representationOnly.length,
       modelDisagreements: adjudication.modelDisagreements.length,
-      models: RECOVERY_MODELS,
+      models: [...RECOVERY_MODELS],
       completedAt: new Date().toISOString(),
     },
   };
@@ -150,12 +142,17 @@ async function main() {
   state.updatedAt = new Date().toISOString();
   await writeJson(STATE_PATH, state);
   if (!state.validationComplete) {
-    throw Object.assign(new Error('campaign checkpoint did not close at validated 15/15'), { exitCode: EXIT_HARD });
+    const pending = entries.filter(([, item]) => !(
+      item.generation?.status === 'generated'
+      && item.validation?.status === 'validated'
+      && item.validation?.fingerprint === item.generation?.fingerprint
+      && consensusZero(item.validation?.consensus)
+    )).map(([id]) => id);
+    throw Object.assign(new Error(`campaign checkpoint did not close at validated 15/15; pending=${pending.join(',')}`), { exitCode: EXIT_HARD });
   }
 
   console.log(`RECOVERY_DUAL_ASR=PASS article=${ARTICLE_ID} models=${RECOVERY_MODELS.join(',')} consensus=0/0/0/0`);
   console.log('CAMPAIGN_VALIDATION=PASS articles=15');
-  return { second, adjudication };
 }
 
 try {
