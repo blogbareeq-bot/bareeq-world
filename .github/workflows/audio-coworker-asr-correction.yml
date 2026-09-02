@@ -123,14 +123,14 @@ jobs:
         if: steps.campaign.outputs.published != 'yes'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          BAREEQ_TARGETED_TTS_TRANSPORT: developer-generate-content
+          BAREEQ_TARGETED_TTS_TRANSPORT: developer-interactions
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_FORCE_TTS_PARTS: '1,4,5,8'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
             {"1":"Keep the reviewed Arabic letters exact; pronounce «أَنْثْرُوبِكْ» and «كْلُودْ» exactly without adding letters.","4":"Pronounce «مُوَزَّعًا» fully and clearly as written.","5":"Pronounce the plural verb «اِسْتَخْدَمُوا» fully, including its final واو الجماعة, exactly as written.","8":"Pronounce «مُوَزَّعًا» fully and clearly as written."}
         run: |
           node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
-          echo 'TARGETED_REGENERATION=PASS parts=1,4,5,8 model=gemini-3.1-flash-tts-preview voice=Sadaltager transport=developer-generate-content'
+          echo 'TARGETED_REGENERATION=PASS parts=1,4,5,8 model=gemini-3.1-flash-tts-preview voice=Sadaltager transport=developer-interactions'
 
       - name: Verify generation remains 15/15 without extra TTS calls
         if: steps.campaign.outputs.published != 'yes'
