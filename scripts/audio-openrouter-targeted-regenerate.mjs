@@ -124,6 +124,13 @@ function correctionInput(part, correctionHint) {
     };
   }
 
+  if (articleId === 'altadakhom-explained-simply' && part.partIndex === 1 && hint.includes('تصعد')) {
+    // The reviewed token is already lexically exact. Keep the Speech Script
+    // byte-for-byte and let the fingerprint-bound correction hint constrain
+    // Gemini pronunciation; this avoids inventing an unreviewed rewrite.
+    return { ...part };
+  }
+
   if (articleId === 'altadakhom-explained-simply' && part.partIndex === 2) {
     return {
       ...part,
