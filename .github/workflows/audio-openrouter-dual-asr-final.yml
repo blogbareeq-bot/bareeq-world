@@ -1,4 +1,4 @@
-name: Bareeq OpenRouter dual-ASR final publish
+name: Bareeq final dual-ASR publish
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: bareeq-openrouter-dual-asr-final-${{ github.event.pull_request.number }}
+  group: bareeq-final-dual-asr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-dual-asr-final-33660723287-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-dual-asr-final-33659325241-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -50,18 +50,17 @@ jobs:
           node scripts/test-audio-transition-normalization.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node --check scripts/audio-openrouter-targeted-regenerate.mjs
-          node --check scripts/audio-openrouter-asr.mjs
-          node --check scripts/audio-openrouter-asr-recovery.mjs
           node --check scripts/audio-openrouter-campaign.mjs
+          node --check scripts/audio-validate-consensus.mjs
 
-      - name: Verify OpenRouter credential
+      - name: Verify direct Gemini credential
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          test -n "${OPENROUTER_API_KEY}"
-          echo 'OPENROUTER_CREDENTIAL=present'
+          test -n "${GEMINI_API_KEY}"
+          echo 'GEMINI_CREDENTIAL=present'
 
-      - name: Restore latest 15/15 checkpoint with immutable dual-ASR evidence
+      - name: Restore newest checkpoint with coworker exact 0-0-0-0
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
@@ -78,12 +77,17 @@ jobs:
           if (state.generationComplete !== true || entries.length !== 15 || entries.some(([,v]) => v.generation?.status !== 'generated')) {
             throw new Error('checkpoint is not generation-complete 15/15');
           }
-          console.log('GENERATION_CHECKPOINT=BOUND articles=15');
+          const coworker = state.articles['ai-as-coworker-future-of-human-work'];
+          const c = coworker?.validation?.consensus || {};
+          const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
+          if (coworker?.validation?.status !== 'validated' || !exact) throw new Error('checkpoint lost coworker exact dual-ASR evidence');
+          console.log('GENERATION_CHECKPOINT=BOUND articles=15 coworker=0/0/0/0');
           NODE
 
-      - name: Regenerate only inflation parts with confirmed shared lexical errors
+      - name: Regenerate only inflation parts with direct Gemini TTS
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_TARGETED_TTS_TRANSPORT: developer-generate-content
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_FORCE_TTS_PARTS: '3,5'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
@@ -91,27 +95,13 @@ jobs:
         run: |
           node scripts/audio-openrouter-targeted-regenerate.mjs --article=altadakhom-explained-simply
           node scripts/audio-openrouter-campaign.mjs --mode=generate
-          echo 'TARGETED_REGENERATION=PASS article=altadakhom-explained-simply parts=3,5 corpus_regenerated=no'
+          echo 'TARGETED_REGENERATION=PASS article=altadakhom-explained-simply parts=3,5 transport=direct-gemini corpus_regenerated=no'
 
-      - name: Validate only remaining articles with independent OpenAI and Microsoft ASR
+      - name: Validate remaining articles with direct Gemini dual ASR
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          mapfile -t pending < <(node - <<'NODE'
-          const fs = require('fs');
-          const path = require('path');
-          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
-          for (const [articleId, item] of Object.entries(state.articles || {})) {
-            const c = item.validation?.consensus || {};
-            const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
-            if (item.validation?.status !== 'validated' || item.validation?.fingerprint !== item.generation?.fingerprint || !exact) console.log(articleId);
-          }
-          NODE
-          )
-          echo "TARGETED_ASR_PENDING=${#pending[@]}"
-          for article in "${pending[@]}"; do
-            node scripts/audio-openrouter-asr-recovery.mjs --article="${article}" --allow-incomplete-campaign
-          done
+          node scripts/audio-openrouter-campaign.mjs --mode=validate
 
       - name: Require exact publication gates
         run: |
@@ -151,7 +141,7 @@ jobs:
           git config user.name 'bareeq-audio'
           git config user.email 'audio@bareeq.local'
           git add -f public/audio docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json docs/audio/PUBLICATION-POLICY-20260901.json
-          git commit -m 'audio: publish validated Sadaltager corpus via independent dual ASR'
+          git commit -m 'audio: publish validated Sadaltager corpus via exact dual ASR'
           git push origin "HEAD:${PR_BRANCH}"
           echo 'PUBLISHED_AUDIO_COMMIT=pushed'
 
@@ -160,13 +150,13 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-openrouter-dual-asr-final-${{ github.run_id }}-${{ github.run_attempt }}
+          key: bareeq-audio-direct-gemini-final-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload final evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: bareeq-openrouter-dual-asr-final-${{ github.run_id }}
+          name: bareeq-direct-gemini-final-${{ github.run_id }}
           path: audio-candidates/
           if-no-files-found: error
           retention-days: 90
