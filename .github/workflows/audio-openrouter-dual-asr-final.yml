@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-final-lexical-33629041197-2
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-dual-asr-final-33640368290-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -49,6 +49,7 @@ jobs:
           node scripts/test-audio-engine-final.mjs
           node scripts/test-audio-transition-normalization.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
+          node --check scripts/audio-openrouter-targeted-regenerate.mjs
           node --check scripts/audio-openrouter-asr.mjs
           node --check scripts/audio-openrouter-asr-recovery.mjs
           node --check scripts/audio-openrouter-campaign.mjs
@@ -58,16 +59,16 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           test -n "${OPENROUTER_API_KEY}"
-          echo 'OPENROUTER_ASR_CREDENTIAL=present'
+          echo 'OPENROUTER_CREDENTIAL=present'
 
-      - name: Restore corrected 15/15 checkpoint
+      - name: Restore latest 15/15 checkpoint with failed dual-ASR evidence
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
           key: ${{ env.BAREEQ_CORRECTED_CACHE_KEY }}
           fail-on-cache-miss: true
 
-      - name: Require corrected generation complete 15/15
+      - name: Require generation complete 15/15
         run: |
           node - <<'NODE'
           const fs = require('fs');
@@ -77,8 +78,20 @@ jobs:
           if (state.generationComplete !== true || entries.length !== 15 || entries.some(([,v]) => v.generation?.status !== 'generated')) {
             throw new Error('checkpoint is not generation-complete 15/15');
           }
-          console.log('CORRECTED_GENERATION=BOUND articles=15 coworkerParts=1,2,6,7,8');
+          console.log('GENERATION_CHECKPOINT=BOUND articles=15');
           NODE
+
+      - name: Regenerate only remaining coworker dual-ASR failing parts
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+          BAREEQ_FORCE_TTS_PARTS: '1,4,6'
+          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
+            {"1":"At the company name «أَنْثْرُوبِك», pronounce exactly the written Arabic form. Do not say English «Anthropic» and do not add a ياء sound to make «أنثروبيك».","4":"At the phrase «وهذا قريب من سؤال متى يستحق حكمنا السريع الثقة», pronounce «سؤال» exactly as written. Do not add a possessive ياء and do not change it to «سؤالي».","6":"At the phrase «أن يضاهي فرقًا من شخصين تعمل من دون النظام», pronounce «فرقًا» exactly as written, meaning teams; do not change it to «فريق» or «فريقًا». Also preserve «آند» exactly with its long initial alif and preserve «سيئ» exactly as written."}
+        run: |
+          node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
+          node scripts/audio-openrouter-campaign.mjs --mode=generate
+          echo 'TARGETED_REGENERATION=PASS parts=1,4,6 corpus_regenerated=no model=gemini-3.1-flash-tts-preview voice=Sadaltager'
 
       - name: Recover coworker with independent OpenAI and Microsoft ASR
         env:
