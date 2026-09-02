@@ -66,6 +66,18 @@ function correctionInput(part, correctionHint) {
     return { ...part, text };
   }
 
+  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 2) {
+    return {
+      ...part,
+      text: replaceExactlyOnce(
+        part.text,
+        'إذن السؤال الأفضل',
+        'إِذَنْ، السؤال الأفضل',
+        'إذن boundary in coworker part 3',
+      ),
+    };
+  }
+
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 3) {
     return {
       ...part,
@@ -81,10 +93,15 @@ function correctionInput(part, correctionHint) {
   }
 
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 5) {
-    return {
-      ...part,
-      text: replaceExactlyOnce(part.text, 'بروكتر', 'بْرُوكْتَر', 'بروكتر token in coworker part 6'),
-    };
+    let text = part.text;
+    text = replaceExactlyOnce(text, 'بروكتر', 'بْرُوكْتَر', 'بروكتر token in coworker part 6');
+    text = replaceExactlyOnce(
+      text,
+      'من دون النظام. كما ساعد النظام',
+      'من دون النِّظَامِ. كما ساعد النظام',
+      'first النظام token in coworker part 6',
+    );
+    return { ...part, text };
   }
 
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 6) {
