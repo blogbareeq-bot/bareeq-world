@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-direct-gemini-final-33662275066-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33668231787-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -79,6 +79,35 @@ jobs:
           const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
           if (coworker?.validation?.status !== 'validated' || !exact) throw new Error('checkpoint lost coworker exact dual-ASR evidence');
           console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 inflationRepair=preserved');
+          NODE
+
+      - name: Regenerate only inflation parts with shared lexical ASR errors
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+          BAREEQ_GEMINI_GENERATE_CONTENT: '1'
+          BAREEQ_FORCE_TTS_PARTS: '2,5'
+          EXPECTED_TTS_REQUESTS: '2'
+          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
+            {"2":"At the phrase containing «تصعد», pronounce exactly the written word «تصعد». Do not change it to «تصاعد» or any other form. Preserve every written lexical token exactly.","5":"At the phrase «خريطة بريق المختصرة», pronounce the brand name exactly as «بريق» with initial ب. Do not pronounce it as «طريق». Preserve every written lexical token exactly."}
+        run: |
+          node scripts/audio-production.mjs --mode=generate-candidate --article=altadakhom-explained-simply
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const articleId = 'altadakhom-explained-simply';
+          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
+          const fp = state.articles[articleId].generation.fingerprint;
+          const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates',articleId,fp,'checkpoint.json'),'utf8'));
+          for (const part of [2,5]) {
+            const rec = checkpoint.completedParts?.[String(part - 1)];
+            if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error(`targeted correction missing for part ${part}`);
+          }
+          const report = JSON.parse(fs.readFileSync(path.join('audio-candidates',articleId,fp,'generation-report.json'),'utf8'));
+          const expected = Number(process.env.EXPECTED_TTS_REQUESTS);
+          if (report.ttsRequestsSent !== expected || report.providerAttempts !== expected) throw new Error(`unexpected TTS request count: sent=${report.ttsRequestsSent} attempts=${report.providerAttempts}`);
+          if (report.ttsModel !== 'gemini-3.1-flash-tts-preview' || report.ttsVoice !== 'Sadaltager') throw new Error('approved model/voice changed');
+          console.log('TARGETED_INFLATION_REGENERATION=PASS parts=2,5 requests=2 model=gemini-3.1-flash-tts-preview voice=Sadaltager');
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
