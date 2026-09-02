@@ -58,7 +58,8 @@ export async function loadBoundEvidence({
   }
   const expected = { articleId, fingerprint, fullSha256, speechScriptHash };
 
-  for (const item of ORIGINAL_REPORTS) {
+  const baseItems = ORIGINAL_REPORTS.filter((item) => item.label !== 'asr-first' && item.label !== 'asr-second');
+  for (const item of baseItems) {
     const absolute = path.join(dir, item.file);
     if (!await pathExists(absolute)) {
       failures.push(`missing ${item.file}`);
@@ -74,36 +75,74 @@ export async function loadBoundEvidence({
     failures.push(...assertBoundReport(payload, expected, item.label));
   }
 
+  const validate = reports.validate;
+  const evidenceModels = Array.isArray(validate?.asrAdjudication?.models) && validate.asrAdjudication.models.length === 2
+    ? validate.asrAdjudication.models
+    : INDEPENDENT_ASR_MODELS;
+  for (const [index, model] of evidenceModels.entries()) {
+    const label = index === 0 ? 'asr-first' : 'asr-second';
+    const relative = `reports/asr-${model}.json`;
+    const absolute = path.join(dir, relative);
+    if (!await pathExists(absolute)) {
+      failures.push(`missing ${relative}`);
+      continue;
+    }
+    const payload = await readJsonIfPresent(absolute);
+    if (!payload) {
+      failures.push(`${relative} is not valid JSON`);
+      continue;
+    }
+    reports[label] = payload;
+    failures.push(...missingBoundFields(payload).map((reason) => `${label}: ${reason}`));
+    failures.push(...assertBoundReport(payload, expected, label));
+  }
+
   const asrFirst = reports['asr-first'];
   const asrSecond = reports['asr-second'];
   const asrReports = [asrFirst, asrSecond].filter(Boolean);
   if (asrReports.length < 2) failures.push('original dual ASR reports missing');
   const models = asrReports.map((item) => item.requestedModel || item.model);
-  if (models[0] !== INDEPENDENT_ASR_MODELS[0]) failures.push(`first ASR model must be ${INDEPENDENT_ASR_MODELS[0]}`);
-  if (models[1] !== INDEPENDENT_ASR_MODELS[1]) failures.push(`second ASR model must be ${INDEPENDENT_ASR_MODELS[1]}`);
+  if (models[0] !== evidenceModels[0]) failures.push(`first ASR model must be ${evidenceModels[0]}`);
+  if (models[1] !== evidenceModels[1]) failures.push(`second ASR model must be ${evidenceModels[1]}`);
   if (models[0] && models[0] === models[1]) failures.push('the same ASR model was used twice');
   for (const model of models) {
     if (FORBIDDEN_ASR_MODELS.includes(model)) failures.push(`forbidden ASR model ${model}`);
   }
   for (const report of asrReports) {
-    if (!(report.substitutions === 0 && report.deletions === 0 && report.insertions === 0)) {
-      failures.push(`ASR ${report.requestedModel || report.model} is not 0/0/0`);
+    if (report.httpStatus !== 200 || typeof report.transcript !== 'string' || !Array.isArray(report.differences)) {
+      failures.push(`ASR ${report.requestedModel || report.model} is not usable raw HTTP-200 evidence`);
     }
-    if (report.status !== 'passed') failures.push(`ASR ${report.requestedModel || report.model} status is not passed`);
   }
 
-  const validate = reports.validate;
+  const consensus = validate?.asrAdjudication?.consensus || {};
+  if (validate?.asrAdjudication) {
+    if (validate.asrAdjudication.passed !== true
+      || !['substitutions', 'deletions', 'insertions', 'unresolved'].every((key) => Number(consensus[key]) === 0)) {
+      failures.push('dual-ASR adjudication is not exact consensus 0/0/0/0');
+    }
+  } else {
+    for (const report of asrReports) {
+      if (report.status !== 'passed'
+        || !['substitutions', 'deletions', 'insertions'].every((key) => Number(report[key]) === 0)) {
+        failures.push(`legacy ASR ${report.requestedModel || report.model} is not exact 0/0/0`);
+      }
+    }
+  }
   if (validate && validate.status !== 'validated' && validate.passed !== true) failures.push('validate report is not passed');
   if (!validate?.reportDigests) {
     failures.push('validate report missing reportDigests');
   } else {
-    for (const item of ORIGINAL_REPORTS) {
-      if (item.label === 'validate') continue;
-      const absolute = path.join(dir, item.file);
+    const digestFiles = [
+      ...baseItems.filter((item) => item.label !== 'validate').map((item) => item.file),
+      ...evidenceModels.map((model) => `reports/asr-${model}.json`),
+      ...(validate.asrAdjudication ? ['reports/asr-adjudication.json'] : []),
+    ];
+    for (const relative of digestFiles) {
+      const absolute = path.join(dir, relative);
       if (!await pathExists(absolute)) continue;
       const actual = sha256(await readFile(absolute));
-      if (validate.reportDigests[item.file] !== actual) {
-        failures.push(`${item.file} SHA-256 does not match validate.reportDigests`);
+      if (validate.reportDigests[relative] !== actual) {
+        failures.push(`${relative} SHA-256 does not match validate.reportDigests`);
       }
     }
   }
