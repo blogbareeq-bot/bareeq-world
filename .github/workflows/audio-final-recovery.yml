@@ -83,7 +83,7 @@ jobs:
           restore-keys: |
             ${{ env.BAREEQ_CACHE_PREFIX }}
 
-      - name: Require current failed coworker ASR evidence
+      - name: Require latest coworker ASR evidence
         if: steps.campaign.outputs.published != 'yes'
         run: |
           node - <<'NODE'
@@ -98,41 +98,37 @@ jobs:
           const articleId = 'ai-as-coworker-future-of-human-work';
           const fp = state.articles[articleId].generation.fingerprint;
           const reportPath = path.join('audio-candidates', articleId, fp, 'reports', 'asr-adjudication.json');
-          if (!fs.existsSync(reportPath)) throw new Error('missing failed dual-ASR adjudication evidence');
+          if (!fs.existsSync(reportPath)) throw new Error('missing dual-ASR adjudication evidence');
           const report = JSON.parse(fs.readFileSync(reportPath,'utf8'));
           const c = report.consensus || {};
-          if (c.substitutions !== 6 || c.deletions !== 0 || c.insertions !== 0 || c.unresolved !== 0) {
+          if (c.substitutions !== 1 || c.deletions !== 0 || c.insertions !== 0 || c.unresolved !== 5) {
             throw new Error(`unexpected coworker ASR state S=${c.substitutions} D=${c.deletions} I=${c.insertions} U=${c.unresolved}`);
           }
-          const expected = [
-            ['أنثروبك','أنثروبيك'],
-            ['كلود','كلاود'],
-            ['إذن','إذا'],
-            ['استخدموا','استخدم'],
-            ['بروكتر','بروكتور'],
-            ['النظام','نظام'],
-          ];
-          const diffs = report.substantiveDifferences || [];
-          for (const [want, got] of expected) {
-            if (!diffs.some(d => d.type === 'substitution' && d.expected === want && d.actual === got)) {
-              throw new Error(`expected confirmed ASR error not found: ${want}->${got}`);
-            }
+          const confirmed = report.substantiveDifferences || [];
+          if (!confirmed.some(d => d.type === 'substitution' && d.expected === 'كلود' && d.actual === 'كلاود')) {
+            throw new Error('expected current كلود->كلاود ASR representation not found');
           }
-          console.log('COWORKER_FAILED_ASR_EVIDENCE=BOUND S=6 D=0 I=0 U=0 generation=15/15');
+          const unresolved = report.unresolved || [];
+          const expectedTokens = unresolved.map(x => x.expected);
+          for (const token of ['أنثروبك','بروكتر','غامبل']) {
+            if (!expectedTokens.includes(token)) throw new Error(`expected unresolved named-entity ASR representation missing: ${token}`);
+          }
+          if (expectedTokens.filter(x => x === 'موزعا').length !== 2) throw new Error('expected two unresolved موزعا pronunciations');
+          console.log('COWORKER_LATEST_ASR_EVIDENCE=BOUND S=1 D=0 I=0 U=5; real Arabic targets=parts 4,8');
           NODE
 
-      - name: Regenerate only confirmed coworker parts 1 3 5 6
+      - name: Regenerate only confirmed Arabic pronunciation parts 4 and 8
         if: steps.campaign.outputs.published != 'yes'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           BAREEQ_TARGETED_TTS_TRANSPORT: openrouter-speech
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_FORCE_TTS_PARTS: '1,3,5,6'
+          BAREEQ_FORCE_TTS_PARTS: '4,8'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"Preserve every reviewed Arabic token exactly. Pronounce «أَنْثْرُوبِكْ» and «كْلُودْ» exactly without inserting ياء or ألف.","3":"Pronounce «إِذَنْ» clearly as the discourse particle إذن, not «إذا». Preserve every other token exactly.","5":"Pronounce the plural verb «اِسْتَخْدَمُوا» fully, including واو الجماعة. Preserve every other token exactly.","6":"Pronounce «بْرُوكْتَر» exactly without an added واو, and pronounce the first «النِّظَامِ» in «من دون النظام. كما ساعد النظام» fully with the definite article. Preserve every other token exactly."}
+            {"4":"Pronounce «مُوَزَّعًا» clearly with a stressed z sound and preserve every other reviewed token exactly.","8":"Pronounce «مُوَزَّعًا» clearly with a stressed z sound and preserve every other reviewed token exactly."}
         run: |
           node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
-          echo 'TARGETED_REGENERATION=PASS parts=1,3,5,6 model=gemini-3.1-flash-tts-preview voice=Sadaltager gateway=OpenRouter'
+          echo 'TARGETED_REGENERATION=PASS parts=4,8 model=gemini-3.1-flash-tts-preview voice=Sadaltager gateway=OpenRouter'
 
       - name: Verify generation remains 15/15
         if: steps.campaign.outputs.published != 'yes'
