@@ -124,6 +124,20 @@ function correctionInput(part, correctionHint) {
     };
   }
 
+  if (articleId === 'altadakhom-explained-simply' && part.partIndex === 2) {
+    return {
+      ...part,
+      text: replaceExactlyOnce(part.text, 'صانعو', 'صَانِعُو', 'صانعو token in inflation part 3'),
+    };
+  }
+
+  if (articleId === 'altadakhom-explained-simply' && part.partIndex === 4) {
+    return {
+      ...part,
+      text: replaceExactlyOnce(part.text, 'وتباطؤه', 'وَتَبَاطُؤِهِ', 'وتباطؤه token in inflation part 5'),
+    };
+  }
+
   throw new Error(`Unsupported targeted correction for ${articleId} part ${part.partIndex + 1}; refusing an unverified rewrite.`);
 }
 
