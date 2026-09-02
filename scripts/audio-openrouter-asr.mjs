@@ -16,6 +16,14 @@ import { boundIdentity } from './audio-report.mjs';
 
 export const OPENROUTER_STT_ENDPOINT = 'https://openrouter.ai/api/v1/audio/transcriptions';
 export const OPENROUTER_RECOVERY_ASR_MODEL = 'openai/gpt-4o-transcribe';
+export const OPENROUTER_DUAL_ASR_MODELS = Object.freeze([
+  'openai/gpt-transcribe',
+  'microsoft/mai-transcribe-1.5',
+]);
+const SUPPORTED_OPENROUTER_ASR_MODELS = new Set([
+  OPENROUTER_RECOVERY_ASR_MODEL,
+  ...OPENROUTER_DUAL_ASR_MODELS,
+]);
 
 function reportIdentity({ article, fingerprint, fullSha256, model, status, extra = {} }) {
   return boundIdentity({
@@ -26,7 +34,7 @@ function reportIdentity({ article, fingerprint, fullSha256, model, status, extra
     status,
     schema: 'bareeq.audio-asr.v4',
     extra: {
-      provider: 'OpenRouter / OpenAI',
+      provider: `OpenRouter / ${String(model).split('/')[0] || 'unknown'}`,
       voice: PRODUCTION_VOICE,
       generatorVersion: GENERATOR_VERSION,
       ttsModel: PRODUCTION_TTS_MODEL,
@@ -51,7 +59,7 @@ export async function transcribeOpenRouterParts({
   apiKey = process.env.OPENROUTER_API_KEY,
   fetchImpl = globalThis.fetch,
 }) {
-  if (model !== OPENROUTER_RECOVERY_ASR_MODEL) {
+  if (!SUPPORTED_OPENROUTER_ASR_MODELS.has(model)) {
     throw Object.assign(new Error(`Unsupported OpenRouter recovery ASR model ${model}`), { exitCode: EXIT_USAGE });
   }
   if (!apiKey?.trim()) {
