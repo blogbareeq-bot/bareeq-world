@@ -21,6 +21,7 @@ const CAMPAIGN_ID = process.env.BAREEQ_AUDIO_CAMPAIGN_ID?.trim() || 'sadaltager-
 const ARTICLE_ID = process.argv.find((arg) => arg.startsWith('--article='))?.slice('--article='.length)
   || 'ai-as-coworker-future-of-human-work';
 const REUSE_EXISTING_REPORTS = process.argv.includes('--reuse-existing-reports');
+const ALLOW_INCOMPLETE_CAMPAIGN = process.argv.includes('--allow-incomplete-campaign');
 const STATE_PATH = path.join(ROOT, 'audio-candidates', '_campaigns', CAMPAIGN_ID, 'state.json');
 const RECOVERY_MODELS = OPENROUTER_DUAL_ASR_MODELS;
 
@@ -156,11 +157,14 @@ async function main() {
       && item.validation?.fingerprint === item.generation?.fingerprint
       && consensusZero(item.validation?.consensus)
     )).map(([id]) => id);
-    throw Object.assign(new Error(`campaign checkpoint did not close at validated 15/15; pending=${pending.join(',')}`), { exitCode: EXIT_HARD });
+    if (!ALLOW_INCOMPLETE_CAMPAIGN) {
+      throw Object.assign(new Error(`campaign checkpoint did not close at validated 15/15; pending=${pending.join(',')}`), { exitCode: EXIT_HARD });
+    }
+    console.log(`CAMPAIGN_VALIDATION=IN_PROGRESS validated=${entries.length - pending.length}/15 pending=${pending.length}`);
   }
 
   console.log(`RECOVERY_DUAL_ASR=PASS article=${ARTICLE_ID} models=${RECOVERY_MODELS.join(',')} consensus=0/0/0/0`);
-  console.log('CAMPAIGN_VALIDATION=PASS articles=15');
+  if (state.validationComplete) console.log('CAMPAIGN_VALIDATION=PASS articles=15');
 }
 
 try {

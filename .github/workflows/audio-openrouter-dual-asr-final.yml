@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-dual-asr-final-33648341283-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-final-lexical-33656273983-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -81,8 +81,25 @@ jobs:
           console.log('GENERATION_CHECKPOINT=BOUND articles=15');
           NODE
 
-      - name: Re-adjudicate immutable independent OpenAI and Microsoft ASR
-        run: node scripts/audio-openrouter-asr-recovery.mjs --article=ai-as-coworker-future-of-human-work --reuse-existing-reports
+      - name: Validate only remaining articles with independent OpenAI and Microsoft ASR
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          mapfile -t pending < <(node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
+          for (const [articleId, item] of Object.entries(state.articles || {})) {
+            const c = item.validation?.consensus || {};
+            const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
+            if (item.validation?.status !== 'validated' || item.validation?.fingerprint !== item.generation?.fingerprint || !exact) console.log(articleId);
+          }
+          NODE
+          )
+          echo "TARGETED_ASR_PENDING=${#pending[@]}"
+          for article in "${pending[@]}"; do
+            node scripts/audio-openrouter-asr-recovery.mjs --article="${article}" --allow-incomplete-campaign
+          done
 
       - name: Require exact publication gates
         run: |
