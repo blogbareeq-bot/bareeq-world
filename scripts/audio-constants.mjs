@@ -13,8 +13,12 @@ export const PRODUCTION_VOICE = 'Sadaltager';
 export const PRODUCTION_VOICE_ID = 'sadaltager';
 export const GENERATOR_VERSION = 10;
 
+// gemini-3.5-transcribe hit its provider quota during the final campaign.
+// gemini-3.5-flash was live-probed against the same full Arabic candidate and
+// returned a non-empty verbatim transcript; keep gemini-3.6-flash as the
+// second, separately requested model so dual-ASR remains model-independent.
 export const INDEPENDENT_ASR_MODELS = Object.freeze([
-  'gemini-3.5-transcribe',
+  'gemini-3.5-flash',
   'gemini-3.6-flash',
 ]);
 
@@ -23,10 +27,10 @@ export const FORBIDDEN_ASR_MODELS = Object.freeze([
 ]);
 
 export const ASR_MODEL_TRANSPORT = Object.freeze({
-  'gemini-3.5-transcribe': {
+  'gemini-3.5-flash': {
     api: 'interactions',
     fileUpload: true,
-    input: 'audio-uri',
+    input: 'text-plus-audio-uri',
     verbatim: true,
   },
   'gemini-3.6-flash': {
