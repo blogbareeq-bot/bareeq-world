@@ -74,9 +74,7 @@ jobs:
           const path = require('path');
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
           const entries = Object.entries(state.articles || {});
-          if (state.generationComplete !== true || entries.length !== 15 || entries.some(([,v]) => v.generation?.status !== 'generated')) {
-            throw new Error('checkpoint is not generation-complete 15/15');
-          }
+          if (state.generationComplete !== true || entries.length !== 15 || entries.some(([,v]) => v.generation?.status !== 'generated')) throw new Error('checkpoint is not generation-complete 15/15');
           const coworker = state.articles['ai-as-coworker-future-of-human-work'];
           const c = coworker?.validation?.consensus || {};
           const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
@@ -84,24 +82,38 @@ jobs:
           console.log('GENERATION_CHECKPOINT=BOUND articles=15 coworker=0/0/0/0');
           NODE
 
-      - name: Regenerate only inflation parts with direct Gemini TTS
+      - name: Regenerate only inflation parts with resilient direct Gemini TTS
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          BAREEQ_TARGETED_TTS_TRANSPORT: developer-generate-content
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_FORCE_TTS_PARTS: '3,5'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
             {"3":"At «ولهذا يوازن صانعو السياسة بين مخاطر متعددة» pronounce the plural «صانعو» completely, including the final واو; do not change it to singular «صانع».","5":"At «وفهم الفرق بين ارتفاع الأسعار وارتفاع معدل التضخم وتباطؤه» pronounce «وتباطؤه» exactly as written, with the correct hamza and vowels; do not change it to «وتباطئه»."}
         run: |
-          node scripts/audio-openrouter-targeted-regenerate.mjs --article=altadakhom-explained-simply
+          set -euo pipefail
+          for part in 3 5; do
+            success=0
+            for transport in developer-interactions developer-generate-content; do
+              for attempt in 1 2 3; do
+                echo "DIRECT_GEMINI_TTS article=altadakhom-explained-simply part=${part} transport=${transport} attempt=${attempt}"
+                if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-openrouter-targeted-regenerate.mjs --article=altadakhom-explained-simply; then
+                  success=1
+                  break 2
+                fi
+                sleep $((attempt * 20))
+              done
+            done
+            if [ "${success}" -ne 1 ]; then
+              echo "DIRECT_GEMINI_TTS_EXHAUSTED part=${part}" >&2
+              exit 75
+            fi
+          done
           node scripts/audio-openrouter-campaign.mjs --mode=generate
           echo 'TARGETED_REGENERATION=PASS article=altadakhom-explained-simply parts=3,5 transport=direct-gemini corpus_regenerated=no'
 
       - name: Validate remaining articles with direct Gemini dual ASR
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          node scripts/audio-openrouter-campaign.mjs --mode=validate
+        run: node scripts/audio-openrouter-campaign.mjs --mode=validate
 
       - name: Require exact publication gates
         run: |
