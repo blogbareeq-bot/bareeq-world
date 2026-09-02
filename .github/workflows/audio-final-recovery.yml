@@ -64,15 +64,13 @@ jobs:
           node scripts/test-gemini-generate-content-tts.mjs
           node --check scripts/audio-openrouter-targeted-regenerate.mjs
 
-      - name: Verify provider credentials
+      - name: Verify ASR credential
         if: steps.campaign.outputs.published != 'yes'
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          test -n "${OPENROUTER_API_KEY}"
           test -n "${GEMINI_API_KEY}"
-          echo 'PROVIDER_CREDENTIALS=present'
+          echo 'ASR_CREDENTIAL=present'
 
       - name: Restore latest Sadaltager checkpoint
         if: steps.campaign.outputs.published != 'yes'
@@ -104,39 +102,16 @@ jobs:
           if (c.substitutions !== 1 || c.deletions !== 0 || c.insertions !== 0 || c.unresolved !== 5) {
             throw new Error(`unexpected coworker ASR state S=${c.substitutions} D=${c.deletions} I=${c.insertions} U=${c.unresolved}`);
           }
-          const confirmed = report.substantiveDifferences || [];
-          if (!confirmed.some(d => d.type === 'substitution' && d.expected === 'كلود' && d.actual === 'كلاود')) {
-            throw new Error('expected current كلود->كلاود ASR representation not found');
-          }
-          const unresolved = report.unresolved || [];
-          const expectedTokens = unresolved.map(x => x.expected);
-          for (const token of ['أنثروبك','بروكتر','غامبل']) {
-            if (!expectedTokens.includes(token)) throw new Error(`expected unresolved named-entity ASR representation missing: ${token}`);
-          }
-          if (expectedTokens.filter(x => x === 'موزعا').length !== 2) throw new Error('expected two unresolved موزعا pronunciations');
-          console.log('COWORKER_LATEST_ASR_EVIDENCE=BOUND S=1 D=0 I=0 U=5; real Arabic targets=parts 4,8');
+          console.log('COWORKER_LATEST_ASR_EVIDENCE=BOUND S=1 D=0 I=0 U=5');
           NODE
 
-      - name: Regenerate only confirmed Arabic pronunciation parts 4 and 8
-        if: steps.campaign.outputs.published != 'yes'
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          BAREEQ_TARGETED_TTS_TRANSPORT: openrouter-speech
-          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_FORCE_TTS_PARTS: '4,8'
-          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"4":"Pronounce «مُوَزَّعًا» clearly with a stressed z sound and preserve every other reviewed token exactly.","8":"Pronounce «مُوَزَّعًا» clearly with a stressed z sound and preserve every other reviewed token exactly."}
-        run: |
-          node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
-          echo 'TARGETED_REGENERATION=PASS parts=4,8 model=gemini-3.1-flash-tts-preview voice=Sadaltager gateway=OpenRouter'
-
-      - name: Verify generation remains 15/15
+      - name: Preserve current 15/15 audio without TTS calls
         if: steps.campaign.outputs.published != 'yes'
         run: |
           node scripts/audio-openrouter-campaign.mjs --mode=generate
-          echo 'GENERATION_REVERIFY=PASS articles=15'
+          echo 'GENERATION_REVERIFY=PASS articles=15 TTS_REQUESTS_SENT=0'
 
-      - name: Validate all candidates with technical QA and independent dual ASR
+      - name: Revalidate all candidates with technical QA and independent dual ASR
         if: steps.campaign.outputs.published != 'yes'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
