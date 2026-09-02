@@ -47,25 +47,25 @@ assert.equal(mismatch.substitutions, 1);
 assert.equal(mismatch.deletions, 0);
 assert.equal(mismatch.insertions, 0);
 
-assert.throws(() => assertIndependentAsrModels(['gemini-3.5-transcribe', 'gemini-3.5-transcribe']));
+assert.throws(() => assertIndependentAsrModels([INDEPENDENT_ASR_MODELS[0], INDEPENDENT_ASR_MODELS[0]]));
 assert.deepEqual(assertIndependentAsrModels(INDEPENDENT_ASR_MODELS), INDEPENDENT_ASR_MODELS);
 
 const sameModelTwice = evaluateAsr({
   asrReports: [
-    { model: 'gemini-3.5-transcribe', substitutions: 0, deletions: 0, insertions: 0 },
-    { model: 'gemini-3.5-transcribe', substitutions: 0, deletions: 0, insertions: 0 },
+    { model: INDEPENDENT_ASR_MODELS[0], substitutions: 0, deletions: 0, insertions: 0 },
+    { model: INDEPENDENT_ASR_MODELS[0], substitutions: 0, deletions: 0, insertions: 0 },
   ],
 });
 assert.equal(sameModelTwice.passed, false);
 
 const dual = evaluateAsr({
   asrReports: [
-    { model: 'gemini-3.5-transcribe', substitutions: 0, deletions: 0, insertions: 0 },
-    { model: 'gemini-3.6-flash', substitutions: 0, deletions: 0, insertions: 0 },
+    { model: INDEPENDENT_ASR_MODELS[0], substitutions: 0, deletions: 0, insertions: 0 },
+    { model: INDEPENDENT_ASR_MODELS[1], substitutions: 0, deletions: 0, insertions: 0 },
   ],
 });
 assert.equal(dual.passed, true);
-assert.throws(() => assertIndependentAsrModels(['gemini-3.5-transcribe', 'gemini-3.6-transcribe']));
+assert.throws(() => assertIndependentAsrModels([INDEPENDENT_ASR_MODELS[0], 'gemini-3.6-transcribe']));
 
 const live = classifyLiveAudio({
   provider: PRODUCTION_NARRATOR.provider,
