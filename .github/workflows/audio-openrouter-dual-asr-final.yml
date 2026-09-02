@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-final-lexical-33620500321-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-final-lexical-33623460301-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
