@@ -111,16 +111,17 @@ function normalizedActual(diff) {
   return normalizeForVerbalComparison(diff?.actual || '');
 }
 
-export function adjudicateDualAsr({ expectedText, reports, articleId = null, fingerprint = null, fullSha256 = null, speechScriptHash = null }) {
+export function adjudicateDualAsr({ expectedText, reports, articleId = null, fingerprint = null, fullSha256 = null, speechScriptHash = null, models = INDEPENDENT_ASR_MODELS }) {
   if (!Array.isArray(reports) || reports.length !== 2) throw new Error('dual-ASR adjudication requires exactly two raw reports');
+  if (!Array.isArray(models) || models.length !== 2 || new Set(models).size !== 2) throw new Error('dual-ASR adjudication requires exactly two distinct model identifiers');
   const byModel = new Map(reports.map((report) => [report.requestedModel || report.model, report]));
-  for (const model of INDEPENDENT_ASR_MODELS) {
+  for (const model of models) {
     if (!byModel.has(model)) throw new Error(`dual-ASR adjudication missing ${model}`);
   }
   for (const model of byModel.keys()) {
     if (FORBIDDEN_ASR_MODELS.includes(model)) throw new Error(`forbidden ASR model ${model}`);
   }
-  const ordered = INDEPENDENT_ASR_MODELS.map((model) => byModel.get(model));
+  const ordered = models.map((model) => byModel.get(model));
   const expectedTokens = tokenizeVerbal(expectedText);
   const maps = ordered.map(nonInsertionByIndex);
   const insertions = ordered.map(insertionsByBoundary);
@@ -139,8 +140,8 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       modelDisagreements.push({
         expectedIndex: index,
         expected,
-        matchedByModel: a ? INDEPENDENT_ASR_MODELS[1] : INDEPENDENT_ASR_MODELS[0],
-        divergentModel: a ? INDEPENDENT_ASR_MODELS[0] : INDEPENDENT_ASR_MODELS[1],
+        matchedByModel: a ? models[1] : models[0],
+        divergentModel: a ? models[0] : models[1],
         divergence: divergent,
         verdict: 'not-an-audio-error-because-the-other-independent-model-matched',
       });
@@ -162,14 +163,14 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
         continue;
       }
       if (normalizedActual(a) === normalizedActual(b)) {
-        substantiveDifferences.push({ type: 'substitution', expectedIndex: index, expected, actual: a.actual, confirmedBy: [...INDEPENDENT_ASR_MODELS] });
+        substantiveDifferences.push({ type: 'substitution', expectedIndex: index, expected, actual: a.actual, confirmedBy: [...models] });
         continue;
       }
       unresolved.push({ expectedIndex: index, expected, first: a, second: b, reason: 'both-models-diverged-differently' });
       continue;
     }
     if (a.type === 'deletion' && b.type === 'deletion') {
-      substantiveDifferences.push({ type: 'deletion', expectedIndex: index, expected, actual: null, confirmedBy: [...INDEPENDENT_ASR_MODELS] });
+      substantiveDifferences.push({ type: 'deletion', expectedIndex: index, expected, actual: null, confirmedBy: [...models] });
       continue;
     }
     unresolved.push({ expectedIndex: index, expected, first: a, second: b, reason: 'both-models-diverged-with-different-operation-types' });
@@ -183,8 +184,8 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       modelDisagreements.push({
         expectedIndex: boundary,
         expected: null,
-        matchedByModel: a.length ? INDEPENDENT_ASR_MODELS[1] : INDEPENDENT_ASR_MODELS[0],
-        divergentModel: a.length ? INDEPENDENT_ASR_MODELS[0] : INDEPENDENT_ASR_MODELS[1],
+        matchedByModel: a.length ? models[1] : models[0],
+        divergentModel: a.length ? models[0] : models[1],
         divergence: a.length ? a : b,
         verdict: 'not-an-audio-error-because-the-other-independent-model-had-no-insertion',
       });
@@ -193,7 +194,7 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
     const first = a.map((item) => normalizedActual(item)).join(' ');
     const second = b.map((item) => normalizedActual(item)).join(' ');
     if (first === second) {
-      substantiveDifferences.push({ type: 'insertion', expectedIndex: boundary, expected: null, actual: first, confirmedBy: [...INDEPENDENT_ASR_MODELS] });
+      substantiveDifferences.push({ type: 'insertion', expectedIndex: boundary, expected: null, actual: first, confirmedBy: [...models] });
     } else {
       unresolved.push({ expectedIndex: boundary, expected: null, first: a, second: b, reason: 'both-models-inserted-different-text' });
     }
@@ -219,7 +220,7 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
     candidateFingerprint: fingerprint,
     fullSha256,
     speechScriptHash,
-    models: [...INDEPENDENT_ASR_MODELS],
+    models: [...models],
     method: 'independent-dual-asr-consensus-with-recorded-representation-equivalence',
     policy: {
       rawReportsImmutable: true,
@@ -274,8 +275,7 @@ async function finalizeEvidence({ dir, article, fingerprint, fullSha256, adjudic
     'reports/merge.json',
     'reports/technical-qa.json',
     'reports/sync.json',
-    `reports/asr-${INDEPENDENT_ASR_MODELS[0]}.json`,
-    `reports/asr-${INDEPENDENT_ASR_MODELS[1]}.json`,
+    ...adjudication.models.map((model) => `reports/asr-${model}.json`),
     'reports/asr-adjudication.json',
   ];
   const reportDigests = {};
@@ -301,7 +301,7 @@ async function finalizeEvidence({ dir, article, fingerprint, fullSha256, adjudic
       technical,
       sync,
       asrAdjudication: adjudication,
-      asrReports: INDEPENDENT_ASR_MODELS.map((model) => JSON.parse('null')),
+      asrReports: adjudication.models.map(() => JSON.parse('null')),
       liveUntouched: technical.liveUntouched === true,
       playerManifestValid: true,
       generatorVersion: GENERATOR_VERSION,
@@ -309,7 +309,7 @@ async function finalizeEvidence({ dir, article, fingerprint, fullSha256, adjudic
     },
   });
   validate.asrReports = [];
-  for (const model of INDEPENDENT_ASR_MODELS) {
+  for (const model of adjudication.models) {
     validate.asrReports.push(JSON.parse(await readFile(path.join(reportsDir, `asr-${model}.json`), 'utf8')));
   }
   await writeJson(path.join(reportsDir, 'validate.json'), validate);
@@ -330,7 +330,7 @@ async function finalizeEvidence({ dir, article, fingerprint, fullSha256, adjudic
   return validate;
 }
 
-export async function adjudicateCandidate({ articleId, fingerprint, root = process.cwd(), storeRoot }) {
+export async function adjudicateCandidate({ articleId, fingerprint, root = process.cwd(), storeRoot, models = INDEPENDENT_ASR_MODELS }) {
   if (!articleId || !fingerprint) throw Object.assign(new Error('adjudicate requires --article and --fingerprint'), { exitCode: EXIT_USAGE });
   const article = await loadSpokenArticle(articleId, root);
   const dir = candidateDir(articleId, fingerprint, storeRoot || root);
@@ -339,7 +339,7 @@ export async function adjudicateCandidate({ articleId, fingerprint, root = proce
   if (!await pathExists(fullPath)) throw Object.assign(new Error('adjudicate refused: full.mp3 missing'), { exitCode: EXIT_HARD });
   const fullSha256 = sha256(await readFile(fullPath));
   const reports = [];
-  for (const model of INDEPENDENT_ASR_MODELS) {
+  for (const model of models) {
     const file = path.join(reportsDir, `asr-${model}.json`);
     if (!await pathExists(file)) throw Object.assign(new Error(`adjudicate refused: missing raw ASR report ${model}`), { exitCode: EXIT_HARD });
     const report = JSON.parse(await readFile(file, 'utf8'));
@@ -356,6 +356,7 @@ export async function adjudicateCandidate({ articleId, fingerprint, root = proce
     fingerprint,
     fullSha256,
     speechScriptHash: article.speechScriptHash,
+    models,
   });
   await mkdir(reportsDir, { recursive: true });
   await writeJson(path.join(reportsDir, 'asr-adjudication.json'), adjudication);
