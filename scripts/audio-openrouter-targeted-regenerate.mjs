@@ -56,13 +56,25 @@ function correctionInput(part, correctionHint) {
 
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 0) {
     let text = part.text;
-    // The reviewed Speech Script already carries Anthropic as أَنْثْرُوبِك.
-    // Tighten only its diacritics (lexically identical after normalization) so
-    // the targeted retry cannot drift to أنثروبيك; Claude remains unvocalized
-    // in the reviewed script and gets the same lexical-preserving treatment.
-    text = replaceExactlyOnce(text, 'أَنْثْرُوبِك', 'أَنْثْرُوبْك', 'reviewed Anthropic token in coworker part 1');
-    text = replaceExactlyOnce(text, 'كلود', 'كْلُود', 'كلود token in coworker part 1');
+    // Strengthen only Arabic vowel/stop marks. The letters remain exactly the
+    // reviewed Speech Script tokens after lexical normalization.
+    text = replaceExactlyOnce(text, 'أَنْثْرُوبِك', 'أَنْثْرُوبِكْ', 'reviewed Anthropic token in coworker part 1');
+    text = replaceExactlyOnce(text, 'كلود', 'كْلُودْ', 'كلود token in coworker part 1');
     return { ...part, text };
+  }
+
+  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 3) {
+    return {
+      ...part,
+      text: replaceExactlyOnce(part.text, 'موزعًا', 'مُوَزَّعًا', 'موزعًا token in coworker part 4'),
+    };
+  }
+
+  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 4) {
+    return {
+      ...part,
+      text: replaceExactlyOnce(part.text, 'استخدموا', 'اِسْتَخْدَمُوا', 'استخدموا token in coworker part 5'),
+    };
   }
 
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 5) {
@@ -76,6 +88,13 @@ function correctionInput(part, correctionHint) {
     return {
       ...part,
       text: replaceExactlyOnce(part.text, 'في ما', 'في، ما', 'في ما boundary in coworker part 7'),
+    };
+  }
+
+  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 7) {
+    return {
+      ...part,
+      text: replaceExactlyOnce(part.text, 'موزعًا', 'مُوَزَّعًا', 'موزعًا token in coworker part 8'),
     };
   }
 
