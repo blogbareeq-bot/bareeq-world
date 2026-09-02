@@ -7,7 +7,7 @@ import {
   readTestClipPlan,
   validateSpeechScript,
 } from './speech-script-core.mjs';
-import { EXIT_HARD, EXIT_USAGE } from './audio-constants.mjs';
+import { EXIT_HARD, EXIT_USAGE, INDEPENDENT_ASR_MODELS } from './audio-constants.mjs';
 import { pathExists } from './audio-checkpoint.mjs';
 import { loadListeningEvidence } from './audio-evidence.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
@@ -70,7 +70,7 @@ export async function loadPublishRecord({
     ? JSON.parse(await readFile(path.join(candidateDir, 'reports', 'validate.json'), 'utf8'))
     : null;
   const asrReports = [];
-  for (const model of ['gemini-3.5-transcribe', 'gemini-3.6-flash']) {
+  for (const model of INDEPENDENT_ASR_MODELS) {
     const file = path.join(candidateDir, 'reports', `asr-${model}.json`);
     if (await pathExists(file)) asrReports.push(JSON.parse(await readFile(file, 'utf8')));
   }
