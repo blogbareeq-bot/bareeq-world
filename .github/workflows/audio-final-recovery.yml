@@ -21,7 +21,7 @@ jobs:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
       BAREEQ_CACHE_PREFIX: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-33612670989-1-final-recovery
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-33613102646-1-final-recovery
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -112,23 +112,10 @@ jobs:
           if (!unresolved.some((item) => item.expected === 'أنثروبك') || !unresolved.some((item) => item.expected === 'مطورون')) {
             throw new Error('expected unresolved Anthropic and مطورون readings not found');
           }
-          console.log('CORRECTED_CHECKPOINT=BOUND generation=15/15 resumedParts=1,2,3 targetedParts=4; priorASR=S3/D0/I0/U2');
+          console.log('CORRECTED_CHECKPOINT=BOUND generation=15/15 resumedParts=1,2,3,4; priorASR=S3/D0/I0/U2');
           NODE
 
-      - name: Regenerate only the newly confirmed failing parts
-        if: steps.campaign.outputs.published != 'yes'
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          BAREEQ_TARGETED_TTS_TRANSPORT: developer-interactions
-          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_FORCE_TTS_PARTS: '4'
-          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"4":"Pronounce «مُطَوِّرُونَ» exactly as written, including the final نون."}
-        run: |
-          node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
-          echo 'TARGETED_REGENERATION=PASS resumed=1,2,3 regenerated=4 model=gemini-3.1-flash-tts-preview voice=Sadaltager transport=developer-interactions'
-
-      - name: Preserve corrected 15/15 audio without extra TTS calls
+      - name: Preserve complete checkpoint and repair normalization only
         if: steps.campaign.outputs.published != 'yes'
         run: |
           node scripts/audio-openrouter-campaign.mjs --mode=generate
