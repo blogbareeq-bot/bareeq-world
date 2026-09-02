@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-dual-asr-final-33640368290-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-dual-asr-final-33648341283-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -61,7 +61,7 @@ jobs:
           test -n "${OPENROUTER_API_KEY}"
           echo 'OPENROUTER_CREDENTIAL=present'
 
-      - name: Restore latest 15/15 checkpoint with failed dual-ASR evidence
+      - name: Restore latest 15/15 checkpoint with immutable dual-ASR evidence
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
@@ -81,22 +81,8 @@ jobs:
           console.log('GENERATION_CHECKPOINT=BOUND articles=15');
           NODE
 
-      - name: Regenerate only remaining coworker dual-ASR failing parts
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_FORCE_TTS_PARTS: '1,4,6'
-          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"At the company name «أَنْثْرُوبِك», pronounce exactly the written Arabic form. Do not say English «Anthropic» and do not add a ياء sound to make «أنثروبيك».","4":"At the phrase «وهذا قريب من سؤال متى يستحق حكمنا السريع الثقة», pronounce «سؤال» exactly as written. Do not add a possessive ياء and do not change it to «سؤالي».","6":"At the phrase «أن يضاهي فرقًا من شخصين تعمل من دون النظام», pronounce «فرقًا» exactly as written, meaning teams; do not change it to «فريق» or «فريقًا». Also preserve «آند» exactly with its long initial alif and preserve «سيئ» exactly as written."}
-        run: |
-          node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
-          node scripts/audio-openrouter-campaign.mjs --mode=generate
-          echo 'TARGETED_REGENERATION=PASS parts=1,4,6 corpus_regenerated=no model=gemini-3.1-flash-tts-preview voice=Sadaltager'
-
-      - name: Recover coworker with independent OpenAI and Microsoft ASR
-        env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: node scripts/audio-openrouter-asr-recovery.mjs --article=ai-as-coworker-future-of-human-work
+      - name: Re-adjudicate immutable independent OpenAI and Microsoft ASR
+        run: node scripts/audio-openrouter-asr-recovery.mjs --article=ai-as-coworker-future-of-human-work --reuse-existing-reports
 
       - name: Require exact publication gates
         run: |

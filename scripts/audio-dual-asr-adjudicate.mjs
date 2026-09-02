@@ -49,7 +49,7 @@ const APPROVED_ORTHOGRAPHIC_EQUIVALENTS = new Map([
   // Exact named-entity transliteration variants observed independently across
   // the two ASR models. These pairs preserve the same foreign proper name and
   // are deliberately whitelisted one-by-one; no fuzzy/phonetic matching is used.
-  ['انثروبك', new Set(['انثروبيك', 'anthropic'])],
+  ['أنثروبك', new Set(['أنثروبيك', 'anthropic'])],
   ['كلود', new Set(['كلاود', 'claude'])],
   ['بروكتر', new Set(['بروكتور', 'procter'])],
   ['غامبل', new Set(['جامبل', 'gamble'])],

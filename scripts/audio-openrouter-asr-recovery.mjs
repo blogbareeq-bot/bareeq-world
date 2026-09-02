@@ -20,6 +20,7 @@ const ROOT = process.cwd();
 const CAMPAIGN_ID = process.env.BAREEQ_AUDIO_CAMPAIGN_ID?.trim() || 'sadaltager-openrouter-20260901-v1';
 const ARTICLE_ID = process.argv.find((arg) => arg.startsWith('--article='))?.slice('--article='.length)
   || 'ai-as-coworker-future-of-human-work';
+const REUSE_EXISTING_REPORTS = process.argv.includes('--reuse-existing-reports');
 const STATE_PATH = path.join(ROOT, 'audio-candidates', '_campaigns', CAMPAIGN_ID, 'state.json');
 const RECOVERY_MODELS = OPENROUTER_DUAL_ASR_MODELS;
 
@@ -77,25 +78,32 @@ async function main() {
   for (const model of RECOVERY_MODELS) {
     const outputPath = path.join(reportsDir, `asr-${model}.json`);
     let report;
-    try {
-      report = await transcribeOpenRouterParts({
-        model,
-        audioPath: fullPath,
-        parts,
-        expectedText: article.spokenText,
-        article,
-        fingerprint,
-        fullSha256,
-        outputPath,
-      });
-    } catch (error) {
-      if (error?.httpStatus === 200 && error?.result?.transcript && Array.isArray(error.result.differences)) {
-        report = error.result;
-      } else {
-        throw error;
+    if (REUSE_EXISTING_REPORTS) {
+      if (!await pathExists(outputPath)) {
+        throw Object.assign(new Error(`cannot reuse missing raw ASR report ${model}`), { exitCode: EXIT_HARD });
+      }
+      report = JSON.parse(await readFile(outputPath, 'utf8'));
+    } else {
+      try {
+        report = await transcribeOpenRouterParts({
+          model,
+          audioPath: fullPath,
+          parts,
+          expectedText: article.spokenText,
+          article,
+          fingerprint,
+          fullSha256,
+          outputPath,
+        });
+      } catch (error) {
+        if (error?.httpStatus === 200 && error?.result?.transcript && Array.isArray(error.result.differences)) {
+          report = error.result;
+        } else {
+          throw error;
+        }
       }
     }
-    console.log(`OPENROUTER_ASR_EVIDENCE model=${model} raw=S${report.substitutions}/D${report.deletions}/I${report.insertions} requests=${report.transcriptionsRequests || parts.length} cost=${report.usageCost || 0}`);
+    console.log(`OPENROUTER_ASR_EVIDENCE model=${model} source=${REUSE_EXISTING_REPORTS ? 'immutable-checkpoint' : 'provider'} raw=S${report.substitutions}/D${report.deletions}/I${report.insertions} requests=${report.transcriptionsRequests || parts.length} cost=${report.usageCost || 0}`);
   }
 
   let adjudication;
