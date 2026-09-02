@@ -21,7 +21,7 @@ jobs:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
       BAREEQ_CACHE_PREFIX: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-33595510975-2-final-recovery
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-33598322527-3-final-recovery
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -99,13 +99,36 @@ jobs:
           if (!fs.existsSync(reportPath)) throw new Error('missing prior dual-ASR adjudication evidence');
           const report = JSON.parse(fs.readFileSync(reportPath,'utf8'));
           const c = report.consensus || {};
-          if (c.substitutions !== 1 || c.deletions !== 0 || c.insertions !== 0 || c.unresolved !== 5) {
+          if (c.substitutions !== 3 || c.deletions !== 0 || c.insertions !== 0 || c.unresolved !== 2) {
             throw new Error(`unexpected prior coworker ASR state S=${c.substitutions} D=${c.deletions} I=${c.insertions} U=${c.unresolved}`);
           }
-          console.log('CORRECTED_CHECKPOINT=BOUND generation=15/15 targetedParts=4,8; priorASR=S1/D0/I0/U5');
+          const differences = report.substantiveDifferences || [];
+          for (const [expected, actual] of [['تتوافر', 'تتوفر'], ['الإحساس', 'الاحساس'], ['بالأنظمة', 'بأنظمة']]) {
+            if (!differences.some((item) => item.type === 'substitution' && item.expected === expected && item.actual === actual)) {
+              throw new Error(`expected confirmed ASR substitution not found: ${expected}->${actual}`);
+            }
+          }
+          const unresolved = report.unresolved || [];
+          if (!unresolved.some((item) => item.expected === 'أنثروبك') || !unresolved.some((item) => item.expected === 'مطورون')) {
+            throw new Error('expected unresolved Anthropic and مطورون readings not found');
+          }
+          console.log('CORRECTED_CHECKPOINT=BOUND generation=15/15 targetedParts=1,2,3,4; priorASR=S3/D0/I0/U2');
           NODE
 
-      - name: Preserve corrected 15/15 audio without TTS calls
+      - name: Regenerate only the newly confirmed failing parts
+        if: steps.campaign.outputs.published != 'yes'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_TARGETED_TTS_TRANSPORT: developer-interactions
+          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+          BAREEQ_FORCE_TTS_PARTS: '1,2,3,4'
+          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
+            {"1":"Pronounce the Arabic brand name «أَنْثْرُوبِكْ» exactly in Arabic letters; do not say the English name or add a ياء.","2":"Pronounce «تَتَوَافَرُ» exactly as written; never shorten it to «تتوفر».","3":"Pronounce «الإِحْسَاسُ» and «بِالْأَنْظِمَةِ» exactly as written, including their initial hamza and definite article.","4":"Pronounce «مُطَوِّرُونَ» exactly as written, including the final نون."}
+        run: |
+          node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
+          echo 'TARGETED_REGENERATION=PASS parts=1,2,3,4 model=gemini-3.1-flash-tts-preview voice=Sadaltager transport=developer-interactions'
+
+      - name: Preserve corrected 15/15 audio without extra TTS calls
         if: steps.campaign.outputs.published != 'yes'
         run: |
           node scripts/audio-openrouter-campaign.mjs --mode=generate
