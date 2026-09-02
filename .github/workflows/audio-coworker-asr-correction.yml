@@ -58,17 +58,16 @@ jobs:
           node scripts/test-audio-engine-final.mjs
           node scripts/test-audio-transition-normalization.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
+          node scripts/test-gemini-generate-content-tts.mjs
           node --check scripts/audio-openrouter-targeted-regenerate.mjs
 
       - name: Verify provider credentials
         if: steps.campaign.outputs.published != 'yes'
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          test -n "${OPENROUTER_API_KEY}"
           test -n "${GEMINI_API_KEY}"
-          echo 'PROVIDER_CREDENTIALS=present'
+          echo 'GEMINI_PROVIDER_CREDENTIALS=present'
 
       - name: Restore latest Sadaltager checkpoint
         if: steps.campaign.outputs.published != 'yes'
@@ -123,14 +122,15 @@ jobs:
       - name: Regenerate only confirmed pronunciation parts 1 4 5 8
         if: steps.campaign.outputs.published != 'yes'
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_TARGETED_TTS_TRANSPORT: developer-generate-content
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_FORCE_TTS_PARTS: '1,4,5,8'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"Keep the reviewed Arabic letters exact; strengthen Anthropic and Claude pronunciation without lexical substitution.","4":"Pronounce «موزعًا» fully and clearly as written.","5":"Pronounce the plural verb «استخدموا» fully, including its final واو الجماعة, exactly as written.","8":"Pronounce «موزعًا» fully and clearly as written."}
+            {"1":"Keep the reviewed Arabic letters exact; pronounce «أَنْثْرُوبِكْ» and «كْلُودْ» exactly without adding letters.","4":"Pronounce «مُوَزَّعًا» fully and clearly as written.","5":"Pronounce the plural verb «اِسْتَخْدَمُوا» fully, including its final واو الجماعة, exactly as written.","8":"Pronounce «مُوَزَّعًا» fully and clearly as written."}
         run: |
           node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
-          echo 'TARGETED_REGENERATION=PASS parts=1,4,5,8 model=gemini-3.1-flash-tts-preview voice=Sadaltager gateway=OpenRouter'
+          echo 'TARGETED_REGENERATION=PASS parts=1,4,5,8 model=gemini-3.1-flash-tts-preview voice=Sadaltager transport=developer-generate-content'
 
       - name: Verify generation remains 15/15 without extra TTS calls
         if: steps.campaign.outputs.published != 'yes'
@@ -185,7 +185,7 @@ jobs:
           git config user.name 'bareeq-audio'
           git config user.email 'audio@bareeq.local'
           git add -f public/audio docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json docs/audio/PUBLICATION-POLICY-20260901.json
-          git commit -m 'audio: publish validated Sadaltager corpus via OpenRouter'
+          git commit -m 'audio: publish validated Sadaltager corpus'
           git push origin "HEAD:${PR_BRANCH}"
           echo 'PUBLISHED_AUDIO_COMMIT=pushed'
 
