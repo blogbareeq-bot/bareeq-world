@@ -27,6 +27,15 @@ export const FORBIDDEN_ASR_MODELS = Object.freeze([
 ]);
 
 export const ASR_MODEL_TRANSPORT = Object.freeze({
+  // Retained only so historical/unit contract checks can still exercise the
+  // specialized transcription body. It is not in INDEPENDENT_ASR_MODELS and
+  // therefore cannot participate in production dual-ASR adjudication.
+  'gemini-3.5-transcribe': {
+    api: 'interactions',
+    fileUpload: true,
+    input: 'audio-uri',
+    verbatim: true,
+  },
   'gemini-3.5-flash': {
     api: 'interactions',
     fileUpload: true,
