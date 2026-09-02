@@ -69,8 +69,11 @@ export async function loadPublishRecord({
   const validate = await pathExists(path.join(candidateDir, 'reports', 'validate.json'))
     ? JSON.parse(await readFile(path.join(candidateDir, 'reports', 'validate.json'), 'utf8'))
     : null;
+  const evidenceModels = Array.isArray(validate?.asrAdjudication?.models) && validate.asrAdjudication.models.length === 2
+    ? validate.asrAdjudication.models
+    : INDEPENDENT_ASR_MODELS;
   const asrReports = [];
-  for (const model of INDEPENDENT_ASR_MODELS) {
+  for (const model of evidenceModels) {
     const file = path.join(candidateDir, 'reports', `asr-${model}.json`);
     if (await pathExists(file)) asrReports.push(JSON.parse(await readFile(file, 'utf8')));
   }
@@ -86,6 +89,7 @@ export async function loadPublishRecord({
     model: PRODUCTION_NARRATOR.model,
     voiceId: PRODUCTION_NARRATOR.voiceId,
     asrReports: asrReports.length ? asrReports : (validate?.asrReports || []),
+    asrAdjudication: validate?.asrAdjudication || null,
     humanListening: record.humanListening || null,
     technicalStatus: technical?.passed ? 'passed' : record.technicalStatus,
     syncStatus: sync?.passed ? 'passed' : record.syncStatus,
