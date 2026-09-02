@@ -115,7 +115,7 @@ export function compareExactSpokenText(expected, actual) {
   return compareExactTokens(tokenizeVerbal(expected), tokenizeVerbal(actual));
 }
 
-export function assertIndependentAsrModels(models, { allowed = ['gemini-3.5-transcribe', 'gemini-3.6-flash'], forbidden = ['gemini-3.6-transcribe'] } = {}) {
+export function assertIndependentAsrModels(models, { allowed = ['gemini-3.5-flash', 'gemini-3.6-flash'], forbidden = ['gemini-3.6-transcribe'] } = {}) {
   const unique = [...new Set((models || []).filter(Boolean))];
   for (const model of unique) {
     if (forbidden.includes(model)) throw new Error(`${model} is forbidden and is not an independent ASR model.`);
