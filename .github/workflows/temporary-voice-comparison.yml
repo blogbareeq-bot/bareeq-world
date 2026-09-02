@@ -1,9 +1,9 @@
 name: Temporary Bareeq voice comparison
 
+# Manual-only diagnostic. Do not consume the production Gemini quota on every
+# audio branch push; production/correction workflows own that quota.
 on:
-  push:
-    branches:
-      - 'arena/01a04a3c-bareeq-world'
+  workflow_dispatch:
 
 permissions:
   contents: read
