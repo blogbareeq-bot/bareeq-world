@@ -13,12 +13,13 @@ export const PRODUCTION_VOICE = 'Sadaltager';
 export const PRODUCTION_VOICE_ID = 'sadaltager';
 export const GENERATOR_VERSION = 10;
 
-// gemini-3.5-transcribe hit its provider quota during the final campaign.
-// gemini-3.5-flash was live-probed against the same full Arabic candidate and
-// returned a non-empty verbatim transcript; keep gemini-3.6-flash as the
-// second, separately requested model so dual-ASR remains model-independent.
+// The specialized transcribe model and gemini-3.5-flash exhausted their
+// provider quotas during the final campaign. gemini-3.5-flash-lite was
+// live-probed against the same full Arabic candidate (HTTP 200, non-empty
+// verbatim transcript). Keep gemini-3.6-flash as the separately requested
+// second model so dual-ASR remains model-independent.
 export const INDEPENDENT_ASR_MODELS = Object.freeze([
-  'gemini-3.5-flash',
+  'gemini-3.5-flash-lite',
   'gemini-3.6-flash',
 ]);
 
@@ -27,16 +28,21 @@ export const FORBIDDEN_ASR_MODELS = Object.freeze([
 ]);
 
 export const ASR_MODEL_TRANSPORT = Object.freeze({
-  // Retained only so historical/unit contract checks can still exercise the
-  // specialized transcription body. It is not in INDEPENDENT_ASR_MODELS and
-  // therefore cannot participate in production dual-ASR adjudication.
+  // Historical/unit-contract compatibility only; not in the production pair.
   'gemini-3.5-transcribe': {
     api: 'interactions',
     fileUpload: true,
     input: 'audio-uri',
     verbatim: true,
   },
+  // Kept as a supported non-production transport for diagnostics/resume data.
   'gemini-3.5-flash': {
+    api: 'interactions',
+    fileUpload: true,
+    input: 'text-plus-audio-uri',
+    verbatim: true,
+  },
+  'gemini-3.5-flash-lite': {
     api: 'interactions',
     fileUpload: true,
     input: 'text-plus-audio-uri',
