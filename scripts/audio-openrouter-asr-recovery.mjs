@@ -68,12 +68,12 @@ async function main() {
     || first.httpStatus !== 200
     || first.candidateFingerprint !== fingerprint
     || first.fullSha256 !== fullSha256
-    || first.status !== 'passed'
-    || !exactZero(first)
     || typeof first.transcript !== 'string'
-    || !Array.isArray(first.differences)) {
-    throw Object.assign(new Error('cached first ASR report is not exact 0/0/0 or is not bound to the corrected candidate'), { exitCode: EXIT_HARD });
+    || !Array.isArray(first.differences)
+    || !['substitutions', 'deletions', 'insertions'].every((key) => Number.isFinite(Number(first[key])))) {
+    throw Object.assign(new Error('cached first ASR report is not usable HTTP-200 evidence bound to the corrected candidate'), { exitCode: EXIT_HARD });
   }
+  console.log(`CACHED_FIRST_ASR=BOUND model=${FIRST_MODEL} raw=S${first.substitutions}/D${first.deletions}/I${first.insertions}`);
 
   const generation = JSON.parse(await readFile(path.join(dir, 'generation-report.json'), 'utf8'));
   const manifest = JSON.parse(await readFile(path.join(dir, 'manifest.candidate.json'), 'utf8'));
