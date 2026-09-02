@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, rm, cp, readFile, readdir } from 'node:fs/pr
 import os from 'node:os';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
-import { EXIT_CONFIG, EXIT_HARD, EXIT_OK, EXIT_QUOTA, EXIT_USAGE, sha256, liveAudioDir, audioKeyFor } from './audio-constants.mjs';
+import { EXIT_CONFIG, EXIT_HARD, EXIT_OK, EXIT_QUOTA, EXIT_USAGE, sha256, liveAudioDir, audioKeyFor, INDEPENDENT_ASR_MODELS } from './audio-constants.mjs';
 import { loadSpokenArticle } from './audio-split.mjs';
 import { writeApprovedFixture } from './test-audio-fixture.mjs';
 import { validateSyncMap, expectedSyncIds, attachSync } from './audio-sync.mjs';
@@ -254,7 +254,7 @@ try {
 
   const flipTargets = [
     path.join(candidateDir, 'full.mp3'),
-    path.join(candidateDir, 'reports', 'asr-gemini-3.5-transcribe.json'),
+    path.join(candidateDir, 'reports', `asr-${INDEPENDENT_ASR_MODELS[0]}.json`),
     path.join(candidateDir, 'reports', 'technical-qa.json'),
     path.join(candidateDir, 'manifest.json'),
   ];
