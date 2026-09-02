@@ -39,7 +39,7 @@ jobs:
           node --input-type=module - <<'NODE'
           import fs from 'node:fs/promises';
           import path from 'node:path';
-          import { uploadAudioFile } from './scripts/audio-asr-transcribe.mjs';
+          import { uploadAudioFile, extractTranscript, extractResponseModel } from './scripts/audio-asr-transcribe.mjs';
           import { deleteUploadedFile } from './scripts/audio-files-api.mjs';
           const apiKey = process.env.GEMINI_API_KEY;
           if (!apiKey) throw new Error('GEMINI_API_KEY missing');
@@ -53,6 +53,7 @@ jobs:
           console.log(`ASR_PROBE_AUDIO=${partName} bytes=${bytes.length}`);
           const uploaded = await uploadAudioFile({ apiKey, bytes, displayName: `bareeq-asr-probe-${Date.now()}.mp3` });
           const models = ['gemini-3.5-flash','gemini-3.5-flash-lite','gemini-2.5-flash'];
+          let usable = 0;
           try {
             for (const model of models) {
               const response = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
@@ -74,11 +75,15 @@ jobs:
               const text = await response.text();
               let payload = null;
               try { payload = JSON.parse(text); } catch {}
-              const output = payload?.output_text || '';
+              const output = payload ? extractTranscript(payload) : '';
+              const actualModel = payload ? extractResponseModel(payload) : null;
               const err = payload?.error?.message || '';
-              console.log(`ASR_MODEL_PROBE model=${model} http=${response.status} outputChars=${output.length} error=${String(err).slice(0,180)}`);
+              if (response.ok && output.trim()) usable += 1;
+              console.log(`ASR_MODEL_PROBE model=${model} http=${response.status} transcriptChars=${output.length} actualModel=${actualModel || 'not-returned'} error=${String(err).slice(0,180)}`);
             }
           } finally {
             if (uploaded?.name) await deleteUploadedFile({ apiKey, name: uploaded.name }).catch(() => null);
           }
+          if (usable < 2) throw new Error(`need two usable independent alternate ASR models, found ${usable}`);
+          console.log(`ASR_ALTERNATE_MODELS_USABLE=${usable}`);
           NODE
