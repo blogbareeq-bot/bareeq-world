@@ -1,13 +1,19 @@
 import path from 'node:path';
 import { runProductionMode } from './audio-production.mjs';
 import { synthesizeOpenRouterPart } from './audio-openrouter-tts.mjs';
+import { synthesizeGeminiGenerateContentPart } from './audio-gemini-tts.mjs';
 
 const articleId = process.argv.find((arg) => arg.startsWith('--article='))?.slice('--article='.length)
   || process.env.BAREEQ_AUDIO_ARTICLE
   || '';
+const targetedTransport = process.env.BAREEQ_TARGETED_TTS_TRANSPORT?.trim() || 'openrouter-speech';
 
 if (!articleId) {
   console.error('Usage: node scripts/audio-openrouter-targeted-regenerate.mjs --article=<id>');
+  process.exit(2);
+}
+if (!['openrouter-speech', 'developer-generate-content'].includes(targetedTransport)) {
+  console.error(`Unsupported BAREEQ_TARGETED_TTS_TRANSPORT=${targetedTransport}`);
   process.exit(2);
 }
 
@@ -29,7 +35,7 @@ function countOccurrences(text, needle) {
 function replaceExactlyOnce(text, needle, replacement, label) {
   const occurrences = countOccurrences(text, needle);
   if (occurrences !== 1) {
-    throw new Error(`Targeted OpenRouter correction expected exactly one ${label}; found ${occurrences}.`);
+    throw new Error(`Targeted correction expected exactly one ${label}; found ${occurrences}.`);
   }
   return text.replace(needle, replacement);
 }
@@ -38,10 +44,9 @@ function correctionInput(part, correctionHint) {
   const hint = String(correctionHint || '').trim();
   if (!hint) return part;
 
-  // OpenRouter's /audio/speech endpoint accepts speech text rather than a
-  // director-instruction prompt. Keep lexical content unchanged and use only
-  // Arabic diacritics or punctuation boundaries that disappear under the ASR
-  // lexical normalizer, so the authoritative Speech Script remains identical.
+  // Keep lexical content identical to the reviewed Speech Script. Targeted
+  // retries may only strengthen Arabic diacritics or punctuation boundaries
+  // that disappear under the exact lexical normalizer.
   if (articleId === 'ai-agents-future-now' && part.partIndex === 4 && hint.includes('المشكلة')) {
     return {
       ...part,
@@ -56,8 +61,6 @@ function correctionInput(part, correctionHint) {
 
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 0) {
     let text = part.text;
-    // Strengthen only Arabic vowel/stop marks. The letters remain exactly the
-    // reviewed Speech Script tokens after lexical normalization.
     text = replaceExactlyOnce(text, 'أَنْثْرُوبِك', 'أَنْثْرُوبِكْ', 'reviewed Anthropic token in coworker part 1');
     text = replaceExactlyOnce(text, 'كلود', 'كْلُودْ', 'كلود token in coworker part 1');
     return { ...part, text };
@@ -98,7 +101,25 @@ function correctionInput(part, correctionHint) {
     };
   }
 
-  throw new Error(`Unsupported OpenRouter targeted correction for ${articleId} part ${part.partIndex + 1}; refusing an unverified rewrite.`);
+  throw new Error(`Unsupported targeted correction for ${articleId} part ${part.partIndex + 1}; refusing an unverified rewrite.`);
+}
+
+async function synthesizeTargeted({ article, part, splitPlan, voice, correctionHint }) {
+  const correctedPart = correctionInput(part, correctionHint);
+  if (targetedTransport === 'developer-generate-content') {
+    return synthesizeGeminiGenerateContentPart({
+      apiKey: process.env.GEMINI_API_KEY,
+      part: correctedPart,
+      context: {
+        articleTitle: article.title,
+        partIndex: part.partIndex,
+        partCount: splitPlan.parts.length,
+        correctionHint,
+      },
+      voice,
+    });
+  }
+  return synthesizeOpenRouterPart({ part: correctedPart, voice });
 }
 
 try {
@@ -106,14 +127,12 @@ try {
     mode: 'generate-candidate',
     articleId,
     root: process.cwd(),
-    synthesize: ({ part, voice, correctionHint }) => synthesizeOpenRouterPart({
-      part: correctionInput(part, correctionHint),
-      voice,
-    }),
+    synthesize: synthesizeTargeted,
   });
 
   console.log(JSON.stringify({
-    mode: 'targeted-openrouter-regeneration',
+    mode: 'targeted-regeneration',
+    transport: targetedTransport,
     status: result.status,
     articleId,
     fingerprint: result.fingerprint,
