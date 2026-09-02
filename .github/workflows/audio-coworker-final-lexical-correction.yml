@@ -1,0 +1,157 @@
+name: Bareeq coworker final lexical correction
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/audio-coworker-final-lexical-correction.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: bareeq-coworker-final-lexical-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  correct-validate-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
+      BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-33616081192-1-final-recovery
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Offline safety gates
+        run: |
+          node scripts/test-audio-lifecycle.mjs
+          node scripts/test-audio-production-safety.mjs
+          node scripts/test-audio-production-integration.mjs
+          node scripts/test-speech-script-quality-gate.mjs
+          node scripts/check-speech-scripts.mjs
+          node scripts/test-audio-engine-final.mjs
+          node scripts/test-audio-transition-normalization.mjs
+          node scripts/test-audio-dual-asr-adjudicate.mjs
+          node --check scripts/audio-openrouter-targeted-regenerate.mjs
+          node --check scripts/audio-openrouter-campaign.mjs
+
+      - name: Verify provider credentials
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          test -n "${GEMINI_API_KEY}"
+          test -n "${OPENROUTER_API_KEY}"
+          echo 'PROVIDER_CREDENTIALS=present'
+
+      - name: Restore latest complete checkpoint
+        uses: actions/cache/restore@v4
+        with:
+          path: audio-candidates
+          key: ${{ env.BAREEQ_CORRECTED_CACHE_KEY }}
+          fail-on-cache-miss: true
+
+      - name: Require generation complete 15/15
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
+          const articles = Object.entries(state.articles || {});
+          if (state.generationComplete !== true || articles.length !== 15 || articles.some(([,v]) => v.generation?.status !== 'generated')) {
+            throw new Error('checkpoint is not generation-complete 15/15');
+          }
+          console.log('GENERATION_CHECKPOINT=BOUND articles=15');
+          NODE
+
+      - name: Regenerate only confirmed coworker lexical-error parts
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+          BAREEQ_FORCE_TTS_PARTS: '1,2,6,7,8'
+          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
+            {"1":"Preserve every written token exactly. In «ليس واعيا» / the inflected form corresponding to normalized «واع», do not add an extra long ya sound beyond the written inflection. Pronounce the company name «أنثروبك» exactly as written in Arabic; do not expand it to «أنثروبيك» or «أنتروبيك».","2":"At every phrase containing «الذكاء الاصطناعي», pronounce both words completely. Never omit «الاصطناعي» after «الذكاء».","6":"Pronounce the conjunction/transliteration «آند» exactly with the long initial alif sound, not «أند». At the occurrence of «سيئ», preserve the exact word and do not change or merge it with a neighboring word.","7":"At the numbered item beginning with «5», speak the number explicitly so it is not omitted. Pronounce «لينكس» exactly as written; do not change it to «لينوكس».","8":"At the target phrase containing «لم», pronounce «لم» exactly as written with /m/; do not change it to «لن»."}
+        run: |
+          node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
+          node scripts/audio-openrouter-campaign.mjs --mode=generate
+          echo 'TARGETED_REGENERATION=PASS parts=1,2,6,7,8 corpus_regenerated=no'
+
+      - name: Validate all 15 with technical QA and independent dual ASR
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          node scripts/audio-openrouter-campaign.mjs --mode=validate
+
+      - name: Require exact publication gates
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
+          const articles = Object.entries(state.articles || {});
+          if (state.validationComplete !== true || articles.length !== 15) throw new Error('validation is not complete 15/15');
+          for (const [articleId,item] of articles) {
+            if (item.validation?.status !== 'validated') throw new Error(`not validated: ${articleId}`);
+            const fp = item.generation?.fingerprint;
+            const dir = path.join('audio-candidates',articleId,fp,'reports');
+            const asr = JSON.parse(fs.readFileSync(path.join(dir,'asr-adjudication.json'),'utf8'));
+            const qa = JSON.parse(fs.readFileSync(path.join(dir,'technical-qa.json'),'utf8'));
+            const sync = JSON.parse(fs.readFileSync(path.join(dir,'sync.json'),'utf8'));
+            const c = asr.consensus || {};
+            if (!asr.passed || c.substitutions !== 0 || c.deletions !== 0 || c.insertions !== 0 || c.unresolved !== 0) throw new Error(`ASR gate failed ${articleId}`);
+            if (!qa.passed || !sync.passed) throw new Error(`QA/sync failed ${articleId}`);
+            if (asr.fingerprint !== fp || qa.fingerprint !== fp || sync.fingerprint !== fp) throw new Error(`fingerprint bind failed ${articleId}`);
+            if (!asr.fullSha256 || asr.fullSha256 !== qa.fullSha256 || asr.fullSha256 !== sync.fullSha256) throw new Error(`digest bind failed ${articleId}`);
+          }
+          console.log('EXACT_PUBLICATION_GATES=PASS articles=15 ASR=0/0/0/0 QA=PASS SYNC=PASS');
+          NODE
+
+      - name: Publish validated candidates into PR tree
+        run: |
+          node scripts/audio-openrouter-campaign.mjs --mode=publish
+          test -f "${BAREEQ_AUDIO_PUBLISHED_MARKER}"
+          echo 'PUBLISH_TO_PR_TREE=PASS'
+
+      - name: Commit validated audio tree to PR branch
+        env:
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          git config user.name 'bareeq-audio'
+          git config user.email 'audio@bareeq.local'
+          git add -f public/audio docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json docs/audio/PUBLICATION-POLICY-20260901.json
+          git commit -m 'audio: publish validated Sadaltager corpus via OpenRouter'
+          git push origin "HEAD:${PR_BRANCH}"
+
+      - name: Save corrected validated checkpoint
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-openrouter-sadaltager-v1-final-lexical-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Upload corrected candidates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-coworker-final-lexical-${{ github.run_id }}
+          path: audio-candidates/
+          if-no-files-found: error
+          retention-days: 90
