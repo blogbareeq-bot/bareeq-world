@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-dual-asr-final-33658692086-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-dual-asr-final-33659325241-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -81,17 +81,17 @@ jobs:
           console.log('GENERATION_CHECKPOINT=BOUND articles=15');
           NODE
 
-      - name: Regenerate only coworker parts with confirmed shared lexical errors
+      - name: Regenerate only inflation parts with confirmed shared lexical errors
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_FORCE_TTS_PARTS: '2,4'
+          BAREEQ_FORCE_TTS_PARTS: '3,5'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"2":"Speak every written phrase exactly once. At «ما يعنينا هنا هو الخطوة التالية: ماذا يحدث للإنسان عندما يصبح هذا التنفيذ جزءًا من الفريق؟» do not repeat or restart any words. At «758 عامل معرفة» pronounce «عامل» exactly as written; do not change it to «عالم».","4":"At «وهذا قريب من سؤال: متى يستحق حكمنا السريع الثقة؟» pronounce «سؤال» exactly as written; do not add a possessive ياء and do not change it to «سؤالي»."}
+            {"3":"At «ولهذا يوازن صانعو السياسة بين مخاطر متعددة» pronounce the plural «صانعو» completely, including the final واو; do not change it to singular «صانع».","5":"At «وفهم الفرق بين ارتفاع الأسعار وارتفاع معدل التضخم وتباطؤه» pronounce «وتباطؤه» exactly as written, with the correct hamza and vowels; do not change it to «وتباطئه»."}
         run: |
-          node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
+          node scripts/audio-openrouter-targeted-regenerate.mjs --article=altadakhom-explained-simply
           node scripts/audio-openrouter-campaign.mjs --mode=generate
-          echo 'TARGETED_REGENERATION=PASS parts=2,4 corpus_regenerated=no'
+          echo 'TARGETED_REGENERATION=PASS article=altadakhom-explained-simply parts=3,5 corpus_regenerated=no'
 
       - name: Validate only remaining articles with independent OpenAI and Microsoft ASR
         env:
