@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33687747861-2
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33691968381-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -54,6 +54,7 @@ jobs:
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node --check scripts/audio-openrouter-campaign.mjs
           node --check scripts/audio-validate-consensus.mjs
+          node --check scripts/audio-touchscreen-targeted-regenerate.mjs
 
       - name: Verify direct Gemini credential
         env:
@@ -84,41 +85,44 @@ jobs:
           console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 prior_repairs=preserved');
           NODE
 
-      - name: Regenerate only inflation part 5 for confirmed shared lexical error
+      - name: Regenerate only touchscreen parts 1,2,5 for confirmed ASR mismatches
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"5":"At the phrase containing «وتباطؤه», pronounce exactly the written word «وتباطؤه» with hamza on واو, not «وتباطئه». Preserve every written lexical token exactly."}
+            {"1":"Pronounce the exact written words «إصبعنا» with initial إِ, not «أصبعنا», and «ملاءمة» exactly with hamza, not «ملائمة». Preserve every written lexical token exactly.","2":"Pronounce «تقنية» as the exact singular written word, not «تقنيات»; pronounce «اللمسة» with final ة, not «اللمس»; and pronounce «إنه» with initial إِ, not «أنه». Preserve every written lexical token exactly.","5":"Pronounce the exact written word «التجفيف», not «التشفير» or «التشفيف». Preserve every written lexical token exactly."}
         run: |
           set -euo pipefail
-          part=5
-          success=0
-          for transport in developer-interactions developer-generate-content; do
-            for attempt in 1 2 3; do
-              echo "TARGETED_TTS article=altadakhom-explained-simply part=${part} transport=${transport} attempt=${attempt}"
-              if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-openrouter-targeted-regenerate.mjs --article=altadakhom-explained-simply; then
-                success=1
-                break 2
-              fi
-              sleep $((attempt * 20))
+          for part in 1 2 5; do
+            success=0
+            for transport in developer-interactions developer-generate-content; do
+              for attempt in 1 2 3; do
+                echo "TARGETED_TTS article=how-touchscreens-work part=${part} transport=${transport} attempt=${attempt}"
+                if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-touchscreen-targeted-regenerate.mjs --article=how-touchscreens-work; then
+                  success=1
+                  break 2
+                fi
+                sleep $((attempt * 20))
+              done
             done
+            if [ "${success}" -ne 1 ]; then
+              echo "TARGETED_TTS_EXHAUSTED article=how-touchscreens-work part=${part}" >&2
+              exit 75
+            fi
           done
-          if [ "${success}" -ne 1 ]; then
-            echo "TARGETED_TTS_EXHAUSTED part=${part}" >&2
-            exit 75
-          fi
           node scripts/audio-openrouter-campaign.mjs --mode=generate
           node - <<'NODE'
           const fs = require('fs');
           const path = require('path');
-          const articleId = 'altadakhom-explained-simply';
+          const articleId = 'how-touchscreens-work';
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
           const fp = state.articles[articleId].generation.fingerprint;
           const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates',articleId,fp,'checkpoint.json'),'utf8'));
-          const rec = checkpoint.completedParts?.['4'];
-          if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error('targeted correction missing for part 5');
-          console.log('TARGETED_INFLATION_REGENERATION=PASS parts=5 model=gemini-3.1-flash-tts-preview voice=Sadaltager corpus_regenerated=no');
+          for (const index of [0,1,4]) {
+            const rec = checkpoint.completedParts?.[String(index)];
+            if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error(`targeted touchscreen correction missing for part ${index + 1}`);
+          }
+          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS parts=1,2,5 corpus_regenerated=no');
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
