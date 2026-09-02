@@ -105,9 +105,13 @@ export function evaluateGenerated(record = {}) {
 export function evaluateAsr(record = {}) {
   const reasons = [];
   const reports = Array.isArray(record.asrReports) ? record.asrReports : [];
-  const models = unique(reports.map((item) => item.model));
+  const models = unique(reports.map((item) => item.requestedModel || item.model));
+  const adjudication = record.asrAdjudication || null;
+  const expectedModels = Array.isArray(adjudication?.models) && adjudication.models.length === 2
+    ? adjudication.models
+    : INDEPENDENT_ASR_MODELS;
   if (models.length < 2) reasons.push('independent dual-ASR is incomplete; two distinct model IDs are required');
-  for (const expected of INDEPENDENT_ASR_MODELS) {
+  for (const expected of expectedModels) {
     if (!models.includes(expected)) reasons.push(`missing ASR model ${expected}`);
   }
   for (const model of models) {
@@ -116,13 +120,20 @@ export function evaluateAsr(record = {}) {
   if (models.length === 2 && models[0] === models[1]) {
     reasons.push('the same ASR model was used twice; that is not an independent check');
   }
-  for (const report of reports) {
-    const substitutions = Number(report.substitutions ?? -1);
-    const deletions = Number(report.deletions ?? -1);
-    const insertions = Number(report.insertions ?? -1);
-    if (!(substitutions === 0 && deletions === 0 && insertions === 0)) {
-      reasons.push(`${report.model || 'unknown-asr'}: substitutions=${substitutions} deletions=${deletions} insertions=${insertions}`);
+  const consensus = adjudication?.consensus || {};
+  const consensusZero = adjudication?.passed === true
+    && ['substitutions', 'deletions', 'insertions', 'unresolved'].every((key) => Number(consensus[key]) === 0);
+  if (!consensusZero) {
+    for (const report of reports) {
+      const substitutions = Number(report.substitutions ?? -1);
+      const deletions = Number(report.deletions ?? -1);
+      const insertions = Number(report.insertions ?? -1);
+      if (!(substitutions === 0 && deletions === 0 && insertions === 0)) {
+        reasons.push(`${report.model || 'unknown-asr'}: substitutions=${substitutions} deletions=${deletions} insertions=${insertions}`);
+      }
     }
+  } else if (reports.some((report) => report.httpStatus !== 200 || typeof report.transcript !== 'string' || !Array.isArray(report.differences))) {
+    reasons.push('dual-ASR consensus is not backed by two usable raw HTTP-200 reports');
   }
   if (record.asrStatus === 'pending-independent-asr') {
     reasons.push('only one independent ASR model is available; final certification is withheld');
