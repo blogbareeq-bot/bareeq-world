@@ -66,23 +66,26 @@ function correctionInput(part, correctionHint) {
     return { ...part, text };
   }
 
-  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 2) {
+  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 1) {
     return {
       ...part,
-      text: replaceExactlyOnce(
-        part.text,
-        'إذن السؤال الأفضل',
-        'إِذَنْ، السؤال الأفضل',
-        'إذن boundary in coworker part 3',
-      ),
+      text: replaceExactlyOnce(part.text, 'تتوافر', 'تَتَوَافَرُ', 'تتوافر token in coworker part 2'),
     };
   }
 
+  if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 2) {
+    let text = part.text;
+    text = replaceExactlyOnce(text, 'إذن السؤال الأفضل', 'إِذَنْ، السؤال الأفضل', 'إذن boundary in coworker part 3');
+    text = replaceExactlyOnce(text, 'الإحساس', 'الإِحْسَاسُ', 'الإحساس token in coworker part 3');
+    text = replaceExactlyOnce(text, 'بالأنظمة', 'بِالْأَنْظِمَةِ', 'بالأنظمة token in coworker part 3');
+    return { ...part, text };
+  }
+
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 3) {
-    return {
-      ...part,
-      text: replaceExactlyOnce(part.text, 'موزعًا', 'مُوَزَّعًا', 'موزعًا token in coworker part 4'),
-    };
+    let text = part.text;
+    text = replaceExactlyOnce(text, 'موزعًا', 'مُوَزَّعًا', 'موزعًا token in coworker part 4');
+    text = replaceExactlyOnce(text, 'مطورون', 'مُطَوِّرُونَ', 'مطورون token in coworker part 4');
+    return { ...part, text };
   }
 
   if (articleId === 'ai-as-coworker-future-of-human-work' && part.partIndex === 4) {
