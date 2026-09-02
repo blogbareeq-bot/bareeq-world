@@ -40,17 +40,6 @@ function replaceExactlyOnce(text, needle, replacement, label) {
   return text.replace(needle, replacement);
 }
 
-function replaceArabicTokenIgnoringDiacritics(text, token, replacement, label) {
-  const marks = '[\\u064B-\\u065F\\u0670]*';
-  const escaped = [...token].map((char) => char.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')).join(marks);
-  const pattern = new RegExp(`${escaped}${marks}`, 'g');
-  const occurrences = [...text.matchAll(pattern)].length;
-  if (occurrences !== 1) {
-    throw new Error(`Targeted correction expected exactly one ${label}; found ${occurrences}.`);
-  }
-  return text.replace(pattern, replacement);
-}
-
 function correctionInput(part, correctionHint) {
   const hint = String(correctionHint || '').trim();
   if (!hint) return part;
@@ -88,7 +77,9 @@ function correctionInput(part, correctionHint) {
     let text = part.text;
     text = replaceExactlyOnce(text, 'إذن السؤال الأفضل', 'إِذَنْ، السؤال الأفضل', 'إذن boundary in coworker part 3');
     text = replaceExactlyOnce(text, 'الإحساس', 'الإِحْسَاسُ', 'الإحساس token in coworker part 3');
-    text = replaceArabicTokenIgnoringDiacritics(text, 'بالأنظمة', 'بِالْأَنْظِمَةِ', 'بالأنظمة token in coworker part 3');
+    // The segment can carry pre-existing internal vocalization here. Keep its
+    // reviewed spelling intact and pass the bound pronunciation note through
+    // the Gemini prompt rather than risking a lexical rewrite.
     return { ...part, text };
   }
 
