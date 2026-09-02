@@ -21,6 +21,7 @@ jobs:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
       BAREEQ_CACHE_PREFIX: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-33595510975-2-final-recovery
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -72,16 +73,15 @@ jobs:
           test -n "${GEMINI_API_KEY}"
           echo 'ASR_CREDENTIAL=present'
 
-      - name: Restore latest Sadaltager checkpoint
+      - name: Restore corrected Sadaltager checkpoint
         if: steps.campaign.outputs.published != 'yes'
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-final-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: |
-            ${{ env.BAREEQ_CACHE_PREFIX }}
+          key: ${{ env.BAREEQ_CORRECTED_CACHE_KEY }}
+          fail-on-cache-miss: true
 
-      - name: Require latest coworker ASR evidence
+      - name: Require corrected checkpoint and prior ASR evidence
         if: steps.campaign.outputs.published != 'yes'
         run: |
           node - <<'NODE'
@@ -96,16 +96,16 @@ jobs:
           const articleId = 'ai-as-coworker-future-of-human-work';
           const fp = state.articles[articleId].generation.fingerprint;
           const reportPath = path.join('audio-candidates', articleId, fp, 'reports', 'asr-adjudication.json');
-          if (!fs.existsSync(reportPath)) throw new Error('missing dual-ASR adjudication evidence');
+          if (!fs.existsSync(reportPath)) throw new Error('missing prior dual-ASR adjudication evidence');
           const report = JSON.parse(fs.readFileSync(reportPath,'utf8'));
           const c = report.consensus || {};
           if (c.substitutions !== 1 || c.deletions !== 0 || c.insertions !== 0 || c.unresolved !== 5) {
-            throw new Error(`unexpected coworker ASR state S=${c.substitutions} D=${c.deletions} I=${c.insertions} U=${c.unresolved}`);
+            throw new Error(`unexpected prior coworker ASR state S=${c.substitutions} D=${c.deletions} I=${c.insertions} U=${c.unresolved}`);
           }
-          console.log('COWORKER_LATEST_ASR_EVIDENCE=BOUND S=1 D=0 I=0 U=5');
+          console.log('CORRECTED_CHECKPOINT=BOUND generation=15/15 targetedParts=4,8; priorASR=S1/D0/I0/U5');
           NODE
 
-      - name: Preserve current 15/15 audio without TTS calls
+      - name: Preserve corrected 15/15 audio without TTS calls
         if: steps.campaign.outputs.published != 'yes'
         run: |
           node scripts/audio-openrouter-campaign.mjs --mode=generate
