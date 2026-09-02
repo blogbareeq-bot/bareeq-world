@@ -9,6 +9,7 @@ assert.equal(representationEquivalent('3', 'ثالثا'), true);
 assert.equal(representationEquivalent('شاتًا', 'شات'), true);
 assert.equal(representationEquivalent('أنثروبك', 'أنثروبيك'), true);
 assert.equal(representationEquivalent('أنثروبك', 'Anthropic'), true);
+assert.equal(representationEquivalent('كلود', 'cloud'), true);
 assert.equal(representationEquivalent('كتابًا', 'كتاب'), false);
 assert.equal(representationEquivalent('تصعد', 'تصاعد'), false);
 assert.equal(representationEquivalent('يتأثر', 'يتاثر'), false);
@@ -155,5 +156,20 @@ const namedEntityOrthography = adjudicateDualAsr({ expectedText: 'أنثروبك
 assert.equal(namedEntityOrthography.passed, true);
 assert.deepEqual(namedEntityOrthography.consensus, { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 });
 assert.equal(namedEntityOrthography.representationOnly.length, 1);
+
+const claudeEntityReports = INDEPENDENT_ASR_MODELS.map((model, index) => ({
+  model,
+  requestedModel: model,
+  substitutions: 1,
+  deletions: 0,
+  insertions: 0,
+  status: 'failed',
+  differences: [
+    { type: 'substitution', expected: 'كلود', actual: index === 0 ? 'Claude' : 'cloud', expectedIndex: 0, actualIndex: 0 },
+  ],
+}));
+const claudeEntityOrthography = adjudicateDualAsr({ expectedText: 'كلود', reports: claudeEntityReports });
+assert.equal(claudeEntityOrthography.passed, true);
+assert.deepEqual(claudeEntityOrthography.consensus, { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 });
 
 console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation and approved tanween orthography stay representation-only; human listening stays mandatory.');

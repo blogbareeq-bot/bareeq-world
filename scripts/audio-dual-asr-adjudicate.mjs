@@ -50,7 +50,7 @@ const APPROVED_ORTHOGRAPHIC_EQUIVALENTS = new Map([
   // the two ASR models. These pairs preserve the same foreign proper name and
   // are deliberately whitelisted one-by-one; no fuzzy/phonetic matching is used.
   ['أنثروبك', new Set(['أنثروبيك', 'anthropic'])],
-  ['كلود', new Set(['كلاود', 'claude'])],
+  ['كلود', new Set(['كلاود', 'claude', 'cloud'])],
   ['بروكتر', new Set(['بروكتور', 'procter'])],
   ['غامبل', new Set(['جامبل', 'gamble'])],
 ]);
