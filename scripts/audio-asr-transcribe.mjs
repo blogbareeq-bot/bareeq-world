@@ -39,10 +39,11 @@ export function assertAsrModel(model) {
   if (FORBIDDEN_ASR_MODELS.includes(model)) {
     throw Object.assign(new Error(`${model} is not a valid independent ASR model id and must not be used.`), { exitCode: EXIT_USAGE });
   }
-  if (!INDEPENDENT_ASR_MODELS.includes(model)) {
-    throw Object.assign(new Error(`ASR model must be one of ${INDEPENDENT_ASR_MODELS.join(', ')}.`), { exitCode: EXIT_USAGE });
+  const transport = ASR_MODEL_TRANSPORT[model];
+  if (!transport) {
+    throw Object.assign(new Error(`Unsupported ASR model ${model}. Production pair is ${INDEPENDENT_ASR_MODELS.join(', ')}.`), { exitCode: EXIT_USAGE });
   }
-  return ASR_MODEL_TRANSPORT[model];
+  return transport;
 }
 
 export function extractTranscript(payload) {
