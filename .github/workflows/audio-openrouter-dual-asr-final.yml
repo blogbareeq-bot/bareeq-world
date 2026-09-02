@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33674647902-2
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33687747861-2
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -84,15 +84,15 @@ jobs:
           console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 prior_repairs=preserved');
           NODE
 
-      - name: Regenerate only inflation part 3 for confirmed shared lexical error
+      - name: Regenerate only inflation part 5 for confirmed shared lexical error
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"3":"At the phrase containing «متعطلا», pronounce exactly the written word «متعطلا», including the initial ت after م. Do not change it to «معطلا» or any other form. Preserve every written lexical token exactly."}
+            {"5":"At the phrase containing «وتباطؤه», pronounce exactly the written word «وتباطؤه» with hamza on واو, not «وتباطئه». Preserve every written lexical token exactly."}
         run: |
           set -euo pipefail
-          part=3
+          part=5
           success=0
           for transport in developer-interactions developer-generate-content; do
             for attempt in 1 2 3; do
@@ -116,9 +116,9 @@ jobs:
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
           const fp = state.articles[articleId].generation.fingerprint;
           const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates',articleId,fp,'checkpoint.json'),'utf8'));
-          const rec = checkpoint.completedParts?.['2'];
-          if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error('targeted correction missing for part 3');
-          console.log('TARGETED_INFLATION_REGENERATION=PASS parts=3 model=gemini-3.1-flash-tts-preview voice=Sadaltager corpus_regenerated=no');
+          const rec = checkpoint.completedParts?.['4'];
+          if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error('targeted correction missing for part 5');
+          console.log('TARGETED_INFLATION_REGENERATION=PASS parts=5 model=gemini-3.1-flash-tts-preview voice=Sadaltager corpus_regenerated=no');
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
