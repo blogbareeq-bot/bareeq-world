@@ -48,9 +48,9 @@ jobs:
           const fp = state.articles[articleId].generation.fingerprint;
           const dir = path.join('audio-candidates', articleId, fp);
           const files = await fs.readdir(dir);
-          const partName = files.filter((x) => /^part-\d+-.+\.clean\.mp3$/.test(x)).sort()[0];
-          if (!partName) throw new Error('no clean part found');
+          const partName = files.filter((x) => x.endsWith('.mp3') && x !== 'full.mp3').sort()[0] || 'full.mp3';
           const bytes = await fs.readFile(path.join(dir, partName));
+          console.log(`ASR_PROBE_AUDIO=${partName} bytes=${bytes.length}`);
           const uploaded = await uploadAudioFile({ apiKey, bytes, displayName: `bareeq-asr-probe-${Date.now()}.mp3` });
           const models = ['gemini-3.5-flash','gemini-3.5-flash-lite','gemini-2.5-flash'];
           try {
