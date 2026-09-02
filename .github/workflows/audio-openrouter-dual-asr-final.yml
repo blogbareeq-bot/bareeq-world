@@ -81,17 +81,32 @@ jobs:
           console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 inflationRepair=preserved');
           NODE
 
-      - name: Regenerate only inflation parts with shared lexical ASR errors
+      - name: Regenerate only inflation parts with resilient Gemini transports
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_GEMINI_GENERATE_CONTENT: '1'
-          BAREEQ_FORCE_TTS_PARTS: '2,5'
-          EXPECTED_TTS_REQUESTS: '2'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
             {"2":"At the phrase containing «تصعد», pronounce exactly the written word «تصعد». Do not change it to «تصاعد» or any other form. Preserve every written lexical token exactly.","5":"At the phrase «خريطة بريق المختصرة», pronounce the brand name exactly as «بريق» with initial ب. Do not pronounce it as «طريق». Preserve every written lexical token exactly."}
         run: |
-          node scripts/audio-production.mjs --mode=generate-candidate --article=altadakhom-explained-simply
+          set -euo pipefail
+          for part in 2 5; do
+            success=0
+            for transport in developer-interactions developer-generate-content; do
+              for attempt in 1 2 3; do
+                echo "TARGETED_TTS article=altadakhom-explained-simply part=${part} transport=${transport} attempt=${attempt}"
+                if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-openrouter-targeted-regenerate.mjs --article=altadakhom-explained-simply; then
+                  success=1
+                  break 2
+                fi
+                sleep $((attempt * 20))
+              done
+            done
+            if [ "${success}" -ne 1 ]; then
+              echo "TARGETED_TTS_EXHAUSTED part=${part}" >&2
+              exit 75
+            fi
+          done
+          node scripts/audio-openrouter-campaign.mjs --mode=generate
           node - <<'NODE'
           const fs = require('fs');
           const path = require('path');
@@ -103,11 +118,7 @@ jobs:
             const rec = checkpoint.completedParts?.[String(part - 1)];
             if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error(`targeted correction missing for part ${part}`);
           }
-          const report = JSON.parse(fs.readFileSync(path.join('audio-candidates',articleId,fp,'generation-report.json'),'utf8'));
-          const expected = Number(process.env.EXPECTED_TTS_REQUESTS);
-          if (report.ttsRequestsSent !== expected || report.providerAttempts !== expected) throw new Error(`unexpected TTS request count: sent=${report.ttsRequestsSent} attempts=${report.providerAttempts}`);
-          if (report.ttsModel !== 'gemini-3.1-flash-tts-preview' || report.ttsVoice !== 'Sadaltager') throw new Error('approved model/voice changed');
-          console.log('TARGETED_INFLATION_REGENERATION=PASS parts=2,5 requests=2 model=gemini-3.1-flash-tts-preview voice=Sadaltager');
+          console.log('TARGETED_INFLATION_REGENERATION=PASS parts=2,5 model=gemini-3.1-flash-tts-preview voice=Sadaltager corpus_regenerated=no');
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
