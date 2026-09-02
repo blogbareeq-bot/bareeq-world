@@ -13,14 +13,13 @@ export const PRODUCTION_VOICE = 'Sadaltager';
 export const PRODUCTION_VOICE_ID = 'sadaltager';
 export const GENERATOR_VERSION = 10;
 
-// gemini-3.6-flash exhausted its daily provider quota during the final
-// validation pass. gemini-3.5-flash-lite and gemini-3.5-flash are both
-// live-supported Arabic audio-capable models with separate model identities.
-// Use this pair for the remaining exact dual-ASR pass without weakening the
-// independent-two-model publication gate.
+// gemini-3.6-flash exhausted its daily provider quota and gemini-3.5-flash
+// remained unavailable after bounded transient retries. Use the specialized
+// transcription model with flash-lite for the remaining final pass; they are
+// distinct model identifiers and keep the two-model exact-consensus gate.
 export const INDEPENDENT_ASR_MODELS = Object.freeze([
   'gemini-3.5-flash-lite',
-  'gemini-3.5-flash',
+  'gemini-3.5-transcribe',
 ]);
 
 export const FORBIDDEN_ASR_MODELS = Object.freeze([
@@ -28,13 +27,13 @@ export const FORBIDDEN_ASR_MODELS = Object.freeze([
 ]);
 
 export const ASR_MODEL_TRANSPORT = Object.freeze({
-  // Historical/unit-contract compatibility only; not in the production pair.
   'gemini-3.5-transcribe': {
     api: 'interactions',
     fileUpload: true,
     input: 'audio-uri',
     verbatim: true,
   },
+  // Kept as a supported non-production transport for diagnostics/resume data.
   'gemini-3.5-flash': {
     api: 'interactions',
     fileUpload: true,
