@@ -79,7 +79,7 @@ jobs:
           restore-keys: |
             bareeq-audio-openrouter-sadaltager-v1-fd324708b4e4f0da2119e4490945aa9a98700d6e7b71e140c9d84a87716959da-
 
-      - name: Require complete 15/15 checkpoint and failed coworker ASR evidence
+      - name: Bind current failed coworker ASR evidence
         if: steps.campaign.outputs.published != 'yes'
         run: |
           node - <<'NODE'
@@ -96,33 +96,41 @@ jobs:
           const reportPath = path.join('audio-candidates', articleId, fp, 'reports', 'asr-adjudication.json');
           if (!fs.existsSync(reportPath)) throw new Error('missing failed dual-ASR adjudication evidence');
           const report = JSON.parse(fs.readFileSync(reportPath,'utf8'));
+          const c = report.consensus || {};
+          if (c.substitutions !== 4 || c.deletions !== 1 || c.insertions !== 0 || c.unresolved !== 2) {
+            throw new Error(`unexpected coworker ASR state S=${c.substitutions} D=${c.deletions} I=${c.insertions} U=${c.unresolved}`);
+          }
           const expected = [
-            ['سير','سلسلة'],
-            ['أنثروبك','أنثروبيك'],
-            ['كلود','كلاود'],
-            ['776','777'],
-            ['دونه','دونها'],
+            { type: 'substitution', expected: 'أنثروبك', actual: 'أنثروبيك' },
+            { type: 'substitution', expected: 'كلود', actual: 'كلاود' },
+            { type: 'deletion', expected: '5', actual: null },
+            { type: 'substitution', expected: '172', actual: '5172' },
+            { type: 'substitution', expected: 'استخدموا', actual: 'استخدم' },
           ];
           const diffs = report.substantiveDifferences || [];
-          for (const [want, got] of expected) {
-            if (!diffs.some(d => d.type === 'substitution' && d.expected === want && d.actual === got)) {
-              throw new Error(`expected confirmed ASR error not found: ${want}->${got}`);
+          for (const wanted of expected) {
+            if (!diffs.some((d) => d.type === wanted.type && d.expected === wanted.expected && d.actual === wanted.actual)) {
+              throw new Error(`expected confirmed ASR evidence not found: ${wanted.type} ${wanted.expected}->${wanted.actual}`);
             }
           }
-          console.log('COWORKER_FAILED_ASR_EVIDENCE=BOUND errors=5 generation=15/15');
+          const unresolved = report.unresolved || [];
+          if (unresolved.length !== 2 || unresolved.some((item) => item.expected !== 'موزعا')) {
+            throw new Error('expected the two remaining unresolved موزعا readings');
+          }
+          console.log('COWORKER_FAILED_ASR_EVIDENCE=BOUND S=4 D=1 I=0 U=2 generation=15/15');
           NODE
 
-      - name: Regenerate only coworker parts 1 and 6
+      - name: Regenerate only confirmed pronunciation parts 1 4 5 8
         if: steps.campaign.outputs.published != 'yes'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_FORCE_TTS_PARTS: '1,6'
+          BAREEQ_FORCE_TTS_PARTS: '1,4,5,8'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"Preserve every written token exactly. In «جزءا مستمرا من سير العمل» pronounce «سير» exactly as written and do not replace it with «سلسلة». Pronounce «أنثروبك» exactly as written, without an extra ي; do not say «أنثروبيك». Pronounce «كلود» exactly as written, without an extra ا; do not say «كلاود».","6":"Preserve every written token exactly. In «تجربة ميدانية على 776 محترفا» pronounce the number 776 exactly as written and do not change it to 777. In «مع الذكاء الاصطناعي أو من دونه» pronounce «دونه» exactly as written and do not change it to «دونها»."}
+            {"1":"Keep the reviewed Arabic letters exact; strengthen Anthropic and Claude pronunciation without lexical substitution.","4":"Pronounce «موزعًا» fully and clearly as written.","5":"Pronounce the plural verb «استخدموا» fully, including its final واو الجماعة, exactly as written.","8":"Pronounce «موزعًا» fully and clearly as written."}
         run: |
           node scripts/audio-openrouter-targeted-regenerate.mjs --article=ai-as-coworker-future-of-human-work
-          echo 'TARGETED_REGENERATION=PASS parts=1,6 model=gemini-3.1-flash-tts-preview voice=Sadaltager gateway=OpenRouter'
+          echo 'TARGETED_REGENERATION=PASS parts=1,4,5,8 model=gemini-3.1-flash-tts-preview voice=Sadaltager gateway=OpenRouter'
 
       - name: Verify generation remains 15/15 without extra TTS calls
         if: steps.campaign.outputs.published != 'yes'
@@ -153,12 +161,12 @@ jobs:
             const asr = JSON.parse(fs.readFileSync(path.join(base,'asr-adjudication.json'),'utf8'));
             const tech = JSON.parse(fs.readFileSync(path.join(base,'technical-qa.json'),'utf8'));
             const sync = JSON.parse(fs.readFileSync(path.join(base,'sync.json'),'utf8'));
-            if (!asr.passed || asr.consensus?.substitutions !== 0 || asr.consensus?.deletions !== 0 || asr.consensus?.insertions !== 0) throw new Error(`ASR gate failed ${articleId}`);
+            if (!asr.passed || asr.consensus?.substitutions !== 0 || asr.consensus?.deletions !== 0 || asr.consensus?.insertions !== 0 || asr.consensus?.unresolved !== 0) throw new Error(`ASR gate failed ${articleId}`);
             if (!tech.passed || !sync.passed) throw new Error(`technical/sync gate failed ${articleId}`);
             if (asr.fingerprint !== fp || tech.fingerprint !== fp || sync.fingerprint !== fp) throw new Error(`fingerprint bind failed ${articleId}`);
             if (!asr.fullSha256 || asr.fullSha256 !== tech.fullSha256 || asr.fullSha256 !== sync.fullSha256) throw new Error(`digest bind failed ${articleId}`);
           }
-          console.log('EXACT_PUBLICATION_GATES=PASS articles=15 dualASR=0/0/0 technical=PASS sync=PASS binds=PASS');
+          console.log('EXACT_PUBLICATION_GATES=PASS articles=15 dualASR=0/0/0/0 technical=PASS sync=PASS binds=PASS');
           NODE
 
       - name: Publish validated candidates into PR tree
