@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, rm, symlink, readFile, realpath } from 'node
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { EXIT_HARD, EXIT_OK, QUOTA_SPLIT, sha256, liveAudioDir, GEMINI_TTS_CONTRACT } from './audio-constants.mjs';
+import { EXIT_HARD, EXIT_OK, QUOTA_SPLIT, sha256, liveAudioDir, GEMINI_TTS_CONTRACT, INDEPENDENT_ASR_MODELS } from './audio-constants.mjs';
 import { persistPublishedAudio, publishApprovedCandidate } from './audio-publish.mjs';
 import { confirmRemoteSha, resolvePublishRef, verifyPublishedManifest } from './audio-publish-verify.mjs';
 import { bindObservedCandidate } from './audio-inventory.mjs';
@@ -297,8 +297,8 @@ try {
   }
   assert.equal(startFailed, true);
   assert.equal(JSON.parse(await readFile(path.join(reportsDir, 'files-api.json'), 'utf8')).stage, 'start');
-  assert.equal(JSON.parse(await readFile(path.join(reportsDir, 'asr-gemini-3.5-transcribe.json'), 'utf8')).status, 'failed');
-  assert.equal(JSON.parse(await readFile(path.join(reportsDir, 'asr-gemini-3.6-flash.json'), 'utf8')).status, 'failed');
+  assert.equal(JSON.parse(await readFile(path.join(reportsDir, `asr-${INDEPENDENT_ASR_MODELS[0]}.json`), 'utf8')).status, 'failed');
+  assert.equal(JSON.parse(await readFile(path.join(reportsDir, `asr-${INDEPENDENT_ASR_MODELS[1]}.json`), 'utf8')).status, 'failed');
 
   const bothDir = path.join(tmp, 'asr-both');
   await mkdir(bothDir, { recursive: true });
@@ -324,7 +324,7 @@ try {
         if (String(url) === GEMINI_INTERACTIONS || String(url).includes('/interactions')) {
           const payload = JSON.parse(options.body);
           models.push(payload.model);
-          if (payload.model === 'gemini-3.5-transcribe') {
+          if (payload.model === INDEPENDENT_ASR_MODELS[0]) {
             return { ok: false, status: 500, text: async () => 'first-down' };
           }
           return { ok: true, status: 200, text: async () => JSON.stringify({ model: payload.model, output_text: 'مرحبا' }) };
@@ -337,9 +337,9 @@ try {
     assert.ok(error.dual.asrReports.length === 2);
   }
   assert.equal(firstFailedSecondRan, true);
-  assert.deepEqual(models, ['gemini-3.5-transcribe', 'gemini-3.6-flash']);
-  assert.equal(JSON.parse(await readFile(path.join(bothDir, 'asr-gemini-3.5-transcribe.json'), 'utf8')).status, 'failed');
-  assert.equal(JSON.parse(await readFile(path.join(bothDir, 'asr-gemini-3.6-flash.json'), 'utf8')).status, 'passed');
+  assert.deepEqual(models, [...INDEPENDENT_ASR_MODELS]);
+  assert.equal(JSON.parse(await readFile(path.join(bothDir, `asr-${INDEPENDENT_ASR_MODELS[0]}.json`), 'utf8')).status, 'failed');
+  assert.equal(JSON.parse(await readFile(path.join(bothDir, `asr-${INDEPENDENT_ASR_MODELS[1]}.json`), 'utf8')).status, 'passed');
 
   let uriInvented = false;
   try {
