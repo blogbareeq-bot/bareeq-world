@@ -1,0 +1,174 @@
+name: Bareeq quota probe
+
+# Diagnostic-only. Measures the real provider quota shape that blocked Run #44:
+# a short TTS request, two production-sized TTS requests (~2450 chars, the real
+# touchscreen part size), and one request per independent ASR model. No
+# candidate audio is created, modified or published.
+on:
+  push:
+    branches:
+      - arena/01a067c5-bareeq-world
+    paths:
+      - '.github/workflows/audio-quota-probe.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bareeq-quota-probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: arena/01a067c5-bareeq-world
+
+      - name: Probe providers
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          set -uo pipefail
+          node - <<'NODE' | tee quota-probe.txt
+          import { writeFileSync, mkdirSync } from 'node:fs';
+          const MODEL = 'gemini-3.1-flash-tts-preview';
+          const VOICE = 'Sadaltager';
+          const ASR_MODELS = ['gemini-3.5-flash-lite', 'gemini-3.5-transcribe'];
+          const out = { generatedAt: new Date().toISOString(), probes: [] };
+          const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+          const geminiKey = process.env.GEMINI_API_KEY || '';
+          const orKey = process.env.OPENROUTER_API_KEY || '';
+
+          // Build a production-sized Arabic transcript from the real article so the
+          // probe exercises the same token volume as an actual touchscreen part.
+          let longText = '';
+          try {
+            const S = await import('./scripts/audio-split.mjs');
+            const a = await S.loadSpokenArticle('how-touchscreens-work', process.cwd());
+            const plan = S.splitSpokenArticle(a);
+            longText = plan.parts.map((p) => p.text).join(' ').slice(0, 2450);
+          } catch (error) {
+            longText = 'اختبار نص طويل. '.repeat(140);
+          }
+          out.longTextChars = longText.length;
+          out.longTextBytes = Buffer.byteLength(longText, 'utf8');
+
+          async function record(name, extra, fn) {
+            const t0 = Date.now();
+            let entry = { name, at: new Date().toISOString(), ...extra };
+            try {
+              const r = await fn();
+              entry = { ...entry, ...r };
+            } catch (error) {
+              entry = { ...entry, ok: false, error: String(error && error.message || error).slice(0, 400) };
+            }
+            entry.ms = Date.now() - t0;
+            out.probes.push(entry);
+            console.log(JSON.stringify(entry));
+          }
+
+          const gemTts = async (transport, text) => {
+            const isGc = transport === 'developer-generate-content';
+            const url = isGc
+              ? `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
+              : 'https://generativelanguage.googleapis.com/v1beta/interactions';
+            const headers = isGc
+              ? { 'x-goog-api-key': geminiKey, 'Content-Type': 'application/json', Accept: 'application/json' }
+              : { 'x-goog-api-key': geminiKey, 'Api-Revision': '2026-05-20', 'Content-Type': 'application/json', Accept: 'application/json' };
+            const body = isGc
+              ? { contents: [{ role: 'user', parts: [{ text }] }], generationConfig: { responseModalities: ['AUDIO'], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: VOICE } } } } }
+              : { model: MODEL, input: text, response_format: { type: 'audio' }, generation_config: { speech_config: [{ voice: VOICE }] } };
+            const r = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+            const raw = await r.text();
+            let retryIn = null;
+            const m = raw.match(/retry in ([0-9.]+)s/);
+            if (m) retryIn = Number(m[1]);
+            let limit = null;
+            const lm = raw.match(/limit: (\d+)/);
+            if (lm) limit = Number(lm[1]);
+            return { ok: r.ok, httpStatus: r.status, responseBytes: raw.length, quotaRetryInSeconds: retryIn, quotaLimit: limit, body: r.ok ? undefined : raw.slice(0, 420) };
+          };
+
+          const gemText = async (model) => {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+              method: 'POST',
+              headers: { 'x-goog-api-key': geminiKey, 'Content-Type': 'application/json', Accept: 'application/json' },
+              body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'قل: تم.' }] }] }),
+            });
+            const raw = await r.text();
+            let retryIn = null; const m = raw.match(/retry in ([0-9.]+)s/); if (m) retryIn = Number(m[1]);
+            let limit = null; const lm = raw.match(/limit: (\d+)/); if (lm) limit = Number(lm[1]);
+            return { ok: r.ok, httpStatus: r.status, responseBytes: raw.length, quotaRetryInSeconds: retryIn, quotaLimit: limit, body: r.ok ? undefined : raw.slice(0, 420) };
+          };
+
+          await record('openrouter-credits', {}, async () => {
+            const r = await fetch('https://openrouter.ai/api/v1/credits', { headers: { Authorization: `Bearer ${orKey}` } });
+            const raw = await r.text();
+            let balance = null;
+            try { const j = JSON.parse(raw); const d = j.data || j; balance = Number(d.total_credits) - Number(d.total_usage); } catch {}
+            return { ok: r.ok, httpStatus: r.status, balanceUsd: Number.isFinite(balance) ? balance : null, body: raw.slice(0, 300) };
+          });
+
+          await record('openrouter-speech-production-size', { chars: longText.length }, async () => {
+            const r = await fetch('https://openrouter.ai/api/v1/audio/speech', {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${orKey}`, 'Content-Type': 'application/json', Accept: 'audio/pcm', 'HTTP-Referer': 'https://bareeqworld.com', 'X-Title': 'Bareeq' },
+              body: JSON.stringify({ model: `google/${MODEL}`, input: longText, voice: VOICE, response_format: 'pcm' }),
+            });
+            const ct = String(r.headers.get('content-type') || '');
+            if (!r.ok) return { ok: false, httpStatus: r.status, contentType: ct, body: (await r.text()).slice(0, 420) };
+            const buf = Buffer.from(await r.arrayBuffer());
+            return { ok: true, httpStatus: r.status, contentType: ct, pcmBytes: buf.length };
+          });
+
+          await sleep(5000);
+          await record('gemini-tts-short-interactions', { chars: 18 }, () => gemTts('developer-interactions', 'اختبار نقل قصير.'));
+          await sleep(20000);
+          await record('gemini-tts-production-interactions-1', { chars: longText.length }, () => gemTts('developer-interactions', longText));
+          await sleep(20000);
+          await record('gemini-tts-production-interactions-2', { chars: longText.length }, () => gemTts('developer-interactions', longText));
+          await sleep(20000);
+          await record('gemini-tts-production-generate-content', { chars: longText.length }, () => gemTts('developer-generate-content', longText));
+
+          for (const model of ASR_MODELS) {
+            await sleep(10000);
+            await record(`gemini-asr-model-${model}`, {}, () => gemText(model));
+          }
+
+          const ok = out.probes.filter((p) => p.ok).length;
+          out.summary = {
+            total: out.probes.length,
+            ok,
+            failed: out.probes.length - ok,
+            http429: out.probes.filter((p) => p.httpStatus === 429).length,
+            http402: out.probes.filter((p) => p.httpStatus === 402).length,
+            geminiProductionTtsOk: out.probes.filter((p) => /gemini-tts-production/.test(p.name) && p.ok).length,
+          };
+          console.log('SUMMARY ' + JSON.stringify(out.summary));
+          mkdirSync('docs/audio/diagnostics', { recursive: true });
+          writeFileSync('docs/audio/diagnostics/QUOTA-PROBE.json', JSON.stringify(out, null, 2));
+          NODE
+
+      - name: Show summary
+        run: |
+          echo "----- quota-probe.json -----"
+          cat docs/audio/diagnostics/QUOTA-PROBE.json
+
+      - name: Commit probe evidence
+        run: |
+          set -euo pipefail
+          git config user.name 'bareeq-audio'
+          git config user.email 'audio@bareeq.local'
+          git add docs/audio/diagnostics/QUOTA-PROBE.json
+          if git diff --cached --quiet; then
+            echo 'QUOTA_PROBE_UNCHANGED=nothing-to-commit'
+          else
+            git commit -m 'diag: record provider quota shape for gemini tts and asr models [skip ci]'
+            git push origin HEAD:arena/01a067c5-bareeq-world
+            echo 'QUOTA_PROBE_COMMITTED=pushed'
+          fi
