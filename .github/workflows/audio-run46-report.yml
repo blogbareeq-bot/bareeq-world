@@ -1,0 +1,39 @@
+name: Inspect Bareeq run 46 checkpoint
+
+on:
+  push:
+    branches:
+      - diagnostics/audio-run46-report
+    paths:
+      - '.github/workflows/audio-run46-report.yml'
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Download preserved run 46 checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-final-validation-33792241771
+          path: artifact
+          repository: blogbareeq-bot/bareeq-world
+          run-id: '33792241771'
+          github-token: ${{ github.token }}
+
+      - name: Print touchscreen validation evidence only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -d '' files < <(find artifact -type f -path '*how-touchscreens-work*' -name '*.json' -size -2M -print0)
+          printf 'TOUCHSCREEN_JSON_FILES=%s\n' "${#files[@]}"
+          for file in "${files[@]}"; do
+            if rg -q 'substitutions|deletions|insertions|unresolved|validation|transcript|expected|actual' "$file"; then
+              printf 'FILE=%s\n' "$file"
+              jq . "$file"
+            fi
+          done
