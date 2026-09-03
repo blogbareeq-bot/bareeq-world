@@ -22,9 +22,9 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      # Run 30 is the newest durable checkpoint. It contains all successful
-      # generation repairs and the fresh dual-ASR evidence used below.
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33719088935-1
+      # Run 31 attempt 2 is the newest durable checkpoint. It preserves the
+      # freshly repaired parts 1, 2, 3; resume with only parts 4, 5, 6.
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33721372448-2
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -98,10 +98,9 @@ jobs:
             {"1":"Read the reviewed Arabic transcript verbatim. Say «الشَّاشَة» singular, never الشاشات. Say «كَثِيرًا» with its final an sound, never كثير. Say «مَلَاءَمَة لِلْمَس» as two clearly separated words; pronounce مَلَاءَمَة with hamza after the long alif and never ملائمة, and pronounce لِلْمَس without an extra lam. Preserve every written token and ending.","2":"Read the reviewed Arabic transcript verbatim. Say the display abbreviations as the separately written Arabic words «أُولِيد» and «إِل سِي دِي», never as English letters. Pronounce «اللَّمْسَة» with the audible final ta marbuta, never اللمس. Pronounce «إِنَّهُ» with initial kasra, never أَنَّهُ. Preserve every written token.","3":"Read the reviewed Arabic transcript verbatim. Pronounce «اللَّمْسَة» with audible final ta marbuta, never اللمس. Pronounce the coordinates as «إِكْس وَوَاي» with both Arabic words explicit. Preserve every written token.","4":"Read the reviewed Arabic transcript verbatim. Pronounce «وَحْدَهُ» with masculine final hu, never وحدها. Preserve every written token and ending.","5":"Read the reviewed Arabic transcript verbatim. Pronounce «يُشَوِّشُهَا» slowly and exactly, with the doubled shin and final ha, never يوشوها or يوشوشها. Preserve every written token.","6":"Read the reviewed Arabic transcript verbatim. Say «لِلْمَس» without an extra lam and without inserting مَلْمَس. Pronounce «تَنْجَح» exactly, never تظهر. Pronounce «إِنَّهُ» exactly, never إنما. Also preserve «مِنْهُ» and «يَحْتَجُّ» exactly. Preserve every written token and ending."}
         run: |
           set -euo pipefail
-          # Fresh run-30 dual-ASR located confirmed or unresolved differences
-          # across all six parts. Repair this article only; preserve the other
-          # fourteen validated articles byte-for-byte.
-          for part in 1 2 3 4 5 6; do
+          # Run 31 attempt 2 repaired parts 1, 2, 3 before free-tier exhaustion.
+          # Preserve them and repair only the remaining parts 4, 5, 6.
+          for part in 4 5 6; do
             success=0
             for transport in developer-interactions developer-generate-content; do
               # Gemini's free endpoint reports rolling retry windows. Patient,
