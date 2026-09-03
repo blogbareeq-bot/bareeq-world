@@ -22,8 +22,8 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_SOURCE_RUN_ID: '33762973140'
-      BAREEQ_SOURCE_ARTIFACT: bareeq-final-validation-33762973140
+      BAREEQ_SOURCE_RUN_ID: '33772835676'
+      BAREEQ_SOURCE_ARTIFACT: bareeq-final-validation-33772835676
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -81,7 +81,7 @@ jobs:
           test -n "${OPENROUTER_API_KEY}"
           echo 'PROVIDER_CREDENTIALS=present'
 
-      - name: Restore run 41 preserved checkpoint artifact
+      - name: Restore run 45 preserved checkpoint artifact
         if: steps.final_guard.outputs.already_final != 'true'
         uses: actions/download-artifact@v4
         with:
@@ -96,7 +96,7 @@ jobs:
         run: |
           set -euo pipefail
           test -f "audio-candidates/_campaigns/${BAREEQ_AUDIO_CAMPAIGN_ID}/state.json"
-          echo "RUN41_ARTIFACT_RESTORE=PASS run=${BAREEQ_SOURCE_RUN_ID} artifact=${BAREEQ_SOURCE_ARTIFACT}"
+          echo "RUN45_ARTIFACT_RESTORE=PASS run=${BAREEQ_SOURCE_RUN_ID} artifact=${BAREEQ_SOURCE_ARTIFACT}"
 
       - name: Require generation complete 15/15 and preserved exact coworker
         if: steps.final_guard.outputs.already_final != 'true'
@@ -124,9 +124,9 @@ jobs:
             {"1":"Read the reviewed Arabic transcript verbatim. The remaining confirmed error in this part is «مَلَاءَمَة»: pronounce it slowly as مَ-لَا-ءَ-مَة, with a clearly audible hamza after the long alif; never say «مُلَائِمَة» or «ملائمة». Then say «لِلْمَس» exactly, without an extra lam. Keep prior corrections too: «الشَّاشَة» singular, «تَعْنِي» with ن, «كَثِيرًا» with its final an sound, and the final word «الْيَوْم». Preserve every written token and ending; add nothing and omit nothing.","2":"Read the reviewed Arabic transcript verbatim. Two remaining confirmed errors are in this part. Pronounce «اللَّمْسَة» with the final ta marbuta clearly audible; never shorten it to «اللَّمْس». Pronounce «إِنَّهُ» with a clearly audible initial kasra and doubled ن; never say «أَنَّهُ». Keep prior corrections too: say «أُولِيد» and «إِل سِي دِي» as the written Arabic words, and pronounce «بِالْأَرْض» with its hamza. Preserve every written token and ending; add nothing and omit nothing.","3":"Read the reviewed Arabic transcript verbatim. Pronounce «اللَّمْسَة» slowly with an unmistakable audible final ta marbuta, never اللمس. Pronounce the coordinates as «إِكْس وَوَاي» with both Arabic words explicit. Say «مَوْضِع» and «الْمَوْضِع» with ض, never موقع or الموقع. Preserve every written token.","4":"Read the reviewed Arabic transcript verbatim. Pronounce «وَحْدَهُ» with masculine final hu, never وحدها. Preserve every written token and ending.","5":"Read the reviewed Arabic transcript verbatim. Pronounce «يُشَوِّشُهَا» slowly and exactly, with the doubled shin and final ha, never يوشوها or يوشوشها. Preserve every written token.","6":"Read the reviewed Arabic transcript verbatim. The remaining confirmed error in this part is the definite word «الضَّغْط»: pronounce the article «الـ» clearly before «ضَغْط», never drop it and never say bare «ضَغْط». Keep prior corrections too: say «لِلْمَس» without an extra lam or inserted مَلْمَس; pronounce «تَنْجَح», «إِنَّهُ», «تُرْسِلُهَا», «مِنْهُ», and «يَحْتَجُّ» exactly as written; near «الْمَرَّة» do not insert «فِي الْمَرَّة» or repeat any phrase. Preserve every written token and ending; add nothing and omit nothing."}
         run: |
           set -euo pipefail
-          # Fresh run-41 dual-ASR isolated four shared substitutions to parts 1, 2 and 6.
-          # Preserve parts 3, 4 and 5 and all other articles byte-for-byte.
-          for part in 1 2 6; do
+          # Run 45 successfully regenerated part 1 and saved it in the bound checkpoint.
+          # Regenerate only the still-pending parts 2 and 6; preserve parts 1, 3, 4 and 5.
+          for part in 2 6; do
             success=0
             for transport in developer-interactions developer-generate-content; do
               attempts=10
@@ -156,7 +156,7 @@ jobs:
             const rec = checkpoint.completedParts?.[String(index)];
             if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error(`targeted touchscreen correction missing for part ${index + 1}`);
           }
-          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS refreshed_parts=1,2,6 preserved_parts=3,4,5 corpus_regenerated=no');
+          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS refreshed_parts=2,6 preserved_parts=1,3,4,5 corpus_regenerated=no');
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
