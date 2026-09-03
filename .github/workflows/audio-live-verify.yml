@@ -1,0 +1,283 @@
+name: Bareeq live audio verification
+
+# Verifies the DEPLOYED production site, not GitHub state.
+#
+# Phase A polls https://bareeqworld.com until all 15 campaign manifests are
+# served and bound to the approved publication marker committed on main.
+# Phase B then binds four independent sources byte-for-byte:
+#   1. the approved marker on main (articleId -> fingerprint + fullSha256)
+#   2. the manifest committed in main's public/audio tree
+#   3. the manifest actually served by bareeqworld.com
+#   4. the real served MP3 bytes (sha256 + byte length) vs manifest vs main blob
+# It also asserts no legacy/fallback voice remains and that every article page
+# references its own audio key.
+#
+# Verification only: it never synthesizes, validates, publishes or changes audio.
+on:
+  push:
+    branches:
+      - arena/01a067c5-bareeq-world
+    paths:
+      - 'docs/audio/diagnostics/VERIFY-TRIGGER'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bareeq-live-verify
+  cancel-in-progress: false
+
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      BAREEQ_SITE: https://bareeqworld.com
+      BAREEQ_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
+      BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
+      BAREEQ_VERIFY_ROUNDS: '14'
+      BAREEQ_VERIFY_DELAY_MS: '90000'
+    steps:
+      - name: Checkout verification branch
+        uses: actions/checkout@v4
+        with:
+          ref: arena/01a067c5-bareeq-world
+          fetch-depth: 0
+
+      - name: Fetch main as the approved source of truth
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin main
+          echo "MAIN_SHA=$(git rev-parse origin/main)" >> "$GITHUB_ENV"
+          mkdir -p verify
+          if git cat-file -e "origin/main:${BAREEQ_MARKER}" 2>/dev/null; then
+            git show "origin/main:${BAREEQ_MARKER}" > verify/marker.json
+            echo 'FINAL_MARKER_ON_MAIN=present' >> "$GITHUB_ENV"
+          else
+            printf '{}' > verify/marker.json
+            echo 'FINAL_MARKER_ON_MAIN=absent' >> "$GITHUB_ENV"
+          fi
+          if git cat-file -e "origin/main:${BAREEQ_PARTIAL_MARKER}" 2>/dev/null; then
+            echo 'PARTIAL_MARKER_ON_MAIN=present' >> "$GITHUB_ENV"
+          else
+            echo 'PARTIAL_MARKER_ON_MAIN=absent' >> "$GITHUB_ENV"
+          fi
+
+      - name: Verify deployed audio for all 15 articles
+        run: |
+          set -uo pipefail
+          node - <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
+
+          const SITE = process.env.BAREEQ_SITE;
+          const EXPECTED_MODEL = 'gemini-3.1-flash-tts-preview';
+          const EXPECTED_VOICE_ID = 'sadaltager';
+          const EXPECTED_PROVIDER_VOICE = 'Sadaltager';
+          const MAX_ROUNDS = Number(process.env.BAREEQ_VERIFY_ROUNDS || 14);
+          const DELAY_MS = Number(process.env.BAREEQ_VERIFY_DELAY_MS || 90000);
+
+          const sha256 = (buf) => createHash('sha256').update(Buffer.isBuffer(buf) ? buf : Buffer.from(buf)).digest('hex');
+          const audioKeyFor = (id) => sha256(Buffer.from(String(id), 'utf8')).slice(0, 16);
+          const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+          const gitText = (ref) => { try { return execFileSync('git', ['show', ref], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }); } catch { return null; } };
+          const gitBlob = (ref) => { try { return execFileSync('git', ['show', ref], { encoding: 'buffer', maxBuffer: 128 * 1024 * 1024 }); } catch { return null; } };
+
+          mkdirSync('docs/audio/diagnostics', { recursive: true });
+          const finish = (report, md, exitCode = 0) => {
+            writeFileSync('docs/audio/diagnostics/LIVE-VERIFICATION.json', JSON.stringify(report, null, 2));
+            writeFileSync('docs/audio/diagnostics/LIVE-VERIFICATION.md', md.join('\n'));
+            console.log(`LIVE_VERIFICATION=${report.liveVerification || 'BLOCKED'} passed=${report.passedArticles ?? 0}/${report.totalArticles ?? 0}`);
+            process.exit(exitCode);
+          };
+
+          let marker = {};
+          try { marker = JSON.parse(readFileSync('verify/marker.json', 'utf8')); } catch {}
+          const markerArticles = Array.isArray(marker.articles) ? marker.articles : [];
+          const report = {
+            schema: 'bareeq.audio-live-verification.v1',
+            site: SITE,
+            mainSha: process.env.MAIN_SHA || null,
+            finalMarkerOnMain: process.env.FINAL_MARKER_ON_MAIN || null,
+            partialMarkerOnMain: process.env.PARTIAL_MARKER_ON_MAIN || null,
+            markerSchema: marker.schema || null,
+            markerArticleCount: marker.articleCount ?? null,
+            markerCampaignId: marker.campaignId || null,
+            markerModel: marker.model || null,
+            markerVoice: marker.voice || null,
+            rounds: [],
+          };
+
+          if (!markerArticles.length) {
+            report.liveVerification = 'BLOCKED';
+            report.fatal = 'FINAL_MARKER_ABSENT_ON_MAIN';
+            finish(report, [
+              '# Live audio verification',
+              '',
+              `Site: ${SITE}`,
+              `main SHA: ${report.mainSha}`,
+              '',
+              'Result: **BLOCKED** — the approved final publication marker',
+              `\`${process.env.BAREEQ_MARKER}\` is not present on \`main\` yet, so there is`,
+              'no approved digest set to verify the deployed audio against.',
+              '',
+              'The final corpus has not been merged. Nothing was published and nothing was',
+              'synthesized by this verification job.',
+            ], 0);
+          }
+
+          const expected = markerArticles.map((e) => ({ ...e, audioKey: audioKeyFor(e.articleId) }));
+          report.totalArticles = expected.length;
+
+          async function getText(url) {
+            const r = await fetch(url, { redirect: 'follow', headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' } });
+            if (!r.ok) return { ok: false, status: r.status };
+            return { ok: true, status: r.status, text: await r.text(), cf: r.headers.get('cf-cache-status') };
+          }
+          async function getBytes(url) {
+            const r = await fetch(url, { redirect: 'follow', headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' } });
+            if (!r.ok) return { ok: false, status: r.status };
+            return { ok: true, status: r.status, buf: Buffer.from(await r.arrayBuffer()), cf: r.headers.get('cf-cache-status') };
+          }
+
+          // ---------------- Phase A: manifest propagation ----------------
+          let phaseA = null;
+          for (let round = 1; round <= MAX_ROUNDS; round += 1) {
+            const rows = [];
+            let ready = 0;
+            for (const e of expected) {
+              const live = await getText(`${SITE}/audio/articles/${e.audioKey}/manifest.json`);
+              const row = { articleId: e.articleId, audioKey: e.audioKey, httpStatus: live.status, bound: false, reason: null };
+              if (live.ok) {
+                try {
+                  const lm = JSON.parse(live.text);
+                  row.voice = lm.defaultVoice;
+                  row.model = lm.model;
+                  row.fingerprint = lm.fingerprint || null;
+                  row.fullSha256 = lm.fullSha256 || null;
+                  row.bound = lm.fingerprint === e.fingerprint && lm.fullSha256 === e.fullSha256
+                    && lm.defaultVoice === EXPECTED_VOICE_ID && lm.model === EXPECTED_MODEL;
+                  if (!row.bound) row.reason = `live=${lm.defaultVoice}/${lm.model}/${(lm.fingerprint || '').slice(0, 12)} expected=${e.fingerprint.slice(0, 12)}`;
+                } catch (err) { row.reason = `parse:${String(err.message).slice(0, 80)}`; }
+              } else { row.reason = `http-${live.status}`; }
+              if (row.bound) ready += 1;
+              rows.push(row);
+            }
+            phaseA = { round, at: new Date().toISOString(), boundArticles: ready, totalArticles: expected.length, rows };
+            report.rounds.push({ round, at: phaseA.at, boundArticles: ready, totalArticles: expected.length });
+            console.log(`PHASE_A_ROUND ${round} bound=${ready}/${expected.length}`);
+            if (ready === expected.length) break;
+            if (round < MAX_ROUNDS) await sleep(DELAY_MS);
+          }
+          report.phaseA = phaseA;
+
+          if (phaseA.boundArticles !== expected.length) {
+            report.liveVerification = 'FAIL';
+            report.passedArticles = 0;
+            report.phase = 'A-manifest-propagation';
+            const md = ['# Live audio verification', '', `Site: ${SITE}`, `main SHA: ${report.mainSha}`,
+              `Final marker on main: ${report.finalMarkerOnMain} (schema ${report.markerSchema}, articleCount ${report.markerArticleCount})`,
+              '', `Result: **FAIL at phase A** — only ${phaseA.boundArticles}/${expected.length} live manifests are bound to the approved marker after ${phaseA.round} rounds.`, '',
+              '| article | audioKey | http | voice | model | live fingerprint | bound | reason |', '| --- | --- | --- | --- | --- | --- | --- | --- |'];
+            for (const r of phaseA.rows) md.push(`| ${r.articleId} | ${r.audioKey} | ${r.httpStatus} | ${r.voice || '-'} | ${r.model || '-'} | ${(r.fingerprint || '-').slice(0, 16)} | ${r.bound} | ${r.reason || '-'} |`);
+            finish(report, md, 1);
+          }
+
+          // ---------------- Phase B: byte-level binding ----------------
+          const articles = [];
+          let allGood = true;
+          for (const e of expected) {
+            const rec = { articleId: e.articleId, audioKey: e.audioKey, checks: {}, problems: [] };
+            const add = (k, v, bad) => { rec.checks[k] = v; if (bad) { rec.problems.push(`${k}=${v}`); allGood = false; } };
+
+            const repoManifestRaw = gitText(`origin/main:public/audio/articles/${e.audioKey}/manifest.json`);
+            if (!repoManifestRaw) { add('repoManifest', 'absent', true); articles.push(rec); continue; }
+            let repoManifest; let lm;
+            try { repoManifest = JSON.parse(repoManifestRaw); } catch (err) { add('repoManifestParse', String(err.message).slice(0, 100), true); articles.push(rec); continue; }
+            const live = await getText(`${SITE}/audio/articles/${e.audioKey}/manifest.json`);
+            add('liveManifestHttpStatus', live.status, !live.ok);
+            if (!live.ok) { articles.push(rec); continue; }
+            try { lm = JSON.parse(live.text); } catch (err) { add('liveManifestParse', String(err.message).slice(0, 100), true); articles.push(rec); continue; }
+
+            add('fingerprintBinding', lm.fingerprint === e.fingerprint && repoManifest.fingerprint === e.fingerprint, !(lm.fingerprint === e.fingerprint && repoManifest.fingerprint === e.fingerprint));
+            add('fullSha256Binding', lm.fullSha256 === e.fullSha256 && repoManifest.fullSha256 === e.fullSha256, !(lm.fullSha256 === e.fullSha256 && repoManifest.fullSha256 === e.fullSha256));
+            add('liveManifestEqualsMainManifest', JSON.stringify(lm) === JSON.stringify(repoManifest), JSON.stringify(lm) !== JSON.stringify(repoManifest));
+            add('defaultVoice', lm.defaultVoice, lm.defaultVoice !== EXPECTED_VOICE_ID);
+            const voice = (lm.voices || []).find((v) => v.id === lm.defaultVoice) || {};
+            add('providerVoice', voice.providerVoice || null, voice.providerVoice !== EXPECTED_PROVIDER_VOICE);
+            add('model', lm.model, lm.model !== EXPECTED_MODEL);
+            add('articleIdInManifest', lm.articleId, lm.articleId !== e.articleId);
+
+            const legacy = [];
+            if (String(lm.provider || '').includes('Azure')) legacy.push('provider-azure');
+            if (String(lm.generationRoute || '').toLowerCase().includes('fallback')) legacy.push('generationRoute-fallback');
+            for (const v of lm.voices || []) if (v.id !== EXPECTED_VOICE_ID) legacy.push(`extra-voice:${v.id}`);
+            for (const p of lm.parts || []) for (const vk of Object.keys(p.audio || {})) if (vk !== EXPECTED_VOICE_ID) legacy.push(`part-voice:${vk}`);
+            add('legacyFallback', legacy.length ? legacy.join(',') : 'none', legacy.length > 0);
+
+            const parts = lm.parts || [];
+            add('partCount', parts.length, parts.length === 0);
+            let ok = 0; const partProblems = []; let servedBytes = 0;
+            for (const [i, p] of parts.entries()) {
+              const asset = (p.audio || {})[lm.defaultVoice];
+              if (!asset?.src) { partProblems.push(`part${i + 1}:no-src`); continue; }
+              const f = await getBytes(`${SITE}${asset.src}`);
+              if (!f.ok) { partProblems.push(`part${i + 1}:http-${f.status}`); continue; }
+              const digest = sha256(f.buf);
+              servedBytes += f.buf.length;
+              if (asset.sha256 && asset.sha256 !== digest) { partProblems.push(`part${i + 1}:live-sha256-mismatch`); continue; }
+              if (asset.bytes && asset.bytes !== f.buf.length) { partProblems.push(`part${i + 1}:live-bytes-mismatch`); continue; }
+              const blob = gitBlob(`origin/main:public${asset.src}`);
+              if (!blob) { partProblems.push(`part${i + 1}:main-blob-absent`); continue; }
+              if (sha256(blob) !== digest) { partProblems.push(`part${i + 1}:main-vs-live-digest`); continue; }
+              ok += 1;
+            }
+            add('partsDigestVerified', `${ok}/${parts.length}`, ok !== parts.length);
+            rec.servedBytes = servedBytes;
+            if (partProblems.length) { rec.problems.push(...partProblems); allGood = false; rec.partProblems = partProblems; }
+
+            const page = await getText(`${SITE}/posts/${encodeURI(e.articleId)}/`);
+            add('articlePageHttpStatus', page.status, !page.ok);
+            if (page.ok) add('articlePageReferencesAudioKey', page.text.includes(e.audioKey), !page.text.includes(e.audioKey));
+
+            rec.passed = rec.problems.length === 0;
+            articles.push(rec);
+          }
+
+          report.phaseB = { at: new Date().toISOString(), articles };
+          report.liveVerification = allGood ? 'PASS' : 'FAIL';
+          report.passedArticles = articles.filter((a) => a.passed).length;
+
+          const md = ['# Live audio verification', '', `Site: ${SITE}`, `main SHA: ${report.mainSha}`,
+            `Final marker on main: ${report.finalMarkerOnMain} — schema \`${report.markerSchema}\`, articleCount ${report.markerArticleCount}, model ${report.markerModel}, voice ${report.markerVoice}`,
+            `Partial marker on main: ${report.partialMarkerOnMain}`,
+            `Phase A: ${phaseA.boundArticles}/${expected.length} live manifests bound after ${phaseA.round} round(s)`,
+            '', `## Result: **${report.liveVerification}** — ${report.passedArticles}/${expected.length} articles fully verified`, '',
+            '| article | audioKey | fp bind | sha bind | live==main manifest | voice | model | parts digest | page | legacy |',
+            '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |'];
+          for (const a of articles) {
+            const c = a.checks;
+            md.push(`| ${a.articleId} | ${a.audioKey} | ${c.fingerprintBinding} | ${c.fullSha256Binding} | ${c.liveManifestEqualsMainManifest} | ${c.defaultVoice}/${c.providerVoice} | ${c.model} | ${c.partsDigestVerified} | ${c.articlePageHttpStatus}/${c.articlePageReferencesAudioKey} | ${c.legacyFallback} |`);
+          }
+          md.push('');
+          const bad = articles.filter((a) => !a.passed);
+          if (bad.length) { md.push('## Problems'); for (const a of bad) md.push(`- ${a.articleId}: ${a.problems.join('; ')}`); }
+          else md.push('No problems detected. Every live manifest is bound to the approved marker fingerprint and full SHA-256, every served MP3 matches its manifest digest and byte length and the committed blob on main, every article page references its own audio key, and no legacy or fallback voice remains.');
+          finish(report, md, allGood ? 0 : 1);
+          NODE
+
+      - name: Commit live verification evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name 'bareeq-audio'
+          git config user.email 'audio@bareeq.local'
+          git add docs/audio/diagnostics/LIVE-VERIFICATION.json docs/audio/diagnostics/LIVE-VERIFICATION.md
+          if git diff --cached --quiet; then
+            echo 'LIVE_VERIFY_UNCHANGED=nothing-to-commit'
+          else
+            git commit -m 'verify: bind live bareeqworld.com audio to approved marker digests [skip ci]'
+            git push origin HEAD:arena/01a067c5-bareeq-world
+            echo 'LIVE_VERIFY_COMMITTED=pushed'
+          fi
