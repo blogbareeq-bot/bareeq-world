@@ -1,0 +1,15 @@
+{
+  "schema": "bareeq.audio-live-verification.v1",
+  "site": "https://bareeqworld.com",
+  "mainSha": "e1e7eedb96b3cc858796772b6a05bb8feb850bd7",
+  "finalMarkerOnMain": "absent",
+  "partialMarkerOnMain": "present",
+  "markerSchema": null,
+  "markerArticleCount": null,
+  "markerCampaignId": null,
+  "markerModel": null,
+  "markerVoice": null,
+  "rounds": [],
+  "liveVerification": "BLOCKED",
+  "fatal": "FINAL_MARKER_ABSENT_ON_MAIN"
+}
