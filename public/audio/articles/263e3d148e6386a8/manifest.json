@@ -1,0 +1,699 @@
+{
+  "version": 3,
+  "generatorVersion": 10,
+  "syncVersion": 1,
+  "speechScriptHash": "6716a5b9240a5f90e56d0a18e93ac60a431121e3911e89329cbdcdf596c04f82",
+  "speechInput": "reviewed-contextual-speech-script",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "language": "ar",
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "articleId": "ai-as-coworker-future-of-human-work",
+  "title": "حين يصبح الذكاء الاصطناعي زميلًا لا أداة: ماذا يبقى للإنسان؟",
+  "audioKey": "263e3d148e6386a8",
+  "fingerprint": "429adbe4ebdabd03e5c77d122255a29c7840ec58b7f32a8e59e18b91aba2db21",
+  "fullSha256": "d7f00585b47dc3ece44c73ac0f62763ffb41a1e4f602ddeae1aabd3d65fd0567",
+  "defaultVoice": "sadaltager",
+  "voices": [
+    {
+      "id": "sadaltager",
+      "label": "سادالتاجر (Sadaltager)",
+      "description": "معرفي طبيعي مناسب لمقالات بريق",
+      "providerVoice": "Sadaltager",
+      "totalDurationSeconds": 1063.488
+    }
+  ],
+  "syncMethod": "paragraph-weighted",
+  "performanceInstructions": "### TASK\nSynthesize the approved Arabic transcript below as speech. TRANSCRIPT is the authoritative, linguistically reviewed Speech Script. Speak only its words, exactly as written. Every written Arabic diacritic is binding: do not reinterpret a vocalized word as another reading. Preserve each token's exact lexical and morphological form; never replace it with a more common, related, or neighboring form. For example, if the transcript says «تصعد», pronounce «تصعد» exactly and never substitute «تصاعد». Do not add, omit, paraphrase, or reorder any word. Do not normalize a written token into another lexical or morphological form. Do not read these directions or labels aloud.\n\n### AUDIO PROFILE\nA mature, well-read Arabic narrator for Bareeq, a refined knowledge blog for curious adult readers.\n\n### SCENE\nA contemporary Arabic recording studio in daylight. The narrator speaks naturally to one attentive listener in a calm, professional setting.\n\n### DIRECTOR'S NOTES\nUse clear Modern Standard Arabic. Sound natural, human, warm, and intellectually engaging. Use a normal conversational volume, never a whisper or a breathy delivery. Keep a comfortable medium pace with subtle organic variation. Articulate clearly without over-pronouncing words or sounding like a news anchor. Let questions carry gentle curiosity, explanations sound calm and confident, and conclusions feel reflective and quietly uplifting. Avoid theatrical acting, advertising energy, excessive solemnity, and monotone delivery.",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "encodingTool": "ffmpeg-libmp3lame",
+  "disclosure": "الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.",
+  "parts": [
+    {
+      "characters": 1657,
+      "sync": [
+        {
+          "id": "b0001",
+          "type": "paragraph",
+          "match": "في اجتماع صباحي تسأل المديرة عن سبب ارتفاع تكلفة المطالبات في الربع الأخير خلال وقت قصير يكون النظام قد جمع البيانات ونظ",
+          "start": 0.036829,
+          "end": 0.146059
+        },
+        {
+          "id": "b0002",
+          "type": "paragraph",
+          "match": "تقرأ المحللة العرض ثم تحذف التوصية الأولى التفسير الأقوى إحصائيا يعتمد على فرع افتتح قبل أشهر قليلة وهي تعرف أن أرقامه ا",
+          "start": 0.146059,
+          "end": 0.268363
+        },
+        {
+          "id": "b0003",
+          "type": "paragraph",
+          "match": "الآلة أنجزت معظم المخرجات الإنسان غير النتيجة فمن كان صاحب هذا العمل",
+          "start": 0.268363,
+          "end": 0.316357
+        },
+        {
+          "id": "b0004",
+          "type": "paragraph",
+          "match": "هذا السؤال أدق من سؤال هل سيأخذ الذكاء الاصطناعي وظائفنا فحين ينتقل النظام من أداة نفتحها لمهمة محددة إلى طرف حاضر داخل ",
+          "start": 0.316357,
+          "end": 0.447256
+        },
+        {
+          "id": "b0005",
+          "type": "h2",
+          "match": "من أداة نستدعيها إلى طرف داخل سير العمل",
+          "start": 0.447256,
+          "end": 0.472363
+        },
+        {
+          "id": "b0006",
+          "type": "paragraph",
+          "match": "وصف الذكاء الاصطناعي بأنه زميل لا يعني أنه واع ولا أن له شخصية أو حقوقا أو استقلالا أخلاقيا المقصود هنا وظيفي نظام لم يع",
+          "start": 0.472363,
+          "end": 0.637459
+        },
+        {
+          "id": "b0007",
+          "type": "paragraph",
+          "match": "يمكن تصور طيف بسيط أداة تنفذ وظيفة محددة ثم مساعد يقترح أثناء العمل ثم وكيل يختار بعض الخطوات ويستخدم أدوات لتحقيق هدف أ",
+          "start": 0.637459,
+          "end": 0.787019
+        },
+        {
+          "id": "b0008",
+          "type": "paragraph",
+          "match": "وقد بدأ هذا الانتقال يظهر في طريقة الاستخدام المؤسسي تشير بيانات anthropic عن استخدام منصتها في أواخر 2025 إلى أن التفاع",
+          "start": 0.787019,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0001",
+        "b0002",
+        "b0003",
+        "b0004",
+        "b0005",
+        "b0006",
+        "b0007",
+        "b0008"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/263e3d148e6386a8/part-001-344473173901.clean.mp3",
+          "bytes": 1776141,
+          "durationSeconds": 148.008,
+          "sha256": "ac033b696cb4bf32a3ee25fc27376fc002e59e31a42e34c9113ed57d4946b358"
+        }
+      }
+    },
+    {
+      "characters": 1627,
+      "sync": [
+        {
+          "id": "b0009",
+          "type": "paragraph",
+          "match": "في بريق شرحنا سابقا كيف ينتقل الوكيل الذكي من الإجابة إلى التنفيذ ما يعنينا هنا هو الخطوة التالية ماذا يحدث للإنسان عندم",
+          "start": 0,
+          "end": 0.101294
+        },
+        {
+          "id": "b0010",
+          "type": "h2",
+          "match": "الوظيفة ليست قائمة مهام",
+          "start": 0.101294,
+          "end": 0.114879
+        },
+        {
+          "id": "b0011",
+          "type": "paragraph",
+          "match": "أكثر الاختصارات تضليلا في هذا النقاش أن نتعامل مع الوظيفة كأنها لائحة مهام منفصلة إذا استطاع النظام أداء نصفها افترضنا أ",
+          "start": 0.114879,
+          "end": 0.205444
+        },
+        {
+          "id": "b0012",
+          "type": "paragraph",
+          "match": "لكن المحاسب لا يحسب فقط والطبيب لا يشخص فقط والمحلل لا يحلل البيانات فقط كل وظيفة تجمع بين مهام واضحة ومعرفة ضمنية وسياق",
+          "start": 0.205444,
+          "end": 0.316034
+        },
+        {
+          "id": "b0013",
+          "type": "paragraph",
+          "match": "لهذا تفرق الدراسات الجادة بين التعرض للذكاء الاصطناعي وبين الاستبدال الوظيفي في مؤشر عالمي نشرته منظمة العمل الدولية عام",
+          "start": 0.316034,
+          "end": 0.556333
+        },
+        {
+          "id": "b0014",
+          "type": "paragraph",
+          "match": "السبب بسيط حتى عندما يمكن أتمتة عدد من المهام تبقى مهام أخرى تحتاج إلى إنسان أو إلى أنظمة وبيانات وصلاحيات لم تتوافر بعد",
+          "start": 0.556333,
+          "end": 0.721991
+        },
+        {
+          "id": "b0015",
+          "type": "h2",
+          "match": "المكسب حقيقي لكنه غير متساو",
+          "start": 0.721991,
+          "end": 0.738972
+        },
+        {
+          "id": "b0016",
+          "type": "paragraph",
+          "match": "الأدلة على مكاسب الإنتاجية موجودة لكنها لا تسمح بجملة مريحة من نوع الذكاء الاصطناعي يجعل الجميع أسرع",
+          "start": 0.738972,
+          "end": 0.801374
+        },
+        {
+          "id": "b0017",
+          "type": "paragraph",
+          "match": "في تجربة عشوائية على 758 عامل معرفة نشرت في organization science عام 2026 أنجز مستخدمو الذكاء الاصطناعي مهاما أكثر بنحو ",
+          "start": 0.801374,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0009",
+        "b0010",
+        "b0011",
+        "b0012",
+        "b0013",
+        "b0014",
+        "b0015",
+        "b0016",
+        "b0017"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/263e3d148e6386a8/part-002-548261081014.clean.mp3",
+          "bytes": 1765773,
+          "durationSeconds": 147.144,
+          "sha256": "36d67fa1b578bcf4a349ed2ea447a0b6b410e426a11fbfc175459fc7e4a7d330"
+        }
+      }
+    },
+    {
+      "characters": 1571,
+      "sync": [
+        {
+          "id": "b0018",
+          "type": "paragraph",
+          "match": "سمى الباحثون هذا التفاوت الحدود التقنية المسننة قد يكون النظام ممتازا في مهمة معقدة ويفشل في مهمة قريبة منها تبدو أسهل م",
+          "start": 0,
+          "end": 0.112393
+        },
+        {
+          "id": "b0019",
+          "type": "paragraph",
+          "match": "وتظهر الصورة نفسها في مجالات أخرى دراسة منشورة في the quarterly journal of economics على 5 172 موظف خدمة عملاء وجدت زياد",
+          "start": 0.112393,
+          "end": 0.364209
+        },
+        {
+          "id": "b0020",
+          "type": "paragraph",
+          "match": "هذه النتيجة الأخيرة لا تكفي للتعميم العينة صغيرة والسياق خاص لكنها تكشف مشكلة مهمة الإحساس بالسرعة ليس دائما قياسا للسرع",
+          "start": 0.364209,
+          "end": 0.44345
+        },
+        {
+          "id": "b0021",
+          "type": "paragraph",
+          "match": "إذن السؤال الأفضل ليس هل يزيد الذكاء الاصطناعي الإنتاجية بل لمن وفي أي مهمة وتحت أي شروط",
+          "start": 0.44345,
+          "end": 0.512892
+        },
+        {
+          "id": "b0022",
+          "type": "h2",
+          "match": "حين يصبح التنفيذ أرخص ترتفع قيمة الاختيار",
+          "start": 0.512892,
+          "end": 0.538598
+        },
+        {
+          "id": "b0023",
+          "type": "paragraph",
+          "match": "قبل الذكاء الاصطناعي التوليدي كان إنتاج عشرة تصورات لمشكلة ما قد يحتاج إلى ساعات اليوم يمكن للنظام أن يولد عشرات البدائل",
+          "start": 0.538598,
+          "end": 0.62531
+        },
+        {
+          "id": "b0024",
+          "type": "paragraph",
+          "match": "هذا لا يلغي العمل بل قد ينقل موضع الندرة حين يصبح إنتاج المسودة والتحليل الأولي والكود والتصميم أسرع تزداد أهمية أسئلة م",
+          "start": 0.62531,
+          "end": 0.80492
+        },
+        {
+          "id": "b0025",
+          "type": "paragraph",
+          "match": "مسح mckinsey العالمي لعام 2025 يوضح الفجوة بين التبني والقيمة 88 من المستجيبين قالوا إن مؤسساتهم تستخدم الذكاء الاصطناعي",
+          "start": 0.80492,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0018",
+        "b0019",
+        "b0020",
+        "b0021",
+        "b0022",
+        "b0023",
+        "b0024",
+        "b0025"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/263e3d148e6386a8/part-003-c68659b28bd1.clean.mp3",
+          "bytes": 1905165,
+          "durationSeconds": 158.76,
+          "sha256": "bbe4443485a40f5a75e596829ef113ba33ba234313142bb329330ad7bb950662"
+        }
+      }
+    },
+    {
+      "characters": 1584,
+      "sync": [
+        {
+          "id": "b0026",
+          "type": "paragraph",
+          "match": "ومن أكثر الفروق ارتباطا بالمؤسسات الأعلى أداء في المسح إعادة تصميم سير العمل نفسه هنا لا تكون المشكلة أي نموذج نشتري بقد",
+          "start": 0,
+          "end": 0.117638
+        },
+        {
+          "id": "b0027",
+          "type": "paragraph",
+          "match": "وقد يكون هذا أحد أهم التحولات في قيمة الإنسان من مجرد تنفيذ خطوات معروفة إلى صياغة المشكلة وتحديد ما يستحق التنفيذ",
+          "start": 0.117638,
+          "end": 0.192631
+        },
+        {
+          "id": "b0028",
+          "type": "h2",
+          "match": "من يملك القرار عندما يكتب النظام نصفه",
+          "start": 0.192631,
+          "end": 0.219254
+        },
+        {
+          "id": "b0029",
+          "type": "paragraph",
+          "match": "القدرة على إنتاج قرار ليست هي المسؤولية عنه",
+          "start": 0.219254,
+          "end": 0.249297
+        },
+        {
+          "id": "b0030",
+          "type": "paragraph",
+          "match": "لائحة الاتحاد الأوروبي للذكاء الاصطناعي تقدم مثالا واضحا على هذا الفصل فالمادة 14 الخاصة بالأنظمة عالية المخاطر تصف الإش",
+          "start": 0.249297,
+          "end": 0.530727
+        },
+        {
+          "id": "b0031",
+          "type": "paragraph",
+          "match": "وهذه ليست مشكلة قانونية فقط في تجربة منشورة في radiology قرأ 27 طبيب أشعة صورا مع توصيات من نظام قدم لهم على أنه ذكاء اص",
+          "start": 0.530727,
+          "end": 0.689338
+        },
+        {
+          "id": "b0032",
+          "type": "paragraph",
+          "match": "المفارقة هنا أن الخبير قد يكون الشخص المطلوب لمراجعة النظام لكنه ليس محصنا من الميل إلى اتباعه وهذا قريب من سؤال متى يست",
+          "start": 0.689338,
+          "end": 0.79754
+        },
+        {
+          "id": "b0033",
+          "type": "paragraph",
+          "match": "لذلك يجب ألا تضيع المسؤولية لمجرد أن التنفيذ أصبح موزعا بين الإنسان والنظام إذا كان الموظف لا يملك الوقت أو المعلومات أو",
+          "start": 0.79754,
+          "end": 0.916508
+        },
+        {
+          "id": "b0034",
+          "type": "h2",
+          "match": "مفارقة المبتدئ من أين سيأتي الخبير التالي",
+          "start": 0.916508,
+          "end": 0.945019
+        },
+        {
+          "id": "b0035",
+          "type": "paragraph",
+          "match": "أكثر أسئلة مستقبل العمل إلحاحا قد لا يتعلق بمن سيخسر وظيفته بل كيف سيتعلم المبتدئ",
+          "start": 0.945019,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0026",
+        "b0027",
+        "b0028",
+        "b0029",
+        "b0030",
+        "b0031",
+        "b0032",
+        "b0033",
+        "b0034",
+        "b0035"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/263e3d148e6386a8/part-004-6b51f44595f2.clean.mp3",
+          "bytes": 1639341,
+          "durationSeconds": 136.608,
+          "sha256": "0bd641b41bbb360c72679d9f9263606fd8af44327e6383ad93dd3e3c057119a7"
+        }
+      }
+    },
+    {
+      "characters": 1659,
+      "sync": [
+        {
+          "id": "b0036",
+          "type": "paragraph",
+          "match": "كان جزء كبير من تكوين الخبرة يأتي من الأعمال التي تبدو بسيطة البحث الأولي وإعداد المسودة وتصحيح الأخطاء وقراءة الملفات ا",
+          "start": 0,
+          "end": 0.145997
+        },
+        {
+          "id": "b0037",
+          "type": "paragraph",
+          "match": "تشير ورقة من stanford digital economy lab إلى أن العاملين في بدايات مسيرتهم بين 22 و25 عاما في المهن الأمريكية الأكثر تع",
+          "start": 0.145997,
+          "end": 0.376458
+        },
+        {
+          "id": "b0038",
+          "type": "paragraph",
+          "match": "أما أثر الاستخدام على التعلم نفسه فلدينا إشارة تجريبية أحدث في دراسة عشوائية أولية نشرت كمسودة بحثية عام 2026 تعلم مطورو",
+          "start": 0.376458,
+          "end": 0.592229
+        },
+        {
+          "id": "b0039",
+          "type": "paragraph",
+          "match": "لكن الدراسة قدمت تفصيلا أهم من الرقم الضرر لم يكن واحدا لدى جميع المستخدمين من استخدموا النظام لطلب الشرح والأسئلة المفا",
+          "start": 0.592229,
+          "end": 0.710677
+        },
+        {
+          "id": "b0040",
+          "type": "paragraph",
+          "match": "هذه نقطة تغير السؤال من هل نسمح للمبتدئ باستخدام الذكاء الاصطناعي إلى كيف نصمم العمل بحيث يستخدمه ولا يفقد الممارسة التي",
+          "start": 0.710677,
+          "end": 0.796579
+        },
+        {
+          "id": "b0041",
+          "type": "paragraph",
+          "match": "فإذا كان النظام يكتب الكود فمن أين يتعلم الموظف اكتشاف الكود الرديء وإذا كان يلخص كل وثيقة فمن أين يبني المحلل حسه لما ي",
+          "start": 0.796579,
+          "end": 0.892375
+        },
+        {
+          "id": "b0042",
+          "type": "h2",
+          "match": "العلاقات ليست ملاذا سحريا للإنسان",
+          "start": 0.892375,
+          "end": 0.910308
+        },
+        {
+          "id": "b0043",
+          "type": "paragraph",
+          "match": "من السهل عند هذه النقطة أن نقول الآلة ستأخذ المهام التقنية وسيبقى للإنسان الإبداع والعلاقات و المهارات الناعمة الأدلة لا",
+          "start": 0.910308,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0036",
+        "b0037",
+        "b0038",
+        "b0039",
+        "b0040",
+        "b0041",
+        "b0042",
+        "b0043"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/263e3d148e6386a8/part-005-027f2b19d0e8.clean.mp3",
+          "bytes": 1869741,
+          "durationSeconds": 155.808,
+          "sha256": "c44cb6ddbf41131d804b97666c2cd55afac483a76704cfb446d1c1578e849cb5"
+        }
+      }
+    },
+    {
+      "characters": 1668,
+      "sync": [
+        {
+          "id": "b0044",
+          "type": "paragraph",
+          "match": "في تجربة ميدانية على 776 محترفا في procter gamble عمل المشاركون أفرادا أو في فرق على مشكلات ابتكار حقيقية مع الذكاء الاص",
+          "start": 0,
+          "end": 0.197563
+        },
+        {
+          "id": "b0045",
+          "type": "paragraph",
+          "match": "هذا لا يعني أن العلاقة البشرية قابلة للاستبدال التجربة تخص نوعا محددا من التعاون في مهمة محددة لكنها تضعف فكرة أن كل فائ",
+          "start": 0.197563,
+          "end": 0.299368
+        },
+        {
+          "id": "b0046",
+          "type": "paragraph",
+          "match": "ما يصعب اختزاله ليس العلاقات ككلمة عامة بل وظائف أكثر تحديدا بناء ثقة تجعل المعلومة السيئة تصل مبكرا والتفاوض على قيود ل",
+          "start": 0.299368,
+          "end": 0.46605
+        },
+        {
+          "id": "b0047",
+          "type": "h2",
+          "match": "اختبار بريق أين تنتقل القيمة البشرية",
+          "start": 0.46605,
+          "end": 0.489199
+        },
+        {
+          "id": "b0048",
+          "type": "paragraph",
+          "match": "لا توجد قائمة أبدية بالأشياء التي لن يستطيع الذكاء الاصطناعي فعلها الحدود تتغير بسرعة وما نعده اليوم مهارة بشرية حصرية ق",
+          "start": 0.489199,
+          "end": 0.584341
+        },
+        {
+          "id": "b0049",
+          "type": "paragraph",
+          "match": "الأدق أن نسأل عن كل مهمة عبر خمس طبقات",
+          "start": 0.584341,
+          "end": 0.612117
+        },
+        {
+          "id": "b0050",
+          "type": "paragraph",
+          "match": "1 الاتجاه ما الذي يستحق أن ينجز النظام يستطيع اقتراح طرق للوصول إلى هدف لكن تحديد الهدف نفسه يظل مرتبطا بالقيم والأولويا",
+          "start": 0.612117,
+          "end": 0.699842
+        },
+        {
+          "id": "b0051",
+          "type": "paragraph",
+          "match": "2 السياق ما الذي لم يكتب البيانات لا تحتوي دائما على تاريخ العلاقة أو سياسة غير معلنة أو سبب استثناء حدث قبل أشهر من لا ",
+          "start": 0.699842,
+          "end": 0.817575
+        },
+        {
+          "id": "b0052",
+          "type": "paragraph",
+          "match": "3 الحكم أين تنتهي كفاءة النظام القيمة ليست في الثقة به أو الشك فيه دائما بل في معرفة متى تكون مساعدته مفيدة ومتى يصبح ال",
+          "start": 0.817575,
+          "end": 0.912857
+        },
+        {
+          "id": "b0053",
+          "type": "paragraph",
+          "match": "4 المسؤولية من يملك القرار والتراجع عنه المسؤولية الحقيقية تعني أن يملك الشخص وقتا ومعلومة وسلطة لرفض النتيجة لا أن يضع ",
+          "start": 0.912857,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0044",
+        "b0045",
+        "b0046",
+        "b0047",
+        "b0048",
+        "b0049",
+        "b0050",
+        "b0051",
+        "b0052",
+        "b0053"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/263e3d148e6386a8/part-006-204825a16b43.clean.mp3",
+          "bytes": 1759149,
+          "durationSeconds": 146.592,
+          "sha256": "3d3c965a7e9cf163d08c87885f0efc3bdce6e1fd1e25ee8771850086c6254e52"
+        }
+      }
+    },
+    {
+      "characters": 871,
+      "sync": [
+        {
+          "id": "b0054",
+          "type": "paragraph",
+          "match": "5 التكوين من يصنع الخبير التالي أي مؤسسة تفوض المهام المبتدئة تحتاج في الوقت نفسه إلى تصميم مسار جديد للتعلم وإلا فقد تو",
+          "start": 0,
+          "end": 0.20701
+        },
+        {
+          "id": "b0055",
+          "type": "paragraph",
+          "match": "هذه الطبقات ليست حصونا أبدية ضد الأتمتة قيمتها أنها تحول السؤال من ما الذي لا تستطيع الآلة فعله إلى ما الذي لا ينبغي أن ",
+          "start": 0.20701,
+          "end": 0.394087
+        },
+        {
+          "id": "b0056",
+          "type": "h2",
+          "match": "هل سيبقى الذكاء الاصطناعي زميلا",
+          "start": 0.394087,
+          "end": 0.431979
+        },
+        {
+          "id": "b0057",
+          "type": "paragraph",
+          "match": "ربما تكون كلمة زميل نفسها مرحلة انتقالية",
+          "start": 0.431979,
+          "end": 0.482029
+        },
+        {
+          "id": "b0058",
+          "type": "paragraph",
+          "match": "في ديسمبر 2025 نقلت linux foundation بروتوكولا مفتوحا لربط نماذج الذكاء الاصطناعي بالأدوات والبيانات إلى مؤسسة محايدة جد",
+          "start": 0.482029,
+          "end": 0.821272
+        },
+        {
+          "id": "b0059",
+          "type": "paragraph",
+          "match": "وحين تصبح التقنية بنية تحتية نتوقف غالبا عن وصفها كطرف مستقل لا نصف محرك البحث في كل مرة بأنه باحث مساعد أصبح جزءا من طر",
+          "start": 0.821272,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0054",
+        "b0055",
+        "b0056",
+        "b0057",
+        "b0058",
+        "b0059"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/263e3d148e6386a8/part-007-494513dadcb7.clean.mp3",
+          "bytes": 950157,
+          "durationSeconds": 79.176,
+          "sha256": "770316429aa615501a29a3a002524e177d30f5cc9c22e95b0e251ec0f05fcecb"
+        }
+      }
+    },
+    {
+      "characters": 986,
+      "sync": [
+        {
+          "id": "b0060",
+          "type": "paragraph",
+          "match": "قد يحدث شيء مشابه مع الذكاء الاصطناعي يصبح تأثيره أكبر حين يقل ظهور اسمه ويصبح موزعا داخل البريد والملفات والتحليل والبر",
+          "start": 0,
+          "end": 0.128728
+        },
+        {
+          "id": "b0061",
+          "type": "paragraph",
+          "match": "وعندها تصبح الأسئلة السابقة أكثر أهمية لا أقل لأن الأنظمة التي تعمل في الخلفية أسهل في الاستخدام لكنها قد تكون أصعب في ا",
+          "start": 0.128728,
+          "end": 0.26705
+        },
+        {
+          "id": "b0062",
+          "type": "h2",
+          "match": "ما يبقى للإنسان ليس ما تعجز عنه الآلة",
+          "start": 0.26705,
+          "end": 0.308227
+        },
+        {
+          "id": "b0063",
+          "type": "paragraph",
+          "match": "بعض المهام ستتغير وبعضها سيختفي وقد تحتاج بعض الأدوار إلى عدد أقل من الأشخاص وفي المقابل ستظهر أعمال ومسؤوليات لم تكن مو",
+          "start": 0.308227,
+          "end": 0.537759
+        },
+        {
+          "id": "b0064",
+          "type": "paragraph",
+          "match": "لكنها تشير إلى تحول واضح في موضع القيمة",
+          "start": 0.537759,
+          "end": 0.584373
+        },
+        {
+          "id": "b0065",
+          "type": "paragraph",
+          "match": "حين تصبح المسودة أرخص ترتفع قيمة اختيار ما يستحق أن يصبح نهائيا وحين يصبح التنفيذ أسرع تصبح معرفة حدود النظام أثمن وحين ",
+          "start": 0.584373,
+          "end": 0.788119
+        },
+        {
+          "id": "b0066",
+          "type": "paragraph",
+          "match": "لذلك فالسؤال ليس ماذا سيبقى للإنسان بعد الذكاء الاصطناعي",
+          "start": 0.788119,
+          "end": 0.844507
+        },
+        {
+          "id": "b0067",
+          "type": "paragraph",
+          "match": "السؤال الأدق هو أي جزء من العمل نريد أن نبقى قادرين على فهمه والحكم عليه وتحمل مسؤوليته حتى عندما لا نعود نحن من ينفذ كل",
+          "start": 0.844507,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0060",
+        "b0061",
+        "b0062",
+        "b0063",
+        "b0064",
+        "b0065",
+        "b0066",
+        "b0067"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/263e3d148e6386a8/part-008-fa355dd40759.clean.mp3",
+          "bytes": 1096749,
+          "durationSeconds": 91.392,
+          "sha256": "5159126f119c4fa96778b4be1bfc5c1fef145ccfdc62d83185ffc9b6be082a7f"
+        }
+      }
+    }
+  ],
+  "schema": "bareeq.audio-production-manifest.v3",
+  "candidateFingerprint": "429adbe4ebdabd03e5c77d122255a29c7840ec58b7f32a8e59e18b91aba2db21",
+  "voice": "Sadaltager",
+  "toolVersion": 9,
+  "status": "published",
+  "generatedAt": "2026-09-03T13:46:40.533Z",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "ttsVoice": "Sadaltager",
+  "publishedFromCandidate": "429adbe4ebdabd03e5c77d122255a29c7840ec58b7f32a8e59e18b91aba2db21",
+  "publishedAt": "2026-09-03T13:46:40.533Z"
+}
