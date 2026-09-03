@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33696473514-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33698014549-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -56,12 +56,14 @@ jobs:
           node --check scripts/audio-validate-consensus.mjs
           node --check scripts/audio-touchscreen-targeted-regenerate.mjs
 
-      - name: Verify direct Gemini credential
+      - name: Verify provider credentials
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           test -n "${GEMINI_API_KEY}"
-          echo 'GEMINI_CREDENTIAL=present'
+          test -n "${OPENROUTER_API_KEY}"
+          echo 'PROVIDER_CREDENTIALS=present'
 
       - name: Restore latest corrected checkpoint
         uses: actions/cache/restore@v4
@@ -88,21 +90,24 @@ jobs:
       - name: Regenerate only touchscreen parts with confirmed fresh dual-ASR mismatches
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
             {"1":"Preserve the written lexical tokens exactly. Pronounce «ودقة» exactly, not «ودقتين»; «الشاشة» exactly where singular, not «الشاشات»; «التصميمات» exactly, not «التصاميم»; and «ملاءمة» exactly, not «ملائمة».","2":"Preserve the written lexical tokens exactly. Pronounce «التصميمات» exactly, not «التصاميم»; pronounce «اللمسة» with final ة, not «اللمس» or «اللمحة»; and pronounce «إنه» with initial إِ, not «أنه».","3":"Preserve the written lexical tokens exactly. Pronounce «اللمسة» with final ة, not «اللمس» or «اللمحة»; and pronounce the coordinate words exactly as written in Arabic: «إكس وواي», not English letter-name output or symbol substitutions.","6":"Preserve the written lexical tokens exactly. Pronounce «يحتج» exactly as written, not «يحتاج»."}
         run: |
           set -euo pipefail
-          for part in 1 2 3 6; do
+          for part in 2 3 6; do
             success=0
-            for transport in developer-interactions developer-generate-content; do
-              for attempt in 1 2 3; do
+            for transport in developer-interactions developer-generate-content openrouter-speech; do
+              attempts=3
+              if [ "${transport}" = "openrouter-speech" ]; then attempts=1; fi
+              for attempt in $(seq 1 "${attempts}"); do
                 echo "TARGETED_TTS article=how-touchscreens-work part=${part} transport=${transport} attempt=${attempt}"
                 if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-touchscreen-targeted-regenerate.mjs --article=how-touchscreens-work; then
                   success=1
                   break 2
                 fi
-                sleep $((attempt * 20))
+                if [ "${transport}" != "openrouter-speech" ]; then sleep $((attempt * 20)); fi
               done
             done
             if [ "${success}" -ne 1 ]; then
