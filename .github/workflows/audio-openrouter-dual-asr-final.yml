@@ -22,7 +22,10 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33698014549-1
+      # Attempt 2 is the newest durable checkpoint. It contains the successful
+      # targeted repairs produced on 2026-09-03 and must be the sole base for
+      # later repair passes; restoring the older seed repeated stale work.
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33700314593-2
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -93,10 +96,13 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"Preserve the written lexical tokens exactly. Pronounce «ودقة» exactly, not «ودقتين»; «الشاشة» exactly where singular, not «الشاشات»; «التصميمات» exactly, not «التصاميم»; and «ملاءمة» exactly, not «ملائمة».","2":"Preserve the written lexical tokens exactly. Pronounce «التصميمات» exactly, not «التصاميم»; pronounce «اللمسة» with final ة, not «اللمس» or «اللمحة»; and pronounce «إنه» with initial إِ, not «أنه».","3":"Preserve the written lexical tokens exactly. Pronounce «اللمسة» with final ة, not «اللمس» or «اللمحة»; and pronounce the coordinate words exactly as written in Arabic: «إكس وواي», not English letter-name output or symbol substitutions.","6":"Preserve the written lexical tokens exactly. Pronounce «يحتج» exactly as written, not «يحتاج»."}
+            {"1":"Read the reviewed Arabic transcript verbatim. At the phrase «ملاءمة للمس» pronounce مَلَاءَمَة exactly with the hamza after the long alif; never say ملائمة. Preserve every written token and ending.","2":"Read the reviewed Arabic transcript verbatim. Say the display abbreviations as the separately written Arabic words «أُولِيد» and «إِل سِي دِي», never as English letters. Pronounce «اللَّمْسَة» with the audible final ta marbuta, never «اللمس». Pronounce «إِنَّهُ» with initial kasra, never «أَنَّهُ». Preserve every written token.","3":"Read the reviewed Arabic transcript verbatim. Pronounce the coordinate words as two explicit Arabic words: «إِكْس وَوَاي». Do not say English X or Y and do not omit either Arabic word. Preserve every written token.","6":"Read the reviewed Arabic transcript verbatim. Pronounce «مِنْهُ» with final hu, never «منها». Pronounce «يَحْتَجُّ» exactly as written, never «يحتاج». Preserve every written token and ending."}
         run: |
           set -euo pipefail
-          for part in 2 3 6; do
+          # The fresh attempt-2 dual-ASR report locates every remaining
+          # substantive/unresolved token in parts 1, 2, 3, and 6. Repair only
+          # those parts; parts 4 and 5 stay byte-for-byte preserved.
+          for part in 1 2 3 6; do
             success=0
             for transport in developer-interactions developer-generate-content openrouter-speech; do
               attempts=3
