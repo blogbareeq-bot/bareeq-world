@@ -1,0 +1,289 @@
+name: Bareeq audio diagnosis
+
+# Diagnostic-only workflow. It never synthesizes, validates or publishes audio.
+# It exists because the operator sandbox can only reach api.github.com, so the
+# Run #44 failure log and its preserved checkpoint artifact have to be read from
+# inside CI and reported back through a committed evidence file.
+on:
+  push:
+    branches:
+      - arena/01a067c5-bareeq-world
+    paths:
+      - '.github/workflows/audio-diagnose.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: bareeq-audio-diagnose
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
+      BAREEQ_DIAG_RUN_ID: '33766919807'
+      BAREEQ_DIAG_JOB_ID: '100687055011'
+      BAREEQ_DIAG_ARTIFACT: bareeq-final-validation-33766919807
+    steps:
+      - name: Checkout diagnosis branch
+        uses: actions/checkout@v4
+        with:
+          ref: arena/01a067c5-bareeq-world
+          fetch-depth: 0
+
+      - name: Pull run 44 job log
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -uo pipefail
+          mkdir -p diag
+          gh run view --repo "$GITHUB_REPOSITORY" --job="$BAREEQ_DIAG_JOB_ID" --log > diag/run44-full.log 2> diag/run44-log.err || true
+          echo "FULL_LOG_LINES=$(wc -l < diag/run44-full.log)"
+          echo "LOG_ERR=$(head -c 400 diag/run44-log.err)"
+
+      - name: Download run 44 preserved checkpoint artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.BAREEQ_DIAG_ARTIFACT }}
+          path: diag/candidates
+          run-id: ${{ env.BAREEQ_DIAG_RUN_ID }}
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+
+      - name: Probe provider transports (no candidate audio touched)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          set -uo pipefail
+          mkdir -p diag
+          node - <<'NODE' > diag/probes.json 2> diag/probes.err
+          const MODEL = 'gemini-3.1-flash-tts-preview';
+          const VOICE = 'Sadaltager';
+          const TEXT = 'اختبار نقل قصير.';
+          const out = { generatedAt: new Date().toISOString(), model: MODEL, voice: VOICE, probes: [] };
+          async function probe(name, fn) {
+            const started = Date.now();
+            try {
+              const res = await fn();
+              out.probes.push({ name, ok: true, ms: Date.now() - started, ...res });
+            } catch (error) {
+              out.probes.push({ name, ok: false, ms: Date.now() - started, error: String(error && error.message || error).slice(0, 500) });
+            }
+          }
+          const geminiKey = process.env.GEMINI_API_KEY || '';
+          const openRouterKey = process.env.OPENROUTER_API_KEY || '';
+          out.credentials = { gemini: geminiKey.length > 0, openrouter: openRouterKey.length > 0 };
+
+          await probe('openrouter-credits', async () => {
+            const r = await fetch('https://openrouter.ai/api/v1/credits', { headers: { Authorization: `Bearer ${openRouterKey}` } });
+            const body = await r.text();
+            let balance = null;
+            try { const j = JSON.parse(body); const d = j.data || j; balance = Number(d.total_credits) - Number(d.total_usage); } catch {}
+            return { httpStatus: r.status, balanceUsd: Number.isFinite(balance) ? balance : null, body: body.slice(0, 400) };
+          });
+
+          await probe('openrouter-speech', async () => {
+            const r = await fetch('https://openrouter.ai/api/v1/audio/speech', {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${openRouterKey}`, 'Content-Type': 'application/json', Accept: 'audio/pcm', 'HTTP-Referer': 'https://bareeqworld.com', 'X-Title': 'Bareeq' },
+              body: JSON.stringify({ model: `google/${MODEL}`, input: TEXT, voice: VOICE, response_format: 'pcm' }),
+            });
+            const ct = String(r.headers.get('content-type') || '');
+            if (!r.ok) return { httpStatus: r.status, contentType: ct, body: (await r.text()).slice(0, 500) };
+            const buf = Buffer.from(await r.arrayBuffer());
+            return { httpStatus: r.status, contentType: ct, pcmBytes: buf.length };
+          });
+
+          await probe('gemini-generate-content-tts', async () => {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
+              method: 'POST',
+              headers: { 'x-goog-api-key': geminiKey, 'Content-Type': 'application/json', Accept: 'application/json' },
+              body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: TEXT }] }], generationConfig: { responseModalities: ['AUDIO'], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: VOICE } } } } }),
+            });
+            if (!r.ok) return { httpStatus: r.status, body: (await r.text()).slice(0, 500) };
+            const body = await r.text();
+            return { httpStatus: r.status, responseBytes: body.length };
+          });
+
+          await probe('gemini-interactions-tts', async () => {
+            const r = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+              method: 'POST',
+              headers: { 'x-goog-api-key': geminiKey, 'Api-Revision': '2026-05-20', 'Content-Type': 'application/json', Accept: 'application/json' },
+              body: JSON.stringify({ model: MODEL, input: TEXT, response_format: { type: 'audio' }, generation_config: { speech_config: [{ voice: VOICE }] } }),
+            });
+            if (!r.ok) return { httpStatus: r.status, body: (await r.text()).slice(0, 500) };
+            const body = await r.text();
+            return { httpStatus: r.status, responseBytes: body.length };
+          });
+
+          console.log(JSON.stringify(out, null, 2));
+          NODE
+          echo "PROBE_ERR=$(head -c 400 diag/probes.err)"
+
+      - name: Build diagnosis report
+        run: |
+          set -uo pipefail
+          mkdir -p docs/audio/diagnostics
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const campaign = process.env.BAREEQ_AUDIO_CAMPAIGN_ID;
+          const report = {
+            schema: 'bareeq.audio-run-diagnosis.v1',
+            generatedAt: new Date().toISOString(),
+            diagnosedRunId: process.env.BAREEQ_DIAG_RUN_ID,
+            diagnosedJobId: process.env.BAREEQ_DIAG_JOB_ID,
+          };
+
+          // ---- 1. log evidence -------------------------------------------------
+          let lines = [];
+          try { lines = fs.readFileSync('diag/run44-full.log', 'utf8').split(/\r?\n/); } catch {}
+          report.logLineCount = lines.length;
+          const stepMark = 'Regenerate only touchscreen parts';
+          const startIdx = lines.findIndex((l) => l.includes(stepMark));
+          const section = startIdx >= 0 ? lines.slice(startIdx) : lines;
+          const interesting = section.filter((l) => /TARGETED_TTS|EXHAUSTED|429|402|quota|Quota|QUOTA|Error|error|refus|refused|OPENROUTER_|CHECKPOINT|fatal|throw|exit/i.test(l));
+          report.step12SignalLines = interesting.slice(0, 240).map((l) => l.slice(0, 600));
+          report.step12Tail = section.slice(-120).map((l) => l.slice(0, 600));
+
+          // ---- 2. campaign state ----------------------------------------------
+          const statePath = path.join('diag', 'candidates', '_campaigns', campaign, 'state.json');
+          report.statePathFound = fs.existsSync(statePath);
+          if (report.statePathFound) {
+            const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+            report.generationComplete = state.generationComplete === true;
+            report.validationComplete = state.validationComplete === true;
+            report.publicationComplete = state.publicationComplete === true;
+            const entries = Object.entries(state.articles || {});
+            report.articleCount = entries.length;
+            report.articles = entries.map(([id, v]) => ({
+              articleId: id,
+              generationStatus: v.generation?.status || null,
+              generationFingerprint: v.generation?.fingerprint || null,
+              validationStatus: v.validation?.status || null,
+              validationFingerprint: v.validation?.fingerprint || null,
+              fingerprintBound: Boolean(v.validation?.fingerprint && v.validation.fingerprint === v.generation?.fingerprint),
+              consensus: v.validation?.consensus || null,
+              validationError: v.validation?.error || null,
+              publicationStatus: v.publication?.status || null,
+            }));
+            report.validatedExact = report.articles.filter((a) => a.validationStatus === 'validated' && a.fingerprintBound
+              && a.consensus && ['substitutions', 'deletions', 'insertions', 'unresolved'].every((k) => Number(a.consensus[k]) === 0)).length;
+          }
+
+          // ---- 3. touchscreen checkpoint --------------------------------------
+          const tsId = 'how-touchscreens-work';
+          if (report.statePathFound) {
+            const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+            const fp = state.articles?.[tsId]?.generation?.fingerprint;
+            report.touchscreenFingerprint = fp || null;
+            if (fp) {
+              const cpPath = path.join('diag', 'candidates', tsId, fp, 'checkpoint.json');
+              report.touchscreenCheckpointFound = fs.existsSync(cpPath);
+              if (report.touchscreenCheckpointFound) {
+                const cp = JSON.parse(fs.readFileSync(cpPath, 'utf8'));
+                report.touchscreenCompletedParts = Object.entries(cp.completedParts || {}).map(([idx, rec]) => ({
+                  part: Number(idx) + 1,
+                  targetedRegeneration: rec.targetedRegeneration === true,
+                  correctionHintApplied: rec.correctionHintApplied === true,
+                  transport: rec.transport || rec.transportsUsed || null,
+                  completedAt: rec.completedAt || null,
+                  sha256: rec.sha256 || rec.digest || null,
+                  bytes: rec.bytes ?? null,
+                  durationSeconds: rec.durationSeconds ?? null,
+                }));
+              }
+              const repDir = path.join('diag', 'candidates', tsId, fp, 'reports');
+              if (fs.existsSync(repDir)) {
+                report.touchscreenReports = fs.readdirSync(repDir).sort();
+                for (const name of ['asr-adjudication.json']) {
+                  const p = path.join(repDir, name);
+                  if (fs.existsSync(p)) {
+                    const j = JSON.parse(fs.readFileSync(p, 'utf8'));
+                    report.touchscreenAdjudication = {
+                      passed: j.passed === true,
+                      fingerprint: j.fingerprint || null,
+                      fingerprintBound: j.fingerprint === fp,
+                      consensus: j.consensus || null,
+                      modelDisagreements: j.modelDisagreements || null,
+                      representationOnly: j.representationOnly || null,
+                    };
+                  }
+                }
+              }
+            }
+          }
+
+          // ---- 4. probes -------------------------------------------------------
+          try { report.probes = JSON.parse(fs.readFileSync('diag/probes.json', 'utf8')); } catch (e) { report.probes = { error: String(e.message) }; }
+
+          // ---- 5. artifact inventory ------------------------------------------
+          try {
+            const root = path.join('diag', 'candidates');
+            report.artifactTopLevel = fs.readdirSync(root).sort().slice(0, 60);
+            report.candidateArticleDirs = fs.readdirSync(root).filter((d) => d !== '_campaigns' && fs.statSync(path.join(root, d)).isDirectory()).sort();
+          } catch (e) { report.artifactInventoryError = String(e.message); }
+
+          fs.mkdirSync('docs/audio/diagnostics', { recursive: true });
+          fs.writeFileSync('docs/audio/diagnostics/RUN44-DIAGNOSIS.json', JSON.stringify(report, null, 2));
+
+          // compact human-readable markdown
+          const md = [];
+          md.push('# Run #44 diagnosis');
+          md.push('');
+          md.push(`Generated: ${report.generatedAt}`);
+          md.push(`Diagnosed run: ${report.diagnosedRunId} job ${report.diagnosedJobId}`);
+          md.push(`Full log lines recovered: ${report.logLineCount}`);
+          md.push('');
+          md.push('## Campaign state');
+          md.push(`generationComplete=${report.generationComplete} validationComplete=${report.validationComplete} publicationComplete=${report.publicationComplete}`);
+          md.push(`articles=${report.articleCount} validatedExact0000=${report.validatedExact}`);
+          md.push('');
+          md.push('| article | gen | validation | bound | consensus |');
+          md.push('| --- | --- | --- | --- | --- |');
+          for (const a of report.articles || []) {
+            const c = a.consensus ? `${a.consensus.substitutions}/${a.consensus.deletions}/${a.consensus.insertions}/${a.consensus.unresolved}` : '-';
+            md.push(`| ${a.articleId} | ${a.generationStatus} | ${a.validationStatus} | ${a.fingerprintBound} | ${c} |`);
+          }
+          md.push('');
+          md.push('## Touchscreen checkpoint parts');
+          for (const p of report.touchscreenCompletedParts || []) {
+            md.push(`- part ${p.part}: targeted=${p.targetedRegeneration} hint=${p.correctionHintApplied} transport=${JSON.stringify(p.transport)} completedAt=${p.completedAt}`);
+          }
+          md.push('');
+          md.push('## Provider probes');
+          for (const p of report.probes?.probes || []) {
+            md.push(`- ${p.name}: ok=${p.ok} ${p.ok ? `http=${p.httpStatus} balance=${p.balanceUsd ?? '-'} pcmBytes=${p.pcmBytes ?? '-'} respBytes=${p.responseBytes ?? '-'}` : `error=${p.error}`}${p.body ? ` body=${String(p.body).slice(0, 200)}` : ''}`);
+          }
+          md.push('');
+          md.push('## Step 12 signal lines');
+          md.push('```');
+          for (const l of (report.step12SignalLines || []).slice(0, 120)) md.push(l);
+          md.push('```');
+          md.push('');
+          md.push('## Step 12 tail');
+          md.push('```');
+          for (const l of (report.step12Tail || []).slice(-70)) md.push(l);
+          md.push('```');
+          fs.writeFileSync('docs/audio/diagnostics/RUN44-DIAGNOSIS.md', md.join('\n'));
+          console.log('DIAGNOSIS_WRITTEN articles=' + (report.articleCount ?? 'n/a') + ' validatedExact=' + (report.validatedExact ?? 'n/a'));
+          NODE
+
+      - name: Commit diagnosis evidence
+        run: |
+          set -euo pipefail
+          git config user.name 'bareeq-audio'
+          git config user.email 'audio@bareeq.local'
+          git add docs/audio/diagnostics/RUN44-DIAGNOSIS.json docs/audio/diagnostics/RUN44-DIAGNOSIS.md
+          if git diff --cached --quiet; then
+            echo 'DIAGNOSIS_UNCHANGED=nothing-to-commit'
+          else
+            git commit -m 'diag: recover run 44 failure evidence and provider transport probes [skip ci]'
+            git push origin HEAD:arena/01a067c5-bareeq-world
+            echo 'DIAGNOSIS_COMMITTED=pushed'
+          fi
