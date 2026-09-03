@@ -17,11 +17,11 @@ if (!['developer-generate-content', 'developer-interactions', 'openrouter-speech
 }
 
 async function synthesizeTargeted({ article, part, splitPlan, voice, correctionHint }) {
-  // These are the only touchscreen parts that have accumulated confirmed
-  // dual-ASR mismatch evidence across the bounded repair passes. The force-part
+  // All six touchscreen parts now have confirmed dual-ASR mismatch evidence
+  // across the bounded repair passes. The force-part
   // gate still decides which one is regenerated on each invocation, so already
   // successful parts remain byte-for-byte untouched.
-  if (![0, 1, 2, 4, 5].includes(part.partIndex)) {
+  if (![0, 1, 2, 3, 4, 5].includes(part.partIndex)) {
     throw new Error(`Unsupported touchscreen targeted part ${part.partIndex + 1}; refusing to regenerate successful audio.`);
   }
   const context = {
