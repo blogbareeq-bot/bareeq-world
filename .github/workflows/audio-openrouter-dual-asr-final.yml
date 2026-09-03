@@ -22,10 +22,8 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      # Run 41 regenerated touchscreen part 6 and saved fresh dual-ASR evidence.
-      # Resume that exact checkpoint; repair only the four confirmed shared lexical mismatches
-      # by regenerating parts 1, 2 and 6. Preserve every other article/part byte-for-byte.
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33762973140-1
+      BAREEQ_SOURCE_RUN_ID: '33762973140'
+      BAREEQ_SOURCE_ARTIFACT: bareeq-final-validation-33762973140
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -33,19 +31,33 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
+      - name: Detect already-final publish
+        id: final_guard
+        run: |
+          if test -f "${BAREEQ_AUDIO_PUBLISHED_MARKER}"; then
+            echo 'already_final=true' >> "$GITHUB_OUTPUT"
+            echo 'FINAL_MARKER_ALREADY_PRESENT=yes; expensive work skipped'
+          else
+            echo 'already_final=false' >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Node
+        if: steps.final_guard.outputs.already_final != 'true'
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: npm
 
       - name: Install dependencies
+        if: steps.final_guard.outputs.already_final != 'true'
         run: npm ci
 
       - name: Apply narrow lam-numeric adjudication repair
+        if: steps.final_guard.outputs.already_final != 'true'
         run: node scripts/audio-final-runtime-repair.mjs
 
       - name: Offline safety gates
+        if: steps.final_guard.outputs.already_final != 'true'
         run: |
           node scripts/test-audio-lifecycle.mjs
           node scripts/test-audio-production-safety.mjs
@@ -60,6 +72,7 @@ jobs:
           node --check scripts/audio-touchscreen-targeted-regenerate.mjs
 
       - name: Verify provider credentials
+        if: steps.final_guard.outputs.already_final != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -68,14 +81,25 @@ jobs:
           test -n "${OPENROUTER_API_KEY}"
           echo 'PROVIDER_CREDENTIALS=present'
 
-      - name: Restore latest corrected checkpoint
-        uses: actions/cache/restore@v4
+      - name: Restore run 41 preserved checkpoint artifact
+        if: steps.final_guard.outputs.already_final != 'true'
+        uses: actions/download-artifact@v4
         with:
+          name: ${{ env.BAREEQ_SOURCE_ARTIFACT }}
           path: audio-candidates
-          key: ${{ env.BAREEQ_CORRECTED_CACHE_KEY }}
-          fail-on-cache-miss: true
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.BAREEQ_SOURCE_RUN_ID }}
+
+      - name: Verify restored checkpoint artifact
+        if: steps.final_guard.outputs.already_final != 'true'
+        run: |
+          set -euo pipefail
+          test -f "audio-candidates/_campaigns/${BAREEQ_AUDIO_CAMPAIGN_ID}/state.json"
+          echo "RUN41_ARTIFACT_RESTORE=PASS run=${BAREEQ_SOURCE_RUN_ID} artifact=${BAREEQ_SOURCE_ARTIFACT}"
 
       - name: Require generation complete 15/15 and preserved exact coworker
+        if: steps.final_guard.outputs.already_final != 'true'
         run: |
           node - <<'NODE'
           const fs = require('fs');
@@ -91,6 +115,7 @@ jobs:
           NODE
 
       - name: Regenerate only touchscreen parts with confirmed fresh dual-ASR mismatches
+        if: steps.final_guard.outputs.already_final != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -135,11 +160,13 @@ jobs:
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
+        if: steps.final_guard.outputs.already_final != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/audio-openrouter-campaign.mjs --mode=validate
 
       - name: Require exact publication gates
+        if: steps.final_guard.outputs.already_final != 'true'
         run: |
           node - <<'NODE'
           const fs = require('fs');
@@ -164,12 +191,14 @@ jobs:
           NODE
 
       - name: Publish validated candidates into PR tree
+        if: steps.final_guard.outputs.already_final != 'true'
         run: |
           node scripts/audio-openrouter-campaign.mjs --mode=publish
           test -f "${BAREEQ_AUDIO_PUBLISHED_MARKER}"
           echo 'PUBLISH_TO_PR_TREE=PASS'
 
       - name: Commit validated audio tree to PR branch
+        if: steps.final_guard.outputs.already_final != 'true'
         env:
           PR_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
@@ -182,14 +211,14 @@ jobs:
           echo 'PUBLISHED_AUDIO_COMMIT=pushed'
 
       - name: Save final checkpoint
-        if: always()
+        if: ${{ always() && steps.final_guard.outputs.already_final != 'true' }}
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
           key: bareeq-audio-final-validation-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload final evidence
-        if: always()
+        if: ${{ always() && steps.final_guard.outputs.already_final != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: bareeq-final-validation-${{ github.run_id }}
