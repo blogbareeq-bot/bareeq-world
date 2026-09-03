@@ -350,7 +350,7 @@ async function publishAll({ allowPartial = false } = {}) {
       })),
       fallbacks: fallbackArticles.map((articleId) => ({
         articleId,
-        reason: 'awaiting-exact-dual-asr-after-tts-quota-renewal',
+        reason: 'awaiting-exact-dual-asr-campaign-completion',
       })),
     };
     await writeJson(PARTIAL_PUBLISHED_MARKER_PATH, marker);
