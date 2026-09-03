@@ -18,6 +18,7 @@ const STATE_PATH = path.join(CAMPAIGN_DIR, 'state.json');
 const SNAPSHOT_PATH = path.join(ROOT, 'docs', 'audio', 'AUDIO-TRUTH-SNAPSHOT.json');
 const POLICY_PATH = path.join(ROOT, 'docs', 'audio', 'PUBLICATION-POLICY-20260901.json');
 const PUBLISHED_MARKER_PATH = path.join(ROOT, 'docs', 'audio', 'PUBLISHED-SADALTAGER-OPENROUTER-20260901.json');
+const PARTIAL_PUBLISHED_MARKER_PATH = path.join(ROOT, 'docs', 'audio', 'PUBLISHED-SADALTAGER-PARTIAL-20260903.json');
 
 async function readJson(file, fallback = null) {
   try {
@@ -223,23 +224,35 @@ function exactConsensusZero(consensus = {}) {
   return ['substitutions', 'deletions', 'insertions', 'unresolved'].every((key) => Number(consensus[key]) === 0);
 }
 
-async function publishAll() {
+async function publishAll({ allowPartial = false } = {}) {
   const items = await inventory();
   const policy = await publicationPolicy();
   const state = await loadState();
-  if (!state.validationComplete) {
+  if (!allowPartial && !state.validationComplete) {
     throw Object.assign(new Error('Publication refused: OpenRouter validation is incomplete.'), { exitCode: EXIT_HARD });
   }
+  const publishedArticles = [];
+  const fallbackArticles = [];
   for (const item of items) {
     const previous = state.articles[item.articleId] || {};
     const fingerprint = previous.generation?.fingerprint;
     const validation = previous.validation || {};
-    if (!fingerprint || validation.status !== 'validated' || validation.fingerprint !== fingerprint || !validation.fullSha256) {
-      throw Object.assign(new Error(`Publication refused: ${item.articleId} has no matching validated candidate.`), { exitCode: EXIT_HARD });
+    const publishable = Boolean(
+      fingerprint
+      && validation.status === 'validated'
+      && validation.fingerprint === fingerprint
+      && validation.fullSha256
+      && exactConsensusZero(validation.consensus),
+    );
+    if (!publishable) {
+      if (allowPartial) {
+        fallbackArticles.push(item.articleId);
+        console.log(`OPENROUTER_PARTIAL_PUBLICATION_FALLBACK ${item.articleId}`);
+        continue;
+      }
+      throw Object.assign(new Error(`Publication refused: ${item.articleId} has no matching exact 0/0/0/0 candidate.`), { exitCode: EXIT_HARD });
     }
-    if (!exactConsensusZero(validation.consensus)) {
-      throw Object.assign(new Error(`Publication refused: ${item.articleId} consensus is not exact 0/0/0/0.`), { exitCode: EXIT_HARD });
-    }
+    publishedArticles.push(item.articleId);
     if (previous.publication?.status === 'published' && previous.publication?.fingerprint === fingerprint) {
       console.log(`OPENROUTER_PUBLICATION_RESUME_SKIP ${item.articleId} ${fingerprint}`);
       continue;
@@ -304,6 +317,47 @@ async function publishAll() {
     console.log(`OPENROUTER_PUBLICATION_DONE ${item.articleId} ${fingerprint}`);
   }
 
+  if (allowPartial) {
+    if (publishedArticles.length === 0 || fallbackArticles.length === 0) {
+      throw Object.assign(new Error(`Partial publication requires both validated and fallback articles; validated=${publishedArticles.length} fallback=${fallbackArticles.length}.`), { exitCode: EXIT_HARD });
+    }
+    state.publicationComplete = false;
+    state.liveUntouched = false;
+    state.partialPublication = {
+      status: 'published-with-fallback',
+      publishedCount: publishedArticles.length,
+      fallbackCount: fallbackArticles.length,
+      publishedArticles,
+      fallbackArticles,
+      completedAt: new Date().toISOString(),
+    };
+    await saveState(state);
+    const marker = {
+      schema: 'bareeq.audio-openrouter-partial-published-tree.v1',
+      campaignId: CAMPAIGN_ID,
+      model: PRODUCTION_NARRATOR.model,
+      voice: PRODUCTION_NARRATOR.providerVoice,
+      publicationStatus: 'partial-with-existing-live-fallback',
+      publicationComplete: false,
+      publishedCount: publishedArticles.length,
+      fallbackCount: fallbackArticles.length,
+      publicationPolicy: 'docs/audio/PUBLICATION-POLICY-20260901.json',
+      generatedAt: new Date().toISOString(),
+      articles: publishedArticles.map((articleId) => ({
+        articleId,
+        fingerprint: state.articles[articleId]?.publication?.fingerprint,
+        fullSha256: state.articles[articleId]?.publication?.fullSha256,
+      })),
+      fallbacks: fallbackArticles.map((articleId) => ({
+        articleId,
+        reason: 'awaiting-exact-dual-asr-after-tts-quota-renewal',
+      })),
+    };
+    await writeJson(PARTIAL_PUBLISHED_MARKER_PATH, marker);
+    console.log(`OPENROUTER_PARTIAL_PUBLICATION_DONE published=${publishedArticles.length} fallback=${fallbackArticles.length}`);
+    return state;
+  }
+
   state.publicationComplete = true;
   state.liveUntouched = false;
   await saveState(state);
@@ -331,7 +385,8 @@ try {
   if (MODE === 'generate') await generateAll();
   else if (MODE === 'validate') await validateAll();
   else if (MODE === 'publish') await publishAll();
-  else throw Object.assign(new Error(`Unknown mode ${MODE}; use generate | validate | publish.`), { exitCode: 2 });
+  else if (MODE === 'publish-current') await publishAll({ allowPartial: true });
+  else throw Object.assign(new Error(`Unknown mode ${MODE}; use generate | validate | publish | publish-current.`), { exitCode: 2 });
   process.exit(EXIT_OK);
 } catch (error) {
   console.error(error.message);
