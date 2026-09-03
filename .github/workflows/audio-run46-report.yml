@@ -32,7 +32,7 @@ jobs:
           mapfile -d '' files < <(find artifact -type f -path '*how-touchscreens-work*' -name '*.json' -size -2M -print0)
           printf 'TOUCHSCREEN_JSON_FILES=%s\n' "${#files[@]}"
           for file in "${files[@]}"; do
-            if rg -q 'substitutions|deletions|insertions|unresolved|validation|transcript|expected|actual' "$file"; then
+            if grep -Eq 'substitutions|deletions|insertions|unresolved|validation|transcript|expected|actual' "$file"; then
               printf 'FILE=%s\n' "$file"
               jq . "$file"
             fi
