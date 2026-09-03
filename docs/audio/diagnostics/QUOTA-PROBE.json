@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-09-03T15:18:05.485Z",
+  "probes": [
+    {
+      "name": "openrouter-credits",
+      "at": "2026-09-03T15:18:05.520Z",
+      "ok": true,
+      "httpStatus": 200,
+      "balanceUsd": 0.5383070419999996,
+      "body": "{\"data\":{\"total_credits\":25,\"total_usage\":24.461692958}}",
+      "ms": 211
+    },
+    {
+      "name": "openrouter-speech-production-size",
+      "at": "2026-09-03T15:18:05.731Z",
+      "chars": 2450,
+      "ok": false,
+      "httpStatus": 402,
+      "contentType": "application/json",
+      "body": "{\"error\":{\"message\":\"Insufficient credits. Add more using https://openrouter.ai/settings/credits\",\"code\":402,\"metadata\":{\"limit_source\":\"openrouter_credits\",\"remedy_hint\":\"Add credits at https://openrouter.ai/settings/credits, or lower max_tokens / prompt size to fit your remaining balance.\"}}}",
+      "ms": 89
+    },
+    {
+      "name": "gemini-tts-short-interactions",
+      "at": "2026-09-03T15:18:10.821Z",
+      "chars": 18,
+      "ok": false,
+      "httpStatus": 429,
+      "responseBytes": 463,
+      "quotaRetryInSeconds": 48.969245492,
+      "quotaLimit": 10,
+      "body": "{\"error\":{\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts\\nPlease retry in 4",
+      "ms": 229
+    },
+    {
+      "name": "gemini-tts-production-interactions-1",
+      "at": "2026-09-03T15:18:31.067Z",
+      "chars": 2450,
+      "ok": false,
+      "httpStatus": 429,
+      "responseBytes": 463,
+      "quotaRetryInSeconds": 28.740287397,
+      "quotaLimit": 10,
+      "body": "{\"error\":{\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts\\nPlease retry in 2",
+      "ms": 214
+    },
+    {
+      "name": "gemini-tts-production-interactions-2",
+      "at": "2026-09-03T15:18:51.291Z",
+      "chars": 2450,
+      "ok": false,
+      "httpStatus": 429,
+      "responseBytes": 462,
+      "quotaRetryInSeconds": 8.499044982,
+      "quotaLimit": 10,
+      "body": "{\"error\":{\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts\\nPlease retry in 8",
+      "ms": 234
+    },
+    {
+      "name": "gemini-tts-production-generate-content",
+      "at": "2026-09-03T15:19:11.541Z",
+      "chars": 2450,
+      "ok": true,
+      "httpStatus": 200,
+      "responseBytes": 8704782,
+      "quotaRetryInSeconds": null,
+      "quotaLimit": null,
+      "ms": 73199
+    },
+    {
+      "name": "gemini-asr-model-gemini-3.5-flash-lite",
+      "at": "2026-09-03T15:20:34.746Z",
+      "ok": true,
+      "httpStatus": 200,
+      "responseBytes": 711,
+      "quotaRetryInSeconds": null,
+      "quotaLimit": null,
+      "ms": 16440
+    },
+    {
+      "name": "gemini-asr-model-gemini-3.5-transcribe",
+      "at": "2026-09-03T15:21:01.193Z",
+      "ok": true,
+      "httpStatus": 200,
+      "responseBytes": 513,
+      "quotaRetryInSeconds": null,
+      "quotaLimit": null,
+      "ms": 130
+    }
+  ],
+  "longTextChars": 2450,
+  "longTextBytes": 4633,
+  "summary": {
+    "total": 8,
+    "ok": 4,
+    "failed": 4,
+    "http429": 3,
+    "http402": 1,
+    "geminiProductionTtsOk": 1
+  }
+}
