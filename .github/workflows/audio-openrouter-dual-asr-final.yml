@@ -22,10 +22,10 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      # Attempt 2 is the newest durable checkpoint. It contains the successful
-      # targeted repairs produced on 2026-09-03 and must be the sole base for
-      # later repair passes; restoring the older seed repeated stale work.
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33700314593-2
+      # Run 29 is the newest durable checkpoint. It preserves the newly repaired
+      # part 1 plus every earlier successful article/part, so later passes must
+      # resume here instead of spending quota on already-correct audio.
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33718101183-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -99,21 +99,23 @@ jobs:
             {"1":"Read the reviewed Arabic transcript verbatim. At the phrase «ملاءمة للمس» pronounce مَلَاءَمَة exactly with the hamza after the long alif; never say ملائمة. Preserve every written token and ending.","2":"Read the reviewed Arabic transcript verbatim. Say the display abbreviations as the separately written Arabic words «أُولِيد» and «إِل سِي دِي», never as English letters. Pronounce «اللَّمْسَة» with the audible final ta marbuta, never «اللمس». Pronounce «إِنَّهُ» with initial kasra, never «أَنَّهُ». Preserve every written token.","3":"Read the reviewed Arabic transcript verbatim. Pronounce the coordinate words as two explicit Arabic words: «إِكْس وَوَاي». Do not say English X or Y and do not omit either Arabic word. Preserve every written token.","6":"Read the reviewed Arabic transcript verbatim. Pronounce «مِنْهُ» with final hu, never «منها». Pronounce «يَحْتَجُّ» exactly as written, never «يحتاج». Preserve every written token and ending."}
         run: |
           set -euo pipefail
-          # The fresh attempt-2 dual-ASR report locates every remaining
-          # substantive/unresolved token in parts 1, 2, 3, and 6. Repair only
-          # those parts; parts 4 and 5 stay byte-for-byte preserved.
-          for part in 1 2 3 6; do
+          # Run 29 repaired part 1 before the provider throttled. Preserve it
+          # byte-for-byte and spend the free-tier quota only on parts 2, 3, 6.
+          for part in 2 3 6; do
             success=0
-            for transport in developer-interactions developer-generate-content openrouter-speech; do
-              attempts=3
-              if [ "${transport}" = "openrouter-speech" ]; then attempts=1; fi
+            for transport in developer-interactions developer-generate-content; do
+              # Gemini's free endpoint reports rolling retry windows. Patient,
+              # evenly spaced retries avoid abandoning a repair during a short
+              # throttle window. OpenRouter is intentionally skipped while its
+              # account reports insufficient credit.
+              attempts=10
               for attempt in $(seq 1 "${attempts}"); do
                 echo "TARGETED_TTS article=how-touchscreens-work part=${part} transport=${transport} attempt=${attempt}"
                 if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-touchscreen-targeted-regenerate.mjs --article=how-touchscreens-work; then
                   success=1
                   break 2
                 fi
-                if [ "${transport}" != "openrouter-speech" ]; then sleep $((attempt * 20)); fi
+                sleep 75
               done
             done
             if [ "${success}" -ne 1 ]; then
