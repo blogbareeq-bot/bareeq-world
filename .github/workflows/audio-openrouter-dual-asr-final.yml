@@ -22,7 +22,7 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33692896978-1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33696473514-1
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -85,15 +85,15 @@ jobs:
           console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 prior_repairs=preserved');
           NODE
 
-      - name: Regenerate only remaining touchscreen parts 2,5 for confirmed ASR mismatches
+      - name: Regenerate only touchscreen parts with confirmed fresh dual-ASR mismatches
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"2":"Pronounce «تقنية» as the exact singular written word, not «تقنيات»; pronounce «اللمسة» with final ة, not «اللمس»; and pronounce «إنه» with initial إِ, not «أنه». Preserve every written lexical token exactly.","5":"Pronounce the exact written word «التجفيف», not «التشفير» or «التشفيف». Preserve every written lexical token exactly."}
+            {"1":"Preserve the written lexical tokens exactly. Pronounce «ودقة» exactly, not «ودقتين»; «الشاشة» exactly where singular, not «الشاشات»; «التصميمات» exactly, not «التصاميم»; and «ملاءمة» exactly, not «ملائمة».","2":"Preserve the written lexical tokens exactly. Pronounce «التصميمات» exactly, not «التصاميم»; pronounce «اللمسة» with final ة, not «اللمس» or «اللمحة»; and pronounce «إنه» with initial إِ, not «أنه».","3":"Preserve the written lexical tokens exactly. Pronounce «اللمسة» with final ة, not «اللمس» or «اللمحة»; and pronounce the coordinate words exactly as written in Arabic: «إكس وواي», not English letter-name output or symbol substitutions.","6":"Preserve the written lexical tokens exactly. Pronounce «يحتج» exactly as written, not «يحتاج»."}
         run: |
           set -euo pipefail
-          for part in 2 5; do
+          for part in 1 2 3 6; do
             success=0
             for transport in developer-interactions developer-generate-content; do
               for attempt in 1 2 3; do
@@ -118,11 +118,11 @@ jobs:
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
           const fp = state.articles[articleId].generation.fingerprint;
           const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates',articleId,fp,'checkpoint.json'),'utf8'));
-          for (const index of [0,1,4]) {
+          for (const index of [0,1,2,4,5]) {
             const rec = checkpoint.completedParts?.[String(index)];
             if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error(`targeted touchscreen correction missing for part ${index + 1}`);
           }
-          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS parts=1,2,5 corpus_regenerated=no');
+          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS parts=1,2,3,5,6 corpus_regenerated=no');
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
