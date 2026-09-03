@@ -1,9 +1,9 @@
 name: Inspect Bareeq run 46 checkpoint
 
 on:
-  push:
+  pull_request:
     branches:
-      - diagnostics/audio-run46-report
+      - main
     paths:
       - '.github/workflows/audio-run46-report.yml'
 
