@@ -130,11 +130,11 @@ jobs:
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
           const fp = state.articles[articleId].generation.fingerprint;
           const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates',articleId,fp,'checkpoint.json'),'utf8'));
-          for (const index of [0,1,2,4,5]) {
+          for (const index of [0,1,2,3,4,5]) {
             const rec = checkpoint.completedParts?.[String(index)];
             if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error(`targeted touchscreen correction missing for part ${index + 1}`);
           }
-          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS parts=1,2,3,5,6 corpus_regenerated=no');
+          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS parts=1,2,3,4,5,6 corpus_regenerated=no');
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
