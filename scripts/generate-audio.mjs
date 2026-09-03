@@ -866,7 +866,17 @@ function manifestAssets(manifest, post) {
   const bundled = bundledManifestAssets(manifest, post);
   if (bundled) return bundled;
   if (PROVIDER === 'bundled') return null;
-  if (manifest.version !== 3 || manifest.sourceHash !== post.sourceHash || manifest.generatorVersion !== GENERATOR_VERSION || manifest.provider !== PROVIDER_NAME || manifest.model !== MODEL || manifest.language !== LANGUAGE || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') return null;
+  const exactPublishedSource = manifest.schema === 'bareeq.audio-production-manifest.v3'
+    && manifest.status === 'published'
+    && manifest.articleId === post.id
+    && manifest.audioKey === post.key
+    && manifest.speechScriptHash === post.speechScriptHash
+    && /^[a-f0-9]{64}$/.test(manifest.candidateFingerprint || '')
+    && manifest.publishedFromCandidate === manifest.candidateFingerprint
+    && /^[a-f0-9]{64}$/.test(manifest.fullSha256 || '');
+  const currentGeneratorSource = manifest.sourceHash === post.sourceHash
+    && manifest.generatorVersion === GENERATOR_VERSION;
+  if (manifest.version !== 3 || (!currentGeneratorSource && !exactPublishedSource) || manifest.provider !== PROVIDER_NAME || manifest.model !== MODEL || manifest.language !== LANGUAGE || manifest.syncVersion !== 1 || manifest.syncMethod !== 'paragraph-weighted') return null;
   if (Boolean(manifest.contractTest) !== CONTRACT_TEST || !Array.isArray(manifest.voices) || manifest.voices.length !== effectiveManifestVoices.length || !Array.isArray(manifest.parts) || !manifest.parts.length) return null;
   if (manifest.defaultVoice !== effectiveManifestVoices[0].id) return null;
   for (let index = 0; index < effectiveManifestVoices.length; index += 1) {
