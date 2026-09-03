@@ -1,0 +1,12 @@
+campaign=sadaltager-all-20260831-v1
+scope=all-15-articles
+model=gemini-3.1-flash-tts-preview
+voice=Sadaltager
+transport=generateContent
+policy=fresh-isolated-candidates-only
+publish=disabled
+validation=technical-plus-independent-dual-asr
+human-listening=pending-after-machine-validation
+live-audio=must-remain-untouched
+resume=checkpoint-on-quota-or-transient-stop
+requested=2026-08-31

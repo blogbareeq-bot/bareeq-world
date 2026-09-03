@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "ai-as-coworker-future-of-human-work",
-  "speechScriptHash": "5a673aaee5ab56f5ba78f8c0dd2ece90ddc51b70e33a5c0003074f695e9c2d90",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "6716a5b9240a5f90e56d0a18e93ac60a431121e3911e89329cbdcdf596c04f82",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "01152e56f256b7cdccecaafdbc0777cca1f243d3d56aee75f1d9eb81938a7737"
+  "planHash": "6ed6e8b00268a699959e181c189cbfcabd856a0d8a7082189b4426809c603333"
 }

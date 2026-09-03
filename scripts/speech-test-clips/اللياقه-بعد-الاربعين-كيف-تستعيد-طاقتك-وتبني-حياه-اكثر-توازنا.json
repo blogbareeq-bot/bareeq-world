@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
-  "speechScriptHash": "676675c864de9f12e2017ce143e5c220271eeb042d5e6f72d8a56844baa39c03",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "42dcf30b9b8b603709af43f193080270659babc091678a079ae2173563c2a057",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "a8808abcb91adb710880f277ac1b2d3a3ee5e5fdfbcf2e3390b339b8978ae121"
+  "planHash": "528b802ae341a025b73e6c8b9c95bdfa38acf9ec54cb8ae5fc2624256b9b1c8c"
 }

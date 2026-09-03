@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
-import { mkdir, mkdtemp, readdir, rm, symlink } from 'node:fs/promises';
+import { mkdir, mkdtemp, readdir, rm, symlink, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import {
@@ -135,9 +135,20 @@ assert(prompt.endsWith(`### TRANSCRIPT\n${approvedTranscript}`));
 assert(prompt.includes('Every written Arabic diacritic is binding'));
 assert(prompt.includes('Do not add, omit, paraphrase, or reorder any word'));
 
-// Audio/Test Clip readiness cannot be claimed without actual listening evidence.
-const fakePost = { speechApproval: { validation: { approved: true }, script: { scriptHash: 'abc' }, testClipPlan: { speechScriptHash: 'abc', testClipPassed: true, fullSynthesisAllowed: true, audioReview: { status: 'not-performed' } } } };
-assert.equal(evaluateSynthesisReadiness(fakePost).allowed, false);
+// Generation may proceed from a reviewed Speech Script. Listening evidence is a
+// later publication gate and must not circularly block the first TTS request.
+const fakePost = {
+  speechApproval: {
+    validation: { valid: true, approved: true },
+    script: { scriptHash: 'abc' },
+    testClipPlan: { speechScriptHash: 'abc', testClipPassed: true, fullSynthesisAllowed: true, audioReview: { status: 'not-performed' } },
+    testClipEvidenceVerified: false,
+  },
+};
+const fakeReadiness = evaluateSynthesisReadiness(fakePost);
+assert.equal(fakeReadiness.generationAuthorized, true, 'reviewed text should authorize generation');
+assert.equal(fakeReadiness.audioEvidencePassed, false, 'missing listening evidence must stay visible');
+assert.equal(fakeReadiness.publishable, false, 'publication must remain blocked without later gates');
 
 // Every current article source snapshot is represented without modifying source.
 const currentModels = await loadPublishedArticleModels(ROOT);
@@ -159,11 +170,11 @@ await new Promise((resolve, reject) => { server.once('error', reject); server.li
 const address = server.address();
 const fixtureRoot = await mkdtemp(path.join(os.tmpdir(), 'bareeq-speech-gate-'));
 try {
-  await mkdir(path.join(fixtureRoot, 'src', 'content'), { recursive: true });
+  await mkdir(path.join(fixtureRoot, 'src', 'content', 'posts'), { recursive: true });
   await mkdir(path.join(fixtureRoot, 'public'), { recursive: true });
   const linkType = process.platform === 'win32' ? 'junction' : 'dir';
   await symlink(path.join(ROOT, 'scripts'), path.join(fixtureRoot, 'scripts'), linkType);
-  await symlink(path.join(ROOT, 'src', 'content', 'posts'), path.join(fixtureRoot, 'src', 'content', 'posts'), linkType);
+  await writeFile(path.join(fixtureRoot, 'src', 'content', 'posts', 'gate-block-fixture.md'), `---\ntitle: \"مقال حاجز التوليد\"\ndraft: false\n---\nفقرة واحدة غير مراجعة تُستخدم فقط لإثبات أن البوابة تمنع الوصول إلى المزود.\n`);
   await symlink(path.join(ROOT, 'node_modules'), path.join(fixtureRoot, 'node_modules'), linkType);
   const endpoint = `http://127.0.0.1:${address.port}`;
   const result = await new Promise((resolve, reject) => {
@@ -172,7 +183,7 @@ try {
       env: {
         ...process.env,
         BAREEQ_TTS_PROVIDER: 'gemini',
-        BAREEQ_TTS_INCLUDE_IDS: 'كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه',
+        BAREEQ_TTS_INCLUDE_IDS: 'gate-block-fixture',
         BAREEQ_TTS_CONTRACT_TEST: '1',
         GEMINI_API_KEY: 'local-key-that-must-never-be-used',
         GEMINI_TTS_ENDPOINT: `${endpoint}/v1beta/interactions`,

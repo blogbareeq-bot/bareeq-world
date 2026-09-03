@@ -1,0 +1,202 @@
+# Canonical production audio workflow installed under .github/workflows.
+# The mirrored copy in docs/audio/github-audio-production.yml is kept for
+# review and for mode/safety contract tests.
+name: Bareeq audio production
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: dry-run never calls a provider. generate-candidate never publishes. validate-candidate never publishes. publish-approved requires listening tied to the file fingerprint. verify-live --snapshot-only is uncertified.
+        required: true
+        type: choice
+        default: dry-run
+        options:
+          - dry-run
+          - generate-candidate
+          - validate-candidate
+          - publish-approved
+          - verify-live
+      article:
+        description: Required except dry-run.
+        required: false
+        type: string
+        default: ''
+      fingerprint:
+        description: Required for validate-candidate and publish-approved. Never implied as latest.
+        required: false
+        type: string
+        default: ''
+      listening:
+        description: Path to fingerprint-bound human listening JSON. Required for publish-approved.
+        required: false
+        type: string
+        default: ''
+      verifyAsr:
+        description: verify-live --with-asr. Requires GEMINI_API_KEY. Default snapshot-only is uncertified.
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bareeq-audio-production
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      BAREEQ_CLOUD_TTS_ACTIVATE: '0'
+      BAREEQ_GEMINI_FREE_ROLLOUT: '0'
+      BAREEQ_AUDIO_MODE: ${{ inputs.mode }}
+      BAREEQ_AUDIO_ARTICLE: ${{ inputs.article }}
+      BAREEQ_AUDIO_FINGERPRINT: ${{ inputs.fingerprint }}
+      BAREEQ_AUDIO_LISTENING: ${{ inputs.listening }}
+      BAREEQ_AUDIO_VERIFY_ASR: ${{ inputs.verifyAsr }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Offline safety tests
+        run: |
+          node scripts/test-audio-lifecycle.mjs
+          node scripts/test-audio-production-safety.mjs
+          node scripts/test-audio-production-integration.mjs
+          node scripts/test-speech-script-quality-gate.mjs
+          node scripts/check-speech-scripts.mjs
+          node scripts/test-audio-engine-final.mjs
+          node scripts/test-audio-transition-normalization.mjs
+
+      - name: Guard inputs
+        run: |
+          set -euo pipefail
+          article="${BAREEQ_AUDIO_ARTICLE}"
+          fingerprint="${BAREEQ_AUDIO_FINGERPRINT}"
+          listening="${BAREEQ_AUDIO_LISTENING}"
+          mode="${BAREEQ_AUDIO_MODE}"
+          if [ "$mode" != "dry-run" ]; then
+            if [ -z "$article" ]; then
+              echo 'article is required'
+              exit 2
+            fi
+            case "$article" in
+              */*|*..*|*\\*) echo 'article path traversal refused'; exit 2 ;;
+            esac
+            if [ ! -f "src/content/posts/${article}.md" ]; then
+              echo "article is not in the inventory: ${article}"
+              exit 2
+            fi
+          fi
+          if [ "$mode" = "validate-candidate" ] || [ "$mode" = "publish-approved" ]; then
+            if [ -z "$fingerprint" ]; then
+              echo 'validate-candidate/publish-approved requires fingerprint. Refusing to pick latest.'
+              exit 2
+            fi
+            if ! printf '%s' "$fingerprint" | grep -Eq '^[a-f0-9]{64}$'; then
+              echo 'fingerprint must be a 64-character SHA-256 hex digest'
+              exit 2
+            fi
+          fi
+          if [ "$mode" = "publish-approved" ] && [ -z "$listening" ]; then
+            echo 'publish-approved requires a listening evidence path'
+            exit 2
+          fi
+
+      - name: Restore candidate cache
+        uses: actions/cache/restore@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-candidate-${{ inputs.article || 'none' }}-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}
+          restore-keys: |
+            bareeq-audio-candidate-${{ inputs.article || 'none' }}-
+
+      - name: Dry-run
+        if: inputs.mode == 'dry-run'
+        run: |
+          node scripts/audio-inventory.mjs
+          node scripts/audio-production.mjs --mode=dry-run
+          echo 'Dry-run complete. No TTS/ASR request was sent. generate-candidate does not publish.'
+
+      - name: Generate candidate
+        id: generate
+        if: inputs.mode == 'generate-candidate'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+        run: |
+          set +e
+          node scripts/audio-production.mjs --mode=generate-candidate --article="${BAREEQ_AUDIO_ARTICLE}"
+          status=$?
+          set -e
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          if [ "$status" = "75" ]; then
+            echo 'Quota pause HTTP 429. Completed fingerprint parts were saved. This step is not a success.'
+            exit 75
+          fi
+          exit "$status"
+
+      - name: Validate candidate
+        id: validate
+        if: inputs.mode == 'validate-candidate'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo 'validate-candidate: normalize playback transitions, merge full.mp3, technical QA, ASR gemini-3.5-transcribe, ASR gemini-3.6-flash, Files API resumable upload, 0/0/0, listening pack. Does not publish.'
+          node scripts/audio-production.mjs --mode=validate-candidate --article="${BAREEQ_AUDIO_ARTICLE}" --fingerprint="${BAREEQ_AUDIO_FINGERPRINT}"
+
+      - name: Publish approved
+        if: inputs.mode == 'publish-approved'
+        env:
+          BAREEQ_AUDIO_PUBLISH_GIT: '1'
+          BAREEQ_AUDIO_PUBLISH_PUSH: '1'
+          BAREEQ_AUDIO_PUBLISH_REF: ${{ github.ref_name }}
+          BAREEQ_AUDIO_VERIFY_ORIGIN: https://bareeqworld.com
+        run: |
+          echo 'publish-approved refuses without human listening evidence bound to the candidate file SHA-256.'
+          node scripts/audio-production.mjs --mode=publish-approved --article="${BAREEQ_AUDIO_ARTICLE}" --fingerprint="${BAREEQ_AUDIO_FINGERPRINT}" --listening="${BAREEQ_AUDIO_LISTENING}"
+
+      - name: Verify live snapshot-only
+        if: inputs.mode == 'verify-live' && inputs.verifyAsr != true
+        run: |
+          echo 'verify-live --snapshot-only: uncertified read-only snapshot. Dual ASR skipped. Live files are not modified.'
+          node scripts/audio-production.mjs --mode=verify-live --article="${BAREEQ_AUDIO_ARTICLE}" --snapshot-only
+
+      - name: Verify live with ASR
+        if: inputs.mode == 'verify-live' && inputs.verifyAsr == true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo 'verify-live --with-asr: merge+QA+sync+dual ASR on a copied snapshot. Live files are not modified. Not certified without human listening.'
+          node scripts/audio-production.mjs --mode=verify-live --article="${BAREEQ_AUDIO_ARTICLE}" --with-asr
+
+      - name: Save candidate cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-candidate-${{ inputs.article || 'none' }}-${{ hashFiles('scripts/audio-constants.mjs', 'scripts/audio-split.mjs', 'scripts/speech-scripts/**') }}-${{ github.run_id }}
+
+      - name: Upload candidate artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audio-candidate-${{ inputs.article || 'dry-run' }}-${{ github.run_id }}
+          path: |
+            audio-candidates/
+            docs/audio/DRY-RUN.json
+          if-no-files-found: warn

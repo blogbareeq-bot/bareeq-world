@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
-  "speechScriptHash": "6f5daaf9fabba77bd5ff07f25f4d65735e8b79216a7ca527ee50e8f8bb57767b",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "d8b98cccc75c2ab62964608ebd65e4bed1b201d59c94b5780a525d74a3213a78",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "489e285bbd21dc2538c029896a2e32c32fa9b926bc98b7adbd001f7572128e4e"
+  "planHash": "9f59e20dc5be9c1b110ceb838247f78437feddfb97207e1640e71418d3d97777"
 }

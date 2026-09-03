@@ -1,0 +1,13 @@
+name: Bareeq audio final recovery (manual only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  parked:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Automatic final recovery retired to protect provider quota. Use the dedicated OpenRouter dual-ASR final workflow.'

@@ -25,7 +25,7 @@ const requireAll = (label, source, tokens) => {
 
 requireAll('run-v4211-audio.mjs', runner, [
   "process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1'",
-  "process.env.BAREEQ_GEMINI_FREE_ROLLOUT?.trim() || '1'",
+  "process.env.BAREEQ_GEMINI_FREE_ROLLOUT?.trim() || '0'",
   "process.env.BAREEQ_GEMINI_FREE_ARTICLES_PER_BUILD?.trim() || '1'",
   "BAREEQ_TTS_CACHE_ALLOW_MISSING: '1'",
   'BAREEQ_TTS_MAX_MISSING_ARTICLES_PER_BUILD',
@@ -43,7 +43,7 @@ requireAll('generate-audio.mjs', generator, [
   'error?.httpStatus === 429',
 ]);
 requireAll('.env.example', envExample, [
-  'BAREEQ_GEMINI_FREE_ROLLOUT=1',
+  'BAREEQ_GEMINI_FREE_ROLLOUT=0',
   'BAREEQ_GEMINI_FREE_ARTICLES_PER_BUILD=1',
   'BAREEQ_CLOUD_TTS_ACTIVATE=0',
 ]);

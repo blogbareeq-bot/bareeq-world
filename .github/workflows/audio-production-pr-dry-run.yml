@@ -1,0 +1,13 @@
+name: Bareeq audio PR dry-run (manual only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  parked:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Automatic PR audio dry-run retired after production campaign completion phase to protect ASR quota.'

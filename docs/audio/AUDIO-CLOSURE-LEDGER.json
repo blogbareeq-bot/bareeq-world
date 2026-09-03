@@ -1,0 +1,1131 @@
+{
+  "schema": "bareeq.audio-closure-ledger.v1",
+  "generatedAt": "2026-08-29T05:19:12.301Z",
+  "articles": [
+    {
+      "article": "ai-agents-future-now",
+      "title": "الوكلاء الأذكياء: من الإجابة إلى التنفيذ",
+      "slug": "ai-agents-future-now",
+      "previousVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 1019.712,
+        "liveUrl": "https://bareeqworld.com/audio/articles/84f9f6b53f7ce503/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "finalVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "version": "gemini-3.1-flash-tts-preview"
+      },
+      "spokenFingerprint": {
+        "spokenChars": 9988,
+        "spokenBytes": 18164,
+        "spokenSha256": "6d43b0bb5ec820b79b603f1641f56ed36c981d08565f2c4c16fa0e15e04f8585"
+      },
+      "files": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 1019.712,
+        "liveUrl": "https://bareeqworld.com/audio/articles/84f9f6b53f7ce503/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/ai-agents-future-now/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/84f9f6b53f7ce503/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "6d43b0bb5ec820b79b603f1641f56ed36c981d08565f2c4c16fa0e15e04f8585",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current sadaltager manifest 84f9f6b53f7ce503",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "8844b531d744699e492f28c15315279cac00d6bad22b697ffa6fb82339f7a153",
+      "parts": [],
+      "status": "pending",
+      "next": "Reuse live Sadaltager. Run dual ASR + human listening + technical QA before certification.",
+      "stage": "generated"
+    },
+    {
+      "article": "ai-as-coworker-future-of-human-work",
+      "title": "حين يصبح الذكاء الاصطناعي زميلًا لا أداة: ماذا يبقى للإنسان؟",
+      "slug": "ai-as-coworker-future-of-human-work",
+      "previousVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 1209.696,
+        "liveUrl": "https://bareeqworld.com/audio/articles/263e3d148e6386a8/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "finalVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "version": "gemini-3.1-flash-tts-preview"
+      },
+      "spokenFingerprint": {
+        "spokenChars": 11622,
+        "spokenBytes": 21058,
+        "spokenSha256": "035f7b7c4f1942f06c03348539129dba26ecfbeed3c24e6958425879be7f117c"
+      },
+      "files": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 1209.696,
+        "liveUrl": "https://bareeqworld.com/audio/articles/263e3d148e6386a8/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/ai-as-coworker-future-of-human-work/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/263e3d148e6386a8/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "035f7b7c4f1942f06c03348539129dba26ecfbeed3c24e6958425879be7f117c",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current sadaltager manifest 263e3d148e6386a8",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "6716a5b9240a5f90e56d0a18e93ac60a431121e3911e89329cbdcdf596c04f82",
+      "parts": [],
+      "status": "pending",
+      "next": "Reuse live Sadaltager. Run dual ASR + human listening + technical QA before certification.",
+      "stage": "generated"
+    },
+    {
+      "article": "altadakhom-explained-simply",
+      "title": "التضخم ببساطة: لماذا ترتفع الأسعار؟",
+      "slug": "altadakhom-explained-simply",
+      "previousVoice": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 866.712,
+        "liveUrl": "https://bareeqworld.com/audio/articles/3fe4cd044730c91d/manifest.json",
+        "class": "live-fallback"
+      },
+      "finalVoice": null,
+      "spokenFingerprint": {
+        "spokenChars": 8463,
+        "spokenBytes": 15377,
+        "spokenSha256": "481d0410a281ee1712404588f62b200f858b9da67ab9adc9476de7e5deacf405"
+      },
+      "files": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 866.712,
+        "liveUrl": "https://bareeqworld.com/audio/articles/3fe4cd044730c91d/manifest.json",
+        "class": "live-fallback"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/altadakhom-explained-simply/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/3fe4cd044730c91d/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "481d0410a281ee1712404588f62b200f858b9da67ab9adc9476de7e5deacf405",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current hamed manifest 3fe4cd044730c91d",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "818300e754265bc5ae7aa2d37d5b0afcfb685b5fc5af0861233b6a9c9792a9eb",
+      "parts": [],
+      "status": "blocked",
+      "next": "Generate Sadaltager candidate with locked gemini-3.1-flash-tts-preview / Sadaltager settings; keep live Hamed until publishable.",
+      "stage": "generation_authorized"
+    },
+    {
+      "article": "how-touchscreens-work",
+      "title": "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟",
+      "slug": "how-touchscreens-work",
+      "previousVoice": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 921.6,
+        "liveUrl": "https://bareeqworld.com/audio/articles/de93f3d9f91c8b8b/manifest.json",
+        "class": "live-fallback"
+      },
+      "finalVoice": null,
+      "spokenFingerprint": {
+        "spokenChars": 14722,
+        "spokenBytes": 27836,
+        "spokenSha256": "2c75b228832a32dfc33949223f9a7b300e011c78b5e8c88037fc99538f2b7a1c"
+      },
+      "files": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 921.6,
+        "liveUrl": "https://bareeqworld.com/audio/articles/de93f3d9f91c8b8b/manifest.json",
+        "class": "live-fallback"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/how-touchscreens-work/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/de93f3d9f91c8b8b/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "2c75b228832a32dfc33949223f9a7b300e011c78b5e8c88037fc99538f2b7a1c",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current hamed manifest de93f3d9f91c8b8b",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "parts": [],
+      "status": "blocked",
+      "next": "Generate Sadaltager candidate with locked gemini-3.1-flash-tts-preview / Sadaltager settings; keep live Hamed until publishable.",
+      "stage": "generation_authorized"
+    },
+    {
+      "article": "intuition-first-impression-decisions-signature",
+      "title": "هل الحدس ذكاء خفي أم اختصار مضلل؟ متى نثق بشعورنا الأول؟",
+      "slug": "intuition-first-impression-decisions-signature",
+      "previousVoice": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 1118.52,
+        "liveUrl": "https://bareeqworld.com/audio/articles/1d1b681593122b59/manifest.json",
+        "class": "live-fallback"
+      },
+      "finalVoice": null,
+      "spokenFingerprint": {
+        "spokenChars": 8652,
+        "spokenBytes": 15606,
+        "spokenSha256": "ac1d80fbe9054adf01af83635b85a41547af3ca114671c9a8d296e620d4ed712"
+      },
+      "files": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 1118.52,
+        "liveUrl": "https://bareeqworld.com/audio/articles/1d1b681593122b59/manifest.json",
+        "class": "live-fallback"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/intuition-first-impression-decisions-signature/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/1d1b681593122b59/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "ac1d80fbe9054adf01af83635b85a41547af3ca114671c9a8d296e620d4ed712",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current hamed manifest 1d1b681593122b59",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "6cf7e840cf44a28cbbb9a436a39247176381c4c32bbe31f570f4f899e9d94c93",
+      "parts": [],
+      "status": "blocked",
+      "next": "Generate Sadaltager candidate with locked gemini-3.1-flash-tts-preview / Sadaltager settings; keep live Hamed until publishable.",
+      "stage": "generation_authorized"
+    },
+    {
+      "article": "language-soft-power-politics",
+      "title": "حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟",
+      "slug": "language-soft-power-politics",
+      "previousVoice": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 1092.432,
+        "liveUrl": "https://bareeqworld.com/audio/articles/b19e29e785a22c73/manifest.json",
+        "class": "live-fallback"
+      },
+      "finalVoice": null,
+      "spokenFingerprint": {
+        "spokenChars": 10597,
+        "spokenBytes": 19289,
+        "spokenSha256": "71a67d53cfde0d206eaea1eded0eaef512431c803e851e29844fc598663bb071"
+      },
+      "files": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 1092.432,
+        "liveUrl": "https://bareeqworld.com/audio/articles/b19e29e785a22c73/manifest.json",
+        "class": "live-fallback"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/language-soft-power-politics/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/b19e29e785a22c73/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "71a67d53cfde0d206eaea1eded0eaef512431c803e851e29844fc598663bb071",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current hamed manifest b19e29e785a22c73",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "parts": [],
+      "status": "blocked",
+      "next": "Generate Sadaltager candidate with locked gemini-3.1-flash-tts-preview / Sadaltager settings; keep live Hamed until publishable.",
+      "stage": "generation_authorized"
+    },
+    {
+      "article": "why-some-passports-are-stronger",
+      "title": "لماذا تفتح بعض جوازات السفر أبواب العالم أكثر من غيرها؟",
+      "slug": "why-some-passports-are-stronger",
+      "previousVoice": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 1246.248,
+        "liveUrl": "https://bareeqworld.com/audio/articles/34e34b6f4633d928/manifest.json",
+        "class": "live-fallback"
+      },
+      "finalVoice": null,
+      "spokenFingerprint": {
+        "spokenChars": 12640,
+        "spokenBytes": 23107,
+        "spokenSha256": "7290b54d1139481cc8089c42f1a4d6c75d0956e8ed90000121ff3ca886208abd"
+      },
+      "files": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 1246.248,
+        "liveUrl": "https://bareeqworld.com/audio/articles/34e34b6f4633d928/manifest.json",
+        "class": "live-fallback"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/why-some-passports-are-stronger/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/34e34b6f4633d928/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "7290b54d1139481cc8089c42f1a4d6c75d0956e8ed90000121ff3ca886208abd",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current hamed manifest 34e34b6f4633d928",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+      "parts": [],
+      "status": "blocked",
+      "next": "Generate Sadaltager candidate with locked gemini-3.1-flash-tts-preview / Sadaltager settings; keep live Hamed until publishable.",
+      "stage": "generation_authorized"
+    },
+    {
+      "article": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "title": "أطياف الوهم: أربع مغالطات منطقية نقع فيها يوميًا",
+      "slug": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "previousVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 719.928,
+        "liveUrl": "https://bareeqworld.com/audio/articles/cf933330ca485220/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "finalVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "version": "gemini-3.1-flash-tts-preview"
+      },
+      "spokenFingerprint": {
+        "spokenChars": 7429,
+        "spokenBytes": 13429,
+        "spokenSha256": "84bfc5996fb1ac0f8a8ea0e10ef33d051db0b6fd184b01b66066b2e623716cde"
+      },
+      "files": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 719.928,
+        "liveUrl": "https://bareeqworld.com/audio/articles/cf933330ca485220/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/%D8%A7%D8%B7%D9%8A%D8%A7%D9%81-%D8%A7%D9%84%D9%88%D9%87%D9%85-%D9%85%D8%BA%D8%A7%D9%84%D8%B7%D8%A7%D8%AA-%D9%85%D9%86%D8%B7%D9%82%D9%8A%D9%87-%D9%86%D9%82%D8%B9-%D9%81%D9%8A%D9%87%D8%A7-%D9%8A%D9%88%D9%85%D9%8A%D8%A7-%D8%AA%D8%AE%D8%AF%D8%B9-%D8%B9%D9%82%D9%88%D9%84%D9%86%D8%A7/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/cf933330ca485220/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "84bfc5996fb1ac0f8a8ea0e10ef33d051db0b6fd184b01b66066b2e623716cde",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current sadaltager manifest cf933330ca485220",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "c8b968121cd2ff0dbbb9096ed2053855d104d0c69cd638116b73122cf6ac303a",
+      "parts": [],
+      "status": "pending",
+      "next": "Reuse live Sadaltager. Run dual ASR + human listening + technical QA before certification.",
+      "stage": "generated"
+    },
+    {
+      "article": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "title": "أعط الصباح فرصة لعبد الوهاب مطاوع: حين يصبح الأمل عملًا",
+      "slug": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "previousVoice": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 1741.824,
+        "liveUrl": "https://bareeqworld.com/audio/articles/8f0fcef1d803164a/manifest.json",
+        "class": "live-fallback"
+      },
+      "finalVoice": null,
+      "spokenFingerprint": {
+        "spokenChars": 17239,
+        "spokenBytes": 31208,
+        "spokenSha256": "93ffedd9789d567481c24723e51b86c220a56aacf2272f55cc1e7e8417d8400b"
+      },
+      "files": {
+        "provider": "Microsoft Azure AI Speech",
+        "model": "Neural TTS",
+        "voiceId": "hamed",
+        "durationSeconds": 1741.824,
+        "liveUrl": "https://bareeqworld.com/audio/articles/8f0fcef1d803164a/manifest.json",
+        "class": "live-fallback"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/%D8%A7%D8%B9%D8%B7-%D8%A7%D9%84%D8%B5%D8%A8%D8%A7%D8%AD-%D9%81%D8%B1%D8%B5%D8%A9-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D9%81%D9%8A-%D9%83%D8%AA%D8%A7%D8%A8-%D8%B9%D8%A8%D8%AF-%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8-%D9%85%D8%B7%D8%A7%D9%88%D8%B9/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/8f0fcef1d803164a/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "93ffedd9789d567481c24723e51b86c220a56aacf2272f55cc1e7e8417d8400b",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current hamed manifest 8f0fcef1d803164a",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "parts": [],
+      "status": "blocked",
+      "next": "Generate Sadaltager candidate with locked gemini-3.1-flash-tts-preview / Sadaltager settings; keep live Hamed until publishable.",
+      "stage": "generation_authorized"
+    },
+    {
+      "article": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "title": "اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا",
+      "slug": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "previousVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 659.088,
+        "liveUrl": "https://bareeqworld.com/audio/articles/43993d7a722d81d4/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "finalVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "version": "gemini-3.1-flash-tts-preview"
+      },
+      "spokenFingerprint": {
+        "spokenChars": 6130,
+        "spokenBytes": 11104,
+        "spokenSha256": "4fc72e11fdf498e28a72cf446f27913b15860457b3ff4837927faf2dd51b28b5"
+      },
+      "files": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 659.088,
+        "liveUrl": "https://bareeqworld.com/audio/articles/43993d7a722d81d4/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/%D8%A7%D9%84%D9%84%D9%8A%D8%A7%D9%82%D9%87-%D8%A8%D8%B9%D8%AF-%D8%A7%D9%84%D8%A7%D8%B1%D8%A8%D8%B9%D9%8A%D9%86-%D9%83%D9%8A%D9%81-%D8%AA%D8%B3%D8%AA%D8%B9%D9%8A%D8%AF-%D8%B7%D8%A7%D9%82%D8%AA%D9%83-%D9%88%D8%AA%D8%A8%D9%86%D9%8A-%D8%AD%D9%8A%D8%A7%D9%87-%D8%A7%D9%83%D8%AB%D8%B1-%D8%AA%D9%88%D8%A7%D8%B2%D9%86%D8%A7/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/43993d7a722d81d4/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "4fc72e11fdf498e28a72cf446f27913b15860457b3ff4837927faf2dd51b28b5",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current sadaltager manifest 43993d7a722d81d4",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "42dcf30b9b8b603709af43f193080270659babc091678a079ae2173563c2a057",
+      "parts": [],
+      "status": "pending",
+      "next": "Reuse live Sadaltager. Run dual ASR + human listening + technical QA before certification.",
+      "stage": "generated"
+    },
+    {
+      "article": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "title": "عادات ثقافية من حول العالم: حين يصبح الاختلاف إثراءً",
+      "slug": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "previousVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 507.168,
+        "liveUrl": "https://bareeqworld.com/audio/articles/0d7d16713d3cea31/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "finalVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "version": "gemini-3.1-flash-tts-preview"
+      },
+      "spokenFingerprint": {
+        "spokenChars": 5019,
+        "spokenBytes": 9127,
+        "spokenSha256": "584a48f2cf8ee41601fd81ec6696e78afac49df888000e13c4f1fed2177e256a"
+      },
+      "files": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 507.168,
+        "liveUrl": "https://bareeqworld.com/audio/articles/0d7d16713d3cea31/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/%D8%B9%D8%A7%D8%AF%D8%A7%D8%AA-%D8%AB%D9%82%D8%A7%D9%81%D9%8A%D9%87-%D9%85%D8%AF%D9%87%D8%B4%D9%87-%D9%85%D9%86-%D8%AD%D9%88%D9%84-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85-%D8%AD%D9%8A%D9%86-%D9%8A%D9%83%D9%88%D9%86-%D8%A7%D9%84%D8%A7%D8%AE%D8%AA%D9%84%D8%A7%D9%81-%D8%A7%D8%AB%D8%B1%D8%A7%D8%A1/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/0d7d16713d3cea31/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "584a48f2cf8ee41601fd81ec6696e78afac49df888000e13c4f1fed2177e256a",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current sadaltager manifest 0d7d16713d3cea31",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "10ae7f7ad9b95e2d7d50f007ffc96337e1cc6af42e417a0522ca3fcebe4ec224",
+      "parts": [],
+      "status": "pending",
+      "next": "Reuse live Sadaltager. Run dual ASR + human listening + technical QA before certification.",
+      "stage": "generated"
+    },
+    {
+      "article": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "title": "كيف تتعامل مع المواقف الصعبة؟ إطار عملي للهدوء واتخاذ القرار",
+      "slug": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "previousVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 796.08,
+        "liveUrl": "https://bareeqworld.com/audio/articles/9d04080d1962a365/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "finalVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "version": "gemini-3.1-flash-tts-preview"
+      },
+      "spokenFingerprint": {
+        "spokenChars": 7602,
+        "spokenBytes": 13726,
+        "spokenSha256": "05d9b708449cdb2a46b79198043ea20e8896cc85102f994cea1d6902648877d7"
+      },
+      "files": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 796.08,
+        "liveUrl": "https://bareeqworld.com/audio/articles/9d04080d1962a365/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/%D9%83%D9%8A%D9%81-%D8%AA%D8%AA%D8%B9%D8%A7%D9%85%D9%84-%D9%85%D8%B9-%D8%A7%D9%84%D9%85%D9%88%D8%A7%D9%82%D9%81-%D8%A7%D9%84%D8%B5%D8%B9%D8%A8%D9%87-%D8%AF%D9%84%D9%8A%D9%84-%D8%B9%D9%85%D9%84%D9%8A-%D9%84%D9%84%D9%87%D8%AF%D9%88%D8%A1-%D9%88%D8%A7%D8%AA%D8%AE%D8%A7%D8%B0-%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D8%B1/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/9d04080d1962a365/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "05d9b708449cdb2a46b79198043ea20e8896cc85102f994cea1d6902648877d7",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current sadaltager manifest 9d04080d1962a365",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "fc5a9729972c2054e92fb5bd2e8fdadf073f7f09478c50c42042fbb5f9be7019",
+      "parts": [],
+      "status": "pending",
+      "next": "Reuse live Sadaltager. Run dual ASR + human listening + technical QA before certification.",
+      "stage": "generated"
+    },
+    {
+      "article": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "title": "كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟",
+      "slug": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "previousVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 446.016,
+        "liveUrl": "https://bareeqworld.com/audio/articles/4d194dd1e6a739a8/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "finalVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "version": "gemini-3.1-flash-tts-preview"
+      },
+      "spokenFingerprint": {
+        "spokenChars": 4564,
+        "spokenBytes": 8296,
+        "spokenSha256": "b5e7831d79071565726fe318d59e155e9e988f7358138c5843f73701dc083bda"
+      },
+      "files": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 446.016,
+        "liveUrl": "https://bareeqworld.com/audio/articles/4d194dd1e6a739a8/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/%D9%83%D9%8A%D9%81-%D9%8A%D8%B9%D8%B1%D9%81-%D8%A7%D9%84%D8%A7%D9%86%D8%AA%D8%B1%D9%86%D8%AA-%D9%85%D8%A7-%D8%A7%D9%84%D8%B0%D9%8A-%D8%AA%D8%A8%D8%AD%D8%AB-%D8%B9%D9%86%D9%87-%D9%82%D8%A8%D9%84-%D8%A7%D9%86-%D8%AA%D9%83%D9%85%D9%84-%D8%A7%D9%84%D9%83%D8%AA%D8%A7%D8%A8%D9%87/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/4d194dd1e6a739a8/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "b5e7831d79071565726fe318d59e155e9e988f7358138c5843f73701dc083bda",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current sadaltager manifest 4d194dd1e6a739a8",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "c754a8a5f702cc4d5b549e8e4cd54e4f0968642ef5be87f881c24f7548310a93",
+      "parts": [],
+      "status": "pending",
+      "next": "Reuse live Sadaltager. Run dual ASR + human listening + technical QA before certification.",
+      "stage": "generated"
+    },
+    {
+      "article": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "title": "لا تبحث عن شغفك… ابنِه: ما الذي يقوله البحث؟",
+      "slug": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "previousVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 589.44,
+        "liveUrl": "https://bareeqworld.com/audio/articles/d15e87706b55a08d/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "finalVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "version": "gemini-3.1-flash-tts-preview"
+      },
+      "spokenFingerprint": {
+        "spokenChars": 5818,
+        "spokenBytes": 10558,
+        "spokenSha256": "5df2d82441f6141f896b8a0fdfc19df6712a61b392d37a0dea94b10254972b38"
+      },
+      "files": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 589.44,
+        "liveUrl": "https://bareeqworld.com/audio/articles/d15e87706b55a08d/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/%D9%84%D8%A7-%D8%AA%D8%A8%D8%AD%D8%AB-%D8%B9%D9%86-%D8%B4%D8%BA%D9%81%D9%83-%D8%A7%D8%A8%D9%86%D9%87-%D8%A7%D9%84%D8%AD%D9%82%D9%8A%D9%82%D9%87-%D8%A7%D9%84%D8%B9%D9%84%D9%85%D9%8A%D9%87-%D8%A7%D9%84%D8%AA%D9%8A-%D9%8A%D8%AC%D9%87%D9%84%D9%87%D8%A7-%D9%83%D8%AB%D9%8A%D8%B1%D9%88%D9%86/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/d15e87706b55a08d/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "5df2d82441f6141f896b8a0fdfc19df6712a61b392d37a0dea94b10254972b38",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current sadaltager manifest d15e87706b55a08d",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "7602bbfe834118a6c23b8a9b0d92220389fa0aeeb0761075801ab8d6be89c49e",
+      "parts": [],
+      "status": "pending",
+      "next": "Reuse live Sadaltager. Run dual ASR + human listening + technical QA before certification.",
+      "stage": "generated"
+    },
+    {
+      "article": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "title": "لماذا لا تسقط الأقمار الصناعية من السماء؟",
+      "slug": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "previousVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 949.2,
+        "liveUrl": "https://bareeqworld.com/audio/articles/45d512425faa533a/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "finalVoice": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "version": "gemini-3.1-flash-tts-preview"
+      },
+      "spokenFingerprint": {
+        "spokenChars": 9922,
+        "spokenBytes": 18034,
+        "spokenSha256": "789a222b480e62122460788e0cda9d8f566064994fb3df41d02beb7808a4fcf7"
+      },
+      "files": {
+        "provider": "Google Gemini API",
+        "model": "gemini-3.1-flash-tts-preview",
+        "voiceId": "sadaltager",
+        "durationSeconds": 949.2,
+        "liveUrl": "https://bareeqworld.com/audio/articles/45d512425faa533a/manifest.json",
+        "class": "live-sadaltager"
+      },
+      "asrFirst": {
+        "model": "gemini-3.5-transcribe",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "asrSecond": {
+        "model": "gemini-3.6-flash",
+        "substitutions": null,
+        "deletions": null,
+        "insertions": null,
+        "status": "not-run"
+      },
+      "listening": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "result": "pending"
+      },
+      "technical": {
+        "status": "pending",
+        "report": null
+      },
+      "sync": {
+        "status": "pending"
+      },
+      "preview": {
+        "url": "https://bareeqworld.com/posts/%D9%84%D9%85%D8%A7%D8%B0%D8%A7-%D9%84%D8%A7-%D8%AA%D8%B3%D9%82%D8%B7-%D8%A7%D9%84%D8%A7%D9%82%D9%85%D8%A7%D8%B1-%D8%A7%D9%84%D8%B5%D9%86%D8%A7%D8%B9%D9%8A%D9%87-%D9%85%D9%86-%D8%A7%D9%84%D8%B3%D9%85%D8%A7%D8%A1/",
+        "status": "live-site-has-current-audio"
+      },
+      "production": {
+        "url": "https://bareeqworld.com/audio/articles/45d512425faa533a/manifest.json",
+        "fingerprint": null,
+        "spokenSha256": "789a222b480e62122460788e0cda9d8f566064994fb3df41d02beb7808a4fcf7",
+        "status": "live-audio-present"
+      },
+      "rollback": "keep current sadaltager manifest 45d512425faa533a",
+      "candidateFingerprint": null,
+      "fullSha256": null,
+      "speechScriptHash": "d8b98cccc75c2ab62964608ebd65e4bed1b201d59c94b5780a525d74a3213a78",
+      "parts": [],
+      "status": "pending",
+      "next": "Reuse live Sadaltager. Run dual ASR + human listening + technical QA before certification.",
+      "stage": "generated"
+    }
+  ]
+}

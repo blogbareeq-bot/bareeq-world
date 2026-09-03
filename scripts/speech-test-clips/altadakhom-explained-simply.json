@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "altadakhom-explained-simply",
-  "speechScriptHash": "13fc68564d321c34f325988016d7ca8026420005461cbf7f887f69d2d14e94db",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "818300e754265bc5ae7aa2d37d5b0afcfb685b5fc5af0861233b6a9c9792a9eb",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "9dc7276c61a514fc4cdacc71c227e1eade665fa26ec307b34d5c6d42c51346c8"
+  "planHash": "4e77941864dc822cbed000140493746b233b3f4db1e305bb914679c96915b0de"
 }

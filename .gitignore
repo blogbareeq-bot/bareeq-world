@@ -15,3 +15,6 @@ APPLY-V*.cmd
 RUN-ONE-SHOT-WINDOWS.cmd
 Bareeq-*.zip
 public/audio/
+audio-candidates/
+audio-rollback/
+.bareeq-audio-checkpoints/

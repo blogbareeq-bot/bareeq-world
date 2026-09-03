@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
-  "speechScriptHash": "9039f05700088c9146eff4b9d9d867d7dca0692465219319f180b80c112f9310",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "fc5a9729972c2054e92fb5bd2e8fdadf073f7f09478c50c42042fbb5f9be7019",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 60,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "8012f458ca153f99399594de92c27bd1e98a574e7bc4c23016c39e6152e8ba49"
+  "planHash": "0d7a2aed6e4d8f8424a5c41f35bf6c76968c5f6fc056821923333a8fcc660ff0"
 }

@@ -1,8 +1,8 @@
 {
   "version": 1,
   "articleId": "ai-agents-future-now",
-  "speechScriptHash": "e8106b721e3fa002e8b7a6cf7e2ce8cfb6edd165a68c4ed188003b78b33d381b",
-  "status": "draft-needs-speech-review",
+  "speechScriptHash": "8844b531d744699e492f28c15315279cac00d6bad22b697ffa6fb82339f7a153",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
   "expectedDurationSeconds": 49,
@@ -51,5 +51,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "663b7d073a481257cdd678812c861bc108eaad769696ed37c442f3b7b7c79733"
+  "planHash": "2164a34012b6f04f1e1f97fed51b865202e07b5b9a78ba9079a4035a03806f55"
 }

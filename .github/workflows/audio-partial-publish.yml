@@ -1,0 +1,83 @@
+name: Bareeq partial Sadaltager publish
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/audio-partial-publish.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: bareeq-partial-publish-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  publish-current:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
+      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33742427277-1
+      BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Restore validated checkpoint
+        uses: actions/cache/restore@v4
+        with:
+          path: audio-candidates
+          key: ${{ env.BAREEQ_CORRECTED_CACHE_KEY }}
+          fail-on-cache-miss: true
+
+      - name: Publish exact candidates and preserve fallback
+        run: |
+          node scripts/audio-rebind-validated-metadata.mjs
+          node scripts/audio-openrouter-campaign.mjs --mode=publish-current
+          node - <<'NODE'
+          const fs = require('fs');
+          const marker = JSON.parse(fs.readFileSync(process.env.BAREEQ_PARTIAL_MARKER, 'utf8'));
+          if (marker.schema !== 'bareeq.audio-openrouter-partial-published-tree.v1') throw new Error('partial marker schema mismatch');
+          if (marker.publishedCount !== 3 || marker.fallbackCount !== 12) throw new Error(`expected validated=3 fallback=12, got validated=${marker.publishedCount} fallback=${marker.fallbackCount}`);
+          if (marker.publicationComplete !== false) throw new Error('partial marker must not claim final completion');
+          if (!marker.fallbacks?.some((item) => item.articleId === 'how-touchscreens-work')) throw new Error('touchscreen fallback is missing');
+          console.log('PARTIAL_PUBLICATION_GATE=PASS validated=3/15 fallbacks=12');
+          NODE
+
+      - name: Commit current publishable audio to PR
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f public/audio
+          git add "${BAREEQ_PARTIAL_MARKER}"
+          if git diff --cached --quiet; then
+            echo 'PARTIAL_PUBLICATION_TREE=already-current'
+          else
+            git commit -m 'audio: publish 3 validated Sadaltager articles with live fallbacks'
+            git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+          fi
+
+      - name: Upload partial publication evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-partial-publication-${{ github.run_id }}
+          path: |
+            ${{ env.BAREEQ_PARTIAL_MARKER }}
+            public/audio/manifest.json
+          if-no-files-found: error

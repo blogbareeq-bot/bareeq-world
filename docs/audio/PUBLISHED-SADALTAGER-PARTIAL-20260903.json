@@ -1,0 +1,79 @@
+{
+  "schema": "bareeq.audio-openrouter-partial-published-tree.v1",
+  "campaignId": "sadaltager-openrouter-20260901-v1",
+  "model": "gemini-3.1-flash-tts-preview",
+  "voice": "Sadaltager",
+  "publicationStatus": "partial-with-existing-live-fallback",
+  "publicationComplete": false,
+  "publishedCount": 3,
+  "fallbackCount": 12,
+  "publicationPolicy": "docs/audio/PUBLICATION-POLICY-20260901.json",
+  "generatedAt": "2026-09-03T13:46:40.670Z",
+  "articles": [
+    {
+      "articleId": "ai-agents-future-now",
+      "fingerprint": "7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488",
+      "fullSha256": "34fa55716fe40389283e40c3fc0fca3b8d7f2cf386a2f835edccabeb1d9b659b"
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "fingerprint": "429adbe4ebdabd03e5c77d122255a29c7840ec58b7f32a8e59e18b91aba2db21",
+      "fullSha256": "d7f00585b47dc3ece44c73ac0f62763ffb41a1e4f602ddeae1aabd3d65fd0567"
+    },
+    {
+      "articleId": "altadakhom-explained-simply",
+      "fingerprint": "58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45",
+      "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135"
+    }
+  ],
+  "fallbacks": [
+    {
+      "articleId": "how-touchscreens-work",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "language-soft-power-politics",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "reason": "awaiting-exact-dual-asr-campaign-completion"
+    }
+  ]
+}

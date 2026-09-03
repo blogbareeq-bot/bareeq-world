@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "node --check scripts/speech-script-core.mjs && node --check scripts/speech-synthesis-gate.mjs && node --check scripts/speech-prompt.mjs && node --check scripts/check-speech-scripts.mjs && node --check scripts/test-speech-script-quality-gate.mjs && node scripts/test-speech-script-quality-gate.mjs && node scripts/check-speech-scripts.mjs && node --check scripts/test-bundled-legacy-snapshot.mjs && node scripts/test-bundled-legacy-snapshot.mjs && node scripts/prepare-v4216.mjs && node scripts/prepare-v4215.mjs && node scripts/prepare-v4214.mjs && node scripts/check-v4214-release.mjs && node --check scripts/check-v4215-release.mjs && node --check scripts/check-v4216-release.mjs",
+    "prebuild": "node --check scripts/speech-script-core.mjs && node --check scripts/speech-synthesis-gate.mjs && node --check scripts/speech-prompt.mjs && node --check scripts/audio-lifecycle.mjs && node --check scripts/audio-constants.mjs && node --check scripts/check-speech-scripts.mjs && node --check scripts/test-speech-script-quality-gate.mjs && node scripts/test-speech-script-quality-gate.mjs && node scripts/test-audio-lifecycle.mjs && node scripts/test-audio-production-safety.mjs && node scripts/test-audio-production-integration.mjs && node scripts/test-audio-engine-final.mjs && node scripts/check-speech-scripts.mjs && node --check scripts/test-bundled-legacy-snapshot.mjs && node scripts/test-bundled-legacy-snapshot.mjs && node scripts/prepare-v4216.mjs && node scripts/prepare-v4215.mjs && node scripts/prepare-v4214.mjs && node scripts/check-v4214-release.mjs && node --check scripts/check-v4215-release.mjs && node --check scripts/check-v4216-release.mjs",
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "start": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "generate:images": "node scripts/generate-images.mjs",
@@ -32,8 +32,18 @@
     "test:audio:ui": "node scripts/test-audio-ui-v4210.mjs",
     "smoke:audio:cloud:live": "node scripts/smoke-cloud-tts-live.mjs --live",
     "audio:gemini:resume:prepare": "node scripts/prepare-v4215-gemini-resume.mjs",
-    "audit:speech-scripts": "node scripts/test-speech-script-quality-gate.mjs && node scripts/check-speech-scripts.mjs",
+    "audit:speech-scripts": "node scripts/test-speech-script-quality-gate.mjs && node scripts/check-speech-scripts.mjs && node scripts/test-audio-lifecycle.mjs && node scripts/test-audio-production-safety.mjs && node scripts/test-audio-production-integration.mjs",
     "test:speech-scripts": "node scripts/test-speech-script-quality-gate.mjs",
+    "test:audio-lifecycle": "node scripts/test-audio-lifecycle.mjs",
+    "test:audio-production-safety": "node scripts/test-audio-production-safety.mjs",
+    "test:audio-production-integration": "node scripts/test-audio-production-integration.mjs",
+    "test:audio-engine-final": "node scripts/test-audio-engine-final.mjs",
+    "audio:inventory": "node scripts/audio-inventory.mjs",
+    "audio:production:dry-run": "node scripts/audio-production.mjs --mode=dry-run",
+    "audio:production:generate": "node scripts/audio-production.mjs --mode=generate-candidate",
+    "audio:production:validate": "node scripts/audio-production.mjs --mode=validate-candidate",
+    "audio:production:publish": "node scripts/audio-production.mjs --mode=publish-approved",
+    "audio:listening-packs": "node scripts/audio-listening-packs.mjs",
     "typecheck": "astro check"
   },
   "dependencies": {
