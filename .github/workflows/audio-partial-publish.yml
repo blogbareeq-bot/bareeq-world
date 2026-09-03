@@ -64,11 +64,12 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add public/audio "${BAREEQ_PARTIAL_MARKER}"
+          git add -f public/audio
+          git add "${BAREEQ_PARTIAL_MARKER}"
           if git diff --cached --quiet; then
             echo 'PARTIAL_PUBLICATION_TREE=already-current'
           else
-            git commit -m 'audio: publish 14 validated Sadaltager articles with touchscreen fallback'
+            git commit -m 'audio: publish 3 validated Sadaltager articles with live fallbacks'
             git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
           fi
 
