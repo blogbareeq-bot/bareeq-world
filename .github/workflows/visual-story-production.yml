@@ -11,6 +11,7 @@ on:
       - 'src/styles/visual-story.css'
       - 'public/scripts/visual-story.js'
       - 'scripts/*visual-stor*'
+      - 'scripts/check-audio-dist.mjs'
       - '.github/workflows/visual-story-production.yml'
 
 permissions:
