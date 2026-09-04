@@ -22,8 +22,8 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_SOURCE_RUN_ID: '33792241771'
-      BAREEQ_SOURCE_ARTIFACT: bareeq-final-validation-33792241771
+      BAREEQ_SOURCE_RUN_ID: '33793915754'
+      BAREEQ_SOURCE_ARTIFACT: bareeq-final-validation-33793915754
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -71,17 +71,15 @@ jobs:
           node --check scripts/audio-validate-consensus.mjs
           node --check scripts/audio-touchscreen-targeted-regenerate.mjs
 
-      - name: Verify provider credentials
+      - name: Verify Gemini credential
         if: steps.final_guard.outputs.already_final != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           test -n "${GEMINI_API_KEY}"
-          test -n "${OPENROUTER_API_KEY}"
-          echo 'PROVIDER_CREDENTIALS=present'
+          echo 'GEMINI_CREDENTIAL=present'
 
-      - name: Restore run 46 preserved checkpoint artifact
+      - name: Restore run 47 preserved checkpoint artifact
         if: steps.final_guard.outputs.already_final != 'true'
         uses: actions/download-artifact@v4
         with:
@@ -96,9 +94,9 @@ jobs:
         run: |
           set -euo pipefail
           test -f "audio-candidates/_campaigns/${BAREEQ_AUDIO_CAMPAIGN_ID}/state.json"
-          echo "RUN46_ARTIFACT_RESTORE=PASS run=${BAREEQ_SOURCE_RUN_ID} artifact=${BAREEQ_SOURCE_ARTIFACT}"
+          echo "RUN47_ARTIFACT_RESTORE=PASS run=${BAREEQ_SOURCE_RUN_ID} artifact=${BAREEQ_SOURCE_ARTIFACT}"
 
-      - name: Require generation complete 15/15 and preserved exact coworker
+      - name: Require generation complete 15/15 and preserved exact validations
         if: steps.final_guard.outputs.already_final != 'true'
         run: |
           node - <<'NODE'
@@ -107,36 +105,38 @@ jobs:
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
           const entries = Object.entries(state.articles || {});
           if (state.generationComplete !== true || entries.length !== 15 || entries.some(([,v]) => v.generation?.status !== 'generated')) throw new Error('checkpoint is not generation-complete 15/15');
-          const coworker = state.articles['ai-as-coworker-future-of-human-work'];
-          const c = coworker?.validation?.consensus || {};
-          const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
-          if (coworker?.validation?.status !== 'validated' || !exact) throw new Error('checkpoint lost coworker exact dual-ASR evidence');
-          console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 prior_repairs=preserved');
+          const preserved = ['ai-agents-future-now','ai-as-coworker-future-of-human-work','altadakhom-explained-simply'];
+          for (const articleId of preserved) {
+            const item = state.articles[articleId];
+            const c = item?.validation?.consensus || {};
+            const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
+            if (item?.validation?.status !== 'validated' || !exact) throw new Error(`checkpoint lost preserved exact validation: ${articleId}`);
+          }
+          console.log('CHECKPOINT=BOUND generation=15/15 preserved_exact=3/15 prior_repairs=preserved');
           NODE
 
-      - name: Regenerate only touchscreen parts with confirmed fresh dual-ASR mismatches
+      - name: Regenerate only touchscreen parts with run-47 shared lexical mismatches
         if: steps.final_guard.outputs.already_final != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"Read the reviewed Arabic transcript verbatim. The only remaining confirmed error in this part is «مَلَاءَمَة». Pronounce it deliberately as «مَلَاءَمَةٌ» (ma-laa-a-ma-tun): make the glottal hamza after the long alif unmistakable, and audibly distinguish it from «مُلَائِمَة»/«ملائمة». Then say «لِلْمَس» exactly, without an extra lam. Keep prior corrections too: «الشَّاشَة» singular, «تَعْنِي» with ن, «كَثِيرًا» with its final an sound, and the final word «الْيَوْم». Preserve every written token and ending; add nothing and omit nothing.","2":"Read the reviewed Arabic transcript verbatim. The only two remaining confirmed errors are «اللَّمْسَة» and «إِنَّهُ». Pronounce the first explicitly as «اللَّمْسَةُ» (al-lam-sa-tu), with an audible final t sound; never shorten it to «اللَّمْس». Pronounce the second syllable by syllable as «إِنْ-نَ-هُ», beginning with kasra and a clearly doubled noon; never say «أَنَّهُ». Keep prior corrections too: say «أُولِيد» and «إِل سِي دِي» as the written Arabic words, and pronounce «بِالْأَرْض» with its hamza. Preserve every written token and ending; add nothing and omit nothing.","3":"Read the reviewed Arabic transcript verbatim. Pronounce «اللَّمْسَة» slowly with an unmistakable audible final ta marbuta, never اللمس. Pronounce the coordinates as «إِكْس وَوَاي» with both Arabic words explicit. Say «مَوْضِع» and «الْمَوْضِع» with ض, never موقع or الموقع. Preserve every written token.","4":"Read the reviewed Arabic transcript verbatim. Pronounce «وَحْدَهُ» with masculine final hu, never وحدها. Preserve every written token and ending.","5":"Read the reviewed Arabic transcript verbatim. Pronounce «يُشَوِّشُهَا» slowly and exactly, with the doubled shin and final ha, never يوشوها or يوشوشها. Preserve every written token.","6":"Read the reviewed Arabic transcript verbatim. The remaining confirmed error in this part is the definite word «الضَّغْط»: pronounce the article «الـ» clearly before «ضَغْط», never drop it and never say bare «ضَغْط». Keep prior corrections too: say «لِلْمَس» without an extra lam or inserted مَلْمَس; pronounce «تَنْجَح», «إِنَّهُ», «تُرْسِلُهَا», «مِنْهُ», and «يَحْتَجُّ» exactly as written; near «الْمَرَّة» do not insert «فِي الْمَرَّة» or repeat any phrase. Preserve every written token and ending; add nothing and omit nothing."}
+            {"1":"Read the reviewed Arabic transcript verbatim. Fresh independent dual-ASR confirmed exactly these problem words in this segment. Say «الشَّاشَة» singular and end it with ta marbuta sound, never «الشَّاشَات». Say «دَارَة» (daa-ra, circuit) with an audible ر, never «دَالَّة» or «دالة». Say «مَلَاءَمَة» (ma-laa-a-ma) with a clear hamza after the long alif, never «مُلَائِمَة» or «ملائمة». Say «لِلْمَس» exactly without an extra lam. Keep the previously protected readings «تَعْنِي», «كَثِيرًا», and final «الْيَوْم». Preserve every written token and ending; add nothing, omit nothing, and do not pluralize or paraphrase.","2":"Read the reviewed Arabic transcript verbatim. Fresh independent dual-ASR confirmed exactly these problem words in this segment. Say «اللَّمْسَة» with an unmistakable audible final t sound, never «اللَّمْس». Say «بِالْأَرْض» with the hamza audibly present, never a flattened «بالارض». Say «إِنَّهُ» beginning with kasra and a clearly doubled noon, never «أَنَّهُ». Keep «أُولِيد» and «إِل سِي دِي» exactly as written. Preserve every written token and ending; add nothing, omit nothing, and do not paraphrase.","3":"Read the reviewed Arabic transcript verbatim. Pronounce «اللَّمْسَة» slowly with an unmistakable audible final ta marbuta, never اللمس. Pronounce the coordinates as «إِكْس وَوَاي» with both Arabic words explicit. Say «مَوْضِع» and «الْمَوْضِع» with ض, never موقع or الموقع. Preserve every written token.","4":"Read the reviewed Arabic transcript verbatim. Pronounce «وَحْدَهُ» with masculine final hu, never وحدها. Preserve every written token and ending.","5":"Read the reviewed Arabic transcript verbatim. Pronounce «يُشَوِّشُهَا» slowly and exactly, with the doubled shin and final ha, never يوشوها or يوشوشها. Preserve every written token.","6":"Read the reviewed Arabic transcript verbatim. Fresh independent dual-ASR confirmed two remaining problem words in this segment. Say «لِلْمَس» exactly as written, with no extra lexical lam and no inserted word. Say «يَحْتَجُّ» (yah-taj-ju) with no long alif and a clearly doubled final ج, never «يَحْتَاج». Keep prior protected readings too: «الضَّغْط» with its definite article, «تَنْجَح», «إِنَّهُ», «تُرْسِلُهَا», and «مِنْهُ». Near «الْمَرَّة» do not insert «فِي الْمَرَّة» or repeat any phrase. Preserve every written token and ending; add nothing, omit nothing, and do not paraphrase."}
         run: |
           set -euo pipefail
-          # Fresh run-46 dual-ASR isolated the final three substitutions to parts 1 and 2.
-          # Regenerate only those two parts; preserve parts 3, 4, 5 and 6 byte-for-byte.
-          for part in 1 2; do
+          # Run 47 fresh dual-ASR mapped all eight shared substitutions to parts 1, 2 and 6.
+          # Preserve parts 3, 4 and 5 byte-for-byte and preserve every other article.
+          for part in 1 2 6; do
             success=0
-            for transport in developer-interactions developer-generate-content; do
-              attempts=10
+            for transport in developer-generate-content developer-interactions; do
+              attempts=6
               for attempt in $(seq 1 "${attempts}"); do
                 echo "TARGETED_TTS article=how-touchscreens-work part=${part} transport=${transport} attempt=${attempt}"
                 if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-touchscreen-targeted-regenerate.mjs --article=how-touchscreens-work; then
                   success=1
                   break 2
                 fi
-                sleep 75
+                sleep 65
               done
             done
             if [ "${success}" -ne 1 ]; then
@@ -156,7 +156,7 @@ jobs:
             const rec = checkpoint.completedParts?.[String(index)];
             if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error(`targeted touchscreen correction missing for part ${index + 1}`);
           }
-          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS refreshed_parts=1,2 preserved_parts=3,4,5,6 corpus_regenerated=no');
+          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS refreshed_parts=1,2,6 preserved_parts=3,4,5 corpus_regenerated=no');
           NODE
 
       - name: Validate remaining articles with fresh independent Gemini pair
@@ -225,3 +225,4 @@ jobs:
           path: audio-candidates/
           if-no-files-found: error
           retention-days: 90
+          overwrite: true
