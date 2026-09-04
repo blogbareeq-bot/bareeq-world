@@ -32,16 +32,31 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
 
+      - name: Detect progressive publication self-push
+        id: self_guard
+        run: |
+          SUBJECT=$(git log -1 --format=%s)
+          echo "HEAD_SUBJECT=${SUBJECT}"
+          if [[ "${SUBJECT}" == audio:\ progressively\ publish* ]]; then
+            echo 'self_push=true' >> "$GITHUB_OUTPUT"
+            echo 'PROGRESSIVE_SELF_PUSH=yes; provider work skipped'
+          else
+            echo 'self_push=false' >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Node
+        if: steps.self_guard.outputs.self_push != 'true'
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: npm
 
       - name: Install dependencies
+        if: steps.self_guard.outputs.self_push != 'true'
         run: npm ci
 
       - name: Apply current adjudication repair and safety checks
+        if: steps.self_guard.outputs.self_push != 'true'
         run: |
           node scripts/audio-final-runtime-repair.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
@@ -49,6 +64,7 @@ jobs:
           node --check scripts/audio-openrouter-campaign.mjs
 
       - name: Verify Gemini credential
+        if: steps.self_guard.outputs.self_push != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
@@ -56,6 +72,7 @@ jobs:
           echo 'GEMINI_CREDENTIAL=present'
 
       - name: Restore latest run 51 checkpoint
+        if: steps.self_guard.outputs.self_push != 'true'
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.BAREEQ_SOURCE_ARTIFACT }}
@@ -65,6 +82,7 @@ jobs:
           run-id: ${{ env.BAREEQ_SOURCE_RUN_ID }}
 
       - name: Verify generation-complete checkpoint
+        if: steps.self_guard.outputs.self_push != 'true'
         run: |
           node - <<'NODE'
           const fs = require('fs');
@@ -82,11 +100,13 @@ jobs:
           NODE
 
       - name: Validate every pending article except touchscreen without blocking on quality failures
+        if: steps.self_guard.outputs.self_push != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/audio-progressive-validate.mjs --skip=how-touchscreens-work
 
       - name: Publish every exact 0/0/0/0 article now and preserve fallbacks
+        if: steps.self_guard.outputs.self_push != 'true'
         run: |
           node scripts/audio-rebind-validated-metadata.mjs
           node scripts/audio-openrouter-campaign.mjs --mode=publish-current
@@ -110,6 +130,7 @@ jobs:
           NODE
 
       - name: Commit all newly publishable audio to PR tree
+        if: steps.self_guard.outputs.self_push != 'true'
         env:
           PR_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
@@ -128,14 +149,14 @@ jobs:
           fi
 
       - name: Save progressive checkpoint
-        if: always()
+        if: ${{ always() && steps.self_guard.outputs.self_push != 'true' }}
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
           key: bareeq-audio-progressive-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload progressive evidence
-        if: always()
+        if: ${{ always() && steps.self_guard.outputs.self_push != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: bareeq-progressive-validation-${{ github.run_id }}
