@@ -1188,9 +1188,9 @@
   "voice": "Sadaltager",
   "toolVersion": 9,
   "status": "published",
-  "generatedAt": "2026-09-03T13:46:40.398Z",
+  "generatedAt": "2026-09-04T15:00:46.255Z",
   "ttsModel": "gemini-3.1-flash-tts-preview",
   "ttsVoice": "Sadaltager",
   "publishedFromCandidate": "7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488",
-  "publishedAt": "2026-09-03T13:46:40.398Z"
+  "publishedAt": "2026-09-04T15:00:46.255Z"
 }

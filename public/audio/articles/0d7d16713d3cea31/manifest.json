@@ -1,0 +1,408 @@
+{
+  "version": 3,
+  "generatorVersion": 10,
+  "syncVersion": 1,
+  "speechScriptHash": "10ae7f7ad9b95e2d7d50f007ffc96337e1cc6af42e417a0522ca3fcebe4ec224",
+  "speechInput": "reviewed-contextual-speech-script",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "language": "ar",
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+  "title": "عادات ثقافية من حول العالم: حين يصبح الاختلاف إثراءً",
+  "audioKey": "0d7d16713d3cea31",
+  "fingerprint": "a7f364df849199a8f4096863f95739a948e2788cf0d4d65d1e94acec022765b6",
+  "fullSha256": "1586e603c9e59b9967a51a980b4d2f7b58af262ee2aff24a77eab948d2e969e6",
+  "defaultVoice": "sadaltager",
+  "voices": [
+    {
+      "id": "sadaltager",
+      "label": "سادالتاجر (Sadaltager)",
+      "description": "معرفي طبيعي مناسب لمقالات بريق",
+      "providerVoice": "Sadaltager",
+      "totalDurationSeconds": 454.464
+    }
+  ],
+  "syncMethod": "paragraph-weighted",
+  "performanceInstructions": "### TASK\nSynthesize the approved Arabic transcript below as speech. TRANSCRIPT is the authoritative, linguistically reviewed Speech Script. Speak only its words, exactly as written. Every written Arabic diacritic is binding: do not reinterpret a vocalized word as another reading. Preserve each token's exact lexical and morphological form; never replace it with a more common, related, or neighboring form. For example, if the transcript says «تصعد», pronounce «تصعد» exactly and never substitute «تصاعد». Do not add, omit, paraphrase, or reorder any word. Do not normalize a written token into another lexical or morphological form. Do not read these directions or labels aloud.\n\n### AUDIO PROFILE\nA mature, well-read Arabic narrator for Bareeq, a refined knowledge blog for curious adult readers.\n\n### SCENE\nA contemporary Arabic recording studio in daylight. The narrator speaks naturally to one attentive listener in a calm, professional setting.\n\n### DIRECTOR'S NOTES\nUse clear Modern Standard Arabic. Sound natural, human, warm, and intellectually engaging. Use a normal conversational volume, never a whisper or a breathy delivery. Keep a comfortable medium pace with subtle organic variation. Articulate clearly without over-pronouncing words or sounding like a news anchor. Let questions carry gentle curiosity, explanations sound calm and confident, and conclusions feel reflective and quietly uplifting. Avoid theatrical acting, advertising energy, excessive solemnity, and monotone delivery.",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "encodingTool": "ffmpeg-libmp3lame",
+  "disclosure": "الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.",
+  "parts": [
+    {
+      "characters": 1706,
+      "sync": [
+        {
+          "id": "b0001",
+          "type": "paragraph",
+          "match": "هل سبق أن تصرفت بعفوية ثم عرفت أن السلوك نفسه قد يفهم بطريقة مختلفة في مجتمع آخر",
+          "start": 0.030947,
+          "end": 0.089315
+        },
+        {
+          "id": "b0002",
+          "type": "paragraph",
+          "match": "العادات ليست قواعد ثابتة تنطبق على كل فرد بل ممارسات تتغير بحسب المنطقة والجيل والمناسبة لذلك لا تهدف هذه الجولة إلى اخت",
+          "start": 0.089315,
+          "end": 0.219443
+        },
+        {
+          "id": "b0003",
+          "type": "h2",
+          "match": "اليابان صوت النودلز ليس بالضرورة قلة ذوق",
+          "start": 0.219443,
+          "end": 0.243879
+        },
+        {
+          "id": "b0004",
+          "type": "paragraph",
+          "match": "قد يعد إصدار صوت أثناء الطعام غير لائق في ثقافات كثيرة لكن الهيئة الوطنية اليابانية للسياحة توضح أن شفط النودلز شائع ومق",
+          "start": 0.243879,
+          "end": 0.360259
+        },
+        {
+          "id": "b0005",
+          "type": "paragraph",
+          "match": "النقطة المهمة هنا هي السياق ما يقبل في مطعم نودلز غير رسمي قد لا يكون قاعدة لكل وجبة أو مطعم رسمي والقاعدة الأذكى للزائر",
+          "start": 0.360259,
+          "end": 0.484133
+        },
+        {
+          "id": "b0006",
+          "type": "h2",
+          "match": "فنلندا الساونا مساحة اجتماعية وذاكرة حية",
+          "start": 0.484133,
+          "end": 0.505989
+        },
+        {
+          "id": "b0007",
+          "type": "paragraph",
+          "match": "الساونا في فنلندا ليست مرفقا ترفيهيا فحسب أدرجت اليونسكو ثقافة الساونا الفنلندية على القائمة التمثيلية للتراث الثقافي غي",
+          "start": 0.505989,
+          "end": 0.644225
+        },
+        {
+          "id": "b0008",
+          "type": "paragraph",
+          "match": "تتنوع أشكال الساونا وطريقة استخدامها ولا توجد تجربة واحدة تمثل جميع الفنلنديين لكن اجتماع الهدوء والبخار والوقت المشترك ",
+          "start": 0.644225,
+          "end": 0.757903
+        },
+        {
+          "id": "b0009",
+          "type": "h2",
+          "match": "نيوزيلندا الهونغي في المناسبات الماورية الرسمية",
+          "start": 0.757903,
+          "end": 0.780864
+        },
+        {
+          "id": "b0010",
+          "type": "paragraph",
+          "match": "في بعض مراسم الترحيب الماورية يلتقي شخصان بتحية الهونغي عبر ملامسة الأنف برفق وقد يصاحبها مصافحة تشرح موسوعة تي آرا الني",
+          "start": 0.780864,
+          "end": 0.893669
+        },
+        {
+          "id": "b0011",
+          "type": "paragraph",
+          "match": "ليست الهونغي تحية يومية يؤديها كل شخص في كل موقف للزائر الأفضل أن ينتظر دعوة المضيف ويتبع إرشاده هذا التفصيل يحول الفضول",
+          "start": 0.893669,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0001",
+        "b0002",
+        "b0003",
+        "b0004",
+        "b0005",
+        "b0006",
+        "b0007",
+        "b0008",
+        "b0009",
+        "b0010",
+        "b0011"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/0d7d16713d3cea31/part-001-8d5ad306d01d.clean.mp3",
+          "bytes": 1796589,
+          "durationSeconds": 149.712,
+          "sha256": "47790133ee03bf44f1473fe3abe0530b800ed952eb826648645e5d295a432d62"
+        }
+      }
+    },
+    {
+      "characters": 1636,
+      "sync": [
+        {
+          "id": "b0012",
+          "type": "h2",
+          "match": "القهوة العربية فنجان صغير يحمل لغة الضيافة",
+          "start": 0,
+          "end": 0.025056
+        },
+        {
+          "id": "b0013",
+          "type": "paragraph",
+          "match": "في مجتمعات عربية عدة لا يمثل تقديم القهوة مشروبا فقط بل ترتيبا من الإشارات الاجتماعية تسجل اليونسكو القهوة العربية بوصفه",
+          "start": 0.025056,
+          "end": 0.169843
+        },
+        {
+          "id": "b0014",
+          "type": "paragraph",
+          "match": "تختلف التفاصيل بين البلدان والعائلات لكن المعنى المشترك هو تحويل الضيافة إلى فعل يمكن قراءته من يقدم أولا وكيف يمسك الدل",
+          "start": 0.169843,
+          "end": 0.269095
+        },
+        {
+          "id": "b0015",
+          "type": "h2",
+          "match": "ماذا نتعلم من هذه الأمثلة",
+          "start": 0.269095,
+          "end": 0.288576
+        },
+        {
+          "id": "b0016",
+          "type": "paragraph",
+          "match": "أولا أن السلوك لا يحمل معناه وحده بل يكتسبه من المكان والمناسبة والعلاقة بين الناس وثانيا أن المعلومة الثقافية تحتاج إلى",
+          "start": 0.288576,
+          "end": 0.419032
+        },
+        {
+          "id": "b0017",
+          "type": "paragraph",
+          "match": "وعندما تزور مجتمعا جديدا تفيدك ثلاث قواعد بسيطة",
+          "start": 0.419032,
+          "end": 0.44894
+        },
+        {
+          "id": "b0018",
+          "type": "list-item",
+          "match": "راقب قبل أن تقلد",
+          "start": 0.44894,
+          "end": 0.464679
+        },
+        {
+          "id": "b0019",
+          "type": "list-item",
+          "match": "اسأل بلطف عندما لا تعرف",
+          "start": 0.464679,
+          "end": 0.48441
+        },
+        {
+          "id": "b0020",
+          "type": "list-item",
+          "match": "اقبل أن أفراد المجتمع الواحد قد يختارون ممارسات مختلفة",
+          "start": 0.48441,
+          "end": 0.517985
+        },
+        {
+          "id": "b0021",
+          "type": "paragraph",
+          "match": "الاختلاف يصبح إثراء حين يدفعنا إلى الفهم لا حين نحوله إلى مشهد غريب للاستهلاك",
+          "start": 0.517985,
+          "end": 0.569007
+        },
+        {
+          "id": "b0022",
+          "type": "paragraph",
+          "match": "ويمكنك الانتقال من صفحة ابدأ من هنا إلى بقية مسارات بريق واختيار زاوية معرفية جديدة",
+          "start": 0.569007,
+          "end": 0.622163
+        },
+        {
+          "id": "b0023",
+          "type": "h2",
+          "match": "لماذا لا تكفي قائمة العادات الغريبة",
+          "start": 0.622163,
+          "end": 0.64576
+        },
+        {
+          "id": "b0024",
+          "type": "paragraph",
+          "match": "من السهل تحويل الاختلاف الثقافي إلى قائمة للدهشة لكن المعرفة تبدأ عندما نسأل ما الوظيفة التي تؤديها العادة داخل سياقها ف",
+          "start": 0.64576,
+          "end": 0.857059
+        },
+        {
+          "id": "b0025",
+          "type": "paragraph",
+          "match": "هذه العدسة تحمينا من خطأين متعاكسين أن نتعامل مع كل عادة مختلفة بوصفها غرابة أو أن نفترض أن معرفة قاعدة عامة تمنحنا حق ت",
+          "start": 0.857059,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0012",
+        "b0013",
+        "b0014",
+        "b0015",
+        "b0016",
+        "b0017",
+        "b0018",
+        "b0019",
+        "b0020",
+        "b0021",
+        "b0022",
+        "b0023",
+        "b0024",
+        "b0025"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/0d7d16713d3cea31/part-002-b2e862b9c4d5.clean.mp3",
+          "bytes": 1816461,
+          "durationSeconds": 151.368,
+          "sha256": "5a18f3dff2e074cc270480ca3977f81e5fa89c02bfbc5fd842900b691e068ab2"
+        }
+      }
+    },
+    {
+      "characters": 1686,
+      "sync": [
+        {
+          "id": "b0026",
+          "type": "h2",
+          "match": "أربع طبقات لفهم أي عادة",
+          "start": 0,
+          "end": 0.014983
+        },
+        {
+          "id": "b0027",
+          "type": "h3",
+          "match": "المكان",
+          "start": 0.014983,
+          "end": 0.018235
+        },
+        {
+          "id": "b0028",
+          "type": "paragraph",
+          "match": "السلوك المقبول في مطعم شعبي قد لا يكون مناسبا في مناسبة رسمية وهذا واضح في مثال النودلز اليابانية قبول صوت الشفط في سياق",
+          "start": 0.018235,
+          "end": 0.128496
+        },
+        {
+          "id": "b0029",
+          "type": "h3",
+          "match": "المناسبة",
+          "start": 0.128496,
+          "end": 0.131981
+        },
+        {
+          "id": "b0030",
+          "type": "paragraph",
+          "match": "بعض الممارسات مرتبطة بالترحيب أو الاحتفال أو الطقوس الرسمية تحية الهونغي مثال جيد وجودها في سياقات ماورية معروفة لا يجعل",
+          "start": 0.131981,
+          "end": 0.224006
+        },
+        {
+          "id": "b0031",
+          "type": "h3",
+          "match": "العلاقة بين الناس",
+          "start": 0.224006,
+          "end": 0.233414
+        },
+        {
+          "id": "b0032",
+          "type": "paragraph",
+          "match": "من يبدأ من يقدم أولا هل الفعل بين أفراد عائلة أم بين مضيف وضيف كثير من معاني السلوك لا يظهر إلا عندما نعرف العلاقة بين ا",
+          "start": 0.233414,
+          "end": 0.323987
+        },
+        {
+          "id": "b0033",
+          "type": "h3",
+          "match": "حق الفرد في الاختيار",
+          "start": 0.323987,
+          "end": 0.336183
+        },
+        {
+          "id": "b0034",
+          "type": "paragraph",
+          "match": "حتى داخل المجتمع الواحد قد يلتزم شخص عادة ما ويتركها آخر لهذا تكون عبارة يشيع في بعض السياقات أدق معرفيا من الناس هناك ي",
+          "start": 0.336183,
+          "end": 0.42031
+        },
+        {
+          "id": "b0035",
+          "type": "h2",
+          "match": "عندما تسافر الفضول يحتاج إلى أدب",
+          "start": 0.42031,
+          "end": 0.440044
+        },
+        {
+          "id": "b0036",
+          "type": "paragraph",
+          "match": "أفضل ما يحمله المسافر ليس قائمة طويلة من التعليمات بل طريقة للتعلم ابدأ بالمصادر الرسمية عندما تكون المسألة مرتبطة ببروت",
+          "start": 0.440044,
+          "end": 0.60407
+        },
+        {
+          "id": "b0037",
+          "type": "paragraph",
+          "match": "ومن المفيد الانتباه إلى أن المحتوى القصير على الشبكات الاجتماعية يحب الأمثلة اللافتة لأنه يكافئ الدهشة قد تكون المعلومة ",
+          "start": 0.60407,
+          "end": 0.769118
+        },
+        {
+          "id": "b0038",
+          "type": "h2",
+          "match": "ما الذي يبقى من الرحلة",
+          "start": 0.769118,
+          "end": 0.786912
+        },
+        {
+          "id": "b0039",
+          "type": "paragraph",
+          "match": "الأمثلة الأربعة مختلفة جدا لكن الرابط بينها واحد السلوك الإنساني لغة لها سياق صوت في مطعم وبخار في غرفة وملامسة للأنف وف",
+          "start": 0.786912,
+          "end": 0.916616
+        },
+        {
+          "id": "b0040",
+          "type": "paragraph",
+          "match": "معرفة العادات لا تجعلنا نحفظ بروتوكولات العالم بل تدربنا على مهارة أوسع أن نؤجل الحكم لحظة وأن نبحث عن المعنى قبل أن نسم",
+          "start": 0.916616,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0026",
+        "b0027",
+        "b0028",
+        "b0029",
+        "b0030",
+        "b0031",
+        "b0032",
+        "b0033",
+        "b0034",
+        "b0035",
+        "b0036",
+        "b0037",
+        "b0038",
+        "b0039",
+        "b0040"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/0d7d16713d3cea31/part-003-d8f519fd10a5.clean.mp3",
+          "bytes": 1840653,
+          "durationSeconds": 153.384,
+          "sha256": "25a9388d58a8debd132610d2931620811b9e1ad236a8b030766729ce9c10e183"
+        }
+      }
+    }
+  ],
+  "schema": "bareeq.audio-production-manifest.v3",
+  "candidateFingerprint": "a7f364df849199a8f4096863f95739a948e2788cf0d4d65d1e94acec022765b6",
+  "voice": "Sadaltager",
+  "toolVersion": 9,
+  "status": "published",
+  "generatedAt": "2026-09-04T18:56:08.771Z",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "ttsVoice": "Sadaltager",
+  "publishedFromCandidate": "a7f364df849199a8f4096863f95739a948e2788cf0d4d65d1e94acec022765b6",
+  "publishedAt": "2026-09-04T18:56:08.771Z"
+}
