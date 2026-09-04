@@ -1,4 +1,4 @@
-name: Bareeq partial Sadaltager publish
+name: Bareeq progressive exact publish
 
 on:
   pull_request:
@@ -6,22 +6,24 @@ on:
       - main
     paths:
       - '.github/workflows/audio-partial-publish.yml'
+      - 'scripts/audio-progressive-validate.mjs'
 
 permissions:
   actions: read
   contents: write
 
 concurrency:
-  group: bareeq-partial-publish-${{ github.event.pull_request.number }}
+  group: bareeq-progressive-publish-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-  publish-current:
+  validate-publish-current:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 240
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33742427277-1
+      BAREEQ_SOURCE_RUN_ID: '33871745084'
+      BAREEQ_SOURCE_ARTIFACT: bareeq-final-validation-33871745084
       BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
     steps:
       - name: Checkout PR head
@@ -33,51 +35,114 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .node-version
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Restore validated checkpoint
-        uses: actions/cache/restore@v4
-        with:
-          path: audio-candidates
-          key: ${{ env.BAREEQ_CORRECTED_CACHE_KEY }}
-          fail-on-cache-miss: true
+      - name: Apply current adjudication repair and safety checks
+        run: |
+          node scripts/audio-final-runtime-repair.mjs
+          node scripts/test-audio-dual-asr-adjudicate.mjs
+          node --check scripts/audio-progressive-validate.mjs
+          node --check scripts/audio-openrouter-campaign.mjs
 
-      - name: Publish exact candidates and preserve fallback
+      - name: Verify Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          test -n "${GEMINI_API_KEY}"
+          echo 'GEMINI_CREDENTIAL=present'
+
+      - name: Restore latest run 51 checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.BAREEQ_SOURCE_ARTIFACT }}
+          path: audio-candidates
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.BAREEQ_SOURCE_RUN_ID }}
+
+      - name: Verify generation-complete checkpoint
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const p = path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json');
+          const s = JSON.parse(fs.readFileSync(p,'utf8'));
+          const rows = Object.values(s.articles || {});
+          if (s.generationComplete !== true || rows.length !== 15 || rows.some((x) => x.generation?.status !== 'generated')) {
+            throw new Error('latest checkpoint is not generation-complete 15/15');
+          }
+          const exact = rows.filter((x) => x.validation?.status === 'validated'
+            && x.validation?.fingerprint === x.generation?.fingerprint
+            && ['substitutions','deletions','insertions','unresolved'].every((k) => Number(x.validation?.consensus?.[k]) === 0));
+          console.log(`PROGRESSIVE_CHECKPOINT=PASS generated=15/15 exact_before=${exact.length}/15`);
+          NODE
+
+      - name: Validate every pending article except touchscreen without blocking on quality failures
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-progressive-validate.mjs --skip=how-touchscreens-work
+
+      - name: Publish every exact 0/0/0/0 article now and preserve fallbacks
         run: |
           node scripts/audio-rebind-validated-metadata.mjs
           node scripts/audio-openrouter-campaign.mjs --mode=publish-current
           node - <<'NODE'
           const fs = require('fs');
+          const path = require('path');
           const marker = JSON.parse(fs.readFileSync(process.env.BAREEQ_PARTIAL_MARKER, 'utf8'));
           if (marker.schema !== 'bareeq.audio-openrouter-partial-published-tree.v1') throw new Error('partial marker schema mismatch');
-          if (marker.publishedCount !== 3 || marker.fallbackCount !== 12) throw new Error(`expected validated=3 fallback=12, got validated=${marker.publishedCount} fallback=${marker.fallbackCount}`);
           if (marker.publicationComplete !== false) throw new Error('partial marker must not claim final completion');
-          if (!marker.fallbacks?.some((item) => item.articleId === 'how-touchscreens-work')) throw new Error('touchscreen fallback is missing');
-          console.log('PARTIAL_PUBLICATION_GATE=PASS validated=3/15 fallbacks=12');
+          if (marker.publishedCount < 3) throw new Error(`validated publication regressed below 3: ${marker.publishedCount}`);
+          if (marker.publishedCount + marker.fallbackCount !== 15) throw new Error('partial publication inventory must remain 15');
+          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
+          for (const item of marker.articles || []) {
+            const row = state.articles?.[item.articleId];
+            const c = row?.validation?.consensus || {};
+            if (row?.validation?.status !== 'validated' || row.validation.fingerprint !== row.generation?.fingerprint) throw new Error(`published article lacks matching validation: ${item.articleId}`);
+            if (!['substitutions','deletions','insertions','unresolved'].every((k) => Number(c[k]) === 0)) throw new Error(`published article is not exact 0/0/0/0: ${item.articleId}`);
+            if (!item.fullSha256 || item.fullSha256 !== row.publication?.fullSha256) throw new Error(`published digest mismatch: ${item.articleId}`);
+          }
+          console.log(`PROGRESSIVE_PUBLICATION_GATE=PASS published=${marker.publishedCount}/15 fallbacks=${marker.fallbackCount}`);
           NODE
 
-      - name: Commit current publishable audio to PR
+      - name: Commit all newly publishable audio to PR tree
+        env:
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          set -euo pipefail
+          COUNT=$(node -p "JSON.parse(require('fs').readFileSync(process.env.BAREEQ_PARTIAL_MARKER,'utf8')).publishedCount")
+          git config user.name 'bareeq-audio'
+          git config user.email 'audio@bareeq.local'
           git add -f public/audio
           git add "${BAREEQ_PARTIAL_MARKER}"
           if git diff --cached --quiet; then
-            echo 'PARTIAL_PUBLICATION_TREE=already-current'
+            echo "PROGRESSIVE_PUBLICATION_TREE=already-current count=${COUNT}"
           else
-            git commit -m 'audio: publish 3 validated Sadaltager articles with live fallbacks'
-            git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+            git commit -m "audio: progressively publish ${COUNT} exact Sadaltager articles"
+            git push origin "HEAD:${PR_BRANCH}"
+            echo "PROGRESSIVE_PUBLICATION_TREE=pushed count=${COUNT}"
           fi
 
-      - name: Upload partial publication evidence
+      - name: Save progressive checkpoint
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-progressive-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Upload progressive evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: bareeq-partial-publication-${{ github.run_id }}
+          name: bareeq-progressive-validation-${{ github.run_id }}
           path: |
+            audio-candidates/
             ${{ env.BAREEQ_PARTIAL_MARKER }}
             public/audio/manifest.json
           if-no-files-found: error
+          retention-days: 90
+          overwrite: true
