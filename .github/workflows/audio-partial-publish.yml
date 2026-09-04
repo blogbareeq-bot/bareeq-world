@@ -81,6 +81,7 @@ jobs:
           node scripts/audio-final-runtime-repair.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node --check scripts/audio-progressive-validate.mjs
+          node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-openrouter-campaign.mjs
 
       - name: Verify Gemini credential
@@ -127,6 +128,13 @@ jobs:
         run: >-
           node scripts/audio-progressive-validate.mjs
           --only=how-touchscreens-work,intuition-first-impression-decisions-signature,language-soft-power-politics,why-some-passports-are-stronger,اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا,اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع,اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا,كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار,كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه,لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء
+
+      - name: Repair only confirmed-failing parts and re-run full dual-ASR
+        if: steps.self_guard.outputs.self_push != 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: >-
+          node scripts/audio-progressive-repair.mjs
 
       - name: Publish every exact 0/0/0/0 article now and preserve fallbacks
         if: steps.self_guard.outputs.self_push != 'true'
