@@ -22,8 +22,8 @@ jobs:
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
       BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      BAREEQ_SOURCE_RUN_ID: '33852420464'
-      BAREEQ_SOURCE_ARTIFACT: bareeq-final-validation-33852420464
+      BAREEQ_SOURCE_RUN_ID: '33862681147'
+      BAREEQ_SOURCE_ARTIFACT: bareeq-final-validation-33862681147
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v4
@@ -79,7 +79,7 @@ jobs:
           test -n "${GEMINI_API_KEY}"
           echo 'GEMINI_CREDENTIAL=present'
 
-      - name: Restore run 49 preserved checkpoint artifact
+      - name: Restore run 50 preserved checkpoint artifact
         if: steps.final_guard.outputs.already_final != 'true'
         uses: actions/download-artifact@v4
         with:
@@ -94,7 +94,7 @@ jobs:
         run: |
           set -euo pipefail
           test -f "audio-candidates/_campaigns/${BAREEQ_AUDIO_CAMPAIGN_ID}/state.json"
-          echo "RUN49_ARTIFACT_RESTORE=PASS run=${BAREEQ_SOURCE_RUN_ID} artifact=${BAREEQ_SOURCE_ARTIFACT}"
+          echo "RUN50_ARTIFACT_RESTORE=PASS run=${BAREEQ_SOURCE_RUN_ID} artifact=${BAREEQ_SOURCE_ARTIFACT}"
 
       - name: Require generation complete 15/15 and preserved exact validations
         if: steps.final_guard.outputs.already_final != 'true'
@@ -112,31 +112,36 @@ jobs:
             const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
             if (item?.validation?.status !== 'validated' || !exact) throw new Error(`checkpoint lost preserved exact validation: ${articleId}`);
           }
-          console.log('CHECKPOINT=BOUND generation=15/15 preserved_exact=3/15 run49=restored');
+          console.log('CHECKPOINT=BOUND generation=15/15 preserved_exact=3/15 run50=restored');
           NODE
 
-      - name: Regenerate only run-49 touchscreen mismatch parts
+      - name: Regenerate only run-50 touchscreen mismatch parts
         if: steps.final_guard.outputs.already_final != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
           BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"Read the reviewed Arabic transcript verbatim. Fresh dual-ASR still confirms one lexical error in this segment: pronounce «مَلَاءَمَة» exactly as ma-laa-a-ma, with a clear hamza after the long alif; never say «مُلَائِمَة» or «ملائمة». Preserve «الشَّاشَة», «دَارَة», «لِلْمَس», «تَعْنِي», «كَثِيرًا», and final «الْيَوْم» exactly as written. Add nothing and omit nothing.","2":"Read the reviewed Arabic transcript verbatim. Fresh dual-ASR still flags «اللَّمْسَة» and the display names. Pronounce «اللَّمْسَة» with an unmistakable final t sound, never «اللَّمْس». Say «أُولِيد» as the Arabic spoken form beginning with a clear hamza, not English OLED and not a hamza-less form. Say «إِل سِي دِي» as three distinct Arabic units, with «إِل» beginning with kasra/hamza and never omit it. Preserve «بِالْأَرْض» and «إِنَّهُ» exactly. Add nothing and omit nothing.","3":"Read the reviewed Arabic transcript verbatim. Fresh dual-ASR still flags «اللَّمْسَة» and «إِكْس». Pronounce «اللَّمْسَة» with a clear final t sound, never «اللَّمْس». Say the coordinates exactly as «إِكْس وَوَاي»: make the initial hamza/kasra in «إِكْس» unmistakable and do not replace it with another conjunction or omit it. Preserve «مَوْضِع» and «الْمَوْضِع» exactly with ض. Add nothing and omit nothing.","4":"Read the reviewed Arabic transcript verbatim. Pronounce «وَحْدَهُ» with masculine final hu, never وحدها. Preserve every written token and ending.","5":"Read the reviewed Arabic transcript verbatim. Pronounce «يُشَوِّشُهَا» slowly and exactly, with the doubled shin and final ha. Preserve every written token.","6":"Read the reviewed Arabic transcript verbatim. Fresh dual-ASR still confirms «يَحْتَجُّ» was spoken as «يَحْتَاج». Pronounce «يَحْتَجُّ» exactly as yah-taj-ju: no long alif and a clearly doubled final ج. Preserve «لِلْمَس», «الضَّغْط», «تَنْجَح», «إِنَّهُ», «تُرْسِلُهَا», and «مِنْهُ» exactly. Do not insert «فِي الْمَرَّة» or repeat any phrase. Add nothing and omit nothing."}
+            {"1":"Read the reviewed Arabic transcript verbatim, at a slightly slower clear pace. Fresh dual-ASR confirms exactly two lexical errors in this segment. First, say «الشَّاشَة» singular exactly as written, with the final ta marbuta sound; never pluralize it to «الشَّاشَات». Second, pronounce «مَلَاءَمَة» as ma-laa-a-ma, with a distinct hamza after the long alif; never say «مُلَائِمَة» or «ملائمة». Preserve «دَارَة», «لِلْمَس», «تَعْنِي», «كَثِيرًا», and «الْيَوْم» exactly. Do not add, omit, pluralize, paraphrase, or replace any token.","2":"Read the reviewed Arabic transcript verbatim, at a slightly slower clear pace. Fresh dual-ASR confirms two lexical errors plus one ambiguous display-name rendering. Say «اللَّمْسَة» with an unmistakable final t sound, never «اللَّمْس». Say «إِنَّهُ» beginning with kasra and a clearly doubled noon, never «أَنَّهُ». Say «أُولِيد» as four audible Arabic syllabic sounds beginning with a clear hamza; do not pronounce the English acronym OLED. Keep «إِل سِي دِي» as three distinct Arabic spoken units, and preserve «بِالْأَرْض» exactly. Do not add, omit, paraphrase, or replace any token.","3":"Read the reviewed Arabic transcript verbatim, at a slightly slower clear pace. Fresh dual-ASR confirms four lexical/rendering errors in this segment. Say «اللَّمْسَة» with a clearly audible final t sound, never «اللَّمْس». Say «مُتَقَابِلَة» exactly, never «مُتَقَاطِعَة». Say the coordinates as the Arabic spoken words «إِكْس وَوَاي»: articulate «إِكْس» as i-k-s with an audible initial hamza/kasra, then say «وَوَاي» as wa-waay; do not use the English letter symbols X or Y. Preserve «مَوْضِع» and «الْمَوْضِع» with ض. Do not add, omit, paraphrase, or replace any token.","4":"Read the reviewed Arabic transcript verbatim. Pronounce «وَحْدَهُ» with masculine final hu, never وحدها. Preserve every written token and ending.","5":"Read the reviewed Arabic transcript verbatim. Pronounce «يُشَوِّشُهَا» slowly and exactly, with the doubled shin and final ha. Preserve every written token.","6":"Read the reviewed Arabic transcript verbatim, at a slightly slower clear pace. Fresh dual-ASR confirms exactly two lexical errors in this segment. Say «تَنْجَح» exactly as written, never replace it with «تَظْهَر» or any other verb. Say «يَحْتَجُّ» exactly as yah-taj-ju, with no long alif and a clearly doubled final ج; never say «يَحْتَاج». Preserve «لِلْمَس», «الضَّغْط», «إِنَّهُ», «تُرْسِلُهَا», and «مِنْهُ» exactly. Do not insert «فِي الْمَرَّة», repeat a phrase, add, omit, paraphrase, or replace any token."}
         run: |
           set -euo pipefail
-          # Run 49 fresh dual-ASR mapped the remaining 4 substitutions and 3 unresolved
-          # to parts 1, 2, 3 and 6. Preserve parts 4 and 5 and every other article.
+          # Run 50 fresh dual-ASR maps all remaining substantive errors to parts 1,2,3,6.
+          # Preserve parts 4 and 5 byte-for-byte and preserve every other article.
           for part in 1 2 3 6; do
             success=0
-            for transport in developer-generate-content developer-interactions; do
-              attempts=6
+            transports="developer-interactions developer-generate-content"
+            if [ -n "${OPENROUTER_API_KEY:-}" ]; then
+              transports="${transports} openrouter-speech"
+            fi
+            for transport in ${transports}; do
+              attempts=8
               for attempt in $(seq 1 "${attempts}"); do
                 echo "TARGETED_TTS article=how-touchscreens-work part=${part} transport=${transport} attempt=${attempt}"
                 if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-touchscreen-targeted-regenerate.mjs --article=how-touchscreens-work; then
                   success=1
                   break 2
                 fi
-                sleep 65
+                sleep 45
               done
             done
             if [ "${success}" -ne 1 ]; then
