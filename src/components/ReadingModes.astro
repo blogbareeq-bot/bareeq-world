@@ -1,30 +1,31 @@
 ---
 interface Props {
-  summary: string;
   readingMinutes: number;
   audioManifest: string;
   hasAudio?: boolean;
+  story?: import('../types/visual-story').VisualStoryData;
 }
-const { summary, readingMinutes, audioManifest, hasAudio = false } = Astro.props;
+import VisualStory from './VisualStory.astro';
+const { readingMinutes, audioManifest, hasAudio = false, story } = Astro.props;
 ---
 <section class="reading-modes" data-reading-modes data-audio-manifest={audioManifest} aria-labelledby="reading-modes-title">
   <div class="reading-modes__intro">
     <span class="reading-modes__spark" aria-hidden="true">✦</span>
     <div>
       <h2 id="reading-modes-title">اقرأ بالطريقة التي تناسبك</h2>
-      <p>النص كاملًا، واستماع متزامن يحفظ موضعك، أو خلاصة مركّزة — اختر ما يناسب وقتك.</p>
+      <p>سطور للنص الكامل، وصدى للاستماع المتزامن مع حفظ موضعك، ونافذة لتجربة بصرية مستقلة.</p>
     </div>
   </div>
 
   <div class="reading-modes__tabs" role="tablist" aria-label="طريقة متابعة المقال">
     <button id="reading-tab-read" class="reading-mode is-active" type="button" role="tab" tabindex="0" aria-selected="true" data-reading-mode="read" aria-controls="article-content">
-      <span class="reading-mode__icon" aria-hidden="true">📖</span><span><b>قراءة</b><small>النص الكامل · {readingMinutes} د</small></span>
+      <span class="reading-mode__icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M8 24c6-1 12-7 16-16-9 4-15 10-16 16Zm0 0-2 3m8-9 5 5"/></svg></span><span><b>سطور</b><small>النص الكامل · {readingMinutes} د</small></span>
     </button>
     <button id="reading-tab-listen" class="reading-mode" type="button" role="tab" tabindex="-1" aria-selected="false" data-reading-mode="listen" aria-controls="reading-listen-panel" disabled={!hasAudio} aria-disabled={!hasAudio} title={!hasAudio ? 'التسجيل الصوتي لهذا المقال قيد الإعداد' : undefined}>
-      <span class="reading-mode__icon" aria-hidden="true">🎧</span><span><b>استماع</b><small data-listen-label>{hasAudio ? 'صوت متزامن مع النص' : 'قيد الإعداد'}</small></span>
+      <span class="reading-mode__icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M6 17a10 10 0 0 1 20 0v7a3 3 0 0 1-3 3h-3v-9h6M6 18h6v9H9a3 3 0 0 1-3-3v-6Z"/></svg></span><span><b>صدى</b><small data-listen-label>{hasAudio ? 'صوت متزامن مع النص' : 'قيد الإعداد'}</small></span>
     </button>
-    <button id="reading-tab-summary" class="reading-mode" type="button" role="tab" tabindex="-1" aria-selected="false" data-reading-mode="summary" aria-controls="reading-summary-panel">
-      <span class="reading-mode__icon" aria-hidden="true">✨</span><span><b>الخلاصة</b><small>الفكرة في أقل من دقيقة</small></span>
+    <button id="reading-tab-window" class="reading-mode reading-mode--window" type="button" role="tab" tabindex="-1" aria-selected="false" data-reading-mode="window" disabled={!story} aria-disabled={!story} title={!story ? 'نافذة هذا المقال قيد الإعداد' : undefined}>
+      <span class="reading-mode__icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M5 26V12a11 11 0 0 1 22 0v14H5Zm11-25v25M5 15h22"/></svg></span><span><b>نافذة</b><small>{story ? 'قصة بصرية تفاعلية' : 'قيد الإعداد'}</small></span>
     </button>
   </div>
 
@@ -46,9 +47,5 @@ const { summary, readingMinutes, audioManifest, hasAudio = false } = Astro.props
     <p class="audio-note"><strong>تنبيه:</strong> الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا. يعمل تتبّع الفقرة تلقائيًا، ويحفظ المشغّل اختيار الصوت وموضع الاستماع لمدة 30 يومًا على هذا الجهاز والمتصفح.</p>
   </div>
 
-  <div id="reading-summary-panel" class="reading-modes__panel reading-modes__panel--summary" data-summary-panel role="tabpanel" aria-labelledby="reading-tab-summary" hidden>
-    <span class="summary-kicker">خلاصة بريق</span>
-    <p>{summary}</p>
-    <button class="summary-read" type="button" data-summary-read>انتقل إلى المقال الكامل <span aria-hidden="true">←</span></button>
-  </div>
 </section>
+{story && <VisualStory story={story} />}

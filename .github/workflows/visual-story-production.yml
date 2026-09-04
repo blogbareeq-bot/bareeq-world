@@ -1,0 +1,40 @@
+name: Bareeq Window production gate
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/content/posts/**'
+      - 'src/data/visual-stories.json'
+      - 'src/components/VisualStory.astro'
+      - 'src/components/visual-story/**'
+      - 'src/styles/visual-story.css'
+      - 'public/scripts/visual-story.js'
+      - 'scripts/*visual-stor*'
+      - 'scripts/check-audio-dist.mjs'
+      - '.github/workflows/visual-story-production.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bareeq-window-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-all-articles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: npm
+      - run: npm ci
+      - name: Validate all visual stories and source fingerprints
+        run: node scripts/generate-visual-stories.mjs --check && node scripts/check-visual-stories.mjs && node scripts/test-visual-story-runtime.mjs
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Production build and full regression gates
+        run: npm run build

@@ -1,0 +1,61 @@
+---
+import StoryVisual from './visual-story/StoryVisual.astro';
+import type { VisualStoryData } from '../types/visual-story';
+interface Props { story: VisualStoryData; }
+const { story } = Astro.props;
+---
+<div
+  class="visual-story"
+  data-visual-story
+  data-story-key={story.slug}
+  data-story-title={story.title}
+  data-card-count={story.cards.length}
+  data-director={story.director.mood}
+  hidden
+>
+  <div class="visual-story__backdrop" data-visual-close></div>
+  <section class="visual-story__dialog" role="dialog" aria-modal="true" aria-labelledby="visual-story-title" tabindex="-1" data-visual-dialog>
+    <header class="visual-story__header">
+      <a class="visual-story__brand" href="/" aria-label="بريق — نافذتك إلى المعرفة">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 14 24 8v30L8 42V14Zm18-6 14 6v28l-14-4V8Z"/><path d="M24 8v30"/></svg>
+        <span><b>نافذة بريق</b><small>{story.director.label}</small></span>
+      </a>
+      <div class="visual-story__progress" aria-live="polite"><span data-visual-position>1</span><i aria-hidden="true">/</i><span>{story.cards.length}</span></div>
+      <button class="visual-story__icon-button" type="button" data-visual-share aria-label="مشاركة البطاقة الحالية">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4"/></svg>
+      </button>
+      <button class="visual-story__icon-button" type="button" data-visual-close aria-label="إغلاق نافذة بريق">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </header>
+
+    <div class="visual-story__track" data-visual-track aria-live="polite">
+      {story.cards.map((card, index) => (
+        <article
+          class:list={['visual-story__card', `visual-story__card--${card.visual}`, { 'is-active': index === 0 }]}
+          data-visual-card
+          data-card-id={card.id}
+          data-index={index}
+          aria-hidden={index === 0 ? 'false' : 'true'}
+        >
+          <div class="visual-story__copy">
+            <span class="visual-story__kicker">{card.kicker}</span>
+            <h2 id={index === 0 ? 'visual-story-title' : undefined}>{card.title}</h2>
+            <p>{card.body}</p>
+          </div>
+          <div class="visual-story__art"><StoryVisual kind={card.visual} index={index} /></div>
+          <span class="visual-story__signature" aria-hidden="true"><i></i><b></b></span>
+        </article>
+      ))}
+    </div>
+
+    <footer class="visual-story__footer">
+      <button type="button" data-visual-next aria-label="البطاقة التالية"><span>التالي</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+      <div class="visual-story__dots" role="tablist" aria-label="بطاقات نافذة بريق">
+        {story.cards.map((card, index) => <button type="button" role="tab" data-visual-dot data-index={index} aria-label={`البطاقة ${index + 1}: ${card.title}`} aria-selected={index === 0 ? 'true' : 'false'}></button>)}
+      </div>
+      <button type="button" data-visual-prev aria-label="البطاقة السابقة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><span>السابق</span></button>
+    </footer>
+    <p class="visual-story__status" data-visual-status aria-live="polite"></p>
+  </section>
+</div>
