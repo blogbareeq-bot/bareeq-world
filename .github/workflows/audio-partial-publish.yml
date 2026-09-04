@@ -22,8 +22,8 @@ jobs:
     timeout-minutes: 240
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
-      BAREEQ_SOURCE_RUN_ID: '33871745084'
-      BAREEQ_SOURCE_ARTIFACT: bareeq-final-validation-33871745084
+      BAREEQ_SOURCE_RUN_ID: '33879669357'
+      BAREEQ_SOURCE_ARTIFACT: bareeq-progressive-validation-33879669357
       BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
     steps:
       - name: Checkout PR head
@@ -71,12 +71,12 @@ jobs:
           test -n "${GEMINI_API_KEY}"
           echo 'GEMINI_CREDENTIAL=present'
 
-      - name: Restore latest run 51 checkpoint
+      - name: Restore latest progressive checkpoint
         if: steps.self_guard.outputs.self_push != 'true'
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.BAREEQ_SOURCE_ARTIFACT }}
-          path: audio-candidates
+          path: .
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
           run-id: ${{ env.BAREEQ_SOURCE_RUN_ID }}
@@ -96,14 +96,17 @@ jobs:
           const exact = rows.filter((x) => x.validation?.status === 'validated'
             && x.validation?.fingerprint === x.generation?.fingerprint
             && ['substitutions','deletions','insertions','unresolved'].every((k) => Number(x.validation?.consensus?.[k]) === 0));
+          if (exact.length < 4) throw new Error(`progressive checkpoint regressed below 4 exact articles: ${exact.length}`);
           console.log(`PROGRESSIVE_CHECKPOINT=PASS generated=15/15 exact_before=${exact.length}/15`);
           NODE
 
-      - name: Validate every pending article except touchscreen without blocking on quality failures
+      - name: Complete first-pass matching for unresolved articles without blocking on failures
         if: steps.self_guard.outputs.self_push != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/audio-progressive-validate.mjs --skip=how-touchscreens-work
+        run: >-
+          node scripts/audio-progressive-validate.mjs
+          --only=how-touchscreens-work,language-soft-power-politics,عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء,كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار,لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء
 
       - name: Publish every exact 0/0/0/0 article now and preserve fallbacks
         if: steps.self_guard.outputs.self_push != 'true'
@@ -116,7 +119,7 @@ jobs:
           const marker = JSON.parse(fs.readFileSync(process.env.BAREEQ_PARTIAL_MARKER, 'utf8'));
           if (marker.schema !== 'bareeq.audio-openrouter-partial-published-tree.v1') throw new Error('partial marker schema mismatch');
           if (marker.publicationComplete !== false) throw new Error('partial marker must not claim final completion');
-          if (marker.publishedCount < 3) throw new Error(`validated publication regressed below 3: ${marker.publishedCount}`);
+          if (marker.publishedCount < 4) throw new Error(`validated publication regressed below 4: ${marker.publishedCount}`);
           if (marker.publishedCount + marker.fallbackCount !== 15) throw new Error('partial publication inventory must remain 15');
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
           for (const item of marker.articles || []) {
