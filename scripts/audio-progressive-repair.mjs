@@ -18,6 +18,35 @@ const CAMPAIGN_ID = process.env.BAREEQ_AUDIO_CAMPAIGN_ID?.trim() || 'sadaltager-
 const STATE_PATH = path.join(ROOT, 'audio-candidates', '_campaigns', CAMPAIGN_ID, 'state.json');
 const SNAPSHOT_PATH = path.join(ROOT, 'docs', 'audio', 'AUDIO-TRUTH-SNAPSHOT.json');
 const LIVE_PATH = path.join(ROOT, 'docs', 'audio', 'LIVE-AUDIO-OBSERVED-20260828.json');
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function pacedSynthesize(baseSynth) {
+  let lastRequestAt = 0;
+  const minSpacingMs = 4000;
+  return async (args) => {
+    for (let attempt = 1; attempt <= 10; attempt += 1) {
+      const now = Date.now();
+      const spacingWait = Math.max(0, minSpacingMs - (now - lastRequestAt));
+      if (spacingWait) await sleep(spacingWait);
+      try {
+        const output = await baseSynth(args);
+        lastRequestAt = Date.now();
+        return output;
+      } catch (error) {
+        const quota = error?.httpStatus === 429 || error?.code === 'BAREEQ_QUOTA';
+        if (!quota) throw error;
+        const retryMs = Number(error?.retryDelay) || 45000;
+        const partNumber = Number(args?.part?.partIndex) + 1;
+        console.log(`PROGRESSIVE_REPAIR_QUOTA_WAIT part=${partNumber} attempt=${attempt} wait=${retryMs}ms`);
+        await sleep(retryMs);
+      }
+    }
+    throw Object.assign(
+      new Error(`Gemini TTS quota exhausted after retries for part ${Number(args?.part?.partIndex) + 1}`),
+      { httpStatus: 429, code: 'BAREEQ_QUOTA' },
+    );
+  };
+}
 
 function csvArg(name) {
   const raw = process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(name.length + 3) || '';
@@ -174,7 +203,8 @@ async function repairArticle({ articleId, state, snapshot }) {
 
   process.env.BAREEQ_FORCE_TTS_PARTS = parts.join(',');
   process.env.BAREEQ_TTS_CORRECTION_HINTS_JSON = JSON.stringify(hints);
-  const synth = await resolveProductionSynthesizer({ apiKey: process.env.GEMINI_API_KEY });
+  const baseSynth = await resolveProductionSynthesizer({ apiKey: process.env.GEMINI_API_KEY });
+  const synth = await pacedSynthesize(baseSynth);
 
   console.log(`PROGRESSIVE_REPAIR_START ${articleId} fingerprint=${fingerprint} parts=${parts.join(',')} tokens=${indices.length} consensus=${JSON.stringify(adjudication.consensus)}`);
   try {
