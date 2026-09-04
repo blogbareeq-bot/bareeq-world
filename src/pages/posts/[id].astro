@@ -9,13 +9,18 @@ import { responsiveImage, socialImage } from '../../lib/images';
 import { createHash } from 'node:crypto';
 import { access } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import visualStories from '../../data/visual-stories.json';
+import { isValidVisualStory } from '../../lib/visual-story/validator';
+import type { VisualStoryData } from '../../types/visual-story';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.draft !== true);
   return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
 }
 interface Props { post: CollectionEntry<'posts'>; }
-const { post } = Astro.props;
+const { post } = Astro.props as Props;
+const candidateVisualStory = visualStories.stories.find((story) => story.slug === post.id) as VisualStoryData | undefined;
+const visualStory = isValidVisualStory(candidateVisualStory) ? candidateVisualStory : undefined;
 const { Content, headings } = await render(post);
 const allPosts = await getPublishedPosts();
 const currentIndex = allPosts.findIndex((entry) => entry.id === post.id);
@@ -126,7 +131,7 @@ const articleSchema = {
       </figure>
     )}
 
-    <ReadingModes summary={post.data.quickSummary ?? post.data.description} readingMinutes={readingMinutes} audioManifest={audioManifest} hasAudio={hasAudio} />
+    <ReadingModes readingMinutes={readingMinutes} audioManifest={audioManifest} hasAudio={hasAudio} story={visualStory} />
 
     <div class:list={['article-layout', { 'has-toc': toc.length > 0 }]}> 
       {toc.length > 0 && (
@@ -172,5 +177,6 @@ const articleSchema = {
 
   <script is:inline src="/scripts/audio-core.js"></script>
   <script is:inline src="/scripts/article.js"></script>
+  <script is:inline src="/scripts/visual-story.js"></script>
   <script is:inline src="/scripts/reading-list.js"></script>
 </BaseLayout>
