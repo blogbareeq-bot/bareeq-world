@@ -38,7 +38,8 @@ if (!state?.generationComplete || !Array.isArray(snapshot?.articles) || snapshot
 
 const attempted = [];
 const failures = [];
-let quotaStop = null;
+const quotaArticles = [];
+const asrUnavailableArticles = [];
 
 for (const item of snapshot.articles) {
   const articleId = item.articleId;
@@ -83,23 +84,28 @@ for (const item of snapshot.articles) {
     await saveState(state);
     console.log(`PROGRESSIVE_VALIDATION_DONE ${articleId} consensus=${JSON.stringify(result.consensus)}`);
   } catch (error) {
+    const message = String(error?.message || error || '');
     const quota = error?.exitCode === EXIT_QUOTA || error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
+    const asrUnavailable = /independent ASR .* unavailable after bounded transient retries/i.test(message);
+    const status = quota ? 'paused-quota' : (asrUnavailable ? 'paused-asr' : 'failed');
+    const kind = quota ? 'quota' : (asrUnavailable ? 'asr-unavailable' : 'quality');
     state.articles[articleId] = {
       ...previous,
       validation: {
-        status: quota ? 'paused-quota' : 'failed',
+        status,
         fingerprint,
-        error: String(error?.message || error || '').slice(0, 700),
+        error: message.slice(0, 700),
         updatedAt: new Date().toISOString(),
       },
     };
-    failures.push({ articleId, kind: quota ? 'quota' : 'quality', message: String(error?.message || error || '').slice(0, 300) });
+    failures.push({ articleId, kind, message: message.slice(0, 300) });
+    if (quota) quotaArticles.push(articleId);
+    if (asrUnavailable) asrUnavailableArticles.push(articleId);
     await saveState(state);
-    console.log(`PROGRESSIVE_VALIDATION_${quota ? 'QUOTA' : 'QUALITY'}_FAIL ${articleId} ${String(error?.message || error || '').slice(0, 300)}`);
-    if (quota) {
-      quotaStop = articleId;
-      break;
-    }
+    console.log(`PROGRESSIVE_VALIDATION_${quota ? 'QUOTA' : (asrUnavailable ? 'ASR_UNAVAILABLE' : 'QUALITY')}_FAIL ${articleId} ${message.slice(0, 300)}`);
+    // Never let one article block the inventory sweep. Provider/quota failures are
+    // recorded and the next article is attempted; repair/retry happens only after
+    // the full set has been classified.
   }
 }
 
@@ -114,7 +120,7 @@ const remainingArticles = articles.filter((articleId) => !validatedArticles.incl
 
 state.validationComplete = validatedArticles.length === articles.length;
 state.progressiveValidation = {
-  status: state.validationComplete ? 'complete' : (quotaStop ? 'paused-quota' : 'partial'),
+  status: state.validationComplete ? 'complete' : ((quotaArticles.length || asrUnavailableArticles.length) ? 'partial-provider-blocks' : 'partial'),
   validatedCount: validatedArticles.length,
   remainingCount: remainingArticles.length,
   validatedArticles,
@@ -123,9 +129,10 @@ state.progressiveValidation = {
   failures,
   skipped: [...skip],
   only: [...only],
-  quotaStop,
+  quotaArticles,
+  asrUnavailableArticles,
   updatedAt: new Date().toISOString(),
 };
 await saveState(state);
 
-console.log(`PROGRESSIVE_VALIDATION_SUMMARY validated=${validatedArticles.length}/15 remaining=${remainingArticles.length} attempted=${attempted.length} failures=${failures.length} quotaStop=${quotaStop || 'none'}`);
+console.log(`PROGRESSIVE_VALIDATION_SUMMARY validated=${validatedArticles.length}/15 remaining=${remainingArticles.length} attempted=${attempted.length} failures=${failures.length} quota=${quotaArticles.length} asrUnavailable=${asrUnavailableArticles.length}`);
