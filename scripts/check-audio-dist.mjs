@@ -83,7 +83,9 @@ function validateProvider(manifest, id) {
     return 'Bundled Hamed';
   }
 
-  if (manifest.version !== 3 || manifest.generatorVersion !== 8 || manifest.syncMethod !== 'paragraph-weighted') {
+  // Generator 10 is the fingerprint-bound exact-publish manifest used by the
+  // current Sadaltager campaign; generator 8 remains valid for legacy fallbacks.
+  if (manifest.version !== 3 || ![8, 10].includes(manifest.generatorVersion) || manifest.syncMethod !== 'paragraph-weighted') {
     throw new Error(`${id}: unsupported generated audio manifest version/configuration.`);
   }
 
