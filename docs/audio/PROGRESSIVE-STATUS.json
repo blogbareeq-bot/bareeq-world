@@ -3,7 +3,7 @@
   "campaignId": "sadaltager-openrouter-20260901-v1",
   "sourceRunId": "33907810856",
   "sourceArtifact": "bareeq-progressive-validation-33907810856",
-  "generatedAt": "2026-09-04T22:05:27.311Z",
+  "generatedAt": "2026-09-04T23:42:22.332Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -70,7 +70,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 34.82660073s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 6"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -86,7 +86,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 34.594663556s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 3"
     },
     {
       "articleId": "language-soft-power-politics",
@@ -102,7 +102,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 34.398648044s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -118,7 +118,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 34.190305428s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 4"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -134,7 +134,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 33.987325841s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 3"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -150,7 +150,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 33.76676792s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
@@ -166,7 +166,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 33.583115911s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -198,7 +198,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 33.385891216s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -214,7 +214,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 33.198725147s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
@@ -246,7 +246,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 33.001884551s.\",\"retryDelay\":null,\"quota\":[]}"
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     }
   ]
 }
