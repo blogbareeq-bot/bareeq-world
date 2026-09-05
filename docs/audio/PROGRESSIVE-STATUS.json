@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v1",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "33907810856",
-  "sourceArtifact": "bareeq-progressive-validation-33907810856",
-  "generatedAt": "2026-09-04T23:42:22.332Z",
+  "sourceRunId": "33924094021",
+  "sourceArtifact": "bareeq-progressive-validation-33924094021",
+  "generatedAt": "2026-09-05T04:55:28.357Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -69,8 +69,8 @@
       "unresolved": null,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 6"
+      "fullSha256": "634a51bc703775c58ed15926bb6c8e5a8bb17fb05fe5a4332d5d914a246917f8",
+      "error": "ASR quota exhausted for gemini-3.5-transcribe"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -86,7 +86,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 3"
+      "error": "Gemini TTS quota exhausted after retries for part 2"
     },
     {
       "articleId": "language-soft-power-politics",
@@ -102,7 +102,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini TTS quota exhausted after retries for part 7"
     },
     {
       "articleId": "why-some-passports-are-stronger",
