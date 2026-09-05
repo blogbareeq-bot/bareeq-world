@@ -8,7 +8,7 @@ import {
 } from './audio-constants.mjs';
 import { loadSpokenArticle, splitSpokenArticle, activeSplitSettings } from './audio-split.mjs';
 import { tokenizeVerbal } from './audio-exact-match.mjs';
-import { resolveProductionSynthesizer } from './audio-gemini-tts.mjs';
+import { synthesizeGeminiPart, synthesizeGeminiGenerateContentPart } from './audio-gemini-tts.mjs';
 import { runProductionMode } from './audio-production.mjs';
 import { validateWithConsensus } from './audio-validate-consensus.mjs';
 import { writeJson, pathExists } from './audio-checkpoint.mjs';
@@ -20,31 +20,62 @@ const SNAPSHOT_PATH = path.join(ROOT, 'docs', 'audio', 'AUDIO-TRUTH-SNAPSHOT.jso
 const LIVE_PATH = path.join(ROOT, 'docs', 'audio', 'LIVE-AUDIO-OBSERVED-20260828.json');
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function pacedSynthesize(baseSynth) {
+// Gemini free-tier TTS is throttled to ~10 requests/min. The project's own
+// generator already uses both Gemini transports (developer-interactions and
+// developer-generate-content) as a fallback pair. We retry each part across
+// both transports with 9s pacing, bounded retries and a per-run request cap so
+// a single run records which parts it finished and pauses cleanly on quota.
+async function dualTransportSynthesize({ apiKey }) {
+  const transports = [
+    ['developer-interactions', synthesizeGeminiPart],
+    ['developer-generate-content', synthesizeGeminiGenerateContentPart],
+  ];
+  const minSpacingMs = 9000;
+  const maxRequests = Number(process.env.BAREEQ_REPAIR_MAX_REQUESTS || 40);
+  const retryAttempts = Number(process.env.BAREEQ_REPAIR_MAX_429_RETRIES || 6);
   let lastRequestAt = 0;
-  const minSpacingMs = 4000;
+  let sent = 0;
+
+  const quotaError = (partNumber, detail) => Object.assign(
+    new Error(`Gemini TTS quota exhausted after retries for part ${partNumber}${detail ? `: ${detail}` : ''}`),
+    { httpStatus: 429, code: 'BAREEQ_QUOTA' },
+  );
+
   return async (args) => {
-    for (let attempt = 1; attempt <= 10; attempt += 1) {
-      const now = Date.now();
-      const spacingWait = Math.max(0, minSpacingMs - (now - lastRequestAt));
-      if (spacingWait) await sleep(spacingWait);
-      try {
-        const output = await baseSynth(args);
-        lastRequestAt = Date.now();
-        return output;
-      } catch (error) {
-        const quota = error?.httpStatus === 429 || error?.code === 'BAREEQ_QUOTA';
-        if (!quota) throw error;
-        const retryMs = Number(error?.retryDelay) || 45000;
-        const partNumber = Number(args?.part?.partIndex) + 1;
-        console.log(`PROGRESSIVE_REPAIR_QUOTA_WAIT part=${partNumber} attempt=${attempt} wait=${retryMs}ms`);
-        await sleep(retryMs);
+    const partNumber = Number(args?.part?.partIndex) + 1;
+    for (const [transport, synth] of transports) {
+      for (let attempt = 1; attempt <= retryAttempts; attempt += 1) {
+        if (sent >= maxRequests) {
+          throw quotaError(partNumber, `request cap ${maxRequests} reached`);
+        }
+        const now = Date.now();
+        const spacingWait = Math.max(0, minSpacingMs - (now - lastRequestAt));
+        if (spacingWait) await sleep(spacingWait);
+        sent += 1;
+        try {
+          const output = await synth({
+            apiKey,
+            part: args.part,
+            context: {
+              articleTitle: args.article.title,
+              partIndex: args.part.partIndex,
+              partCount: args.splitPlan.parts.length,
+              correctionHint: args.correctionHint,
+            },
+          });
+          lastRequestAt = Date.now();
+          console.log(`PROGRESSIVE_REPAIR_TTS_OK part=${partNumber} transport=${transport} attempt=${attempt}`);
+          return output;
+        } catch (error) {
+          const quota = error?.httpStatus === 429 || error?.code === 'BAREEQ_QUOTA';
+          if (!quota) throw error;
+          const retryMs = Math.max(Number(error?.retryDelay) || 0, 45000);
+          console.log(`PROGRESSIVE_REPAIR_QUOTA_WAIT part=${partNumber} transport=${transport} attempt=${attempt} wait=${retryMs}ms`);
+          await sleep(retryMs);
+        }
       }
     }
-    throw Object.assign(
-      new Error(`Gemini TTS quota exhausted after retries for part ${Number(args?.part?.partIndex) + 1}`),
-      { httpStatus: 429, code: 'BAREEQ_QUOTA' },
-    );
+    throw quotaError(partNumber);
   };
 }
 
@@ -203,8 +234,7 @@ async function repairArticle({ articleId, state, snapshot }) {
 
   process.env.BAREEQ_FORCE_TTS_PARTS = parts.join(',');
   process.env.BAREEQ_TTS_CORRECTION_HINTS_JSON = JSON.stringify(hints);
-  const baseSynth = await resolveProductionSynthesizer({ apiKey: process.env.GEMINI_API_KEY });
-  const synth = await pacedSynthesize(baseSynth);
+  const synth = await dualTransportSynthesize({ apiKey: process.env.GEMINI_API_KEY });
 
   console.log(`PROGRESSIVE_REPAIR_START ${articleId} fingerprint=${fingerprint} parts=${parts.join(',')} tokens=${indices.length} consensus=${JSON.stringify(adjudication.consensus)}`);
   try {

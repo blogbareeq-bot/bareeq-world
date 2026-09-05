@@ -25,10 +25,11 @@ jobs:
     timeout-minutes: 240
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
-      # Latest valid progressive checkpoint: run 33907810856 published 5 exact
-      # Sadaltager articles (commit b1dac5ae). Resume from it, never from run 0.
-      BAREEQ_SOURCE_RUN_ID: '33907810856'
-      BAREEQ_SOURCE_ARTIFACT: bareeq-progressive-validation-33907810856
+      # Latest valid progressive checkpoint. Run 33924094021 published 5 exact
+      # Sadaltager articles and preserved the partial touchscreen repair
+      # (parts 1-5 regenerated before the free-tier 429 window). Never run 0.
+      BAREEQ_SOURCE_RUN_ID: '33924094021'
+      BAREEQ_SOURCE_ARTIFACT: bareeq-progressive-validation-33924094021
       BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
       BAREEQ_STATUS_FILE: docs/audio/PROGRESSIVE-STATUS.json
     steps:
