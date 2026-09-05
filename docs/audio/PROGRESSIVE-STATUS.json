@@ -3,7 +3,7 @@
   "campaignId": "sadaltager-openrouter-20260901-v1",
   "sourceRunId": "33924094021",
   "sourceArtifact": "bareeq-progressive-validation-33924094021",
-  "generatedAt": "2026-09-05T04:55:28.357Z",
+  "generatedAt": "2026-09-05T12:54:35.469Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -62,15 +62,15 @@
       "audioKey": "de93f3d9f91c8b8b",
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 8,
+      "deletions": 0,
+      "insertions": 0,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "634a51bc703775c58ed15926bb6c8e5a8bb17fb05fe5a4332d5d914a246917f8",
-      "error": "ASR quota exhausted for gemini-3.5-transcribe"
+      "fullSha256": "92669b22bc57d0d561928145bc65f884a4e6c6d2afed4d9eb36fa765dc588920",
+      "error": "dual-ASR consensus failed: S=8 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -78,15 +78,15 @@
       "audioKey": "1d1b681593122b59",
       "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 5,
+      "deletions": 2,
+      "insertions": 0,
+      "unresolved": 8,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 2"
+      "fullSha256": "d7d05aa3cd45d7e4703f41b13f893b52f6ffd9901838944235d2282161182a60",
+      "error": "dual-ASR consensus failed: S=5 D=2 I=0 unresolved=8"
     },
     {
       "articleId": "language-soft-power-politics",
@@ -94,15 +94,15 @@
       "audioKey": "b19e29e785a22c73",
       "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 6,
+      "deletions": 1,
+      "insertions": 0,
+      "unresolved": 4,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 7"
+      "fullSha256": "ec5ae835c9cefb6b4fe2b821a89b257f8ff1af86fa5a633a367cecd759f6de0f",
+      "error": "dual-ASR consensus failed: S=6 D=1 I=0 unresolved=4"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -118,7 +118,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 4"
+      "error": "Gemini TTS quota exhausted after retries for part 2"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -134,7 +134,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 3"
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -150,7 +150,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini TTS quota exhausted after retries for part 3"
     },
     {
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
