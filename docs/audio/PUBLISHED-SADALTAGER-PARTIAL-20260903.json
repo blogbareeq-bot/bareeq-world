@@ -5,10 +5,10 @@
   "voice": "Sadaltager",
   "publicationStatus": "partial-with-existing-live-fallback",
   "publicationComplete": false,
-  "publishedCount": 3,
-  "fallbackCount": 12,
+  "publishedCount": 5,
+  "fallbackCount": 10,
   "publicationPolicy": "docs/audio/PUBLICATION-POLICY-20260901.json",
-  "generatedAt": "2026-09-03T13:46:40.670Z",
+  "generatedAt": "2026-09-05T04:55:28.308Z",
   "articles": [
     {
       "articleId": "ai-agents-future-now",
@@ -24,6 +24,16 @@
       "articleId": "altadakhom-explained-simply",
       "fingerprint": "58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45",
       "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135"
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "fingerprint": "a7f364df849199a8f4096863f95739a948e2788cf0d4d65d1e94acec022765b6",
+      "fullSha256": "1586e603c9e59b9967a51a980b4d2f7b58af262ee2aff24a77eab948d2e969e6"
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "fingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
+      "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7"
     }
   ],
   "fallbacks": [
@@ -56,19 +66,11 @@
       "reason": "awaiting-exact-dual-asr-campaign-completion"
     },
     {
-      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
-      "reason": "awaiting-exact-dual-asr-campaign-completion"
-    },
-    {
       "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
       "reason": "awaiting-exact-dual-asr-campaign-completion"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
-      "reason": "awaiting-exact-dual-asr-campaign-completion"
-    },
-    {
-      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
       "reason": "awaiting-exact-dual-asr-campaign-completion"
     },
     {
