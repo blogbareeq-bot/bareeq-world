@@ -58,3 +58,42 @@ const { story } = Astro.props;
     <p class="visual-story__status" data-visual-status aria-live="polite"></p>
   </section>
 </div>
+
+<style is:global>
+  /* Keep story copy inside the track row. Long cards scroll within their copy
+     column instead of visually spilling underneath the persistent footer. */
+  .visual-story__track,
+  .visual-story__card,
+  .visual-story__copy {
+    min-height: 0;
+  }
+  .visual-story__card {
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .visual-story__copy {
+    max-height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb,var(--story-gold) 55%,transparent) transparent;
+  }
+  @media (max-height: 520px) and (orientation: landscape) {
+    .visual-story__dialog {
+      grid-template-rows: auto minmax(0,1fr) auto;
+    }
+    .visual-story__status {
+      display: none;
+    }
+    .visual-story__card {
+      align-items: stretch;
+    }
+    .visual-story__copy {
+      align-self: stretch;
+      padding-block: 2px 10px;
+    }
+    .visual-story__signature {
+      display: none;
+    }
+  }
+</style>
