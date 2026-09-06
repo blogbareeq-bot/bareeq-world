@@ -15,7 +15,7 @@ await required('src/components/ReadingModes.astro', [
   'data-article-audio', 'data-audio-manifest={audioManifest}', 'tabindex="-1"'
 ]);
 await required('src/pages/posts/[id].astro', [
-  'import ReadingModes', 'import visualStories', '<ReadingModes', 'id="article-content"', 'data-article-content', 'audioManifest={audioManifest}', 'story={visualStory}'
+  'import ReadingModes', 'import { findVisualStoryBySlug }', '<ReadingModes', 'id="article-content"', 'data-article-content', 'audioManifest={audioManifest}', 'story={visualStory}'
 ]);
 await required('src/components/VisualStory.astro', ['data-visual-story', 'data-visual-card', 'data-visual-share', 'data-visual-next', 'data-visual-prev']);
 await required('public/scripts/visual-story.js', ['bareeq-visual-progress-v1', 'bareeq:visual-story', '#visual=', 'maxAge', "event.key === 'Escape'"]);

@@ -1,0 +1,35 @@
+{
+  "slug": "language-soft-power-politics",
+  "title": "حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟",
+  "articlePath": "/posts/language-soft-power-politics/",
+  "image": "/images/posts/language-soft-power-politics.webp",
+  "sourceFingerprint": "bb0adbfb5ff842f3c4261114de37a70f4decaf2e45e26f828bbae76efe6ad2e8",
+  "arc": "",
+  "path": "",
+  "director": {
+    "mood": "language-currents",
+    "label": "",
+    "grammar": "",
+    "density": "airy",
+    "motion": "calm",
+    "palette": []
+  },
+  "cards": [],
+  "_skeleton": {
+    "category": "نافذة على العالم",
+    "quickSummary": "لا تنتشر اللغة بجمال مفرداتها وحده، ولا بقرار حكومي منفرد. إنها تتحرك حين تلتقي المصلحة بالرغبة، وتساندهما مؤسسة، وتضاعفهما المنصة، ثم يحولهما الزمن إلى عادة.",
+    "candidateSections": [
+      "الجواب المختصر",
+      "ما علاقة اللغة بالقوة الناعمة؟",
+      "خمس بوابات يتحول عبرها الكلام إلى نفوذ",
+      "خمس لغات، وخمسة مسارات مختلفة",
+      "الوجه الآخر: عندما تصبح اللغة بوابةً وحاجزًا",
+      "هل ستنهي الترجمة الآلية هيمنة اللغات الكبرى؟",
+      "وماذا عن العربية؟ من الاتساع إلى التأثير",
+      "اختبار النفوذ اللغوي: خمس أسئلة تكشف الصورة",
+      "الخلاصة"
+    ],
+    "suggestedCards": 9,
+    "note": "هذا هيكل عظمي للقصة، لا قصة جاهزة. يحتاج إلى تحرير بشري لكتابة arc, path, و7-10 بطاقات بكل بطاقات تحتوي kicker, title, body, kind, visual."
+  }
+}

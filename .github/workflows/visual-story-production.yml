@@ -5,13 +5,20 @@ on:
   pull_request:
     paths:
       - 'src/content/posts/**'
-      - 'src/data/visual-stories.json'
+      - 'src/data/visual-stories/**'
+      - 'src/lib/visual-story/**'
+      - 'src/types/visual-story.ts'
       - 'src/components/VisualStory.astro'
       - 'src/components/visual-story/**'
       - 'src/styles/visual-story.css'
       - 'public/scripts/visual-story.js'
       - 'scripts/*visual-stor*'
+      - 'scripts/test-window-editorial.mjs'
+      - 'scripts/test-viewport-qa.mjs'
+      - 'scripts/check-reading-modes.mjs'
       - 'scripts/check-audio-dist.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/visual-story-production.yml'
 
 permissions:
@@ -24,17 +31,58 @@ concurrency:
 jobs:
   validate-all-articles:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
           cache: npm
-      - run: npm ci
-      - name: Validate all visual stories and source fingerprints
-        run: node scripts/generate-visual-stories.mjs --check && node scripts/check-visual-stories.mjs && node scripts/test-visual-story-runtime.mjs
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Validate all Window stories, fingerprints, editorial quality and runtime
+        run: |
+          node scripts/generate-visual-stories.mjs --check
+          npm run window:check
+
       - name: Typecheck
         run: npm run typecheck
+
       - name: Production build and full regression gates
         run: npm run build
+
+      - name: Install Chromium for real viewport QA
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start production preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4321 > /tmp/bareeq-preview.log 2>&1 &
+          echo $! > /tmp/bareeq-preview.pid
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4321/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/bareeq-preview.log
+          exit 1
+
+      - name: Real-browser viewport QA — 15 stories × 4 viewports
+        env:
+          CI: '1'
+          BAREEQ_PREVIEW_URL: http://127.0.0.1:4321
+        run: npm run window:viewport
+
+      - name: Upload viewport QA diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-window-viewport-${{ github.run_id }}
+          path: artifacts/window-viewport
+          if-no-files-found: ignore
+          retention-days: 7
