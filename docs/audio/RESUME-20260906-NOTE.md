@@ -1,0 +1,1 @@
+This branch intentionally resumes only unresolved Sadaltager audio from the newest checkpoint. Exact 5/15 remain immutable.
