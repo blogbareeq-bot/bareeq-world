@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -86,10 +87,23 @@ for (const size of [192, 512]) {
   }
 }
 
+// Arabic editorial safety gate is part of launch-readiness, so deployment cannot
+// bypass the deterministic checks even if a PR status check is not required.
+const arabicQa = spawnSync(process.execPath, ['scripts/bareeq-arabic-qa.mjs', '--all', '--no-write'], {
+  cwd: root,
+  encoding: 'utf8'
+});
+if (arabicQa.error) {
+  failures.push(`Bareeq Arabic Quality Gate could not start: ${arabicQa.error.message}`);
+} else if (arabicQa.status !== 0) {
+  const details = `${arabicQa.stdout ?? ''}\n${arabicQa.stderr ?? ''}`.trim();
+  failures.push(`Bareeq Arabic Quality Gate failed.${details ? `\n${details}` : ''}`);
+}
+
 if (failures.length) {
   console.error(`Launch-readiness source audit found ${failures.length} failure(s):`);
   failures.forEach((failure) => console.error(`- ${failure}`));
   process.exit(1);
 }
 
-console.log('Launch-readiness source audit passed: V4.21.6 package identity, heading identity, single-encoded Arabic sharing, H2-only TOC, real breadcrumbs, intent-based related posts, complete series sitemap policy, SearchAction, body-font preload, visible wrapped mobile categories, HTML CORS hardening, and PWA icons.');
+console.log('Launch-readiness source audit passed: V4.21.6 package identity, heading identity, single-encoded Arabic sharing, H2-only TOC, real breadcrumbs, intent-based related posts, complete series sitemap policy, SearchAction, body-font preload, visible wrapped mobile categories, HTML CORS hardening, PWA icons, and Bareeq Arabic Quality Gate.');
