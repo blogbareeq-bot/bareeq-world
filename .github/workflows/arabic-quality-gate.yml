@@ -58,6 +58,8 @@ jobs:
         run: |
           node --check scripts/bareeq-arabic-qa-core.mjs
           node --check scripts/bareeq-arabic-qa.mjs
+          node --check scripts/check-launch-readiness.mjs
+          python3 -m py_compile scripts/bareeq-camel-qa.py
           node scripts/test-bareeq-arabic-qa.mjs
 
       - name: Run blocking gate
@@ -70,6 +72,9 @@ jobs:
           else
             node scripts/bareeq-arabic-qa.mjs --all --report-dir .bareeq/qa/core
           fi
+
+      - name: Verify launch-readiness integration
+        run: node scripts/check-launch-readiness.mjs
 
       - name: Upload deterministic QA report
         if: always()
