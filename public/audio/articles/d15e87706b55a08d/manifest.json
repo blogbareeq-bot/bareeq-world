@@ -1,0 +1,551 @@
+{
+  "version": 3,
+  "generatorVersion": 10,
+  "syncVersion": 1,
+  "speechScriptHash": "7602bbfe834118a6c23b8a9b0d92220389fa0aeeb0761075801ab8d6be89c49e",
+  "speechInput": "reviewed-contextual-speech-script",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "language": "ar",
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+  "title": "لا تبحث عن شغفك… ابنِه: ما الذي يقوله البحث؟",
+  "audioKey": "d15e87706b55a08d",
+  "fingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
+  "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7",
+  "defaultVoice": "sadaltager",
+  "voices": [
+    {
+      "id": "sadaltager",
+      "label": "سادالتاجر (Sadaltager)",
+      "description": "معرفي طبيعي مناسب لمقالات بريق",
+      "providerVoice": "Sadaltager",
+      "totalDurationSeconds": 536.736
+    }
+  ],
+  "syncMethod": "paragraph-weighted",
+  "performanceInstructions": "### TASK\nSynthesize the approved Arabic transcript below as speech. TRANSCRIPT is the authoritative, linguistically reviewed Speech Script. Speak only its words, exactly as written. Every written Arabic diacritic is binding: do not reinterpret a vocalized word as another reading. Preserve each token's exact lexical and morphological form; never replace it with a more common, related, or neighboring form. For example, if the transcript says «تصعد», pronounce «تصعد» exactly and never substitute «تصاعد». Do not add, omit, paraphrase, or reorder any word. Do not normalize a written token into another lexical or morphological form. Do not read these directions or labels aloud.\n\n### AUDIO PROFILE\nA mature, well-read Arabic narrator for Bareeq, a refined knowledge blog for curious adult readers.\n\n### SCENE\nA contemporary Arabic recording studio in daylight. The narrator speaks naturally to one attentive listener in a calm, professional setting.\n\n### DIRECTOR'S NOTES\nUse clear Modern Standard Arabic. Sound natural, human, warm, and intellectually engaging. Use a normal conversational volume, never a whisper or a breathy delivery. Keep a comfortable medium pace with subtle organic variation. Articulate clearly without over-pronouncing words or sounding like a news anchor. Let questions carry gentle curiosity, explanations sound calm and confident, and conclusions feel reflective and quietly uplifting. Avoid theatrical acting, advertising energy, excessive solemnity, and monotone delivery.",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "encodingTool": "ffmpeg-libmp3lame",
+  "disclosure": "الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.",
+  "parts": [
+    {
+      "characters": 1441,
+      "sync": [
+        {
+          "id": "b0001",
+          "type": "paragraph",
+          "match": "كم مرة سألت نفسك ما شغفي الحقيقي ثم انتظرت إجابة واضحة قبل أن تبدأ",
+          "start": 0.037196,
+          "end": 0.095786
+        },
+        {
+          "id": "b0002",
+          "type": "paragraph",
+          "match": "يبدو السؤال بريئا لكنه قد يوحي بأن لكل إنسان اهتماما مكتملا ومخفيا وأن مهمته الوحيدة هي العثور عليه يقدم كتاب كال نيوبور",
+          "start": 0.095786,
+          "end": 0.270738
+        },
+        {
+          "id": "b0003",
+          "type": "paragraph",
+          "match": "هذه ليست قاعدة حتمية لكل شخص أو مهنة لكنها عدسة مفيدة تمنعنا من انتظار اليقين الكامل",
+          "start": 0.270738,
+          "end": 0.334157
+        },
+        {
+          "id": "b0004",
+          "type": "h2",
+          "match": "فكرتان عن الاهتمام",
+          "start": 0.334157,
+          "end": 0.345533
+        },
+        {
+          "id": "b0005",
+          "type": "paragraph",
+          "match": "يمكن النظر إلى الاهتمامات بطريقتين",
+          "start": 0.345533,
+          "end": 0.366469
+        },
+        {
+          "id": "b0006",
+          "type": "list-item",
+          "match": "اهتمام ثابت موجود كاملا في الداخل وسأشعر به فور العثور على المجال الصحيح",
+          "start": 0.366469,
+          "end": 0.421133
+        },
+        {
+          "id": "b0007",
+          "type": "list-item",
+          "match": "اهتمام قابل للنمو قد يبدأ بفضول صغير ثم يقوى مع التعلم والممارسة وفهم المجال",
+          "start": 0.421133,
+          "end": 0.479126
+        },
+        {
+          "id": "b0008",
+          "type": "paragraph",
+          "match": "بحث منشور في psychological science اختبر هاتين النظرتين عبر خمس دراسات وجد الباحثون أن تبني النظرة الثابتة ارتبط بتوقع د",
+          "start": 0.479126,
+          "end": 0.703942
+        },
+        {
+          "id": "b0009",
+          "type": "h2",
+          "match": "لماذا تبدو البداية فاترة أحيانا",
+          "start": 0.703942,
+          "end": 0.726584
+        },
+        {
+          "id": "b0010",
+          "type": "paragraph",
+          "match": "المبتدئ لا يرى المجال كما يراه الخبير هو يقضي وقتا في فهم الأدوات والمصطلحات وتصحيح الأخطاء بينما يملك الخبير مساحة أكبر",
+          "start": 0.726584,
+          "end": 0.884401
+        },
+        {
+          "id": "b0011",
+          "type": "paragraph",
+          "match": "في المقابل لا تعني المثابرة أن تجبر نفسك إلى الأبد على عمل يضر صحتك أو يخالف قيمك الفكرة هي إعطاء التجربة وقتا كافيا قبل",
+          "start": 0.884401,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0001",
+        "b0002",
+        "b0003",
+        "b0004",
+        "b0005",
+        "b0006",
+        "b0007",
+        "b0008",
+        "b0009",
+        "b0010",
+        "b0011"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/d15e87706b55a08d/part-001-edfdfe60e6d7.clean.mp3",
+          "bytes": 1457613,
+          "durationSeconds": 121.464,
+          "sha256": "8c18028d51300474f72500cb380048ff2a10108a987de62ef4493ad24dfc8dda"
+        }
+      }
+    },
+    {
+      "characters": 1435,
+      "sync": [
+        {
+          "id": "b0012",
+          "type": "h2",
+          "match": "رأس المال المهني في فكرة نيوبورت",
+          "start": 0,
+          "end": 0.021625
+        },
+        {
+          "id": "b0013",
+          "type": "paragraph",
+          "match": "يستخدم نيوبورت تعبير رأس المال المهني للإشارة إلى مهارات نادرة وقيمة تستطيع مبادلتها بقدر أكبر من الاستقلال أو الإبداع أ",
+          "start": 0.021625,
+          "end": 0.109786
+        },
+        {
+          "id": "b0014",
+          "type": "paragraph",
+          "match": "بدل سؤال هل أحب هذا المجال الآن يمكن أن تسأل",
+          "start": 0.109786,
+          "end": 0.14965
+        },
+        {
+          "id": "b0015",
+          "type": "list-item",
+          "match": "ما المهارة المحددة التي أتعلمها هنا",
+          "start": 0.14965,
+          "end": 0.175111
+        },
+        {
+          "id": "b0016",
+          "type": "list-item",
+          "match": "هل لهذه المهارة قيمة حقيقية لدى الآخرين",
+          "start": 0.175111,
+          "end": 0.203971
+        },
+        {
+          "id": "b0017",
+          "type": "list-item",
+          "match": "هل يتيح لي التحسن مساحة أكبر للاختيار أو الإبداع",
+          "start": 0.203971,
+          "end": 0.239769
+        },
+        {
+          "id": "b0018",
+          "type": "list-item",
+          "match": "هل تتوافق طبيعة العمل مع قيمي وحدودي",
+          "start": 0.239769,
+          "end": 0.268222
+        },
+        {
+          "id": "b0019",
+          "type": "paragraph",
+          "match": "هذه الأسئلة لا تلغي المشاعر لكنها تمنح القرار أرضا أكثر صلابة",
+          "start": 0.268222,
+          "end": 0.313118
+        },
+        {
+          "id": "b0020",
+          "type": "h2",
+          "match": "تجربة صغيرة بدل قرار كبير",
+          "start": 0.313118,
+          "end": 0.330935
+        },
+        {
+          "id": "b0021",
+          "type": "paragraph",
+          "match": "لا تحتاج إلى ترك عملك أو شراء معدات مكلفة صمم تجربة محدودة",
+          "start": 0.330935,
+          "end": 0.378143
+        },
+        {
+          "id": "b0022",
+          "type": "list-item",
+          "match": "اختر مجالا يثير فضولك لا مجالا تزعم أنك متأكد منه",
+          "start": 0.378143,
+          "end": 0.418688
+        },
+        {
+          "id": "b0023",
+          "type": "list-item",
+          "match": "حدد مشروعا صغيرا يمكن إنهاؤه خلال أسبوعين",
+          "start": 0.418688,
+          "end": 0.448092
+        },
+        {
+          "id": "b0024",
+          "type": "list-item",
+          "match": "استخدم الأدوات المتاحة قبل الاستثمار المالي",
+          "start": 0.448092,
+          "end": 0.474641
+        },
+        {
+          "id": "b0025",
+          "type": "list-item",
+          "match": "اطلب ملاحظة من شخص يعرف المجال",
+          "start": 0.474641,
+          "end": 0.499422
+        },
+        {
+          "id": "b0026",
+          "type": "list-item",
+          "match": "دون ما أحببته وما أتعبك وما ترغب في تعلمه بعد ذلك",
+          "start": 0.499422,
+          "end": 0.544169
+        },
+        {
+          "id": "b0027",
+          "type": "paragraph",
+          "match": "إذا أردت اختبار الكتابة أنجز مقالا كاملا وإذا أردت اختبار البرمجة ابن أداة صغيرة وإذا أردت التصوير نفذ سلسلة صور حول موض",
+          "start": 0.544169,
+          "end": 0.680653
+        },
+        {
+          "id": "b0028",
+          "type": "h2",
+          "match": "اختبر العملية لا الصورة اللامعة",
+          "start": 0.680653,
+          "end": 0.699286
+        },
+        {
+          "id": "b0029",
+          "type": "paragraph",
+          "match": "من السهل أن نحب صورة المهنة الكاتب المنشور أو المصور المسافر أو رائد الأعمال المستقل الاختبار الأدق هو علاقتك بالعملية ا",
+          "start": 0.699286,
+          "end": 0.785896
+        },
+        {
+          "id": "b0030",
+          "type": "list-item",
+          "match": "هل تستطيع تقبل التدريب المتكرر",
+          "start": 0.785896,
+          "end": 0.80782
+        },
+        {
+          "id": "b0031",
+          "type": "list-item",
+          "match": "هل يثير حل المشكلات فضولك",
+          "start": 0.80782,
+          "end": 0.829065
+        },
+        {
+          "id": "b0032",
+          "type": "list-item",
+          "match": "هل تتحمل التصحيح وإعادة المحاولة",
+          "start": 0.829065,
+          "end": 0.851261
+        },
+        {
+          "id": "b0033",
+          "type": "list-item",
+          "match": "هل تريد فهم المجال بصورة أعمق بعد أن رأيت جانبه الصعب",
+          "start": 0.851261,
+          "end": 0.893451
+        },
+        {
+          "id": "b0034",
+          "type": "paragraph",
+          "match": "لا يلزم أن تستمتع بكل دقيقة لكن وجود فضول مستمر وتقدم يمكن ملاحظته وقيمة تتوافق معك مؤشرات أفضل من الحماس العابر",
+          "start": 0.893451,
+          "end": 0.97862
+        },
+        {
+          "id": "b0035",
+          "type": "h2",
+          "match": "أين تحتاج الفكرة إلى توازن",
+          "start": 0.97862,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0012",
+        "b0013",
+        "b0014",
+        "b0015",
+        "b0016",
+        "b0017",
+        "b0018",
+        "b0019",
+        "b0020",
+        "b0021",
+        "b0022",
+        "b0023",
+        "b0024",
+        "b0025",
+        "b0026",
+        "b0027",
+        "b0028",
+        "b0029",
+        "b0030",
+        "b0031",
+        "b0032",
+        "b0033",
+        "b0034",
+        "b0035"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/d15e87706b55a08d/part-002-1e47ed814593.clean.mp3",
+          "bytes": 1618317,
+          "durationSeconds": 134.856,
+          "sha256": "9a488af2041791f45fc3806d06c123fe5ef443a842f1273792767399b0ae77dc"
+        }
+      }
+    },
+    {
+      "characters": 1502,
+      "sync": [
+        {
+          "id": "b0036",
+          "type": "paragraph",
+          "match": "التركيز على المهارة وحدها قد يتجاهل ظروفا مهمة بيئة عمل سامة أو غياب الأمان أو التمييز أو مسؤوليات لا يستطيع الفرد تغيير",
+          "start": 0,
+          "end": 0.13403
+        },
+        {
+          "id": "b0037",
+          "type": "paragraph",
+          "match": "كما أن بعض الناس يملكون اهتماما مبكرا وواضحا بالفعل المقصود ليس إنكار ذلك بل التحرر من فكرة أن وضوح الشغف شرط لبدء تجربة",
+          "start": 0.13403,
+          "end": 0.223818
+        },
+        {
+          "id": "b0038",
+          "type": "h2",
+          "match": "الشغف ليس عنصرا واحدا",
+          "start": 0.223818,
+          "end": 0.237764
+        },
+        {
+          "id": "b0039",
+          "type": "paragraph",
+          "match": "تزداد الفكرة وضوحا إذا فصلنا بين ثلاثة أشياء نخلطها عادة تحت كلمة الشغف الاهتمام والكفاءة والمعنى قد يثيرك مجال ما لكنك ",
+          "start": 0.237764,
+          "end": 0.411645
+        },
+        {
+          "id": "b0040",
+          "type": "paragraph",
+          "match": "لذلك لا يوجد سؤال واحد يحسم القرار الأفضل أن تسأل هل ما زال فضولي حيا بعد الاحتكاك بالواقع هل تتحسن مهارتي مع التدريب وه",
+          "start": 0.411645,
+          "end": 0.553914
+        },
+        {
+          "id": "b0041",
+          "type": "h2",
+          "match": "من الفضول إلى المهارة",
+          "start": 0.553914,
+          "end": 0.567602
+        },
+        {
+          "id": "b0042",
+          "type": "paragraph",
+          "match": "يمكن أن يبدأ المسار بفضول صغير يدفعك إلى تجربة التجربة تمنحك معرفة أولية والمعرفة تجعل التدريب أقل غموضا مع التحسن تظهر ",
+          "start": 0.567602,
+          "end": 0.746391
+        },
+        {
+          "id": "b0043",
+          "type": "paragraph",
+          "match": "المهم أن هذه الحلقة لا تعد بنتيجة واحدة بعض التجارب تنتهي بقرار واع بالمغادرة وهذا أيضا مكسب إذا اتخذته بعد معرفة حقيقية",
+          "start": 0.746391,
+          "end": 0.840053
+        },
+        {
+          "id": "b0044",
+          "type": "h2",
+          "match": "تجربة الثلاثين يوما",
+          "start": 0.840053,
+          "end": 0.8509
+        },
+        {
+          "id": "b0045",
+          "type": "paragraph",
+          "match": "إذا كنت حائرا بين التأمل الطويل وقرار كبير جرب فترة محدودة اختر مهارة واحدة تمثل العمل الحقيقي في المجال خصص لها وقتا ثا",
+          "start": 0.8509,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0036",
+        "b0037",
+        "b0038",
+        "b0039",
+        "b0040",
+        "b0041",
+        "b0042",
+        "b0043",
+        "b0044",
+        "b0045"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/d15e87706b55a08d/part-003-7f5a362ceffe.clean.mp3",
+          "bytes": 1673325,
+          "durationSeconds": 139.44,
+          "sha256": "2dc069e40a4280b350107aadc830df0d2a4937cd67942cae1c5a81388d1a0807"
+        }
+      }
+    },
+    {
+      "characters": 1446,
+      "sync": [
+        {
+          "id": "b0046",
+          "type": "paragraph",
+          "match": "لا تجعل التجربة اختبارا لإثبات أنك خلقت لهذا المجال هي طريقة منخفضة المخاطر نسبيا للحصول على بيانات عن نفسك",
+          "start": 0,
+          "end": 0.077255
+        },
+        {
+          "id": "b0047",
+          "type": "h2",
+          "match": "متى يكون التوقف قرارا ناضجا",
+          "start": 0.077255,
+          "end": 0.099301
+        },
+        {
+          "id": "b0048",
+          "type": "paragraph",
+          "match": "خطاب ابن شغفك يمكن أن يتحول إلى فخ إذا فهمناه كدعوة للاستمرار مهما كان الثمن هناك فرق بين صعوبة التعلم التي تستحق الصبر ",
+          "start": 0.099301,
+          "end": 0.277178
+        },
+        {
+          "id": "b0049",
+          "type": "paragraph",
+          "match": "التوقف يكون أكثر نضجا عندما تستطيع تحديد السبب هل المشكلة في المجال نفسه أم شكل الوظيفة الحالية أم البيئة أم مستوى المها",
+          "start": 0.277178,
+          "end": 0.429488
+        },
+        {
+          "id": "b0050",
+          "type": "h2",
+          "match": "سؤال أصغر وأفضل",
+          "start": 0.429488,
+          "end": 0.440359
+        },
+        {
+          "id": "b0051",
+          "type": "paragraph",
+          "match": "بدل البحث عن كلمة واحدة تصف بقية حياتك جرب سؤالا أصغر ما التجربة التالية التي تستحق أن أبني فيها مهارة حقيقية هذا السؤال",
+          "start": 0.440359,
+          "end": 0.571517
+        },
+        {
+          "id": "b0052",
+          "type": "paragraph",
+          "match": "وقد يكون هذا أكثر ما يجمع بين فكرة نيوبورت والبحث النفسي الاهتمام لا يعيش منفصلا عن الممارسة أحيانا نكتشفه وأحيانا نصنع ",
+          "start": 0.571517,
+          "end": 0.736679
+        },
+        {
+          "id": "b0053",
+          "type": "h2",
+          "match": "الخلاصة",
+          "start": 0.736679,
+          "end": 0.74067
+        },
+        {
+          "id": "b0054",
+          "type": "paragraph",
+          "match": "ربما لا تحتاج إلى إجابة نهائية عن شغف العمر تحتاج إلى تجربة تالية جيدة ومهارة تتطور ومراجعة صادقة لما تتعلمه عن نفسك وعن",
+          "start": 0.74067,
+          "end": 0.837852
+        },
+        {
+          "id": "b0055",
+          "type": "paragraph",
+          "match": "لا تنتظر شعورا كاملا قبل الحركة ابدأ بخطوة صغيرة يمكن قياسها ثم دع الخبرة لا الخيال وحده تخبرك إن كان هذا المسار يستحق ا",
+          "start": 0.837852,
+          "end": 0.927478
+        },
+        {
+          "id": "b0056",
+          "type": "paragraph",
+          "match": "ولتطبيق الفكرة نفسها على بناء عادة صحية واقعية اقرأ اللياقة بعد الأربعين قراءة عملية في كتاب دون نافا",
+          "start": 0.927478,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0046",
+        "b0047",
+        "b0048",
+        "b0049",
+        "b0050",
+        "b0051",
+        "b0052",
+        "b0053",
+        "b0054",
+        "b0055",
+        "b0056"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/d15e87706b55a08d/part-004-ca1c1f41f1be.clean.mp3",
+          "bytes": 1691757,
+          "durationSeconds": 140.976,
+          "sha256": "e85cfe301421c2a2afa598096cb3b04195b196a13e34ff7307ac7ed0d2bacd36"
+        }
+      }
+    }
+  ],
+  "schema": "bareeq.audio-production-manifest.v3",
+  "candidateFingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
+  "voice": "Sadaltager",
+  "toolVersion": 9,
+  "status": "published",
+  "generatedAt": "2026-09-04T15:00:46.557Z",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "ttsVoice": "Sadaltager",
+  "publishedFromCandidate": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
+  "publishedAt": "2026-09-04T15:00:46.557Z"
+}
