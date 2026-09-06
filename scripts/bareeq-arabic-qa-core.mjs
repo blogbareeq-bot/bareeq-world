@@ -4,7 +4,7 @@ import path from 'node:path';
 const ARABIC_DIACRITICS_RE = /[\u064B-\u065F\u0670\u06D6-\u06ED]/gu;
 const DANGEROUS_INVISIBLES_RE = /[\u061C\u200B\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/gu;
 const ARABIC_WORD_RE = /[\u0621-\u063A\u0641-\u064A\u066E-\u06D3\u06FA-\u06FC]+/gu;
-const MIXED_SCRIPT_TOKEN_RE = /(?=[^\s]*[\u0600-\u06FF])(?=[^\s]*[A-Za-z])[^\s]+/gu;
+const MIXED_SCRIPT_TOKEN_RE = /(?=[^\s]*[\u0621-\u063A\u0641-\u064A\u066E-\u06D3\u06FA-\u06FC])(?=[^\s]*[A-Za-z])[^\s]+/gu;
 const URL_RE = /https?:\/\/[^\s)\]>"']+/giu;
 const EMAIL_RE = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/giu;
 const NUMBER_RE = /(?<![\p{L}\p{N}])(?:[0-9٠-٩]+(?:[.,٫٬:/-][0-9٠-٩]+)*(?:\s?[%٪])?)(?![\p{L}\p{N}])/gu;
@@ -208,7 +208,7 @@ export function scanArticle({ file, source, config }) {
       previousHeadingDepth = depth;
       if (key && headingKeys.has(key)) {
         findings.push(makeFinding({
-          ruleId: 'BQA-MD-002', severity: 'warning', provider: 'bareeq-core', file: rel, line: lineNumber,
+          ruleId: 'BQA-MD-002', severity: 'info', provider: 'bareeq-core', file: rel, line: lineNumber,
           excerpt: title, message: `عنوان فرعي مكرر؛ ظهر أول مرة في السطر ${headingKeys.get(key)}.`
         }));
       } else if (key) {
@@ -279,7 +279,7 @@ export function scanArticle({ file, source, config }) {
     const duplicateWord = findAdjacentDuplicateArabicWord(line);
     if (duplicateWord) {
       findings.push(makeFinding({
-        ruleId: 'BQA-LEX-002', severity: 'warning', provider: 'bareeq-core', file: rel, line: lineNumber,
+        ruleId: 'BQA-LEX-002', severity: 'info', provider: 'bareeq-core', file: rel, line: lineNumber,
         column: duplicateWord.index + 1, excerpt: snippet(rawLine, duplicateWord.index),
         message: `كلمة عربية متكررة مباشرة: «${duplicateWord.word}».`
       }));
@@ -523,7 +523,7 @@ function maskProtectedMarkdown(line) {
     /<[^>]+>/gu
   ];
   for (const rx of patterns) {
-    masked = masked.replace(rx, (match) => ' '.repeat(match.length));
+    masked = masked.replace(rx, (match) => '¤'.repeat(match.length));
   }
   return masked;
 }

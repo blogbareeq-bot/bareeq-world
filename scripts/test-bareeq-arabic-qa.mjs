@@ -89,6 +89,25 @@ quickSummary: "خلاصة موجزة تشرح الفكرة الأساسية لل
 }
 
 {
+  const markdownLink = good.replace('تبدأ الفكرة', 'تبدأ [الفكرة](https://example.com/path)؛ ثم نتابع.');
+  const findings = scanArticle({ file: 'markdown-link.md', source: markdownLink, config });
+  assert.ok(!findings.some((item) => item.ruleId === 'BQA-TYPO-001'));
+  assert.ok(!findings.some((item) => item.ruleId === 'BQA-PUNC-001'));
+}
+
+{
+  const latinWithArabicComma = good.replace('تبدأ الفكرة', 'تستخدم بعض الشاشات ITO، بينما تستخدم أخرى مواد مختلفة.');
+  const findings = scanArticle({ file: 'latin-punctuation.md', source: latinWithArabicComma, config });
+  assert.ok(!findings.some((item) => item.ruleId === 'BQA-LEX-003'));
+}
+
+{
+  const mixedToken = good.replace('تبدأ الفكرة', 'يعتمد المثال على بنية الـTrie في الشرح.');
+  const findings = scanArticle({ file: 'mixed-token.md', source: mixedToken, config });
+  assert.ok(findings.some((item) => item.ruleId === 'BQA-LEX-003'));
+}
+
+{
   const baseSource = `${good}\nالمصدر: https://example.com/report والقيمة 42%، والمختصر OLED.\n`;
   const headSource = `${good}\nالمصدر: https://example.com/new-report والقيمة 47%، والمختصر LCD.\n`;
   const advisory = compareProtectedTokens({ file: 'semantic.md', baseSource, headSource, strict: false });
