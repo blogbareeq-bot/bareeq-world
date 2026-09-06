@@ -14,53 +14,51 @@ const postsDir = resolve(root, 'src/content/posts');
 
 const STOP_WORDS = new Set(['في', 'من', 'على', 'إلى', 'هذا', 'هذه', 'ذلك', 'تلك', 'التي', 'الذي', 'الذين', 'أن', 'إن', 'كان', 'كانت', 'يكون', 'تكون', 'هو', 'هي', 'هم', 'هن', 'نحن', 'أنا', 'أنت', 'كما', 'كذلك', 'أيضًا', 'لكن', 'لكنه', 'إذا', 'إذ', 'ما', 'لا', 'لم', 'لن', 'قد', 'لقد', 'حتى', 'بين', 'عند', 'بعد', 'قبل', 'أمام', 'خلف', 'فوق', 'تحت', 'مع', 'بدون', 'كل', 'بعض', 'جميع', 'كثير', 'قليل', 'كثيرًا', 'جدًا', 'لأن', 'بسبب', 'غير', 'ليس', 'ليست', 'سوف', 'يجب', 'ينبغي', 'نحو', 'حول']);
 
-// Words that are not acceptable as the final lexical unit of a card body.
-// They introduce a condition, relation or continuation that still needs a complement.
 const DANGLING_TAIL_WORDS = new Set([
   'حين', 'عندما', 'إذا', 'لو', 'لولا', 'لكن', 'بل', 'ثم', 'إلى', 'على', 'في', 'من', 'عن',
   'أن', 'إن', 'أو', 'حتى', 'مع', 'عند', 'بعد', 'قبل', 'مثل', 'لأن', 'كي', 'لكي', 'بين',
   'ضمن', 'خلال', 'نحو', 'دون', 'غير', 'كل', 'بعض', 'الذي', 'التي', 'الذين', 'حيث'
 ]);
+const CLAUSE_INTRODUCERS = new Set(['حين', 'عندما', 'إذا', 'لو', 'لولا', 'لأن', 'بينما', 'لكن', 'ثم', 'حتى']);
 
 const frontmatterValue = (fm, key) => {
   const m = fm.match(new RegExp(`^${key}:\\s*["']?(.+?)["']?\\s*$`, 'm'));
   return m?.[1]?.replace(/^['"]|['"]$/g, '').trim() || '';
 };
 
-const normalizeTail = (body) => body
-  .trim()
-  .replace(/[.!؟?!؛،,:]+$/g, '')
-  .trim();
-
+const normalizeTail = (body) => body.trim().replace(/[.!؟?!؛،,:]+$/g, '').trim();
 const lastWord = (body) => {
   const clean = normalizeTail(body);
   return clean.split(/\s+/).at(-1)?.replace(/[«»"'()\[\]{}]/g, '') || '';
 };
-
-const hasBalancedArabicQuotes = (text) => {
-  const opens = [...text].filter((c) => c === '«').length;
-  const closes = [...text].filter((c) => c === '»').length;
-  return opens === closes;
-};
+const hasBalancedArabicQuotes = (text) => [...text].filter((c) => c === '«').length === [...text].filter((c) => c === '»').length;
 
 const hasSuspiciousChoppedToken = (body) => {
-  // Real regressions caught by this family included: إ. / ذكا. / مطع. / خا.
   const token = lastWord(body);
   if (!token) return true;
   const arabicLetters = token.replace(/[^\u0621-\u064A]/g, '');
   return /^[\u0621-\u064A]{1,3}$/.test(arabicLetters) && /[.]\s*$/.test(body.trim());
 };
 
+const danglingShortFinalClause = (body) => {
+  const stripped = body.trim().replace(/[.!؟?!]+$/g, '').trim();
+  const parts = stripped.split(/[.!؟?!]+/).map((p) => p.trim()).filter(Boolean);
+  const fragment = parts.at(-1) || stripped;
+  const words = fragment.replace(/[،؛,:]/g, ' ').split(/\s+/).filter(Boolean);
+  const first = words[0]?.replace(/[«»"'()\[\]{}]/g, '') || '';
+  return CLAUSE_INTRODUCERS.has(first) && words.length <= 7 ? fragment : '';
+};
+
 const semanticTailIssue = (body) => {
   const tail = lastWord(body);
   if (DANGLING_TAIL_WORDS.has(tail)) return `ينتهي برابط غير مكتمل: «${tail}»`;
   if (hasSuspiciousChoppedToken(body)) return `ينتهي بكلمة تبدو مبتورة: «${tail}»`;
+  const danglingClause = danglingShortFinalClause(body);
+  if (danglingClause) return `ينتهي بجملة تابعة قصيرة بلا تتمة: «${danglingClause}»`;
   if (!hasBalancedArabicQuotes(body)) return 'علامات الاقتباس العربية « » غير متوازنة';
   return '';
 };
 
-// Guard fixtures: these were actual production-candidate failures. If this
-// detector stops rejecting them, the test itself must fail before stories run.
 const NEGATIVE_FIXTURES = [
   'حين يقترب الإصبع',
   'وقد يتسع المعروض أكثر من قدرة الاقتصاد على إ.',
@@ -71,9 +69,7 @@ const NEGATIVE_FIXTURES = [
   '«أنا لم أقل إلغاء الواجبات'
 ];
 for (const fixture of NEGATIVE_FIXTURES) {
-  if (!semanticTailIssue(fixture)) {
-    throw new Error(`semantic-tail fixture escaped detection: ${fixture}`);
-  }
+  if (!semanticTailIssue(fixture)) throw new Error(`semantic-tail fixture escaped detection: ${fixture}`);
 }
 
 const stories = [];
@@ -89,8 +85,7 @@ const failures = [];
 const contentWords = (s) => s.split(/\s+/).filter((w) => w.length > 2 && !STOP_WORDS.has(w));
 const contentRatio = (s) => {
   const words = s.split(/\s+/).filter(Boolean);
-  if (!words.length) return 0;
-  return contentWords(s).length / words.length;
+  return words.length ? contentWords(s).length / words.length : 0;
 };
 
 for (const s of stories) {
@@ -105,16 +100,12 @@ for (const s of stories) {
     'المستقبل الآن': new Set(['technical', 'reflective'])
   };
   const expected = CATEGORY_EXPECTED[s._category];
-  if (expected && !expected.has(s.path)) {
-    failures.push(`${s.slug}: path=${s.path} لا يطابق القسم الفعلي "${s._category}". المتوقع: ${[...expected].join(', ')}.`);
-  }
+  if (expected && !expected.has(s.path)) failures.push(`${s.slug}: path=${s.path} لا يطابق القسم الفعلي "${s._category}". المتوقع: ${[...expected].join(', ')}.`);
 
   const uniqueKickers = new Set(s.cards.map((c) => c.kicker));
   if (uniqueKickers.size < 5) failures.push(`${s.slug}: فقط ${uniqueKickers.size} kicker فريد. نوّع أكثر.`);
 
-  const first = s.cards[0].title.trim();
-  const last = s.cards.at(-1).title.trim();
-  if (first === last) failures.push(`${s.slug}: عنوان hook و takeaway متطابق.`);
+  if (s.cards[0].title.trim() === s.cards.at(-1).title.trim()) failures.push(`${s.slug}: عنوان hook و takeaway متطابق.`);
 
   for (const c of s.cards) {
     const ratio = contentRatio(c.body);
@@ -125,14 +116,11 @@ for (const s of stories) {
 
   if (s._summary) {
     const summaryWords = new Set(s._summary.split(/\s+/).filter((w) => w.length > 4));
-    const hookBody = s.cards[0].body;
-    const overlap = hookBody.split(/\s+/).filter((w) => w.length > 4 && summaryWords.has(w)).length;
+    const overlap = s.cards[0].body.split(/\s+/).filter((w) => w.length > 4 && summaryWords.has(w)).length;
     if (overlap > 10) failures.push(`${s.slug}: بطاقة الافتتاح تكرّر ملخص المقال حرفيًا (${overlap} كلمة مشتركة).`);
   }
 
-  if (s.cards.at(-1).body.length < s.cards[0].body.length - 40) {
-    failures.push(`${s.slug}: الخاتمة أقصر من الافتتاح بكثير. أعطها نفس العمق.`);
-  }
+  if (s.cards.at(-1).body.length < s.cards[0].body.length - 40) failures.push(`${s.slug}: الخاتمة أقصر من الافتتاح بكثير. أعطها نفس العمق.`);
 
   const kinds = new Set(s.cards.map((c) => c.kind));
   if (kinds.size < 4) failures.push(`${s.slug}: تنوع الأنواع محدود (${kinds.size}). استعمل ${[...kinds].join(',')}.`);
