@@ -1,307 +1,167 @@
 #!/usr/bin/env node
 /**
- * Viewport QA for Bareeq Window.
+ * Real-browser viewport QA for Bareeq Window.
  *
- * Tests the visual story at the four critical viewports:
- *   - 390px portrait  (iPhone 14/15)
- *   - 430px portrait  (iPhone 14/15 Pro Max / Plus)
- *   - mobile landscape  (e.g. 812x375)
- *   - desktop          (1280x800)
+ * Preconditions:
+ *   1. `npm run build` has completed.
+ *   2. `astro preview` is serving the built site.
+ *   3. Playwright + Chromium are installed.
  *
- * Verifies:
- *   - no horizontal overflow on the dialog
- *   - title and body are not clipped
- *   - prev/next buttons are visible and clickable
- *   - first and last cards render
- *   - reduced-motion preference is respected
- *   - no controls overlap body text
- *   - RTL orientation is preserved
- *
- * The script tries Playwright first (real Chromium, real pixels). If
- * Playwright is not installed or its browser is missing, it falls back to
- * JSDOM with mock viewport sizes for a structural smoke test.
- *
- * Run:
- *   node scripts/test-viewport-qa.mjs
+ * This test intentionally has NO JSDOM fallback. A structural DOM simulation
+ * cannot certify clipping, overflow, overlap, responsive CSS, RTL geometry or
+ * real focus behaviour. If Chromium is unavailable, the gate must fail.
  */
 
 import { readFile, readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { JSDOM, ResourceLoader } from 'jsdom';
 
+let chromium;
+try {
+  ({ chromium } = await import('playwright'));
+} catch {
+  throw new Error('Playwright is required for viewport QA; install playwright and Chromium. JSDOM is not an acceptable visual PASS.');
+}
+
+const BASE_URL = (process.env.BAREEQ_PREVIEW_URL || 'http://127.0.0.1:4321').replace(/\/$/, '');
 const storiesDir = resolve(process.cwd(), 'src/data/visual-stories');
-const files = (await readdir(storiesDir)).filter((n) => n.endsWith('.json') && !n.endsWith('.skeleton.json')).sort();
+const files = (await readdir(storiesDir))
+  .filter((name) => name.endsWith('.json') && !name.endsWith('.skeleton.json'))
+  .sort();
+const stories = await Promise.all(files.map(async (file) => JSON.parse(await readFile(resolve(storiesDir, file), 'utf8'))));
 
 const VIEWPORTS = [
-  { name: '390px portrait (iPhone)', width: 390, height: 844, dpr: 3 },
-  { name: '430px portrait (iPhone Pro Max)', width: 430, height: 932, dpr: 3 },
-  { name: 'Mobile landscape (812x375)', width: 812, height: 375, dpr: 2 },
-  { name: 'Desktop (1280x800)', width: 1280, height: 800, dpr: 1 }
+  { name: '390x844 portrait', width: 390, height: 844, dpr: 3 },
+  { name: '430x932 portrait', width: 430, height: 932, dpr: 3 },
+  { name: '812x375 landscape', width: 812, height: 375, dpr: 2 },
+  { name: '1280x800 desktop', width: 1280, height: 800, dpr: 1 }
 ];
-
-const sampleSlugs = [
-  'how-touchscreens-work',
-  'ai-agents-future-now',
-  'language-soft-power-politics',
-  'لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء',
-  'اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع'
-];
-
-const stories = await Promise.all(
-  sampleSlugs.map(async (slug) => {
-    const file = files.find((f) => f.replace(/\.json$/, '') === slug);
-    if (!file) throw new Error(`Story not found: ${slug}`);
-    return JSON.parse(await readFile(resolve(storiesDir, file), 'utf8'));
-  })
-);
-
-console.log(`[viewport-qa] sampling ${stories.length} stories across ${VIEWPORTS.length} viewports.`);
-
-let usePlaywright = false;
-let playwright;
-try {
-  playwright = await import('playwright');
-  usePlaywright = true;
-} catch (err) {
-  console.warn('[viewport-qa] playwright not available, using JSDOM structural fallback.');
-}
-
-const runtime = await readFile('public/scripts/visual-story.js', 'utf8');
-
-const buildHtml = (story) => {
-  const cards = story.cards
-    .map(
-      (card, i) => `<article data-visual-card data-card-id="${card.id}" aria-hidden="${i ? 'true' : 'false'}">
-        <span>${card.kicker}</span>
-        <h2>${card.title}</h2>
-        <p>${card.body}</p>
-      </article>`
-    )
-    .join('');
-  const dots = story.cards
-    .map((_, i) => `<button data-visual-dot data-index="${i}" aria-selected="${i === 0}"></button>`)
-    .join('');
-  return `<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>${story.title}</title></head><body>
-    <main><button data-reading-mode="read"></button><button data-reading-mode="window"></button></main>
-    <div data-visual-story data-story-key="${story.slug}" data-story-title="${story.title}" data-card-count="${story.cards.length}" data-director="${story.director.mood}" hidden>
-      <div data-visual-close></div>
-      <section data-visual-dialog tabindex="-1">
-        <header>
-          <span data-visual-position>1</span>
-          <button data-visual-share></button>
-          <button data-visual-close></button>
-        </header>
-        <div data-visual-track>${cards}</div>
-        <footer>
-          <button data-visual-next><span>التالي</span></button>
-          <div>${dots}</div>
-          <button data-visual-prev><span>السابق</span></button>
-        </footer>
-        <p data-visual-status></p>
-      </section>
-    </div>
-  </body></html>`;
-};
 
 const failures = [];
-const results = [];
+const fail = (story, viewport, message) => failures.push(`${story.slug} @ ${viewport.name}: ${message}`);
+const overlaps = (a, b, tolerance = 1) => Boolean(a && b &&
+  a.x + a.width > b.x + tolerance && b.x + b.width > a.x + tolerance &&
+  a.y + a.height > b.y + tolerance && b.y + b.height > a.y + tolerance);
 
-const checkOverflow = ({ dialogWidth, bodyWidth, story, viewport }) => {
-  // dialog must fit within viewport; body must fit within dialog
-  if (dialogWidth > viewport.width) {
-    failures.push(`${story.slug} @ ${viewport.name}: dialog overflows viewport (${dialogWidth} > ${viewport.width})`);
-  }
-  if (bodyWidth > dialogWidth) {
-    failures.push(`${story.slug} @ ${viewport.name}: body overflows dialog (${bodyWidth} > ${dialogWidth})`);
-  }
-};
+const browser = await chromium.launch({ headless: true });
+try {
+  for (const viewport of VIEWPORTS) {
+    const context = await browser.newContext({
+      viewport: { width: viewport.width, height: viewport.height },
+      deviceScaleFactor: viewport.dpr,
+      reducedMotion: 'reduce'
+    });
 
-const checkButtons = ({ hasNext, hasPrev, story, viewport }) => {
-  if (!hasNext) failures.push(`${story.slug} @ ${viewport.name}: next button missing or not visible.`);
-  if (!hasPrev) failures.push(`${story.slug} @ ${viewport.name}: prev button missing or not visible.`);
-};
-
-const checkFirstLast = ({ firstRendered, lastRendered, story, viewport }) => {
-  if (!firstRendered) failures.push(`${story.slug} @ ${viewport.name}: first card not rendered.`);
-  if (!lastRendered) failures.push(`${story.slug} @ ${viewport.name}: last card not rendered.`);
-};
-
-const runJsdom = async () => {
-  for (const story of stories) {
-    for (const viewport of VIEWPORTS) {
-      const dom = new JSDOM(buildHtml(story), {
-        url: 'https://bareeqworld.com/posts/' + story.slug + '/',
-        runScripts: 'outside-only',
-        pretendToBeVisual: true
-      });
-      const { window } = dom;
-      window.requestAnimationFrame = (cb) => { cb(Date.now()); return 1; };
-      window.navigator.share = async () => {};
-      window.eval(runtime);
-      // Open the story
-      window.document.querySelector('[data-reading-mode="window"]').click();
-      // Verify opening
-      const root = window.document.querySelector('[data-visual-story]');
-      if (root.hidden) {
-        failures.push(`${story.slug} @ ${viewport.name}: dialog fails to open.`);
-        continue;
-      }
-      // Check structure: dialog, cards, navigation controls
-      const dialog = window.document.querySelector('[data-visual-dialog]');
-      const allCards = window.document.querySelectorAll('[data-visual-card]');
-      const firstCard = allCards[0];
-      const lastCard = allCards[allCards.length - 1];
-      const next = window.document.querySelector('[data-visual-next]');
-      const prev = window.document.querySelector('[data-visual-prev]');
-      const dots = window.document.querySelectorAll('[data-visual-dot]');
-      // Use the configured viewport width as a stand-in for dialog width
-      checkOverflow({
-        dialogWidth: viewport.width - 28,
-        bodyWidth: viewport.width - 56,
-        story,
-        viewport
-      });
-      checkButtons({
-        hasNext: !!next,
-        hasPrev: !!prev,
-        story,
-        viewport
-      });
-      checkFirstLast({
-        firstRendered: !!firstCard,
-        lastRendered: !!lastCard,
-        story,
-        viewport
-      });
-      if (dots.length !== story.cards.length) {
-        failures.push(`${story.slug} @ ${viewport.name}: dot count mismatch (${dots.length} vs ${story.cards.length}).`);
-      }
-      if (!dialog) {
-        failures.push(`${story.slug} @ ${viewport.name}: dialog element missing.`);
-      }
-      if (window.document.documentElement.dir !== 'rtl') {
-        failures.push(`${story.slug} @ ${viewport.name}: RTL direction lost.`);
-      }
-      // Navigate to last
-      while (Number(window.document.querySelector('[data-visual-position]').textContent) < story.cards.length) {
-        next.click();
-      }
-      const finalPosition = Number(window.document.querySelector('[data-visual-position]').textContent);
-      if (finalPosition !== story.cards.length) {
-        failures.push(`${story.slug} @ ${viewport.name}: failed to reach last card (got ${finalPosition}, expected ${story.cards.length}).`);
-      }
-      // Navigate back
-      prev.click();
-      const backPosition = Number(window.document.querySelector('[data-visual-position]').textContent);
-      if (backPosition !== story.cards.length - 1) {
-        failures.push(`${story.slug} @ ${viewport.name}: prev navigation broken (got ${backPosition}, expected ${story.cards.length - 1}).`);
-      }
-      // Close via Escape
-      window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-      if (!root.hidden) {
-        failures.push(`${story.slug} @ ${viewport.name}: Escape fails to close.`);
-      }
-      results.push({ story: story.slug, viewport: viewport.name, ok: true });
-      dom.window.close();
-    }
-  }
-};
-
-const runPlaywright = async () => {
-  for (const story of stories) {
-    for (const viewport of VIEWPORTS) {
-      const browser = await playwright.chromium.launch();
-      const context = await browser.newContext({
-        viewport: { width: viewport.width, height: viewport.height },
-        deviceScaleFactor: viewport.dpr,
-        reducedMotion: 'reduce'
-      });
+    for (const story of stories) {
       const page = await context.newPage();
-      await page.setContent(buildHtml(story), { waitUntil: 'load' });
-      // Inline the runtime so it runs in page context
-      await page.addScriptTag({ content: runtime });
-      // Open the story
-      await page.click('[data-reading-mode="window"]');
-      // Wait for dialog to be visible
-      await page.waitForSelector('[data-visual-dialog]', { state: 'visible' });
-      // Real pixel measurements
-      const dialogBox = await page.locator('[data-visual-dialog]').boundingBox();
-      const firstCardBox = await page.locator('[data-visual-card]').first().boundingBox();
-      const nextVisible = await page.locator('[data-visual-next]').isVisible();
-      const prevVisible = await page.locator('[data-visual-prev]').isVisible();
-      const htmlDir = await page.evaluate(() => document.documentElement.dir);
-      checkOverflow({
-        dialogWidth: dialogBox ? dialogBox.width : 0,
-        bodyWidth: firstCardBox ? firstCardBox.width : 0,
-        story,
-        viewport
-      });
-      checkButtons({ hasNext: nextVisible, hasPrev: prevVisible, story, viewport });
-      checkFirstLast({
-        firstRendered: !!firstCardBox,
-        lastRendered: true,
-        story,
-        viewport
-      });
-      if (htmlDir !== 'rtl') {
-        failures.push(`${story.slug} @ ${viewport.name}: RTL direction lost (got ${htmlDir}).`);
+      const url = `${BASE_URL}${story.articlePath}`;
+      try {
+        const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+        if (!response?.ok()) {
+          fail(story, viewport, `article request failed (${response?.status() ?? 'no response'})`);
+          continue;
+        }
+
+        const mode = page.locator('[data-reading-mode="window"]');
+        if (await mode.count() !== 1) {
+          fail(story, viewport, 'window reading-mode control missing');
+          continue;
+        }
+        await mode.click();
+
+        const root = page.locator('[data-visual-story]');
+        const dialog = page.locator('[data-visual-dialog]');
+        await dialog.waitFor({ state: 'visible', timeout: 5000 });
+
+        const dir = await page.evaluate(() => document.documentElement.dir);
+        if (dir !== 'rtl') fail(story, viewport, `document direction is ${dir || '(empty)'}, expected rtl`);
+
+        const cardCount = await page.locator('[data-visual-card]').count();
+        if (cardCount !== story.cards.length) fail(story, viewport, `card count ${cardCount}, expected ${story.cards.length}`);
+
+        const hasHorizontalOverflow = await dialog.evaluate((el) => el.scrollWidth > el.clientWidth + 1);
+        if (hasHorizontalOverflow) fail(story, viewport, 'dialog has horizontal overflow');
+
+        const dialogBox = await dialog.boundingBox();
+        if (!dialogBox) {
+          fail(story, viewport, 'dialog has no measurable box');
+          continue;
+        }
+        if (dialogBox.x < -1 || dialogBox.x + dialogBox.width > viewport.width + 1) {
+          fail(story, viewport, `dialog exceeds viewport horizontally (${JSON.stringify(dialogBox)})`);
+        }
+        if (dialogBox.y < -1 || dialogBox.y + dialogBox.height > viewport.height + 1) {
+          fail(story, viewport, `dialog exceeds viewport vertically (${JSON.stringify(dialogBox)})`);
+        }
+
+        const header = page.locator('.visual-story__header');
+        const footer = page.locator('.visual-story__footer');
+        const headerBox = await header.boundingBox();
+        const footerBox = await footer.boundingBox();
+        const next = page.locator('[data-visual-next]');
+        const prev = page.locator('[data-visual-prev]');
+        if (!(await next.isVisible())) fail(story, viewport, 'next control not visible');
+        if (!(await prev.isVisible())) fail(story, viewport, 'previous control not visible');
+
+        // Inspect every card in its real active state, not only the opening.
+        for (let index = 0; index < story.cards.length; index += 1) {
+          if (index > 0) await next.click();
+          const active = page.locator('[data-visual-card].is-active');
+          if (await active.count() !== 1) {
+            fail(story, viewport, `expected one active card at ${index + 1}`);
+            break;
+          }
+          const copy = active.locator('.visual-story__copy');
+          const copyBox = await copy.boundingBox();
+          const cardBox = await active.boundingBox();
+          if (!copyBox || !cardBox) {
+            fail(story, viewport, `card ${index + 1} has no measurable copy/card box`);
+            continue;
+          }
+          const clipped = await copy.evaluate((el) => el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1);
+          if (clipped) fail(story, viewport, `card ${index + 1} copy is clipped or internally overflowing`);
+          if (copyBox.x < cardBox.x - 1 || copyBox.x + copyBox.width > cardBox.x + cardBox.width + 1) {
+            fail(story, viewport, `card ${index + 1} copy escapes card horizontally`);
+          }
+          if (headerBox && overlaps(copyBox, headerBox)) fail(story, viewport, `card ${index + 1} copy overlaps header`);
+          if (footerBox && overlaps(copyBox, footerBox)) fail(story, viewport, `card ${index + 1} copy overlaps footer`);
+        }
+
+        const position = Number(await page.locator('[data-visual-position]').textContent());
+        if (position !== story.cards.length) fail(story, viewport, `last-card navigation ended at ${position}`);
+
+        await page.keyboard.press('Home');
+        const homePosition = Number(await page.locator('[data-visual-position]').textContent());
+        if (homePosition !== 1) fail(story, viewport, `Home key ended at ${homePosition}`);
+
+        await page.keyboard.press('End');
+        const endPosition = Number(await page.locator('[data-visual-position]').textContent());
+        if (endPosition !== story.cards.length) fail(story, viewport, `End key ended at ${endPosition}`);
+
+        await page.keyboard.press('Escape');
+        if (await root.isVisible()) fail(story, viewport, 'Escape did not close Window');
+        const focusReturned = await mode.evaluate((el) => document.activeElement === el);
+        if (!focusReturned) fail(story, viewport, 'focus was not restored to the Window mode control');
+
+        const reduced = await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches);
+        if (!reduced) fail(story, viewport, 'reduced-motion emulation not active');
+      } catch (error) {
+        fail(story, viewport, error instanceof Error ? error.message : String(error));
+        // A screenshot is intentionally attempted only on failure; Actions
+        // logs still contain the slug/viewport even when artifact upload is unavailable.
+        try { await page.screenshot({ path: `/tmp/window-${encodeURIComponent(story.slug)}-${viewport.width}x${viewport.height}.png`, fullPage: true }); } catch {}
+      } finally {
+        await page.close();
       }
-      // Overflow check on body
-      const overflowed = await page.evaluate(() => {
-        const dialog = document.querySelector('[data-visual-dialog]');
-        return dialog ? dialog.scrollWidth > dialog.clientWidth : false;
-      });
-      if (overflowed) {
-        failures.push(`${story.slug} @ ${viewport.name}: dialog has horizontal scroll (scrollWidth > clientWidth).`);
-      }
-      // Navigate
-      await page.click('[data-visual-next]');
-      const pos1 = await page.locator('[data-visual-position]').textContent();
-      if (pos1 !== '2') {
-        failures.push(`${story.slug} @ ${viewport.name}: next navigation broken (got ${pos1}).`);
-      }
-      // End key
-      await page.keyboard.press('End');
-      const posEnd = await page.locator('[data-visual-position]').textContent();
-      if (Number(posEnd) !== story.cards.length) {
-        failures.push(`${story.slug} @ ${viewport.name}: End key fails (got ${posEnd}).`);
-      }
-      // Escape
-      await page.keyboard.press('Escape');
-      const stillOpen = await page.evaluate(() => !document.querySelector('[data-visual-story]').hidden);
-      if (stillOpen) {
-        failures.push(`${story.slug} @ ${viewport.name}: Escape fails to close.`);
-      }
-      results.push({ story: story.slug, viewport: viewport.name, ok: true });
-      await context.close();
-      await browser.close();
     }
+    await context.close();
   }
-};
-
-if (usePlaywright) {
-  try {
-    await runPlaywright();
-    console.log(`[viewport-qa] Playwright run complete (${results.length} viewport/story combinations).`);
-  } catch (err) {
-    console.warn(`[viewport-qa] Playwright run failed: ${err.message}. Falling back to JSDOM.`);
-    await runJsdom();
-  }
-} else {
-  await runJsdom();
-}
-
-const grouped = {};
-for (const r of results) (grouped[r.viewport] ||= []).push(r.story);
-console.log('\n[viewport-qa] Results:');
-for (const [vp, slugs] of Object.entries(grouped)) {
-  console.log(`  ${vp}: ${slugs.length} stories passed`);
+} finally {
+  await browser.close();
 }
 
 if (failures.length) {
-  console.error(`\n[viewport-qa] FAILED with ${failures.length} issues:`);
-  for (const f of failures) console.error(`  - ${f}`);
-  throw new Error('viewport-qa failed');
+  console.error(`[viewport-qa] FAILED with ${failures.length} issue(s):\n- ${failures.join('\n- ')}`);
+  throw new Error('real-browser viewport QA failed');
 }
 
-console.log('\n[viewport-qa] All viewports passed: 390px portrait, 430px portrait, mobile landscape, desktop.');
+console.log(`[viewport-qa] PASS: ${stories.length}/15 stories × ${VIEWPORTS.length} real viewports = ${stories.length * VIEWPORTS.length} production-page checks.`);
