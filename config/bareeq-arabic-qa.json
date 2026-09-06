@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "gateVersion": "1.0.0",
+  "contentRoots": ["src/content/posts"],
+  "requiredFrontmatter": [
+    "title",
+    "description",
+    "publishedAt",
+    "category",
+    "categorySlug",
+    "author",
+    "image",
+    "imageAlt",
+    "thumbnail",
+    "thumbnailAlt",
+    "quickSummary"
+  ],
+  "minimumLengths": {
+    "title": 8,
+    "description": 40,
+    "imageAlt": 20,
+    "thumbnailAlt": 15,
+    "quickSummary": 40
+  },
+  "style": {
+    "maxSentenceWords": 55,
+    "maxParagraphWords": 180,
+    "aiMarkerDensityWarn": 3,
+    "genericPhrases": [
+      "في عالمنا المتسارع",
+      "في عصرنا الحالي",
+      "لا يخفى على أحد",
+      "من الجدير بالذكر",
+      "في نهاية المطاف",
+      "دعونا نتعمق",
+      "في هذا المقال سوف",
+      "في هذا المقال سن",
+      "ليس هذا فحسب",
+      "والأمر لا يتوقف عند هذا الحد"
+    ]
+  },
+  "lexicon": {
+    "highConfidenceTypos": {
+      "لاكن": "لكن",
+      "هاذا": "هذا",
+      "هاذه": "هذه",
+      "اللذي": "الذي",
+      "اللتي": "التي",
+      "اللة": "الله",
+      "مسؤلية": "مسؤولية",
+      "مسئولية": "مسؤولية"
+    }
+  },
+  "externalProviders": {
+    "languageTool": {
+      "mode": "advisory",
+      "maxCharsPerRequest": 11000
+    },
+    "camelTools": {
+      "mode": "advisory"
+    },
+    "arabWriter": {
+      "mode": "report-only"
+    }
+  }
+}

@@ -1,0 +1,151 @@
+name: Bareeq Arabic Quality Gate
+
+on:
+  pull_request:
+    paths:
+      - 'src/content/posts/**/*.md'
+      - 'src/content/posts/**/*.mdx'
+      - 'scripts/bareeq-arabic-qa*.mjs'
+      - 'scripts/bareeq-camel-qa.py'
+      - 'config/bareeq-arabic-qa.json'
+      - '.github/workflows/arabic-quality-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/posts/**/*.md'
+      - 'src/content/posts/**/*.mdx'
+      - 'scripts/bareeq-arabic-qa*.mjs'
+      - 'scripts/bareeq-camel-qa.py'
+      - 'config/bareeq-arabic-qa.json'
+      - '.github/workflows/arabic-quality-gate.yml'
+  workflow_dispatch:
+    inputs:
+      run_languagetool:
+        description: 'Run LanguageTool advisory layer'
+        required: false
+        default: true
+        type: boolean
+      run_camel:
+        description: 'Run deep CAMeL Tools advisory layer'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bareeq-arabic-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deterministic-gate:
+    name: Deterministic Arabic editorial gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Syntax and unit tests
+        run: |
+          node --check scripts/bareeq-arabic-qa-core.mjs
+          node --check scripts/bareeq-arabic-qa.mjs
+          node scripts/test-bareeq-arabic-qa.mjs
+
+      - name: Run blocking gate
+        shell: bash
+        run: |
+          mkdir -p .bareeq/qa/core
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git fetch --no-tags origin "${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+            node scripts/bareeq-arabic-qa.mjs --all --base-ref "origin/${{ github.base_ref }}" --report-dir .bareeq/qa/core
+          else
+            node scripts/bareeq-arabic-qa.mjs --all --report-dir .bareeq/qa/core
+          fi
+
+      - name: Upload deterministic QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-arabic-qa-core
+          path: .bareeq/qa/core
+          if-no-files-found: warn
+          retention-days: 14
+
+  languagetool-advisory:
+    name: LanguageTool Arabic advisory
+    if: ${{ github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.run_languagetool) }}
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BAREEQ_LT_URL: https://api.languagetool.org/v2/check
+      BAREEQ_LT_STRICT: '0'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run LanguageTool on changed articles
+        shell: bash
+        run: |
+          mkdir -p .bareeq/qa/languagetool
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git fetch --no-tags origin "${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+            node scripts/bareeq-arabic-qa.mjs --changed --base-ref "origin/${{ github.base_ref }}" --language-tool --report-dir .bareeq/qa/languagetool
+          else
+            node scripts/bareeq-arabic-qa.mjs --all --language-tool --report-dir .bareeq/qa/languagetool
+          fi
+
+      - name: Upload LanguageTool report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-arabic-qa-languagetool
+          path: .bareeq/qa/languagetool
+          if-no-files-found: warn
+          retention-days: 14
+
+  camel-deep-advisory:
+    name: CAMeL Tools deep Arabic advisory
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_camel }}
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install CAMeL Tools
+        run: python -m pip install 'camel-tools==1.6.0'
+
+      - name: Run CAMeL advisory
+        run: python scripts/bareeq-camel-qa.py --require --output .bareeq/qa/camel/bareeq-camel-qa.json
+
+      - name: Upload CAMeL report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-arabic-qa-camel
+          path: .bareeq/qa/camel
+          if-no-files-found: warn
+          retention-days: 14
