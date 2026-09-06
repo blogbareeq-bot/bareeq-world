@@ -77,3 +77,12 @@ jobs:
           CI: '1'
           BAREEQ_PREVIEW_URL: http://127.0.0.1:4321
         run: npm run window:viewport
+
+      - name: Upload viewport QA diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-window-viewport-${{ github.run_id }}
+          path: artifacts/window-viewport
+          if-no-files-found: ignore
+          retention-days: 7
