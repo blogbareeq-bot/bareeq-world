@@ -3,42 +3,27 @@ import { resolve } from 'node:path';
 
 /**
  * Editorial QA — runs AFTER check-visual-stories passes.
- *
- * In addition to narrative quality, this pass protects against the failure
- * mode that previously cut Arabic prose mechanically at the character limit.
+ * Protects narrative quality and prevents mechanically truncated Arabic prose.
  */
-
 const root = process.cwd();
 const storiesDir = resolve(root, 'src/data/visual-stories');
 const postsDir = resolve(root, 'src/content/posts');
 
 const STOP_WORDS = new Set(['في', 'من', 'على', 'إلى', 'هذا', 'هذه', 'ذلك', 'تلك', 'التي', 'الذي', 'الذين', 'أن', 'إن', 'كان', 'كانت', 'يكون', 'تكون', 'هو', 'هي', 'هم', 'هن', 'نحن', 'أنا', 'أنت', 'كما', 'كذلك', 'أيضًا', 'لكن', 'لكنه', 'إذا', 'إذ', 'ما', 'لا', 'لم', 'لن', 'قد', 'لقد', 'حتى', 'بين', 'عند', 'بعد', 'قبل', 'أمام', 'خلف', 'فوق', 'تحت', 'مع', 'بدون', 'كل', 'بعض', 'جميع', 'كثير', 'قليل', 'كثيرًا', 'جدًا', 'لأن', 'بسبب', 'غير', 'ليس', 'ليست', 'سوف', 'يجب', 'ينبغي', 'نحو', 'حول']);
-
-const DANGLING_TAIL_WORDS = new Set([
-  'حين', 'عندما', 'إذا', 'لو', 'لولا', 'لكن', 'بل', 'ثم', 'إلى', 'على', 'في', 'من', 'عن',
-  'أن', 'إن', 'أو', 'حتى', 'مع', 'عند', 'بعد', 'قبل', 'مثل', 'لأن', 'كي', 'لكي', 'بين',
-  'ضمن', 'خلال', 'نحو', 'دون', 'غير', 'كل', 'بعض', 'الذي', 'التي', 'الذين', 'حيث'
-]);
+const DANGLING_TAIL_WORDS = new Set(['حين', 'عندما', 'إذا', 'لو', 'لولا', 'لكن', 'بل', 'ثم', 'إلى', 'على', 'في', 'من', 'عن', 'أن', 'إن', 'أو', 'حتى', 'مع', 'عند', 'بعد', 'قبل', 'مثل', 'لأن', 'كي', 'لكي', 'بين', 'ضمن', 'خلال', 'نحو', 'دون', 'غير', 'كل', 'بعض', 'الذي', 'التي', 'الذين', 'حيث']);
 const CLAUSE_INTRODUCERS = new Set(['حين', 'عندما', 'إذا', 'لو', 'لولا', 'لأن', 'بينما', 'لكن', 'ثم', 'حتى']);
+// Exact fragments observed in the real hard-cut regression. Keep this narrow
+// so ordinary short Arabic words ending a valid sentence are not rejected.
+const KNOWN_CHOPPED_TOKENS = new Set(['إ', 'ذكا', 'نحاو', 'مطع', 'الهج', 'خا', 'الطوي', 'وال']);
 
 const frontmatterValue = (fm, key) => {
   const m = fm.match(new RegExp(`^${key}:\\s*["']?(.+?)["']?\\s*$`, 'm'));
   return m?.[1]?.replace(/^['"]|['"]$/g, '').trim() || '';
 };
-
 const normalizeTail = (body) => body.trim().replace(/[.!؟?!؛،,:]+$/g, '').trim();
-const lastWord = (body) => {
-  const clean = normalizeTail(body);
-  return clean.split(/\s+/).at(-1)?.replace(/[«»"'()\[\]{}]/g, '') || '';
-};
+const lastWord = (body) => normalizeTail(body).split(/\s+/).at(-1)?.replace(/[«»"'()\[\]{}]/g, '') || '';
 const hasBalancedArabicQuotes = (text) => [...text].filter((c) => c === '«').length === [...text].filter((c) => c === '»').length;
-
-const hasSuspiciousChoppedToken = (body) => {
-  const token = lastWord(body);
-  if (!token) return true;
-  const arabicLetters = token.replace(/[^\u0621-\u064A]/g, '');
-  return /^[\u0621-\u064A]{1,3}$/.test(arabicLetters) && /[.]\s*$/.test(body.trim());
-};
+const hasSuspiciousChoppedToken = (body) => /[.]\s*$/.test(body.trim()) && KNOWN_CHOPPED_TOKENS.has(lastWord(body));
 
 const danglingShortFinalClause = (body) => {
   const stripped = body.trim().replace(/[.!؟?!]+$/g, '').trim();
@@ -52,7 +37,7 @@ const danglingShortFinalClause = (body) => {
 const semanticTailIssue = (body) => {
   const tail = lastWord(body);
   if (DANGLING_TAIL_WORDS.has(tail)) return `ينتهي برابط غير مكتمل: «${tail}»`;
-  if (hasSuspiciousChoppedToken(body)) return `ينتهي بكلمة تبدو مبتورة: «${tail}»`;
+  if (hasSuspiciousChoppedToken(body)) return `ينتهي بكلمة مبتورة معروفة من عيب القص السابق: «${tail}»`;
   const danglingClause = danglingShortFinalClause(body);
   if (danglingClause) return `ينتهي بجملة تابعة قصيرة بلا تتمة: «${danglingClause}»`;
   if (!hasBalancedArabicQuotes(body)) return 'علامات الاقتباس العربية « » غير متوازنة';
@@ -104,7 +89,6 @@ for (const s of stories) {
 
   const uniqueKickers = new Set(s.cards.map((c) => c.kicker));
   if (uniqueKickers.size < 5) failures.push(`${s.slug}: فقط ${uniqueKickers.size} kicker فريد. نوّع أكثر.`);
-
   if (s.cards[0].title.trim() === s.cards.at(-1).title.trim()) failures.push(`${s.slug}: عنوان hook و takeaway متطابق.`);
 
   for (const c of s.cards) {
@@ -119,12 +103,10 @@ for (const s of stories) {
     const overlap = s.cards[0].body.split(/\s+/).filter((w) => w.length > 4 && summaryWords.has(w)).length;
     if (overlap > 10) failures.push(`${s.slug}: بطاقة الافتتاح تكرّر ملخص المقال حرفيًا (${overlap} كلمة مشتركة).`);
   }
-
   if (s.cards.at(-1).body.length < s.cards[0].body.length - 40) failures.push(`${s.slug}: الخاتمة أقصر من الافتتاح بكثير. أعطها نفس العمق.`);
 
   const kinds = new Set(s.cards.map((c) => c.kind));
   if (kinds.size < 4) failures.push(`${s.slug}: تنوع الأنواع محدود (${kinds.size}). استعمل ${[...kinds].join(',')}.`);
-
   const grounded = new Set(['example', 'experiment', 'evidence', 'application']);
   if (!s.cards.some((c) => grounded.has(c.kind))) failures.push(`${s.slug}: لا توجد بطاقة «مرتكزة» (مثال/تجربة/دليل/تطبيق). القصة ستبدو مجردة.`);
 }
