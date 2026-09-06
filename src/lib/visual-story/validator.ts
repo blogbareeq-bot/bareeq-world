@@ -20,11 +20,6 @@ const MAX_CARDS = 10;
 const MIN_KICKER_CHARS = 3;
 const MAX_KICKER_CHARS = 26;
 
-// Per-kind minimum body length (semantic completeness beats character count).
-// Hook / question / takeaway may be shorter to land a single sharp idea;
-// myth sits in the middle; example / evidence / application / experiment /
-// contrast / reveal / reflection need enough room to actually develop the
-// point. Keep a max bound on all kinds to prevent bloat.
 const MIN_BODY_CHARS_BY_KIND: Record<VisualStoryCardKind, number> = {
   hook: 70,
   question: 70,
@@ -41,18 +36,25 @@ const MIN_BODY_CHARS_BY_KIND: Record<VisualStoryCardKind, number> = {
 const minBodyFor = (kind: VisualStoryCardKind): number => MIN_BODY_CHARS_BY_KIND[kind] ?? 96;
 
 const stripWhitespace = (value: string | undefined): string => (value || '').replace(/\s+/g, ' ').trim();
-
-// Truncated endings: a card that ends with an ellipsis, comma, semicolon, or
-// colon is a sign of mechanical cutting. Question marks and exclamation
-// marks are legitimate editorial endings for hook / question / reveal cards,
-// so they are NOT in this set.
 const ENDS_INCOMPLETE = /(\.\.\.|…|،|:|؛|,|;)$/;
 const STARTS_INCOMPLETE = /^(\.\.\.|…|،|:|؛)/;
+const TERMINAL_PUNCTUATION = /[.!؟!»”)]$/u;
+// Regression guard for real hard-cut fragments that escaped punctuation-only QA.
+const KNOWN_TRUNCATED_TAIL = /(?:^|\s)(?:إ|ذكا|نحاو|مطع|الهج|خا|الطوي|وال)\.$/u;
 const TABLE_FRAGMENT = /^\s*\|?\s*-{2,}\s*\|/;
 const HTML_PATTERN = /<\/?[a-z][^>]*>/i;
 const ARABIC_LETTER = /[\u0600-\u06FF]/;
 
 const hasArabicContent = (value: string): boolean => ARABIC_LETTER.test(value);
+const countChar = (value: string, char: string): number => [...value].filter((c) => c === char).length;
+
+const semanticEndingIssue = (value: string): string | null => {
+  if (!TERMINAL_PUNCTUATION.test(value)) return 'النص لا ينتهي بعلامة ترقيم ختامية؛ راجع احتمال القص الميكانيكي';
+  if (KNOWN_TRUNCATED_TAIL.test(value)) return 'النص ينتهي بكلمة مبتورة معروفة من عيب القص السابق';
+  if (countChar(value, '«') !== countChar(value, '»')) return 'علامات الاقتباس «» غير متوازنة';
+  if (countChar(value, '(') !== countChar(value, ')')) return 'الأقواس () غير متوازنة';
+  return null;
+};
 
 const uniqueBy = <T,>(items: T[], key: (item: T) => string): T[] => {
   const seen = new Set<string>();
@@ -91,7 +93,7 @@ export const validateEditorialStory = (story: VisualStoryData): EditorialIssue[]
     return issues;
   }
   if (!story.arc || stripWhitespace(story.arc).length < 24) {
-    issues.push({ slug: story.slug, code: 'arc-missing', message: 'arc (ملخص القصة) مفود أو قصير جدًا' });
+    issues.push({ slug: story.slug, code: 'arc-missing', message: 'arc (ملخص القصة) مفقود أو قصير جدًا' });
   }
   if (!['technical', 'reflective', 'books', 'world', 'simply'].includes(story.path)) {
     issues.push({ slug: story.slug, code: 'arc-path', message: 'path غير معروف' });
@@ -100,15 +102,18 @@ export const validateEditorialStory = (story: VisualStoryData): EditorialIssue[]
     issues.push({ slug: story.slug, code: 'card-count', message: `عدد البطاقات خارج ${MIN_CARDS}–${MAX_CARDS}` });
     return issues;
   }
+
   const ids = new Set<string>();
   const bodies: string[] = [];
   const kickers: string[] = [];
   const kinds: string[] = [];
+
   for (const card of story.cards) {
     if (!card.id || ids.has(card.id)) {
       issues.push({ slug: story.slug, cardId: card.id, code: 'card-id', message: 'معرّف بطاقة مفقود أو مكرر' });
     }
     ids.add(card.id);
+
     const kicker = stripWhitespace(card.kicker);
     if (!kicker || kicker.length < MIN_KICKER_CHARS || kicker.length > MAX_KICKER_CHARS) {
       issues.push({ slug: story.slug, cardId: card.id, code: 'kicker-len', message: 'طول الـkicker خارج النطاق 3–26' });
@@ -117,6 +122,7 @@ export const validateEditorialStory = (story: VisualStoryData): EditorialIssue[]
       issues.push({ slug: story.slug, cardId: card.id, code: 'kicker-lang', message: 'kicker يجب أن يحتوي العربية' });
     }
     kickers.push(kicker);
+
     const title = stripWhitespace(card.title);
     if (!title || title.length < MIN_TITLE_CHARS || title.length > MAX_TITLE_CHARS) {
       issues.push({ slug: story.slug, cardId: card.id, code: 'title-len', message: `طول العنوان خارج ${MIN_TITLE_CHARS}–${MAX_TITLE_CHARS}` });
@@ -124,12 +130,10 @@ export const validateEditorialStory = (story: VisualStoryData): EditorialIssue[]
     if (!hasArabicContent(title)) {
       issues.push({ slug: story.slug, cardId: card.id, code: 'title-lang', message: 'العنوان يجب أن يحتوي العربية' });
     }
-    if (ENDS_INCOMPLETE.test(title)) {
-      issues.push({ slug: story.slug, cardId: card.id, code: 'title-truncated', message: 'العنوان منتهٍ بعلامة قطع أو فاصلة' });
+    if (ENDS_INCOMPLETE.test(title) || STARTS_INCOMPLETE.test(title)) {
+      issues.push({ slug: story.slug, cardId: card.id, code: 'title-truncated', message: 'العنوان يبدأ أو ينتهي بعلامة قطع/فاصلة' });
     }
-    if (STARTS_INCOMPLETE.test(title)) {
-      issues.push({ slug: story.slug, cardId: card.id, code: 'title-truncated', message: 'العنوان يبدأ بعلامة قطع أو فاصلة' });
-    }
+
     const body = stripWhitespace(card.body);
     if (!body) {
       issues.push({ slug: story.slug, cardId: card.id, code: 'body-empty', message: 'النص فارغ' });
@@ -150,13 +154,13 @@ export const validateEditorialStory = (story: VisualStoryData): EditorialIssue[]
       if (HTML_PATTERN.test(body)) {
         issues.push({ slug: story.slug, cardId: card.id, code: 'body-html', message: 'تسرب HTML إلى النص' });
       }
-      if (ENDS_INCOMPLETE.test(body)) {
-        issues.push({ slug: story.slug, cardId: card.id, code: 'body-truncated', message: 'النص ينتهي بعلامة قطع (القص الميكانيكي ممنوع)' });
+      if (ENDS_INCOMPLETE.test(body) || STARTS_INCOMPLETE.test(body)) {
+        issues.push({ slug: story.slug, cardId: card.id, code: 'body-truncated', message: 'النص يبدأ أو ينتهي بعلامة قطع؛ القص الميكانيكي ممنوع' });
       }
-      if (STARTS_INCOMPLETE.test(body)) {
-        issues.push({ slug: story.slug, cardId: card.id, code: 'body-truncated', message: 'النص يبدأ بعلامة قطع' });
+      const semanticIssue = semanticEndingIssue(body);
+      if (semanticIssue) {
+        issues.push({ slug: story.slug, cardId: card.id, code: 'body-semantic-ending', message: semanticIssue });
       }
-      // Detect leaked markdown artifacts and frontmatter lines.
       if (/^-{3,}\s*$/.test(body) || /^\s*---\s*$/m.test(body)) {
         issues.push({ slug: story.slug, cardId: card.id, code: 'body-frontmatter', message: 'تسرب frontmatter إلى النص' });
       }
@@ -164,6 +168,7 @@ export const validateEditorialStory = (story: VisualStoryData): EditorialIssue[]
         issues.push({ slug: story.slug, cardId: card.id, code: 'body-list', message: 'تسرب قائمة نقطية إلى النص' });
       }
     }
+
     if (!KIND_VALUES.includes(card.kind)) {
       issues.push({ slug: story.slug, cardId: card.id, code: 'kind-invalid', message: 'نوع البطاقة غير معروف' });
     }
@@ -173,18 +178,18 @@ export const validateEditorialStory = (story: VisualStoryData): EditorialIssue[]
     }
     bodies.push(body);
   }
-  // Single-type variety: at least 3 distinct kinds per story.
+
   const distinctKinds = new Set(kinds);
   if (distinctKinds.size < 3) {
     issues.push({ slug: story.slug, code: 'kinds-monotone', message: `أنواع البطاقات متشابهة (${distinctKinds.size} فقط)` });
   }
-  // Editorial kicker variety: at most 2 cards may share the same kicker text.
+
   const kickerCounts = new Map<string, number>();
   for (const k of kickers) kickerCounts.set(k, (kickerCounts.get(k) || 0) + 1);
   for (const [k, count] of kickerCounts) {
     if (count > 2) issues.push({ slug: story.slug, code: 'kicker-repeat', message: `kicker مكرر أكثر من مرتين: ${k} (${count}×)` });
   }
-  // Detect high pairwise similarity across bodies (PowerPoint-style duplication).
+
   for (let i = 0; i < bodies.length; i += 1) {
     for (let j = i + 1; j < bodies.length; j += 1) {
       const sim = jaccard(bodies[i], bodies[j]);
@@ -193,23 +198,17 @@ export const validateEditorialStory = (story: VisualStoryData): EditorialIssue[]
       }
     }
   }
-  // Hook vs. takeaway must not be identical.
+
   if (story.cards[0]?.id === 'hook' && story.cards[story.cards.length - 1]?.id === 'takeaway') {
     const sim = jaccard(stripWhitespace(story.cards[0].body), stripWhitespace(story.cards[story.cards.length - 1].body));
-    if (sim > 0.4) {
-      issues.push({ slug: story.slug, code: 'arc-bookends', message: 'الافتتاح والخاتمة متقاربان جدًا' });
-    }
+    if (sim > 0.4) issues.push({ slug: story.slug, code: 'arc-bookends', message: 'الافتتاح والخاتمة متقاربان جدًا' });
   }
-  if (story.cards[0]?.title && story.cards[story.cards.length - 1]?.title) {
-    if (stripWhitespace(story.cards[0].title) === stripWhitespace(story.cards[story.cards.length - 1].title)) {
-      issues.push({ slug: story.slug, code: 'arc-title-bookends', message: 'عنوان الافتتاح والخاتمة متطابق' });
-    }
+  if (stripWhitespace(story.cards[0]?.title) === stripWhitespace(story.cards[story.cards.length - 1]?.title)) {
+    issues.push({ slug: story.slug, code: 'arc-title-bookends', message: 'عنوان الافتتاح والخاتمة متطابق' });
   }
-  // Unique titles inside a single story.
+
   const titleSet = new Set(story.cards.map((c) => stripWhitespace(c.title)));
-  if (titleSet.size !== story.cards.length) {
-    issues.push({ slug: story.slug, code: 'title-dup', message: 'عنوان بطاقة مكرر داخل القصة' });
-  }
+  if (titleSet.size !== story.cards.length) issues.push({ slug: story.slug, code: 'title-dup', message: 'عنوان بطاقة مكرر داخل القصة' });
   return issues;
 };
 
@@ -236,9 +235,7 @@ export const collectEditorialIssues = (stories: VisualStoryData[]): EditorialIss
   const titles = new Set<string>();
   for (const story of stories) {
     issues.push(...validateEditorialStory(story));
-    if (titles.has(story.title)) {
-      issues.push({ slug: story.slug, code: 'cross-title-dup', message: `عنوان القصة مكرر: ${story.title}` });
-    }
+    if (titles.has(story.title)) issues.push({ slug: story.slug, code: 'cross-title-dup', message: `عنوان القصة مكرر: ${story.title}` });
     titles.add(story.title);
   }
   return issues;
