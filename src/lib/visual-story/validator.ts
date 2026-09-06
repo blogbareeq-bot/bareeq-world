@@ -9,10 +9,9 @@ const ALLOWED_VISUALS = new Set([
   'threshold', 'rings', 'path', 'layers', 'contrast', 'pulse',
   'constellation', 'horizon', 'opening', 'seal', 'orbit',
   'wave', 'ledger', 'prism', 'compass', 'weave', 'arc', 'field', 'dawn', 'paper', 'ladder',
-  'currents', 'stamps', 'orbit', 'compass', 'pulse', 'weave'
+  'currents', 'stamps'
 ]);
 
-const MIN_BODY_CHARS = 96;
 const MAX_BODY_CHARS = 290;
 const MIN_TITLE_CHARS = 8;
 const MAX_TITLE_CHARS = 88;
@@ -20,6 +19,26 @@ const MIN_CARDS = 7;
 const MAX_CARDS = 10;
 const MIN_KICKER_CHARS = 3;
 const MAX_KICKER_CHARS = 26;
+
+// Per-kind minimum body length (semantic completeness beats character count).
+// Hook / question / takeaway may be shorter to land a single sharp idea;
+// myth sits in the middle; example / evidence / application / experiment /
+// contrast / reveal / reflection need enough room to actually develop the
+// point. Keep a max bound on all kinds to prevent bloat.
+const MIN_BODY_CHARS_BY_KIND: Record<VisualStoryCardKind, number> = {
+  hook: 70,
+  question: 70,
+  takeaway: 80,
+  myth: 110,
+  reveal: 130,
+  example: 140,
+  evidence: 140,
+  application: 140,
+  experiment: 140,
+  contrast: 130,
+  reflection: 130
+};
+const minBodyFor = (kind: VisualStoryCardKind): number => MIN_BODY_CHARS_BY_KIND[kind] ?? 96;
 
 const stripWhitespace = (value: string | undefined): string => (value || '').replace(/\s+/g, ' ').trim();
 
@@ -115,8 +134,9 @@ export const validateEditorialStory = (story: VisualStoryData): EditorialIssue[]
     if (!body) {
       issues.push({ slug: story.slug, cardId: card.id, code: 'body-empty', message: 'النص فارغ' });
     } else {
-      if (body.length < MIN_BODY_CHARS) {
-        issues.push({ slug: story.slug, cardId: card.id, code: 'body-short', message: `النص أقصر من ${MIN_BODY_CHARS} حرفًا (${body.length})` });
+      const minForKind = minBodyFor(card.kind);
+      if (body.length < minForKind) {
+        issues.push({ slug: story.slug, cardId: card.id, code: 'body-short', message: `النص أقصر من ${minForKind} حرفًا لنوع ${card.kind} (${body.length})` });
       }
       if (body.length > MAX_BODY_CHARS) {
         issues.push({ slug: story.slug, cardId: card.id, code: 'body-long', message: `النص أطول من ${MAX_BODY_CHARS} حرفًا (${body.length})` });
@@ -199,7 +219,8 @@ export const isValidVisualStory = (story: VisualStoryData | undefined): story is
   const ids = new Set<string>();
   for (const card of story.cards) {
     if (!card.id || ids.has(card.id) || !stripWhitespace(card.title) || !stripWhitespace(card.body)) return false;
-    if (card.body.length < MIN_BODY_CHARS || card.body.length > MAX_BODY_CHARS) return false;
+    const minForKind = minBodyFor(card.kind);
+    if (card.body.length < minForKind || card.body.length > MAX_BODY_CHARS) return false;
     ids.add(card.id);
   }
   return story.director?.density === 'airy'

@@ -36,7 +36,6 @@ const ALLOWED_VISUALS = new Set([
   'wave', 'ledger', 'prism', 'compass', 'weave', 'arc', 'field', 'dawn', 'paper', 'ladder',
   'currents', 'stamps'
 ]);
-const MIN_BODY = 96;
 const MAX_BODY = 290;
 const MIN_TITLE = 8;
 const MAX_TITLE = 88;
@@ -45,6 +44,26 @@ const MAX_CARDS = 10;
 const MIN_KICKER = 3;
 const MAX_KICKER = 26;
 const MIN_ARC = 24;
+
+// Per-kind minimum body length (semantic completeness beats character count).
+// Hook / question / takeaway may be shorter; myth sits in the middle;
+// example / evidence / application / experiment / contrast / reveal /
+// reflection need enough room to actually develop the point. Mirrors the
+// TypeScript validator in src/lib/visual-story/validator.ts.
+const MIN_BODY_BY_KIND = {
+  hook: 70,
+  question: 70,
+  takeaway: 80,
+  myth: 110,
+  reveal: 130,
+  example: 140,
+  evidence: 140,
+  application: 140,
+  experiment: 140,
+  contrast: 130,
+  reflection: 130
+};
+const minBodyFor = (kind) => MIN_BODY_BY_KIND[kind] ?? 96;
 
 const strip = (v) => (v || '').replace(/\s+/g, ' ').trim();
 
@@ -93,7 +112,8 @@ const validateStory = (story) => {
     if (!b) {
       issues.push({ code: 'body-empty', cardId: card.id, message: 'النص فارغ' });
     } else {
-      if (b.length < MIN_BODY) issues.push({ code: 'body-short', cardId: card.id, message: `النص أقصر من ${MIN_BODY} حرفًا (${b.length})` });
+      const minForKind = minBodyFor(card.kind);
+      if (b.length < minForKind) issues.push({ code: 'body-short', cardId: card.id, message: `النص أقصر من ${minForKind} حرفًا لنوع ${card.kind} (${b.length})` });
       if (b.length > MAX_BODY) issues.push({ code: 'body-long', cardId: card.id, message: `النص أطول من ${MAX_BODY} حرفًا (${b.length})` });
       if (!ARABIC_LETTER.test(b)) issues.push({ code: 'body-lang', cardId: card.id, message: 'النص لا يحتوي العربية' });
       if (TABLE_FRAGMENT.test(b)) issues.push({ code: 'body-table', cardId: card.id, message: 'تسرب جدول Markdown' });
