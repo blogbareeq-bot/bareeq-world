@@ -9,7 +9,7 @@ import { responsiveImage, socialImage } from '../../lib/images';
 import { createHash } from 'node:crypto';
 import { access } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import visualStories from '../../data/visual-stories.json';
+import { findVisualStoryBySlug } from '../../lib/visual-story/loader';
 import { isValidVisualStory } from '../../lib/visual-story/validator';
 import type { VisualStoryData } from '../../types/visual-story';
 
@@ -19,7 +19,7 @@ export async function getStaticPaths() {
 }
 interface Props { post: CollectionEntry<'posts'>; }
 const { post } = Astro.props as Props;
-const candidateVisualStory = visualStories.stories.find((story) => story.slug === post.id) as VisualStoryData | undefined;
+const candidateVisualStory = await findVisualStoryBySlug(post.id);
 const visualStory = isValidVisualStory(candidateVisualStory) ? candidateVisualStory : undefined;
 const { Content, headings } = await render(post);
 const allPosts = await getPublishedPosts();

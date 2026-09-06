@@ -28,6 +28,9 @@ const { story } = Astro.props;
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
       </button>
     </header>
+    {story.arc && (
+      <p class="visual-story__arc" data-visual-arc aria-label="ملخص القصة">{story.arc}</p>
+    )}
 
     <div class="visual-story__track" data-visual-track aria-live="polite">
       {story.cards.map((card, index) => (
