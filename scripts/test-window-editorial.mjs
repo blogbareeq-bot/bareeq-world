@@ -4,35 +4,77 @@ import { resolve } from 'node:path';
 /**
  * Editorial QA — runs AFTER check-visual-stories passes.
  *
- * This is the second pass. The first pass enforces structure (lengths,
- * kind, fingerprint, etc.). This pass enforces EDITORIAL value:
- *  - each card stands alone (a reader who has not read the article can
- *    understand it)
- *  - the arc is more than a vague sentence
- *  - kickers are varied and editorial
- *  - bodies are not just the article's quickSummary re-cut
- *  - the takeaway does not simply restate the hook
- *  - no card is dominated by stop-words
- *  - the path label matches the article's category
+ * In addition to narrative quality, this pass protects against the failure
+ * mode that previously cut Arabic prose mechanically at the character limit.
  */
 
 const root = process.cwd();
 const storiesDir = resolve(root, 'src/data/visual-stories');
 const postsDir = resolve(root, 'src/content/posts');
-const CATEGORY_PATH = {
-  'ببساطة…': 'simply',
-  'أطياف العقل': 'reflective',
-  'بريق الكتب': 'books',
-  'نافذة على العالم': 'world',
-  'المستقبل الآن': 'technical'
-};
 
-const STOP_WORDS = new Set(['في', 'من', 'على', 'إلى', 'هذا', 'هذه', 'ذلك', 'تلك', 'التي', 'الذي', 'الذين', 'أن', 'إن', 'كان', 'كانت', 'يكون', 'تكون', 'هو', 'هي', 'هم', 'هن', 'نحن', 'أنا', 'أنت', 'كما', 'كذلك', 'أيضًا', 'لكن', 'لكنه', 'إذا', 'إذ', 'ما', 'لا', 'لم', 'لن', 'قد', 'لقد', 'حتى', 'بين', 'عند', 'بعد', 'قبل', 'أمام', 'خلف', 'فوق', 'تحت', 'مع', 'بدون', 'كل', 'بعض', 'جميع', 'كثير', 'قليل', 'كثيرًا', 'جدًا', 'لأن', 'بسبب', 'غير', 'ليس', 'ليست', 'سوف', 'يجب', 'ينبغي', 'يكون', 'نحو', 'حول']);
+const STOP_WORDS = new Set(['في', 'من', 'على', 'إلى', 'هذا', 'هذه', 'ذلك', 'تلك', 'التي', 'الذي', 'الذين', 'أن', 'إن', 'كان', 'كانت', 'يكون', 'تكون', 'هو', 'هي', 'هم', 'هن', 'نحن', 'أنا', 'أنت', 'كما', 'كذلك', 'أيضًا', 'لكن', 'لكنه', 'إذا', 'إذ', 'ما', 'لا', 'لم', 'لن', 'قد', 'لقد', 'حتى', 'بين', 'عند', 'بعد', 'قبل', 'أمام', 'خلف', 'فوق', 'تحت', 'مع', 'بدون', 'كل', 'بعض', 'جميع', 'كثير', 'قليل', 'كثيرًا', 'جدًا', 'لأن', 'بسبب', 'غير', 'ليس', 'ليست', 'سوف', 'يجب', 'ينبغي', 'نحو', 'حول']);
+
+// Words that are not acceptable as the final lexical unit of a card body.
+// They introduce a condition, relation or continuation that still needs a complement.
+const DANGLING_TAIL_WORDS = new Set([
+  'حين', 'عندما', 'إذا', 'لو', 'لولا', 'لكن', 'بل', 'ثم', 'إلى', 'على', 'في', 'من', 'عن',
+  'أن', 'إن', 'أو', 'حتى', 'مع', 'عند', 'بعد', 'قبل', 'مثل', 'لأن', 'كي', 'لكي', 'بين',
+  'ضمن', 'خلال', 'نحو', 'دون', 'غير', 'كل', 'بعض', 'الذي', 'التي', 'الذين', 'حيث'
+]);
 
 const frontmatterValue = (fm, key) => {
   const m = fm.match(new RegExp(`^${key}:\\s*["']?(.+?)["']?\\s*$`, 'm'));
   return m?.[1]?.replace(/^['"]|['"]$/g, '').trim() || '';
 };
+
+const normalizeTail = (body) => body
+  .trim()
+  .replace(/[.!؟?!؛،,:]+$/g, '')
+  .trim();
+
+const lastWord = (body) => {
+  const clean = normalizeTail(body);
+  return clean.split(/\s+/).at(-1)?.replace(/[«»"'()\[\]{}]/g, '') || '';
+};
+
+const hasBalancedArabicQuotes = (text) => {
+  const opens = [...text].filter((c) => c === '«').length;
+  const closes = [...text].filter((c) => c === '»').length;
+  return opens === closes;
+};
+
+const hasSuspiciousChoppedToken = (body) => {
+  // Real regressions caught by this family included: إ. / ذكا. / مطع. / خا.
+  const token = lastWord(body);
+  if (!token) return true;
+  const arabicLetters = token.replace(/[^\u0621-\u064A]/g, '');
+  return /^[\u0621-\u064A]{1,3}$/.test(arabicLetters) && /[.]\s*$/.test(body.trim());
+};
+
+const semanticTailIssue = (body) => {
+  const tail = lastWord(body);
+  if (DANGLING_TAIL_WORDS.has(tail)) return `ينتهي برابط غير مكتمل: «${tail}»`;
+  if (hasSuspiciousChoppedToken(body)) return `ينتهي بكلمة تبدو مبتورة: «${tail}»`;
+  if (!hasBalancedArabicQuotes(body)) return 'علامات الاقتباس العربية « » غير متوازنة';
+  return '';
+};
+
+// Guard fixtures: these were actual production-candidate failures. If this
+// detector stops rejecting them, the test itself must fail before stories run.
+const NEGATIVE_FIXTURES = [
+  'حين يقترب الإصبع',
+  'وقد يتسع المعروض أكثر من قدرة الاقتصاد على إ.',
+  'ما المشكلة التي نحاو.',
+  'قُدّم لهم على أنه ذكا.',
+  'في مطعم نودلز غير رسمي قد لا يكون قاعدة لكل وجبة أو مطع.',
+  'لا تستنتج أن النظام قرأ ملفًا خا.',
+  '«أنا لم أقل إلغاء الواجبات'
+];
+for (const fixture of NEGATIVE_FIXTURES) {
+  if (!semanticTailIssue(fixture)) {
+    throw new Error(`semantic-tail fixture escaped detection: ${fixture}`);
+  }
+}
 
 const stories = [];
 const files = (await readdir(storiesDir)).filter((n) => n.endsWith('.json') && !n.endsWith('.skeleton.json')).sort();
@@ -44,24 +86,17 @@ for (const file of files) {
 }
 
 const failures = [];
-
 const contentWords = (s) => s.split(/\s+/).filter((w) => w.length > 2 && !STOP_WORDS.has(w));
 const contentRatio = (s) => {
   const words = s.split(/\s+/).filter(Boolean);
   if (!words.length) return 0;
-  const nonStop = contentWords(s);
-  return nonStop.length / words.length;
+  return contentWords(s).length / words.length;
 };
 
 for (const s of stories) {
-  // 1. Arc must read like a story description, not a topic.
   if (s.arc.length < 60) failures.push(`${s.slug}: arc قصير جدًا (${s.arc.length} حرفًا). اكتب ملخصًا سرديًا للقصة.`);
-  if (!/،/.test(s.arc)) failures.push(`${s.slug}: arc يحتاج إلى أكثر من جملة واحدة (ليست فاصلة).`);
+  if (!/،/.test(s.arc)) failures.push(`${s.slug}: arc يحتاج إلى تركيب سردي أوضح يتضمن فاصلة.`);
 
-  // 2. Path must match the article's editorial shape, not its category.
-  //    An article under "بريق الكتب" may carry path=reflective if the
-  //    review is conceptual rather than a book summary. We only warn when
-  //    the mismatch is jarring (e.g. books article with path=simply).
   const CATEGORY_EXPECTED = {
     'ببساطة…': new Set(['simply', 'technical']),
     'أطياف العقل': new Set(['reflective', 'books']),
@@ -74,45 +109,36 @@ for (const s of stories) {
     failures.push(`${s.slug}: path=${s.path} لا يطابق القسم الفعلي "${s._category}". المتوقع: ${[...expected].join(', ')}.`);
   }
 
-  // 3. Kicker variety: at least 5 distinct kickers per story.
   const uniqueKickers = new Set(s.cards.map((c) => c.kicker));
   if (uniqueKickers.size < 5) failures.push(`${s.slug}: فقط ${uniqueKickers.size} kicker فريد. نوّع أكثر.`);
 
-  // 4. First and last titles must differ.
   const first = s.cards[0].title.trim();
   const last = s.cards.at(-1).title.trim();
   if (first === last) failures.push(`${s.slug}: عنوان hook و takeaway متطابق.`);
 
-  // 5. Each body must be content-rich (at least 40% non-stop words).
   for (const c of s.cards) {
     const ratio = contentRatio(c.body);
     if (ratio < 0.4) failures.push(`${s.slug}/${c.id}: كثرة كلمات وظيفية (${(ratio * 100).toFixed(0)}% محتوى فعلي).`);
+    const tailIssue = semanticTailIssue(c.body);
+    if (tailIssue) failures.push(`${s.slug}/${c.id}: ${tailIssue}. أعد صياغة البطاقة؛ يمنع القص الميكانيكي.`);
   }
 
-  // 6. Body should not be a direct excerpt of the quickSummary.
   if (s._summary) {
     const summaryWords = new Set(s._summary.split(/\s+/).filter((w) => w.length > 4));
     const hookBody = s.cards[0].body;
     const overlap = hookBody.split(/\s+/).filter((w) => w.length > 4 && summaryWords.has(w)).length;
-    if (overlap > 10) {
-      failures.push(`${s.slug}: بطاقة الافتتاح تكرّر ملخص المقال حرفيًا (${overlap} كلمة مشتركة).`);
-    }
+    if (overlap > 10) failures.push(`${s.slug}: بطاقة الافتتاح تكرّر ملخص المقال حرفيًا (${overlap} كلمة مشتركة).`);
   }
 
-  // 7. Takeaway should not be shorter than hook — the closing is the
-  //    strongest statement, not a tag line.
   if (s.cards.at(-1).body.length < s.cards[0].body.length - 40) {
     failures.push(`${s.slug}: الخاتمة أقصر من الافتتاح بكثير. أعطها نفس العمق.`);
   }
 
-  // 8. At least 4 distinct kinds (not just hook/reveal/takeaway).
   const kinds = new Set(s.cards.map((c) => c.kind));
   if (kinds.size < 4) failures.push(`${s.slug}: تنوع الأنواع محدود (${kinds.size}). استعمل ${[...kinds].join(',')}.`);
 
-  // 9. Every story should include at least one of: example, experiment, evidence, application
   const grounded = new Set(['example', 'experiment', 'evidence', 'application']);
-  const hasGrounded = s.cards.some((c) => grounded.has(c.kind));
-  if (!hasGrounded) failures.push(`${s.slug}: لا توجد بطاقة «مرتكزة» (مثال/تجربة/دليل/تطبيق). القصة ستبدو مجردة.`);
+  if (!s.cards.some((c) => grounded.has(c.kind))) failures.push(`${s.slug}: لا توجد بطاقة «مرتكزة» (مثال/تجربة/دليل/تطبيق). القصة ستبدو مجردة.`);
 }
 
 if (failures.length) {
@@ -120,7 +146,7 @@ if (failures.length) {
   throw new Error('editorial-qa failed');
 }
 
-console.log(`نافذة بريق: ${stories.length} قصة اجتازت التحرير المستقل (hook ≠ takeaway, تنوع kickers, ربط بالقسم, إلخ).`);
+console.log(`نافذة بريق: ${stories.length} قصة اجتازت التحرير المستقل، بما فيه فحص اكتمال النهايات ومنع القص الميكانيكي.`);
 for (const s of stories) {
   const kinds = [...new Set(s.cards.map((c) => c.kind))].join(',');
   console.log(`  - ${s.slug} :: ${s.path} :: ${s.cards.length} بطاقة :: ${kinds}`);
