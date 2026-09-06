@@ -6,196 +6,22 @@ on:
       - main
     paths:
       - '.github/workflows/audio-openrouter-dual-asr-final.yml'
+      - '.github/workflows/audio-partial-publish.yml'
+      - 'scripts/audio-progressive-validate.mjs'
 
 permissions:
-  actions: read
-  contents: write
+  contents: read
 
 concurrency:
   group: bareeq-final-dual-asr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-  verify-publish:
+  progressive-handoff:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
-    env:
-      BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
-      BAREEQ_AUDIO_PUBLISHED_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
-      # Run 37 attempt 3 successfully regenerated touchscreen parts 1, 2 and 3.
-      # Resume that exact checkpoint and repair only the still-pending part 6.
-      BAREEQ_CORRECTED_CACHE_KEY: bareeq-audio-final-validation-33747129652-3
     steps:
-      - name: Checkout PR head
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Apply narrow lam-numeric adjudication repair
-        run: node scripts/audio-final-runtime-repair.mjs
-
-      - name: Offline safety gates
+      - name: Confirm progressive publication plan owns execution
         run: |
-          node scripts/test-audio-lifecycle.mjs
-          node scripts/test-audio-production-safety.mjs
-          node scripts/test-audio-production-integration.mjs
-          node scripts/test-speech-script-quality-gate.mjs
-          node scripts/check-speech-scripts.mjs
-          node scripts/test-audio-engine-final.mjs
-          node scripts/test-audio-transition-normalization.mjs
-          node scripts/test-audio-dual-asr-adjudicate.mjs
-          node --check scripts/audio-openrouter-campaign.mjs
-          node --check scripts/audio-validate-consensus.mjs
-          node --check scripts/audio-touchscreen-targeted-regenerate.mjs
-
-      - name: Verify provider credentials
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: |
-          test -n "${GEMINI_API_KEY}"
-          test -n "${OPENROUTER_API_KEY}"
-          echo 'PROVIDER_CREDENTIALS=present'
-
-      - name: Restore latest corrected checkpoint
-        uses: actions/cache/restore@v4
-        with:
-          path: audio-candidates
-          key: ${{ env.BAREEQ_CORRECTED_CACHE_KEY }}
-          fail-on-cache-miss: true
-
-      - name: Require generation complete 15/15 and preserved exact coworker
-        run: |
-          node - <<'NODE'
-          const fs = require('fs');
-          const path = require('path');
-          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
-          const entries = Object.entries(state.articles || {});
-          if (state.generationComplete !== true || entries.length !== 15 || entries.some(([,v]) => v.generation?.status !== 'generated')) throw new Error('checkpoint is not generation-complete 15/15');
-          const coworker = state.articles['ai-as-coworker-future-of-human-work'];
-          const c = coworker?.validation?.consensus || {};
-          const exact = ['substitutions','deletions','insertions','unresolved'].every((key) => Number(c[key]) === 0);
-          if (coworker?.validation?.status !== 'validated' || !exact) throw new Error('checkpoint lost coworker exact dual-ASR evidence');
-          console.log('CHECKPOINT=BOUND generation=15/15 coworker=0/0/0/0 prior_repairs=preserved');
-          NODE
-
-      - name: Regenerate only touchscreen parts with confirmed fresh dual-ASR mismatches
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
-          BAREEQ_TTS_CORRECTION_HINTS_JSON: >-
-            {"1":"Read the reviewed Arabic transcript verbatim. Say «الشَّاشَة» singular, never الشاشات. Say «تَعْنِي» with ن, never تعمي. Say «كَثِيرًا» with its final an sound, never كثير. End the part with the written word «الْيَوْم» clearly; never omit it. Say «مَلَاءَمَة لِلْمَس» as two clearly separated words; pronounce مَلَاءَمَة with hamza after the long alif and never ملائمة, and pronounce لِلْمَس without an extra lam. Preserve every written token and ending.","2":"Read the reviewed Arabic transcript verbatim. Say the display abbreviations as the separately written Arabic words «أُولِيد» and «إِل سِي دِي», never as English letters. Pronounce «اللَّمْسَة» with the audible final ta marbuta, never اللمس. Pronounce «بِالْأَرْض» with the audible hamza, then «إِنَّهُ» with initial kasra, never أَنَّهُ. Preserve every written token.","3":"Read the reviewed Arabic transcript verbatim. Pronounce «اللَّمْسَة» slowly with an unmistakable audible final ta marbuta, never اللمس. Pronounce the coordinates as «إِكْس وَوَاي» with both Arabic words explicit. Say «مَوْضِع» and «الْمَوْضِع» with ض, never موقع or الموقع. Preserve every written token.","4":"Read the reviewed Arabic transcript verbatim. Pronounce «وَحْدَهُ» with masculine final hu, never وحدها. Preserve every written token and ending.","5":"Read the reviewed Arabic transcript verbatim. Pronounce «يُشَوِّشُهَا» slowly and exactly, with the doubled shin and final ha, never يوشوها or يوشوشها. Preserve every written token.","6":"Read the reviewed Arabic transcript verbatim. Say «لِلْمَس» without an extra lam and without inserting مَلْمَس. Pronounce «تَنْجَح» exactly, never تظهر. Pronounce «إِنَّهُ» exactly, never إنما. Say «تُرْسِلُهَا» with ر and س, never توصلها. Also preserve «مِنْهُ» and pronounce «يَحْتَجُّ» with short a after ي and doubled final ج, never يَحْتَاج. Near «الْمَرَّة», do not insert the words «فِي الْمَرَّة» or repeat any phrase; read only the written tokens once. Preserve every written token and ending."}
-        run: |
-          set -euo pipefail
-          # Parts 1, 2 and 3 were regenerated successfully in run 37 attempt 3;
-          # part 6 is the only remaining TTS request. Preserve parts 1-5 byte-for-byte.
-          for part in 6; do
-            success=0
-            for transport in developer-interactions developer-generate-content; do
-              # Gemini's free endpoint reports rolling retry windows. Patient,
-              # evenly spaced retries avoid abandoning a repair during a short
-              # throttle window. OpenRouter is intentionally skipped while its
-              # account reports insufficient credit.
-              attempts=10
-              for attempt in $(seq 1 "${attempts}"); do
-                echo "TARGETED_TTS article=how-touchscreens-work part=${part} transport=${transport} attempt=${attempt}"
-                if BAREEQ_FORCE_TTS_PARTS="${part}" BAREEQ_TARGETED_TTS_TRANSPORT="${transport}" node scripts/audio-touchscreen-targeted-regenerate.mjs --article=how-touchscreens-work; then
-                  success=1
-                  break 2
-                fi
-                sleep 75
-              done
-            done
-            if [ "${success}" -ne 1 ]; then
-              echo "TARGETED_TTS_EXHAUSTED article=how-touchscreens-work part=${part}" >&2
-              exit 75
-            fi
-          done
-          node scripts/audio-openrouter-campaign.mjs --mode=generate
-          node - <<'NODE'
-          const fs = require('fs');
-          const path = require('path');
-          const articleId = 'how-touchscreens-work';
-          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
-          const fp = state.articles[articleId].generation.fingerprint;
-          const checkpoint = JSON.parse(fs.readFileSync(path.join('audio-candidates',articleId,fp,'checkpoint.json'),'utf8'));
-          for (const index of [0,1,2,3,4,5]) {
-            const rec = checkpoint.completedParts?.[String(index)];
-            if (rec?.targetedRegeneration !== true || rec?.correctionHintApplied !== true) throw new Error(`targeted touchscreen correction missing for part ${index + 1}`);
-          }
-          console.log('TARGETED_TOUCHSCREEN_REGENERATION=PASS parts=1,2,3,4,5,6 corpus_regenerated=no');
-          NODE
-
-      - name: Validate remaining articles with fresh independent Gemini pair
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/audio-openrouter-campaign.mjs --mode=validate
-
-      - name: Require exact publication gates
-        run: |
-          node - <<'NODE'
-          const fs = require('fs');
-          const path = require('path');
-          const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
-          const entries = Object.entries(state.articles || {});
-          if (state.validationComplete !== true || entries.length !== 15) throw new Error('validation is not complete 15/15');
-          for (const [articleId,item] of entries) {
-            const fp = item.generation?.fingerprint;
-            if (item.validation?.status !== 'validated' || item.validation?.fingerprint !== fp) throw new Error(`not validated: ${articleId}`);
-            const base = path.join('audio-candidates', articleId, fp, 'reports');
-            const asr = JSON.parse(fs.readFileSync(path.join(base,'asr-adjudication.json'),'utf8'));
-            const tech = JSON.parse(fs.readFileSync(path.join(base,'technical-qa.json'),'utf8'));
-            const sync = JSON.parse(fs.readFileSync(path.join(base,'sync.json'),'utf8'));
-            const c = asr.consensus || {};
-            if (!asr.passed || c.substitutions !== 0 || c.deletions !== 0 || c.insertions !== 0 || c.unresolved !== 0) throw new Error(`ASR gate failed ${articleId}`);
-            if (!tech.passed || !sync.passed) throw new Error(`technical/sync gate failed ${articleId}`);
-            if (asr.fingerprint !== fp || tech.fingerprint !== fp || sync.fingerprint !== fp) throw new Error(`fingerprint bind failed ${articleId}`);
-            if (!asr.fullSha256 || asr.fullSha256 !== tech.fullSha256 || asr.fullSha256 !== sync.fullSha256) throw new Error(`digest bind failed ${articleId}`);
-          }
-          console.log('EXACT_PUBLICATION_GATES=PASS articles=15 dualASR=0/0/0/0 technical=PASS sync=PASS binds=PASS');
-          NODE
-
-      - name: Publish validated candidates into PR tree
-        run: |
-          node scripts/audio-openrouter-campaign.mjs --mode=publish
-          test -f "${BAREEQ_AUDIO_PUBLISHED_MARKER}"
-          echo 'PUBLISH_TO_PR_TREE=PASS'
-
-      - name: Commit validated audio tree to PR branch
-        env:
-          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
-        run: |
-          set -euo pipefail
-          git config user.name 'bareeq-audio'
-          git config user.email 'audio@bareeq.local'
-          git add -f public/audio docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json docs/audio/PUBLICATION-POLICY-20260901.json scripts/audio-dual-asr-adjudicate.mjs
-          git commit -m 'audio: publish validated Sadaltager corpus via exact dual ASR'
-          git push origin "HEAD:${PR_BRANCH}"
-          echo 'PUBLISHED_AUDIO_COMMIT=pushed'
-
-      - name: Save final checkpoint
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: audio-candidates
-          key: bareeq-audio-final-validation-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Upload final evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: bareeq-final-validation-${{ github.run_id }}
-          path: audio-candidates/
-          if-no-files-found: error
-          retention-days: 90
+          echo 'ALL_OR_NOTHING_LOOP=disabled'
+          echo 'PROGRESSIVE_PLAN=validate-independent-articles,publish-exact-immediately,repair-only-failures,repeat-until-15/15'
+          echo 'No TTS or ASR provider calls are made by this guard workflow.'
