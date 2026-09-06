@@ -100,13 +100,20 @@ jobs:
         with:
           node-version: 22
 
-      - name: Run LanguageTool on changed articles
+      - name: Run LanguageTool advisory
         shell: bash
         run: |
           mkdir -p .bareeq/qa/languagetool
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             git fetch --no-tags origin "${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
-            node scripts/bareeq-arabic-qa.mjs --changed --base-ref "origin/${{ github.base_ref }}" --language-tool --report-dir .bareeq/qa/languagetool
+            changed_articles="$(git diff --name-only --diff-filter=ACMR "origin/${{ github.base_ref }}...HEAD" -- src/content/posts | grep -E '\.mdx?$' || true)"
+            if [[ -n "$changed_articles" ]]; then
+              node scripts/bareeq-arabic-qa.mjs --changed --base-ref "origin/${{ github.base_ref }}" --language-tool --report-dir .bareeq/qa/languagetool
+            else
+              # Gate-only PRs still exercise the real connector on one representative
+              # production article so a broken endpoint/integration is visible before merge.
+              node scripts/bareeq-arabic-qa.mjs --file src/content/posts/how-touchscreens-work.md --base-ref "origin/${{ github.base_ref }}" --language-tool --report-dir .bareeq/qa/languagetool
+            fi
           else
             node scripts/bareeq-arabic-qa.mjs --all --language-tool --report-dir .bareeq/qa/languagetool
           fi
