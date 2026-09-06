@@ -5,10 +5,10 @@
   "voice": "Sadaltager",
   "publicationStatus": "partial-with-existing-live-fallback",
   "publicationComplete": false,
-  "publishedCount": 5,
-  "fallbackCount": 10,
+  "publishedCount": 6,
+  "fallbackCount": 9,
   "publicationPolicy": "docs/audio/PUBLICATION-POLICY-20260901.json",
-  "generatedAt": "2026-09-05T04:55:28.308Z",
+  "generatedAt": "2026-09-06T07:17:33.876Z",
   "articles": [
     {
       "articleId": "ai-agents-future-now",
@@ -34,6 +34,11 @@
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
       "fingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
       "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "fullSha256": "03119b41012211dfb5c0d179a07e5b029d9af416aa099534d5a7db929a7cca6e"
     }
   ],
   "fallbacks": [
@@ -71,10 +76,6 @@
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
-      "reason": "awaiting-exact-dual-asr-campaign-completion"
-    },
-    {
-      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
       "reason": "awaiting-exact-dual-asr-campaign-completion"
     }
   ]

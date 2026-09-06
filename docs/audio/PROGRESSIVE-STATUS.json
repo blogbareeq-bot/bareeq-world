@@ -1,12 +1,12 @@
 {
   "schema": "bareeq.audio-progressive-status.v1",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "33924094021",
-  "sourceArtifact": "bareeq-progressive-validation-33924094021",
-  "generatedAt": "2026-09-05T04:55:28.357Z",
-  "publishedCount": 5,
-  "fallbackCount": 10,
-  "exactCount": 5,
+  "sourceRunId": "33962242086",
+  "sourceArtifact": "bareeq-progressive-validation-33962242086",
+  "generatedAt": "2026-09-06T07:17:33.944Z",
+  "publishedCount": 6,
+  "fallbackCount": 9,
+  "exactCount": 6,
   "rows": [
     {
       "articleId": "ai-agents-future-now",
@@ -69,8 +69,8 @@
       "unresolved": null,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "634a51bc703775c58ed15926bb6c8e5a8bb17fb05fe5a4332d5d914a246917f8",
-      "error": "ASR quota exhausted for gemini-3.5-transcribe"
+      "fullSha256": null,
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -102,7 +102,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 7"
+      "error": "Gemini TTS quota exhausted after retries for part 2"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -118,7 +118,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 4"
+      "error": "Gemini TTS quota exhausted after retries for part 5"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -134,7 +134,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 3"
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -150,7 +150,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini TTS quota exhausted after retries for part 3"
     },
     {
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
@@ -206,7 +206,7 @@
       "audioKey": "4d194dd1e6a739a8",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "repair-failed",
       "substitutions": null,
       "deletions": null,
       "insertions": null,
@@ -214,7 +214,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini generateContent TTS failed (503): {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
@@ -238,15 +238,15 @@
       "audioKey": "45d512425faa533a",
       "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
-      "exact": false,
-      "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "validationStatus": "validated",
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
+      "unresolved": 0,
+      "exact": true,
+      "publishedExact": true,
+      "fullSha256": "03119b41012211dfb5c0d179a07e5b029d9af416aa099534d5a7db929a7cca6e",
+      "error": null
     }
   ]
 }
