@@ -3,7 +3,7 @@
   "campaignId": "sadaltager-openrouter-20260901-v1",
   "sourceRunId": "33962242086",
   "sourceArtifact": "bareeq-progressive-validation-33962242086",
-  "generatedAt": "2026-09-08T14:54:48.340Z",
+  "generatedAt": "2026-09-08T18:15:01.608Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -70,7 +70,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 3"
+      "error": "Gemini TTS quota exhausted after retries for part 6"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -102,7 +102,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini TTS quota exhausted after retries for part 2"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -118,7 +118,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 5"
+      "error": "Gemini TTS quota exhausted after retries for part 4"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -150,7 +150,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini TTS quota exhausted after retries for part 3"
     },
     {
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
@@ -238,7 +238,7 @@
       "audioKey": "45d512425faa533a",
       "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "repair-failed",
       "substitutions": null,
       "deletions": null,
       "insertions": null,
@@ -246,7 +246,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini TTS failed (503): {\"error\":{\"message\":\"The service is currently unavailable.\",\"code\":\"service_unavailable\"}}"
     }
   ]
 }
