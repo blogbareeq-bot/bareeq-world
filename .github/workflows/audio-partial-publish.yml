@@ -9,6 +9,7 @@ on:
       - '.github/workflows/audio-partial-publish.yml'
       - 'scripts/audio-progressive-orchestrator.mjs'
       - 'scripts/audio-progressive-publish-router.mjs'
+      - 'scripts/audio-repair-progress-recover.mjs'
       - 'scripts/audio-progressive-validate.mjs'
       - 'scripts/audio-progressive-repair.mjs'
       - 'scripts/audio-generate-candidate.mjs'
@@ -92,6 +93,7 @@ jobs:
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node --check scripts/audio-progressive-orchestrator.mjs
           node --check scripts/audio-progressive-publish-router.mjs
+          node --check scripts/audio-repair-progress-recover.mjs
           node --check scripts/audio-openrouter-campaign.mjs
           node --check scripts/audio-generate-candidate.mjs
           node --check scripts/audio-validate-consensus.mjs
@@ -162,6 +164,10 @@ jobs:
           if (exact.length < 5) throw new Error(`checkpoint regressed below 5 exact articles: ${exact.length}`);
           console.log(`PROGRESSIVE_CHECKPOINT=PASS exact_before=${exact.length}/15 source=${process.env.BAREEQ_CHECKPOINT_SOURCE}`);
           NODE
+
+      - name: Recover successful partial targeted repairs
+        if: steps.self_guard.outputs.self_push != 'true'
+        run: node scripts/audio-repair-progress-recover.mjs
 
       - name: Run quota-efficient progressive orchestrator
         if: steps.self_guard.outputs.self_push != 'true'
@@ -306,4 +312,3 @@ jobs:
             git commit -m "audio: progressively publish ${COUNT} exact Sadaltager articles"
             git push origin "HEAD:${PR_BRANCH}"
             echo "PROGRESSIVE_PUBLICATION_TREE=pushed count=${COUNT}"
-          fi
