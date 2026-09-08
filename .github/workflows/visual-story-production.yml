@@ -9,6 +9,7 @@ on:
       - 'src/lib/visual-story/**'
       - 'src/types/visual-story.ts'
       - 'src/components/VisualStory.astro'
+      - 'src/components/VisualStoryLegacy.astro'
       - 'src/components/visual-story/**'
       - 'src/styles/visual-story*.css'
       - 'public/scripts/visual-story*.js'
