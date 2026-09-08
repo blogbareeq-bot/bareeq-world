@@ -112,8 +112,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-progressive-${{ github.run_id }}-${{ github.run_attempt }}
+          key: bareeq-audio-progressive-pr21-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
+            bareeq-audio-progressive-pr21-
             bareeq-audio-progressive-
 
       - name: Restore baseline artifact only when no progressive cache exists
@@ -276,7 +277,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-progressive-${{ github.run_id }}-${{ github.run_attempt }}
+          key: bareeq-audio-progressive-pr21-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload progressive evidence before any self-push
         if: ${{ always() && steps.self_guard.outputs.self_push != 'true' }}
