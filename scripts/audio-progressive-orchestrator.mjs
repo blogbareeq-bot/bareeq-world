@@ -127,6 +127,14 @@ function isTransientTts(error) {
   return /transport failed|service is currently unavailable|temporarily unavailable|ECONNRESET|ETIMEDOUT|fetch failed/i.test(String(error?.message || ''));
 }
 
+function retryDelayFromQuota(error) {
+  const message = String(error?.message || '');
+  const match = message.match(/"retryDelay"\s*:\s*"([0-9.]+)s"/i);
+  if (!match) return 0;
+  const ms = Math.ceil(Number(match[1]) * 1000);
+  return Number.isFinite(ms) ? ms : 0;
+}
+
 function quotaError(partNumber, detail = '') {
   return Object.assign(
     new Error(`Gemini TTS quota exhausted for part ${partNumber}${detail ? `: ${detail}` : ''}`),
@@ -142,6 +150,7 @@ function createSharedSynthesizer({ apiKey }) {
   const maxRequests = Number(process.env.BAREEQ_REPAIR_MAX_REQUESTS || 10);
   const minSpacingMs = Number(process.env.BAREEQ_REPAIR_MIN_SPACING_MS || 9000);
   const transientRetries = Number(process.env.BAREEQ_REPAIR_TRANSIENT_RETRIES || 2);
+  const maxThrottleWaitMs = Number(process.env.BAREEQ_REPAIR_MAX_THROTTLE_WAIT_MS || 90000);
   const budget = {
     sent: 0,
     lastRequestAt: 0,
@@ -178,9 +187,15 @@ function createSharedSynthesizer({ apiKey }) {
         } catch (error) {
           const quota = error?.httpStatus === 429 || error?.code === 'BAREEQ_QUOTA' || error?.exitCode === EXIT_QUOTA;
           if (quota) {
+            const retryMs = retryDelayFromQuota(error);
+            if (retryMs > 0 && retryMs <= maxThrottleWaitMs && attempt < transientRetries) {
+              console.log(`PROGRESSIVE_TTS_THROTTLE_RETRY transport=${transport} part=${partNumber} attempt=${attempt} wait=${retryMs}ms`);
+              await sleep(retryMs);
+              continue;
+            }
             budget.quotaTransports.add(transport);
             sawQuota = true;
-            console.log(`PROGRESSIVE_TTS_QUOTA transport=${transport} part=${partNumber} runRequests=${budget.sent}/${maxRequests}`);
+            console.log(`PROGRESSIVE_TTS_QUOTA transport=${transport} part=${partNumber} runRequests=${budget.sent}/${maxRequests} retryDelayMs=${retryMs || 0}`);
             break;
           }
           if (isTransientTts(error) && attempt < transientRetries) {
