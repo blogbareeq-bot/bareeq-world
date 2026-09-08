@@ -1,0 +1,184 @@
+---
+import type { VisualStoryData, VisualStoryCard } from '../../types/visual-story';
+import '../../styles/visual-story-v3.css';
+
+interface Props { story: VisualStoryData; }
+const { story } = Astro.props;
+const tones = ['deep', 'ivory', 'mist', 'deep', 'sand', 'deep', 'ivory', 'mist', 'deep'] as const;
+const supportedVisuals = new Set(['field', 'layers', 'rings', 'wave', 'contrast', 'constellation', 'pulse', 'horizon', 'seal']);
+const toneFor = (index: number) => tones[index % tones.length];
+const isSupported = (card: VisualStoryCard) => supportedVisuals.has(card.visual);
+---
+<div
+  class="visual-story-v3"
+  data-window-v3-root
+  data-story-key={story.slug}
+  data-story-title={story.title}
+  data-card-count={story.cards.length}
+  data-director={story.director.mood}
+  hidden
+>
+  <div class="visual-story-v3__backdrop" data-visual-close></div>
+  <section
+    class="visual-story-v3__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="visual-story-v3-title"
+    tabindex="-1"
+    data-visual-dialog
+  >
+    <header class="visual-story-v3__header">
+      <a class="visual-story-v3__brand" href="/" aria-label="بريق — نافذتك إلى المعرفة">
+        <img src="/images/bareeq-window-mark.svg" alt="" width="90" height="150" decoding="async" />
+        <span><b>نافذة بريق</b><small>رحلة قصيرة تعيد اكتشاف المقال</small></span>
+      </a>
+      <div class="visual-story-v3__progress-shell" aria-label="تقدم نافذة بريق">
+        <i data-v3-progress-bar></i>
+      </div>
+      <div class="visual-story-v3__position" aria-live="polite">
+        <span data-visual-position>1</span><i>/</i><span>{story.cards.length}</span>
+      </div>
+      <button class="visual-story-v3__icon" type="button" data-v3-motion aria-pressed="false" aria-label="تهدئة الحركة" title="تهدئة الحركة">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-6 4 12 3-6h4" /></svg>
+      </button>
+      <button class="visual-story-v3__icon" type="button" data-visual-share aria-label="مشاركة المشهد الحالي">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4"/></svg>
+      </button>
+      <button class="visual-story-v3__icon" type="button" data-visual-close aria-label="إغلاق نافذة بريق">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </header>
+
+    <div class="visual-story-v3__scroller" data-v3-scroller>
+      {story.cards.map((card, index) => (
+        <article
+          class:list={[
+            'visual-story-v3__scene',
+            `visual-story-v3__scene--${toneFor(index)}`,
+            `visual-story-v3__scene--${card.visual}`,
+            { 'is-active': index === 0 }
+          ]}
+          data-visual-card
+          data-v3-scene
+          data-card-id={card.id}
+          data-index={index}
+          aria-current={index === 0 ? 'step' : undefined}
+        >
+          {card.visual === 'field' && (
+            <div class="visual-story-v3__layout visual-story-v3__layout--overture">
+              <div class="visual-story-v3__copy" data-visual-copy>
+                <span class="visual-story-v3__kicker">{card.kicker}</span>
+                <h2 id={index === 0 ? 'visual-story-v3-title' : undefined}>{card.title}</h2>
+                <p>{card.body}</p>
+              </div>
+              <figure class="visual-story-v3__art visual-story-v3__overture" aria-hidden="true">
+                <svg viewBox="0 0 620 390">
+                  <g opacity=".45"><path d="M40 265H262M40 280H262M150 90l22 122"/><circle cx="174" cy="220" r="6"/><path d="M124 250q26-18 54 0"/></g>
+                  <g><path d="M358 265H580M358 280H580"/><path d="M470 85q28 32 28 68v48q0 28-28 28t-28-28v-48q0-36 28-68Z" class="visual-story-v3__finger"/><ellipse cx="470" cy="248" rx="72" ry="20" class="visual-story-v3__halo"/><ellipse cx="470" cy="248" rx="44" ry="12" class="visual-story-v3__halo"/></g>
+                </svg>
+              </figure>
+            </div>
+          )}
+
+          {card.visual === 'layers' && (
+            <div class="visual-story-v3__layout visual-story-v3__layout--layers">
+              <figure class="visual-story-v3__art visual-story-v3__layers" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <svg viewBox="0 0 520 260"><g>{Array.from({ length: 9 }, (_, n) => <path d={`M${55 + n * 50} 70V205`} />)}</g><g>{Array.from({ length: 5 }, (_, n) => <path d={`M48 ${82 + n * 29}H470`} />)}</g></svg>
+              </figure>
+              <div class="visual-story-v3__copy" data-visual-copy>
+                <span class="visual-story-v3__kicker">{card.kicker}</span><h2>{card.title}</h2><p>{card.body}</p>
+              </div>
+            </div>
+          )}
+
+          {card.visual === 'rings' && (
+            <div class="visual-story-v3__layout visual-story-v3__layout--evidence">
+              <div class="visual-story-v3__copy visual-story-v3__copy--center" data-visual-copy>
+                <span class="visual-story-v3__kicker">{card.kicker}</span><h2>{card.title}</h2><p>{card.body}</p>
+              </div>
+              <figure class="visual-story-v3__art visual-story-v3__rings" aria-hidden="true"><i></i><i></i><i></i><b>✦</b></figure>
+            </div>
+          )}
+
+          {card.visual === 'wave' && (
+            <div class="visual-story-v3__layout visual-story-v3__layout--probe">
+              <div class="visual-story-v3__copy" data-visual-copy>
+                <span class="visual-story-v3__kicker">{card.kicker}</span><h2>{card.title}</h2><p>{card.body}</p>
+                <span class="visual-story-v3__interaction-hint">حرّك المؤشر أو إصبعك فوق الشبكة</span>
+              </div>
+              <figure class="visual-story-v3__art visual-story-v3__probe" data-v3-probe>
+                <svg viewBox="0 0 545 290" role="img" aria-label="محاكاة بصرية نوعية لتأثر شبكة اللمس بالقرب من المؤشر">
+                  <g class="visual-story-v3__probe-lines">{Array.from({ length: 9 }, (_, n) => <path d={`M${40 + n * 55} 20V268`} />)}{Array.from({ length: 6 }, (_, n) => <path d={`M26 ${34 + n * 44}H506`} />)}</g>
+                  <g>{Array.from({ length: 6 }, (_, r) => Array.from({ length: 9 }, (_, c) => <circle cx={40 + c * 55} cy={34 + r * 44} r="4" data-v3-probe-node data-x={40 + c * 55} data-y={34 + r * 44} />))}</g>
+                  <circle class="visual-story-v3__probe-touch" r="46" cx="-999" cy="-999" data-v3-probe-touch />
+                </svg>
+                <output data-v3-probe-output>محاكاة بصرية نوعية</output>
+              </figure>
+            </div>
+          )}
+
+          {card.visual === 'contrast' && (
+            <div class="visual-story-v3__layout visual-story-v3__layout--diptych">
+              <div class="visual-story-v3__copy visual-story-v3__copy--wide" data-visual-copy>
+                <span class="visual-story-v3__kicker">{card.kicker}</span><h2>{card.title}</h2><p>{card.body}</p>
+              </div>
+              <figure class="visual-story-v3__art visual-story-v3__diptych" aria-hidden="true">
+                <div><svg viewBox="0 0 220 175"><path d="M22 136H198"/><ellipse cx="110" cy="134" rx="22" ry="6"/><path d="M110 34q22 30 22 48a22 22 0 0 1-44 0q0-18 22-48Z"/><path d="M80 101q30 18 60 0l4 23q-34 18-68 0Z"/></svg></div>
+                <span></span>
+                <div><svg viewBox="0 0 220 175"><path d="M22 136H198"/><ellipse cx="110" cy="134" rx="54" ry="14"/><path d="M110 34q22 30 22 48a22 22 0 0 1-44 0q0-18 22-48Z"/><path d="M80 101q30 18 60 0l4 23q-34 18-68 0Z"/>{Array.from({ length: 7 }, (_, n) => <path d={`M${88 + n * 7} 111V130`} />)}</svg></div>
+              </figure>
+            </div>
+          )}
+
+          {card.visual === 'constellation' && (
+            <div class="visual-story-v3__layout visual-story-v3__layout--pinch">
+              <div class="visual-story-v3__copy" data-visual-copy><span class="visual-story-v3__kicker">{card.kicker}</span><h2>{card.title}</h2><p>{card.body}</p></div>
+              <figure class="visual-story-v3__art visual-story-v3__pinch" data-v3-pinch>
+                <svg viewBox="0 0 520 250" aria-label="شبكة مع نقطتي لمس"><g>{Array.from({ length: 13 }, (_, n) => <path d={`M${30 + n * 38} 24V226`} />)}{Array.from({ length: 6 }, (_, n) => <path d={`M30 ${34 + n * 38}H486`} />)}</g><line x1="185" y1="130" x2="335" y2="130" data-v3-pinch-link/><circle cx="185" cy="130" r="8" data-v3-pinch-dot="a"/><circle cx="335" cy="130" r="8" data-v3-pinch-dot="b"/><circle cx="185" cy="130" r="30" data-v3-pinch-halo="a"/><circle cx="335" cy="130" r="30" data-v3-pinch-halo="b"/></svg>
+                <button type="button" data-v3-pinch-handle="a" aria-label="نقطة اللمس الأولى">١</button><button type="button" data-v3-pinch-handle="b" aria-label="نقطة اللمس الثانية">٢</button>
+                <button class="visual-story-v3__reset" type="button" data-v3-pinch-reset>إعادة النقاط</button>
+              </figure>
+            </div>
+          )}
+
+          {card.visual === 'pulse' && (
+            <div class="visual-story-v3__layout visual-story-v3__layout--lab">
+              <div class="visual-story-v3__copy" data-visual-copy><span class="visual-story-v3__kicker">{card.kicker}</span><h2>{card.title}</h2><p>{card.body}</p><div class="visual-story-v3__lab-controls" role="group" aria-label="حالة سطح الشاشة"><button type="button" class="is-active" data-v3-lab-state="dry">سطح جاف</button><button type="button" data-v3-lab-state="wet">رطوبة</button></div></div>
+              <figure class="visual-story-v3__art visual-story-v3__lab" data-v3-lab><div class="visual-story-v3__phone"><div><i></i><i></i><i></i><b></b><b></b></div></div><output data-v3-lab-output>سطح جاف.</output></figure>
+            </div>
+          )}
+
+          {card.visual === 'horizon' && (
+            <div class="visual-story-v3__layout visual-story-v3__layout--quiet">
+              <div class="visual-story-v3__copy" data-visual-copy><span class="visual-story-v3__kicker">{card.kicker}</span><h2>{card.title}</h2><p>{card.body}</p></div>
+              <aside class="visual-story-v3__art visual-story-v3__questions" aria-label="حدود القياس في الشاشة السعوية الأساسية"><div><small>السؤال الأساسي</small><b>أين يوجد الإصبع؟</b></div><div><small>مسألة هندسية أخرى</small><b>كم يضغط الإصبع؟</b></div></aside>
+            </div>
+          )}
+
+          {card.visual === 'seal' && (
+            <div class="visual-story-v3__layout visual-story-v3__layout--closing">
+              <img class="visual-story-v3__signature" src="/images/bareeq-window-signature.svg" alt="" width="900" height="484" loading="lazy" decoding="async" />
+              <div class="visual-story-v3__copy visual-story-v3__copy--center" data-visual-copy><span class="visual-story-v3__kicker">{card.kicker}</span><h2>{card.title}</h2><p>{card.body}</p></div>
+              <div class="visual-story-v3__closing-chain" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div>
+          )}
+
+          {!isSupported(card) && (
+            <div class="visual-story-v3__layout"><div class="visual-story-v3__copy" data-visual-copy><span class="visual-story-v3__kicker">{card.kicker}</span><h2>{card.title}</h2><p>{card.body}</p></div></div>
+          )}
+        </article>
+      ))}
+    </div>
+
+    <footer class="visual-story-v3__nav" aria-label="التنقل بين مشاهد نافذة بريق">
+      <button type="button" data-v3-home aria-label="العودة إلى بداية النافذة" title="البداية"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5.5 10.5V20h13v-9.5M9.5 20v-6h5v6"/></svg></button>
+      <button type="button" data-visual-prev aria-label="المشهد السابق" title="السابق"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
+      <span data-v3-nav-count>1 / {story.cards.length}</span>
+      <button class="is-accent" type="button" data-visual-next aria-label="المشهد التالي" title="التالي"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+    </footer>
+    <p class="visual-story-v3__status" data-visual-status aria-live="polite"></p>
+  </section>
+</div>
+
+<script is:inline src="/scripts/visual-story-v3.js"></script>

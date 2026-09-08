@@ -1,0 +1,144 @@
+---
+import StoryVisual from './visual-story/StoryVisual.astro';
+import type { VisualStoryData } from '../types/visual-story';
+interface Props { story: VisualStoryData; }
+const { story } = Astro.props;
+---
+<div
+  class="visual-story"
+  data-visual-story
+  data-story-key={story.slug}
+  data-story-title={story.title}
+  data-card-count={story.cards.length}
+  data-director={story.director.mood}
+  hidden
+>
+  <div class="visual-story__backdrop" data-visual-close></div>
+  <section class="visual-story__dialog" role="dialog" aria-modal="true" aria-labelledby="visual-story-title" tabindex="-1" data-visual-dialog>
+    <header class="visual-story__header">
+      <a class="visual-story__brand" href="/" aria-label="بريق — نافذتك إلى المعرفة">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 14 24 8v30L8 42V14Zm18-6 14 6v28l-14-4V8Z"/><path d="M24 8v30"/></svg>
+        <span><b>نافذة بريق</b><small>{story.director.label}</small></span>
+      </a>
+      <div class="visual-story__progress" aria-live="polite"><span data-visual-position>1</span><i aria-hidden="true">/</i><span>{story.cards.length}</span></div>
+      <button class="visual-story__icon-button" type="button" data-visual-share aria-label="مشاركة البطاقة الحالية">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4"/></svg>
+      </button>
+      <button class="visual-story__icon-button" type="button" data-visual-close aria-label="إغلاق نافذة بريق">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </header>
+    <div class="visual-story__track" data-visual-track aria-live="polite">
+      {story.cards.map((card, index) => (
+        <article
+          class:list={['visual-story__card', `visual-story__card--${card.visual}`, { 'is-active': index === 0 }]}
+          data-visual-card
+          data-card-id={card.id}
+          data-index={index}
+          aria-hidden={index === 0 ? 'false' : 'true'}
+        >
+          <div class="visual-story__copy">
+            <span class="visual-story__kicker">{card.kicker}</span>
+            <h2 id={index === 0 ? 'visual-story-title' : undefined}>{card.title}</h2>
+            <p>{card.body}</p>
+          </div>
+          <div class="visual-story__art"><StoryVisual kind={card.visual} index={index} /></div>
+          <span class="visual-story__signature" aria-hidden="true"><i></i><b></b></span>
+        </article>
+      ))}
+    </div>
+
+    <footer class="visual-story__footer">
+      <button type="button" data-visual-next aria-label="البطاقة التالية"><span>التالي</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>
+      <div class="visual-story__dots" role="tablist" aria-label="بطاقات نافذة بريق">
+        {story.cards.map((card, index) => <button type="button" role="tab" data-visual-dot data-index={index} aria-label={`البطاقة ${index + 1}: ${card.title}`} aria-selected={index === 0 ? 'true' : 'false'}></button>)}
+      </div>
+      <button type="button" data-visual-prev aria-label="البطاقة السابقة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg><span>السابق</span></button>
+    </footer>
+    <p class="visual-story__status" data-visual-status aria-live="polite"></p>
+  </section>
+</div>
+
+<style is:global>
+  /* The card owns its available track area. Do not impose an artificial
+     max-height on the copy: on desktop that made otherwise fitting prose look
+     scrollable to real-browser QA. */
+  .visual-story__track,
+  .visual-story__card {
+    min-height: 0;
+  }
+  .visual-story__card {
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .visual-story__copy {
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* A 812×375 phone has enough room for the complete card text but not for a
+     simultaneous decorative illustration column. Landscape therefore becomes
+     a deliberate text-first reading mode instead of shrinking or scrolling the
+     prose. The illustration remains in portrait/tablet/desktop. */
+  @media (max-height: 520px) and (orientation: landscape) {
+    .visual-story__dialog {
+      grid-template-rows: auto minmax(0,1fr) auto;
+    }
+    .visual-story__header {
+      min-height: 46px;
+      padding-block: 4px;
+    }
+    .visual-story__brand svg {
+      width: 28px;
+      height: 28px;
+    }
+    .visual-story__icon-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+    }
+    .visual-story__card {
+      grid-template-columns: minmax(0,1fr);
+      grid-template-rows: minmax(0,1fr);
+      align-items: center;
+      gap: 0;
+      padding: 10px 24px;
+    }
+    .visual-story__copy {
+      grid-row: 1;
+      width: 100%;
+      max-width: none;
+      align-self: center;
+      padding: 0;
+      overflow: visible;
+    }
+    .visual-story__kicker {
+      font-size: .64rem;
+    }
+    .visual-story__copy h2 {
+      max-width: none;
+      margin-top: 4px;
+      font-size: 1.28rem;
+      line-height: 1.18;
+    }
+    .visual-story__copy p {
+      max-width: none;
+      margin-top: 5px;
+      font-size: .72rem;
+      line-height: 1.38;
+    }
+    .visual-story__art,
+    .visual-story__signature,
+    .visual-story__status {
+      display: none;
+    }
+    .visual-story__footer {
+      min-height: 46px;
+      padding-block: 3px;
+    }
+    .visual-story__footer > button {
+      min-height: 38px;
+    }
+  }
+</style>
