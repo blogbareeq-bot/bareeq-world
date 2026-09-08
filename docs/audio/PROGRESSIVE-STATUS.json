@@ -3,7 +3,7 @@
   "campaignId": "sadaltager-openrouter-20260901-v1",
   "sourceRunId": "33962242086",
   "sourceArtifact": "bareeq-progressive-validation-33962242086",
-  "generatedAt": "2026-09-08T10:51:53.591Z",
+  "generatedAt": "2026-09-08T14:54:48.340Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -134,7 +134,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini TTS quota exhausted after retries for part 3"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -150,7 +150,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 2"
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
