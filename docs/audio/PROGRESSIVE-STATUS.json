@@ -1,12 +1,25 @@
 {
-  "schema": "bareeq.audio-progressive-status.v1",
+  "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "33962242086",
-  "sourceArtifact": "bareeq-progressive-validation-33962242086",
-  "generatedAt": "2026-09-08T18:15:01.608Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34270616438-1",
+  "generatedAt": "2026-09-08T22:41:00.315Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
+  "publicationComplete": false,
+  "orchestrator": {
+    "status": "paused-quota",
+    "exactCount": 5,
+    "remainingCount": 10,
+    "newExact": 0,
+    "ttsRequestsSent": 5,
+    "ttsRequestCap": 10,
+    "quotaBlockedTransports": [
+      "developer-interactions",
+      "developer-generate-content"
+    ],
+    "updatedAt": "2026-09-08T22:41:00.099Z"
+  },
   "rows": [
     {
       "articleId": "ai-agents-future-now",
@@ -22,6 +35,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "34fa55716fe40389283e40c3fc0fca3b8d7f2cf386a2f835edccabeb1d9b659b",
+      "repairProgress": null,
       "error": null
     },
     {
@@ -38,6 +52,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "d7f00585b47dc3ece44c73ac0f62763ffb41a1e4f602ddeae1aabd3d65fd0567",
+      "repairProgress": null,
       "error": null
     },
     {
@@ -54,6 +69,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135",
+      "repairProgress": null,
       "error": null
     },
     {
@@ -62,15 +78,16 @@
       "audioKey": "de93f3d9f91c8b8b",
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 3,
+      "deletions": 0,
+      "insertions": 0,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 6"
+      "fullSha256": "482feef6de78f8d109b743b837adc36998e8629b76f60e0e6e8f7c070866833e",
+      "repairProgress": null,
+      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -78,14 +95,15 @@
       "audioKey": "1d1b681593122b59",
       "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 5,
+      "deletions": 2,
+      "insertions": 0,
+      "unresolved": 8,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
+      "fullSha256": "d7d05aa3cd45d7e4703f41b13f893b52f6ffd9901838944235d2282161182a60",
+      "repairProgress": null,
       "error": "Gemini TTS quota exhausted after retries for part 2"
     },
     {
@@ -94,15 +112,16 @@
       "audioKey": "b19e29e785a22c73",
       "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 6,
+      "deletions": 1,
+      "insertions": 0,
+      "unresolved": 4,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 2"
+      "fullSha256": "ec5ae835c9cefb6b4fe2b821a89b257f8ff1af86fa5a633a367cecd759f6de0f",
+      "repairProgress": null,
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -110,15 +129,16 @@
       "audioKey": "34e34b6f4633d928",
       "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 5,
+      "deletions": 1,
+      "insertions": 0,
+      "unresolved": 3,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 4"
+      "fullSha256": "40ff42434264f644a61e32d4cdbd403e23d190e6a46dec4aca56ab19a3d033d3",
+      "repairProgress": null,
+      "error": "Gemini TTS quota exhausted after retries for part 2"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -127,14 +147,28 @@
       "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
       "generationStatus": "generated",
       "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "substitutions": 2,
+      "deletions": 0,
+      "insertions": 0,
+      "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 3"
+      "fullSha256": "b9052a1f3407122032beabb56b0ff44561dcb5c180401b18c20f1888c31fb37a",
+      "repairProgress": {
+        "planKey": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94:b9052a1f3407122032beabb56b0ff44561dcb5c180401b18c20f1888c31fb37a:3,4",
+        "sourceFullSha256": "b9052a1f3407122032beabb56b0ff44561dcb5c180401b18c20f1888c31fb37a",
+        "targetParts": [
+          3,
+          4
+        ],
+        "completedParts": [],
+        "remainingParts": [
+          3,
+          4
+        ],
+        "updatedAt": "2026-09-08T22:41:00.098Z"
+      },
+      "error": "Gemini TTS quota exhausted for part 3: all available transports are quota-blocked"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -142,14 +176,15 @@
       "audioKey": "8f0fcef1d803164a",
       "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 9,
+      "deletions": 4,
+      "insertions": 0,
+      "unresolved": 5,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
+      "fullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+      "repairProgress": null,
       "error": "Gemini TTS quota exhausted after retries for part 3"
     },
     {
@@ -158,14 +193,15 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 3,
+      "deletions": 0,
+      "insertions": 1,
+      "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
+      "fullSha256": "018cbece73656cb5d628c92c34f11aadecfec96a23dd2835cb70c18b0c224753",
+      "repairProgress": null,
       "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
@@ -182,6 +218,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "1586e603c9e59b9967a51a980b4d2f7b58af262ee2aff24a77eab948d2e969e6",
+      "repairProgress": null,
       "error": null
     },
     {
@@ -190,15 +227,16 @@
       "audioKey": "9d04080d1962a365",
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 1,
+      "deletions": 4,
+      "insertions": 0,
+      "unresolved": 3,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "fullSha256": "026a9c9cb3688f38104b1035ec0dd8df5e8b9870d3664d73f44cdbaea28bcb0f",
+      "repairProgress": null,
+      "error": "dual-ASR consensus failed: S=1 D=4 I=0 unresolved=3"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -206,14 +244,15 @@
       "audioKey": "4d194dd1e6a739a8",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 6,
+      "deletions": 0,
+      "insertions": 0,
+      "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
+      "fullSha256": "154f6f71113702268b855606a318ffa8a6d5ab46235c40f8f3345b1387d72000",
+      "repairProgress": null,
       "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
@@ -230,6 +269,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7",
+      "repairProgress": null,
       "error": null
     },
     {
@@ -238,15 +278,16 @@
       "audioKey": "45d512425faa533a",
       "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
       "generationStatus": "generated",
-      "validationStatus": "repair-failed",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 9,
+      "deletions": 3,
+      "insertions": 0,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS failed (503): {\"error\":{\"message\":\"The service is currently unavailable.\",\"code\":\"service_unavailable\"}}"
+      "fullSha256": "7ede5922b01fb6780f0b7ef99637ebffd7c0ab9dbea96808e55aea2d835fd230",
+      "repairProgress": null,
+      "error": "Gemini TTS quota exhausted after retries for part 1"
     }
   ]
 }
