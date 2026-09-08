@@ -313,3 +313,4 @@ jobs:
             git commit -m "audio: progressively publish ${COUNT} exact Sadaltager articles"
             git push origin "HEAD:${PR_BRANCH}"
             echo "PROGRESSIVE_PUBLICATION_TREE=pushed count=${COUNT}"
+          fi
