@@ -8,3 +8,51 @@ const { story } = Astro.props;
 const useWindowV3 = story.slug === 'how-touchscreens-work';
 ---
 {useWindowV3 ? <VisualStoryV3 story={story} /> : <VisualStoryLegacy story={story} />}
+
+<style is:global>
+  /* V3 pilot viewport refinements. Keep the dense explanatory scenes from
+     centering a tall one-column layout above the scroller's visible start. */
+  @media (min-width: 901px) {
+    .visual-story-v3 .visual-story-v3__layout--evidence {
+      grid-template-columns: .78fr 1.22fr;
+      gap: clamp(24px, 3.2vw, 44px);
+    }
+    .visual-story-v3 .visual-story-v3__layout--diptych {
+      grid-template-columns: .82fr 1.18fr;
+      gap: clamp(24px, 3vw, 40px);
+    }
+    .visual-story-v3 .visual-story-v3__layout--pinch {
+      grid-template-columns: .76fr 1.24fr;
+      gap: clamp(24px, 3vw, 40px);
+    }
+    .visual-story-v3 .visual-story-v3__layout--evidence .visual-story-v3__rings {
+      width: min(360px, 32vw);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .visual-story-v3 .visual-story-v3__layout--evidence,
+    .visual-story-v3 .visual-story-v3__layout--diptych,
+    .visual-story-v3 .visual-story-v3__layout--pinch {
+      grid-template-columns: 1fr;
+    }
+    .visual-story-v3 .visual-story-v3__scene--contrast {
+      align-items: start;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .visual-story-v3 .visual-story-v3__layout--diptych {
+      gap: 14px;
+    }
+    .visual-story-v3 .visual-story-v3__diptych {
+      gap: 6px;
+    }
+    .visual-story-v3 .visual-story-v3__diptych > div {
+      min-height: 118px;
+    }
+    .visual-story-v3 .visual-story-v3__diptych svg {
+      max-height: 118px;
+    }
+  }
+</style>
