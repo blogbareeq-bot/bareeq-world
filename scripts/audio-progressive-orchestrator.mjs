@@ -337,6 +337,16 @@ async function buildRepairPlan({ item, state, adjudication }) {
   };
 }
 
+async function completedTargetedPartsAfter({ articleId, fingerprint, adjudication, targetParts }) {
+  const checkpoint = await readJson(path.join(candidateDir(articleId, fingerprint, ROOT), 'checkpoint.json'), null);
+  const adjudicatedAt = Date.parse(adjudication.generatedAt || '') || 0;
+  if (!checkpoint || !adjudicatedAt) return [];
+  return targetParts.filter((part) => {
+    const record = checkpoint.completedParts?.[String(part - 1)];
+    return record?.targetedRegeneration === true && (Date.parse(record.savedAt || '') || 0) > adjudicatedAt;
+  });
+}
+
 async function persistRepairProgress({ state, articleId, fingerprint, adjudication, plan, newlyCompleted = [], status, error = null }) {
   const row = state.articles?.[articleId] || {};
   const completed = new Set([...plan.completedParts, ...newlyCompleted].map(Number));
@@ -378,8 +388,8 @@ async function repairOne({ item, state, adjudication, plan, synthesize }) {
       synthesize,
     });
   } catch (error) {
-    const partial = error?.result || {};
-    const newlyCompleted = Array.isArray(partial.forceRegeneratedParts) ? partial.forceRegeneratedParts : [];
+    const checkpointCompleted = await completedTargetedPartsAfter({ articleId, fingerprint, adjudication, targetParts: plan.targetParts });
+    const newlyCompleted = checkpointCompleted.filter((part) => !plan.completedParts.includes(part));
     const quota = error?.exitCode === EXIT_QUOTA || error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
     await persistRepairProgress({
       state,
@@ -391,11 +401,12 @@ async function repairOne({ item, state, adjudication, plan, synthesize }) {
       status: quota ? 'paused-quota' : 'repair-failed',
       error: error?.message || error,
     });
-    console.log(`PROGRESSIVE_REPAIR_PAUSE ${articleId} status=${quota ? 'paused-quota' : 'repair-failed'} newlyCompleted=${newlyCompleted.join(',') || '-'} message=${String(error?.message || error || '').slice(0, 220)}`);
+    console.log(`PROGRESSIVE_REPAIR_PAUSE ${articleId} status=${quota ? 'paused-quota' : 'repair-failed'} checkpointCompleted=${checkpointCompleted.join(',') || '-'} newlyCompleted=${newlyCompleted.join(',') || '-'} message=${String(error?.message || error || '').slice(0, 220)}`);
     return { status: quota ? 'quota' : 'failed', newlyCompleted };
   }
 
-  const newlyCompleted = Array.isArray(generated.forceRegeneratedParts) ? generated.forceRegeneratedParts : [];
+  const checkpointCompleted = await completedTargetedPartsAfter({ articleId, fingerprint, adjudication, targetParts: plan.targetParts });
+  const newlyCompleted = checkpointCompleted.filter((part) => !plan.completedParts.includes(part));
   await persistRepairProgress({
     state,
     articleId,
@@ -406,7 +417,7 @@ async function repairOne({ item, state, adjudication, plan, synthesize }) {
     status: 'repair-generated-awaiting-asr',
   });
 
-  console.log(`PROGRESSIVE_REPAIR_ASR ${articleId} newlyCompleted=${newlyCompleted.join(',') || '-'} resumed=${generated.resumedParts}`);
+  console.log(`PROGRESSIVE_REPAIR_ASR ${articleId} checkpointCompleted=${checkpointCompleted.join(',') || '-'} newlyCompleted=${newlyCompleted.join(',') || '-'} resumed=${generated.resumedParts}`);
   try {
     const result = await validateWithConsensus({ articleId, fingerprint, root: ROOT });
     row.validation = {
