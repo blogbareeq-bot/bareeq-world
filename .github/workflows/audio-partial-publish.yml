@@ -7,17 +7,25 @@ on:
     paths:
       - '.github/workflows/audio-openrouter-dual-asr-final.yml'
       - '.github/workflows/audio-partial-publish.yml'
+      - 'scripts/audio-progressive-orchestrator.mjs'
+      - 'scripts/audio-progressive-publish-router.mjs'
       - 'scripts/audio-progressive-validate.mjs'
       - 'scripts/audio-progressive-repair.mjs'
+      - 'scripts/audio-generate-candidate.mjs'
+      - 'scripts/audio-gemini-tts.mjs'
+      - 'scripts/audio-validate-consensus.mjs'
+      - 'scripts/audio-openrouter-campaign.mjs'
   workflow_dispatch:
 
 permissions:
   actions: read
   contents: write
 
+# Never cancel provider work because of a self-push or a duplicate manual run.
+# A cancelled run can lose the newest partial TTS checkpoint before it is saved.
 concurrency:
   group: bareeq-progressive-publish-${{ github.event.pull_request.number || github.ref_name }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   validate-publish-current:
@@ -25,13 +33,15 @@ jobs:
     timeout-minutes: 240
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
-      # Latest valid progressive checkpoint. Run 33962242086 preserved the
-      # 5 exact published articles plus all partial repairs from the last run.
-      # Never regress to an older checkpoint or regenerate successful exact audio.
-      BAREEQ_SOURCE_RUN_ID: '33962242086'
-      BAREEQ_SOURCE_ARTIFACT: bareeq-progressive-validation-33962242086
+      BAREEQ_BASELINE_RUN_ID: '33962242086'
+      BAREEQ_BASELINE_ARTIFACT: bareeq-progressive-validation-33962242086
       BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
+      BAREEQ_FINAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
       BAREEQ_STATUS_FILE: docs/audio/PROGRESSIVE-STATUS.json
+      BAREEQ_REPAIR_MAX_REQUESTS: '10'
+      BAREEQ_REPAIR_MIN_SPACING_MS: '9000'
+      BAREEQ_REPAIR_TRANSIENT_RETRIES: '2'
+
     steps:
       - name: Resolve branch
         id: branch
@@ -57,7 +67,6 @@ jobs:
           echo "HEAD_SUBJECT=${SUBJECT}"
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo 'self_push=false' >> "$GITHUB_OUTPUT"
-            echo 'EVENT=workflow_dispatch; provider work requested'
           elif [[ "${SUBJECT}" == audio:\ progressively\ publish* || "${SUBJECT}" == audio:\ progressive\ status* ]]; then
             echo 'self_push=true' >> "$GITHUB_OUTPUT"
             echo 'PROGRESSIVE_SELF_PUSH=yes; provider work skipped'
@@ -76,14 +85,16 @@ jobs:
         if: steps.self_guard.outputs.self_push != 'true'
         run: npm ci
 
-      - name: Apply current adjudication repair and safety checks
+      - name: Apply deterministic safety checks
         if: steps.self_guard.outputs.self_push != 'true'
         run: |
           node scripts/audio-final-runtime-repair.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
-          node --check scripts/audio-progressive-validate.mjs
-          node --check scripts/audio-progressive-repair.mjs
+          node --check scripts/audio-progressive-orchestrator.mjs
+          node --check scripts/audio-progressive-publish-router.mjs
           node --check scripts/audio-openrouter-campaign.mjs
+          node --check scripts/audio-generate-candidate.mjs
+          node --check scripts/audio-validate-consensus.mjs
 
       - name: Verify Gemini credential
         if: steps.self_guard.outputs.self_push != 'true'
@@ -93,17 +104,46 @@ jobs:
           test -n "${GEMINI_API_KEY}"
           echo 'GEMINI_CREDENTIAL=present'
 
-      - name: Restore latest progressive checkpoint
+      - name: Restore newest progressive checkpoint cache
         if: steps.self_guard.outputs.self_push != 'true'
+        id: checkpoint_cache
+        uses: actions/cache/restore@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-progressive-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            bareeq-audio-progressive-
+
+      - name: Restore baseline artifact only when no progressive cache exists
+        if: steps.self_guard.outputs.self_push != 'true' && steps.checkpoint_cache.outputs.cache-matched-key == ''
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.BAREEQ_SOURCE_ARTIFACT }}
-          path: .
+          name: ${{ env.BAREEQ_BASELINE_ARTIFACT }}
+          path: .checkpoint-baseline
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
-          run-id: ${{ env.BAREEQ_SOURCE_RUN_ID }}
+          run-id: ${{ env.BAREEQ_BASELINE_RUN_ID }}
 
-      - name: Verify generation-complete checkpoint
+      - name: Install baseline audio-candidates only
+        if: steps.self_guard.outputs.self_push != 'true' && steps.checkpoint_cache.outputs.cache-matched-key == ''
+        run: |
+          test -d .checkpoint-baseline/audio-candidates
+          rm -rf audio-candidates
+          cp -a .checkpoint-baseline/audio-candidates ./audio-candidates
+
+      - name: Record checkpoint source
+        if: steps.self_guard.outputs.self_push != 'true'
+        run: |
+          MATCHED='${{ steps.checkpoint_cache.outputs.cache-matched-key }}'
+          if [ -n "${MATCHED}" ]; then
+            echo "BAREEQ_CHECKPOINT_SOURCE=cache:${MATCHED}" >> "$GITHUB_ENV"
+            echo "CHECKPOINT_SOURCE=cache:${MATCHED}"
+          else
+            echo "BAREEQ_CHECKPOINT_SOURCE=artifact:${BAREEQ_BASELINE_RUN_ID}/${BAREEQ_BASELINE_ARTIFACT}" >> "$GITHUB_ENV"
+            echo "CHECKPOINT_SOURCE=artifact:${BAREEQ_BASELINE_RUN_ID}/${BAREEQ_BASELINE_ARTIFACT}"
+          fi
+
+      - name: Verify monotonic generation-complete checkpoint
         if: steps.self_guard.outputs.self_push != 'true'
         run: |
           node - <<'NODE'
@@ -112,53 +152,60 @@ jobs:
           const p = path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json');
           const s = JSON.parse(fs.readFileSync(p,'utf8'));
           const rows = Object.values(s.articles || {});
-          if (s.generationComplete !== true || rows.length !== 15 || rows.some((x) => x.generation?.status !== 'generated')) {
-            throw new Error('latest checkpoint is not generation-complete 15/15');
+          if (s.campaignId !== process.env.BAREEQ_AUDIO_CAMPAIGN_ID) throw new Error('checkpoint campaign mismatch');
+          if (s.generationComplete !== true || rows.length !== 15 || rows.some((x) => x.generation?.status !== 'generated' || !x.generation?.fingerprint)) {
+            throw new Error('checkpoint is not generation-complete 15/15');
           }
           const exact = rows.filter((x) => x.validation?.status === 'validated'
             && x.validation?.fingerprint === x.generation?.fingerprint
             && ['substitutions','deletions','insertions','unresolved'].every((k) => Number(x.validation?.consensus?.[k]) === 0));
-          if (exact.length < 5) throw new Error(`progressive checkpoint regressed below 5 exact articles: ${exact.length}`);
-          console.log(`PROGRESSIVE_CHECKPOINT=PASS generated=15/15 exact_before=${exact.length}/15`);
+          if (exact.length < 5) throw new Error(`checkpoint regressed below 5 exact articles: ${exact.length}`);
+          console.log(`PROGRESSIVE_CHECKPOINT=PASS exact_before=${exact.length}/15 source=${process.env.BAREEQ_CHECKPOINT_SOURCE}`);
           NODE
 
-      - name: Complete first-pass matching for pending articles without blocking on failures
+      - name: Run quota-efficient progressive orchestrator
         if: steps.self_guard.outputs.self_push != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: >-
-          node scripts/audio-progressive-validate.mjs
-          --only=how-touchscreens-work,intuition-first-impression-decisions-signature,language-soft-power-politics,why-some-passports-are-stronger,اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا,اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع,اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا,كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار,كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه,لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء
+        run: node scripts/audio-progressive-orchestrator.mjs
 
-      - name: Repair only confirmed-failing parts and re-run full dual-ASR
+      - name: Publish every exact article or finalize 15/15
         if: steps.self_guard.outputs.self_push != 'true'
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: >-
-          node scripts/audio-progressive-repair.mjs
+        run: node scripts/audio-progressive-publish-router.mjs
 
-      - name: Publish every exact 0/0/0/0 article now and preserve fallbacks
+      - name: Verify publication inventory and immutable exact gates
         if: steps.self_guard.outputs.self_push != 'true'
         run: |
-          node scripts/audio-rebind-validated-metadata.mjs
-          node scripts/audio-openrouter-campaign.mjs --mode=publish-current
           node - <<'NODE'
           const fs = require('fs');
           const path = require('path');
-          const marker = JSON.parse(fs.readFileSync(process.env.BAREEQ_PARTIAL_MARKER, 'utf8'));
-          if (marker.schema !== 'bareeq.audio-openrouter-partial-published-tree.v1') throw new Error('partial marker schema mismatch');
-          if (marker.publicationComplete !== false) throw new Error('partial marker must not claim final completion');
-          if (marker.publishedCount < 5) throw new Error(`validated publication regressed below 5: ${marker.publishedCount}`);
-          if (marker.publishedCount + marker.fallbackCount !== 15) throw new Error('partial publication inventory must remain 15');
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
-          for (const item of marker.articles || []) {
+          const snapshot = JSON.parse(fs.readFileSync('docs/audio/AUDIO-TRUTH-SNAPSHOT.json','utf8'));
+          const keys = ['substitutions','deletions','insertions','unresolved'];
+          const exact = snapshot.articles.filter((item) => {
+            const r = state.articles?.[item.articleId] || {};
+            return r.validation?.status === 'validated'
+              && r.validation?.fingerprint === r.generation?.fingerprint
+              && keys.every((k) => Number(r.validation?.consensus?.[k]) === 0);
+          });
+          const final = exact.length === 15;
+          const markerPath = final ? process.env.BAREEQ_FINAL_MARKER : process.env.BAREEQ_PARTIAL_MARKER;
+          const marker = JSON.parse(fs.readFileSync(markerPath,'utf8'));
+          const articles = marker.articles || [];
+          const publishedCount = final ? Number(marker.articleCount) : Number(marker.publishedCount);
+          const fallbackCount = final ? 0 : Number(marker.fallbackCount);
+          if (publishedCount !== exact.length) throw new Error(`published count ${publishedCount} != exact ${exact.length}`);
+          if (publishedCount + fallbackCount !== 15) throw new Error('publication inventory must total 15');
+          if (final && marker.schema !== 'bareeq.audio-openrouter-published-tree.v1') throw new Error('final marker schema mismatch');
+          if (!final && (marker.schema !== 'bareeq.audio-openrouter-partial-published-tree.v1' || marker.publicationComplete !== false)) throw new Error('partial marker contract mismatch');
+          for (const item of articles) {
             const row = state.articles?.[item.articleId];
             const c = row?.validation?.consensus || {};
             if (row?.validation?.status !== 'validated' || row.validation.fingerprint !== row.generation?.fingerprint) throw new Error(`published article lacks matching validation: ${item.articleId}`);
-            if (!['substitutions','deletions','insertions','unresolved'].every((k) => Number(c[k]) === 0)) throw new Error(`published article is not exact 0/0/0/0: ${item.articleId}`);
-            if (!item.fullSha256 || item.fullSha256 !== row.publication?.fullSha256) throw new Error(`published digest mismatch: ${item.articleId}`);
+            if (!keys.every((k) => Number(c[k]) === 0)) throw new Error(`published article is not exact 0/0/0/0: ${item.articleId}`);
+            if (!item.fullSha256 || item.fullSha256 !== row.publication?.fullSha256 || item.fullSha256 !== row.validation?.fullSha256) throw new Error(`published digest mismatch: ${item.articleId}`);
           }
-          console.log(`PROGRESSIVE_PUBLICATION_GATE=PASS published=${marker.publishedCount}/15 fallbacks=${marker.fallbackCount}`);
+          console.log(`PROGRESSIVE_PUBLICATION_GATE=PASS published=${publishedCount}/15 fallback=${fallbackCount} final=${final}`);
           NODE
 
       - name: Write progressive per-article status summary
@@ -169,7 +216,14 @@ jobs:
           const path = require('path');
           const state = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
           const snapshot = JSON.parse(fs.readFileSync('docs/audio/AUDIO-TRUTH-SNAPSHOT.json','utf8'));
-          const marker = JSON.parse(fs.readFileSync(process.env.BAREEQ_PARTIAL_MARKER,'utf8'));
+          const keys = ['substitutions','deletions','insertions','unresolved'];
+          const exactRows = snapshot.articles.filter((item) => {
+            const r = state.articles?.[item.articleId] || {};
+            return r.validation?.status === 'validated' && r.validation?.fingerprint === r.generation?.fingerprint
+              && keys.every((k) => Number(r.validation?.consensus?.[k]) === 0);
+          });
+          const final = exactRows.length === 15;
+          const marker = JSON.parse(fs.readFileSync(final ? process.env.BAREEQ_FINAL_MARKER : process.env.BAREEQ_PARTIAL_MARKER,'utf8'));
           const publishedIds = new Set((marker.articles || []).map((a) => a.articleId));
           const rows = snapshot.articles.map((item) => {
             const row = state.articles?.[item.articleId] || {};
@@ -187,60 +241,38 @@ jobs:
               deletions: Number.isFinite(Number(consensus.deletions)) ? Number(consensus.deletions) : null,
               insertions: Number.isFinite(Number(consensus.insertions)) ? Number(consensus.insertions) : null,
               unresolved: Number.isFinite(Number(consensus.unresolved)) ? Number(consensus.unresolved) : null,
-              exact: gen.fingerprint && val.status === 'validated' && val.fingerprint === gen.fingerprint
-                && ['substitutions','deletions','insertions','unresolved'].every((k) => Number(consensus[k]) === 0),
+              exact: gen.fingerprint && val.status === 'validated' && val.fingerprint === gen.fingerprint && keys.every((k) => Number(consensus[k]) === 0),
               publishedExact: publishedIds.has(item.articleId),
               fullSha256: val.fullSha256 || null,
+              repairProgress: val.repairProgress || null,
               error: val.error || null,
             };
           });
           const summary = {
-            schema: 'bareeq.audio-progressive-status.v1',
+            schema: 'bareeq.audio-progressive-status.v2',
             campaignId: process.env.BAREEQ_AUDIO_CAMPAIGN_ID,
-            sourceRunId: process.env.BAREEQ_SOURCE_RUN_ID,
-            sourceArtifact: process.env.BAREEQ_SOURCE_ARTIFACT,
+            checkpointSource: process.env.BAREEQ_CHECKPOINT_SOURCE,
             generatedAt: new Date().toISOString(),
-            publishedCount: marker.publishedCount,
-            fallbackCount: marker.fallbackCount,
+            publishedCount: final ? 15 : Number(marker.publishedCount),
+            fallbackCount: final ? 0 : Number(marker.fallbackCount),
             exactCount: rows.filter((r) => r.exact).length,
+            publicationComplete: final,
+            orchestrator: state.progressiveOrchestrator || null,
             rows,
           };
           fs.mkdirSync(path.dirname(process.env.BAREEQ_STATUS_FILE), { recursive: true });
           fs.writeFileSync(process.env.BAREEQ_STATUS_FILE, JSON.stringify(summary, null, 2) + '\n');
-          for (const r of rows) {
-            console.log(`PROGRESSIVE_STATUS ${r.articleId} gen=${r.generationStatus} val=${r.validationStatus} sub=${r.substitutions} del=${r.deletions} ins=${r.insertions} un=${r.unresolved} exact=${r.exact} pub=${r.publishedExact}`);
-          }
-          console.log(`PROGRESSIVE_STATUS_SUMMARY published=${marker.publishedCount} exact=${summary.exactCount} fallback=${marker.fallbackCount}`);
+          console.log(`PROGRESSIVE_STATUS_SUMMARY published=${summary.publishedCount} exact=${summary.exactCount} fallback=${summary.fallbackCount} final=${summary.publicationComplete}`);
           NODE
 
-      - name: Commit all newly publishable audio and status to branch
-        if: steps.self_guard.outputs.self_push != 'true'
-        env:
-          PR_BRANCH: ${{ steps.branch.outputs.BRANCH }}
-        run: |
-          set -euo pipefail
-          COUNT=$(node -p "JSON.parse(require('fs').readFileSync(process.env.BAREEQ_PARTIAL_MARKER,'utf8')).publishedCount")
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f public/audio
-          git add "${BAREEQ_PARTIAL_MARKER}"
-          git add "${BAREEQ_STATUS_FILE}"
-          if git diff --cached --quiet; then
-            echo "PROGRESSIVE_PUBLICATION_TREE=already-current count=${COUNT}"
-          else
-            git commit -m "audio: progressively publish ${COUNT} exact Sadaltager articles"
-            git push origin "HEAD:${PR_BRANCH}"
-            echo "PROGRESSIVE_PUBLICATION_TREE=pushed count=${COUNT}"
-          fi
-
-      - name: Save progressive checkpoint
+      - name: Save newest progressive checkpoint before any self-push
         if: ${{ always() && steps.self_guard.outputs.self_push != 'true' }}
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
           key: bareeq-audio-progressive-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: Upload progressive evidence
+      - name: Upload progressive evidence before any self-push
         if: ${{ always() && steps.self_guard.outputs.self_push != 'true' }}
         uses: actions/upload-artifact@v4
         with:
@@ -248,10 +280,30 @@ jobs:
           path: |
             audio-candidates/
             ${{ env.BAREEQ_PARTIAL_MARKER }}
+            ${{ env.BAREEQ_FINAL_MARKER }}
             ${{ env.BAREEQ_STATUS_FILE }}
             public/audio/manifest.json
           if-no-files-found: error
           retention-days: 90
           overwrite: true
 
-# retry-trigger: 2026-09-08T18:59Z
+      - name: Commit all newly publishable audio and status to branch
+        if: steps.self_guard.outputs.self_push != 'true'
+        env:
+          PR_BRANCH: ${{ steps.branch.outputs.BRANCH }}
+        run: |
+          set -euo pipefail
+          COUNT=$(node -p "JSON.parse(require('fs').readFileSync(process.env.BAREEQ_STATUS_FILE,'utf8')).publishedCount")
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f public/audio
+          git add "${BAREEQ_STATUS_FILE}"
+          test ! -f "${BAREEQ_PARTIAL_MARKER}" || git add "${BAREEQ_PARTIAL_MARKER}"
+          test ! -f "${BAREEQ_FINAL_MARKER}" || git add "${BAREEQ_FINAL_MARKER}"
+          if git diff --cached --quiet; then
+            echo "PROGRESSIVE_PUBLICATION_TREE=already-current count=${COUNT}"
+          else
+            git commit -m "audio: progressively publish ${COUNT} exact Sadaltager articles"
+            git push origin "HEAD:${PR_BRANCH}"
+            echo "PROGRESSIVE_PUBLICATION_TREE=pushed count=${COUNT}"
+          fi
