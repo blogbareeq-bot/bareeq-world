@@ -35,6 +35,7 @@ const snapshot = await readJson(SNAPSHOT_PATH);
 if (!state?.generationComplete || !Array.isArray(snapshot?.articles)) throw new Error('repair progress recovery requires a valid checkpoint');
 
 let recovered = 0;
+let corrected = 0;
 for (const item of snapshot.articles) {
   const row = state.articles?.[item.articleId] || {};
   const fingerprint = row.generation?.fingerprint;
@@ -65,18 +66,25 @@ for (const item of snapshot.articles) {
   }
   const targetParts = [...target].sort((a, b) => a - b);
   if (!targetParts.length) continue;
+
+  // Checkpoint part records are the source of truth for partial targeted repair.
+  // Never trust an in-memory forceRegeneratedParts list after an interrupted
+  // request because it can include the part whose synthesis actually failed.
   const inferred = targetParts.filter((part) => {
     const record = checkpoint.completedParts?.[String(part - 1)];
     return record?.targetedRegeneration === true && (Date.parse(record.savedAt || '') || 0) > adjudicatedAt;
   });
-  if (!inferred.length) continue;
-
   const planKey = `${fingerprint}:${adjudication.fullSha256 || 'no-sha'}:${targetParts.join(',')}`;
   const previous = row.validation?.repairProgress?.planKey === planKey ? row.validation.repairProgress : null;
-  const completed = new Set([...(previous?.completedParts || []), ...inferred].map(Number));
+  const previousCompleted = [...(previous?.completedParts || [])].map(Number).sort((a, b) => a - b);
+  const completed = new Set(inferred.map(Number));
+  const completedParts = [...completed].sort((a, b) => a - b);
+  const changed = JSON.stringify(previousCompleted) !== JSON.stringify(completedParts);
+  if (!inferred.length && !previous && !changed) continue;
+
   row.validation = {
     ...row.validation,
-    status: 'paused-partial-repair',
+    status: completedParts.length ? 'paused-partial-repair' : (row.validation?.status || 'failed'),
     fingerprint,
     fullSha256: adjudication.fullSha256,
     consensus: adjudication.consensus,
@@ -84,7 +92,7 @@ for (const item of snapshot.articles) {
       planKey,
       sourceFullSha256: adjudication.fullSha256,
       targetParts,
-      completedParts: [...completed].sort((a, b) => a - b),
+      completedParts,
       remainingParts: targetParts.filter((part) => !completed.has(part)),
       recoveredFromCheckpoint: true,
       updatedAt: new Date().toISOString(),
@@ -93,8 +101,9 @@ for (const item of snapshot.articles) {
   };
   state.articles[item.articleId] = row;
   recovered += inferred.length;
-  console.log(`PROGRESSIVE_REPAIR_PROGRESS_RECOVER ${item.articleId} completed=${[...completed].sort((a,b)=>a-b).join(',')} remaining=${targetParts.filter((part) => !completed.has(part)).join(',') || '-'}`);
+  if (changed) corrected += 1;
+  console.log(`PROGRESSIVE_REPAIR_PROGRESS_RECOVER ${item.articleId} completed=${completedParts.join(',') || '-'} remaining=${targetParts.filter((part) => !completed.has(part)).join(',') || '-'} corrected=${changed}`);
 }
 state.updatedAt = new Date().toISOString();
 await writeJson(STATE_PATH, state);
-console.log(`PROGRESSIVE_REPAIR_PROGRESS_RECOVER_SUMMARY inferredParts=${recovered}`);
+console.log(`PROGRESSIVE_REPAIR_PROGRESS_RECOVER_SUMMARY inferredParts=${recovered} correctedArticles=${corrected}`);
