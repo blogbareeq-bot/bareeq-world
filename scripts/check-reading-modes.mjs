@@ -36,7 +36,12 @@ await required('src/components/visual-story/VisualStoryV3.astro', [
   'data-v3-scroller', 'data-v3-progress-bar', 'data-v3-probe', 'bareeq-window-mark.svg', 'bareeq-window-signature.svg'
 ]);
 await required('public/scripts/visual-story.js', ['bareeq-visual-progress-v1', 'bareeq:visual-story', '#visual=', 'maxAge', "event.key === 'Escape'"]);
-await required('public/scripts/visual-story-v3.js', ['bareeq-window-v3-progress-v1', 'bareeq:visual-story-v3', '#visual=', 'maxAge', "event.key === 'Escape'"]);
+// V3 deliberately keeps the established progress key and analytics event so
+// saved reading position and analytics remain compatible during the guarded
+// one-article pilot. Isolation is provided by the V3 root and separate runtime.
+await required('public/scripts/visual-story-v3.js', [
+  "[data-window-v3-root]", 'bareeq-visual-progress-v1', 'bareeq:visual-story', '#visual=', 'maxAge', "event.key === 'Escape'"
+]);
 await required('public/scripts/article.js', [
   'prepareAudio', 'fetch(manifestUrl', 'audio.play()', "audio?.addEventListener('ended'", 'pagehide',
   'ArrowLeft', 'ArrowRight', 'Home', 'End', 'stopAudio', 'is-audio-active'
