@@ -3,7 +3,7 @@
   "campaignId": "sadaltager-openrouter-20260901-v1",
   "sourceRunId": "33962242086",
   "sourceArtifact": "bareeq-progressive-validation-33962242086",
-  "generatedAt": "2026-09-06T13:22:02.412Z",
+  "generatedAt": "2026-09-08T08:17:12.029Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -70,7 +70,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS failed (400): {\"error\":{\"message\":\"The audio stream could not be completed. Please retry your request, or try your request in unary mode if streaming continues to fail. You can also modify your input text slightly, or select a different voice. If you think this was an error, [send feedback](https://ai.google.dev/gemini-api/docs/troubleshooting).\",\"code\":\"safety\"}}"
+      "error": "Gemini TTS failed (500): {\"error\":{\"message\":\"gemini-3.1-flash-tts-preview is currently experiencing high demand, spikes in demand are usually temporary. Please try again later.\",\"code\":\"api_error\"}}"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -78,15 +78,15 @@
       "audioKey": "1d1b681593122b59",
       "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
       "generationStatus": "generated",
-      "validationStatus": "failed",
-      "substitutions": 4,
-      "deletions": 1,
-      "insertions": 0,
-      "unresolved": 6,
+      "validationStatus": "repair-failed",
+      "substitutions": null,
+      "deletions": null,
+      "insertions": null,
+      "unresolved": null,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "73795077ff0194e5e3c561518d40482627990ee9fcaa23377bb48b12e34f8edc",
-      "error": "dual-ASR consensus failed: S=4 D=1 I=0 unresolved=6"
+      "fullSha256": null,
+      "error": "Gemini TTS transport failed (https://generativelanguage.googleapis.com/v1beta/interactions): UND_ERR_HEADERS_TIMEOUT"
     },
     {
       "articleId": "language-soft-power-politics",
@@ -94,7 +94,7 @@
       "audioKey": "b19e29e785a22c73",
       "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "repair-failed",
       "substitutions": null,
       "deletions": null,
       "insertions": null,
@@ -102,7 +102,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 3"
+      "error": "Gemini TTS failed (500): {\"error\":{\"message\":\"gemini-3.1-flash-tts-preview is currently experiencing high demand, spikes in demand are usually temporary. Please try again later.\",\"code\":\"api_error\"}}"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -110,7 +110,7 @@
       "audioKey": "34e34b6f4633d928",
       "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "repair-failed",
       "substitutions": null,
       "deletions": null,
       "insertions": null,
@@ -118,7 +118,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 5"
+      "error": "Gemini TTS transport failed (https://generativelanguage.googleapis.com/v1beta/interactions): UND_ERR_HEADERS_TIMEOUT"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -126,7 +126,7 @@
       "audioKey": "cf933330ca485220",
       "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "repair-failed",
       "substitutions": null,
       "deletions": null,
       "insertions": null,
@@ -134,7 +134,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini TTS transport failed (https://generativelanguage.googleapis.com/v1beta/interactions): UND_ERR_HEADERS_TIMEOUT"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -150,7 +150,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "Gemini TTS quota exhausted after retries for part 5"
     },
     {
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
