@@ -110,3 +110,4 @@ console.log(`PROGRESSIVE_REPAIR_PROGRESS_RECOVER_SUMMARY inferredParts=${recover
 
 // CI resume trigger: 2026-09-09 quota window.
 // Manual Gemini free-tier resume trigger: 2026-09-09T10:16+03:00.
+// Resume after user workflow approval; Gemini free tier only.
