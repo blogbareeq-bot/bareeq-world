@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34318357368-1",
-  "generatedAt": "2026-09-09T06:22:00.062Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34318978977-1",
+  "generatedAt": "2026-09-09T06:29:59.757Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -12,13 +12,13 @@
     "exactCount": 5,
     "remainingCount": 10,
     "newExact": 0,
-    "ttsRequestsSent": 4,
+    "ttsRequestsSent": 3,
     "ttsRequestCap": 10,
     "quotaBlockedTransports": [
       "developer-interactions",
       "developer-generate-content"
     ],
-    "updatedAt": "2026-09-09T06:21:59.913Z"
+    "updatedAt": "2026-09-09T06:29:59.530Z"
   },
   "rows": [
     {
@@ -180,7 +180,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 3,
       "deletions": 0,
       "insertions": 0,
@@ -188,8 +188,22 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "d18caa89b6f8e7647df1ce3b257369b14ba7d2db8e956424986679603cb237b4",
-      "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=1"
+      "repairProgress": {
+        "planKey": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77:d18caa89b6f8e7647df1ce3b257369b14ba7d2db8e956424986679603cb237b4:1,3",
+        "sourceFullSha256": "d18caa89b6f8e7647df1ce3b257369b14ba7d2db8e956424986679603cb237b4",
+        "targetParts": [
+          1,
+          3
+        ],
+        "completedParts": [
+          1
+        ],
+        "remainingParts": [
+          3
+        ],
+        "updatedAt": "2026-09-09T06:29:59.528Z"
+      },
+      "error": "Gemini TTS quota exhausted for part 3: all available transports are quota-blocked"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -251,7 +265,8 @@
           1,
           2
         ],
-        "updatedAt": "2026-09-09T06:21:59.911Z"
+        "recoveredFromCheckpoint": true,
+        "updatedAt": "2026-09-09T06:29:02.444Z"
       },
       "error": "Gemini TTS quota exhausted for part 1: all available transports are quota-blocked"
     },
