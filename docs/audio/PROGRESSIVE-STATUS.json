@@ -1,25 +1,24 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34317624725-1",
-  "generatedAt": "2026-09-09T06:17:40.617Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34318357368-1",
+  "generatedAt": "2026-09-09T06:22:00.062Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
   "publicationComplete": false,
   "orchestrator": {
-    "status": "paused-openrouter-quota",
+    "status": "paused-quota",
     "exactCount": 5,
     "remainingCount": 10,
     "newExact": 0,
-    "ttsRequestsSent": 6,
+    "ttsRequestsSent": 4,
     "ttsRequestCap": 10,
     "quotaBlockedTransports": [
       "developer-interactions",
       "developer-generate-content"
     ],
-    "updatedAt": "2026-09-09T06:17:40.424Z",
-    "fallbackTransport": "openrouter-speech"
+    "updatedAt": "2026-09-09T06:21:59.913Z"
   },
   "rows": [
     {
@@ -181,30 +180,16 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-openrouter-quota",
+      "validationStatus": "failed",
       "substitutions": 3,
       "deletions": 0,
-      "insertions": 1,
+      "insertions": 0,
       "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "018cbece73656cb5d628c92c34f11aadecfec96a23dd2835cb70c18b0c224753",
-      "repairProgress": {
-        "planKey": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77:018cbece73656cb5d628c92c34f11aadecfec96a23dd2835cb70c18b0c224753:1,3",
-        "sourceFullSha256": "018cbece73656cb5d628c92c34f11aadecfec96a23dd2835cb70c18b0c224753",
-        "targetParts": [
-          1,
-          3
-        ],
-        "completedParts": [
-          1
-        ],
-        "remainingParts": [
-          3
-        ],
-        "updatedAt": "2026-09-09T06:17:40.424Z"
-      },
-      "error": "OpenRouter TTS quota/billing stop (402): {\"error\":{\"message\":\"Insufficient credits. Add more using https://openrouter.ai/settings/credits\",\"code\":402,\"metadata\":{\"limit_source\":\"openrouter_credits\",\"remedy_hint\":\"Add credits at https://openrouter.ai/settings/credits, or lower max_tokens / prompt size to fit your remaining balance.\"}}}"
+      "fullSha256": "d18caa89b6f8e7647df1ce3b257369b14ba7d2db8e956424986679603cb237b4",
+      "repairProgress": null,
+      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=1"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -246,7 +231,7 @@
       "audioKey": "4d194dd1e6a739a8",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 6,
       "deletions": 0,
       "insertions": 0,
@@ -254,8 +239,21 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "154f6f71113702268b855606a318ffa8a6d5ab46235c40f8f3345b1387d72000",
-      "repairProgress": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "repairProgress": {
+        "planKey": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b:154f6f71113702268b855606a318ffa8a6d5ab46235c40f8f3345b1387d72000:1,2",
+        "sourceFullSha256": "154f6f71113702268b855606a318ffa8a6d5ab46235c40f8f3345b1387d72000",
+        "targetParts": [
+          1,
+          2
+        ],
+        "completedParts": [],
+        "remainingParts": [
+          1,
+          2
+        ],
+        "updatedAt": "2026-09-09T06:21:59.911Z"
+      },
+      "error": "Gemini TTS quota exhausted for part 1: all available transports are quota-blocked"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
