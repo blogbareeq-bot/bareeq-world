@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34334013840-1",
-  "generatedAt": "2026-09-09T11:25:59.738Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34345243939-1",
+  "generatedAt": "2026-09-09T13:37:00.329Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -12,13 +12,13 @@
     "exactCount": 5,
     "remainingCount": 10,
     "newExact": 0,
-    "ttsRequestsSent": 4,
+    "ttsRequestsSent": 6,
     "ttsRequestCap": 10,
     "quotaBlockedTransports": [
       "developer-interactions",
       "developer-generate-content"
     ],
-    "updatedAt": "2026-09-09T11:25:59.532Z"
+    "updatedAt": "2026-09-09T13:37:00.098Z"
   },
   "rows": [
     {
@@ -78,7 +78,7 @@
       "audioKey": "de93f3d9f91c8b8b",
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
-      "validationStatus": "repair-failed",
+      "validationStatus": "paused-quota",
       "substitutions": 3,
       "deletions": 0,
       "insertions": 0,
@@ -100,10 +100,9 @@
           2,
           5
         ],
-        "recoveredFromCheckpoint": true,
-        "updatedAt": "2026-09-09T11:23:26.350Z"
+        "updatedAt": "2026-09-09T13:37:00.097Z"
       },
-      "error": "Gemini TTS failed (400): {\"error\":{\"message\":\"The audio stream could not be completed. Please retry your request, or try your request in unary mode if streaming continues to fail. You can also modify your input text slightly, or select a different voice. If you think this was an error, [send feedback](https://ai.google.dev/gemini-api/docs/troubleshooting).\",\"code\":\"safety\"}}"
+      "error": "Gemini TTS quota exhausted for part 1: all available transports are quota-blocked"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -230,33 +229,16 @@
       "audioKey": "9d04080d1962a365",
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
-      "validationStatus": "paused-partial-repair",
+      "validationStatus": "failed",
       "substitutions": 1,
       "deletions": 4,
-      "insertions": 0,
-      "unresolved": 3,
+      "insertions": 1,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "026a9c9cb3688f38104b1035ec0dd8df5e8b9870d3664d73f44cdbaea28bcb0f",
-      "repairProgress": {
-        "planKey": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3:026a9c9cb3688f38104b1035ec0dd8df5e8b9870d3664d73f44cdbaea28bcb0f:1,3,5",
-        "sourceFullSha256": "026a9c9cb3688f38104b1035ec0dd8df5e8b9870d3664d73f44cdbaea28bcb0f",
-        "targetParts": [
-          1,
-          3,
-          5
-        ],
-        "completedParts": [
-          1
-        ],
-        "remainingParts": [
-          3,
-          5
-        ],
-        "recoveredFromCheckpoint": true,
-        "updatedAt": "2026-09-09T11:23:26.534Z"
-      },
-      "error": "Gemini TTS quota exhausted for part 3: all available transports are quota-blocked"
+      "fullSha256": "3060db2e238e6fd20312988b90b2c0655010cd24b2c2c291ad3468ff3c48a4c1",
+      "repairProgress": null,
+      "error": "dual-ASR consensus failed: S=1 D=4 I=1 unresolved=0"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -264,30 +246,16 @@
       "audioKey": "4d194dd1e6a739a8",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": 5,
+      "validationStatus": "failed",
+      "substitutions": 1,
       "deletions": 0,
-      "insertions": 1,
-      "unresolved": 1,
+      "insertions": 0,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "3137848390f87f58970d3a36079d4590c087411796ac654236c74c87b706010d",
-      "repairProgress": {
-        "planKey": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b:3137848390f87f58970d3a36079d4590c087411796ac654236c74c87b706010d:1,2",
-        "sourceFullSha256": "3137848390f87f58970d3a36079d4590c087411796ac654236c74c87b706010d",
-        "targetParts": [
-          1,
-          2
-        ],
-        "completedParts": [
-          1
-        ],
-        "remainingParts": [
-          2
-        ],
-        "updatedAt": "2026-09-09T11:25:59.530Z"
-      },
-      "error": "Gemini TTS quota exhausted for part 2: all available transports are quota-blocked"
+      "fullSha256": "3dcbe83b2fbe98ab8ded85baf37800f0d9542f591dfaccdb3e88451bf7169b07",
+      "repairProgress": null,
+      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
