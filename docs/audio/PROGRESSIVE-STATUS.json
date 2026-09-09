@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34323290147-1",
-  "generatedAt": "2026-09-09T09:25:59.975Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34334013840-1",
+  "generatedAt": "2026-09-09T11:25:59.738Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -12,13 +12,13 @@
     "exactCount": 5,
     "remainingCount": 10,
     "newExact": 0,
-    "ttsRequestsSent": 6,
+    "ttsRequestsSent": 4,
     "ttsRequestCap": 10,
     "quotaBlockedTransports": [
       "developer-interactions",
       "developer-generate-content"
     ],
-    "updatedAt": "2026-09-09T09:25:59.686Z"
+    "updatedAt": "2026-09-09T11:25:59.532Z"
   },
   "rows": [
     {
@@ -101,7 +101,7 @@
           5
         ],
         "recoveredFromCheckpoint": true,
-        "updatedAt": "2026-09-09T09:19:34.333Z"
+        "updatedAt": "2026-09-09T11:23:26.350Z"
       },
       "error": "Gemini TTS failed (400): {\"error\":{\"message\":\"The audio stream could not be completed. Please retry your request, or try your request in unary mode if streaming continues to fail. You can also modify your input text slightly, or select a different voice. If you think this was an error, [send feedback](https://ai.google.dev/gemini-api/docs/troubleshooting).\",\"code\":\"safety\"}}"
     },
@@ -230,7 +230,7 @@
       "audioKey": "9d04080d1962a365",
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "paused-partial-repair",
       "substitutions": 1,
       "deletions": 4,
       "insertions": 0,
@@ -253,7 +253,8 @@
           3,
           5
         ],
-        "updatedAt": "2026-09-09T09:25:59.685Z"
+        "recoveredFromCheckpoint": true,
+        "updatedAt": "2026-09-09T11:23:26.534Z"
       },
       "error": "Gemini TTS quota exhausted for part 3: all available transports are quota-blocked"
     },
@@ -263,7 +264,7 @@
       "audioKey": "4d194dd1e6a739a8",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 5,
       "deletions": 0,
       "insertions": 1,
@@ -271,8 +272,22 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "3137848390f87f58970d3a36079d4590c087411796ac654236c74c87b706010d",
-      "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=5 D=0 I=1 unresolved=1"
+      "repairProgress": {
+        "planKey": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b:3137848390f87f58970d3a36079d4590c087411796ac654236c74c87b706010d:1,2",
+        "sourceFullSha256": "3137848390f87f58970d3a36079d4590c087411796ac654236c74c87b706010d",
+        "targetParts": [
+          1,
+          2
+        ],
+        "completedParts": [
+          1
+        ],
+        "remainingParts": [
+          2
+        ],
+        "updatedAt": "2026-09-09T11:25:59.530Z"
+      },
+      "error": "Gemini TTS quota exhausted for part 2: all available transports are quota-blocked"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
