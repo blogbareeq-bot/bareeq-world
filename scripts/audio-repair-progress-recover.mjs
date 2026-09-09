@@ -109,3 +109,4 @@ await writeJson(STATE_PATH, state);
 console.log(`PROGRESSIVE_REPAIR_PROGRESS_RECOVER_SUMMARY inferredParts=${recovered} correctedArticles=${corrected}`);
 
 // CI resume trigger: 2026-09-09 quota window.
+// Manual Gemini free-tier resume trigger: 2026-09-09T10:16+03:00.
