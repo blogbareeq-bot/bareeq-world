@@ -107,3 +107,5 @@ for (const item of snapshot.articles) {
 state.updatedAt = new Date().toISOString();
 await writeJson(STATE_PATH, state);
 console.log(`PROGRESSIVE_REPAIR_PROGRESS_RECOVER_SUMMARY inferredParts=${recovered} correctedArticles=${corrected}`);
+
+// CI resume trigger: 2026-09-09 quota window.
