@@ -1,14 +1,14 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34286657905-1",
-  "generatedAt": "2026-09-09T06:13:00.345Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34317624725-1",
+  "generatedAt": "2026-09-09T06:17:40.617Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
   "publicationComplete": false,
   "orchestrator": {
-    "status": "paused-quota",
+    "status": "paused-openrouter-quota",
     "exactCount": 5,
     "remainingCount": 10,
     "newExact": 0,
@@ -18,7 +18,8 @@
       "developer-interactions",
       "developer-generate-content"
     ],
-    "updatedAt": "2026-09-09T06:13:00.133Z"
+    "updatedAt": "2026-09-09T06:17:40.424Z",
+    "fallbackTransport": "openrouter-speech"
   },
   "rows": [
     {
@@ -180,7 +181,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "paused-openrouter-quota",
       "substitutions": 3,
       "deletions": 0,
       "insertions": 1,
@@ -201,9 +202,9 @@
         "remainingParts": [
           3
         ],
-        "updatedAt": "2026-09-09T06:13:00.132Z"
+        "updatedAt": "2026-09-09T06:17:40.424Z"
       },
-      "error": "Gemini TTS quota exhausted for part 3: all available transports are quota-blocked"
+      "error": "OpenRouter TTS quota/billing stop (402): {\"error\":{\"message\":\"Insufficient credits. Add more using https://openrouter.ai/settings/credits\",\"code\":402,\"metadata\":{\"limit_source\":\"openrouter_credits\",\"remedy_hint\":\"Add credits at https://openrouter.ai/settings/credits, or lower max_tokens / prompt size to fit your remaining balance.\"}}}"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
