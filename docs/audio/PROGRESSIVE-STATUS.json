@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34319155348-1",
-  "generatedAt": "2026-09-09T07:39:00.230Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34323290147-1",
+  "generatedAt": "2026-09-09T09:25:59.975Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -12,12 +12,13 @@
     "exactCount": 5,
     "remainingCount": 10,
     "newExact": 0,
-    "ttsRequestsSent": 10,
+    "ttsRequestsSent": 6,
     "ttsRequestCap": 10,
     "quotaBlockedTransports": [
-      "developer-interactions"
+      "developer-interactions",
+      "developer-generate-content"
     ],
-    "updatedAt": "2026-09-09T07:39:00.006Z"
+    "updatedAt": "2026-09-09T09:25:59.686Z"
   },
   "rows": [
     {
@@ -99,7 +100,8 @@
           2,
           5
         ],
-        "updatedAt": "2026-09-09T07:34:04.234Z"
+        "recoveredFromCheckpoint": true,
+        "updatedAt": "2026-09-09T09:19:34.333Z"
       },
       "error": "Gemini TTS failed (400): {\"error\":{\"message\":\"The audio stream could not be completed. Please retry your request, or try your request in unary mode if streaming continues to fail. You can also modify your input text slightly, or select a different voice. If you think this was an error, [send feedback](https://ai.google.dev/gemini-api/docs/troubleshooting).\",\"code\":\"safety\"}}"
     },
@@ -161,15 +163,15 @@
       "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 1,
+      "substitutions": 4,
       "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "edfc555ebac98cf77b7003a9abb9e5b5c85ab0a91f7cd97e987749ee2607d487",
+      "fullSha256": "7a98c05aaabb12ffa91a7ca36faf6a9fd92a750e6fad869d3177c8e5ed04f220",
       "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=4 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -251,9 +253,9 @@
           3,
           5
         ],
-        "updatedAt": "2026-09-09T07:39:00.005Z"
+        "updatedAt": "2026-09-09T09:25:59.685Z"
       },
-      "error": "Gemini TTS quota exhausted for part 3: run request cap 10 reached"
+      "error": "Gemini TTS quota exhausted for part 3: all available transports are quota-blocked"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -262,15 +264,15 @@
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 0,
+      "substitutions": 5,
       "deletions": 0,
-      "insertions": 0,
-      "unresolved": 4,
+      "insertions": 1,
+      "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "36d76df1bae3652f1d1adccc0f4db7b61a460f34a1a3a50912eb1459fc80c34a",
+      "fullSha256": "3137848390f87f58970d3a36079d4590c087411796ac654236c74c87b706010d",
       "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=0 D=0 I=0 unresolved=4"
+      "error": "dual-ASR consensus failed: S=5 D=0 I=1 unresolved=1"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
