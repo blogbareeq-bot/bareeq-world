@@ -112,3 +112,4 @@ console.log(`PROGRESSIVE_REPAIR_PROGRESS_RECOVER_SUMMARY inferredParts=${recover
 // Manual Gemini free-tier resume trigger: 2026-09-09T10:16+03:00.
 // Resume after user workflow approval; Gemini free tier only.
 // Resume after Run #62 approval; force provider work from newest checkpoint.
+// Resume after Run #64 self-push skip; Gemini free tier only.
