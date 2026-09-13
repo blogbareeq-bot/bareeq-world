@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34357423107-1",
-  "generatedAt": "2026-09-13T05:30:52.968Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34739783915-1",
+  "generatedAt": "2026-09-13T09:32:54.146Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -15,7 +15,7 @@
     "ttsRequestsSent": 10,
     "ttsRequestCap": 10,
     "quotaBlockedTransports": [],
-    "updatedAt": "2026-09-13T05:30:52.758Z"
+    "updatedAt": "2026-09-13T09:32:53.916Z"
   },
   "rows": [
     {
@@ -76,15 +76,15 @@
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 3,
+      "substitutions": 5,
       "deletions": 0,
-      "insertions": 0,
+      "insertions": 1,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "a2983d7eaad588c84f043130b7433312986c75817b232d6a1cb313a56b73870f",
+      "fullSha256": "59f0914126556751a97d709058b61d262193db031522051f51e32059093dee4e",
       "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=5 D=0 I=1 unresolved=0"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -147,12 +147,12 @@
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
-      "unresolved": 1,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "ec230e22eb89ef9682c587913c64e785bcb1a70fd70c02fca96893db14bd8ce8",
+      "fullSha256": "f4ae445d5515728c1e93e10d3c86f1a55f083d565434d2beab720c1f611a8f10",
       "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=1"
+      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -194,16 +194,17 @@
           3,
           4
         ],
-        "completedParts": [],
-        "remainingParts": [
+        "completedParts": [
           1,
-          2,
+          2
+        ],
+        "remainingParts": [
           3,
           4
         ],
-        "updatedAt": "2026-09-13T05:30:52.757Z"
+        "updatedAt": "2026-09-13T09:32:53.914Z"
       },
-      "error": "Gemini TTS quota exhausted for part 1: run request cap 10 reached"
+      "error": "Gemini TTS quota exhausted for part 3: run request cap 10 reached"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -229,15 +230,15 @@
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 2,
+      "substitutions": 1,
       "deletions": 4,
-      "insertions": 2,
+      "insertions": 1,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "c1fc96f5e2cc52b798687ad693a3ed3b023f56a9bcab99ee35d6a8a02f0b1c4d",
+      "fullSha256": "7c569fd6f710074327473254caef21b6df1c605c6b50af10f614798d9f0d3bca",
       "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=2 D=4 I=2 unresolved=0"
+      "error": "dual-ASR consensus failed: S=1 D=4 I=1 unresolved=0"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -248,13 +249,13 @@
       "validationStatus": "failed",
       "substitutions": 4,
       "deletions": 0,
-      "insertions": 0,
-      "unresolved": 0,
+      "insertions": 1,
+      "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "f9765fc9542adb5e3511c76fa53be516a4d1a57db482213c5e1f79d265ad4e3b",
+      "fullSha256": "f138f11c5f73cb84cd4266576ca1a6d0cdb3782131e8530ebe13583c7bf0c0fa",
       "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=4 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=4 D=0 I=1 unresolved=1"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
