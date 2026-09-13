@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34345243939-1",
-  "generatedAt": "2026-09-09T13:37:00.329Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34357423107-1",
+  "generatedAt": "2026-09-13T05:30:52.968Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -12,13 +12,10 @@
     "exactCount": 5,
     "remainingCount": 10,
     "newExact": 0,
-    "ttsRequestsSent": 6,
+    "ttsRequestsSent": 10,
     "ttsRequestCap": 10,
-    "quotaBlockedTransports": [
-      "developer-interactions",
-      "developer-generate-content"
-    ],
-    "updatedAt": "2026-09-09T13:37:00.098Z"
+    "quotaBlockedTransports": [],
+    "updatedAt": "2026-09-13T05:30:52.758Z"
   },
   "rows": [
     {
@@ -78,31 +75,16 @@
       "audioKey": "de93f3d9f91c8b8b",
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 3,
       "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "482feef6de78f8d109b743b837adc36998e8629b76f60e0e6e8f7c070866833e",
-      "repairProgress": {
-        "planKey": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7:482feef6de78f8d109b743b837adc36998e8629b76f60e0e6e8f7c070866833e:1,2,5",
-        "sourceFullSha256": "482feef6de78f8d109b743b837adc36998e8629b76f60e0e6e8f7c070866833e",
-        "targetParts": [
-          1,
-          2,
-          5
-        ],
-        "completedParts": [],
-        "remainingParts": [
-          1,
-          2,
-          5
-        ],
-        "updatedAt": "2026-09-09T13:37:00.097Z"
-      },
-      "error": "Gemini TTS quota exhausted for part 1: all available transports are quota-blocked"
+      "fullSha256": "a2983d7eaad588c84f043130b7433312986c75817b232d6a1cb313a56b73870f",
+      "repairProgress": null,
+      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -162,15 +144,15 @@
       "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 4,
+      "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
-      "unresolved": 0,
+      "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "7a98c05aaabb12ffa91a7ca36faf6a9fd92a750e6fad869d3177c8e5ed04f220",
+      "fullSha256": "ec230e22eb89ef9682c587913c64e785bcb1a70fd70c02fca96893db14bd8ce8",
       "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=4 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=1"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -195,7 +177,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 3,
       "deletions": 0,
       "insertions": 0,
@@ -203,8 +185,25 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "a2c82dbc05f1ffb6b624af87e6bda8aa4c6ad8636e82839e08a4eb2272a1d012",
-      "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=2"
+      "repairProgress": {
+        "planKey": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77:a2c82dbc05f1ffb6b624af87e6bda8aa4c6ad8636e82839e08a4eb2272a1d012:1,2,3,4",
+        "sourceFullSha256": "a2c82dbc05f1ffb6b624af87e6bda8aa4c6ad8636e82839e08a4eb2272a1d012",
+        "targetParts": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "completedParts": [],
+        "remainingParts": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "updatedAt": "2026-09-13T05:30:52.757Z"
+      },
+      "error": "Gemini TTS quota exhausted for part 1: run request cap 10 reached"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -230,15 +229,15 @@
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 1,
+      "substitutions": 2,
       "deletions": 4,
-      "insertions": 1,
+      "insertions": 2,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "3060db2e238e6fd20312988b90b2c0655010cd24b2c2c291ad3468ff3c48a4c1",
+      "fullSha256": "c1fc96f5e2cc52b798687ad693a3ed3b023f56a9bcab99ee35d6a8a02f0b1c4d",
       "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=1 D=4 I=1 unresolved=0"
+      "error": "dual-ASR consensus failed: S=2 D=4 I=2 unresolved=0"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -247,15 +246,15 @@
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 1,
+      "substitutions": 4,
       "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "3dcbe83b2fbe98ab8ded85baf37800f0d9542f591dfaccdb3e88451bf7169b07",
+      "fullSha256": "f9765fc9542adb5e3511c76fa53be516a4d1a57db482213c5e1f79d265ad4e3b",
       "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=4 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
