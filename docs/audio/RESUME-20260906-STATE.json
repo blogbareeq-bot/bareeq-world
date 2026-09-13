@@ -1,0 +1,7 @@
+{
+  "sourceRunId": 33962242086,
+  "sourceArtifact": "bareeq-progressive-validation-33962242086",
+  "baselineExact": 5,
+  "fallback": 10,
+  "policy": "repair-confirmed-failing-parts-only"
+}
