@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34739783915-1",
-  "generatedAt": "2026-09-13T09:32:54.146Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34739783915-3",
+  "generatedAt": "2026-09-13T11:49:06.606Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -12,10 +12,13 @@
     "exactCount": 5,
     "remainingCount": 10,
     "newExact": 0,
-    "ttsRequestsSent": 10,
+    "ttsRequestsSent": 3,
     "ttsRequestCap": 10,
-    "quotaBlockedTransports": [],
-    "updatedAt": "2026-09-13T09:32:53.916Z"
+    "quotaBlockedTransports": [
+      "developer-interactions",
+      "developer-generate-content"
+    ],
+    "updatedAt": "2026-09-13T11:49:06.475Z"
   },
   "rows": [
     {
@@ -143,7 +146,7 @@
       "audioKey": "cf933330ca485220",
       "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -151,8 +154,19 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "f4ae445d5515728c1e93e10d3c86f1a55f083d565434d2beab720c1f611a8f10",
-      "repairProgress": null,
-      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=0"
+      "repairProgress": {
+        "planKey": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94:f4ae445d5515728c1e93e10d3c86f1a55f083d565434d2beab720c1f611a8f10:4",
+        "sourceFullSha256": "f4ae445d5515728c1e93e10d3c86f1a55f083d565434d2beab720c1f611a8f10",
+        "targetParts": [
+          4
+        ],
+        "completedParts": [],
+        "remainingParts": [
+          4
+        ],
+        "updatedAt": "2026-09-13T11:49:06.474Z"
+      },
+      "error": "Gemini TTS quota exhausted for part 4: all available transports are quota-blocked"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -177,7 +191,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "paused-partial-repair",
       "substitutions": 3,
       "deletions": 0,
       "insertions": 0,
@@ -202,7 +216,8 @@
           3,
           4
         ],
-        "updatedAt": "2026-09-13T09:32:53.914Z"
+        "recoveredFromCheckpoint": true,
+        "updatedAt": "2026-09-13T11:47:05.052Z"
       },
       "error": "Gemini TTS quota exhausted for part 3: run request cap 10 reached"
     },
