@@ -114,3 +114,4 @@ console.log(`PROGRESSIVE_REPAIR_PROGRESS_RECOVER_SUMMARY inferredParts=${recover
 // Resume after Run #62 approval; force provider work from newest checkpoint.
 // Resume after Run #64 self-push skip; Gemini free tier only.
 // Resume after stale self-push rerun; Gemini free tier only (2026-09-13).
+// User-requested Gemini free-tier batch 2 trigger: 2026-09-13T12:11+03:00.
