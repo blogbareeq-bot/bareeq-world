@@ -132,7 +132,7 @@ jobs:
           console.log(`PROGRESSIVE_CHECKPOINT=PASS source=${process.env.CACHE_KEY || process.env.BAREEQ_BOOTSTRAP_RUN_ID} exact_before=${exact.length}/15`);
           NODE
 
-      - name: Finish the easiest article first and repair only failed parts
+      - name: Classify all pending audio, then repair the easiest failed parts
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/audio-progressive-repair.mjs --max-articles=10
