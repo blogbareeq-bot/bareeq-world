@@ -63,7 +63,7 @@ jobs:
       BAREEQ_STATUS_FILE: docs/audio/PROGRESSIVE-STATUS.json
       BAREEQ_REPAIR_MAX_REQUESTS: '10'
       BAREEQ_REPAIR_MAX_429_RETRIES: '2'
-      BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '4'
+      BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '2'
       BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
     steps:
       - name: Checkout current production branch
@@ -98,9 +98,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-progressive-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          key: bareeq-audio-progressive-v3-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            bareeq-audio-progressive-v2-
+            bareeq-audio-progressive-v3-
 
       - name: Bootstrap from the latest preserved artifact once
         if: steps.checkpoint.outputs.cache-matched-key == ''
@@ -168,7 +168,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: audio-candidates
-          key: bareeq-audio-progressive-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          key: bareeq-audio-progressive-v3-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Upload recovery evidence before git publication
         if: always()

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { parseGeminiQuotaDetail } from './audio-gemini-tts.mjs';
-import { createBudgetedSynthesizer } from './audio-progressive-repair.mjs';
+import { consensusErrorTotal, createBudgetedSynthesizer } from './audio-progressive-repair.mjs';
 
 const dailyBody = JSON.stringify({
   error: {
@@ -21,6 +21,8 @@ const dailyBody = JSON.stringify({
 const parsedDaily = parseGeminiQuotaDetail(dailyBody);
 assert.equal(parsedDaily.daily, true);
 assert.equal(parsedDaily.quota[0].value, '10');
+assert.equal(consensusErrorTotal({ substitutions: 3, deletions: 1, insertions: 2, unresolved: 1 }), 7);
+assert.equal(consensusErrorTotal({ substitutions: 2, deletions: 0, insertions: 0, unresolved: 0 }), 2);
 
 const args = {
   article: { title: 'اختبار' },
