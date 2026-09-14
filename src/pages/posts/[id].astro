@@ -3,8 +3,10 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import ReadingModes from '../../components/ReadingModes.astro';
+import BareeqRecommendation from '../../components/BareeqRecommendation.astro';
 import { formatDate, formatReadingMinutes, getPublishedPosts, absoluteUrl, postWordCount, postReadingMinutes, getRelatedPosts } from '../../lib/posts';
 import { site } from '../../config/site';
+import { getMonetizationOffer } from '../../config/monetization';
 import { responsiveImage, socialImage } from '../../lib/images';
 import { createHash } from 'node:crypto';
 import { access } from 'node:fs/promises';
@@ -31,6 +33,7 @@ const readingMinutes = postReadingMinutes(post);
 const articlePath = `/posts/${post.id}/`;
 const audioKey = createHash('sha256').update(post.id).digest('hex').slice(0, 16);
 const audioManifest = `/audio/articles/${audioKey}/manifest.json`;
+const monetizationOffer = getMonetizationOffer(post.id);
 let hasAudio = false;
 try {
   const manifestPath = resolve(process.cwd(), 'public', 'audio', 'articles', audioKey, 'manifest.json');
@@ -146,7 +149,14 @@ const articleSchema = {
       <div id="article-content" class="article-content prose" data-article-content><Content /></div>
     </div>
 
+    {monetizationOffer && (
+      <BareeqRecommendation offer={monetizationOffer} articleId={post.id} placement="after-content" />
+    )}
+
     <footer class="article-footer">
+      {monetizationOffer?.repeat && (
+        <BareeqRecommendation offer={monetizationOffer} articleId={post.id} placement="article-footer" compact />
+      )}
       {post.data.tags.length > 0 && <nav class="tag-list" aria-label="وسوم المقال">{post.data.tags.map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</nav>}
       <button class="save-reading-button" type="button" data-save-post data-post-id={post.id} aria-pressed="false"><span aria-hidden="true">🔖</span> <span data-save-label>حفظ للقراءة لاحقًا</span></button>
       <div class="share-box">
@@ -179,4 +189,5 @@ const articleSchema = {
   <script is:inline src="/scripts/article.js"></script>
   <script is:inline src="/scripts/visual-story.js"></script>
   <script is:inline src="/scripts/reading-list.js"></script>
+  <script is:inline src="/scripts/monetization.js"></script>
 </BaseLayout>
