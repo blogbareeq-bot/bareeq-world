@@ -1,10 +1,11 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 import {
   EXIT_OK,
   EXIT_QUOTA,
   QUOTA_SPLIT,
   candidateDir,
+  sha256,
 } from './audio-constants.mjs';
 import { loadSpokenArticle, splitSpokenArticle, activeSplitSettings } from './audio-split.mjs';
 import { tokenizeVerbal } from './audio-exact-match.mjs';
@@ -20,37 +21,42 @@ const SNAPSHOT_PATH = path.join(ROOT, 'docs', 'audio', 'AUDIO-TRUTH-SNAPSHOT.jso
 const LIVE_PATH = path.join(ROOT, 'docs', 'audio', 'LIVE-AUDIO-OBSERVED-20260828.json');
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Gemini free-tier TTS is throttled to ~10 requests/min. The project's own
-// generator already uses both Gemini transports (developer-interactions and
-// developer-generate-content) as a fallback pair. We retry each part across
-// both transports with 9s pacing, bounded retries and a per-run request cap so
-// a single run records which parts it finished and pauses cleanly on quota.
-async function dualTransportSynthesize({ apiKey }) {
-  const transports = [
+// The quota belongs to the Google project + model, not to an HTTP transport.
+// Keep one budget for the whole run; creating a new synthesizer per article
+// previously reset the counter and scattered the daily allowance across the
+// entire backlog. A daily/RPD 429 is terminal for this run, while a short RPM
+// throttle may be retried once using the provider supplied retry delay.
+export function createBudgetedSynthesizer({ apiKey, sleepImpl = sleep, transportEntries = null } = {}) {
+  const transports = transportEntries || [
     ['developer-interactions', synthesizeGeminiPart],
     ['developer-generate-content', synthesizeGeminiGenerateContentPart],
   ];
-  const minSpacingMs = 9000;
-  const maxRequests = Number(process.env.BAREEQ_REPAIR_MAX_REQUESTS || 40);
-  const retryAttempts = Number(process.env.BAREEQ_REPAIR_MAX_429_RETRIES || 6);
+  const minSpacingMs = Number(process.env.BAREEQ_REPAIR_MIN_INTERVAL_MS || 9000);
+  const maxRequests = Number(process.env.BAREEQ_REPAIR_MAX_REQUESTS || 10);
+  const retryAttempts = Number(process.env.BAREEQ_REPAIR_MAX_429_RETRIES || 2);
   let lastRequestAt = 0;
   let sent = 0;
+  let successful = 0;
+  let quotaRejected = 0;
+  let dailyQuotaExhausted = false;
+  let budgetExhausted = false;
 
   const quotaError = (partNumber, detail) => Object.assign(
     new Error(`Gemini TTS quota exhausted after retries for part ${partNumber}${detail ? `: ${detail}` : ''}`),
-    { httpStatus: 429, code: 'BAREEQ_QUOTA' },
+    { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' },
   );
 
-  return async (args) => {
+  const synthesize = async (args) => {
     const partNumber = Number(args?.part?.partIndex) + 1;
     for (const [transport, synth] of transports) {
       for (let attempt = 1; attempt <= retryAttempts; attempt += 1) {
         if (sent >= maxRequests) {
+          budgetExhausted = true;
           throw quotaError(partNumber, `request cap ${maxRequests} reached`);
         }
         const now = Date.now();
         const spacingWait = Math.max(0, minSpacingMs - (now - lastRequestAt));
-        if (spacingWait) await sleep(spacingWait);
+        if (spacingWait) await sleepImpl(spacingWait);
         sent += 1;
         try {
           const output = await synth({
@@ -64,19 +70,33 @@ async function dualTransportSynthesize({ apiKey }) {
             },
           });
           lastRequestAt = Date.now();
+          successful += 1;
           console.log(`PROGRESSIVE_REPAIR_TTS_OK part=${partNumber} transport=${transport} attempt=${attempt}`);
           return output;
         } catch (error) {
           const quota = error?.httpStatus === 429 || error?.code === 'BAREEQ_QUOTA';
           if (!quota) throw error;
-          const retryMs = Math.max(Number(error?.retryDelay) || 0, 45000);
-          console.log(`PROGRESSIVE_REPAIR_QUOTA_WAIT part=${partNumber} transport=${transport} attempt=${attempt} wait=${retryMs}ms`);
-          await sleep(retryMs);
+          quotaRejected += 1;
+          const retryMs = Number(error?.retryDelayMs) || 0;
+          const daily = error?.dailyQuota === true
+            || error?.quotaInfo?.daily === true
+            || /per.?day|requests.?per.?day|rpd/i.test(String(error?.message || ''));
+          if (daily || retryMs > 10 * 60 * 1000) {
+            dailyQuotaExhausted = true;
+            console.log(`PROGRESSIVE_REPAIR_DAILY_QUOTA_STOP part=${partNumber} transport=${transport} retry=${retryMs ? `${retryMs}ms` : 'next-reset'}`);
+            throw error;
+          }
+          if (attempt >= retryAttempts) break;
+          const boundedRetryMs = Math.max(retryMs, 15000);
+          console.log(`PROGRESSIVE_REPAIR_RATE_WAIT part=${partNumber} transport=${transport} attempt=${attempt} wait=${boundedRetryMs}ms`);
+          await sleepImpl(boundedRetryMs);
         }
       }
     }
     throw quotaError(partNumber);
   };
+  synthesize.stats = () => ({ sent, successful, quotaRejected, maxRequests, dailyQuotaExhausted, budgetExhausted });
+  return synthesize;
 }
 
 function csvArg(name) {
@@ -101,6 +121,23 @@ async function readJson(file, fallback = null) {
 async function saveState(state) {
   state.updatedAt = new Date().toISOString();
   await writeJson(STATE_PATH, state);
+}
+
+async function currentAdjudication(dir, fingerprint) {
+  const report = await readJson(path.join(dir, 'reports', 'asr-adjudication.json'), null);
+  const fullPath = path.join(dir, 'full.mp3');
+  if (!report || !await pathExists(fullPath)) return null;
+  const fullSha256 = sha256(await readFile(fullPath));
+  const reportFingerprint = report.fingerprint || report.candidateFingerprint;
+  if (reportFingerprint !== fingerprint || report.fullSha256 !== fullSha256) return null;
+  return report;
+}
+
+async function invalidateDerivedEvidence(dir) {
+  await rm(path.join(dir, 'reports'), { recursive: true, force: true });
+  for (const name of ['full.mp3', 'concat.txt', 'manifest.json', 'manifest.candidate.json']) {
+    await rm(path.join(dir, name), { force: true });
+  }
 }
 
 async function liveDuration(articleId) {
@@ -177,7 +214,7 @@ function buildCorrectionHint(adjudication = {}, range) {
   return problems.join('; ');
 }
 
-async function repairArticle({ articleId, state, snapshot }) {
+async function repairArticle({ articleId, state, synth }) {
   const row = state.articles?.[articleId] || {};
   const gen = row.generation || {};
   const fingerprint = gen.fingerprint;
@@ -190,12 +227,63 @@ async function repairArticle({ articleId, state, snapshot }) {
   }
 
   const dir = candidateDir(articleId, fingerprint, ROOT);
-  const reportsDir = path.join(dir, 'reports');
-  const adjudication = await readJson(path.join(reportsDir, 'asr-adjudication.json'));
+  let adjudication = await currentAdjudication(dir, fingerprint);
   if (!adjudication) {
-    return { articleId, status: 'missing-adjudication', note: 'no asr-adjudication.json; run inventory first' };
+    console.log(`PROGRESSIVE_REPAIR_CLASSIFY ${articleId} reason=missing-or-stale-adjudication`);
+    try {
+      const result = await validateWithConsensus({ articleId, fingerprint, root: ROOT });
+      row.validation = {
+        status: result.status,
+        fingerprint,
+        fullSha256: result.fullSha256,
+        consensus: result.consensus,
+        representationOnly: result.representationOnly,
+        modelDisagreements: result.modelDisagreements,
+        repairInProgress: false,
+        completedAt: new Date().toISOString(),
+      };
+      state.articles[articleId] = { ...row };
+      await saveState(state);
+      return { articleId, status: 'validated', consensus: result.consensus, parts: [] };
+    } catch (error) {
+      adjudication = await currentAdjudication(dir, fingerprint);
+      const quota = error?.exitCode === EXIT_QUOTA || error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
+      if (!adjudication) {
+        row.validation = {
+          ...previousValidation,
+          status: quota ? 'paused-quota' : 'classification-failed',
+          fingerprint,
+          error: String(error?.message || error || '').slice(0, 700),
+          updatedAt: new Date().toISOString(),
+        };
+        state.articles[articleId] = { ...row };
+        await saveState(state);
+        return { articleId, status: quota ? 'paused-quota' : 'classification-failed', error: row.validation.error };
+      }
+      row.validation = {
+        status: 'failed',
+        fingerprint,
+        fullSha256: adjudication.fullSha256,
+        consensus: adjudication.consensus,
+        error: String(error?.message || error || '').slice(0, 700),
+        updatedAt: new Date().toISOString(),
+      };
+      state.articles[articleId] = { ...row };
+      await saveState(state);
+    }
   }
   if (exactConsensusZero(adjudication.consensus)) {
+    row.validation = {
+      ...(row.validation || previousValidation),
+      status: 'validated',
+      fingerprint,
+      fullSha256: adjudication.fullSha256,
+      consensus: adjudication.consensus,
+      repairInProgress: false,
+      completedAt: new Date().toISOString(),
+    };
+    state.articles[articleId] = { ...row };
+    await saveState(state);
     return { articleId, status: 'already-exact', consensus: adjudication.consensus };
   }
 
@@ -234,7 +322,6 @@ async function repairArticle({ articleId, state, snapshot }) {
 
   process.env.BAREEQ_FORCE_TTS_PARTS = parts.join(',');
   process.env.BAREEQ_TTS_CORRECTION_HINTS_JSON = JSON.stringify(hints);
-  const synth = await dualTransportSynthesize({ apiKey: process.env.GEMINI_API_KEY });
 
   console.log(`PROGRESSIVE_REPAIR_START ${articleId} fingerprint=${fingerprint} parts=${parts.join(',')} tokens=${indices.length} consensus=${JSON.stringify(adjudication.consensus)}`);
   try {
@@ -245,12 +332,20 @@ async function repairArticle({ articleId, state, snapshot }) {
       synthesize: synth,
     });
     console.log(`PROGRESSIVE_REPAIR_GENERATED ${articleId} parts=${generated.forceRegeneratedParts.join(',')} resumed=${generated.resumedParts}`);
+    await invalidateDerivedEvidence(dir);
   } catch (error) {
     const quota = error?.exitCode === EXIT_QUOTA || error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
     const status = quota ? 'paused-quota' : 'repair-failed';
+    const completedThisRound = Number(error?.result?.successfulRequests || error?.result?.ttsRequestsSent || 0);
+    if (completedThisRound > 0) {
+      await invalidateDerivedEvidence(dir);
+    }
     row.validation = {
+      ...(row.validation || previousValidation),
       status,
       fingerprint,
+      repairInProgress: completedThisRound > 0,
+      repairedParts: parts,
       error: String(error?.message || error || '').slice(0, 700),
       updatedAt: new Date().toISOString(),
     };
@@ -269,6 +364,7 @@ async function repairArticle({ articleId, state, snapshot }) {
       representationOnly: result.representationOnly,
       modelDisagreements: result.modelDisagreements,
       repairApplied: true,
+      repairInProgress: false,
       repairedParts: parts,
       completedAt: new Date().toISOString(),
     };
@@ -280,15 +376,17 @@ async function repairArticle({ articleId, state, snapshot }) {
     const quota = error?.exitCode === EXIT_QUOTA || error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
     const status = quota ? 'paused-quota' : 'failed';
     let consensus = null;
-    const fresh = await readJson(path.join(reportsDir, 'asr-adjudication.json'), null);
-    if (!quota && fresh) consensus = fresh.consensus || null;
+    const boundFresh = await currentAdjudication(dir, fingerprint);
+    if (!quota && boundFresh) consensus = boundFresh.consensus || null;
     row.validation = {
+      ...(quota ? (row.validation || previousValidation) : {}),
       status,
       fingerprint,
       consensus,
-      fullSha256: fresh?.fullSha256 || null,
+      fullSha256: boundFresh?.fullSha256 || (quota ? (row.validation?.fullSha256 || previousValidation.fullSha256) : null),
       error: String(error?.message || error || '').slice(0, 700),
       repairApplied: true,
+      repairInProgress: quota,
       repairedParts: parts,
       updatedAt: new Date().toISOString(),
     };
@@ -299,6 +397,7 @@ async function repairArticle({ articleId, state, snapshot }) {
   }
 }
 
+export async function runProgressiveRepair() {
 const only = csvArg('only');
 const skip = csvArg('skip');
 const state = await readJson(STATE_PATH);
@@ -307,8 +406,25 @@ if (!state?.generationComplete || !Array.isArray(snapshot?.articles) || snapshot
   throw new Error('progressive repair requires a generation-complete 15/15 checkpoint and the 15-article truth snapshot');
 }
 
-const results = [];
-for (const item of snapshot.articles) {
+async function repairScore(item, order) {
+  const articleId = item.articleId;
+  const row = state.articles?.[articleId] || {};
+  const fingerprint = row.generation?.fingerprint;
+  if (!fingerprint) return { item, order, partCount: Number.MAX_SAFE_INTEGER, tokenCount: Number.MAX_SAFE_INTEGER };
+  if (row.validation?.repairInProgress === true) return { item, order, partCount: -1, tokenCount: -1 };
+  const dir = candidateDir(articleId, fingerprint, ROOT);
+  const adjudication = await currentAdjudication(dir, fingerprint);
+  if (!adjudication) return { item, order, partCount: Number.MAX_SAFE_INTEGER - 1, tokenCount: Number.MAX_SAFE_INTEGER - 1 };
+  const article = await loadSpokenArticle(articleId, ROOT);
+  const duration = await liveDuration(articleId);
+  const { ranges } = buildPartRanges(article, duration);
+  const indices = failedTokenIndices(adjudication);
+  const parts = new Set(indices.map((index) => partForTokenIndex(ranges, index)?.partIndex).filter(Number.isInteger));
+  return { item, order, partCount: parts.size || Number.MAX_SAFE_INTEGER - 2, tokenCount: indices.length };
+}
+
+const candidates = [];
+for (const [order, item] of snapshot.articles.entries()) {
   const articleId = item.articleId;
   if (skip.has(articleId) || (only.size > 0 && !only.has(articleId))) continue;
   const row = state.articles?.[articleId] || {};
@@ -319,8 +435,33 @@ for (const item of snapshot.articles) {
     console.log(`PROGRESSIVE_REPAIR_SKIP ${articleId} already-exact`);
     continue;
   }
-  const result = await repairArticle({ articleId, state, snapshot });
-  results.push(result);
+  candidates.push(await repairScore(item, order));
+}
+candidates.sort((a, b) => a.partCount - b.partCount || a.tokenCount - b.tokenCount || a.order - b.order);
+console.log(`PROGRESSIVE_REPAIR_ORDER ${candidates.map(({ item, partCount }) => `${item.articleId}:${Number.isSafeInteger(partCount) && partCount < 1000 ? partCount : 'classify'}`).join(',')}`);
+
+const maxArticlesArg = Number(process.argv.find((arg) => arg.startsWith('--max-articles='))?.slice('--max-articles='.length) || 10);
+const maxRounds = Number(process.env.BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE || 4);
+const synth = createBudgetedSynthesizer({ apiKey: process.env.GEMINI_API_KEY });
+const results = [];
+let visited = 0;
+let stopRun = false;
+for (const candidate of candidates) {
+  if (visited >= maxArticlesArg || stopRun) break;
+  const articleId = candidate.item.articleId;
+  visited += 1;
+  for (let round = 1; round <= maxRounds; round += 1) {
+    console.log(`PROGRESSIVE_REPAIR_ROUND ${articleId} round=${round}/${maxRounds}`);
+    const result = await repairArticle({ articleId, state, synth });
+    results.push({ ...result, round });
+    if (result.status === 'validated' || result.status === 'already-exact') break;
+    const stats = synth.stats();
+    if (result.status === 'paused-quota' || stats.dailyQuotaExhausted || stats.budgetExhausted) {
+      stopRun = true;
+      break;
+    }
+    if (result.status !== 'failed') break;
+  }
 }
 
 const nowExact = snapshot.articles.filter((item) => {
@@ -329,6 +470,18 @@ const nowExact = snapshot.articles.filter((item) => {
     && row.validation?.fingerprint === row.generation?.fingerprint
     && exactConsensusZero(row.validation?.consensus);
 });
-console.log(`PROGRESSIVE_REPAIR_SUMMARY exact=${nowExact.length}/15 attempted=${results.length}`);
+console.log(`PROGRESSIVE_REPAIR_SUMMARY exact=${nowExact.length}/15 attemptedRounds=${results.length} visited=${visited} tts=${JSON.stringify(synth.stats())}`);
 console.log(JSON.stringify(results, null, 2));
-process.exit(EXIT_OK);
+return { exactCount: nowExact.length, results, visited, tts: synth.stats(), exitCode: EXIT_OK };
+}
+
+const isCli = process.argv[1] && path.basename(process.argv[1]) === 'audio-progressive-repair.mjs';
+if (isCli) {
+  try {
+    await runProgressiveRepair();
+    process.exit(EXIT_OK);
+  } catch (error) {
+    console.error(error?.stack || error?.message || error);
+    process.exit(error?.exitCode || 1);
+  }
+}

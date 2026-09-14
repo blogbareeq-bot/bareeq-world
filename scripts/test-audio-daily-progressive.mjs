@@ -1,0 +1,86 @@
+import assert from 'node:assert/strict';
+import { parseGeminiQuotaDetail } from './audio-gemini-tts.mjs';
+import { createBudgetedSynthesizer } from './audio-progressive-repair.mjs';
+
+const dailyBody = JSON.stringify({
+  error: {
+    message: 'You exceeded your current quota',
+    details: [
+      {
+        '@type': 'type.googleapis.com/google.rpc.QuotaFailure',
+        violations: [{
+          quotaMetric: 'generativelanguage.googleapis.com/generate_content_free_tier_requests',
+          quotaId: 'GenerateRequestsPerDayPerProjectPerModel-FreeTier',
+          quotaValue: '10',
+        }],
+      },
+      { '@type': 'type.googleapis.com/google.rpc.RetryInfo', retryDelay: '9h12m' },
+    ],
+  },
+});
+const parsedDaily = parseGeminiQuotaDetail(dailyBody);
+assert.equal(parsedDaily.daily, true);
+assert.equal(parsedDaily.quota[0].value, '10');
+
+const args = {
+  article: { title: 'اختبار' },
+  part: { partIndex: 0, text: 'نص' },
+  splitPlan: { parts: [{}] },
+  correctionHint: '',
+};
+
+const previous = {
+  max: process.env.BAREEQ_REPAIR_MAX_REQUESTS,
+  retries: process.env.BAREEQ_REPAIR_MAX_429_RETRIES,
+  interval: process.env.BAREEQ_REPAIR_MIN_INTERVAL_MS,
+};
+try {
+  process.env.BAREEQ_REPAIR_MAX_REQUESTS = '2';
+  process.env.BAREEQ_REPAIR_MAX_429_RETRIES = '1';
+  process.env.BAREEQ_REPAIR_MIN_INTERVAL_MS = '0';
+  let successCalls = 0;
+  const successful = createBudgetedSynthesizer({
+    apiKey: 'test',
+    sleepImpl: async () => {},
+    transportEntries: [['mock', async () => {
+      successCalls += 1;
+      return { audio: Buffer.alloc(120), transport: 'mock' };
+    }]],
+  });
+  await successful(args);
+  await successful(args);
+  await assert.rejects(() => successful(args), /request cap 2/);
+  assert.equal(successCalls, 2);
+  assert.deepEqual(successful.stats(), {
+    sent: 2,
+    successful: 2,
+    quotaRejected: 0,
+    maxRequests: 2,
+    dailyQuotaExhausted: false,
+    budgetExhausted: true,
+  });
+
+  process.env.BAREEQ_REPAIR_MAX_REQUESTS = '10';
+  let secondTransportCalls = 0;
+  const dailyStop = createBudgetedSynthesizer({
+    apiKey: 'test',
+    sleepImpl: async () => { throw new Error('daily quota must not sleep/retry'); },
+    transportEntries: [
+      ['first', async () => { throw Object.assign(new Error('RPD'), { httpStatus: 429, dailyQuota: true }); }],
+      ['second', async () => { secondTransportCalls += 1; return { audio: Buffer.alloc(120) }; }],
+    ],
+  });
+  await assert.rejects(() => dailyStop(args), /RPD/);
+  assert.equal(secondTransportCalls, 0);
+  assert.equal(dailyStop.stats().sent, 1);
+  assert.equal(dailyStop.stats().dailyQuotaExhausted, true);
+} finally {
+  if (previous.max === undefined) delete process.env.BAREEQ_REPAIR_MAX_REQUESTS;
+  else process.env.BAREEQ_REPAIR_MAX_REQUESTS = previous.max;
+  if (previous.retries === undefined) delete process.env.BAREEQ_REPAIR_MAX_429_RETRIES;
+  else process.env.BAREEQ_REPAIR_MAX_429_RETRIES = previous.retries;
+  if (previous.interval === undefined) delete process.env.BAREEQ_REPAIR_MIN_INTERVAL_MS;
+  else process.env.BAREEQ_REPAIR_MIN_INTERVAL_MS = previous.interval;
+}
+
+console.log('Daily progressive audio tests passed: RPD detection, one shared request budget, and immediate daily-quota stop.');
