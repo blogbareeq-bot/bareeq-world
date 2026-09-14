@@ -1,9 +1,10 @@
 {
-  "schema": "bareeq.audio-progressive-status.v1",
+  "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "33924094021",
-  "sourceArtifact": "bareeq-progressive-validation-33924094021",
-  "generatedAt": "2026-09-05T12:54:35.469Z",
+  "sourceRunId": "34824359522",
+  "sourceArtifact": "bareeq-progressive-validation-34824359522",
+  "generatedAt": "2026-09-14T09:05:29.268Z",
+  "publicationComplete": false,
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -22,6 +23,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "34fa55716fe40389283e40c3fc0fca3b8d7f2cf386a2f835edccabeb1d9b659b",
+      "repairedParts": [],
       "error": null
     },
     {
@@ -38,6 +40,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "d7f00585b47dc3ece44c73ac0f62763ffb41a1e4f602ddeae1aabd3d65fd0567",
+      "repairedParts": [],
       "error": null
     },
     {
@@ -54,6 +57,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135",
+      "repairedParts": [],
       "error": null
     },
     {
@@ -70,6 +74,12 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "92669b22bc57d0d561928145bc65f884a4e6c6d2afed4d9eb36fa765dc588920",
+      "repairedParts": [
+        1,
+        2,
+        3,
+        6
+      ],
       "error": "dual-ASR consensus failed: S=8 D=0 I=0 unresolved=0"
     },
     {
@@ -86,6 +96,13 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "d7d05aa3cd45d7e4703f41b13f893b52f6ffd9901838944235d2282161182a60",
+      "repairedParts": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "error": "dual-ASR consensus failed: S=5 D=2 I=0 unresolved=8"
     },
     {
@@ -102,6 +119,12 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "ec5ae835c9cefb6b4fe2b821a89b257f8ff1af86fa5a633a367cecd759f6de0f",
+      "repairedParts": [
+        1,
+        2,
+        3,
+        6
+      ],
       "error": "dual-ASR consensus failed: S=6 D=1 I=0 unresolved=4"
     },
     {
@@ -118,6 +141,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
+      "repairedParts": [],
       "error": "Gemini TTS quota exhausted after retries for part 2"
     },
     {
@@ -134,6 +158,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
+      "repairedParts": [],
       "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
@@ -150,6 +175,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
+      "repairedParts": [],
       "error": "Gemini TTS quota exhausted after retries for part 3"
     },
     {
@@ -158,15 +184,20 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 5,
+      "deletions": 1,
+      "insertions": 0,
+      "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "fullSha256": "28878106d0d7429874d2bd823a24a5ddd2d086e3fdf038eb1d5977c28bc792cf",
+      "repairedParts": [
+        1,
+        2,
+        3
+      ],
+      "error": "dual-ASR consensus failed: S=5 D=1 I=0 unresolved=1"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -182,6 +213,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "1586e603c9e59b9967a51a980b4d2f7b58af262ee2aff24a77eab948d2e969e6",
+      "repairedParts": [],
       "error": null
     },
     {
@@ -198,7 +230,11 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "repairedParts": [
+        1,
+        5
+      ],
+      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 10 reached"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -214,6 +250,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
+      "repairedParts": [],
       "error": "Gemini TTS quota exhausted after retries for part 1"
     },
     {
@@ -230,6 +267,7 @@
       "exact": true,
       "publishedExact": true,
       "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7",
+      "repairedParts": [],
       "error": null
     },
     {
@@ -246,6 +284,7 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
+      "repairedParts": [],
       "error": "Gemini TTS quota exhausted after retries for part 1"
     }
   ]
