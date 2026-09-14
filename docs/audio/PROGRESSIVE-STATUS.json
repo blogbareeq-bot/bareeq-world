@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "34826645209",
-  "sourceArtifact": "bareeq-progressive-validation-34826645209",
-  "generatedAt": "2026-09-14T09:19:46.913Z",
+  "sourceRunId": "34832231197",
+  "sourceArtifact": "bareeq-progressive-validation-34832231197",
+  "generatedAt": "2026-09-14T10:15:46.322Z",
   "publicationComplete": false,
   "publishedCount": 5,
   "fallbackCount": 10,
@@ -184,7 +184,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 2,
       "deletions": 0,
       "insertions": 0,
@@ -195,7 +195,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=1"
+      "error": "Gemini generateContent TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 14.007402969s.\",\"retryDelay\":\"14s\",\"retryDelayMs\":14000,\"quota\":[{\"metric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"id\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"value\":\"10\",\"dimensions\":{\"location\":\"global\",\"mod"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
