@@ -63,8 +63,16 @@ export function extractGenerateContentAudio(payload) {
   return null;
 }
 
-function safeQuotaDetail(body) {
-  if (!body) return 'no response body';
+function durationToMs(value) {
+  const match = String(value || '').trim().match(/^([0-9]+(?:\.[0-9]+)?)(ms|s|m|h)$/i);
+  if (!match) return null;
+  const amount = Number(match[1]);
+  const multiplier = { ms: 1, s: 1000, m: 60000, h: 3600000 }[match[2].toLowerCase()];
+  return Number.isFinite(amount) ? Math.round(amount * multiplier) : null;
+}
+
+export function parseGeminiQuotaDetail(body) {
+  if (!body) return { message: '', retryDelay: null, retryDelayMs: null, quota: [], daily: false };
   try {
     const payload = JSON.parse(body);
     const message = String(payload?.error?.message || '').replace(/[\r\n]+/g, ' ').slice(0, 500);
@@ -79,10 +87,34 @@ function safeQuotaDetail(body) {
         dimensions: item?.quotaDimensions || null,
       }))
       .slice(0, 6);
-    return JSON.stringify({ message, retryDelay: retryInfo?.retryDelay || null, quota });
+    const retryDelay = retryInfo?.retryDelay || null;
+    const daily = quota.some((item) => /per.?day|requests.?per.?day|rpd/i.test(`${item.metric} ${item.id}`));
+    return { message, retryDelay, retryDelayMs: durationToMs(retryDelay), quota, daily };
   } catch {
-    return String(body).replace(/[\r\n]+/g, ' ').slice(0, 500);
+    return {
+      message: String(body).replace(/[\r\n]+/g, ' ').slice(0, 500),
+      retryDelay: null,
+      retryDelayMs: null,
+      quota: [],
+      daily: false,
+    };
   }
+}
+
+function geminiQuotaError(label, body) {
+  const quotaInfo = parseGeminiQuotaDetail(body);
+  return Object.assign(
+    new Error(`${label} HTTP 429: ${JSON.stringify(quotaInfo)}`),
+    {
+      httpStatus: 429,
+      exitCode: EXIT_QUOTA,
+      code: 'BAREEQ_QUOTA',
+      quotaInfo,
+      retryDelay: quotaInfo.retryDelay,
+      retryDelayMs: quotaInfo.retryDelayMs,
+      dailyQuota: quotaInfo.daily,
+    },
+  );
 }
 
 export function encodeGeminiPcmToMp3(pcm, ffmpegPath) {
@@ -163,7 +195,7 @@ export async function synthesizeGeminiPart({ apiKey, part, context, voice = PROD
   }
   if (response.status === 429) {
     const body = await response.text().catch(() => '');
-    throw Object.assign(new Error(`Gemini TTS HTTP 429: ${safeQuotaDetail(body)}`), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
+    throw geminiQuotaError('Gemini TTS', body);
   }
   if (!response.ok) {
     const body = await response.text().catch(() => '');
@@ -193,7 +225,7 @@ export async function synthesizeGeminiGenerateContentPart({ apiKey, part, contex
   }
   if (response.status === 429) {
     const body = await response.text().catch(() => '');
-    throw Object.assign(new Error(`Gemini generateContent TTS HTTP 429: ${safeQuotaDetail(body)}`), { httpStatus: 429, exitCode: EXIT_QUOTA, code: 'BAREEQ_QUOTA' });
+    throw geminiQuotaError('Gemini generateContent TTS', body);
   }
   if (!response.ok) {
     const body = await response.text().catch(() => '');
