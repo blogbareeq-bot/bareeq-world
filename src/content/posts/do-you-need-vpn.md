@@ -6,7 +6,7 @@ category: "المستقبل الآن"
 categorySlug: "future-now"
 seriesSlug: "technology-simply"
 featured: false
-draft: false
+draft: true
 author: "فريق بريق"
 tags: ["الخصوصية", "الأمن الرقمي"]
 image: "/media/do-you-need-vpn.svg"
