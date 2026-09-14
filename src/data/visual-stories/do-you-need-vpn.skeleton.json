@@ -1,0 +1,34 @@
+{
+  "slug": "do-you-need-vpn",
+  "title": "هل تحتاج VPN فعلًا؟ ومتى لا تحتاجه؟",
+  "articlePath": "/posts/do-you-need-vpn/",
+  "image": "/media/do-you-need-vpn.svg",
+  "sourceFingerprint": "b76301504fafc804aa1cd7ab07d96ec356545bbe1f58f6916131c176ddb2cb92",
+  "arc": "",
+  "path": "",
+  "director": {
+    "mood": "editorial-dawn",
+    "label": "",
+    "grammar": "",
+    "density": "airy",
+    "motion": "calm",
+    "palette": []
+  },
+  "cards": [],
+  "_skeleton": {
+    "category": "المستقبل الآن",
+    "quickSummary": "VPN أداة لتغيير مسار اتصالك وإخفاء عنوان IP عن المواقع ونقل الثقة من الشبكة المحلية ومزود الإنترنت إلى مزود VPN. قد تكون مفيدة في حالات محددة، لكنها لا تمنح مجهولية كاملة ولا تستبدل HTTPS وكلمات المرور القوية والمصادقة المتعددة.",
+    "candidateSections": [
+      "ماذا يحدث عندما تشغّل VPN؟",
+      "هل تحتاج VPN على شبكة Wi-Fi عامة؟",
+      "خمس حالات قد تكون فيها VPN مفيدة",
+      "ومتى لا تكون VPN هي الحل؟",
+      "اختبار سريع: هل VPN مناسبة لك؟",
+      "كيف تختار مزود VPN من دون الوقوع في فخ التسويق؟",
+      "ترتيب الأولويات قبل أن تدفع لأي VPN",
+      "الحكم المختصر"
+    ],
+    "suggestedCards": 8,
+    "note": "هذا هيكل عظمي للقصة، لا قصة جاهزة. يحتاج إلى تحرير بشري لكتابة arc, path, و7-10 بطاقات بكل بطاقات تحتوي kicker, title, body, kind, visual."
+  }
+}
