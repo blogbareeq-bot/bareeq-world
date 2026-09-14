@@ -452,6 +452,56 @@ if (!state?.generationComplete || !Array.isArray(snapshot?.articles) || snapshot
   throw new Error('progressive repair requires a generation-complete 15/15 checkpoint and the 15-article truth snapshot');
 }
 
+// Classify every pending candidate before spending any TTS allowance. ASR and
+// TTS have independent budgets; the old interleaved loop stopped at the first
+// TTS RPD response and left later articles unclassified. That also prevented
+// the easiest-first sorter from seeing candidates needing a tiny repair.
+for (const item of snapshot.articles) {
+  const articleId = item.articleId;
+  if (skip.has(articleId) || (only.size > 0 && !only.has(articleId))) continue;
+  const row = state.articles?.[articleId] || {};
+  const fingerprint = row.generation?.fingerprint;
+  if (!fingerprint || row.generation?.status !== 'generated') continue;
+  if (row.validation?.status === 'validated'
+    && row.validation?.fingerprint === fingerprint
+    && exactConsensusZero(row.validation?.consensus)) continue;
+  const dir = candidateDir(articleId, fingerprint, ROOT);
+  if (await currentAdjudication(dir, fingerprint)) continue;
+  console.log(`PROGRESSIVE_PRECLASSIFY ${articleId} reason=missing-or-stale-adjudication`);
+  try {
+    const result = await validateWithConsensus({ articleId, fingerprint, root: ROOT });
+    row.validation = {
+      status: result.status,
+      fingerprint,
+      fullSha256: result.fullSha256,
+      consensus: result.consensus,
+      representationOnly: result.representationOnly,
+      modelDisagreements: result.modelDisagreements,
+      repairInProgress: false,
+      completedAt: new Date().toISOString(),
+    };
+  } catch (error) {
+    const adjudication = await currentAdjudication(dir, fingerprint);
+    const quota = error?.exitCode === EXIT_QUOTA || error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
+    row.validation = adjudication ? {
+      status: 'failed',
+      fingerprint,
+      fullSha256: adjudication.fullSha256,
+      consensus: adjudication.consensus,
+      error: String(error?.message || error || '').slice(0, 700),
+      updatedAt: new Date().toISOString(),
+    } : {
+      ...(row.validation || {}),
+      status: quota ? 'paused-quota' : 'classification-failed',
+      fingerprint,
+      error: String(error?.message || error || '').slice(0, 700),
+      updatedAt: new Date().toISOString(),
+    };
+  }
+  state.articles[articleId] = { ...row };
+  await saveState(state);
+}
+
 async function repairScore(item, order) {
   const articleId = item.articleId;
   const row = state.articles?.[articleId] || {};
