@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34739783915-3",
-  "generatedAt": "2026-09-13T11:49:06.606Z",
+  "checkpointSource": "cache:bareeq-audio-progressive-pr21-34755313701-1",
+  "generatedAt": "2026-09-14T03:13:04.096Z",
   "publishedCount": 5,
   "fallbackCount": 10,
   "exactCount": 5,
@@ -18,7 +18,7 @@
       "developer-interactions",
       "developer-generate-content"
     ],
-    "updatedAt": "2026-09-13T11:49:06.475Z"
+    "updatedAt": "2026-09-14T03:13:03.897Z"
   },
   "rows": [
     {
@@ -164,7 +164,7 @@
         "remainingParts": [
           4
         ],
-        "updatedAt": "2026-09-13T11:49:06.474Z"
+        "updatedAt": "2026-09-14T03:13:03.895Z"
       },
       "error": "Gemini TTS quota exhausted for part 4: all available transports are quota-blocked"
     },
@@ -217,7 +217,7 @@
           4
         ],
         "recoveredFromCheckpoint": true,
-        "updatedAt": "2026-09-13T11:47:05.052Z"
+        "updatedAt": "2026-09-14T03:10:24.752Z"
       },
       "error": "Gemini TTS quota exhausted for part 3: run request cap 10 reached"
     },
