@@ -9,13 +9,13 @@ featured: false
 draft: false
 author: "فريق بريق"
 tags: ["الخصوصية", "الأمن الرقمي"]
-image: "/images/posts/do-you-need-vpn.png"
+image: "/media/do-you-need-vpn.svg"
 imageAlt: "مسار رقمي يمر عبر درع تجريدي يرمز إلى انتقال اتصال الإنترنت عبر شبكة VPN"
 imageWidth: 1600
 imageHeight: 900
 imagePosition: "center"
-thumbnail: "/images/thumbnails/do-you-need-vpn.webp"
-thumbnailAlt: "مسار رقمي ودرع تجريدي يرمزان إلى شبكة VPN والخصوصية"
+thumbnail: "/images/bareeq-social-card.jpg"
+thumbnailAlt: "هوية بريق للمشاركة الاجتماعية"
 quickSummary: "VPN أداة لتغيير مسار اتصالك وإخفاء عنوان IP عن المواقع ونقل الثقة من الشبكة المحلية ومزود الإنترنت إلى مزود VPN. قد تكون مفيدة في حالات محددة، لكنها لا تمنح مجهولية كاملة ولا تستبدل HTTPS وكلمات المرور القوية والمصادقة المتعددة."
 ---
 
