@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { parseGeminiQuotaDetail } from './audio-gemini-tts.mjs';
 import { consensusErrorTotal, createBudgetedSynthesizer } from './audio-progressive-repair.mjs';
 
@@ -23,6 +24,9 @@ assert.equal(parsedDaily.daily, true);
 assert.equal(parsedDaily.quota[0].value, '10');
 assert.equal(consensusErrorTotal({ substitutions: 3, deletions: 1, insertions: 2, unresolved: 1 }), 7);
 assert.equal(consensusErrorTotal({ substitutions: 2, deletions: 0, insertions: 0, unresolved: 0 }), 2);
+const repairSource = await readFile(new URL('./audio-progressive-repair.mjs', import.meta.url), 'utf8');
+assert.ok(repairSource.indexOf('PROGRESSIVE_PRECLASSIFY') < repairSource.indexOf('const candidates = []'),
+  'all pending candidates must be ASR-classified before TTS candidate ordering');
 
 const args = {
   article: { title: 'اختبار' },
