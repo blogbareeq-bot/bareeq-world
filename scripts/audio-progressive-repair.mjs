@@ -1,4 +1,5 @@
-import { readFile, rm } from 'node:fs/promises';
+import { cp, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import {
   EXIT_OK,
@@ -109,6 +110,11 @@ function exactConsensusZero(consensus = {}) {
     .every((key) => Number(consensus[key]) === 0);
 }
 
+export function consensusErrorTotal(consensus = {}) {
+  return ['substitutions', 'deletions', 'insertions', 'unresolved']
+    .reduce((total, key) => total + (Number(consensus[key]) || 0), 0);
+}
+
 async function readJson(file, fallback = null) {
   try {
     return JSON.parse(await readFile(file, 'utf8'));
@@ -214,7 +220,7 @@ function buildCorrectionHint(adjudication = {}, range) {
   return problems.join('; ');
 }
 
-async function repairArticle({ articleId, state, synth }) {
+async function repairArticle({ articleId, state, synth, triedParts = new Set() }) {
   const row = state.articles?.[articleId] || {};
   const gen = row.generation || {};
   const fingerprint = gen.fingerprint;
@@ -309,19 +315,34 @@ async function repairArticle({ articleId, state, synth }) {
     return { articleId, status: 'no-parts', note: 'confirmed errors could not be mapped to parts' };
   }
 
-  const parts = [];
-  for (const [partIndex, entry] of [...failedPartMap.entries()].sort((a, b) => a[0] - b[0])) {
-    parts.push(partIndex + 1);
-    entry.range;
+  // A part regeneration is stochastic: replacing several parts at once can
+  // fix one word while introducing errors elsewhere. Trial one failed part at
+  // a time and compare it with the preserved candidate before accepting it.
+  const orderedPartIndexes = [...failedPartMap.keys()].sort((a, b) => a - b);
+  const trialPartIndex = orderedPartIndexes.find((partIndex) => !triedParts.has(partIndex));
+  if (!Number.isInteger(trialPartIndex)) {
+    return { articleId, status: 'no-untried-part', note: 'all failing parts already received one trial this run' };
   }
+  triedParts.add(trialPartIndex);
+  const parts = [trialPartIndex + 1];
   const hints = {};
   for (const [partIndex, entry] of failedPartMap) {
+    if (partIndex !== trialPartIndex) continue;
     const hint = buildCorrectionHint(adjudication, entry.range);
     hints[String(partIndex + 1)] = hint || 'Read the reviewed transcript verbatim; preserve every spoken token and ending.';
   }
 
   process.env.BAREEQ_FORCE_TTS_PARTS = parts.join(',');
   process.env.BAREEQ_TTS_CORRECTION_HINTS_JSON = JSON.stringify(hints);
+
+  const baselineScore = consensusErrorTotal(adjudication.consensus);
+  const backupRoot = await mkdtemp(path.join(tmpdir(), 'bareeq-audio-trial-'));
+  const backupDir = path.join(backupRoot, 'candidate');
+  await cp(dir, backupDir, { recursive: true });
+  const restoreBaseline = async () => {
+    await rm(dir, { recursive: true, force: true });
+    await cp(backupDir, dir, { recursive: true });
+  };
 
   console.log(`PROGRESSIVE_REPAIR_START ${articleId} fingerprint=${fingerprint} parts=${parts.join(',')} tokens=${indices.length} consensus=${JSON.stringify(adjudication.consensus)}`);
   try {
@@ -336,15 +357,13 @@ async function repairArticle({ articleId, state, synth }) {
   } catch (error) {
     const quota = error?.exitCode === EXIT_QUOTA || error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
     const status = quota ? 'paused-quota' : 'repair-failed';
-    const completedThisRound = Number(error?.result?.successfulRequests || error?.result?.ttsRequestsSent || 0);
-    if (completedThisRound > 0) {
-      await invalidateDerivedEvidence(dir);
-    }
+    await restoreBaseline();
+    await rm(backupRoot, { recursive: true, force: true });
     row.validation = {
       ...(row.validation || previousValidation),
       status,
       fingerprint,
-      repairInProgress: completedThisRound > 0,
+      repairInProgress: false,
       repairedParts: parts,
       error: String(error?.message || error || '').slice(0, 700),
       updatedAt: new Date().toISOString(),
@@ -371,29 +390,56 @@ async function repairArticle({ articleId, state, synth }) {
     state.articles[articleId] = { ...row };
     await saveState(state);
     console.log(`PROGRESSIVE_REPAIR_DONE ${articleId} parts=${parts.join(',')} consensus=${JSON.stringify(result.consensus)}`);
+    await rm(backupRoot, { recursive: true, force: true });
     return { articleId, status: 'validated', consensus: result.consensus, parts };
   } catch (error) {
     const quota = error?.exitCode === EXIT_QUOTA || error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;
-    const status = quota ? 'paused-quota' : 'failed';
-    let consensus = null;
     const boundFresh = await currentAdjudication(dir, fingerprint);
-    if (!quota && boundFresh) consensus = boundFresh.consensus || null;
-    row.validation = {
-      ...(quota ? (row.validation || previousValidation) : {}),
-      status,
-      fingerprint,
-      consensus,
-      fullSha256: boundFresh?.fullSha256 || (quota ? (row.validation?.fullSha256 || previousValidation.fullSha256) : null),
-      error: String(error?.message || error || '').slice(0, 700),
-      repairApplied: true,
-      repairInProgress: quota,
-      repairedParts: parts,
-      updatedAt: new Date().toISOString(),
-    };
+    const trialScore = boundFresh ? consensusErrorTotal(boundFresh.consensus) : Number.POSITIVE_INFINITY;
+    const improved = !quota && boundFresh && trialScore < baselineScore;
+    if (improved) {
+      row.validation = {
+        status: 'failed',
+        fingerprint,
+        consensus: boundFresh.consensus,
+        fullSha256: boundFresh.fullSha256,
+        error: String(error?.message || error || '').slice(0, 700),
+        repairApplied: true,
+        repairInProgress: true,
+        repairedParts: parts,
+        baselineScore,
+        acceptedScore: trialScore,
+        updatedAt: new Date().toISOString(),
+      };
+      console.log(`PROGRESSIVE_REPAIR_IMPROVED ${articleId} part=${parts[0]} score=${baselineScore}->${trialScore}`);
+    } else {
+      await restoreBaseline();
+      row.validation = {
+        ...previousValidation,
+        status: quota ? 'paused-quota' : 'failed',
+        fingerprint,
+        consensus: adjudication.consensus,
+        fullSha256: adjudication.fullSha256,
+        repairInProgress: false,
+        rejectedPart: parts[0],
+        rejectedScore: Number.isFinite(trialScore) ? trialScore : null,
+        baselineScore,
+        error: String(error?.message || error || '').slice(0, 700),
+        updatedAt: new Date().toISOString(),
+      };
+      console.log(`PROGRESSIVE_REPAIR_REJECTED ${articleId} part=${parts[0]} score=${baselineScore}->${Number.isFinite(trialScore) ? trialScore : 'unverified'} restored=yes`);
+    }
+    await rm(backupRoot, { recursive: true, force: true });
     state.articles[articleId] = { ...row };
     await saveState(state);
-    console.log(`PROGRESSIVE_REPAIR_${quota ? 'QUOTA' : 'QUALITY'}_FAIL ${articleId} parts=${parts.join(',')} message=${String(error?.message || error || '').slice(0, 240)}`);
-    return { articleId, status, error: String(error?.message || error || '').slice(0, 200), consensus };
+    return {
+      articleId,
+      status: quota ? 'paused-quota' : (improved ? 'improved' : 'trial-rejected'),
+      error: String(error?.message || error || '').slice(0, 200),
+      consensus: improved ? boundFresh.consensus : adjudication.consensus,
+      baselineScore,
+      trialScore: Number.isFinite(trialScore) ? trialScore : null,
+    };
   }
 }
 
@@ -450,9 +496,10 @@ for (const candidate of candidates) {
   if (visited >= maxArticlesArg || stopRun) break;
   const articleId = candidate.item.articleId;
   visited += 1;
+  const triedParts = new Set();
   for (let round = 1; round <= maxRounds; round += 1) {
     console.log(`PROGRESSIVE_REPAIR_ROUND ${articleId} round=${round}/${maxRounds}`);
-    const result = await repairArticle({ articleId, state, synth });
+    const result = await repairArticle({ articleId, state, synth, triedParts });
     results.push({ ...result, round });
     if (result.status === 'validated' || result.status === 'already-exact') break;
     const stats = synth.stats();
@@ -460,7 +507,7 @@ for (const candidate of candidates) {
       stopRun = true;
       break;
     }
-    if (result.status !== 'failed') break;
+    if (!['failed', 'improved', 'trial-rejected'].includes(result.status)) break;
   }
 }
 
