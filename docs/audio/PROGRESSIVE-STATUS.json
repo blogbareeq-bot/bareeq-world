@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "34824359522",
-  "sourceArtifact": "bareeq-progressive-validation-34824359522",
-  "generatedAt": "2026-09-14T09:05:29.268Z",
+  "sourceRunId": "34826645209",
+  "sourceArtifact": "bareeq-progressive-validation-34826645209",
+  "generatedAt": "2026-09-14T09:19:46.913Z",
   "publicationComplete": false,
   "publishedCount": 5,
   "fallbackCount": 10,
@@ -185,19 +185,17 @@
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 5,
-      "deletions": 1,
+      "substitutions": 2,
+      "deletions": 0,
       "insertions": 0,
-      "unresolved": 1,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "28878106d0d7429874d2bd823a24a5ddd2d086e3fdf038eb1d5977c28bc792cf",
+      "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301",
       "repairedParts": [
-        1,
-        2,
-        3
+        1
       ],
-      "error": "dual-ASR consensus failed: S=5 D=1 I=0 unresolved=1"
+      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=1"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -223,18 +221,17 @@
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
       "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "substitutions": 2,
+      "deletions": 4,
+      "insertions": 1,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
+      "fullSha256": "9420a1cd29057c4b92825995b6e8ec6bcf2e7cf8e64698698fe83711b50ef6bf",
       "repairedParts": [
-        1,
         5
       ],
-      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 10 reached"
+      "error": "Gemini generateContent TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 13.418445116s.\",\"retryDelay\":\"13s\",\"retryDelayMs\":13000,\"quota\":[{\"metric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"id\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"value\":\"10\",\"dimensions\":{\"location\":\"global\",\"mod"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
