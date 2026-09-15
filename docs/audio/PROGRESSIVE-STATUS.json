@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "34832231197",
-  "sourceArtifact": "bareeq-progressive-validation-34832231197",
-  "generatedAt": "2026-09-14T10:15:46.322Z",
+  "sourceRunId": "34959429500",
+  "sourceArtifact": "bareeq-progressive-validation-34959429500",
+  "generatedAt": "2026-09-15T11:02:40.387Z",
   "publicationComplete": false,
   "publishedCount": 5,
   "fallbackCount": 10,
@@ -67,20 +67,17 @@
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 8,
+      "substitutions": 5,
       "deletions": 0,
       "insertions": 0,
-      "unresolved": 0,
+      "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "92669b22bc57d0d561928145bc65f884a4e6c6d2afed4d9eb36fa765dc588920",
+      "fullSha256": "b6311b3ea321a14b3a9ecbe72e51574a423c75c2e70d8b5bc05901960e7cbae2",
       "repairedParts": [
-        1,
-        2,
-        3,
-        6
+        1
       ],
-      "error": "dual-ASR consensus failed: S=8 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=5 D=0 I=0 unresolved=1"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -150,16 +147,18 @@
       "audioKey": "cf933330ca485220",
       "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 1,
+      "deletions": 0,
+      "insertions": 0,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
-      "repairedParts": [],
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "fullSha256": "dc2217a45d1872ab0de9010897ad22028f0e5e93fddb07178d1f6aa2f7f66a71",
+      "repairedParts": [
+        3
+      ],
+      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -184,7 +183,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 2,
       "deletions": 0,
       "insertions": 0,
@@ -195,7 +194,7 @@
       "repairedParts": [
         1
       ],
-      "error": "Gemini generateContent TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 14.007402969s.\",\"retryDelay\":\"14s\",\"retryDelayMs\":14000,\"quota\":[{\"metric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"id\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"value\":\"10\",\"dimensions\":{\"location\":\"global\",\"mod"
+      "error": "dual-ASR consensus failed: S=2 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -220,18 +219,18 @@
       "audioKey": "9d04080d1962a365",
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": 2,
+      "validationStatus": "failed",
+      "substitutions": 1,
       "deletions": 4,
       "insertions": 1,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "9420a1cd29057c4b92825995b6e8ec6bcf2e7cf8e64698698fe83711b50ef6bf",
+      "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3",
       "repairedParts": [
         5
       ],
-      "error": "Gemini generateContent TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 13.418445116s.\",\"retryDelay\":\"13s\",\"retryDelayMs\":13000,\"quota\":[{\"metric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"id\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"value\":\"10\",\"dimensions\":{\"location\":\"global\",\"mod"
+      "error": "dual-ASR consensus failed: S=1 D=4 I=1 unresolved=0"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -239,16 +238,16 @@
       "audioKey": "4d194dd1e6a739a8",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": null,
-      "deletions": null,
-      "insertions": null,
-      "unresolved": null,
+      "validationStatus": "failed",
+      "substitutions": 6,
+      "deletions": 0,
+      "insertions": 0,
+      "unresolved": 1,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": null,
+      "fullSha256": "154f6f71113702268b855606a318ffa8a6d5ab46235c40f8f3345b1387d72000",
       "repairedParts": [],
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "error": "dual-ASR consensus failed: S=7 D=1 I=0 unresolved=0"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
@@ -281,8 +280,10 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": null,
-      "repairedParts": [],
-      "error": "Gemini TTS quota exhausted after retries for part 1"
+      "repairedParts": [
+        1
+      ],
+      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 10 reached"
     }
   ]
 }
