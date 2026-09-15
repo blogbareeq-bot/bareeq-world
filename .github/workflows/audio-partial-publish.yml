@@ -21,6 +21,9 @@ on:
   # reset in both daylight-saving and standard time.
   schedule:
     - cron: '20 8 * * *'
+    # GitHub may drop a scheduled event; an off-peak backup keeps the campaign
+    # moving. The schedule gate below skips it when today's primary ran.
+    - cron: '47 10 * * *'
   workflow_dispatch:
 
 permissions:
@@ -32,6 +35,33 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  schedule-gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - id: check
+        run: |
+          if [ "${{ github.event_name }}" != schedule ]; then
+            echo 'should-run=true' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          node - <<'NODE' >> "$GITHUB_OUTPUT"
+          const fs = require('fs');
+          const filename = 'docs/audio/PROGRESSIVE-STATUS.json';
+          const status = fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, 'utf8')) : {};
+          // Primary and backup share a UTC date. A complete production run
+          // writes a fresh status before pushing, including quota-only pauses.
+          const today = new Date().toISOString().slice(0, 10);
+          const alreadyRan = typeof status.generatedAt === 'string'
+            && status.generatedAt.slice(0, 10) === today;
+          process.stdout.write(`should-run=${!alreadyRan}\n`);
+          console.error(`SCHEDULE_GATE date=${today} already-ran=${alreadyRan}`);
+          NODE
+
   offline-gates:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -50,7 +80,8 @@ jobs:
           node --check scripts/audio-gemini-tts.mjs
 
   repair-publish:
-    if: github.event_name != 'pull_request'
+    needs: schedule-gate
+    if: github.event_name != 'pull_request' && needs.schedule-gate.outputs.should-run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 240
     env:
