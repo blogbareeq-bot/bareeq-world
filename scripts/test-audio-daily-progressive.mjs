@@ -6,6 +6,7 @@ import {
   compareRepairCandidates,
   consensusErrorTotal,
   createBudgetedSynthesizer,
+  shouldRetryCurrentArticle,
 } from './audio-progressive-repair.mjs';
 
 const dailyBody = JSON.stringify({
@@ -40,6 +41,10 @@ const prioritized = [
   { errorScore: 1, repairPriority: 1, partCount: 2, tokenCount: 1, order: 1 },
 ].sort(compareRepairCandidates);
 assert.equal(prioritized[0].errorScore, 1, 'fewest consensus errors must be repaired first');
+assert.equal(shouldRetryCurrentArticle('repair-failed'), true,
+  'a restored candidate must keep article focus after a transient synthesis failure');
+assert.equal(shouldRetryCurrentArticle('paused-quota'), false,
+  'a daily quota stop must still end the run');
 const repairSource = await readFile(new URL('./audio-progressive-repair.mjs', import.meta.url), 'utf8');
 assert.ok(repairSource.indexOf('PROGRESSIVE_PRECLASSIFY') < repairSource.indexOf('const candidates = []'),
   'all pending candidates must be ASR-classified before TTS candidate ordering');
