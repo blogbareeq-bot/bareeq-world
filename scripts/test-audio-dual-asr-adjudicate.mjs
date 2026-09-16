@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
-import { adjudicateDualAsr, representationEquivalent } from './audio-dual-asr-adjudicate.mjs';
+import {
+  ADJUDICATION_POLICY_VERSION,
+  adjudicateDualAsr,
+  representationEquivalent,
+} from './audio-dual-asr-adjudicate.mjs';
 import { INDEPENDENT_ASR_MODELS } from './audio-constants.mjs';
 import { tokenizeVerbal } from './audio-exact-match.mjs';
 
@@ -7,6 +11,7 @@ assert.equal(representationEquivalent('سيئ', 'سيء'), true);
 assert.equal(representationEquivalent('عشرة', '10'), true);
 assert.equal(representationEquivalent('3', 'ثالثا'), true);
 assert.equal(representationEquivalent('شاتًا', 'شات'), true);
+assert.equal(representationEquivalent('لإنهائه', 'لانهائه'), true);
 assert.equal(representationEquivalent('أنثروبك', 'أنثروبيك'), true);
 assert.equal(representationEquivalent('أنثروبك', 'Anthropic'), true);
 assert.equal(representationEquivalent('كلود', 'cloud'), true);
@@ -81,6 +86,7 @@ assert.deepEqual(passed.consensus, { substitutions: 0, deletions: 0, insertions:
 assert.equal(passed.representationOnly.length, 4);
 assert.equal(passed.modelDisagreements.length, 2);
 assert.equal(passed.policy.humanListeningStillRequired, true);
+assert.equal(passed.policy.version, ADJUDICATION_POLICY_VERSION);
 
 const deleteA = structuredClone(fixedFirst);
 deleteA.differences.push({ type: 'deletion', expected: 'النتيجة', actual: null, expectedIndex: idx('النتيجة'), actualIndex: idx('النتيجة') });
