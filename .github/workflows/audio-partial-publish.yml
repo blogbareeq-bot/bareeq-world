@@ -94,7 +94,10 @@ jobs:
       BAREEQ_STATUS_FILE: docs/audio/PROGRESSIVE-STATUS.json
       BAREEQ_REPAIR_MAX_REQUESTS: '10'
       BAREEQ_REPAIR_MAX_429_RETRIES: '2'
-      BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '2'
+      # Finish the closest article before moving on. A rejected stochastic
+      # trial restores the preserved baseline and may retry the same part.
+      BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '10'
+      BAREEQ_REPAIR_MAX_TRIALS_PER_PART: '10'
       BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
     steps:
       - name: Checkout current production branch
