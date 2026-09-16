@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { parseGeminiQuotaDetail } from './audio-gemini-tts.mjs';
-import { consensusErrorTotal, createBudgetedSynthesizer } from './audio-progressive-repair.mjs';
+import {
+  chooseRepairPart,
+  compareRepairCandidates,
+  consensusErrorTotal,
+  createBudgetedSynthesizer,
+} from './audio-progressive-repair.mjs';
 
 const dailyBody = JSON.stringify({
   error: {
@@ -24,6 +29,17 @@ assert.equal(parsedDaily.daily, true);
 assert.equal(parsedDaily.quota[0].value, '10');
 assert.equal(consensusErrorTotal({ substitutions: 3, deletions: 1, insertions: 2, unresolved: 1 }), 7);
 assert.equal(consensusErrorTotal({ substitutions: 2, deletions: 0, insertions: 0, unresolved: 0 }), 2);
+const partAttempts = new Map();
+assert.equal(chooseRepairPart([3], partAttempts, 3), 3);
+partAttempts.set(3, 1);
+assert.equal(chooseRepairPart([3], partAttempts, 3), 3, 'the same failed part may be retried');
+partAttempts.set(3, 3);
+assert.equal(chooseRepairPart([3], partAttempts, 3), undefined, 'the per-part trial cap is enforced');
+const prioritized = [
+  { errorScore: 4, repairPriority: 0, partCount: 1, tokenCount: 4, order: 0 },
+  { errorScore: 1, repairPriority: 1, partCount: 2, tokenCount: 1, order: 1 },
+].sort(compareRepairCandidates);
+assert.equal(prioritized[0].errorScore, 1, 'fewest consensus errors must be repaired first');
 const repairSource = await readFile(new URL('./audio-progressive-repair.mjs', import.meta.url), 'utf8');
 assert.ok(repairSource.indexOf('PROGRESSIVE_PRECLASSIFY') < repairSource.indexOf('const candidates = []'),
   'all pending candidates must be ASR-classified before TTS candidate ordering');
@@ -89,4 +105,4 @@ try {
   else process.env.BAREEQ_REPAIR_MIN_INTERVAL_MS = previous.interval;
 }
 
-console.log('Daily progressive audio tests passed: RPD detection, one shared request budget, and immediate daily-quota stop.');
+console.log('Daily progressive audio tests passed: closest-first retries, RPD detection, shared request budget, and immediate daily-quota stop.');
