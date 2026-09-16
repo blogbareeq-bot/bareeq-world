@@ -115,6 +115,21 @@ export function consensusErrorTotal(consensus = {}) {
     .reduce((total, key) => total + (Number(consensus[key]) || 0), 0);
 }
 
+export function chooseRepairPart(partIndexes, partAttempts = new Map(), maxTrialsPerPart = 1) {
+  const limit = Math.max(1, Number(maxTrialsPerPart) || 1);
+  return [...partIndexes]
+    .sort((a, b) => a - b)
+    .find((partIndex) => (partAttempts.get(partIndex) || 0) < limit);
+}
+
+export function compareRepairCandidates(a, b) {
+  return a.errorScore - b.errorScore
+    || a.repairPriority - b.repairPriority
+    || a.partCount - b.partCount
+    || a.tokenCount - b.tokenCount
+    || a.order - b.order;
+}
+
 async function readJson(file, fallback = null) {
   try {
     return JSON.parse(await readFile(file, 'utf8'));
@@ -220,7 +235,13 @@ function buildCorrectionHint(adjudication = {}, range) {
   return problems.join('; ');
 }
 
-async function repairArticle({ articleId, state, synth, triedParts = new Set() }) {
+async function repairArticle({
+  articleId,
+  state,
+  synth,
+  partAttempts = new Map(),
+  maxTrialsPerPart = 1,
+}) {
   const row = state.articles?.[articleId] || {};
   const gen = row.generation || {};
   const fingerprint = gen.fingerprint;
@@ -318,12 +339,15 @@ async function repairArticle({ articleId, state, synth, triedParts = new Set() }
   // A part regeneration is stochastic: replacing several parts at once can
   // fix one word while introducing errors elsewhere. Trial one failed part at
   // a time and compare it with the preserved candidate before accepting it.
-  const orderedPartIndexes = [...failedPartMap.keys()].sort((a, b) => a - b);
-  const trialPartIndex = orderedPartIndexes.find((partIndex) => !triedParts.has(partIndex));
+  const trialPartIndex = chooseRepairPart(failedPartMap.keys(), partAttempts, maxTrialsPerPart);
   if (!Number.isInteger(trialPartIndex)) {
-    return { articleId, status: 'no-untried-part', note: 'all failing parts already received one trial this run' };
+    return {
+      articleId,
+      status: 'part-trial-limit',
+      note: `all failing parts reached the per-part trial limit (${maxTrialsPerPart})`,
+    };
   }
-  triedParts.add(trialPartIndex);
+  partAttempts.set(trialPartIndex, (partAttempts.get(trialPartIndex) || 0) + 1);
   const parts = [trialPartIndex + 1];
   const hints = {};
   for (const [partIndex, entry] of failedPartMap) {
@@ -506,17 +530,33 @@ async function repairScore(item, order) {
   const articleId = item.articleId;
   const row = state.articles?.[articleId] || {};
   const fingerprint = row.generation?.fingerprint;
-  if (!fingerprint) return { item, order, partCount: Number.MAX_SAFE_INTEGER, tokenCount: Number.MAX_SAFE_INTEGER };
-  if (row.validation?.repairInProgress === true) return { item, order, partCount: -1, tokenCount: -1 };
+  const missing = Number.MAX_SAFE_INTEGER;
+  if (!fingerprint) return { item, order, errorScore: missing, repairPriority: 1, partCount: missing, tokenCount: missing };
   const dir = candidateDir(articleId, fingerprint, ROOT);
   const adjudication = await currentAdjudication(dir, fingerprint);
-  if (!adjudication) return { item, order, partCount: Number.MAX_SAFE_INTEGER - 1, tokenCount: Number.MAX_SAFE_INTEGER - 1 };
+  if (!adjudication) {
+    return {
+      item,
+      order,
+      errorScore: missing - 1,
+      repairPriority: 1,
+      partCount: missing - 1,
+      tokenCount: missing - 1,
+    };
+  }
   const article = await loadSpokenArticle(articleId, ROOT);
   const duration = await liveDuration(articleId);
   const { ranges } = buildPartRanges(article, duration);
   const indices = failedTokenIndices(adjudication);
   const parts = new Set(indices.map((index) => partForTokenIndex(ranges, index)?.partIndex).filter(Number.isInteger));
-  return { item, order, partCount: parts.size || Number.MAX_SAFE_INTEGER - 2, tokenCount: indices.length };
+  return {
+    item,
+    order,
+    errorScore: consensusErrorTotal(adjudication.consensus),
+    repairPriority: row.validation?.repairInProgress === true ? 0 : 1,
+    partCount: parts.size || missing - 2,
+    tokenCount: indices.length,
+  };
 }
 
 const candidates = [];
@@ -533,11 +573,12 @@ for (const [order, item] of snapshot.articles.entries()) {
   }
   candidates.push(await repairScore(item, order));
 }
-candidates.sort((a, b) => a.partCount - b.partCount || a.tokenCount - b.tokenCount || a.order - b.order);
-console.log(`PROGRESSIVE_REPAIR_ORDER ${candidates.map(({ item, partCount }) => `${item.articleId}:${Number.isSafeInteger(partCount) && partCount < 1000 ? partCount : 'classify'}`).join(',')}`);
+candidates.sort(compareRepairCandidates);
+console.log(`PROGRESSIVE_REPAIR_ORDER ${candidates.map(({ item, errorScore, partCount }) => `${item.articleId}:${Number.isSafeInteger(errorScore) && errorScore < 1000 ? `errors=${errorScore},parts=${partCount}` : 'classify'}`).join(',')}`);
 
 const maxArticlesArg = Number(process.argv.find((arg) => arg.startsWith('--max-articles='))?.slice('--max-articles='.length) || 10);
 const maxRounds = Number(process.env.BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE || 4);
+const maxTrialsPerPart = Number(process.env.BAREEQ_REPAIR_MAX_TRIALS_PER_PART || maxRounds);
 const synth = createBudgetedSynthesizer({ apiKey: process.env.GEMINI_API_KEY });
 const results = [];
 let visited = 0;
@@ -546,10 +587,10 @@ for (const candidate of candidates) {
   if (visited >= maxArticlesArg || stopRun) break;
   const articleId = candidate.item.articleId;
   visited += 1;
-  const triedParts = new Set();
+  const partAttempts = new Map();
   for (let round = 1; round <= maxRounds; round += 1) {
     console.log(`PROGRESSIVE_REPAIR_ROUND ${articleId} round=${round}/${maxRounds}`);
-    const result = await repairArticle({ articleId, state, synth, triedParts });
+    const result = await repairArticle({ articleId, state, synth, partAttempts, maxTrialsPerPart });
     results.push({ ...result, round });
     if (result.status === 'validated' || result.status === 'already-exact') break;
     const stats = synth.stats();
