@@ -15,6 +15,8 @@ import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { loadSpokenArticle } from './audio-split.mjs';
 import { boundIdentity } from './audio-report.mjs';
 
+export const ADJUDICATION_POLICY_VERSION = 2;
+
 const NUMBER_FORMS = new Map([
   [0, ['0', '٠', 'صفر']],
   [1, ['1', '١', 'واحد', 'واحدة', 'أول', 'اول', 'أولا', 'اولا', 'الأول', 'الاول', 'الأولى', 'الاولى']],
@@ -46,6 +48,10 @@ const APPROVED_ORTHOGRAPHIC_EQUIVALENTS = new Map([
   // returns the undiacritized loanword «شات» without the orthographic tanween
   // alif; this exact pair is representation-only, not a lexical substitution.
   ['شاتا', new Set(['شات'])],
+  // Both independent ASR models render this inflected form without the hamza
+  // seat even when the audible word is unchanged. Keep this exception exact
+  // and local; medial-hamza removal is not accepted generically.
+  ['لإنهائه', new Set(['لانهائه'])],
   // Exact named-entity transliteration variants observed independently across
   // the two ASR models. These pairs preserve the same foreign proper name and
   // are deliberately whitelisted one-by-one; no fuzzy/phonetic matching is used.
@@ -223,10 +229,11 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
     models: [...models],
     method: 'independent-dual-asr-consensus-with-recorded-representation-equivalence',
     policy: {
+      version: ADJUDICATION_POLICY_VERSION,
       rawReportsImmutable: true,
       oneModelDivergence: 'recorded-as-asr-disagreement; not counted as an audio error when the other independent model matches expected text',
       bothModelsSameNonEquivalentDivergence: 'counted as a substantive spoken error',
-      representationEquivalence: ['same normalized token', 'final hamza carrier only', 'explicit approved Arabic ASR orthography شاتًا/شات', 'strict per-name transliteration whitelist for أنثروبك/Anthropic, كلود/Claude, بروكتر/Procter, غامبل/Gamble', 'explicit numeric/cardinal/ordinal verbalization for 0-10, 100, 1000', 'lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)'],
+      representationEquivalence: ['same normalized token', 'final hamza carrier only', 'explicit approved Arabic ASR orthography شاتًا/شات and لإنهائه/لانهائه', 'strict per-name transliteration whitelist for أنثروبك/Anthropic, كلود/Claude, بروكتر/Procter, غامبل/Gamble', 'explicit numeric/cardinal/ordinal verbalization for 0-10, 100, 1000', 'lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)'],
       fuzzyMatching: false,
       stemming: false,
       synonyms: false,
