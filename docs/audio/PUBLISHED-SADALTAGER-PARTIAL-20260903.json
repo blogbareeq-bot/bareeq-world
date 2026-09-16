@@ -5,10 +5,10 @@
   "voice": "Sadaltager",
   "publicationStatus": "partial-with-existing-live-fallback",
   "publicationComplete": false,
-  "publishedCount": 5,
-  "fallbackCount": 10,
+  "publishedCount": 6,
+  "fallbackCount": 9,
   "publicationPolicy": "docs/audio/PUBLICATION-POLICY-20260901.json",
-  "generatedAt": "2026-09-16T13:06:39.058Z",
+  "generatedAt": "2026-09-16T13:20:12.068Z",
   "articles": [
     {
       "articleId": "ai-agents-future-now",
@@ -24,6 +24,11 @@
       "articleId": "altadakhom-explained-simply",
       "fingerprint": "58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45",
       "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135"
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
+      "fullSha256": "dc2217a45d1872ab0de9010897ad22028f0e5e93fddb07178d1f6aa2f7f66a71"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -51,10 +56,6 @@
     },
     {
       "articleId": "why-some-passports-are-stronger",
-      "reason": "awaiting-exact-dual-asr-campaign-completion"
-    },
-    {
-      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
       "reason": "awaiting-exact-dual-asr-campaign-completion"
     },
     {

@@ -1,0 +1,702 @@
+{
+  "version": 3,
+  "generatorVersion": 10,
+  "syncVersion": 1,
+  "speechScriptHash": "c8b968121cd2ff0dbbb9096ed2053855d104d0c69cd638116b73122cf6ac303a",
+  "speechInput": "reviewed-contextual-speech-script",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "language": "ar",
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+  "title": "أطياف الوهم: أربع مغالطات منطقية نقع فيها يوميًا",
+  "audioKey": "cf933330ca485220",
+  "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
+  "fullSha256": "dc2217a45d1872ab0de9010897ad22028f0e5e93fddb07178d1f6aa2f7f66a71",
+  "defaultVoice": "sadaltager",
+  "voices": [
+    {
+      "id": "sadaltager",
+      "label": "سادالتاجر (Sadaltager)",
+      "description": "معرفي طبيعي مناسب لمقالات بريق",
+      "providerVoice": "Sadaltager",
+      "totalDurationSeconds": 680.328
+    }
+  ],
+  "syncMethod": "paragraph-weighted",
+  "performanceInstructions": "### TASK\nSynthesize the approved Arabic transcript below as speech. TRANSCRIPT is the authoritative, linguistically reviewed Speech Script. Speak only its words, exactly as written. Every written Arabic diacritic is binding: do not reinterpret a vocalized word as another reading. Preserve each token's exact lexical and morphological form; never replace it with a more common, related, or neighboring form. For example, if the transcript says «تصعد», pronounce «تصعد» exactly and never substitute «تصاعد». Do not add, omit, paraphrase, or reorder any word. Do not normalize a written token into another lexical or morphological form. Do not read these directions or labels aloud.\n\n### AUDIO PROFILE\nA mature, well-read Arabic narrator for Bareeq, a refined knowledge blog for curious adult readers.\n\n### SCENE\nA contemporary Arabic recording studio in daylight. The narrator speaks naturally to one attentive listener in a calm, professional setting.\n\n### DIRECTOR'S NOTES\nUse clear Modern Standard Arabic. Sound natural, human, warm, and intellectually engaging. Use a normal conversational volume, never a whisper or a breathy delivery. Keep a comfortable medium pace with subtle organic variation. Articulate clearly without over-pronouncing words or sounding like a news anchor. Let questions carry gentle curiosity, explanations sound calm and confident, and conclusions feel reflective and quietly uplifting. Avoid theatrical acting, advertising energy, excessive solemnity, and monotone delivery.",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "encodingTool": "ffmpeg-libmp3lame",
+  "disclosure": "الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.",
+  "parts": [
+    {
+      "characters": 1759,
+      "sync": [
+        {
+          "id": "b0001",
+          "type": "paragraph",
+          "match": "تقول في اجتماع نحتاج إلى أسبوع إضافي لاختبار المنتج قبل إطلاقه فيأتي الرد إذن أنت تريد تأجيل المشروع إلى ما لا نهاية تبد",
+          "start": 0.024956,
+          "end": 0.141014
+        },
+        {
+          "id": "b0002",
+          "type": "paragraph",
+          "match": "هذا النوع من الانحراف يحدث كثيرا لأن النقاش اليومي سريع ولأننا لا نحلل كل جملة كما لو كنا في درس للمنطق لكن تعلم أسماء ب",
+          "start": 0.141014,
+          "end": 0.296436
+        },
+        {
+          "id": "b0003",
+          "type": "paragraph",
+          "match": "المغالطة المنطقية خلل في بنية الحجة أو في الصلة بين مقدماتها ونتيجتها وهي تختلف عن التحيز المعرفي فالتحيز ميل نفسي منتظم",
+          "start": 0.296436,
+          "end": 0.431753
+        },
+        {
+          "id": "b0004",
+          "type": "paragraph",
+          "match": "في هذا المقال نركز على أربع مغالطات شائعة والأهم من تعريفها كيف نكتشفها في نقاش حقيقي ومتى لا يصح استخدام اسمها",
+          "start": 0.431753,
+          "end": 0.498944
+        },
+        {
+          "id": "b0005",
+          "type": "h2",
+          "match": "لماذا تبدو الحجة المعيبة مقنعة أحيانا",
+          "start": 0.498944,
+          "end": 0.519864
+        },
+        {
+          "id": "b0006",
+          "type": "paragraph",
+          "match": "لأن المغالطة لا تأتي عادة في صورة عبارة تقول أنا استدلال خاطئ قد تكون الجملة صحيحة جزئيا أو تلمس نقطة جانبية مهمة أو تست",
+          "start": 0.519864,
+          "end": 0.70529
+        },
+        {
+          "id": "b0007",
+          "type": "paragraph",
+          "match": "ومن المفيد هنا التمييز بين نتيجة خاطئة واستدلال مغلوط قد يصل شخص إلى نتيجة صحيحة بطريقة ضعيفة كأن يقول إن منتجا آمن لأن ",
+          "start": 0.70529,
+          "end": 0.891102
+        },
+        {
+          "id": "b0008",
+          "type": "paragraph",
+          "match": "لذلك حين نبحث عن المغالطة لا نسأل فقط هل أتفق مع النتيجة بل هل الأسباب المقدمة تمنحني حقا سببا كافيا لقبولها",
+          "start": 0.891102,
+          "end": 0.962484
+        },
+        {
+          "id": "b0009",
+          "type": "h2",
+          "match": "1 رجل القش حين نرد على نسخة أضعف من كلام الطرف الآخر",
+          "start": 0.962484,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0001",
+        "b0002",
+        "b0003",
+        "b0004",
+        "b0005",
+        "b0006",
+        "b0007",
+        "b0008",
+        "b0009"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/cf933330ca485220/part-001-def0fc3fe572.clean.mp3",
+          "bytes": 2071917,
+          "durationSeconds": 172.656,
+          "sha256": "191c5a8bda60872135cb5a1e4691451a3a2d7bb4c61b07eef2edf0baa4acb3c1"
+        }
+      }
+    },
+    {
+      "characters": 1841,
+      "sync": [
+        {
+          "id": "b0010",
+          "type": "paragraph",
+          "match": "تحدث مغالطة رجل القش عندما يعاد تقديم موقف شخص بطريقة أضعف أو أكثر تطرفا أو أسهل للهجوم ثم يفند ذلك البديل بدل الموقف ال",
+          "start": 0,
+          "end": 0.068769
+        },
+        {
+          "id": "b0011",
+          "type": "paragraph",
+          "match": "لنعد إلى المثال الأول الاقتراح كان أسبوع إضافي للاختبار الرد حوله إلى تأجيل بلا نهاية المشكلة ليست في اختلاف الرأي حول ا",
+          "start": 0.068769,
+          "end": 0.172472
+        },
+        {
+          "id": "b0012",
+          "type": "paragraph",
+          "match": "مثال آخر",
+          "start": 0.172472,
+          "end": 0.178843
+        },
+        {
+          "id": "b0013",
+          "type": "list-item",
+          "match": "تقول من المفيد أن تقلل المدرسة الواجبات المتكررة وتزيد التمارين التي تحتاج إلى تطبيق",
+          "start": 0.178843,
+          "end": 0.221776
+        },
+        {
+          "id": "b0014",
+          "type": "list-item",
+          "match": "يرد شخص إذن تريد إلغاء الواجبات وترك الطلاب بلا تدريب",
+          "start": 0.221776,
+          "end": 0.252872
+        },
+        {
+          "id": "b0015",
+          "type": "paragraph",
+          "match": "الطرف الثاني يستطيع أن يعارض تقليل الواجبات لكن عليه أن يعارض الاقتراح كما هو لا أن يصنع نسخة أشد منه ثم يهزمها",
+          "start": 0.252872,
+          "end": 0.316792
+        },
+        {
+          "id": "b0016",
+          "type": "h3",
+          "match": "متى لا يكون الأمر رجل قش",
+          "start": 0.316792,
+          "end": 0.334929
+        },
+        {
+          "id": "b0017",
+          "type": "paragraph",
+          "match": "ليس كل تلخيص ناقص مغالطة قد يفهم الطرف كلامك بصورة مختلفة فعلا وقد يطلب توضيحا وقد يستنتج نتيجة يعتقد أنها لازمة لموقفك ",
+          "start": 0.334929,
+          "end": 0.460238
+        },
+        {
+          "id": "b0018",
+          "type": "h3",
+          "match": "سؤال بريق للكشف عنها",
+          "start": 0.460238,
+          "end": 0.471045
+        },
+        {
+          "id": "b0019",
+          "type": "paragraph",
+          "match": "لو طلبنا من صاحب الفكرة أن يصوغ موقفه بأقوى صورة يقبلها هل ستكون هذه هي الحجة التي نرد عليها",
+          "start": 0.471045,
+          "end": 0.525403
+        },
+        {
+          "id": "b0020",
+          "type": "paragraph",
+          "match": "إذا كانت الإجابة لا فربما ابتعد النقاش عن هدفه",
+          "start": 0.525403,
+          "end": 0.553411
+        },
+        {
+          "id": "b0021",
+          "type": "h2",
+          "match": "2 الشخصنة حين تصبح سيرة المتحدث بديلا عن فحص حجته",
+          "start": 0.553411,
+          "end": 0.583992
+        },
+        {
+          "id": "b0022",
+          "type": "paragraph",
+          "match": "في الشخصنة يتحول الرد من تقييم الادعاء إلى مهاجمة صاحب الادعاء على نحو لا يحسم صحة ما قاله",
+          "start": 0.583992,
+          "end": 0.634861
+        },
+        {
+          "id": "b0023",
+          "type": "paragraph",
+          "match": "مثال بسيط يقدم موظف اقتراحا لتقليل الهدر فيقال لا نأخذ منه نصائح في الكفاءة مكتبه نفسه غير مرتب قد يكون ترتيب المكتب موض",
+          "start": 0.634861,
+          "end": 0.739625
+        },
+        {
+          "id": "b0024",
+          "type": "paragraph",
+          "match": "الطريقة الأدق هي فصل مسارين",
+          "start": 0.739625,
+          "end": 0.754436
+        },
+        {
+          "id": "b0025",
+          "type": "list-item",
+          "match": "ما جودة الدليل أو الاستدلال",
+          "start": 0.754436,
+          "end": 0.77072
+        },
+        {
+          "id": "b0026",
+          "type": "list-item",
+          "match": "هل توجد معلومات عن المتحدث تؤثر فعلا في موثوقية الشهادة أو وجود تضارب مصالح",
+          "start": 0.77072,
+          "end": 0.811502
+        },
+        {
+          "id": "b0027",
+          "type": "h3",
+          "match": "متى تكون معلومات الشخص ذات صلة",
+          "start": 0.811502,
+          "end": 0.830564
+        },
+        {
+          "id": "b0028",
+          "type": "paragraph",
+          "match": "هنا يقع خطأ معاكس شائع الاعتقاد أن ذكر الشخص مغالطة في كل الأحوال ليس كذلك",
+          "start": 0.830564,
+          "end": 0.877017
+        },
+        {
+          "id": "b0029",
+          "type": "paragraph",
+          "match": "إذا كان النقاش عن شهادة شاهد أو خبرة متخصص أو تضارب مصالح أو مصدر تمويل فقد تكون معلومات عن المتحدث ذات صلة مباشرة بوزن ",
+          "start": 0.877017,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0010",
+        "b0011",
+        "b0012",
+        "b0013",
+        "b0014",
+        "b0015",
+        "b0016",
+        "b0017",
+        "b0018",
+        "b0019",
+        "b0020",
+        "b0021",
+        "b0022",
+        "b0023",
+        "b0024",
+        "b0025",
+        "b0026",
+        "b0027",
+        "b0028",
+        "b0029"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/cf933330ca485220/part-002-3b91ea1651fa.clean.mp3",
+          "bytes": 1995597,
+          "durationSeconds": 166.296,
+          "sha256": "b9233f40a584192973859a792f1d322bc9239438cdfb8e0995a6e29d67e8dac6"
+        }
+      }
+    },
+    {
+      "characters": 1806,
+      "sync": [
+        {
+          "id": "b0030",
+          "type": "paragraph",
+          "match": "المغالطة تظهر عندما يستخدم الهجوم الشخصي بدل فحص الحجة لا عندما تكون خصائص المصدر جزءا حقيقيا من السؤال",
+          "start": 0,
+          "end": 0.0561
+        },
+        {
+          "id": "b0031",
+          "type": "h3",
+          "match": "سؤال بريق للكشف عنها",
+          "start": 0.0561,
+          "end": 0.06734
+        },
+        {
+          "id": "b0032",
+          "type": "paragraph",
+          "match": "لو قال الجملة نفسها شخص آخر لا نعرف عنه شيئا هل ستبقى الحجة قوية أو ضعيفة للأسباب نفسها",
+          "start": 0.06734,
+          "end": 0.121192
+        },
+        {
+          "id": "b0033",
+          "type": "paragraph",
+          "match": "إذا كان نعم فربما انتقل الحوار من الفكرة إلى صاحبها بلا حاجة",
+          "start": 0.121192,
+          "end": 0.15856
+        },
+        {
+          "id": "b0034",
+          "type": "h2",
+          "match": "3 المأزق المفتعل حين يختصر الواقع في خيارين فقط",
+          "start": 0.15856,
+          "end": 0.1879
+        },
+        {
+          "id": "b0035",
+          "type": "paragraph",
+          "match": "تظهر مغالطة المأزق المفتعل عندما تعرض مسألة كأنها لا تسمح إلا بخيارين متعارضين مع وجود بدائل أو درجات أو تركيبات معقولة ",
+          "start": 0.1879,
+          "end": 0.257809
+        },
+        {
+          "id": "b0036",
+          "type": "paragraph",
+          "match": "مثلا إما أن تعمل من المكتب خمسة أيام أو أن الشركة لا تهتم بالتعاون هذا التقسيم يتجاهل بدائل مثل العمل الهجين أو اختلاف ط",
+          "start": 0.257809,
+          "end": 0.355858
+        },
+        {
+          "id": "b0037",
+          "type": "paragraph",
+          "match": "وفي الحياة الشخصية قد تظهر بصيغة إما أن أقبل هذه الفرصة الآن أو سأندم طوال حياتي قد تكون الفرصة مهمة لكن النتيجة صيغت كأ",
+          "start": 0.355858,
+          "end": 0.449102
+        },
+        {
+          "id": "b0038",
+          "type": "h3",
+          "match": "متى لا يكون الخيار الثنائي مغالطة",
+          "start": 0.449102,
+          "end": 0.468926
+        },
+        {
+          "id": "b0039",
+          "type": "paragraph",
+          "match": "بعض الأسئلة ثنائية فعلا قد تنص لائحة على قبول طلب أو رفضه وقد يكون مفتاح كهربائي في وضع تشغيل أو إيقاف كذلك قد يختصر الم",
+          "start": 0.468926,
+          "end": 0.581255
+        },
+        {
+          "id": "b0040",
+          "type": "paragraph",
+          "match": "المطلوب ليس الاعتراض على كل ثنائية بل التحقق من أن حدود المسألة تبررها",
+          "start": 0.581255,
+          "end": 0.621941
+        },
+        {
+          "id": "b0041",
+          "type": "h3",
+          "match": "سؤال بريق للكشف عنها",
+          "start": 0.621941,
+          "end": 0.633181
+        },
+        {
+          "id": "b0042",
+          "type": "paragraph",
+          "match": "ما الخيار الثالث المعقول الذي لم يذكر",
+          "start": 0.633181,
+          "end": 0.655788
+        },
+        {
+          "id": "b0043",
+          "type": "paragraph",
+          "match": "إذا ظهر خيار ثالث بسهولة فقد نكون أمام تبسيط زائد وإذا لم يظهر بعد فحص حقيقي فقد يكون التقسيم الثنائي مشروعا",
+          "start": 0.655788,
+          "end": 0.722496
+        },
+        {
+          "id": "b0044",
+          "type": "h2",
+          "match": "4 الاحتكام إلى الأغلبية حين تصبح الشعبية دليلا على الصحة",
+          "start": 0.722496,
+          "end": 0.755047
+        },
+        {
+          "id": "b0045",
+          "type": "paragraph",
+          "match": "تحدث مغالطة الاحتكام إلى الأغلبية عندما تستخدم شعبية فكرة أو منتج أو اعتقاد بوصفها دليلا كافيا على صحته",
+          "start": 0.755047,
+          "end": 0.809659
+        },
+        {
+          "id": "b0046",
+          "type": "paragraph",
+          "match": "الجميع يستخدم هذا التطبيق إذن هو الأكثر أمانا أو هذا الرأي منتشر جدا فلا يمكن أن يكون خاطئا",
+          "start": 0.809659,
+          "end": 0.869613
+        },
+        {
+          "id": "b0047",
+          "type": "paragraph",
+          "match": "الانتشار قد يخبرنا بأشياء مهمة سهولة الاستخدام قوة التسويق أثر الشبكة العادة أو ثقة الجمهور لكنه لا يختبر وحده الادعاء ا",
+          "start": 0.869613,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0030",
+        "b0031",
+        "b0032",
+        "b0033",
+        "b0034",
+        "b0035",
+        "b0036",
+        "b0037",
+        "b0038",
+        "b0039",
+        "b0040",
+        "b0041",
+        "b0042",
+        "b0043",
+        "b0044",
+        "b0045",
+        "b0046",
+        "b0047"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/cf933330ca485220/part-003-f4e5509849a4.clean.mp3",
+          "bytes": 1861101,
+          "durationSeconds": 155.088,
+          "sha256": "f8cbb359526863773bcf86218ef69af4a96a11043b4005a141b2f21ff5c2b2f8"
+        }
+      }
+    },
+    {
+      "characters": 1091,
+      "sync": [
+        {
+          "id": "b0048",
+          "type": "h3",
+          "match": "متى تكون الشعبية معلومة مفيدة",
+          "start": 0,
+          "end": 0.02843
+        },
+        {
+          "id": "b0049",
+          "type": "paragraph",
+          "match": "الشعبية ليست بلا قيمة إذا كنت تختار منصة تحتاج إلى عدد كبير من المستخدمين كي تعمل فحجم المجتمع ميزة حقيقية وإذا كان السؤ",
+          "start": 0.02843,
+          "end": 0.197687
+        },
+        {
+          "id": "b0050",
+          "type": "paragraph",
+          "match": "المشكلة تظهر عندما ننتقل من شائع إلى صحيح أو أفضل في كل معيار من دون دليل إضافي",
+          "start": 0.197687,
+          "end": 0.279249
+        },
+        {
+          "id": "b0051",
+          "type": "h3",
+          "match": "سؤال بريق للكشف عنها",
+          "start": 0.279249,
+          "end": 0.29754
+        },
+        {
+          "id": "b0052",
+          "type": "paragraph",
+          "match": "لو انخفض عدد المؤيدين إلى النصف هل سيتغير الدليل على صحة الادعاء نفسه",
+          "start": 0.29754,
+          "end": 0.363581
+        },
+        {
+          "id": "b0053",
+          "type": "paragraph",
+          "match": "إذا كانت قوة الحجة تعتمد فقط على عدد من يكررونها فنحن بحاجة إلى دليل آخر",
+          "start": 0.363581,
+          "end": 0.437461
+        },
+        {
+          "id": "b0054",
+          "type": "h2",
+          "match": "لا تجعل أسماء المغالطات مغالطة جديدة",
+          "start": 0.437461,
+          "end": 0.465856
+        },
+        {
+          "id": "b0055",
+          "type": "paragraph",
+          "match": "تعلم المصطلحات قد يمنحنا إغراء غريبا بدل أن نناقش الطرف الآخر نقول رجل قش أو شخصنة ونعتبر الحوار منتهيا لكن اسم المغالطة",
+          "start": 0.465856,
+          "end": 0.602031
+        },
+        {
+          "id": "b0056",
+          "type": "paragraph",
+          "match": "الطريقة الأقوى هي أن تشرح موضع الخلل",
+          "start": 0.602031,
+          "end": 0.635984
+        },
+        {
+          "id": "b0057",
+          "type": "list-item",
+          "match": "أنا لم أقل إلغاء الواجبات قلت تقليل النوع المتكرر منها",
+          "start": 0.635984,
+          "end": 0.688785
+        },
+        {
+          "id": "b0058",
+          "type": "list-item",
+          "match": "ملاحظتك عن الشخص قد تكون صحيحة لكن ما علاقتها بصحة هذا الرقم",
+          "start": 0.688785,
+          "end": 0.75486
+        },
+        {
+          "id": "b0059",
+          "type": "list-item",
+          "match": "لدينا خيار ثالث تجربة الحل لمدة شهر قبل التعميم",
+          "start": 0.75486,
+          "end": 0.802784
+        },
+        {
+          "id": "b0060",
+          "type": "list-item",
+          "match": "الشعبية تخبرنا عن الانتشار لا عن الأمان ما بيانات الأمان",
+          "start": 0.802784,
+          "end": 0.862222
+        },
+        {
+          "id": "b0061",
+          "type": "paragraph",
+          "match": "حين نفعل ذلك يصبح المنطق أداة لتحسين النقاش لا سلاحا لإنهائه",
+          "start": 0.862222,
+          "end": 0.919553
+        },
+        {
+          "id": "b0062",
+          "type": "h2",
+          "match": "اختبار سريع قبل أن تقتنع بحجة",
+          "start": 0.919553,
+          "end": 0.946728
+        },
+        {
+          "id": "b0063",
+          "type": "paragraph",
+          "match": "قبل أن تتبنى نتيجة في نقاش مهم مررها على أربعة أسئلة",
+          "start": 0.946728,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0048",
+        "b0049",
+        "b0050",
+        "b0051",
+        "b0052",
+        "b0053",
+        "b0054",
+        "b0055",
+        "b0056",
+        "b0057",
+        "b0058",
+        "b0059",
+        "b0060",
+        "b0061",
+        "b0062",
+        "b0063"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/cf933330ca485220/part-004-3dfe3cc9f496.clean.mp3",
+          "bytes": 1165293,
+          "durationSeconds": 97.104,
+          "sha256": "099b973c5c83bc11b0c13d0dd2feaa41a9645c4ffecad6da3508c74abdcf01e9"
+        }
+      }
+    },
+    {
+      "characters": 939,
+      "sync": [
+        {
+          "id": "b0064",
+          "type": "list-item",
+          "match": "هل أعيد عرض موقف الطرف الآخر بأمانة",
+          "start": 0,
+          "end": 0.045005
+        },
+        {
+          "id": "b0065",
+          "type": "list-item",
+          "match": "هل نناقش الادعاء أم صاحب الادعاء",
+          "start": 0.045005,
+          "end": 0.084631
+        },
+        {
+          "id": "b0066",
+          "type": "list-item",
+          "match": "هل الخيارات المعروضة هي كل الخيارات المعقولة فعلا",
+          "start": 0.084631,
+          "end": 0.137165
+        },
+        {
+          "id": "b0067",
+          "type": "list-item",
+          "match": "هل الدليل يثبت الفكرة أم أن الدليل الوحيد هو أن كثيرين يصدقونها",
+          "start": 0.137165,
+          "end": 0.212912
+        },
+        {
+          "id": "b0068",
+          "type": "paragraph",
+          "match": "هذه الأسئلة لا تجعل أحكامنا معصومة ولا تحول كل حوار إلى مسألة منطق صوري لكنها تمنحنا فرصة قصيرة لإبطاء الانطباع والعودة ",
+          "start": 0.212912,
+          "end": 0.363781
+        },
+        {
+          "id": "b0069",
+          "type": "paragraph",
+          "match": "ولأن بعض الأخطاء تأتي من الحكم السريع لا من بنية الحجة وحدها يرتبط هذا الموضوع مباشرة بسؤال الحدس متى تكون السرعة خبرة و",
+          "start": 0.363781,
+          "end": 0.541885
+        },
+        {
+          "id": "b0070",
+          "type": "h2",
+          "match": "الخلاصة",
+          "start": 0.541885,
+          "end": 0.548124
+        },
+        {
+          "id": "b0071",
+          "type": "paragraph",
+          "match": "المغالطات الأربع هنا مختلفة لكنها تشترك في حركة واحدة استبدال السؤال الأصعب بسؤال أسهل",
+          "start": 0.548124,
+          "end": 0.640199
+        },
+        {
+          "id": "b0072",
+          "type": "paragraph",
+          "match": "رجل القش يستبدل الموقف الحقيقي بنسخة أضعف الشخصنة تستبدل الحجة بصاحبها المأزق المفتعل يستبدل الواقع الواسع بخيارين والاح",
+          "start": 0.640199,
+          "end": 0.812043
+        },
+        {
+          "id": "b0073",
+          "type": "paragraph",
+          "match": "أفضل حماية ليست حفظ قائمة طويلة من الأسماء بل اكتساب عادة واحدة عندما تبدو الحجة مقنعة بسرعة ارجع خطوة واسأل ما الادعاء ",
+          "start": 0.812043,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0064",
+        "b0065",
+        "b0066",
+        "b0067",
+        "b0068",
+        "b0069",
+        "b0070",
+        "b0071",
+        "b0072",
+        "b0073"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/cf933330ca485220/part-005-587922aef493.clean.mp3",
+          "bytes": 1070253,
+          "durationSeconds": 89.184,
+          "sha256": "14ffb06519d06d6e06d5d22b842d82afc2254e0a5eec9b13ba9c619a642c502f"
+        }
+      }
+    }
+  ],
+  "schema": "bareeq.audio-production-manifest.v3",
+  "candidateFingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
+  "voice": "Sadaltager",
+  "toolVersion": 9,
+  "status": "published",
+  "generatedAt": "2026-09-16T13:20:12.019Z",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "ttsVoice": "Sadaltager",
+  "publishedFromCandidate": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
+  "publishedAt": "2026-09-16T13:20:12.019Z"
+}
