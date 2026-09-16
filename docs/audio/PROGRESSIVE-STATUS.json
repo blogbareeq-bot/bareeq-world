@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "35094213665",
-  "sourceArtifact": "bareeq-progressive-validation-35094213665",
-  "generatedAt": "2026-09-16T12:56:06.667Z",
+  "sourceRunId": "35099113140",
+  "sourceArtifact": "bareeq-progressive-validation-35099113140",
+  "generatedAt": "2026-09-16T13:06:39.106Z",
   "publicationComplete": false,
   "publishedCount": 5,
   "fallbackCount": 10,
@@ -147,7 +147,7 @@
       "audioKey": "cf933330ca485220",
       "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
       "generationStatus": "generated",
-      "validationStatus": "repair-failed",
+      "validationStatus": "paused-quota",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -158,7 +158,7 @@
       "repairedParts": [
         4
       ],
-      "error": "Gemini TTS transport failed (https://generativelanguage.googleapis.com/v1beta/interactions): UND_ERR_HEADERS_TIMEOUT"
+      "error": "Gemini generateContent TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 21.237293604s.\",\"retryDelay\":\"21s\",\"retryDelayMs\":21000,\"quota\":[{\"metric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"id\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"value\":\"10\",\"dimensions\":{\"model\":\"gemini-3.1-flas"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
