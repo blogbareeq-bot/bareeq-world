@@ -130,6 +130,10 @@ export function compareRepairCandidates(a, b) {
     || a.order - b.order;
 }
 
+export function shouldRetryCurrentArticle(status) {
+  return ['failed', 'improved', 'trial-rejected', 'repair-failed'].includes(status);
+}
+
 async function readJson(file, fallback = null) {
   try {
     return JSON.parse(await readFile(file, 'utf8'));
@@ -598,7 +602,7 @@ for (const candidate of candidates) {
       stopRun = true;
       break;
     }
-    if (!['failed', 'improved', 'trial-rejected'].includes(result.status)) break;
+    if (!shouldRetryCurrentArticle(result.status)) break;
   }
 }
 
