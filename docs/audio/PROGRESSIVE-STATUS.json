@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "34959429500",
-  "sourceArtifact": "bareeq-progressive-validation-34959429500",
-  "generatedAt": "2026-09-15T11:02:40.387Z",
+  "sourceRunId": "35094213665",
+  "sourceArtifact": "bareeq-progressive-validation-35094213665",
+  "generatedAt": "2026-09-16T12:56:06.667Z",
   "publicationComplete": false,
   "publishedCount": 5,
   "fallbackCount": 10,
@@ -147,7 +147,7 @@
       "audioKey": "cf933330ca485220",
       "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "repair-failed",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -156,9 +156,9 @@
       "publishedExact": false,
       "fullSha256": "dc2217a45d1872ab0de9010897ad22028f0e5e93fddb07178d1f6aa2f7f66a71",
       "repairedParts": [
-        3
+        4
       ],
-      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=0"
+      "error": "Gemini TTS transport failed (https://generativelanguage.googleapis.com/v1beta/interactions): UND_ERR_HEADERS_TIMEOUT"
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
@@ -183,7 +183,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 2,
       "deletions": 0,
       "insertions": 0,
@@ -194,7 +194,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=2 D=0 I=0 unresolved=0"
+      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 10 reached"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
