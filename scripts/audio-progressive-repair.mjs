@@ -13,6 +13,10 @@ import { tokenizeVerbal } from './audio-exact-match.mjs';
 import { synthesizeGeminiPart, synthesizeGeminiGenerateContentPart } from './audio-gemini-tts.mjs';
 import { runProductionMode } from './audio-production.mjs';
 import { validateWithConsensus } from './audio-validate-consensus.mjs';
+import {
+  ADJUDICATION_POLICY_VERSION,
+  adjudicateCandidate,
+} from './audio-dual-asr-adjudicate.mjs';
 import { writeJson, pathExists } from './audio-checkpoint.mjs';
 
 const ROOT = process.cwd();
@@ -154,7 +158,9 @@ async function currentAdjudication(dir, fingerprint) {
   if (!report || !await pathExists(fullPath)) return null;
   const fullSha256 = sha256(await readFile(fullPath));
   const reportFingerprint = report.fingerprint || report.candidateFingerprint;
-  if (reportFingerprint !== fingerprint || report.fullSha256 !== fullSha256) return null;
+  if (reportFingerprint !== fingerprint
+    || report.fullSha256 !== fullSha256
+    || Number(report.policy?.version) !== ADJUDICATION_POLICY_VERSION) return null;
   return report;
 }
 
@@ -496,6 +502,32 @@ for (const item of snapshot.articles) {
   const dir = candidateDir(articleId, fingerprint, ROOT);
   if (await currentAdjudication(dir, fingerprint)) continue;
   console.log(`PROGRESSIVE_PRECLASSIFY ${articleId} reason=missing-or-stale-adjudication`);
+  // An adjudication policy update does not make the immutable raw ASR reports
+  // stale. Re-run consensus locally first, so representation-only fixes never
+  // consume ASR or TTS allowance. If the raw reports are missing or bound to a
+  // different audio SHA, the normal provider-backed validation follows.
+  let refreshedAdjudication = null;
+  try {
+    refreshedAdjudication = await adjudicateCandidate({ articleId, fingerprint, root: ROOT });
+  } catch {
+    refreshedAdjudication = await currentAdjudication(dir, fingerprint);
+  }
+  if (refreshedAdjudication) {
+    row.validation = {
+      status: refreshedAdjudication.passed ? 'validated' : 'failed',
+      fingerprint,
+      fullSha256: refreshedAdjudication.fullSha256,
+      consensus: refreshedAdjudication.consensus,
+      representationOnly: refreshedAdjudication.representationOnly?.length || 0,
+      modelDisagreements: refreshedAdjudication.modelDisagreements?.length || 0,
+      repairInProgress: false,
+      completedAt: new Date().toISOString(),
+    };
+    state.articles[articleId] = { ...row };
+    await saveState(state);
+    console.log(`PROGRESSIVE_PRECLASSIFY_OFFLINE ${articleId} consensus=${JSON.stringify(refreshedAdjudication.consensus)}`);
+    continue;
+  }
   try {
     const result = await validateWithConsensus({ articleId, fingerprint, root: ROOT });
     row.validation = {
