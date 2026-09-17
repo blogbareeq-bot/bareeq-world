@@ -88,6 +88,26 @@ try {
   });
 
   process.env.BAREEQ_REPAIR_MAX_REQUESTS = '10';
+  process.env.BAREEQ_REPAIR_MAX_429_RETRIES = '2';
+  const shortWaits = [];
+  let shortRetryCalls = 0;
+  const shortDailyReset = createBudgetedSynthesizer({
+    apiKey: 'test',
+    sleepImpl: async (ms) => { shortWaits.push(ms); },
+    transportEntries: [['first', async () => {
+      shortRetryCalls += 1;
+      if (shortRetryCalls === 1) {
+        throw Object.assign(new Error('RPD resetting shortly'), { httpStatus: 429, dailyQuota: true, retryDelayMs: 36000 });
+      }
+      return { audio: Buffer.alloc(120) };
+    }]],
+  });
+  await shortDailyReset(args);
+  assert.equal(shortRetryCalls, 2, 'a short explicit provider reset must be retried in the same run');
+  assert.deepEqual(shortWaits, [36000]);
+  assert.equal(shortDailyReset.stats().dailyQuotaExhausted, false);
+
+  process.env.BAREEQ_REPAIR_MAX_429_RETRIES = '1';
   let secondTransportCalls = 0;
   const dailyStop = createBudgetedSynthesizer({
     apiKey: 'test',

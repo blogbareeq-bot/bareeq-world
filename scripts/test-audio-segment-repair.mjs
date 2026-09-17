@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {
   buildMicroPart,
   chooseSilenceBoundary,
+  chooseSilenceBoundaryPair,
   detectSilenceRuns,
   locateSegmentRepair,
   planSegmentSplice,
@@ -16,9 +17,9 @@ const samples = (seconds, value = 0) => {
 };
 const original = Buffer.concat([
   samples(1, 6000),
-  samples(0.2),
+  samples(0.6),
   samples(1.6, 7000),
-  samples(0.2),
+  samples(0.6),
   samples(1, 6000),
 ]);
 const boundarySettings = {
@@ -27,10 +28,25 @@ const boundarySettings = {
   windowMs: 10,
   minSilenceMs: 80,
   maxDistanceSeconds: 0.35,
+  boundaryMinSilenceMs: 500,
 };
 const runs = detectSilenceRuns(original, boundarySettings);
 assert.equal(runs.length, 2);
-assert.equal(chooseSilenceBoundary(runs, 1.1, boundarySettings).seconds, 1.1);
+assert.equal(chooseSilenceBoundary(runs, 1.3, boundarySettings).seconds, 1.3);
+
+const sentenceAndParagraphPauses = [
+  { startSample: 800, endSample: 1000, startSeconds: 0.8, endSeconds: 1, centerSeconds: 0.9, durationSeconds: 0.2 },
+  { startSample: 1300, endSample: 1900, startSeconds: 1.3, endSeconds: 1.9, centerSeconds: 1.6, durationSeconds: 0.6 },
+  { startSample: 3000, endSample: 3200, startSeconds: 3, endSeconds: 3.2, centerSeconds: 3.1, durationSeconds: 0.2 },
+  { startSample: 3350, endSample: 3950, startSeconds: 3.35, endSeconds: 3.95, centerSeconds: 3.65, durationSeconds: 0.6 },
+];
+const paragraphPair = chooseSilenceBoundaryPair(sentenceAndParagraphPauses, 0.95, 3.15, {
+  sampleRate,
+  maxDistanceSeconds: 1,
+  boundaryMinSilenceMs: 500,
+});
+assert.equal(paragraphPair.start.seconds, 1.6, 'a nearby short sentence pause must not become the paragraph start');
+assert.equal(paragraphPair.end.seconds, 3.65, 'paragraph boundaries must be selected jointly by interval duration');
 
 const splitPlan = {
   parts: [{
@@ -55,8 +71,8 @@ assert.equal(repair.text, 'هذه فقرة فيها أقسى تمرين');
 assert.equal(locateSegmentRepair(splitPlan, [1, 5]), null, 'one micro repair cannot span two synchronized paragraphs');
 
 const splicePlan = planSegmentSplice(original, repair, boundarySettings);
-assert.equal(splicePlan.start.seconds, 1.1);
-assert.equal(splicePlan.end.seconds, 2.9);
+assert.equal(splicePlan.start.seconds, 1.3);
+assert.equal(splicePlan.end.seconds, 3.5);
 const replacement = Buffer.concat([samples(0.3), samples(1, 8000), samples(0.3)]);
 const spliced = spliceSegmentPcm(original, replacement, splicePlan, {
   transitionSettings: {
@@ -72,7 +88,7 @@ const spliced = spliceSegmentPcm(original, replacement, splicePlan, {
   },
 });
 assert.equal(spliced.replacementSeconds, 1.02);
-assert.equal(spliced.outputSeconds, 3.22);
+assert.equal(spliced.outputSeconds, 3.62);
 assert.equal(spliced.startMetrics.click, false);
 assert.equal(spliced.endMetrics.click, false);
 const micro = buildMicroPart(repair, splitPlan.parts[0]);
