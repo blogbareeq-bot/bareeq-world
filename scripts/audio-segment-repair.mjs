@@ -11,7 +11,10 @@ const DEFAULT_BOUNDARY_SETTINGS = Object.freeze({
   thresholdRms: TRANSITION_NORMALIZATION.thresholdRms,
   windowMs: TRANSITION_NORMALIZATION.windowMs,
   minSilenceMs: 80,
-  maxDistanceSeconds: 4,
+  maxDistanceSeconds: 6,
+  boundaryMinSilenceMs: 500,
+  timingDistanceWeight: 0.15,
+  silenceDurationBonus: 0.05,
 });
 
 function rmsPcm16(pcm) {
@@ -79,6 +82,52 @@ export function chooseSilenceBoundary(runs, targetSeconds, {
   };
 }
 
+function boundaryFromRun(run, sampleRate) {
+  const sample = Math.round((run.startSample + run.endSample) / 2);
+  return { ...run, sample, seconds: sample / sampleRate };
+}
+
+export function chooseSilenceBoundaryPair(runs, targetStartSeconds, targetEndSeconds, {
+  sampleRate = DEFAULT_BOUNDARY_SETTINGS.sampleRate,
+  maxDistanceSeconds = DEFAULT_BOUNDARY_SETTINGS.maxDistanceSeconds,
+  boundaryMinSilenceMs = DEFAULT_BOUNDARY_SETTINGS.boundaryMinSilenceMs,
+  timingDistanceWeight = DEFAULT_BOUNDARY_SETTINGS.timingDistanceWeight,
+  silenceDurationBonus = DEFAULT_BOUNDARY_SETTINGS.silenceDurationBonus,
+} = {}) {
+  const minimumSeconds = boundaryMinSilenceMs / 1000;
+  const candidates = (runs || []).filter((run) => run.durationSeconds >= minimumSeconds);
+  const starts = candidates.filter((run) => Math.abs(run.centerSeconds - targetStartSeconds) <= maxDistanceSeconds);
+  const ends = candidates.filter((run) => Math.abs(run.centerSeconds - targetEndSeconds) <= maxDistanceSeconds);
+  const predictedSpan = targetEndSeconds - targetStartSeconds;
+  const pairs = [];
+  for (const start of starts) {
+    for (const end of ends) {
+      if (end.centerSeconds <= start.centerSeconds) continue;
+      const span = end.centerSeconds - start.centerSeconds;
+      const spanErrorSeconds = Math.abs(span - predictedSpan);
+      const distanceSeconds = Math.abs(start.centerSeconds - targetStartSeconds)
+        + Math.abs(end.centerSeconds - targetEndSeconds);
+      const score = spanErrorSeconds
+        + timingDistanceWeight * distanceSeconds
+        - silenceDurationBonus * (start.durationSeconds + end.durationSeconds);
+      pairs.push({ start, end, span, spanErrorSeconds, distanceSeconds, score });
+    }
+  }
+  pairs.sort((a, b) => a.score - b.score
+    || a.spanErrorSeconds - b.spanErrorSeconds
+    || b.start.durationSeconds + b.end.durationSeconds - a.start.durationSeconds - a.end.durationSeconds);
+  const best = pairs[0];
+  if (!best) return null;
+  return {
+    start: boundaryFromRun(best.start, sampleRate),
+    end: boundaryFromRun(best.end, sampleRate),
+    spanSeconds: best.span,
+    spanErrorSeconds: best.spanErrorSeconds,
+    distanceSeconds: best.distanceSeconds,
+    score: best.score,
+  };
+}
+
 function itemId(item) {
   return item?.runtimeId || item?.segmentId || null;
 }
@@ -126,9 +175,18 @@ export function planSegmentSplice(originalPcm, repair, settings = DEFAULT_BOUNDA
   const totalSamples = Math.floor(originalPcm.length / 2);
   const durationSeconds = totalSamples / sampleRate;
   const runs = detectSilenceRuns(originalPcm, settings);
-  const start = chooseSilenceBoundary(runs, repair.sync.start * durationSeconds, settings);
-  const end = chooseSilenceBoundary(runs, repair.sync.end * durationSeconds, settings);
-  if (!start || !end) throw new Error(`safe silence boundaries not found for synchronized segment ${repair.segmentId}`);
+  // Paragraph sync ratios are estimates, and a nearby sentence pause can be
+  // several seconds earlier than the real paragraph boundary. Select the two
+  // boundaries jointly: both must be long paragraph-grade pauses and their
+  // interval must remain close to the predicted paragraph duration.
+  const boundaries = chooseSilenceBoundaryPair(
+    runs,
+    repair.sync.start * durationSeconds,
+    repair.sync.end * durationSeconds,
+    settings,
+  );
+  if (!boundaries) throw new Error(`safe paragraph-grade silence boundaries not found for synchronized segment ${repair.segmentId}`);
+  const { start, end } = boundaries;
   if (end.sample <= start.sample) throw new Error(`invalid silence boundary order for synchronized segment ${repair.segmentId}`);
   const removedSeconds = (end.sample - start.sample) / sampleRate;
   const predictedSeconds = (repair.sync.end - repair.sync.start) * durationSeconds;
@@ -144,6 +202,11 @@ export function planSegmentSplice(originalPcm, repair, settings = DEFAULT_BOUNDA
     end,
     removedSeconds,
     predictedSeconds,
+    boundarySelection: {
+      spanErrorSeconds: boundaries.spanErrorSeconds,
+      distanceSeconds: boundaries.distanceSeconds,
+      score: boundaries.score,
+    },
     silenceRunCount: runs.length,
   };
 }
