@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "35101161013",
-  "sourceArtifact": "bareeq-progressive-validation-35101161013",
-  "generatedAt": "2026-09-17T07:38:21.014Z",
+  "sourceRunId": "35197310249",
+  "sourceArtifact": "bareeq-progressive-validation-35197310249",
+  "generatedAt": "2026-09-17T08:05:23.575Z",
   "publicationComplete": false,
   "publishedCount": 6,
   "fallbackCount": 9,
@@ -168,8 +168,8 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "failed",
-      "substitutions": 2,
+      "validationStatus": "paused-quota",
+      "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
@@ -179,7 +179,7 @@
       "repairedParts": [
         1
       ],
-      "error": "Technical QA failed (1)"
+      "error": "Gemini generateContent TTS HTTP 429: {\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit.  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 10, model: gemini-3.1-flash-tts Please retry in 36.770088062s.\",\"retryDelay\":\"36s\",\"retryDelayMs\":36000,\"quota\":[{\"metric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"id\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"value\":\"10\",\"dimensions\":{\"location\":\"global\",\"mod"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -204,7 +204,7 @@
       "audioKey": "9d04080d1962a365",
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 1,
       "deletions": 4,
       "insertions": 1,
@@ -212,10 +212,8 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3",
-      "repairedParts": [
-        1
-      ],
-      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 10 reached"
+      "repairedParts": [],
+      "error": null
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
