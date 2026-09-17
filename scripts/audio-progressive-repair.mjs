@@ -1,4 +1,4 @@
-import { cp, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import {
@@ -17,7 +17,22 @@ import {
   ADJUDICATION_POLICY_VERSION,
   adjudicateCandidate,
 } from './audio-dual-asr-adjudicate.mjs';
-import { writeJson, pathExists } from './audio-checkpoint.mjs';
+import {
+  appendRequestLog,
+  checkpointPaths,
+  loadCompletedPart,
+  saveCompletedPart,
+  writeJson,
+  pathExists,
+} from './audio-checkpoint.mjs';
+import { decodePcm } from './audio-merge.mjs';
+import { encodePcm48kToMp3 } from './audio-normalize-parts.mjs';
+import {
+  buildMicroPart,
+  locateSegmentRepair,
+  planSegmentSplice,
+  spliceSegmentPcm,
+} from './audio-segment-repair.mjs';
 
 const ROOT = process.cwd();
 const CAMPAIGN_ID = process.env.BAREEQ_AUDIO_CAMPAIGN_ID?.trim() || 'sadaltager-openrouter-20260901-v1';
@@ -245,6 +260,90 @@ function buildCorrectionHint(adjudication = {}, range) {
   return problems.join('; ');
 }
 
+function unpackRepairSynthesis(value) {
+  if (Buffer.isBuffer(value)) return { audio: value, transport: 'developer-interactions' };
+  if (Buffer.isBuffer(value?.audio)) return { audio: value.audio, transport: value.transport || 'unknown' };
+  return { audio: null, transport: 'unknown' };
+}
+
+async function regenerateSynchronizedSegment({
+  article,
+  splitPlan,
+  fingerprint,
+  failedIndices: indices,
+  correctionHint,
+  synth,
+}) {
+  const repair = locateSegmentRepair(splitPlan, indices);
+  if (!repair) return null;
+  const paths = checkpointPaths(article.articleId, fingerprint, ROOT);
+  const existing = await loadCompletedPart(paths, article, splitPlan, repair.part);
+  if (!existing) return null;
+
+  // Resolve both cut points before spending a TTS request. A paragraph is only
+  // eligible when its weighted sync estimates land near real silence on both
+  // sides; otherwise the caller safely falls back to whole-part replacement.
+  const originalPcm = await decodePcm(existing.file);
+  let splicePlan;
+  try {
+    splicePlan = planSegmentSplice(originalPcm, repair);
+  } catch (error) {
+    console.log(`PROGRESSIVE_SEGMENT_REPAIR_SKIP ${article.articleId} segment=${repair.segmentId} reason=${JSON.stringify(String(error?.message || error))}`);
+    return null;
+  }
+  console.log(`PROGRESSIVE_SEGMENT_REPAIR_START ${article.articleId} part=${repair.partIndex + 1} segment=${repair.segmentId} cut=${splicePlan.start.seconds.toFixed(3)}-${splicePlan.end.seconds.toFixed(3)}s textBytes=${repair.text.length}`);
+
+  const microPart = buildMicroPart(repair, repair.part);
+  const generated = unpackRepairSynthesis(await synth({
+    article,
+    part: microPart,
+    splitPlan,
+    correctionHint,
+  }));
+  if (!generated.audio || generated.audio.length < 100) throw new Error(`synthesized segment ${repair.segmentId} is too small`);
+
+  const tempRoot = await mkdtemp(path.join(tmpdir(), 'bareeq-segment-repair-'));
+  try {
+    const replacementFile = path.join(tempRoot, 'replacement.mp3');
+    await writeFile(replacementFile, generated.audio);
+    const replacementPcm = await decodePcm(replacementFile);
+    const spliced = spliceSegmentPcm(originalPcm, replacementPcm, splicePlan);
+    const bytes = await encodePcm48kToMp3(spliced.pcm);
+    await saveCompletedPart(paths, article, splitPlan, repair.part, bytes, {
+      resumed: false,
+      transport: generated.transport,
+      targetedRegeneration: true,
+      targetedSegmentRepair: true,
+      repairedSegmentId: repair.segmentId,
+      correctionHintApplied: Boolean(correctionHint),
+      previousSha256: existing.record?.sha256 || null,
+      spliceStartSeconds: Number(splicePlan.start.seconds.toFixed(3)),
+      spliceEndSeconds: Number(splicePlan.end.seconds.toFixed(3)),
+      replacementSeconds: Number(spliced.replacementSeconds.toFixed(3)),
+    });
+    await appendRequestLog(paths, {
+      partIndex: repair.partIndex,
+      action: 'targeted-segment-regeneration-synthesize',
+      providerCalls: 1,
+      providerAttempts: 1,
+      transport: generated.transport,
+      segmentId: repair.segmentId,
+      previousSha256: existing.record?.sha256 || null,
+      bytes: bytes.length,
+      spliceStartSeconds: Number(splicePlan.start.seconds.toFixed(3)),
+      spliceEndSeconds: Number(splicePlan.end.seconds.toFixed(3)),
+      replacementSeconds: Number(spliced.replacementSeconds.toFixed(3)),
+      startBoundary: spliced.startMetrics,
+      endBoundary: spliced.endMetrics,
+      correctionHintApplied: Boolean(correctionHint),
+    });
+    console.log(`PROGRESSIVE_SEGMENT_REPAIR_DONE ${article.articleId} part=${repair.partIndex + 1} segment=${repair.segmentId} replacement=${spliced.replacementSeconds.toFixed(3)}s output=${spliced.outputSeconds.toFixed(3)}s`);
+    return { repair, splicePlan, spliced };
+  } finally {
+    await rm(tempRoot, { recursive: true, force: true });
+  }
+}
+
 async function repairArticle({
   articleId,
   state,
@@ -366,9 +465,6 @@ async function repairArticle({
     hints[String(partIndex + 1)] = hint || 'Read the reviewed transcript verbatim; preserve every spoken token and ending.';
   }
 
-  process.env.BAREEQ_FORCE_TTS_PARTS = parts.join(',');
-  process.env.BAREEQ_TTS_CORRECTION_HINTS_JSON = JSON.stringify(hints);
-
   const baselineScore = consensusErrorTotal(adjudication.consensus);
   const backupRoot = await mkdtemp(path.join(tmpdir(), 'bareeq-audio-trial-'));
   const backupDir = path.join(backupRoot, 'candidate');
@@ -380,13 +476,26 @@ async function repairArticle({
 
   console.log(`PROGRESSIVE_REPAIR_START ${articleId} fingerprint=${fingerprint} parts=${parts.join(',')} tokens=${indices.length} consensus=${JSON.stringify(adjudication.consensus)}`);
   try {
-    const generated = await runProductionMode({
-      mode: 'generate-candidate',
-      articleId,
-      root: ROOT,
-      synthesize: synth,
+    const failedInTrialPart = failedPartMap.get(trialPartIndex)?.indices || [];
+    const segmentRepair = await regenerateSynchronizedSegment({
+      article,
+      splitPlan: plan,
+      fingerprint,
+      failedIndices: failedInTrialPart,
+      correctionHint: hints[String(trialPartIndex + 1)],
+      synth,
     });
-    console.log(`PROGRESSIVE_REPAIR_GENERATED ${articleId} parts=${generated.forceRegeneratedParts.join(',')} resumed=${generated.resumedParts}`);
+    if (!segmentRepair) {
+      process.env.BAREEQ_FORCE_TTS_PARTS = parts.join(',');
+      process.env.BAREEQ_TTS_CORRECTION_HINTS_JSON = JSON.stringify(hints);
+      const generated = await runProductionMode({
+        mode: 'generate-candidate',
+        articleId,
+        root: ROOT,
+        synthesize: synth,
+      });
+      console.log(`PROGRESSIVE_REPAIR_GENERATED ${articleId} parts=${generated.forceRegeneratedParts.join(',')} resumed=${generated.resumedParts}`);
+    }
     await invalidateDerivedEvidence(dir);
   } catch (error) {
     const quota = error?.exitCode === EXIT_QUOTA || error?.code === 'BAREEQ_QUOTA' || error?.httpStatus === 429;

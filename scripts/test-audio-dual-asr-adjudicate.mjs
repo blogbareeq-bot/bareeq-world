@@ -12,6 +12,8 @@ assert.equal(representationEquivalent('عشرة', '10'), true);
 assert.equal(representationEquivalent('3', 'ثالثا'), true);
 assert.equal(representationEquivalent('شاتًا', 'شات'), true);
 assert.equal(representationEquivalent('لإنهائه', 'لانهائه'), true);
+assert.equal(representationEquivalent('دال', 'د'), true);
+assert.equal(representationEquivalent('ذال', 'ذ'), false, 'letter-name equivalence must not become generic');
 assert.equal(representationEquivalent('أنثروبك', 'أنثروبيك'), true);
 assert.equal(representationEquivalent('أنثروبك', 'Anthropic'), true);
 assert.equal(representationEquivalent('كلود', 'cloud'), true);
