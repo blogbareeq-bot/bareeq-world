@@ -133,7 +133,7 @@ export function normalizedPartFileName(inputFile) {
   return base.endsWith('.mp3') ? `${base.slice(0, -4)}.clean.mp3` : `${base}.clean.mp3`;
 }
 
-async function encodePcm48kToMp3(pcm) {
+export async function encodePcm48kToMp3(pcm) {
   const { ffmpeg } = await assertFfmpeg();
   const encoded = await runCommand(ffmpeg, [
     '-hide_banner', '-loglevel', 'error',
