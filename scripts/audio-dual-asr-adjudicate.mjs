@@ -15,7 +15,7 @@ import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { loadSpokenArticle } from './audio-split.mjs';
 import { boundIdentity } from './audio-report.mjs';
 
-export const ADJUDICATION_POLICY_VERSION = 2;
+export const ADJUDICATION_POLICY_VERSION = 3;
 
 const NUMBER_FORMS = new Map([
   [0, ['0', '٠', 'صفر']],
@@ -52,6 +52,10 @@ const APPROVED_ORTHOGRAPHIC_EQUIVALENTS = new Map([
   // seat even when the audible word is unchanged. Keep this exception exact
   // and local; medial-hamza removal is not accepted generically.
   ['لإنهائه', new Set(['لانهائه'])],
+  // In Arabic vitamin names, «دال» is the spoken name of the written letter
+  // «د». Independent ASR commonly emits the glyph while preserving exactly
+  // the same speech. This deliberately does not generalize to other letters.
+  ['دال', new Set(['د'])],
   // Exact named-entity transliteration variants observed independently across
   // the two ASR models. These pairs preserve the same foreign proper name and
   // are deliberately whitelisted one-by-one; no fuzzy/phonetic matching is used.
@@ -233,7 +237,7 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       rawReportsImmutable: true,
       oneModelDivergence: 'recorded-as-asr-disagreement; not counted as an audio error when the other independent model matches expected text',
       bothModelsSameNonEquivalentDivergence: 'counted as a substantive spoken error',
-      representationEquivalence: ['same normalized token', 'final hamza carrier only', 'explicit approved Arabic ASR orthography شاتًا/شات and لإنهائه/لانهائه', 'strict per-name transliteration whitelist for أنثروبك/Anthropic, كلود/Claude, بروكتر/Procter, غامبل/Gamble', 'explicit numeric/cardinal/ordinal verbalization for 0-10, 100, 1000', 'lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)'],
+      representationEquivalence: ['same normalized token', 'final hamza carrier only', 'explicit approved Arabic ASR orthography شاتًا/شات, لإنهائه/لانهائه, and vitamin letter-name دال/د', 'strict per-name transliteration whitelist for أنثروبك/Anthropic, كلود/Claude, بروكتر/Procter, غامبل/Gamble', 'explicit numeric/cardinal/ordinal verbalization for 0-10, 100, 1000', 'lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)'],
       fuzzyMatching: false,
       stemming: false,
       synonyms: false,
