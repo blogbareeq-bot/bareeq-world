@@ -44,8 +44,10 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // The quota belongs to the Google project + model, not to an HTTP transport.
 // Keep one budget for the whole run; creating a new synthesizer per article
 // previously reset the counter and scattered the daily allowance across the
-// entire backlog. A daily/RPD 429 is terminal for this run, while a short RPM
-// throttle may be retried once using the provider supplied retry delay.
+// entire backlog. A true daily/RPD exhaustion is terminal for this run. When
+// Gemini supplies a short explicit retry delay, honor it even if the quota ID
+// contains "per day"; treating a 36-second reset as terminal previously threw
+// away requests that were still usable in the same run.
 export function createBudgetedSynthesizer({ apiKey, sleepImpl = sleep, transportEntries = null } = {}) {
   const transports = transportEntries || [
     ['developer-interactions', synthesizeGeminiPart],
@@ -54,6 +56,7 @@ export function createBudgetedSynthesizer({ apiKey, sleepImpl = sleep, transport
   const minSpacingMs = Number(process.env.BAREEQ_REPAIR_MIN_INTERVAL_MS || 9000);
   const maxRequests = Number(process.env.BAREEQ_REPAIR_MAX_REQUESTS || 10);
   const retryAttempts = Number(process.env.BAREEQ_REPAIR_MAX_429_RETRIES || 2);
+  const maxTransientRetryMs = Number(process.env.BAREEQ_REPAIR_MAX_TRANSIENT_RETRY_MS || 120000);
   let lastRequestAt = 0;
   let sent = 0;
   let successful = 0;
@@ -101,7 +104,8 @@ export function createBudgetedSynthesizer({ apiKey, sleepImpl = sleep, transport
           const daily = error?.dailyQuota === true
             || error?.quotaInfo?.daily === true
             || /per.?day|requests.?per.?day|rpd/i.test(String(error?.message || ''));
-          if (daily || retryMs > 10 * 60 * 1000) {
+          const shortExplicitRetry = retryMs > 0 && retryMs <= maxTransientRetryMs;
+          if ((daily && !shortExplicitRetry) || retryMs > 10 * 60 * 1000) {
             dailyQuotaExhausted = true;
             console.log(`PROGRESSIVE_REPAIR_DAILY_QUOTA_STOP part=${partNumber} transport=${transport} retry=${retryMs ? `${retryMs}ms` : 'next-reset'}`);
             throw error;
