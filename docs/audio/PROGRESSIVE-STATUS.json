@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "35347716765",
-  "sourceArtifact": "bareeq-progressive-validation-35347716765",
-  "generatedAt": "2026-09-18T13:37:16.149Z",
+  "sourceRunId": "35443202659",
+  "sourceArtifact": "bareeq-progressive-validation-35443202659",
+  "generatedAt": "2026-09-19T12:44:51.038Z",
   "publicationComplete": false,
   "publishedCount": 6,
   "fallbackCount": 9,
@@ -168,7 +168,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -179,7 +179,7 @@
       "repairedParts": [
         1
       ],
-      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 44s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}"
+      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=0"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -204,7 +204,7 @@
       "audioKey": "9d04080d1962a365",
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 1,
       "deletions": 4,
       "insertions": 1,
@@ -212,8 +212,10 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3",
-      "repairedParts": [],
-      "error": null
+      "repairedParts": [
+        1
+      ],
+      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 10 reached"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
