@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "35443202659",
-  "sourceArtifact": "bareeq-progressive-validation-35443202659",
-  "generatedAt": "2026-09-19T12:44:51.038Z",
+  "sourceRunId": "35512468294",
+  "sourceArtifact": "bareeq-progressive-validation-35512468294",
+  "generatedAt": "2026-09-20T13:16:38.356Z",
   "publicationComplete": false,
   "publishedCount": 6,
   "fallbackCount": 9,
@@ -179,7 +179,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=1 D=7 I=0 unresolved=2"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
