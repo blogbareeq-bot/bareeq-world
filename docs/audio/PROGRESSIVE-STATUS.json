@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "35512468294",
-  "sourceArtifact": "bareeq-progressive-validation-35512468294",
-  "generatedAt": "2026-09-20T13:16:38.356Z",
+  "sourceRunId": "35520151251",
+  "sourceArtifact": "bareeq-progressive-validation-35520151251",
+  "generatedAt": "2026-09-20T15:41:47.441Z",
   "publicationComplete": false,
   "publishedCount": 6,
   "fallbackCount": 9,
@@ -179,7 +179,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=1 D=7 I=0 unresolved=2"
+      "error": "dual-ASR consensus failed: S=1 D=7 I=0 unresolved=0"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -215,7 +215,7 @@
       "repairedParts": [
         1
       ],
-      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 10 reached"
+      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 12s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
