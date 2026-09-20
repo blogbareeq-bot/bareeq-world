@@ -747,6 +747,10 @@ for (const candidate of candidates) {
       stopRun = true;
       break;
     }
+    // Fair-share policy: a stubborn stochastic part must not monopolize the
+    // run's free Gemini allowance. Once this article reaches its configured
+    // round cap, continue to the next easiest pending article with the same
+    // shared provider budget and immutable accepted baseline.
     if (!shouldRetryCurrentArticle(result.status)) break;
   }
 }
