@@ -37,9 +37,11 @@ jobs:
 
       - name: Dependency security patch rehearsal
         run: |
+          npm pkg set overrides.devalue=5.9.1 overrides.svgo=4.1.0
           npm install astro@7.2.8 sharp@0.35.4 --save-exact
           npm audit --json > npm-audit.json || true
           node -e "const r=require('./npm-audit.json'); console.log(JSON.stringify({metadata:r.metadata?.vulnerabilities||{}, vulnerabilities:r.vulnerabilities||{}}, null, 2))"
+          npm audit --audit-level=moderate
           rm -f npm-audit.json
 
       - name: Capture patched dependency lock
