@@ -324,7 +324,7 @@ if (isCli) {
     }
     process.exit(result.exitCode || EXIT_OK);
   } catch (error) {
-    console.error(error.message);
+    console.error(process.env.BAREEQ_AUDIO_DEBUG_STACK === '1' ? (error.stack || error.message) : error.message);
     process.exit(error.exitCode || EXIT_HARD);
   }
 }
