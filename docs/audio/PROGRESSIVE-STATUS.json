@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "35520151251",
-  "sourceArtifact": "bareeq-progressive-validation-35520151251",
-  "generatedAt": "2026-09-20T15:41:47.441Z",
+  "sourceRunId": "35617030127",
+  "sourceArtifact": "bareeq-progressive-validation-35617030127",
+  "generatedAt": "2026-09-21T15:12:19.459Z",
   "publicationComplete": false,
   "publishedCount": 6,
   "fallbackCount": 9,
@@ -168,7 +168,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -179,7 +179,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=1 D=7 I=0 unresolved=0"
+      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 40s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
