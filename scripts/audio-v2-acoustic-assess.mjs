@@ -12,6 +12,7 @@ import {
   probeAudio,
 } from './audio-technical-qa.mjs';
 import { transcribeDualAsr } from './audio-asr-transcribe.mjs';
+import { adjudicateDualAsr } from './audio-dual-asr-adjudicate.mjs';
 
 function argValue(name, fallback) {
   const prefix = `--${name}=`;
@@ -192,13 +193,40 @@ for (const trialCase of trial.cases) {
 
     const asrComplete = asrReports.length === 2;
     if (!asrComplete) incomplete = true;
-    const exact = exactAsr(asrReports);
+    const rawExact = exactAsr(asrReports);
+    let adjudication = null;
+    if (asrComplete) {
+      try {
+        adjudication = adjudicateDualAsr({
+          expectedText,
+          reports: asrReports,
+          articleId: `acoustic-${trialCase.caseId}-${engine}`,
+          fingerprint,
+          fullSha256,
+          speechScriptHash: sha256(Buffer.from(expectedText, 'utf8')),
+        });
+      } catch (error) {
+        asrError = asrError || {
+          name: error?.name || 'Error',
+          message: String(error?.message || error).slice(0, 1200),
+          exitCode: error?.exitCode || null,
+          httpStatus: error?.httpStatus || null,
+        };
+      }
+    }
+    const acceptedByConsensus = adjudication?.passed === true;
     row.candidates[engine] = {
-      status: technical.passed && exact ? 'eligible-for-human-listening' : 'rejected-automatically',
+      status: technical.passed && acceptedByConsensus ? 'eligible-for-human-listening' : 'rejected-automatically',
       technical,
       asr: {
         complete: asrComplete,
-        exact,
+        rawExact,
+        consensusPassed: acceptedByConsensus,
+        consensus: adjudication?.consensus || null,
+        representationOnly: adjudication?.representationOnly || [],
+        modelDisagreements: adjudication?.modelDisagreements || [],
+        substantiveDifferences: adjudication?.substantiveDifferences || [],
+        unresolved: adjudication?.unresolved || [],
         error: asrError,
         models: asrReports.map((report) => ({
           requestedModel: report.requestedModel || report.model,
