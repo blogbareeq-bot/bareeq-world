@@ -1,4 +1,7 @@
 import { spawn } from 'node:child_process';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import { assertFfmpeg, runCommand } from './audio-ffmpeg.mjs';
 
 const EXIT_HARD = 1;
@@ -132,6 +135,36 @@ export async function invokeCommandWorker({ runtime, request }) {
     mimeType: decoded.mimeType,
     transport: 'command',
   };
+}
+
+export async function concatWorkerMp3Buffers(buffers) {
+  if (!Array.isArray(buffers) || !buffers.length) throw hard('Cannot merge an empty local TTS segment list.');
+  if (buffers.length === 1) return buffers[0];
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'bareeq-tts-segments-'));
+  try {
+    const files = [];
+    for (let index = 0; index < buffers.length; index += 1) {
+      const file = path.join(temp, 'segment-' + String(index + 1).padStart(3, '0') + '.mp3');
+      await writeFile(file, buffers[index]);
+      files.push(file);
+    }
+    const list = path.join(temp, 'concat.txt');
+    await writeFile(list, files.map((file) => "file '" + file.replace(/'/g, "'\\''") + "'").join('\n') + '\n');
+    const output = path.join(temp, 'part.mp3');
+    const { ffmpeg } = await assertFfmpeg();
+    const result = await runCommand(ffmpeg, [
+      '-hide_banner', '-loglevel', 'error',
+      '-f', 'concat', '-safe', '0', '-i', list,
+      '-map_metadata', '-1', '-ac', '1', '-ar', '48000',
+      '-c:a', 'libmp3lame', '-b:a', '96k', '-y', output,
+    ], { timeoutMs: 180000 });
+    if (result.code !== 0) throw hard('ffmpeg could not merge local TTS segments: ' + result.stderr.slice(0, 700));
+    const merged = await readFile(output);
+    if (merged.length < 100) throw hard('Merged local TTS part is unexpectedly small (' + merged.length + ' bytes).');
+    return merged;
+  } finally {
+    await rm(temp, { recursive: true, force: true }).catch(() => {});
+  }
 }
 
 export async function invokeLocalTtsWorker({ runtime, request, fetchImpl = globalThis.fetch }) {
