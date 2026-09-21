@@ -1,0 +1,13 @@
+{
+  "schema": "bareeq.audio-pronunciation-lexicon.v1",
+  "version": 1,
+  "language": "ar",
+  "policy": "pronunciation-only; canonical spoken text remains unchanged for ASR",
+  "entries": [
+    {
+      "source": "ببساطة",
+      "synthesis": "بِبَساطَة",
+      "reason": "Protect the established Bareeq section name from a recurring TTS mispronunciation."
+    }
+  ]
+}
