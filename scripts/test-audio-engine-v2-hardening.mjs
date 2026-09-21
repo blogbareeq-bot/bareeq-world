@@ -6,7 +6,7 @@ import { assertCandidatePublishEngine, publishApprovedCandidate } from './audio-
 import { candidateDir, sha256 } from './audio-constants.mjs';
 import { assertFfmpeg, runCommand } from './audio-ffmpeg.mjs';
 import { atomicWriteFile } from './audio-io.mjs';
-import { invokeHttpWorker, invokeCommandWorker, concatWorkerMp3Buffers } from './audio-local-transport.mjs';
+import { invokeHttpWorker, invokeCommandWorker, concatWorkerMp3Buffers, isStrictBase64 } from './audio-local-transport.mjs';
 import { readPronunciationLexicon, prepareArabicSynthesisText } from './audio-arabic-normalizer.mjs';
 import { segmentCachePaths, segmentFingerprint } from './audio-segment-cache.mjs';
 import { resolveAudioSynthesizer } from './audio-engine-router.mjs';
@@ -89,6 +89,9 @@ try {
   assert.ok((await invokeHttpWorker({ runtime, request, fetchImpl: async () => success(payload) })).audio.length > 100);
   await assert.rejects(invokeHttpWorker({ runtime, request, fetchImpl: async () => success({ ...payload, model: 'wrong' }) }), /identity/);
   await assert.rejects(invokeHttpWorker({ runtime, request, fetchImpl: async () => success({ ...payload, audioBase64: payload.audioBase64 + '%%' }) }), /base64/);
+  const largeBase64 = Buffer.alloc(8 * 1024 * 1024, 7).toString('base64');
+  assert.equal(isStrictBase64(largeBase64), true, 'large worker Base64 must validate without recursive RegExp stack use');
+  assert.equal(isStrictBase64(largeBase64.slice(0, -1) + '%'), false, 'large malformed Base64 must be rejected');
   await assert.rejects(invokeHttpWorker({ runtime, request, fetchImpl: async () => success({ ...payload, audioBase64: Buffer.alloc(200, 1).toString('base64') }) }), /type/);
   const token = 'REVIEW_SECRET_TEST_ONLY';
   await assert.rejects(invokeHttpWorker({ runtime: { ...runtime, token }, request,
