@@ -196,6 +196,32 @@ try {
   assert.equal(pushFailed, true);
   assert.equal(sawPush, true);
 
+  let previewAwaited = false;
+  const previewFailure = await persistPublishedAudio({
+    root: tmp,
+    liveDir,
+    articleId,
+    fingerprint,
+    fullSha256: manifest.fullSha256,
+    parts: manifest.parts,
+    defaultVoice: 'sadaltager',
+    push: false,
+    spawn: (_cmd, args) => {
+      if (args[0] === 'config') return { status: 0, stdout: 'bareeq-audio\n', stderr: '' };
+      if (args[0] === 'add' || args[0] === 'commit') return { status: 0, stdout: '', stderr: '' };
+      if (args[0] === 'rev-parse') return { status: 0, stdout: `${'ef'.repeat(20)}\n`, stderr: '' };
+      return { status: 0, stdout: '', stderr: '' };
+    },
+    waitPreview: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      previewAwaited = true;
+      throw new Error('injected production verification failure');
+    },
+  }).then(() => null).catch((error) => error);
+  assert.equal(previewAwaited, true, 'production verification must be awaited before publish success');
+  assert.ok(previewFailure);
+  assert.match(previewFailure.message, /injected production verification failure/);
+
   const origin = await new Promise((resolve) => {
     const server = http.createServer((req, res) => {
       if (req.url.endsWith('manifest.json')) {
