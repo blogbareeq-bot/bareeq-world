@@ -15,8 +15,16 @@ function config(message) {
   return Object.assign(new Error(message), { exitCode: EXIT_CONFIG });
 }
 
+function compactBase64(value) {
+  return String(value || '')
+    .replaceAll(' ', '')
+    .replaceAll('\n', '')
+    .replaceAll('\r', '')
+    .replaceAll('\t', '');
+}
+
 export function isStrictBase64(value) {
-  const clean = String(value || '').replace(/\s+/g, '');
+  const clean = compactBase64(value);
   if (!clean || clean.length % 4 !== 0) return false;
   const padding = clean.endsWith('==') ? 2 : clean.endsWith('=') ? 1 : 0;
   const contentEnd = clean.length - padding;
@@ -35,7 +43,7 @@ export function isStrictBase64(value) {
 function decodeJsonAudio(payload) {
   const encoded = payload?.audioBase64 || payload?.audio_base64 || payload?.audio?.base64 || null;
   if (typeof encoded !== 'string' || !encoded.trim()) throw hard('Local TTS worker JSON has no audioBase64 payload.');
-  const clean = encoded.replace(/\s+/g, '');
+  const clean = compactBase64(encoded);
   const maxEncodedBytes = Math.ceil(MAX_WORKER_BYTES / 3) * 4;
   if (clean.length > maxEncodedBytes) throw hard('Local TTS audio exceeds the size limit.');
   if (!isStrictBase64(clean)) throw hard('Local TTS worker returned invalid base64 audio.');
