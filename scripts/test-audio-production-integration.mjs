@@ -353,6 +353,30 @@ try {
   const rollbackNames = (await readdir(liveDir)).sort();
   assert.deepEqual(rollbackNames, ['hamed.mp3', 'manifest.json'], 'failed publish must leave zero staged/candidate MP3 files in live');
 
+  let persistRolledBack = false;
+  try {
+    await publishApprovedCandidate({
+      articleId: 'resume-fixture',
+      fingerprint: payload.fingerprint,
+      root: tmp2,
+      post,
+      record,
+      listening: record.humanListening,
+      persistGit: async () => {
+        throw new Error('injected persist failure');
+      },
+    });
+  } catch (error) {
+    persistRolledBack = true;
+    assert.match(error.message, /injected persist failure/);
+  }
+  assert.equal(persistRolledBack, true);
+  const persistRestored = JSON.parse(await readFile(path.join(liveDir, 'manifest.json'), 'utf8'));
+  assert.equal(persistRestored.defaultVoice, 'hamed');
+  assert.equal(await readFile(path.join(liveDir, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED-KEEP');
+  const persistRollbackNames = (await readdir(liveDir)).sort();
+  assert.deepEqual(persistRollbackNames, ['hamed.mp3', 'manifest.json'], 'persist failure must restore the whole previous live directory');
+
   const publishEnv = {
     ...env,
     BAREEQ_AUDIO_PUBLISH_GIT: '1',
