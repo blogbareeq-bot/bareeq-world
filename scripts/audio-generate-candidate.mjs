@@ -38,11 +38,12 @@ async function defaultLiveDuration(articleId, root) {
 }
 
 function unpackSynthesis(value) {
-  if (Buffer.isBuffer(value)) return { audio: value, transport: 'developer-interactions', metadata: {} };
+  if (Buffer.isBuffer(value)) return { audio: value, transport: 'developer-interactions', providerCalls: 1, metadata: {} };
   if (Buffer.isBuffer(value?.audio)) {
     return {
       audio: value.audio,
       transport: value.transport || 'unknown',
+      providerCalls: Number.isInteger(value.providerCalls) && value.providerCalls >= 0 ? value.providerCalls : 1,
       metadata: {
         endpoint: value.endpoint || null,
         projectId: value.projectId || null,
@@ -163,7 +164,6 @@ export async function generateCandidate({
       });
     }
     try {
-      result.providerAttempts += 1;
       const synthesized = unpackSynthesis(await synthesize({
         article,
         part,
@@ -174,11 +174,12 @@ export async function generateCandidate({
         voice: PRODUCTION_NARRATOR.providerVoice,
         correctionHint: correctionHints.get(part.partIndex) || '',
       }));
-      const { audio, transport, metadata } = synthesized;
+      const { audio, transport, metadata, providerCalls } = synthesized;
       if (!audio || audio.length < 100) throw new Error(`synthesized part ${part.partIndex} is too small`);
       transportsUsed.add(transport);
-      result.ttsRequestsSent += 1;
-      result.successfulRequests += 1;
+      result.ttsRequestsSent += providerCalls;
+      result.providerAttempts += providerCalls;
+      result.successfulRequests += providerCalls;
       await saveCompletedPart(paths, article, splitPlan, part, audio, {
         resumed: false,
         transport,
@@ -189,22 +190,24 @@ export async function generateCandidate({
         partIndex: part.partIndex,
         fingerprint: partFingerprint(article, splitPlan, part),
         action: forced ? 'targeted-regeneration-synthesize' : 'synthesize',
-        providerCalls: 1,
-        providerAttempts: 1,
+        providerCalls,
+        providerAttempts: providerCalls,
         bytes: audio.length,
         transport,
         correctionHintApplied: forced && Boolean(correctionHints.get(part.partIndex)),
         ...metadata,
       });
     } catch (error) {
+      const failedProviderCalls = Number.isInteger(error?.providerCalls) && error.providerCalls >= 0 ? error.providerCalls : 1;
+      result.providerAttempts += failedProviderCalls;
       if (error?.httpStatus === 429 || error?.code === 'BAREEQ_QUOTA') {
         result.quotaRejectedRequests += 1;
         await markQuotaPause(paths, part.partIndex, error);
         await appendRequestLog(paths, {
           partIndex: part.partIndex,
           action: 'quota-pause',
-          providerCalls: 1,
-          providerAttempts: 1,
+          providerCalls: failedProviderCalls,
+          providerAttempts: failedProviderCalls,
           httpStatus: 429,
           transport: engine.local ? 'local-' + engine.engineId : (process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1' ? 'developer-generate-content' : 'developer-interactions'),
         });
