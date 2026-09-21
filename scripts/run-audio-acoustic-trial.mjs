@@ -74,6 +74,7 @@ const env = {
   BAREEQ_LOCAL_ASR_PREFLIGHT: '0',
   BAREEQ_CLOUD_TTS_ACTIVATE: '0',
   BAREEQ_GEMINI_FREE_ROLLOUT: '0',
+  BAREEQ_AUDIO_DEBUG_STACK: '1',
 };
 if (local) {
   const [modelRev, workerRev] = revisionVars[engine];
