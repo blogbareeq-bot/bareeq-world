@@ -5,6 +5,7 @@ import { sha256 } from './audio-constants.mjs';
 import { assertFfmpeg, runCommand } from './audio-ffmpeg.mjs';
 import { candidateDir } from './audio-constants.mjs';
 import { pathExists, writeJson } from './audio-checkpoint.mjs';
+import { publicEngineIdentity } from './audio-engine-config.mjs';
 
 export async function decodePcm(file) {
   const { ffmpeg } = await assertFfmpeg();
@@ -124,6 +125,7 @@ export async function mergeCandidateParts({ articleId, fingerprint, root = proce
   if (gaps.length) throw new Error(`merge gap/silence at splice ${gaps.map((item) => item.afterPart).join(', ')}`);
 
   const digest = sha256(merged);
+  const engine = publicEngineIdentity();
   const report = {
     schema: 'bareeq.audio-merge.v2',
     articleId,
@@ -131,9 +133,11 @@ export async function mergeCandidateParts({ articleId, fingerprint, root = proce
     candidateFingerprint: fingerprint,
     fullSha256: digest,
     speechScriptHash: speechScriptHash,
-    provider: 'Google Gemini API',
-    model: 'gemini-3.1-flash-tts-preview',
-    voice: 'Sadaltager',
+    engineId: engine.engineId,
+    engine,
+    provider: engine.provider,
+    model: engine.model,
+    voice: engine.voice,
     generatorVersion: 9,
     toolVersion: 9,
     status: 'merged',
