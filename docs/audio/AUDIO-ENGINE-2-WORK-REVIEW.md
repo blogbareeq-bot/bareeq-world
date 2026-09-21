@@ -12,7 +12,7 @@ Remove TTS vendor lock-in without weakening Bareeq's existing publication gate. 
 2. Commercial-license allow-list for the new local profiles. No OmniVoice non-commercial weights are registered.
 3. Isolated worker contract instead of copying VoiceStudio/AGPL backend code into Bareeq.
 4. Arabic synthesis normalizer that keeps canonical ASR text unchanged. The first versioned pronunciation entry protects: ببساطة → بِبَساطَة.
-5. Content-addressed segment cache primitives with engine + synthesis fingerprints and SHA-256 verification.
+5. Content-addressed segment cache with engine + synthesis fingerprints, SHA-256 verification, cross-candidate reuse, and opt-in worker-call avoidance.
 6. Optional local-ASR preflight that can reject a bad candidate before Gemini dual-ASR requests are spent.
 7. Engine-bound evidence in candidate, merge and ASR reports.
 8. Hard review lock: local-engine candidates cannot pass publish-approved unless BAREEQ_AUDIO_ENGINE_V2_PUBLISH=1 is explicitly set after review.
@@ -40,6 +40,7 @@ Non-MP3 audio is normalized by Bareeq through ffmpeg to mono 48 kHz / 96 kbps MP
 - BAREEQ_LOCAL_TTS_ENABLE=1 for any non-Gemini engine
 - per-engine endpoint or executable variables defined in audio-engine-config.mjs
 - BAREEQ_VOICE_DESIGN_PROMPT for VoxCPM2 voice-design experiments
+- BAREEQ_SEGMENT_CACHE_ENABLE=1 to enable local-engine segment reuse (off by default during review)
 - BAREEQ_LOCAL_ASR_PREFLIGHT=1
 - BAREEQ_LOCAL_ASR_BIN and optional BAREEQ_LOCAL_ASR_ARGS_JSON
 - BAREEQ_AUDIO_ENGINE_V2_PUBLISH=1 only after owner review
@@ -58,7 +59,7 @@ It should verify:
 - credentials cannot leak through worker error messages;
 - path traversal and command injection risks;
 - Arabic normalizer changes pronunciation only, not canonical ASR truth;
-- segment cache validates hashes and cannot collide across engines;
+- segment cache validates hashes, cannot collide across engines, survives candidate fingerprint changes, and avoids repeat worker calls for unchanged segments;
 - local-ASR failure occurs before dual-ASR network calls;
 - existing 0/0/0 + unresolved=0 policy remains intact;
 - AGPL VoiceStudio source was not copied;
