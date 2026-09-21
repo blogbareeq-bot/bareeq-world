@@ -350,6 +350,8 @@ try {
   const restored = JSON.parse(await readFile(path.join(liveDir, 'manifest.json'), 'utf8'));
   assert.equal(restored.defaultVoice, 'hamed');
   assert.equal(await readFile(path.join(liveDir, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED-KEEP');
+  const rollbackNames = (await readdir(liveDir)).sort();
+  assert.deepEqual(rollbackNames, ['hamed.mp3', 'manifest.json'], 'failed publish must leave zero staged/candidate MP3 files in live');
 
   const publishEnv = {
     ...env,
