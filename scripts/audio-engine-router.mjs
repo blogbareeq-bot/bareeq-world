@@ -45,6 +45,7 @@ export async function resolveAudioSynthesizer({
   env = process.env,
   fetchImpl = globalThis.fetch,
   root = process.cwd(),
+  cacheRoot = root,
 } = {}) {
   const profile = selectedEngineProfile(env);
   if (profile.id === 'gemini') return resolveProductionSynthesizer({ apiKey: env.GEMINI_API_KEY, fetchImpl });
@@ -61,7 +62,7 @@ export async function resolveAudioSynthesizer({
         const synthesis = prepareArabicSynthesisText(item.text, lexicon);
         const fingerprint = segmentFingerprint({ article, item, synthesis, correctionHint, env });
         const paths = segmentCachePaths({
-          root,
+          root: cacheRoot,
           articleId: article.articleId,
           segmentId: item.segmentId,
           fingerprint,
