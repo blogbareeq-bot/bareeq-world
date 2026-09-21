@@ -9,6 +9,7 @@ on:
       - 'docs/audio/AUDIO-ENGINE-2-WORK-REVIEW.md'
       - 'package.json'
       - 'package-lock.json'
+      - '.node-version'
       - '.github/workflows/audio-engine-v2-review.yml'
   workflow_dispatch:
 
