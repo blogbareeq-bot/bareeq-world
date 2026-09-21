@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: bareeq-audio-v2-gemini-nano-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   acoustic-trial:
     name: acoustic-${{ matrix.engine }}
