@@ -15,13 +15,30 @@ function config(message) {
   return Object.assign(new Error(message), { exitCode: EXIT_CONFIG });
 }
 
+export function isStrictBase64(value) {
+  const clean = String(value || '').replace(/\s+/g, '');
+  if (!clean || clean.length % 4 !== 0) return false;
+  const padding = clean.endsWith('==') ? 2 : clean.endsWith('=') ? 1 : 0;
+  const contentEnd = clean.length - padding;
+  if (contentEnd === 0 || clean.slice(0, contentEnd).includes('=')) return false;
+  for (let index = 0; index < contentEnd; index += 1) {
+    const code = clean.charCodeAt(index);
+    const valid = (code >= 65 && code <= 90)
+      || (code >= 97 && code <= 122)
+      || (code >= 48 && code <= 57)
+      || code === 43 || code === 47;
+    if (!valid) return false;
+  }
+  return padding === 0 || clean.slice(contentEnd) === '='.repeat(padding);
+}
+
 function decodeJsonAudio(payload) {
   const encoded = payload?.audioBase64 || payload?.audio_base64 || payload?.audio?.base64 || null;
   if (typeof encoded !== 'string' || !encoded.trim()) throw hard('Local TTS worker JSON has no audioBase64 payload.');
   const clean = encoded.replace(/\s+/g, '');
-  if (!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(clean)) {
-    throw hard('Local TTS worker returned invalid base64 audio.');
-  }
+  const maxEncodedBytes = Math.ceil(MAX_WORKER_BYTES / 3) * 4;
+  if (clean.length > maxEncodedBytes) throw hard('Local TTS audio exceeds the size limit.');
+  if (!isStrictBase64(clean)) throw hard('Local TTS worker returned invalid base64 audio.');
   const bytes = Buffer.from(clean, 'base64');
   if (bytes.length > MAX_WORKER_BYTES) throw hard('Local TTS audio exceeds the size limit.');
   if (bytes.length < 100) throw hard('Local TTS worker returned only ' + bytes.length + ' audio bytes.');
