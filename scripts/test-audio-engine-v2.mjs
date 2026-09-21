@@ -144,6 +144,7 @@ try {
     const cached = await loadCachedSegment(paths, plan[0].fingerprint);
     assert.ok(cached);
     assert.equal(cached.metadata.sha256, sha256(fakeMp3));
+    await rm(temp, { recursive: true, force: true });
 
     process.env.BAREEQ_SEGMENT_CACHE_ENABLE = '1';
     let workerCalls = 0;
