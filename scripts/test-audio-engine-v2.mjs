@@ -144,6 +144,46 @@ try {
     const cached = await loadCachedSegment(paths, plan[0].fingerprint);
     assert.ok(cached);
     assert.equal(cached.metadata.sha256, sha256(fakeMp3));
+
+    process.env.BAREEQ_SEGMENT_CACHE_ENABLE = '1';
+    let workerCalls = 0;
+    const cachedSynth = await resolveAudioSynthesizer({
+      root: process.cwd(),
+      cacheRoot: temp,
+      env: process.env,
+      fetchImpl: async (_url, options) => {
+        workerCalls += 1;
+        const body = JSON.parse(options.body);
+        assert.equal(body.segmentId, 's1');
+        return {
+          ok: true,
+          status: 200,
+          headers: { get: () => 'application/json' },
+          json: async () => ({ audioBase64: fakeMp3.toString('base64'), mimeType: 'audio/mpeg' }),
+        };
+      },
+    });
+    const cachedPart = {
+      text: 'ببساطة',
+      partIndex: 0,
+      items: segmentArticle.items,
+    };
+    const firstCachedRun = await cachedSynth({
+      article: segmentArticle,
+      part: cachedPart,
+      splitPlan: { parts: [cachedPart] },
+    });
+    const secondCachedRun = await cachedSynth({
+      article: segmentArticle,
+      part: cachedPart,
+      splitPlan: { parts: [cachedPart] },
+    });
+    assert.equal(firstCachedRun.providerCalls, 1);
+    assert.equal(firstCachedRun.workerMetadata.segmentCache.misses, 1);
+    assert.equal(secondCachedRun.providerCalls, 0);
+    assert.equal(secondCachedRun.workerMetadata.segmentCache.hits, 1);
+    assert.equal(workerCalls, 1);
+    delete process.env.BAREEQ_SEGMENT_CACHE_ENABLE;
   } finally {
     await rm(temp, { recursive: true, force: true });
   }
