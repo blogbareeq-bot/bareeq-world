@@ -55,12 +55,7 @@ jobs:
           python3 -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.7.0 torchaudio==2.7.0
           python3 -m pip install numpy sentencepiece transformers==4.57.1 soundfile onnxruntime huggingface_hub
           WORKER_SHA="$(git -C /tmp/moss-tts-nano rev-parse HEAD)"
-          MODEL_SHA="$(python3 - <<'PY'
-import json, urllib.request
-with urllib.request.urlopen('https://huggingface.co/api/models/OpenMOSS-Team/MOSS-TTS-Nano-100M-ONNX', timeout=30) as r:
-    print(json.load(r)['sha'])
-PY
-)"
+          MODEL_SHA="$(git ls-remote https://huggingface.co/OpenMOSS-Team/MOSS-TTS-Nano-100M-ONNX HEAD | awk '{print $1}')"
           echo "MOSS_NANO_HOME=/tmp/moss-tts-nano" >> "$GITHUB_ENV"
           echo "BAREEQ_MOSS_NANO_BIN=python3" >> "$GITHUB_ENV"
           printf 'BAREEQ_MOSS_NANO_ARGS_JSON=["%s/scripts/moss-nano-onnx-worker.py"]\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
