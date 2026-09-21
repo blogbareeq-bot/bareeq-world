@@ -12,6 +12,7 @@ import { resolveAudioSynthesizer } from './audio-engine-router.mjs';
 import { buildSegmentPlan, loadCachedSegment, saveCachedSegment, segmentCachePaths } from './audio-segment-cache.mjs';
 import { runLocalAsrPreflight } from './audio-local-asr-preflight.mjs';
 import { candidateFingerprint } from './audio-split.mjs';
+import { assertFfmpeg, runCommand } from './audio-ffmpeg.mjs';
 import {
   GENERATOR_VERSION,
   PERFORMANCE_INSTRUCTIONS,
@@ -85,6 +86,8 @@ try {
   assert.throws(() => assertEngineConfiguration(selectedEngineProfile()), /disabled/);
   process.env.BAREEQ_LOCAL_TTS_ENABLE = '1';
   process.env.BAREEQ_VOXCPM2_ENDPOINT = 'http://127.0.0.1:9876/tts';
+  process.env.BAREEQ_TTS_MODEL_REVISION = 'test-model-v1';
+  process.env.BAREEQ_TTS_WORKER_REVISION = 'test-worker-v1';
   assert.equal(assertEngineConfiguration(selectedEngineProfile()).kind, 'http');
   assert.notEqual(candidateFingerprint(article, splitPlan), oldCandidateFingerprint(article, splitPlan));
 
@@ -94,7 +97,21 @@ try {
   assert.match(normalized.synthesisText, /بِبَساطَة/u);
 
   let request = null;
-  const fakeMp3 = Buffer.concat([Buffer.from('ID3'), Buffer.alloc(240, 7)]);
+  const { ffmpeg } = await assertFfmpeg();
+  const generated = await runCommand(ffmpeg, [
+    '-v', 'error', '-f', 'lavfi', '-i', 'sine=frequency=440:duration=0.4:sample_rate=48000',
+    '-ac', '1', '-c:a', 'libmp3lame', '-b:a', '96k', '-f', 'mp3', 'pipe:1',
+  ]);
+  assert.equal(generated.code, 0);
+  const fakeMp3 = generated.stdout;
+  const wavGenerated = await runCommand(ffmpeg, [
+    '-v', 'error', '-f', 'lavfi', '-i', 'sine=frequency=440:duration=0.4:sample_rate=48000',
+    '-ac', '1', '-c:a', 'pcm_s16le', '-f', 'wav', 'pipe:1',
+  ]);
+  assert.equal(wavGenerated.code, 0);
+  const fakeWav = wavGenerated.stdout;
+  const attest = (body) => ({ engine: body.engine, model: body.model, voiceId: body.voice.id,
+    modelRevision: body.audit.modelRevision, workerRevision: body.audit.workerRevision });
   const synth = await resolveAudioSynthesizer({
     root: process.cwd(),
     env: process.env,
@@ -104,7 +121,7 @@ try {
         ok: true,
         status: 200,
         headers: { get: () => 'application/json' },
-        json: async () => ({ audioBase64: fakeMp3.toString('base64'), mimeType: 'audio/mpeg' }),
+        json: async () => ({ ...attest(request), audioBase64: fakeMp3.toString('base64'), mimeType: 'audio/mpeg' }),
       };
     },
   });
@@ -138,12 +155,12 @@ try {
       articleId: segmentArticle.articleId,
       segmentId: plan[0].segmentId,
       synthesis,
-      audio: fakeMp3,
+      audio: fakeWav,
       env: process.env,
     });
     const cached = await loadCachedSegment(paths, plan[0].fingerprint);
     assert.ok(cached);
-    assert.equal(cached.metadata.sha256, sha256(fakeMp3));
+    assert.equal(cached.metadata.sha256, sha256(fakeWav));
     await rm(temp, { recursive: true, force: true });
 
     process.env.BAREEQ_SEGMENT_CACHE_ENABLE = '1';
@@ -160,7 +177,7 @@ try {
           ok: true,
           status: 200,
           headers: { get: () => 'application/json' },
-          json: async () => ({ audioBase64: fakeMp3.toString('base64'), mimeType: 'audio/mpeg' }),
+          json: async () => ({ ...attest(body), audioBase64: fakeWav.toString('base64'), mimeType: 'audio/wav' }),
         };
       },
     });

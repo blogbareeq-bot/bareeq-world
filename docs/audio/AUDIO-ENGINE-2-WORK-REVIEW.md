@@ -31,8 +31,11 @@ A local/remote worker receives JSON schema bareeq.tts-worker.v1.
 Required request fields include engine/model/language, canonical text, synthesis text, article/part identity, voice configuration and output settings.
 
 The worker may return application/json with audioBase64 and mimeType, or raw audio bytes over HTTP.
+Each response must attest the actual `engine`, `model`, `voiceId`, `modelRevision`, and `workerRevision` of the loaded model. Raw HTTP audio must carry the matching `X-Bareeq-TTS-Engine`, `X-Bareeq-TTS-Model`, `X-Bareeq-TTS-Voice`, `X-Bareeq-TTS-Model-Revision`, and `X-Bareeq-TTS-Worker-Revision` headers. A response with a missing or mismatched identity is rejected. The worker must report its loaded revisions, not merely echo the request.
 
-Non-MP3 audio is normalized by Bareeq through ffmpeg to mono 48 kHz / 96 kbps MP3 before the existing validation pipeline.
+All worker audio is decoded and normalized by Bareeq through ffmpeg to mono 48 kHz / 96 kbps MP3 before the existing validation pipeline. For segment cache requests, `output.format` is `wav`: the worker must return lossless WAV, which is cached with its SHA-256. Bareeq joins decoded PCM in segment order and encodes the whole part once; MP3 segments are rejected in this mode to avoid per-segment encoder padding.
+
+HTTP workers must use HTTPS, or HTTP on loopback. Remote HTTPS origins must also be explicitly listed in `BAREEQ_LOCAL_TTS_ALLOWED_ORIGINS` (comma-separated origins). Redirects and credentials in endpoint URLs are rejected. Responses are size-limited and timed out; response bodies, worker stderr and credentials are not copied into reports. Command workers receive JSON over stdin and must return the same attested JSON response on stdout.
 
 ## Activation variables
 
@@ -41,9 +44,13 @@ Non-MP3 audio is normalized by Bareeq through ffmpeg to mono 48 kHz / 96 kbps MP
 - per-engine endpoint or executable variables defined in audio-engine-config.mjs
 - BAREEQ_VOICE_DESIGN_PROMPT for VoxCPM2 voice-design experiments
 - BAREEQ_SEGMENT_CACHE_ENABLE=1 to enable local-engine segment reuse (off by default during review)
+- BAREEQ_TTS_MODEL_REVISION and BAREEQ_TTS_WORKER_REVISION are required for any local generation; pin them to the actual loaded model/worker artifacts
+- BAREEQ_TTS_REFERENCE_AUDIO_SHA256 is required for worker-side voice references that Bareeq cannot read locally; a readable local reference is hashed and checked against this optional declaration
 - BAREEQ_LOCAL_ASR_PREFLIGHT=1
 - BAREEQ_LOCAL_ASR_BIN and optional BAREEQ_LOCAL_ASR_ARGS_JSON
 - BAREEQ_AUDIO_ENGINE_V2_PUBLISH=1 only after owner review
+
+The publish lock is enforced inside `publishApprovedCandidate` against the candidate's saved engine identity, including callers that bypass `audio-production.mjs`. Keep it unset during work review and acoustic trials. A successful trial does not authorize publication.
 
 ## Work-mode review checklist
 

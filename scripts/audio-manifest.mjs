@@ -5,7 +5,7 @@ import {
   GENERATOR_VERSION,
   PERFORMANCE_INSTRUCTIONS,
 } from './audio-constants.mjs';
-import { publicEngineIdentity } from './audio-engine-config.mjs';
+import { publicEngineIdentity, synthesisContractSha256 } from './audio-engine-config.mjs';
 
 export function isValidProductionManifest(data) {
   if (!data || !Array.isArray(data.parts) || !data.parts.length || !data.parts.every((part) => Array.isArray(part?.sync))) return false;
@@ -53,6 +53,7 @@ export function buildProductionManifest({
     speechInput: 'reviewed-contextual-speech-script',
     engineId: engine.engineId,
     engine,
+    ...(engine.local ? { synthesisContractSha256: synthesisContractSha256() } : {}),
     provider: engine.provider,
     model: engine.model,
     language: PRODUCTION_NARRATOR.language,

@@ -17,7 +17,7 @@ import {
 import { deleteUploadedFile, uploadResumableFile, addHttp, emptyHttp } from './audio-files-api.mjs';
 import { boundIdentity } from './audio-report.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
-import { publicEngineIdentity } from './audio-engine-config.mjs';
+import { publicEngineIdentity, synthesisContractSha256 } from './audio-engine-config.mjs';
 
 export function geminiInteractionsUrl() {
   const override = process.env.GEMINI_INTERACTIONS_ENDPOINT?.trim() || process.env.GEMINI_TTS_ENDPOINT?.trim();
@@ -102,6 +102,8 @@ function asrIdentity({ article, fingerprint, fullSha256, model, status, extra })
       engineId: ttsEngine.engineId,
       generatorVersion: GENERATOR_VERSION,
       ttsModel: ttsEngine.model,
+      ttsVoice: ttsEngine.voice,
+      ...(ttsEngine.local ? { synthesisContractSha256: synthesisContractSha256() } : {}),
       ...extra,
     },
   });

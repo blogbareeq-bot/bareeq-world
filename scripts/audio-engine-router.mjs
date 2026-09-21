@@ -1,14 +1,15 @@
 import { resolveProductionSynthesizer } from './audio-gemini-tts.mjs';
 import {
+  ARABIC_NORMALIZER_VERSION,
   assertEngineConfiguration,
   publicEngineIdentity,
   selectedEngineProfile,
 } from './audio-engine-config.mjs';
 import { prepareArabicSynthesisText, readPronunciationLexicon } from './audio-arabic-normalizer.mjs';
 import { concatWorkerMp3Buffers, invokeLocalTtsWorker } from './audio-local-transport.mjs';
-import { loadCachedSegment, saveCachedSegment, segmentCachePaths, segmentFingerprint } from './audio-segment-cache.mjs';
+import { loadCachedSegment, saveCachedSegment, segmentCachePaths, segmentFingerprint, withSegmentCacheLock } from './audio-segment-cache.mjs';
 
-export function buildLocalWorkerRequest({ profile, article, part, splitPlan, synthesis, correctionHint = '', env = process.env }) {
+export function buildLocalWorkerRequest({ profile, article, part, splitPlan, synthesis, correctionHint = '', segmentMode = false, env = process.env }) {
   return {
     schema: 'bareeq.tts-worker.v1',
     engine: profile.id,
@@ -28,7 +29,7 @@ export function buildLocalWorkerRequest({ profile, article, part, splitPlan, syn
       referenceAudio: String(env.BAREEQ_TTS_REFERENCE_AUDIO || '').trim() || null,
     },
     output: {
-      format: 'mp3',
+      format: segmentMode ? 'wav' : 'mp3',
       sampleRateHz: profile.outputSampleRateHz || 48000,
       channels: 1,
       bitrateKbps: 96,
@@ -37,6 +38,8 @@ export function buildLocalWorkerRequest({ profile, article, part, splitPlan, syn
       normalizerVersion: synthesis.normalizerVersion,
       pronunciationLexiconVersion: synthesis.lexiconVersion,
       synthesisFingerprint: synthesis.fingerprint,
+      modelRevision: String(env.BAREEQ_TTS_MODEL_REVISION || '').trim(),
+      workerRevision: String(env.BAREEQ_TTS_WORKER_REVISION || '').trim(),
     },
   };
 }
@@ -68,41 +71,36 @@ export async function resolveAudioSynthesizer({
           fingerprint,
           env,
         });
-        const cached = await loadCachedSegment(paths, fingerprint);
-        if (cached) {
-          buffers.push(cached.audio);
-          segmentRecords.push({ segmentId: item.segmentId, fingerprint, cache: 'hit', sha256: cached.metadata.sha256 });
-          continue;
-        }
-        const segmentPart = { ...part, text: item.text, items: [item], segmentId: item.segmentId };
-        const request = buildLocalWorkerRequest({ profile, article, part: segmentPart, splitPlan, synthesis, correctionHint, env });
-        let result;
-        try {
-          result = await invokeLocalTtsWorker({ runtime, request, fetchImpl });
-          providerCalls += 1;
-        } catch (error) {
-          error.providerCalls = providerCalls + 1;
-          throw error;
-        }
-        const record = await saveCachedSegment(paths, {
-          fingerprint,
-          articleId: article.articleId,
-          segmentId: item.segmentId,
-          synthesis,
-          audio: result.audio,
-          env,
-          metadata: {
-            workerTransport: result.transport,
-            workerMetadata: result.metadata,
-          },
+        const resolved = await withSegmentCacheLock(paths, async () => {
+          const cached = await loadCachedSegment(paths, fingerprint);
+          if (cached) return { audio: cached.audio, sha256: cached.metadata.sha256, cache: 'hit' };
+          const segmentPart = { ...part, text: item.text, items: [item], segmentId: item.segmentId };
+          const request = buildLocalWorkerRequest({ profile, article, part: segmentPart, splitPlan, synthesis, correctionHint, segmentMode: true, env });
+          let result;
+          try {
+            result = await invokeLocalTtsWorker({ runtime, request, fetchImpl });
+            if (!['audio/wav', 'audio/x-wav'].includes(result.mimeType.split(';')[0])) {
+              throw Object.assign(new Error('Segment cache worker must return lossless WAV audio.'), { exitCode: 1 });
+            }
+            providerCalls += 1;
+          } catch (error) {
+            error.providerCalls = providerCalls + 1;
+            throw error;
+          }
+          const record = await saveCachedSegment(paths, {
+            fingerprint, articleId: article.articleId, segmentId: item.segmentId,
+            synthesis, audio: result.sourceAudio, env,
+            metadata: { workerTransport: result.transport, workerMetadata: result.metadata },
+          });
+          return { audio: result.sourceAudio, sha256: record.sha256, cache: 'miss' };
         });
-        buffers.push(result.audio);
-        segmentRecords.push({ segmentId: item.segmentId, fingerprint, cache: 'miss', sha256: record.sha256 });
+        buffers.push(resolved.audio);
+        segmentRecords.push({ segmentId: item.segmentId, fingerprint, cache: resolved.cache, sha256: resolved.sha256 });
       }
       return {
         audio: await concatWorkerMp3Buffers(buffers),
         transport: 'local-' + profile.id + '-segment-cache',
-        endpoint: runtime.kind === 'http' ? runtime.endpoint : null,
+        endpoint: null,
         projectId: null,
         model: profile.model,
         voice: profile.voice,
@@ -110,7 +108,7 @@ export async function resolveAudioSynthesizer({
         providerCalls,
         normalization: {
           mode: 'segment',
-          normalizerVersion: segmentRecords.length ? undefined : null,
+          normalizerVersion: ARABIC_NORMALIZER_VERSION,
           lexiconVersion: lexicon.version,
         },
         workerMetadata: {
@@ -130,7 +128,7 @@ export async function resolveAudioSynthesizer({
     return {
       audio: result.audio,
       transport: 'local-' + profile.id + '-' + result.transport,
-      endpoint: runtime.kind === 'http' ? runtime.endpoint : null,
+      endpoint: null,
       projectId: null,
       model: profile.model,
       voice: profile.voice,

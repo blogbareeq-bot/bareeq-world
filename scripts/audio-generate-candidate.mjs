@@ -19,6 +19,8 @@ import {
   writeJson,
 } from './audio-checkpoint.mjs';
 import { currentAudioEngineIdentity, resolveAudioSynthesizer } from './audio-engine-router.mjs';
+import { synthesisContractSha256 } from './audio-engine-config.mjs';
+import { assertSafeArticleId } from './audio-report.mjs';
 
 export class QuotaError extends Error {
   constructor(message = 'HTTP 429') {
@@ -89,8 +91,8 @@ export async function generateCandidate({
   liveDurationSeconds = undefined,
   settings,
 }) {
-  if (!articleId) {
-    const error = new Error('generate-candidate requires --article');
+  if (!assertSafeArticleId(articleId)) {
+    const error = new Error('generate-candidate requires a safe --article ID');
     error.exitCode = EXIT_USAGE;
     throw error;
   }
@@ -129,6 +131,7 @@ export async function generateCandidate({
     status: 'in-progress',
     liveUntouched: true,
     engine,
+    ...(engine.local ? { synthesisContractSha256: synthesisContractSha256() } : {}),
   };
 
   for (const part of splitPlan.parts) {
@@ -242,6 +245,7 @@ export async function generateCandidate({
     speechScriptHash: article.speechScriptHash,
     engineId: engine.engineId,
     engine,
+    ...(engine.local ? { synthesisContractSha256: synthesisContractSha256() } : {}),
     provider: engine.provider,
     model: engine.model,
     voice: engine.voice,

@@ -14,11 +14,32 @@ import {
 import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { isValidProductionManifest } from './audio-manifest.mjs';
 import { loadBoundEvidence, listeningMatchesFingerprint as listeningBound } from './audio-evidence.mjs';
-import { boundIdentity } from './audio-report.mjs';
+import { boundIdentity, assertSafeArticleId, assertSha256Fingerprint } from './audio-report.mjs';
 import { atomicWriteFile } from './audio-io.mjs';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { loadSpokenArticle } from './audio-split.mjs';
 import { confirmRemoteSha, resolvePublishRef, waitAndVerifyPublished } from './audio-publish-verify.mjs';
+import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
+
+export function assertCandidatePublishEngine(candidate, player, env = process.env) {
+  const engineId = candidate?.engineId || candidate?.engine?.engineId || 'gemini';
+  const playerEngineId = player?.engineId || player?.engine?.engineId || 'gemini';
+  if (engineId !== playerEngineId || (candidate?.provider && candidate.provider !== player?.provider)
+    || (candidate?.model && candidate.model !== player?.model)
+    || (engineId !== 'gemini' && (!candidate?.synthesisContractSha256
+      || candidate.synthesisContractSha256 !== player?.synthesisContractSha256))
+    || (candidate?.voice && candidate.voice !== player?.voices?.find((voice) => voice.id === player.defaultVoice)?.providerVoice)) {
+    throw Object.assign(new Error('publish-approved refused: candidate and player TTS identities differ'), { exitCode: EXIT_HARD });
+  }
+  if (engineId !== 'gemini' && env.BAREEQ_AUDIO_ENGINE_V2_PUBLISH !== '1') {
+    throw Object.assign(new Error('publish-approved refused: local-engine publishing remains review-locked'), { exitCode: EXIT_HARD });
+  }
+  if (engineId === 'gemini' && (player?.provider !== PRODUCTION_NARRATOR.provider
+    || player?.model !== PRODUCTION_NARRATOR.model || player?.defaultVoice !== PRODUCTION_NARRATOR.voiceId)) {
+    throw Object.assign(new Error('publish-approved refused: Gemini identity is inconsistent'), { exitCode: EXIT_HARD });
+  }
+  return { engineId, provider: player.provider, model: player.model, voiceId: player.defaultVoice };
+}
 
 export function listeningMatchesFingerprint(review, fullSha256, candidateFingerprint) {
   return listeningBound(review, fullSha256, candidateFingerprint);
@@ -151,8 +172,8 @@ export async function publishApprovedCandidate({
   persistGit = process.env.BAREEQ_AUDIO_PUBLISH_GIT === '1',
   afterManifestWrite,
 }) {
-  if (!articleId || !fingerprint) {
-    throw Object.assign(new Error('publish-approved requires article and candidate fingerprint'), { exitCode: EXIT_USAGE });
+  if (!assertSafeArticleId(articleId) || !assertSha256Fingerprint(fingerprint)) {
+    throw Object.assign(new Error('publish-approved requires a safe article ID and SHA-256 candidate fingerprint'), { exitCode: EXIT_USAGE });
   }
   const dir = candidateDir(articleId, fingerprint, root);
   const fullFile = path.join(dir, 'full.mp3');
@@ -163,6 +184,12 @@ export async function publishApprovedCandidate({
   const article = await loadSpokenArticle(articleId, root).catch(() => ({ articleId, speechScriptHash: record?.speechScriptHash || null }));
   const fullSha256 = sha256(await readFile(fullFile));
   const playerManifest = JSON.parse(await readFile(playerManifestPath, 'utf8'));
+  const candidateManifestPath = path.join(dir, 'manifest.candidate.json');
+  if (!await pathExists(candidateManifestPath)) {
+    throw Object.assign(new Error('publish-approved refused: candidate identity is missing'), { exitCode: EXIT_HARD });
+  }
+  const candidateManifest = JSON.parse(await readFile(candidateManifestPath, 'utf8'));
+  const expectedEngine = assertCandidatePublishEngine(candidateManifest, playerManifest);
   if ((playerManifest.candidateFingerprint || playerManifest.fingerprint) !== fingerprint) {
     throw Object.assign(new Error('candidate fingerprint mismatch'), { exitCode: EXIT_HARD });
   }
@@ -185,7 +212,7 @@ export async function publishApprovedCandidate({
     listening: human,
     record,
   });
-  const publication = evaluatePublishability(post, record);
+  const publication = evaluatePublishability(post, record, expectedEngine);
   if (!publication.passed) {
     throw Object.assign(new Error(`publish-approved refused:\n${publication.reasons.map((reason) => `- ${reason}`).join('\n')}`), {
       exitCode: EXIT_HARD,

@@ -1,3 +1,8 @@
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 const CONFIG_EXIT = 78;
 const USAGE_EXIT = 2;
 
@@ -93,6 +98,32 @@ function configError(message, exitCode = CONFIG_EXIT) {
   return Object.assign(new Error(message), { exitCode });
 }
 
+function digest(value) {
+  return createHash('sha256').update(value).digest('hex');
+}
+
+function referenceAudioDigest(env) {
+  const reference = String(env.BAREEQ_TTS_REFERENCE_AUDIO || '').trim();
+  if (!reference) return null;
+  const declared = String(env.BAREEQ_TTS_REFERENCE_AUDIO_SHA256 || '').trim().toLowerCase();
+  if (declared && !/^[a-f0-9]{64}$/.test(declared)) throw configError('BAREEQ_TTS_REFERENCE_AUDIO_SHA256 must be a SHA-256 digest.');
+  const absolute = path.resolve(reference);
+  if (existsSync(absolute)) {
+    const actual = digest(readFileSync(absolute));
+    if (declared && declared !== actual) throw configError('Reference audio SHA-256 does not match its bytes.');
+    return actual;
+  }
+  if (!declared) throw configError('Worker-side reference audio requires BAREEQ_TTS_REFERENCE_AUDIO_SHA256.');
+  return declared;
+}
+
+function lexiconDigest(env) {
+  const file = env.BAREEQ_PRONUNCIATION_LEXICON
+    ? path.resolve(env.BAREEQ_PRONUNCIATION_LEXICON)
+    : fileURLToPath(new URL('./audio-pronunciation-lexicon.json', import.meta.url));
+  return digest(readFileSync(file));
+}
+
 export function selectedEngineId(env = process.env) {
   const requested = String(env.BAREEQ_TTS_ENGINE || 'gemini').trim().toLowerCase();
   return ALIASES[requested] || requested;
@@ -116,7 +147,7 @@ export function engineRuntimeConfig(profile = selectedEngineProfile(), env = pro
   const rawArgs = String(env[profile.argsEnv] || '').trim();
   if (rawArgs) {
     try { args = JSON.parse(rawArgs); }
-    catch (error) { throw configError(profile.argsEnv + ' must be a JSON array: ' + error.message, USAGE_EXIT); }
+    catch { throw configError(profile.argsEnv + ' must be a JSON array.', USAGE_EXIT); }
     if (!Array.isArray(args) || args.some((item) => typeof item !== 'string')) {
       throw configError(profile.argsEnv + ' must be a JSON array of strings.', USAGE_EXIT);
     }
@@ -132,9 +163,29 @@ export function assertEngineConfiguration(profile = selectedEngineProfile(), env
   if (env.BAREEQ_LOCAL_TTS_ENABLE !== '1') {
     throw configError(profile.id + ' is local/worker TTS and is disabled. Set BAREEQ_LOCAL_TTS_ENABLE=1 only on an approved worker.');
   }
+  if (!String(env.BAREEQ_TTS_MODEL_REVISION || '').trim() || !String(env.BAREEQ_TTS_WORKER_REVISION || '').trim()) {
+    throw configError('Local TTS requires pinned BAREEQ_TTS_MODEL_REVISION and BAREEQ_TTS_WORKER_REVISION.');
+  }
   const runtime = engineRuntimeConfig(profile, env);
   if (runtime.kind === 'missing') {
     throw configError(profile.id + ' requires either ' + profile.endpointEnv + ' or ' + profile.binEnv + '. No TTS request was sent.');
+  }
+  if (runtime.kind === 'http') {
+    let url;
+    try { url = new URL(runtime.endpoint); } catch { throw configError('Local TTS endpoint must be a valid URL.'); }
+    const loopback = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+    if (url.protocol !== 'https:' && !(url.protocol === 'http:' && loopback)) {
+      throw configError('Local TTS endpoint must use HTTPS, or HTTP on loopback.');
+    }
+    if (url.username || url.password) throw configError('Credentials in local TTS endpoint URLs are forbidden.');
+    if ([...url.searchParams.keys()].some((key) => /^(token|key|api_key|access_token)$/i.test(key))) {
+      throw configError('Local TTS endpoint secrets must use its Authorization header.');
+    }
+    if (!loopback) {
+      const allowlist = String(env.BAREEQ_LOCAL_TTS_ALLOWED_ORIGINS || '').split(',').map((item) => item.trim());
+      if (!allowlist.includes(url.origin)) throw configError('Remote TTS worker origin is not explicitly allow-listed.');
+      runtime.approvedOrigin = url.origin;
+    }
   }
   return runtime;
 }
@@ -142,6 +193,11 @@ export function assertEngineConfiguration(profile = selectedEngineProfile(), env
 export function engineFingerprintExtension(env = process.env) {
   const profile = selectedEngineProfile(env);
   if (profile.id === 'gemini') return null;
+  const runtime = engineRuntimeConfig(profile, env);
+  const correctionHints = String(env.BAREEQ_TTS_CORRECTION_HINTS_JSON || '').trim();
+  let parsedHints = {};
+  try { parsedHints = correctionHints ? JSON.parse(correctionHints) : {}; }
+  catch { throw configError('BAREEQ_TTS_CORRECTION_HINTS_JSON must be valid JSON.'); }
   return {
     engineId: profile.id,
     provider: profile.provider,
@@ -152,7 +208,19 @@ export function engineFingerprintExtension(env = process.env) {
     pronunciationLexiconVersion: Number(env.BAREEQ_PRONUNCIATION_LEXICON_VERSION || DEFAULT_PRONUNCIATION_LEXICON_VERSION),
     voiceDesignPrompt: profile.supportsVoiceDesign ? String(env.BAREEQ_VOICE_DESIGN_PROMPT || '').trim() : '',
     synthesisProfile: String(env.BAREEQ_TTS_SYNTHESIS_PROFILE || 'bareeq-ar-v1').trim(),
+    lexiconSha256: lexiconDigest(env),
+    referenceAudioSha256: referenceAudioDigest(env),
+    modelRevision: String(env.BAREEQ_TTS_MODEL_REVISION || '').trim(),
+    workerRevision: String(env.BAREEQ_TTS_WORKER_REVISION || '').trim(),
+    workerContractSha256: digest(JSON.stringify({ kind: runtime.kind, endpoint: runtime.endpoint, bin: runtime.bin, args: runtime.args })),
+    correctionHintsSha256: digest(JSON.stringify(parsedHints)),
+    output: { format: 'mp3', sampleRateHz: profile.outputSampleRateHz || 48000, channels: 1, bitrateKbps: 96 },
   };
+}
+
+export function synthesisContractSha256(env = process.env) {
+  const contract = engineFingerprintExtension(env);
+  return contract ? digest(JSON.stringify(contract)) : null;
 }
 
 export function publicEngineIdentity(env = process.env) {

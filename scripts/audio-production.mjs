@@ -232,10 +232,6 @@ export async function runProductionMode({
     });
   }
   if (mode === 'publish-approved') {
-    const engine = currentAudioEngineIdentity();
-    if (engine.engineId !== 'gemini' && process.env.BAREEQ_AUDIO_ENGINE_V2_PUBLISH !== '1') {
-      throw Object.assign(new Error('Audio Engine 2.0 local-engine publishing is review-locked. Inspect this branch in Work mode before setting BAREEQ_AUDIO_ENGINE_V2_PUBLISH=1.'), { exitCode: EXIT_CONFIG });
-    }
     if (!fingerprint) {
       throw Object.assign(new Error('publish-approved requires --fingerprint; it will not pick the latest candidate'), { exitCode: EXIT_USAGE });
     }

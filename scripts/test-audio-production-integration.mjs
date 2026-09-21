@@ -10,6 +10,7 @@ import { writeApprovedFixture } from './test-audio-fixture.mjs';
 import { validateSyncMap, expectedSyncIds, attachSync } from './audio-sync.mjs';
 import { publishApprovedCandidate } from './audio-publish.mjs';
 import { loadPublicationPost, loadPublishRecord } from './audio-approval.mjs';
+import { loadBoundEvidence } from './audio-evidence.mjs';
 
 const ROOT = process.cwd();
 
@@ -20,6 +21,24 @@ function sinePcm(seconds = 0.25, sampleRate = 24000, freq = 440) {
     bytes.writeInt16LE(Math.floor(Math.sin((2 * Math.PI * freq * index) / sampleRate) * 12000), index * 2);
   }
   return bytes;
+}
+
+function sineWav() {
+  const pcm = sinePcm(0.25, 48000);
+  const header = Buffer.alloc(44);
+  header.write('RIFF', 0);
+  header.writeUInt32LE(36 + pcm.length, 4);
+  header.write('WAVEfmt ', 8);
+  header.writeUInt32LE(16, 16);
+  header.writeUInt16LE(1, 20);
+  header.writeUInt16LE(1, 22);
+  header.writeUInt32LE(48000, 24);
+  header.writeUInt32LE(96000, 28);
+  header.writeUInt16LE(2, 32);
+  header.writeUInt16LE(16, 34);
+  header.write('data', 36);
+  header.writeUInt32LE(pcm.length, 40);
+  return Buffer.concat([header, pcm]);
 }
 
 function readBody(req) {
@@ -36,9 +55,19 @@ function startMockServer({ failTtsAt = -1, spoken = 'اختبار الاستئن
   let filesFinalizes = 0;
   let filesDeletes = 0;
   let interactions = 0;
+  let localTtsRequests = 0;
   const uris = [];
   const server = http.createServer(async (req, res) => {
     try {
+      if (req.method === 'POST' && req.url === '/tts') {
+        const payload = JSON.parse((await readBody(req)).toString('utf8'));
+        localTtsRequests += 1;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ engine: payload.engine, model: payload.model, voiceId: payload.voice.id,
+          modelRevision: payload.audit.modelRevision, workerRevision: payload.audit.workerRevision,
+          mimeType: 'audio/wav', audioBase64: sineWav().toString('base64') }));
+        return;
+      }
       if (req.method === 'POST' && req.url === '/upload/v1beta/files') {
         await readBody(req);
         filesStarts += 1;
@@ -112,6 +141,7 @@ function startMockServer({ failTtsAt = -1, spoken = 'اختبار الاستئن
         filesFinalizes: () => filesFinalizes,
         filesDeletes: () => filesDeletes,
         interactions: () => interactions,
+        localTtsRequests: () => localTtsRequests,
         uris: () => uris,
         url: `http://127.0.0.1:${port}`,
       });
@@ -197,6 +227,7 @@ assert.equal(publishNoFp.status, EXIT_USAGE);
 
 const tmp = await mkdtemp(path.join(os.tmpdir(), 'bareeq-audio-cli-'));
 const tmp2 = await mkdtemp(path.join(os.tmpdir(), 'bareeq-audio-cli-b-'));
+const tmp3 = await mkdtemp(path.join(os.tmpdir(), 'bareeq-audio-local-'));
 await writeApprovedFixture(tmp, { copyRulesFrom: ROOT });
 const fixtureArticle = await loadSpokenArticle('resume-fixture', tmp);
 const mock = await startMockServer({ failTtsAt: 3, spoken: fixtureArticle.spokenText });
@@ -338,6 +369,46 @@ try {
   assert.equal(published.status, 'published');
   const liveManifest = JSON.parse(await readFile(path.join(published.liveDir, 'manifest.json'), 'utf8'));
   assert.equal(liveManifest.defaultVoice, 'sadaltager');
+
+  await writeApprovedFixture(tmp3, { copyRulesFrom: ROOT });
+  const localEnv = {
+    ...env,
+    BAREEQ_TTS_ENGINE: 'voxcpm2',
+    BAREEQ_LOCAL_TTS_ENABLE: '1',
+    BAREEQ_SEGMENT_CACHE_ENABLE: '1',
+    BAREEQ_LOCAL_ASR_PREFLIGHT: '0',
+    BAREEQ_AUDIO_ENGINE_V2_PUBLISH: '0',
+    BAREEQ_VOXCPM2_ENDPOINT: `${mock.url}/tts`,
+    BAREEQ_TTS_MODEL_REVISION: 'integration-model-1',
+    BAREEQ_TTS_WORKER_REVISION: 'integration-worker-1',
+  };
+  const localGenerated = await runCliAsync(['--mode=generate-candidate', '--article=resume-fixture'], { cwd: tmp3, env: localEnv });
+  assert.equal(localGenerated.status, EXIT_OK, `local generation failed: ${localGenerated.stderr}\n${localGenerated.stdout}`);
+  const localFingerprint = JSON.parse(localGenerated.stdout).fingerprint;
+  assert.ok(mock.localTtsRequests() > 0);
+  const localValidated = await runCliAsync(['--mode=validate-candidate', '--article=resume-fixture', `--fingerprint=${localFingerprint}`], { cwd: tmp3, env: localEnv });
+  assert.equal(localValidated.status, EXIT_OK, `local validation failed: ${localValidated.stderr}\n${localValidated.stdout}`);
+  const localDir = path.join(tmp3, 'audio-candidates', 'resume-fixture', localFingerprint);
+  const localArticle = await loadSpokenArticle('resume-fixture', tmp3);
+  const localFullSha = sha256(await readFile(path.join(localDir, 'full.mp3')));
+  const localListening = { status: 'passed', reviewedBy: 'fixture-reviewer', reviewedAt: '2026-08-29T00:00:00.000Z',
+    evidence: { sha256: localFullSha, candidateFingerprint: localFingerprint } };
+  await loadBoundEvidence({ dir: localDir, fingerprint: localFingerprint, fullSha256: localFullSha,
+    articleId: 'resume-fixture', speechScriptHash: localArticle.speechScriptHash, listening: localListening });
+  const localPlayerPath = path.join(localDir, 'manifest.json');
+  const localPlayerOriginal = await readFile(localPlayerPath);
+  const mismatchedPlayer = JSON.parse(localPlayerOriginal.toString('utf8'));
+  mismatchedPlayer.synthesisContractSha256 = '0'.repeat(64);
+  await writeFile(localPlayerPath, JSON.stringify(mismatchedPlayer));
+  await assert.rejects(loadBoundEvidence({ dir: localDir, fingerprint: localFingerprint, fullSha256: localFullSha,
+    articleId: 'resume-fixture', speechScriptHash: localArticle.speechScriptHash, listening: localListening }), /provenance mismatch|SHA-256/);
+  await writeFile(localPlayerPath, localPlayerOriginal);
+  const localListeningPath = path.join(localDir, 'reports', 'human-listening.json');
+  await writeFile(localListeningPath, JSON.stringify(localListening));
+  const blocked = await runCliAsync(['--mode=publish-approved', '--article=resume-fixture', `--fingerprint=${localFingerprint}`,
+    `--listening=${localListeningPath}`], { cwd: tmp3, env: localEnv });
+  assert.equal(blocked.status, EXIT_HARD, `local publishing must stay locked: ${blocked.stderr}`);
+  assert.match(blocked.stderr, /review-locked/);
   assert.equal(liveManifest.candidateFingerprint, payload.fingerprint);
   assert.equal(await readFile(path.join(liveDir, 'hamed.mp3'), 'utf8'), 'LIVE-HAMED-KEEP');
 
@@ -353,6 +424,7 @@ try {
   mock.server.close();
   await rm(tmp, { recursive: true, force: true });
   await rm(tmp2, { recursive: true, force: true });
+  await rm(tmp3, { recursive: true, force: true });
 }
 
-console.log('Audio production integration tests passed: CLI two-checkout 429 resume, dual ASR one URI, listening required, positive publish, byte-flip, rollback. Zero real provider calls.');
+console.log('Audio production integration tests passed: Gemini resume/publish, local TTS candidate validation and review lock, provenance, rollback. Zero real provider calls.');

@@ -6,6 +6,8 @@ on:
       - 'scripts/audio-*.mjs'
       - 'scripts/audio-pronunciation-lexicon.json'
       - 'scripts/test-audio-engine-v2.mjs'
+      - 'scripts/test-audio-engine-v2-hardening.mjs'
+      - 'scripts/test-audio-production-integration.mjs'
       - 'docs/audio/AUDIO-ENGINE-2-WORK-REVIEW.md'
       - '.github/workflows/audio-engine-v2-review.yml'
   workflow_dispatch:
@@ -52,9 +54,12 @@ jobs:
           node --check scripts/audio-merge.mjs
           node --check scripts/audio-asr-transcribe.mjs
           node --check scripts/test-audio-engine-v2.mjs
+          node --check scripts/test-audio-engine-v2-hardening.mjs
 
       - name: Audio Engine 2.0 offline contract
-        run: node scripts/test-audio-engine-v2.mjs
+        run: |
+          node scripts/test-audio-engine-v2.mjs
+          node scripts/test-audio-engine-v2-hardening.mjs
 
       - name: Existing audio safety regression
         run: |
@@ -63,6 +68,10 @@ jobs:
           node scripts/test-audio-production-integration.mjs
           node scripts/test-audio-engine-final.mjs
           node scripts/test-audio-transition-normalization.mjs
+          node scripts/test-audio-dual-asr-adjudicate.mjs
+          node scripts/test-audio-segment-repair.mjs
+          node scripts/test-audio-daily-progressive.mjs
+          node scripts/test-audio-ui-v4210.mjs
 
       - name: Prove no provider activation
         run: |

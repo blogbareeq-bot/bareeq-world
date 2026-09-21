@@ -7,6 +7,8 @@
     {
       "source": "ببساطة",
       "synthesis": "بِبَساطَة",
+      "kind": "section-name",
+      "prefixes": ["و", "ف"],
       "reason": "Protect the established Bareeq section name from a recurring TTS mispronunciation."
     }
   ]

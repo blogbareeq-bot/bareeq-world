@@ -69,6 +69,12 @@ export async function loadPublishRecord({
   const validate = await pathExists(path.join(candidateDir, 'reports', 'validate.json'))
     ? JSON.parse(await readFile(path.join(candidateDir, 'reports', 'validate.json'), 'utf8'))
     : null;
+  const candidateManifest = await pathExists(path.join(candidateDir, 'manifest.candidate.json'))
+    ? JSON.parse(await readFile(path.join(candidateDir, 'manifest.candidate.json'), 'utf8'))
+    : null;
+  const playerManifest = await pathExists(path.join(candidateDir, 'manifest.json'))
+    ? JSON.parse(await readFile(path.join(candidateDir, 'manifest.json'), 'utf8'))
+    : null;
   const evidenceModels = Array.isArray(validate?.asrAdjudication?.models) && validate.asrAdjudication.models.length === 2
     ? validate.asrAdjudication.models
     : INDEPENDENT_ASR_MODELS;
@@ -85,9 +91,9 @@ export async function loadPublishRecord({
     : null;
   return {
     generated: true,
-    provider: PRODUCTION_NARRATOR.provider,
-    model: PRODUCTION_NARRATOR.model,
-    voiceId: PRODUCTION_NARRATOR.voiceId,
+    provider: candidateManifest?.provider || PRODUCTION_NARRATOR.provider,
+    model: candidateManifest?.model || PRODUCTION_NARRATOR.model,
+    voiceId: playerManifest?.defaultVoice || PRODUCTION_NARRATOR.voiceId,
     asrReports: asrReports.length ? asrReports : (validate?.asrReports || []),
     asrAdjudication: validate?.asrAdjudication || null,
     humanListening: record.humanListening || null,
