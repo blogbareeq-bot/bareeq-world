@@ -52,6 +52,8 @@ HTTP workers must use HTTPS, or HTTP on loopback. Remote HTTPS origins must also
 
 The publish lock is enforced inside `publishApprovedCandidate` against the candidate's saved engine identity, including callers that bypass `audio-production.mjs`. Keep it unset during work review and acoustic trials. A successful trial does not authorize publication.
 
+Publication is directory-atomic: Bareeq builds the complete next live directory in a sibling staging path, validates and writes the manifest there, then swaps the directory into place. Any failure before the swap leaves live untouched; a persistence failure after the swap restores the complete previous live directory. Production verification is awaited before publish persistence is reported successful.
+
 ## Work-mode review checklist
 
 Ask Work mode to inspect the entire PR, not only this document.
