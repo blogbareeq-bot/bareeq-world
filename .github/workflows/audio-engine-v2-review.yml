@@ -21,6 +21,7 @@ jobs:
       BAREEQ_TTS_ENGINE: gemini
       BAREEQ_LOCAL_TTS_ENABLE: '0'
       BAREEQ_LOCAL_ASR_PREFLIGHT: '0'
+      BAREEQ_SEGMENT_CACHE_ENABLE: '0'
       BAREEQ_AUDIO_ENGINE_V2_PUBLISH: '0'
       BAREEQ_CLOUD_TTS_ACTIVATE: '0'
       BAREEQ_GEMINI_FREE_ROLLOUT: '0'
@@ -67,4 +68,5 @@ jobs:
         run: |
           test "$BAREEQ_LOCAL_TTS_ENABLE" = "0"
           test "$BAREEQ_LOCAL_ASR_PREFLIGHT" = "0"
+          test "$BAREEQ_SEGMENT_CACHE_ENABLE" = "0"
           test "$BAREEQ_AUDIO_ENGINE_V2_PUBLISH" = "0"
