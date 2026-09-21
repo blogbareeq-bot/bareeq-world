@@ -7,11 +7,13 @@ on:
       - 'scripts/audio-pronunciation-lexicon.json'
       - 'scripts/test-audio-*.mjs'
       - 'docs/audio/AUDIO-ENGINE-2-WORK-REVIEW.md'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/audio-engine-v2-review.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   offline-review:
@@ -33,26 +35,13 @@ jobs:
           node-version-file: .node-version
           cache: npm
 
-      - run: npm ci
+      - name: Install locked dependencies
+        run: npm ci
 
-      - name: Dependency security patch rehearsal
+      - name: Dependency security gate
         run: |
-          npm pkg set overrides.devalue=5.9.1 overrides.svgo=4.1.0
-          npm install astro@7.2.8 sharp@0.35.4 --save-exact
-          npm audit --json > npm-audit.json || true
-          node -e "const r=require('./npm-audit.json'); console.log(JSON.stringify({metadata:r.metadata?.vulnerabilities||{}, vulnerabilities:r.vulnerabilities||{}}, null, 2))"
-          npm audit --audit-level=moderate
-          rm -f npm-audit.json
-
-      - name: Capture patched dependency lock
-        uses: actions/upload-artifact@v4
-        with:
-          name: audio-v2-patched-dependencies
-          path: |
-            package.json
-            package-lock.json
-          if-no-files-found: error
-          retention-days: 1
+          npm audit --audit-level=low
+          git diff --exit-code -- package.json package-lock.json
 
       - name: Syntax
         run: |
@@ -99,22 +88,3 @@ jobs:
           test "$BAREEQ_LOCAL_ASR_PREFLIGHT" = "0"
           test "$BAREEQ_SEGMENT_CACHE_ENABLE" = "0"
           test "$BAREEQ_AUDIO_ENGINE_V2_PUBLISH" = "0"
-
-      - name: Commit verified dependency patches
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-        run: |
-          cp package.json /tmp/bareeq-package.json
-          cp package-lock.json /tmp/bareeq-package-lock.json
-          git fetch origin "$GITHUB_HEAD_REF"
-          git checkout -B "$GITHUB_HEAD_REF" "origin/$GITHUB_HEAD_REF"
-          cp /tmp/bareeq-package.json package.json
-          cp /tmp/bareeq-package-lock.json package-lock.json
-          git add package.json package-lock.json
-          if git diff --cached --quiet; then
-            echo "Verified dependency files already committed."
-            exit 0
-          fi
-          git config user.name "bareeq-audio"
-          git config user.email "audio@bareeq.local"
-          git commit -m "chore(security): patch audited runtime dependencies"
-          git push origin "HEAD:$GITHUB_HEAD_REF"
