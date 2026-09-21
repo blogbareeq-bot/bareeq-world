@@ -113,8 +113,10 @@ await writeFile(path.join(resultRoot, 'validate.stdout.txt'), validate.stdout);
 await writeFile(path.join(resultRoot, 'validate.stderr.txt'), validate.stderr);
 
 const candidateDir = path.join(workRoot, 'audio-candidates', articleId, fingerprint);
-if (validate.code === 0) {
+try {
   await cp(candidateDir, path.join(resultRoot, 'candidate'), { recursive: true });
+} catch {
+  // Preserve status/stdout/stderr even if candidate creation was incomplete.
 }
 const summary = {
   schema: 'bareeq.audio-acoustic-trial.v1',
