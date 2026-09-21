@@ -191,7 +191,11 @@ for (const trialCase of trial.cases) {
       }
     }
 
-    const asrComplete = asrReports.length === 2;
+    const asrComplete = asrReports.length === 2
+      && asrReports.every((report) => ['passed', 'failed'].includes(report?.status))
+      && asrReports.every((report) => Number.isInteger(Number(report?.substitutions))
+        && Number.isInteger(Number(report?.deletions))
+        && Number.isInteger(Number(report?.insertions)));
     if (!asrComplete) incomplete = true;
     const rawExact = exactAsr(asrReports);
     let adjudication = null;
