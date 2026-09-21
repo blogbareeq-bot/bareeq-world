@@ -22,6 +22,8 @@ import { partFileName } from './audio-checkpoint.mjs';
 import { boundIdentity } from './audio-report.mjs';
 import { ORIGINAL_REPORTS } from './audio-evidence.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
+import { publicEngineIdentity, selectedEngineProfile } from './audio-engine-config.mjs';
+import { runLocalAsrPreflight } from './audio-local-asr-preflight.mjs';
 import {
   TRANSITION_NORMALIZATION,
   normalizeCandidatePart,
@@ -70,6 +72,12 @@ export async function validateCandidate({
   const paths = checkpointPaths(articleId, resolvedFingerprint, storeRoot || root);
   if (!await pathExists(dir)) {
     throw Object.assign(new Error(`validate-candidate refused: candidate missing at ${dir}`), { exitCode: EXIT_HARD });
+  }
+  const initialManifest = await pathExists(paths.manifestFile) ? JSON.parse(await readFile(paths.manifestFile, 'utf8')) : {};
+  const candidateEngineId = initialManifest.engineId || initialManifest.engine?.engineId || 'gemini';
+  const selectedEngineId = selectedEngineProfile().id;
+  if (candidateEngineId !== selectedEngineId) {
+    throw Object.assign(new Error(`validate-candidate engine mismatch: candidate=${candidateEngineId}, selected=${selectedEngineId}. Set BAREEQ_TTS_ENGINE to the candidate engine explicitly.`), { exitCode: EXIT_CONFIG });
   }
 
   const partFiles = [];
@@ -226,6 +234,18 @@ export async function validateCandidate({
   };
   await writeJson(path.join(paths.reportsDir, 'technical-qa.json'), technical);
 
+  let localAsrPreflight = null;
+  if (!skipAsr) {
+    localAsrPreflight = await runLocalAsrPreflight({
+      audioPath: paths.fullFile,
+      expectedText: article.spokenText,
+      outputPath: path.join(paths.reportsDir, 'local-asr-preflight.json'),
+    });
+    if (localAsrPreflight.enabled && localAsrPreflight.status !== 'passed') {
+      throw Object.assign(new Error(`Local ASR preflight rejected candidate before paid/remote ASR: S=${localAsrPreflight.substitutions} D=${localAsrPreflight.deletions} I=${localAsrPreflight.insertions}`), { exitCode: EXIT_HARD, report: localAsrPreflight });
+    }
+  }
+
   const asrReports = [];
   let filesApiUploads = 0;
   let asrInteractions = 0;
@@ -300,6 +320,9 @@ export async function validateCandidate({
     if (await pathExists(file)) reportDigests[item.file] = sha256(await readFile(file));
   }
   reportDigests['reports/normalization.json'] = sha256(await readFile(path.join(paths.reportsDir, 'normalization.json')));
+  if (await pathExists(path.join(paths.reportsDir, 'local-asr-preflight.json'))) {
+    reportDigests['reports/local-asr-preflight.json'] = sha256(await readFile(path.join(paths.reportsDir, 'local-asr-preflight.json')));
+  }
 
   const report = {
     ...stamp(article, resolvedFingerprint, fullSha256, 'validated', 'bareeq.audio-validate.v2'),
@@ -309,6 +332,7 @@ export async function validateCandidate({
     technical,
     sync: syncReport,
     asrReports,
+    localAsrPreflight,
     filesApiUploads,
     asrInteractions,
     asrProviderCalls: httpCounts.totalHttpRequests || (filesApiUploads + asrInteractions),
@@ -322,6 +346,7 @@ export async function validateCandidate({
     liveUntouched: technical.liveUntouched,
     playerManifestValid: true,
     narrator: PRODUCTION_NARRATOR,
+    selectedTtsEngine: publicEngineIdentity(),
     generatorVersion: GENERATOR_VERSION,
     exitCode: EXIT_OK,
   };
