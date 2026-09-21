@@ -1,0 +1,61 @@
+name: Audio Engine 2.0 acoustic trial
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/run-audio-acoustic-trial.mjs'
+      - '.github/workflows/audio-engine-v2-acoustic-trial.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acoustic-trial:
+    name: acoustic-${{ matrix.engine }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [gemini, voxcpm2, moss-v15, moss-nano]
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      BAREEQ_VOXCPM2_ENDPOINT: ${{ secrets.BAREEQ_VOXCPM2_ENDPOINT }}
+      BAREEQ_VOXCPM2_TOKEN: ${{ secrets.BAREEQ_VOXCPM2_TOKEN }}
+      BAREEQ_MOSS_V15_ENDPOINT: ${{ secrets.BAREEQ_MOSS_V15_ENDPOINT }}
+      BAREEQ_MOSS_V15_TOKEN: ${{ secrets.BAREEQ_MOSS_V15_TOKEN }}
+      BAREEQ_MOSS_NANO_ENDPOINT: ${{ secrets.BAREEQ_MOSS_NANO_ENDPOINT }}
+      BAREEQ_MOSS_NANO_TOKEN: ${{ secrets.BAREEQ_MOSS_NANO_TOKEN }}
+      BAREEQ_VOXCPM2_MODEL_REVISION: ${{ vars.BAREEQ_VOXCPM2_MODEL_REVISION }}
+      BAREEQ_VOXCPM2_WORKER_REVISION: ${{ vars.BAREEQ_VOXCPM2_WORKER_REVISION }}
+      BAREEQ_MOSS_V15_MODEL_REVISION: ${{ vars.BAREEQ_MOSS_V15_MODEL_REVISION }}
+      BAREEQ_MOSS_V15_WORKER_REVISION: ${{ vars.BAREEQ_MOSS_V15_WORKER_REVISION }}
+      BAREEQ_MOSS_NANO_MODEL_REVISION: ${{ vars.BAREEQ_MOSS_NANO_MODEL_REVISION }}
+      BAREEQ_MOSS_NANO_WORKER_REVISION: ${{ vars.BAREEQ_MOSS_NANO_WORKER_REVISION }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Prove publishing is locked
+        run: |
+          test "${BAREEQ_AUDIO_ENGINE_V2_PUBLISH:-0}" != "1"
+
+      - name: Run acoustic candidate through full validation
+        run: node scripts/run-audio-acoustic-trial.mjs --engine=${{ matrix.engine }}
+
+      - name: Upload acoustic evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: audio-v2-acoustic-${{ matrix.engine }}
+          path: .acoustic-trials/results/${{ matrix.engine }}/
+          if-no-files-found: error
+          retention-days: 7
