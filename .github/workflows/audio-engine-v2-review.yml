@@ -35,6 +35,13 @@ jobs:
 
       - run: npm ci
 
+      - name: Dependency security audit
+        continue-on-error: true
+        run: |
+          npm audit --json > npm-audit.json || true
+          node -e "const r=require('./npm-audit.json'); console.log(JSON.stringify({metadata:r.metadata?.vulnerabilities||{}, vulnerabilities:r.vulnerabilities||{}}, null, 2))"
+          rm -f npm-audit.json
+
       - name: Syntax
         run: |
           node --check scripts/audio-engine-config.mjs
