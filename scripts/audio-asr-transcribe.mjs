@@ -17,6 +17,7 @@ import {
 import { deleteUploadedFile, uploadResumableFile, addHttp, emptyHttp } from './audio-files-api.mjs';
 import { boundIdentity } from './audio-report.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
+import { publicEngineIdentity } from './audio-engine-config.mjs';
 
 export function geminiInteractionsUrl() {
   const override = process.env.GEMINI_INTERACTIONS_ENDPOINT?.trim() || process.env.GEMINI_TTS_ENDPOINT?.trim();
@@ -87,6 +88,7 @@ async function persistReport(outputPath, result) {
 }
 
 function asrIdentity({ article, fingerprint, fullSha256, model, status, extra }) {
+  const ttsEngine = publicEngineIdentity();
   return boundIdentity({
     article: article || { articleId: extra?.articleId, speechScriptHash: extra?.speechScriptHash },
     fingerprint,
@@ -95,10 +97,11 @@ function asrIdentity({ article, fingerprint, fullSha256, model, status, extra })
     schema: 'bareeq.audio-asr.v4',
     model,
     extra: {
-      provider: PRODUCTION_NARRATOR.provider,
-      voice: PRODUCTION_VOICE,
+      provider: ttsEngine.provider,
+      voice: ttsEngine.voice,
+      engineId: ttsEngine.engineId,
       generatorVersion: GENERATOR_VERSION,
-      ttsModel: PRODUCTION_TTS_MODEL,
+      ttsModel: ttsEngine.model,
       ...extra,
     },
   });
@@ -157,6 +160,7 @@ export async function transcribeFullAudio({
   assertAsrModel(model);
   const startedAt = new Date().toISOString();
   const endpoint = geminiInteractionsUrl();
+  const ttsEngine = publicEngineIdentity();
   const base = {
     schema: 'bareeq.audio-asr.v4',
     generatedAt: startedAt,
@@ -174,8 +178,9 @@ export async function transcribeFullAudio({
     forbiddenModels: FORBIDDEN_ASR_MODELS,
     apiRevision: GEMINI_API_REVISION,
     endpoint,
-    provider: PRODUCTION_NARRATOR.provider,
-    voice: PRODUCTION_VOICE,
+    provider: ttsEngine.provider,
+    voice: ttsEngine.voice,
+    engineId: ttsEngine.engineId,
     generatorVersion: GENERATOR_VERSION,
     toolVersion: 9,
     filesApiUploads: 0,
