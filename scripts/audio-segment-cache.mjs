@@ -11,7 +11,7 @@ function safeId(value) {
   return String(value || 'segment').replace(/[^\p{L}\p{N}._-]+/gu, '-').replace(/^-+|-+$/g, '').slice(0, 80) || 'segment';
 }
 
-export function segmentFingerprint({ article, item, synthesis, env = process.env }) {
+export function segmentFingerprint({ article, item, synthesis, correctionHint = '', env = process.env }) {
   const profile = publicEngineIdentity(env);
   return sha256(JSON.stringify({
     schema: SEGMENT_CACHE_SCHEMA,
@@ -20,15 +20,16 @@ export function segmentFingerprint({ article, item, synthesis, env = process.env
     canonicalText: synthesis.canonicalText,
     synthesisText: synthesis.synthesisText,
     synthesisFingerprint: synthesis.fingerprint,
-    speechScriptHash: article.speechScriptHash,
+    correctionHint: String(correctionHint || ''),
     model: profile.model,
     voice: profile.voice,
     engine: engineFingerprintExtension(env),
   }));
 }
 
-export function segmentCachePaths({ root, articleId, candidateFingerprint, segmentId, fingerprint }) {
-  const dir = path.join(root, 'audio-candidates', articleId, candidateFingerprint, 'segments');
+export function segmentCachePaths({ root, articleId, segmentId, fingerprint, env = process.env }) {
+  const engine = publicEngineIdentity(env);
+  const dir = path.join(root, 'audio-candidates', '_segment-cache', articleId, engine.engineId);
   const stem = safeId(segmentId) + '-' + fingerprint.slice(0, 12);
   return {
     dir,
@@ -77,10 +78,10 @@ export async function saveCachedSegment(paths, { fingerprint, articleId, segment
   return record;
 }
 
-export function buildSegmentPlan(article, lexicon, env = process.env) {
+export function buildSegmentPlan(article, lexicon, env = process.env, correctionHint = '') {
   return article.items.map((item, index) => {
     const synthesis = prepareArabicSynthesisText(item.text, lexicon);
-    const fingerprint = segmentFingerprint({ article, item, synthesis, env });
+    const fingerprint = segmentFingerprint({ article, item, synthesis, correctionHint, env });
     return {
       index,
       segmentId: item.segmentId,
