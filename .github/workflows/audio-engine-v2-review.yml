@@ -35,12 +35,22 @@ jobs:
 
       - run: npm ci
 
-      - name: Dependency security audit
-        continue-on-error: true
+      - name: Dependency security patch rehearsal
         run: |
+          npm install astro@7.2.8 sharp@0.35.4 --save-exact
           npm audit --json > npm-audit.json || true
           node -e "const r=require('./npm-audit.json'); console.log(JSON.stringify({metadata:r.metadata?.vulnerabilities||{}, vulnerabilities:r.vulnerabilities||{}}, null, 2))"
           rm -f npm-audit.json
+
+      - name: Capture patched dependency lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: audio-v2-patched-dependencies
+          path: |
+            package.json
+            package-lock.json
+          if-no-files-found: error
+          retention-days: 1
 
       - name: Syntax
         run: |
