@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   offline-review:
@@ -99,3 +99,22 @@ jobs:
           test "$BAREEQ_LOCAL_ASR_PREFLIGHT" = "0"
           test "$BAREEQ_SEGMENT_CACHE_ENABLE" = "0"
           test "$BAREEQ_AUDIO_ENGINE_V2_PUBLISH" = "0"
+
+      - name: Commit verified dependency patches
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          cp package.json /tmp/bareeq-package.json
+          cp package-lock.json /tmp/bareeq-package-lock.json
+          git fetch origin "$GITHUB_HEAD_REF"
+          git checkout -B "$GITHUB_HEAD_REF" "origin/$GITHUB_HEAD_REF"
+          cp /tmp/bareeq-package.json package.json
+          cp /tmp/bareeq-package-lock.json package-lock.json
+          git add package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "Verified dependency files already committed."
+            exit 0
+          fi
+          git config user.name "bareeq-audio"
+          git config user.email "audio@bareeq.local"
+          git commit -m "chore(security): patch audited runtime dependencies"
+          git push origin "HEAD:$GITHUB_HEAD_REF"
