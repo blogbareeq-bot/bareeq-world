@@ -5,9 +5,7 @@ on:
     paths:
       - 'scripts/audio-*.mjs'
       - 'scripts/audio-pronunciation-lexicon.json'
-      - 'scripts/test-audio-engine-v2.mjs'
-      - 'scripts/test-audio-engine-v2-hardening.mjs'
-      - 'scripts/test-audio-production-integration.mjs'
+      - 'scripts/test-audio-*.mjs'
       - 'docs/audio/AUDIO-ENGINE-2-WORK-REVIEW.md'
       - '.github/workflows/audio-engine-v2-review.yml'
   workflow_dispatch:
@@ -55,6 +53,9 @@ jobs:
           node --check scripts/audio-asr-transcribe.mjs
           node --check scripts/test-audio-engine-v2.mjs
           node --check scripts/test-audio-engine-v2-hardening.mjs
+          node --check scripts/test-audio-production-safety.mjs
+          node --check scripts/test-audio-production-integration.mjs
+          node --check scripts/test-audio-engine-final.mjs
 
       - name: Audio Engine 2.0 offline contract
         run: |
