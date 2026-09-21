@@ -18,7 +18,7 @@ import {
   saveCompletedPart,
   writeJson,
 } from './audio-checkpoint.mjs';
-import { resolveProductionSynthesizer } from './audio-gemini-tts.mjs';
+import { currentAudioEngineIdentity, resolveAudioSynthesizer } from './audio-engine-router.mjs';
 
 export class QuotaError extends Error {
   constructor(message = 'HTTP 429') {
@@ -48,6 +48,9 @@ function unpackSynthesis(value) {
         projectId: value.projectId || null,
         model: value.model || null,
         voice: value.voice || null,
+        engineId: value.engineId || null,
+        normalization: value.normalization || null,
+        workerMetadata: value.workerMetadata || null,
       },
     };
   }
@@ -97,6 +100,7 @@ export async function generateCandidate({
   }
 
   const article = await loadSpokenArticle(articleId, root);
+  const engine = currentAudioEngineIdentity();
   const duration = liveDurationSeconds === undefined ? await defaultLiveDuration(articleId, root) : liveDurationSeconds;
   const splitPlan = splitSpokenArticle(article, { settings: activeSplitSettings(settings), liveDurationSeconds: duration });
   const forcedParts = parseForcedParts(process.env.BAREEQ_FORCE_TTS_PARTS, splitPlan.parts.length);
@@ -123,6 +127,7 @@ export async function generateCandidate({
     completedParts: Object.keys(checkpoint.completedParts || {}).length,
     status: 'in-progress',
     liveUntouched: true,
+    engine,
   };
 
   for (const part of splitPlan.parts) {
@@ -201,7 +206,7 @@ export async function generateCandidate({
           providerCalls: 1,
           providerAttempts: 1,
           httpStatus: 429,
-          transport: process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1' ? 'developer-generate-content' : 'developer-interactions',
+          transport: engine.local ? 'local-' + engine.engineId : (process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1' ? 'developer-generate-content' : 'developer-interactions'),
         });
         const quota = new QuotaError(error.message);
         quota.exitCode = EXIT_QUOTA;
@@ -218,11 +223,13 @@ export async function generateCandidate({
   result.completedParts = splitPlan.parts.length;
   result.exitCode = EXIT_OK;
   result.transportsUsed = [...transportsUsed].sort();
-  result.transportPolicy = forcedParts.size
-    ? 'targeted-generate-content-regeneration-with-resumed-checkpoint'
-    : process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1'
-      ? 'generate-content-completion-with-resumed-checkpoint'
-      : 'developer-interactions';
+  result.transportPolicy = engine.local
+    ? 'local-worker-with-resumed-checkpoint'
+    : forcedParts.size
+      ? 'targeted-generate-content-regeneration-with-resumed-checkpoint'
+      : process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1'
+        ? 'generate-content-completion-with-resumed-checkpoint'
+        : 'developer-interactions';
   await writeJson(path.join(paths.dir, 'generation-report.json'), {
     schema: 'bareeq.audio-generation.v2',
     articleId,
@@ -230,9 +237,11 @@ export async function generateCandidate({
     fingerprint,
     fullSha256: 'pending-merge',
     speechScriptHash: article.speechScriptHash,
-    provider: PRODUCTION_NARRATOR.provider,
-    model: PRODUCTION_NARRATOR.model,
-    voice: PRODUCTION_NARRATOR.providerVoice,
+    engineId: engine.engineId,
+    engine,
+    provider: engine.provider,
+    model: engine.model,
+    voice: engine.voice,
     generatorVersion: GENERATOR_VERSION,
     toolVersion: GENERATOR_VERSION,
     status: 'generated',
@@ -263,7 +272,7 @@ if (isCli) {
     process.exit(EXIT_USAGE);
   }
   try {
-    const synthesize = await resolveProductionSynthesizer();
+    const synthesize = await resolveAudioSynthesizer();
     const result = await generateCandidate({ articleId, synthesize });
     console.log(JSON.stringify({
       status: result.status,
