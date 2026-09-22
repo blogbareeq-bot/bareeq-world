@@ -598,14 +598,35 @@ const snapshot = await readJson(SNAPSHOT_PATH);
 if (!state?.generationComplete || !Array.isArray(snapshot?.articles) || snapshot.articles.length !== 15) {
   throw new Error('progressive repair requires a generation-complete 15/15 checkpoint and the 15-article truth snapshot');
 }
+const selectedArticles = snapshot.articles.filter((item) => !skip.has(item.articleId)
+  && (only.size === 0 || only.has(item.articleId)));
+if (process.argv.includes('--plan-only')) {
+  const pendingArticleIds = selectedArticles.filter((item) => {
+    const row = state.articles?.[item.articleId] || {};
+    return !(row.validation?.status === 'validated'
+      && row.validation?.fingerprint === row.generation?.fingerprint
+      && exactConsensusZero(row.validation?.consensus));
+  }).map((item) => item.articleId);
+  const preview = {
+    status: 'plan-only',
+    campaignId: CAMPAIGN_ID,
+    skippedArticleIds: snapshot.articles.filter((item) => skip.has(item.articleId)).map((item) => item.articleId),
+    selectedArticleIds: selectedArticles.map((item) => item.articleId),
+    pendingArticleIds,
+    providerCalls: 0,
+    liveUntouched: true,
+  };
+  console.log(JSON.stringify(preview, null, 2));
+  return preview;
+}
+console.log(`PROGRESSIVE_SKIP_ARTICLES ${snapshot.articles.filter((item) => skip.has(item.articleId)).map((item) => item.articleId).join(',') || 'none'}`);
 
 // Classify every pending candidate before spending any TTS allowance. ASR and
 // TTS have independent budgets; the old interleaved loop stopped at the first
 // TTS RPD response and left later articles unclassified. That also prevented
 // the easiest-first sorter from seeing candidates needing a tiny repair.
-for (const item of snapshot.articles) {
+for (const item of selectedArticles) {
   const articleId = item.articleId;
-  if (skip.has(articleId) || (only.size > 0 && !only.has(articleId))) continue;
   const row = state.articles?.[articleId] || {};
   const fingerprint = row.generation?.fingerprint;
   if (!fingerprint || row.generation?.status !== 'generated') continue;
@@ -709,9 +730,8 @@ async function repairScore(item, order) {
 }
 
 const candidates = [];
-for (const [order, item] of snapshot.articles.entries()) {
+for (const [order, item] of selectedArticles.entries()) {
   const articleId = item.articleId;
-  if (skip.has(articleId) || (only.size > 0 && !only.has(articleId))) continue;
   const row = state.articles?.[articleId] || {};
   const gen = row.generation || {};
   const val = row.validation || {};

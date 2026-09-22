@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import os from 'node:os';
+import path from 'node:path';
 import { parseGeminiQuotaDetail } from './audio-gemini-tts.mjs';
 import {
   chooseRepairPart,
@@ -48,6 +51,45 @@ assert.equal(shouldRetryCurrentArticle('paused-quota'), false,
 const repairSource = await readFile(new URL('./audio-progressive-repair.mjs', import.meta.url), 'utf8');
 assert.ok(repairSource.indexOf('PROGRESSIVE_PRECLASSIFY') < repairSource.indexOf('const candidates = []'),
   'all pending candidates must be ASR-classified before TTS candidate ordering');
+
+const workflow = await readFile(new URL('../.github/workflows/audio-partial-publish.yml', import.meta.url), 'utf8');
+const excludedId = 'اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع';
+assert.match(workflow, new RegExp(`BAREEQ_PROGRESSIVE_SKIP_ARTICLES: '${excludedId}'`));
+assert.match(workflow, /audio-progressive-repair\.mjs --max-articles=10 "--skip=\$\{BAREEQ_PROGRESSIVE_SKIP_ARTICLES\}"/);
+const previewRoot = await mkdtemp(path.join(os.tmpdir(), 'bareeq-progressive-skip-'));
+try {
+  const snapshot = JSON.parse(await readFile(new URL('../docs/audio/AUDIO-TRUTH-SNAPSHOT.json', import.meta.url), 'utf8'));
+  assert.equal(snapshot.articles.length, 15);
+  const ids = snapshot.articles.map((item) => item.articleId);
+  assert.ok(ids.includes(excludedId));
+  const campaignId = 'sadaltager-openrouter-20260901-v1';
+  const stateFile = path.join(previewRoot, 'audio-candidates', '_campaigns', campaignId, 'state.json');
+  const snapshotFile = path.join(previewRoot, 'docs', 'audio', 'AUDIO-TRUTH-SNAPSHOT.json');
+  await mkdir(path.dirname(stateFile), { recursive: true });
+  await mkdir(path.dirname(snapshotFile), { recursive: true });
+  const state = { generationComplete: true, articles: Object.fromEntries(ids.map((id) => [id, {
+    generation: { status: 'generated', fingerprint: 'a'.repeat(64) },
+    validation: id === ids[0] ? { status: 'validated', fingerprint: 'a'.repeat(64),
+      consensus: { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 } } : { status: 'failed' },
+  }])) };
+  const unchangedState = JSON.stringify(state);
+  await writeFile(stateFile, unchangedState);
+  await writeFile(snapshotFile, JSON.stringify(snapshot));
+  const preview = spawnSync(process.execPath, [new URL('./audio-progressive-repair.mjs', import.meta.url).pathname,
+    '--plan-only', `--skip=${excludedId}`], { cwd: previewRoot, encoding: 'utf8', env: { ...process.env, GEMINI_API_KEY: '' } });
+  assert.equal(preview.status, 0, preview.stderr);
+  const selection = JSON.parse(preview.stdout);
+  assert.equal(selection.status, 'plan-only');
+  assert.deepEqual(selection.skippedArticleIds, [excludedId]);
+  assert.equal(selection.selectedArticleIds.length, 14);
+  assert.equal(selection.pendingArticleIds.length, 13);
+  assert.ok(selection.pendingArticleIds.includes(ids[1]));
+  assert.ok(!selection.selectedArticleIds.includes(excludedId));
+  assert.equal(selection.providerCalls, 0);
+  assert.equal(await readFile(stateFile, 'utf8'), unchangedState, 'planning cannot mutate the checkpoint');
+} finally {
+  await rm(previewRoot, { recursive: true, force: true });
+}
 
 const args = {
   article: { title: 'اختبار' },
