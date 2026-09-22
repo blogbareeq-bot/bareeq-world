@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "35617030127",
-  "sourceArtifact": "bareeq-progressive-validation-35617030127",
-  "generatedAt": "2026-09-21T15:12:19.459Z",
+  "sourceRunId": "35727661660",
+  "sourceArtifact": "bareeq-progressive-validation-35727661660",
+  "generatedAt": "2026-09-22T12:49:22.647Z",
   "publicationComplete": false,
   "publishedCount": 6,
   "fallbackCount": 9,
@@ -75,7 +75,7 @@
       "publishedExact": false,
       "fullSha256": "b6311b3ea321a14b3a9ecbe72e51574a423c75c2e70d8b5bc05901960e7cbae2",
       "repairedParts": [],
-      "error": null
+      "error": "dual-ASR consensus failed: S=6 D=0 I=0 unresolved=5"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -100,7 +100,7 @@
       "audioKey": "b19e29e785a22c73",
       "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 6,
       "deletions": 1,
       "insertions": 0,
@@ -108,8 +108,10 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "ec5ae835c9cefb6b4fe2b821a89b257f8ff1af86fa5a633a367cecd759f6de0f",
-      "repairedParts": [],
-      "error": null
+      "repairedParts": [
+        1
+      ],
+      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 10 reached"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -118,15 +120,17 @@
       "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 5,
-      "deletions": 1,
+      "substitutions": 7,
+      "deletions": 0,
       "insertions": 0,
-      "unresolved": 3,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "40ff42434264f644a61e32d4cdbd403e23d190e6a46dec4aca56ab19a3d033d3",
-      "repairedParts": [],
-      "error": null
+      "fullSha256": "8e7f09581faddb14dea22662fdac670045d567e3a9ad1b8168253c9827248584",
+      "repairedParts": [
+        2
+      ],
+      "error": "dual-ASR consensus failed: S=5 D=1 I=0 unresolved=1"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -168,7 +172,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -179,7 +183,7 @@
       "repairedParts": [
         1
       ],
-      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 40s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}"
+      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=1"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -204,7 +208,7 @@
       "audioKey": "9d04080d1962a365",
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 1,
       "deletions": 4,
       "insertions": 1,
@@ -215,7 +219,7 @@
       "repairedParts": [
         1
       ],
-      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 12s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}"
+      "error": "dual-ASR consensus failed: S=0 D=4 I=0 unresolved=3"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -232,7 +236,7 @@
       "publishedExact": false,
       "fullSha256": "154f6f71113702268b855606a318ffa8a6d5ab46235c40f8f3345b1387d72000",
       "repairedParts": [],
-      "error": null
+      "error": "dual-ASR consensus failed: S=5 D=0 I=1 unresolved=3"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
