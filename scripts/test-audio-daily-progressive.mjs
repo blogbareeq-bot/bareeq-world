@@ -46,6 +46,10 @@ const prioritized = [
 assert.equal(prioritized[0].errorScore, 1, 'fewest consensus errors must be repaired first');
 assert.equal(shouldRetryCurrentArticle('repair-failed'), true,
   'a restored candidate must keep article focus after a transient synthesis failure');
+assert.equal(shouldRetryCurrentArticle('trial-rejected'), false,
+  'a rejected ASR trial must give the next article a chance at the shared TTS budget');
+assert.equal(shouldRetryCurrentArticle('improved'), true,
+  'an accepted improvement may continue toward an exact candidate');
 assert.equal(shouldRetryCurrentArticle('paused-quota'), false,
   'a daily quota stop must still end the run');
 const repairSource = await readFile(new URL('./audio-progressive-repair.mjs', import.meta.url), 'utf8');
