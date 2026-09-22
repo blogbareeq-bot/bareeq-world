@@ -109,6 +109,9 @@ jobs:
       # trial restores the preserved baseline and may retry the same part.
       BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '2'
       BAREEQ_REPAIR_MAX_TRIALS_PER_PART: '2'
+      # Temporarily leave this failed article on its existing live fallback;
+      # do not classify, regenerate or spend TTS/ASR quota on it.
+      BAREEQ_PROGRESSIVE_SKIP_ARTICLES: 'اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع'
       BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
     steps:
       - name: Checkout current production branch
@@ -181,7 +184,7 @@ jobs:
       - name: Classify all pending audio, then repair the easiest failed parts
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/audio-progressive-repair.mjs --max-articles=10
+        run: node scripts/audio-progressive-repair.mjs --max-articles=10 "--skip=${BAREEQ_PROGRESSIVE_SKIP_ARTICLES}"
 
       - name: Publish every newly exact article immediately
         run: |
