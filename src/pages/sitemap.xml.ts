@@ -19,6 +19,8 @@ export const GET: APIRoute = async ({ site: astroSite }) => {
     { path: '/articles/', date: latestPostDate },
     { path: '/start-here/', date: latestPostDate },
     { path: '/series/', date: latestPostDate },
+    { path: '/picks/', date: latestPostDate },
+    { path: '/products/agents-starter-kit/', date: latestPostDate },
     { path: '/about/', date: pageDate('about') },
     { path: '/team/', date: pageDate('team') },
     { path: '/contact/', date: pageDate('contact-source') },
