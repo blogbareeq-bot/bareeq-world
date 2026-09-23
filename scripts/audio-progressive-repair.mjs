@@ -146,10 +146,13 @@ export function chooseRepairPart(partIndexes, partAttempts = new Map(), maxTrial
 }
 
 export function compareRepairCandidates(a, b) {
+  // Publication-first: maximize newly exact articles per scarce free Gemini
+  // request. Prefer the smallest confirmed error surface first. An in-progress
+  // article only breaks ties; it must never outrank a cleaner near-exact item.
   return a.errorScore - b.errorScore
-    || a.repairPriority - b.repairPriority
     || a.partCount - b.partCount
     || a.tokenCount - b.tokenCount
+    || a.repairPriority - b.repairPriority
     || a.order - b.order;
 }
 
