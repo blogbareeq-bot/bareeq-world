@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "35727661660",
-  "sourceArtifact": "bareeq-progressive-validation-35727661660",
-  "generatedAt": "2026-09-22T12:49:22.647Z",
+  "sourceRunId": "35868938290",
+  "sourceArtifact": "bareeq-progressive-validation-35868938290",
+  "generatedAt": "2026-09-23T14:12:16.419Z",
   "publicationComplete": false,
   "publishedCount": 6,
   "fallbackCount": 9,
@@ -70,12 +70,14 @@
       "substitutions": 5,
       "deletions": 0,
       "insertions": 0,
-      "unresolved": 1,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "b6311b3ea321a14b3a9ecbe72e51574a423c75c2e70d8b5bc05901960e7cbae2",
-      "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=6 D=0 I=0 unresolved=5"
+      "fullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
+      "repairedParts": [
+        1
+      ],
+      "error": "dual-ASR consensus failed: S=5 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -120,17 +122,17 @@
       "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 7,
+      "substitutions": 4,
       "deletions": 0,
       "insertions": 0,
-      "unresolved": 0,
+      "unresolved": 2,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "8e7f09581faddb14dea22662fdac670045d567e3a9ad1b8168253c9827248584",
+      "fullSha256": "597168624f702c027ede0c2a719de337149f853822ef634a715c840873703dd8",
       "repairedParts": [
-        2
+        4
       ],
-      "error": "dual-ASR consensus failed: S=5 D=1 I=0 unresolved=1"
+      "error": "dual-ASR consensus failed: S=5 D=0 I=0 unresolved=1"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -183,7 +185,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=1"
+      "error": "dual-ASR consensus failed: S=1 D=7 I=0 unresolved=2"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -219,7 +221,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=0 D=4 I=0 unresolved=3"
+      "error": "dual-ASR consensus failed: S=2 D=4 I=1 unresolved=0"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -228,15 +230,17 @@
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 6,
+      "substitutions": 5,
       "deletions": 0,
       "insertions": 0,
-      "unresolved": 1,
+      "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "154f6f71113702268b855606a318ffa8a6d5ab46235c40f8f3345b1387d72000",
-      "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=5 D=0 I=1 unresolved=3"
+      "fullSha256": "95a07eed02c321795e7c262e9dd9832b93586170794592f9393018757f9e6b13",
+      "repairedParts": [
+        1
+      ],
+      "error": "dual-ASR consensus failed: S=5 D=0 I=1 unresolved=1"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
