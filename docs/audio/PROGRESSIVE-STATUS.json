@@ -3,7 +3,7 @@
   "campaignId": "sadaltager-openrouter-20260901-v1",
   "sourceRunId": "35912425552",
   "sourceArtifact": "bareeq-progressive-validation-35912425552",
-  "generatedAt": "2026-09-24T11:49:06.421Z",
+  "generatedAt": "2026-09-25T07:23:34.736Z",
   "publicationComplete": false,
   "publishedCount": 6,
   "fallbackCount": 9,
@@ -77,7 +77,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=8 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=6 D=0 I=0 unresolved=3"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -94,7 +94,7 @@
       "publishedExact": false,
       "fullSha256": "d7d05aa3cd45d7e4703f41b13f893b52f6ffd9901838944235d2282161182a60",
       "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=17"
+      "error": "dual-ASR consensus failed: S=6 D=1 I=0 unresolved=14"
     },
     {
       "articleId": "language-soft-power-politics",
@@ -113,7 +113,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=3 D=6 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=3 D=10 I=1 unresolved=0"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -132,7 +132,7 @@
       "repairedParts": [
         4
       ],
-      "error": "dual-ASR consensus failed: S=6 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=8 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -185,7 +185,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=1 D=7 I=0 unresolved=2"
+      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=1"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -221,7 +221,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=1 D=4 I=1 unresolved=0"
+      "error": "dual-ASR consensus failed: S=1 D=4 I=0 unresolved=4"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -230,17 +230,17 @@
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 5,
+      "substitutions": 3,
       "deletions": 0,
-      "insertions": 0,
+      "insertions": 1,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "95a07eed02c321795e7c262e9dd9832b93586170794592f9393018757f9e6b13",
+      "fullSha256": "096f23d0d137747256248a09375d1764795f9fb9ad39c43ad2654637bcf206df",
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=6 D=0 I=1 unresolved=0"
+      "error": "dual-ASR consensus failed: S=3 D=0 I=1 unresolved=0"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
@@ -266,15 +266,17 @@
       "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 9,
-      "deletions": 3,
+      "substitutions": 3,
+      "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "7ede5922b01fb6780f0b7ef99637ebffd7c0ab9dbea96808e55aea2d835fd230",
-      "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=10 D=3 I=0 unresolved=0"
+      "fullSha256": "8e275068d0fe2ee56964473bf116b2e07b0e95f999e17b696543f845279aaa3c",
+      "repairedParts": [
+        1
+      ],
+      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=0"
     }
   ]
 }
