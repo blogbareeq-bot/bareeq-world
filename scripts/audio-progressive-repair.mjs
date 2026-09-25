@@ -157,7 +157,9 @@ export function compareRepairCandidates(a, b) {
 }
 
 export function shouldRetryCurrentArticle(status) {
-  return ['failed', 'improved', 'trial-rejected', 'repair-failed'].includes(status);
+  // A rejected trial restored the same baseline. Give another article the
+  // remaining shared TTS budget instead of immediately repeating that trial.
+  return ['failed', 'improved', 'repair-failed'].includes(status);
 }
 
 async function readJson(file, fallback = null) {
