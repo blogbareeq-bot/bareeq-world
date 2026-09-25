@@ -5,6 +5,7 @@ import {
   GENERATOR_VERSION,
   PERFORMANCE_INSTRUCTIONS,
 } from './audio-constants.mjs';
+import { publicEngineIdentity, synthesisContractSha256 } from './audio-engine-config.mjs';
 
 export function isValidProductionManifest(data) {
   if (!data || !Array.isArray(data.parts) || !data.parts.length || !data.parts.every((part) => Array.isArray(part?.sync))) return false;
@@ -22,7 +23,8 @@ export function buildProductionManifest({
   fingerprint,
   fullSha256 = null,
 }) {
-  const voiceId = PRODUCTION_VOICE_ID;
+  const engine = publicEngineIdentity();
+  const voiceId = engine.engineId === 'gemini' ? PRODUCTION_VOICE_ID : engine.voiceId;
   const parts = splitPlan.parts.map((part, index) => {
     const asset = partAssets[index];
     if (!asset?.src || !asset.src.endsWith('.mp3') || !(Number(asset.durationSeconds) > 0)) {
@@ -49,10 +51,13 @@ export function buildProductionManifest({
     syncVersion: 1,
     speechScriptHash: article.speechScriptHash,
     speechInput: 'reviewed-contextual-speech-script',
-    provider: PRODUCTION_NARRATOR.provider,
-    model: PRODUCTION_NARRATOR.model,
+    engineId: engine.engineId,
+    engine,
+    ...(engine.local ? { synthesisContractSha256: synthesisContractSha256() } : {}),
+    provider: engine.provider,
+    model: engine.model,
     language: PRODUCTION_NARRATOR.language,
-    outputFormat: PRODUCTION_NARRATOR.outputFormat,
+    outputFormat: engine.engineId === 'gemini' ? PRODUCTION_NARRATOR.outputFormat : 'MP3 48kHz mono 96kbps',
     articleId: article.articleId,
     title: article.title,
     audioKey: audioKeyFor(article.articleId),
@@ -61,15 +66,15 @@ export function buildProductionManifest({
     defaultVoice: voiceId,
     voices: [{
       id: voiceId,
-      label: 'سادالتاجر (Sadaltager)',
-      description: 'معرفي طبيعي مناسب لمقالات بريق',
-      providerVoice: PRODUCTION_NARRATOR.providerVoice,
+      label: engine.engineId === 'gemini' ? 'سادالتاجر (Sadaltager)' : engine.provider,
+      description: engine.engineId === 'gemini' ? 'معرفي طبيعي مناسب لمقالات بريق' : 'مرشح صوت بريق التجريبي — غير معتمد للنشر حتى مراجعة وضع العمل',
+      providerVoice: engine.voice,
       totalDurationSeconds,
     }],
     syncMethod: 'paragraph-weighted',
     performanceInstructions: PERFORMANCE_INSTRUCTIONS,
-    sourceAudioFormat: PRODUCTION_NARRATOR.sourceAudioFormat,
-    encodingTool: PRODUCTION_NARRATOR.encodingTool,
+    sourceAudioFormat: engine.engineId === 'gemini' ? PRODUCTION_NARRATOR.sourceAudioFormat : 'worker audio normalized before validation',
+    encodingTool: engine.engineId === 'gemini' ? PRODUCTION_NARRATOR.encodingTool : 'ffmpeg',
     disclosure: 'الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.',
     parts,
   };

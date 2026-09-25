@@ -19,7 +19,7 @@ import { loadSpokenArticle, splitSpokenArticle } from './audio-split.mjs';
 import { generateCandidate } from './audio-generate-candidate.mjs';
 import { validateCandidate } from './audio-validate.mjs';
 import { publishApprovedCandidate } from './audio-publish.mjs';
-import { resolveProductionSynthesizer } from './audio-gemini-tts.mjs';
+import { currentAudioEngineIdentity, resolveAudioSynthesizer } from './audio-engine-router.mjs';
 import { pathExists } from './audio-checkpoint.mjs';
 import { loadPublicationPost, loadPublishRecord } from './audio-approval.mjs';
 import { assertSafeArticleId, assertSha256Fingerprint } from './audio-report.mjs';
@@ -49,6 +49,7 @@ const HTTP_PER_ARTICLE = {
 };
 
 export async function buildDryRun(root = ROOT) {
+  const engine = currentAudioEngineIdentity();
   const snapshot = JSON.parse(await readFile(path.join(root, 'docs', 'audio', 'AUDIO-TRUTH-SNAPSHOT.json'), 'utf8'));
   const live = JSON.parse(await readFile(path.join(root, 'docs', 'audio', 'LIVE-AUDIO-OBSERVED-20260828.json'), 'utf8'));
   const liveDuration = Object.fromEntries(live.articles.map((item) => [item.articleId, item.durationSeconds]));
@@ -112,6 +113,7 @@ export async function buildDryRun(root = ROOT) {
     generatedAt: new Date().toISOString(),
     mode: 'dry-run',
     narrator: PRODUCTION_NARRATOR,
+    selectedTtsEngine: engine,
     fallback: FALLBACK_NARRATOR,
     geminiTtsContract: GEMINI_TTS_CONTRACT,
     cloudTtsContract: CLOUD_TTS_CONTRACT,
@@ -193,7 +195,7 @@ export async function runProductionMode({
     if (!injected && process.env.BAREEQ_AUDIO_PRODUCTION_LOCK !== '1' && process.env.BAREEQ_TTS_CONTRACT_TEST !== '1') {
       throw Object.assign(new Error('generate-candidate requires BAREEQ_AUDIO_PRODUCTION_LOCK=1. No TTS request was sent.'), { exitCode: EXIT_CONFIG });
     }
-    const synth = synthesize || await resolveProductionSynthesizer({ fetchImpl });
+    const synth = synthesize || await resolveAudioSynthesizer({ fetchImpl, root });
     return generateCandidate({
       articleId,
       root,
@@ -322,7 +324,7 @@ if (isCli) {
     }
     process.exit(result.exitCode || EXIT_OK);
   } catch (error) {
-    console.error(error.message);
+    console.error(process.env.BAREEQ_AUDIO_DEBUG_STACK === '1' ? (error.stack || error.message) : error.message);
     process.exit(error.exitCode || EXIT_HARD);
   }
 }

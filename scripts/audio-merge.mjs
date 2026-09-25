@@ -1,10 +1,12 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { sha256 } from './audio-constants.mjs';
 import { assertFfmpeg, runCommand } from './audio-ffmpeg.mjs';
 import { candidateDir } from './audio-constants.mjs';
 import { pathExists, writeJson } from './audio-checkpoint.mjs';
+import { publicEngineIdentity, synthesisContractSha256 } from './audio-engine-config.mjs';
+import { atomicWriteFile } from './audio-io.mjs';
 
 export async function decodePcm(file) {
   const { ffmpeg } = await assertFfmpeg();
@@ -90,25 +92,28 @@ export async function mergeCandidateParts({ articleId, fingerprint, root = proce
   const { ffmpeg } = await assertFfmpeg();
   const dir = fingerprint ? candidateDir(articleId, fingerprint, root) : path.dirname(partFiles[0]);
   await mkdir(dir, { recursive: true });
-  const listFile = path.join(dir, 'concat.txt');
-  await writeFile(listFile, partFiles.map((file) => `file '${path.resolve(file).replace(/'/g, "'\\''")}'`).join('\n') + '\n');
   const fullFile = path.join(dir, 'full.mp3');
   const encoded = await runCommand(ffmpeg, [
     '-hide_banner', '-loglevel', 'error',
-    '-f', 'concat', '-safe', '0', '-i', listFile,
+    '-f', 's16le', '-ar', '48000', '-ac', '1', '-i', 'pipe:0',
     '-ac', '1', '-ar', '48000', '-c:a', 'libmp3lame', '-b:a', '96k',
-    '-y', fullFile,
-  ]);
-  if (encoded.code !== 0) throw new Error(`ffmpeg concat failed: ${encoded.stderr.slice(0, 700)}`);
+    '-f', 'mp3', 'pipe:1',
+  ], { input: Buffer.concat(pcmParts) });
+  if (encoded.code !== 0) throw new Error(`ffmpeg PCM merge failed: ${encoded.stderr.slice(0, 700)}`);
 
-  const merged = await readFile(fullFile);
+  const merged = encoded.stdout;
   const duration = mp3DurationSeconds(merged);
   const expected = durations.reduce((sum, value) => sum + value, 0);
   const durationSlack = Math.max(0.35, 0.08 * partFiles.length);
   if (Math.abs(duration - expected) > durationSlack) {
     throw new Error(`merged duration ${duration}s does not match part sum ${expected.toFixed(3)}s (slack ${durationSlack.toFixed(3)}s)`);
   }
-  const fullPcm = await decodePcm(fullFile);
+  const decoded = await runCommand(ffmpeg, [
+    '-hide_banner', '-loglevel', 'error', '-i', 'pipe:0',
+    '-f', 's16le', '-acodec', 'pcm_s16le', '-ac', '1', '-ar', '48000', 'pipe:1',
+  ], { input: merged });
+  if (decoded.code !== 0) throw new Error('Could not decode merged MP3.');
+  const fullPcm = decoded.stdout;
   const expectedPcmBytes = pcmParts.reduce((sum, part) => sum + part.length, 0);
   if (Math.abs(fullPcm.length - expectedPcmBytes) > 48000 * 2 * 0.35) {
     throw new Error('merged PCM length does not match concatenated parts');
@@ -123,7 +128,9 @@ export async function mergeCandidateParts({ articleId, fingerprint, root = proce
   if (clicks.length) throw new Error(`merge click/discontinuity detected at ${clicks.map((item) => item.afterPart).join(', ')}`);
   if (gaps.length) throw new Error(`merge gap/silence at splice ${gaps.map((item) => item.afterPart).join(', ')}`);
 
+  await atomicWriteFile(fullFile, merged);
   const digest = sha256(merged);
+  const engine = publicEngineIdentity();
   const report = {
     schema: 'bareeq.audio-merge.v2',
     articleId,
@@ -131,9 +138,12 @@ export async function mergeCandidateParts({ articleId, fingerprint, root = proce
     candidateFingerprint: fingerprint,
     fullSha256: digest,
     speechScriptHash: speechScriptHash,
-    provider: 'Google Gemini API',
-    model: 'gemini-3.1-flash-tts-preview',
-    voice: 'Sadaltager',
+    engineId: engine.engineId,
+    engine,
+    ...(engine.local ? { synthesisContractSha256: synthesisContractSha256() } : {}),
+    provider: engine.provider,
+    model: engine.model,
+    voice: engine.voice,
     generatorVersion: 9,
     toolVersion: 9,
     status: 'merged',

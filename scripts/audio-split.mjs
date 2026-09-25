@@ -15,6 +15,7 @@ import {
   estimateGeminiTokens,
 } from './audio-constants.mjs';
 import { attachSync } from './audio-sync.mjs';
+import { engineFingerprintExtension, selectedEngineProfile } from './audio-engine-config.mjs';
 
 function splitOversizedText(text, maxBytes) {
   if (utf8Bytes(text) <= maxBytes) return [text];
@@ -492,33 +493,41 @@ function splitFingerprintPayload(splitPlan) {
 }
 
 export function candidateFingerprint(article, splitPlan) {
-  return sha256(JSON.stringify({
+  const profile = selectedEngineProfile();
+  const payload = {
     articleId: article.articleId,
     spokenText: article.spokenText,
     speechScriptHash: article.speechScriptHash,
-    model: PRODUCTION_TTS_MODEL,
-    voice: PRODUCTION_VOICE,
+    model: profile.id === 'gemini' ? PRODUCTION_TTS_MODEL : profile.model,
+    voice: profile.id === 'gemini' ? PRODUCTION_VOICE : profile.voice,
     generatorVersion: GENERATOR_VERSION,
     performanceInstructions: PERFORMANCE_INSTRUCTIONS,
     split: splitFingerprintPayload(splitPlan),
     partTexts: splitPlan.parts.map((part) => part.text),
     partIndexes: splitPlan.parts.map((part) => part.partIndex),
-  }));
+  };
+  const engine = engineFingerprintExtension();
+  if (engine) payload.engine = engine;
+  return sha256(JSON.stringify(payload));
 }
 
 export function partFingerprint(article, splitPlan, part) {
-  return sha256(JSON.stringify({
+  const profile = selectedEngineProfile();
+  const payload = {
     articleId: article.articleId,
     spokenText: part.text,
     speechScriptHash: article.speechScriptHash,
-    model: PRODUCTION_TTS_MODEL,
-    voice: PRODUCTION_VOICE,
+    model: profile.id === 'gemini' ? PRODUCTION_TTS_MODEL : profile.model,
+    voice: profile.id === 'gemini' ? PRODUCTION_VOICE : profile.voice,
     generatorVersion: GENERATOR_VERSION,
     performanceInstructions: PERFORMANCE_INSTRUCTIONS,
     split: splitFingerprintPayload(splitPlan),
     partIndex: part.partIndex,
     partCount: splitPlan.parts.length,
-  }));
+  };
+  const engine = engineFingerprintExtension();
+  if (engine) payload.engine = engine;
+  return sha256(JSON.stringify(payload));
 }
 
 export { LEGACY_SPLIT, QUOTA_SPLIT };

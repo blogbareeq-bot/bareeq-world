@@ -389,7 +389,7 @@ try {
   try {
     await publishApprovedCandidate({
       articleId: 'resume-fixture',
-      fingerprint: 'missing',
+      fingerprint: 'a'.repeat(64),
       root: tmp,
       post: { speechApproval: { validation: { valid: true, approved: true }, script: { scriptHash: 'a' }, testClipPlan: { speechScriptHash: 'a' } } },
       record: {},

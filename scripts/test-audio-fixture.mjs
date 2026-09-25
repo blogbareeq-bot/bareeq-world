@@ -70,6 +70,7 @@ export async function writeApprovedFixture(dir, { articleId = 'resume-fixture', 
   if (copyRulesFrom) {
     await mkdir(path.join(dir, 'scripts'), { recursive: true });
     await cp(path.join(copyRulesFrom, 'scripts', 'contextual-ambiguities.json'), path.join(dir, 'scripts', 'contextual-ambiguities.json'));
+    await cp(path.join(copyRulesFrom, 'scripts', 'audio-pronunciation-lexicon.json'), path.join(dir, 'scripts', 'audio-pronunciation-lexicon.json'));
   }
   return { model, script, plan };
 }
