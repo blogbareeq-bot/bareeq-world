@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "35912425552",
-  "sourceArtifact": "bareeq-progressive-validation-35912425552",
-  "generatedAt": "2026-09-25T07:23:34.736Z",
+  "sourceRunId": "36244382430",
+  "sourceArtifact": "bareeq-progressive-validation-36244382430",
+  "generatedAt": "2026-09-26T13:27:23.110Z",
   "publicationComplete": false,
   "publishedCount": 6,
   "fallbackCount": 9,
@@ -77,7 +77,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=6 D=0 I=0 unresolved=3"
+      "error": "dual-ASR consensus failed: S=5 D=0 I=0 unresolved=3"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -86,15 +86,17 @@
       "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 5,
-      "deletions": 2,
+      "substitutions": 4,
+      "deletions": 1,
       "insertions": 0,
-      "unresolved": 8,
+      "unresolved": 4,
       "exact": false,
       "publishedExact": false,
-      "fullSha256": "d7d05aa3cd45d7e4703f41b13f893b52f6ffd9901838944235d2282161182a60",
-      "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=6 D=1 I=0 unresolved=14"
+      "fullSha256": "3dc0c8e0ed2b4eb579354a84b1344a49c17aa1bb69c5bcaa4ae306331bd67611",
+      "repairedParts": [
+        2
+      ],
+      "error": "dual-ASR consensus failed: S=4 D=1 I=0 unresolved=4"
     },
     {
       "articleId": "language-soft-power-politics",
@@ -113,7 +115,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=3 D=10 I=1 unresolved=0"
+      "error": "dual-ASR consensus failed: S=4 D=1 I=0 unresolved=8"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -132,7 +134,7 @@
       "repairedParts": [
         4
       ],
-      "error": "dual-ASR consensus failed: S=8 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=5 D=0 I=0 unresolved=1"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -185,7 +187,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=1"
+      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=0"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -221,7 +223,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=1 D=4 I=0 unresolved=4"
+      "error": "dual-ASR consensus failed: S=0 D=4 I=0 unresolved=3"
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -240,7 +242,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=3 D=0 I=1 unresolved=0"
+      "error": "dual-ASR consensus failed: S=10 D=0 I=1 unresolved=0"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
@@ -276,7 +278,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=9 D=3 I=0 unresolved=0"
     }
   ]
 }
