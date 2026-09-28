@@ -10,6 +10,8 @@ import { tokenizeVerbal } from './audio-exact-match.mjs';
 assert.equal(representationEquivalent('سيئ', 'سيء'), true);
 assert.equal(representationEquivalent('عشرة', '10'), true);
 assert.equal(representationEquivalent('3', 'ثالثا'), true);
+assert.equal(representationEquivalent('عشرين', '20'), true);
+assert.equal(representationEquivalent('تسعين', '90'), true);
 assert.equal(representationEquivalent('شاتًا', 'شات'), true);
 assert.equal(representationEquivalent('لإنهائه', 'لانهائه'), true);
 assert.equal(representationEquivalent('دال', 'د'), true);
@@ -180,4 +182,53 @@ const claudeEntityOrthography = adjudicateDualAsr({ expectedText: 'كلود', re
 assert.equal(claudeEntityOrthography.passed, true);
 assert.deepEqual(claudeEntityOrthography.consensus, { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 });
 
-console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation and approved tanween orthography stay representation-only; human listening stays mandatory.');
+const arrowReports = INDEPENDENT_ASR_MODELS.map((model) => ({
+  model,
+  requestedModel: model,
+  substitutions: 0,
+  deletions: 1,
+  insertions: 0,
+  status: 'failed',
+  differences: [
+    { type: 'deletion', expected: '→', actual: null, expectedIndex: 1, actualIndex: 1 },
+  ],
+}));
+const silentArrow = adjudicateDualAsr({ expectedText: 'مدخل → تحليل', reports: arrowReports });
+assert.equal(silentArrow.passed, true);
+assert.deepEqual(silentArrow.consensus, { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 });
+assert.equal(silentArrow.representationOnly[0].type, 'representation-only-silent-visual-marker');
+
+const baSplitReports = INDEPENDENT_ASR_MODELS.map((model) => ({
+  model,
+  requestedModel: model,
+  substitutions: 1,
+  deletions: 0,
+  insertions: 1,
+  status: 'failed',
+  differences: [
+    { type: 'insertion', expected: null, actual: 'ب', expectedIndex: 0, actualIndex: 0 },
+    { type: 'substitution', expected: 'بما', actual: 'ما', expectedIndex: 0, actualIndex: 1 },
+  ],
+}));
+const baTokenization = adjudicateDualAsr({ expectedText: 'بما يحدث', reports: baSplitReports });
+assert.equal(baTokenization.passed, true);
+assert.deepEqual(baTokenization.consensus, { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 });
+assert.equal(baTokenization.representationOnly.length, 1);
+assert.deepEqual(baTokenization.representationOnly[0].firstBoundaryInsertions, ['ب']);
+
+const missingBaReports = INDEPENDENT_ASR_MODELS.map((model) => ({
+  model,
+  requestedModel: model,
+  substitutions: 1,
+  deletions: 0,
+  insertions: 0,
+  status: 'failed',
+  differences: [
+    { type: 'substitution', expected: 'بما', actual: 'ما', expectedIndex: 0, actualIndex: 0 },
+  ],
+}));
+const missingBa = adjudicateDualAsr({ expectedText: 'بما يحدث', reports: missingBaReports });
+assert.equal(missingBa.passed, false);
+assert.equal(missingBa.consensus.substitutions, 1);
+
+console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation, explicit Arabic ب tokenization, silent visual arrows, and approved orthography stay representation-only; human listening stays mandatory.');
