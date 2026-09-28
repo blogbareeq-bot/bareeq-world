@@ -1,0 +1,49 @@
+{
+  "schema": "bareeq.audio-chirp3-pilot-samples.v1",
+  "createdAt": "2026-09-28T08:39:00Z",
+  "purpose": "Isolated non-production comparison of Google Cloud Text-to-Speech Chirp 3 HD / Sadaltager against the existing Gemini / Sadaltager campaign. These samples must never publish or replace production audio directly.",
+  "engine": {
+    "provider": "google-cloud-text-to-speech",
+    "model": "Chirp3-HD",
+    "languageCode": "ar-XA",
+    "voice": "ar-XA-Chirp3-HD-Sadaltager"
+  },
+  "decisionRule": {
+    "deltaDefinition": "baselineErrors - chirpErrors",
+    "pass": "No sample may regress by more than one error; total delta across the three samples must be positive; at least two samples must have delta > 0; technical QA must pass for every generated sample.",
+    "fail": "Two or more samples regress, any sample regresses by three or more errors, or technical QA fails.",
+    "spliceRule": "Even if lexical QA passes, Chirp may be used for segment repair only if an A/B splice review finds no material voice/timbre/prosody discontinuity. Otherwise Chirp can only be considered for whole-article regeneration of a pending article after explicit human approval."
+  },
+  "samples": [
+    {
+      "sampleId": "A-single-lexical-search",
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "articleTitle": "كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟",
+      "type": "single-real-lexical-error",
+      "baselineErrors": 1,
+      "sourceSegmentId": "paragraph-206fe5f04af9",
+      "text": "سنستخدم «الإكمال التلقائي في غُوغِل» مثالًا لأن الشركة تشرح بعض عوامله علنًا. قد تستخدم الخدمات الأخرى آليات مختلفة، لذلك لا ينبغي تعميم كل تفصيل على الإنترنت كله.",
+      "rationale": "The article is currently one confirmed Dual-ASR error from exact and previously improved from two to one. This probes a short surgical repair with a foreign-name pronunciation transformation."
+    },
+    {
+      "sampleId": "B-multi-error-satellites",
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "articleTitle": "لماذا لا تسقط الأقمار الصناعية من السماء؟",
+      "type": "multi-error-paragraph",
+      "baselineErrors": 2,
+      "sourceSegmentId": "paragraph-e3175497e126",
+      "text": "حين تنظر إلى السماء في ليلة صافية، قد تلمح نقطة مضيئة تتحرك بهدوء بين النجوم. إنها ليست نجمة خرجت عن مسارها، ولا طائرة تحلق على ارتفاع شاهق، بل ربما تَكُونُ قمرًا صناعيًا يزن مئات الكيلوجرامات، وقد يصل وزن بعض الأقمار والمركبات الفضائية إلى عدة أطنان.",
+      "rationale": "The article has two current substitutions and a prior rejected Gemini trial that worsened sharply, so this probes paragraph-level stability rather than only a one-word correction."
+    },
+    {
+      "sampleId": "C-regression-touchscreen",
+      "articleId": "how-touchscreens-work",
+      "articleTitle": "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟",
+      "type": "previous-gemini-regression",
+      "baselineErrors": 5,
+      "sourceSegmentId": "paragraph-d819d69b2d84",
+      "text": "تَلْمَسُ الشَّاشَةَ بِخِفَّةٍ فَيَفْتَحُ القُفْلُ، تُمَرِّرُ إِصْبَعَكَ فَتَتَحَرَّكُ الخَرِيطَةُ، وَتَضْغَطُ عَلَى حَرْفٍ فِي لَوْحَةِ المَفَاتِيحِ فَيَظْهَرُ فَوْرًا. نَفْعَلُ ذَلِكَ مِئَاتِ المَرَّاتِ يَوْمِيًّا مِنْ دُونِ أَنْ نَسْمَعَ نَقْرَةً مِيكَانِيكِيَّةً أَوْ نَشْعُرَ بِزِرٍّ يَهْبِطُ تَحْتَ إِصْبَعِنَا.",
+      "rationale": "Touchscreens repeatedly regressed under stochastic Gemini segment regeneration. This probes whether Chirp is materially more stable on heavily diacritized Arabic with dense consonant transitions."
+    }
+  ]
+}

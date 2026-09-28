@@ -1,0 +1,121 @@
+name: Bareeq Chirp 3 Sadaltager pilot
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-chirp3-pilot.yml'
+      - 'scripts/audio-chirp3-pilot.mjs'
+      - 'scripts/audio-chirp3-pilot-evaluate.mjs'
+      - 'scripts/test-audio-chirp3-pilot.mjs'
+      - 'docs/audio/CHIRP-PILOT-SAMPLES.json'
+      - 'docs/audio/MOTOR-DECISION.md'
+  workflow_dispatch:
+    inputs:
+      execute_live:
+        description: 'Generate exactly three isolated Chirp samples and run independent Dual-ASR. Never publishes.'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bareeq-chirp3-sadaltager-pilot-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Validate pilot code without provider calls
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-chirp3-pilot.mjs
+          node --check scripts/audio-chirp3-pilot-evaluate.mjs
+          node --check scripts/test-audio-chirp3-pilot.mjs
+          node scripts/test-audio-chirp3-pilot.mjs
+          node scripts/audio-chirp3-pilot.mjs > chirp-pilot-plan.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = JSON.parse(fs.readFileSync('chirp-pilot-plan.json','utf8'));
+          if (p.mode !== 'dry-run' || p.providerRequests !== 0 || p.productionAudioTouched !== false || p.publicationAllowed !== false) {
+            throw new Error('Chirp pilot dry-run safety contract failed');
+          }
+          if (!Array.isArray(p.samples) || p.samples.length !== 3) throw new Error('Chirp pilot must remain exactly three locked samples');
+          console.log('CHIRP_PILOT_DRY_RUN=PASS samples=3 requests=0 publish=false');
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chirp3-sadaltager-pilot-plan-${{ github.run_id }}
+          path: chirp-pilot-plan.json
+          retention-days: 30
+
+  live-pilot:
+    needs: offline-contract
+    if: github.event_name == 'workflow_dispatch' && inputs.execute_live == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      BAREEQ_CHIRP_PILOT_ACTIVATE: '1'
+      GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Preflight human/account gates
+        run: |
+          set -euo pipefail
+          test -n "${GOOGLE_CLOUD_PROJECT}" || { echo 'BLOCKED: GOOGLE_CLOUD_PROJECT secret is missing'; exit 78; }
+          test -n "${GOOGLE_SERVICE_ACCOUNT_JSON}" || { echo 'BLOCKED: GOOGLE_SERVICE_ACCOUNT_JSON secret is missing'; exit 78; }
+          test -n "${GEMINI_API_KEY}" || { echo 'BLOCKED: GEMINI_API_KEY secret is missing for Dual-ASR'; exit 78; }
+          echo 'CHIRP_PILOT_CREDENTIALS=present'
+          echo 'NOTE: Billing and Text-to-Speech API enablement are verified by the first Cloud TTS request; no production audio can be published by this workflow.'
+      - name: Generate exactly three Chirp samples
+        run: node scripts/audio-chirp3-pilot.mjs --live
+      - name: Run technical QA and independent Dual-ASR
+        id: evaluate
+        continue-on-error: true
+        run: node scripts/audio-chirp3-pilot-evaluate.mjs
+      - name: Enforce no-production mutation
+        run: |
+          set -euo pipefail
+          if ! git diff --quiet -- public/audio; then
+            echo 'FATAL: pilot touched public/audio'
+            git diff -- public/audio
+            exit 1
+          fi
+          node - <<'NODE'
+          const fs = require('fs');
+          const i = JSON.parse(fs.readFileSync('chirp-pilot-artifacts/index.json','utf8'));
+          if (i.productionAudioTouched !== false || i.publicationAllowed !== false) throw new Error('pilot publication lock failed');
+          console.log('CHIRP_PILOT_PRODUCTION_ISOLATION=PASS');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: chirp3-sadaltager-pilot-live-${{ github.run_id }}
+          path: chirp-pilot-artifacts/
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Require technical pilot success
+        if: steps.evaluate.outcome != 'success'
+        run: |
+          echo 'CHIRP_PILOT_DECISION=FAIL_OR_INCOMPLETE — inspect evaluation artifact; no engine switch is authorized.'
+          exit 1
+      - name: Record next human gate
+        run: |
+          echo 'CHIRP_PILOT_DECISION=TECHNICAL_PASS_AWAITING_HUMAN_SPLICE_REVIEW'
+          echo 'No secondary-engine activation, whole-article replacement, merge into the production campaign, or public/audio write is authorized by this workflow.'
