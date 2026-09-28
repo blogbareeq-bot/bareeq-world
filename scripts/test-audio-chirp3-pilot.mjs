@@ -3,6 +3,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { buildChirpRequest, pilotFingerprint, PILOT_ENGINE, runPilot } from './audio-chirp3-pilot.mjs';
+import { decidePilot } from './audio-chirp3-pilot-evaluate.mjs';
 
 const sample = {
   sampleId: 'unit',
@@ -83,4 +84,31 @@ try {
   await rm(temp, { recursive: true, force: true });
 }
 
-console.log('Chirp 3 Sadaltager pilot tests passed: locked dry-run, exact engine identity, three isolated requests, and zero publication authority.');
+const qa = { passed: true };
+assert.equal(decidePilot([
+  { delta: 1, technicalQa: qa },
+  { delta: 2, technicalQa: qa },
+  { delta: 0, technicalQa: qa },
+]).passed, true);
+assert.equal(decidePilot([
+  { delta: 2, technicalQa: qa },
+  { delta: 1, technicalQa: qa },
+  { delta: -1, technicalQa: qa },
+]).passed, true);
+assert.equal(decidePilot([
+  { delta: 2, technicalQa: qa },
+  { delta: -1, technicalQa: qa },
+  { delta: -1, technicalQa: qa },
+]).passed, false);
+assert.equal(decidePilot([
+  { delta: 4, technicalQa: qa },
+  { delta: 1, technicalQa: qa },
+  { delta: -3, technicalQa: qa },
+]).passed, false);
+assert.equal(decidePilot([
+  { delta: 2, technicalQa: qa },
+  { delta: 1, technicalQa: { passed: false } },
+  { delta: 0, technicalQa: qa },
+]).passed, false);
+
+console.log('Chirp 3 Sadaltager pilot tests passed: locked dry-run, engine identity, isolation, and bounded decision thresholds.');
