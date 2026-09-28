@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import {
   ADJUDICATION_POLICY_VERSION,
   adjudicateDualAsr,
@@ -231,4 +232,16 @@ const missingBa = adjudicateDualAsr({ expectedText: 'بما يحدث', reports: 
 assert.equal(missingBa.passed, false);
 assert.equal(missingBa.consensus.substitutions, 1);
 
-console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation, explicit Arabic ب tokenization, silent visual arrows, and approved orthography stay representation-only; human listening stays mandatory.');
+const consensusSource = await readFile(new URL('./audio-validate-consensus.mjs', import.meta.url), 'utf8');
+const offlinePassMarker = consensusSource.indexOf('ASR_OFFLINE_REUSE_PASS');
+const offlineMismatchMarker = consensusSource.indexOf('ASR_OFFLINE_REUSE_MISMATCH');
+const apiKeyGate = consensusSource.indexOf("if (!apiKey?.trim())");
+const providerUpload = consensusSource.indexOf('uploaded = await uploadAudioFile');
+assert.ok(offlinePassMarker >= 0 && offlinePassMarker < apiKeyGate,
+  'stored raw ASR must be re-adjudicated before an API key is required');
+assert.ok(offlineMismatchMarker >= 0 && offlineMismatchMarker < providerUpload,
+  'a bound stored exact mismatch must return before any provider upload');
+assert.ok(apiKeyGate < providerUpload,
+  'provider validation must remain credential-gated after offline reuse is unavailable');
+
+console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation, explicit Arabic ب tokenization, silent visual arrows, approved orthography, and offline raw-ASR reuse stay guarded; human listening stays mandatory.');
