@@ -11,6 +11,7 @@ on:
       - 'scripts/audio-dual-asr-adjudicate.mjs'
       - 'scripts/audio-gemini-tts.mjs'
       - 'scripts/audio-progressive-status.mjs'
+      - 'scripts/audio-repair-session-report.mjs'
       - 'scripts/test-audio-daily-progressive.mjs'
       - 'scripts/test-audio-segment-repair.mjs'
       - 'scripts/test-audio-dual-asr-adjudicate.mjs'
@@ -24,6 +25,7 @@ on:
       - 'scripts/audio-dual-asr-adjudicate.mjs'
       - 'scripts/audio-gemini-tts.mjs'
       - 'scripts/audio-progressive-status.mjs'
+      - 'scripts/audio-repair-session-report.mjs'
       - 'scripts/test-audio-daily-progressive.mjs'
       - 'scripts/test-audio-segment-repair.mjs'
       - 'scripts/test-audio-dual-asr-adjudicate.mjs'
@@ -89,6 +91,7 @@ jobs:
           node scripts/test-audio-segment-repair.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-gemini-tts.mjs
+          node --check scripts/audio-repair-session-report.mjs
 
   repair-publish:
     needs: schedule-gate
@@ -135,6 +138,7 @@ jobs:
           node scripts/test-audio-segment-repair.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-openrouter-campaign.mjs
+          node --check scripts/audio-repair-session-report.mjs
 
       - name: Verify Gemini credential
         env:
@@ -142,6 +146,7 @@ jobs:
         run: |
           test -n "${GEMINI_API_KEY}"
           echo 'GEMINI_CREDENTIAL=present'
+          echo 'BAREEQ_PROVIDER_CREDENTIAL_VERIFIED=1' >> "$GITHUB_ENV"
 
       - name: Restore newest durable checkpoint
         id: checkpoint
@@ -182,6 +187,9 @@ jobs:
           console.log(`PROGRESSIVE_CHECKPOINT=PASS source=${process.env.CACHE_KEY || process.env.BAREEQ_BOOTSTRAP_RUN_ID} exact_before=${exact.length}/15`);
           NODE
 
+      - name: Mark repair session start
+        run: echo "BAREEQ_REPAIR_SESSION_STARTED_AT=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_ENV"
+
       - name: Classify all pending audio, then repair the easiest failed parts
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -213,6 +221,11 @@ jobs:
           BAREEQ_SOURCE_ARTIFACT: bareeq-progressive-validation-${{ github.run_id }}
         run: node scripts/audio-progressive-status.mjs
 
+      - name: Write classification, repair log, and session report
+        env:
+          BAREEQ_SOURCE_RUN_ID: ${{ github.run_id }}
+        run: node scripts/audio-repair-session-report.mjs
+
       - name: Save newest checkpoint before git publication
         if: always()
         uses: actions/cache/save@v4
@@ -230,6 +243,11 @@ jobs:
             docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
             docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
             docs/audio/PROGRESSIVE-STATUS.json
+            docs/audio/PHASE-0-READINESS.md
+            docs/audio/PHASE-1-CLASSIFICATION.json
+            docs/audio/REPAIR-LOG.json
+            docs/audio/REPAIR-SESSION-LATEST.md
+            docs/audio/FINAL-COMPLETION-REPORT.md
             public/audio/manifest.json
           if-no-files-found: warn
           retention-days: 90
@@ -242,7 +260,9 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f public/audio
           git add docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json docs/audio/PROGRESSIVE-STATUS.json
+          git add docs/audio/PHASE-0-READINESS.md docs/audio/PHASE-1-CLASSIFICATION.json docs/audio/REPAIR-LOG.json docs/audio/REPAIR-SESSION-LATEST.md
           test ! -f docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json || git add docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
+          test ! -f docs/audio/FINAL-COMPLETION-REPORT.md || git add docs/audio/FINAL-COMPLETION-REPORT.md
           if git diff --cached --quiet; then
             echo "PROGRESSIVE_PUBLICATION_TREE=already-current exact=${COUNT}/15"
             exit 0
