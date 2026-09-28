@@ -15,7 +15,7 @@ import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { loadSpokenArticle } from './audio-split.mjs';
 import { boundIdentity } from './audio-report.mjs';
 
-export const ADJUDICATION_POLICY_VERSION = 3;
+export const ADJUDICATION_POLICY_VERSION = 4;
 
 const NUMBER_FORMS = new Map([
   [0, ['0', '٠', 'صفر']],
@@ -29,6 +29,8 @@ const NUMBER_FORMS = new Map([
   [8, ['8', '٨', 'ثمانية', 'ثمان', 'ثامن', 'ثامنا', 'الثامن', 'الثامنة']],
   [9, ['9', '٩', 'تسعة', 'تسع', 'تاسع', 'تاسعا', 'التاسع', 'التاسعة']],
   [10, ['10', '١٠', 'عشرة', 'عشر', 'عاشر', 'عاشرا', 'العاشر', 'العاشرة']],
+  [20, ['20', '٢٠', 'عشرون', 'عشرين']],
+  [90, ['90', '٩٠', 'تسعون', 'تسعين']],
   [100, ['100', '١٠٠', 'مئة', 'مائة']],
   [1000, ['1000', '١٠٠٠', 'ألف', 'الف']],
 ]);
@@ -44,26 +46,16 @@ function finalHamzaCarrier(value) {
 }
 
 const APPROVED_ORTHOGRAPHIC_EQUIVALENTS = new Map([
-  // Speech Script «شاتًا» carries audible fatḥ tanween. Arabic ASR commonly
-  // returns the undiacritized loanword «شات» without the orthographic tanween
-  // alif; this exact pair is representation-only, not a lexical substitution.
   ['شاتا', new Set(['شات'])],
-  // Both independent ASR models render this inflected form without the hamza
-  // seat even when the audible word is unchanged. Keep this exception exact
-  // and local; medial-hamza removal is not accepted generically.
   ['لإنهائه', new Set(['لانهائه'])],
-  // In Arabic vitamin names, «دال» is the spoken name of the written letter
-  // «د». Independent ASR commonly emits the glyph while preserving exactly
-  // the same speech. This deliberately does not generalize to other letters.
   ['دال', new Set(['د'])],
-  // Exact named-entity transliteration variants observed independently across
-  // the two ASR models. These pairs preserve the same foreign proper name and
-  // are deliberately whitelisted one-by-one; no fuzzy/phonetic matching is used.
   ['أنثروبك', new Set(['أنثروبيك', 'anthropic'])],
   ['كلود', new Set(['كلاود', 'claude', 'cloud'])],
   ['بروكتر', new Set(['بروكتور', 'procter'])],
   ['غامبل', new Set(['جامبل', 'gamble'])],
 ]);
+
+const SILENT_VISUAL_MARKERS = new Set(['→']);
 
 export function representationEquivalent(expected, actual) {
   const e = normalizeForVerbalComparison(expected);
@@ -84,8 +76,17 @@ function lamNumericCanonical(value) {
   return number ? `ل:${number}` : null;
 }
 
+function procliticBoundaryEquivalent(expected, diff, boundaryInsertions = []) {
+  if (boundaryInsertions.length !== 1) return false;
+  const e = normalizeForVerbalComparison(expected);
+  const a = normalizeForVerbalComparison(diff?.actual || '');
+  const insertedPrefix = normalizeForVerbalComparison(boundaryInsertions[0]?.actual || '');
+  return insertedPrefix === 'ب' && e.length > 1 && e.startsWith('ب') && a === e.slice(1);
+}
+
 function representationWithBoundaryEquivalent(expected, diff, boundaryInsertions = []) {
   if (representationEquivalent(expected, diff?.actual)) return true;
+  if (procliticBoundaryEquivalent(expected, diff, boundaryInsertions)) return true;
   const expectedCanonical = lamNumericCanonical(expected);
   if (!expectedCanonical) return false;
   if (lamNumericCanonical(diff?.actual) === expectedCanonical) return true;
@@ -94,6 +95,10 @@ function representationWithBoundaryEquivalent(expected, diff, boundaryInsertions
   if (insertedPrefix !== 'ل') return false;
   const numeric = NUMBER_CANONICAL.get(normalizeForVerbalComparison(diff?.actual || ''));
   return Boolean(numeric && `ل:${numeric}` === expectedCanonical);
+}
+
+function silentVisualMarker(value) {
+  return SILENT_VISUAL_MARKERS.has(String(value ?? '').trim());
 }
 
 function nonInsertionByIndex(report) {
@@ -135,6 +140,7 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
   const expectedTokens = tokenizeVerbal(expectedText);
   const maps = ordered.map(nonInsertionByIndex);
   const insertions = ordered.map(insertionsByBoundary);
+  const consumedInsertionBoundaries = ordered.map(() => new Set());
   const representationOnly = [];
   const modelDisagreements = [];
   const substantiveDifferences = [];
@@ -158,9 +164,15 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       continue;
     }
     if (a.type === 'substitution' && b.type === 'substitution') {
+      const aBoundary = procliticBoundaryEquivalent(expected, a, insertions[0].get(index) || []);
+      const bBoundary = procliticBoundaryEquivalent(expected, b, insertions[1].get(index) || []);
       const aRepresentation = representationWithBoundaryEquivalent(expected, a, insertions[0].get(index) || []);
       const bRepresentation = representationWithBoundaryEquivalent(expected, b, insertions[1].get(index) || []);
       if (aRepresentation && bRepresentation) {
+        if (aBoundary && bBoundary) {
+          consumedInsertionBoundaries[0].add(index);
+          consumedInsertionBoundaries[1].add(index);
+        }
         representationOnly.push({
           expectedIndex: index,
           expected,
@@ -180,6 +192,16 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       continue;
     }
     if (a.type === 'deletion' && b.type === 'deletion') {
+      if (silentVisualMarker(expected)) {
+        representationOnly.push({
+          expectedIndex: index,
+          expected,
+          firstActual: null,
+          secondActual: null,
+          type: 'representation-only-silent-visual-marker',
+        });
+        continue;
+      }
       substantiveDifferences.push({ type: 'deletion', expectedIndex: index, expected, actual: null, confirmedBy: [...models] });
       continue;
     }
@@ -188,8 +210,9 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
 
   const insertionBoundaries = new Set([...insertions[0].keys(), ...insertions[1].keys()]);
   for (const boundary of [...insertionBoundaries].sort((a, b) => a - b)) {
-    const a = insertions[0].get(boundary) || [];
-    const b = insertions[1].get(boundary) || [];
+    const a = consumedInsertionBoundaries[0].has(boundary) ? [] : (insertions[0].get(boundary) || []);
+    const b = consumedInsertionBoundaries[1].has(boundary) ? [] : (insertions[1].get(boundary) || []);
+    if (!a.length && !b.length) continue;
     if (!a.length || !b.length) {
       modelDisagreements.push({
         expectedIndex: boundary,
@@ -237,7 +260,16 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       rawReportsImmutable: true,
       oneModelDivergence: 'recorded-as-asr-disagreement; not counted as an audio error when the other independent model matches expected text',
       bothModelsSameNonEquivalentDivergence: 'counted as a substantive spoken error',
-      representationEquivalence: ['same normalized token', 'final hamza carrier only', 'explicit approved Arabic ASR orthography شاتًا/شات, لإنهائه/لانهائه, and vitamin letter-name دال/د', 'strict per-name transliteration whitelist for أنثروبك/Anthropic, كلود/Claude, بروكتر/Procter, غامبل/Gamble', 'explicit numeric/cardinal/ordinal verbalization for 0-10, 100, 1000', 'lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)'],
+      representationEquivalence: [
+        'same normalized token',
+        'final hamza carrier only',
+        'explicit approved Arabic ASR orthography شاتًا/شات, لإنهائه/لانهائه, and vitamin letter-name دال/د',
+        'strict per-name transliteration whitelist for أنثروبك/Anthropic, كلود/Claude, بروكتر/Procter, غامبل/Gamble',
+        'explicit numeric/cardinal/ordinal verbalization for 0-10, 20, 90, 100, 1000',
+        'lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)',
+        'Arabic ب proclitic tokenization only when the raw ASR explicitly records ب as the adjacent insertion (for example بما = ب + ما)',
+        'silent visual arrow marker → when both independent ASR models omit it',
+      ],
       fuzzyMatching: false,
       stemming: false,
       synonyms: false,
