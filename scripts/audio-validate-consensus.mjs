@@ -50,6 +50,37 @@ export async function validateWithConsensus({
   if (!articleId || !fingerprint) {
     throw Object.assign(new Error('validate-consensus requires --article and --fingerprint'), { exitCode: EXIT_USAGE });
   }
+
+  // Re-adjudicate already-bound raw reports before any network/provider call.
+  // This path is critical when only the deterministic adjudication policy
+  // changes. adjudicateCandidate verifies model IDs, fingerprint and full.mp3
+  // SHA-256 before it can reuse the reports. A genuine mismatch is returned to
+  // the caller as current evidence; missing/stale raw evidence falls through to
+  // a fresh provider validation below. After a TTS repair the old reports no
+  // longer match fullSha256, so they cannot be reused accidentally.
+  try {
+    const stored = await adjudicateCandidate({ articleId, fingerprint, root, storeRoot });
+    console.log(`ASR_OFFLINE_REUSE_PASS article=${articleId} fingerprint=${fingerprint}`);
+    return {
+      status: 'validated',
+      articleId,
+      fingerprint,
+      fullSha256: stored.fullSha256,
+      consensus: stored.consensus,
+      representationOnly: stored.representationOnly.length,
+      modelDisagreements: stored.modelDisagreements.length,
+      retryAttempts: [],
+      reusedRawAsr: true,
+      exitCode: EXIT_OK,
+    };
+  } catch (error) {
+    if (error?.result?.consensus) {
+      console.log(`ASR_OFFLINE_REUSE_MISMATCH article=${articleId} fingerprint=${fingerprint} consensus=${JSON.stringify(error.result.consensus)}`);
+      throw error;
+    }
+    console.log(`ASR_OFFLINE_REUSE_UNAVAILABLE article=${articleId} fingerprint=${fingerprint} reason=${JSON.stringify(String(error?.message || error).slice(0, 240))}`);
+  }
+
   if (!apiKey?.trim()) {
     throw Object.assign(new Error('GEMINI_API_KEY is absent. Consensus validation did not start ASR.'), { exitCode: 78 });
   }
@@ -219,6 +250,7 @@ export async function validateWithConsensus({
     representationOnly: adjudication.representationOnly.length,
     modelDisagreements: adjudication.modelDisagreements.length,
     retryAttempts: retryLog,
+    reusedRawAsr: false,
     exitCode: EXIT_OK,
   };
 }
