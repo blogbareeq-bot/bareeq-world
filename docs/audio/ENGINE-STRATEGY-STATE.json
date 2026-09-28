@@ -1,0 +1,12 @@
+{
+  "schema": "bareeq.audio-engine-strategy.v1",
+  "provider": "Gemini / Sadaltager",
+  "threshold": 20,
+  "exactBaseline": 7,
+  "successfulTtsSinceLastNewExact": 13,
+  "status": "active",
+  "reason": "Seeded from production evidence: 7 successful Gemini TTS requests in run 36391729540 after the seventh exact milestone, plus 6 successful requests in run 36393122347 without another exact publication.",
+  "lastExactAt": "2026-09-28T07:41:06.988Z",
+  "lastRunId": "36393122347",
+  "updatedAt": "2026-09-28T07:57:26.098Z"
+}
