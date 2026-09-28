@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-repair-log.v1",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "generatedAt": "2026-09-28T07:57:26.170Z",
-  "sourceRunId": "36393122347",
+  "generatedAt": "2026-09-28T08:04:07.480Z",
+  "sourceRunId": "36395098429",
   "entries": [
     {
       "articleId": "ai-agents-future-now",

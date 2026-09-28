@@ -1,7 +1,7 @@
 {
   "schema": "bareeq.audio-phase-1-classification.v1",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "generatedAt": "2026-09-28T07:57:26.170Z",
+  "generatedAt": "2026-09-28T08:04:07.480Z",
   "rule": "all pending candidates classified before repair; pending ordered by total Dual-ASR consensus errors",
   "exactGate": {
     "substitutions": 0,
@@ -39,7 +39,7 @@
       "title": "كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -50,11 +50,11 @@
       "repairedParts": [
         2
       ],
-      "repairInProgress": true,
+      "repairInProgress": false,
       "baselineScore": 2,
       "acceptedScore": 1,
       "rejectedScore": null,
-      "latestError": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=0",
+      "latestError": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 52s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}",
       "estimatedTtsCharsNeeded": null,
       "estimateNote": "calculated at repair time from the targeted sentence/paragraph; no whole-article estimate is fabricated",
       "fallbackActive": true
