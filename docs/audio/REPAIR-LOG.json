@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-repair-log.v1",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "generatedAt": "2026-09-28T07:41:07.056Z",
-  "sourceRunId": "36391729540",
+  "generatedAt": "2026-09-28T07:57:26.170Z",
+  "sourceRunId": "36393122347",
   "entries": [
     {
       "articleId": "ai-agents-future-now",
@@ -19331,6 +19331,55 @@
       },
       "correctionHintApplied": true,
       "at": "2026-09-28T06:38:55.052Z"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "fingerprint": "cc20fb62e3684d3e245d4431307ce668cb3e9db7e188a88735ca397f5a452cc3",
+      "requestIndex": 16,
+      "partIndex": 0,
+      "action": "resume-skip",
+      "providerCalls": 0,
+      "providerAttempts": 0,
+      "transport": "developer-interactions",
+      "at": "2026-09-28T07:45:09.350Z"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "fingerprint": "4c97feaec94bf495af51276c8038a364aad7f3e5faae34ab2f32cbd01a56ad76",
+      "requestIndex": 17,
+      "partIndex": 1,
+      "action": "targeted-regeneration-replace",
+      "providerCalls": 0,
+      "providerAttempts": 0,
+      "previousSha256": "bf380133e1e78a4ab9af1ebf11fc2a4ed972a3d20ee882e3c6b1c92bc1f2cd0f",
+      "previousBytes": 1552365,
+      "previousTransport": "openrouter-speech",
+      "correctionHint": "the reviewed word \"بياناتي\" must be spoken exactly; never \"بيانات\"; the reviewed word \"ويعرض\" must be spoken exactly; never \"ويظهر\"",
+      "at": "2026-09-28T07:45:09.353Z"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "fingerprint": "4c97feaec94bf495af51276c8038a364aad7f3e5faae34ab2f32cbd01a56ad76",
+      "requestIndex": 18,
+      "partIndex": 1,
+      "action": "targeted-regeneration-synthesize",
+      "providerCalls": 1,
+      "providerAttempts": 1,
+      "bytes": 1724013,
+      "transport": "developer-interactions",
+      "correctionHintApplied": true,
+      "at": "2026-09-28T07:46:49.402Z"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "fingerprint": "bf85bfb61e317828b95a1392c5c9f80cb3a5b0888a4d693a15fccfd94c3dacd3",
+      "requestIndex": 19,
+      "partIndex": 2,
+      "action": "resume-skip",
+      "providerCalls": 0,
+      "providerAttempts": 0,
+      "transport": "openrouter-speech",
+      "at": "2026-09-28T07:46:49.405Z"
     }
   ]
 }
