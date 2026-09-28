@@ -1,13 +1,13 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "36387922476",
-  "sourceArtifact": "bareeq-progressive-validation-36387922476",
-  "generatedAt": "2026-09-28T06:44:38.467Z",
+  "sourceRunId": "36391729540",
+  "sourceArtifact": "bareeq-progressive-validation-36391729540",
+  "generatedAt": "2026-09-28T07:41:06.988Z",
   "publicationComplete": false,
-  "publishedCount": 6,
-  "fallbackCount": 9,
-  "exactCount": 6,
+  "publishedCount": 7,
+  "fallbackCount": 8,
+  "exactCount": 7,
   "rows": [
     {
       "articleId": "ai-agents-future-now",
@@ -66,7 +66,7 @@
       "audioKey": "de93f3d9f91c8b8b",
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 5,
       "deletions": 0,
       "insertions": 0,
@@ -74,10 +74,8 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
-      "repairedParts": [
-        1
-      ],
-      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 3s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}"
+      "repairedParts": [],
+      "error": "dual-ASR consensus failed: S=7 D=0 I=0 unresolved=3"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -93,10 +91,8 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "3dc0c8e0ed2b4eb579354a84b1344a49c17aa1bb69c5bcaa4ae306331bd67611",
-      "repairedParts": [
-        2
-      ],
-      "error": "dual-ASR consensus failed: S=6 D=1 I=0 unresolved=3"
+      "repairedParts": [],
+      "error": "dual-ASR consensus failed: S=3 D=1 I=0 unresolved=7"
     },
     {
       "articleId": "language-soft-power-politics",
@@ -112,10 +108,8 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "8046a0551920ed9cce4422610738917dc18da95f367e6aa6348450fd828c76df",
-      "repairedParts": [
-        1
-      ],
-      "error": "dual-ASR consensus failed: S=4 D=11 I=0 unresolved=0"
+      "repairedParts": [],
+      "error": "dual-ASR consensus failed: S=3 D=10 I=0 unresolved=0"
     },
     {
       "articleId": "why-some-passports-are-stronger",
@@ -124,17 +118,15 @@
       "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 4,
+      "substitutions": 0,
       "deletions": 0,
       "insertions": 0,
       "unresolved": 2,
       "exact": false,
       "publishedExact": false,
       "fullSha256": "597168624f702c027ede0c2a719de337149f853822ef634a715c840873703dd8",
-      "repairedParts": [
-        4
-      ],
-      "error": "dual-ASR consensus failed: S=5 D=0 I=0 unresolved=2"
+      "repairedParts": [],
+      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=2"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -176,7 +168,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -184,10 +176,8 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301",
-      "repairedParts": [
-        1
-      ],
-      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 21s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}"
+      "repairedParts": [],
+      "error": "dual-ASR consensus failed: S=1 D=7 I=0 unresolved=1"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -212,18 +202,16 @@
       "audioKey": "9d04080d1962a365",
       "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
       "generationStatus": "generated",
-      "validationStatus": "failed",
-      "substitutions": 1,
-      "deletions": 4,
-      "insertions": 1,
+      "validationStatus": "validated",
+      "substitutions": 0,
+      "deletions": 0,
+      "insertions": 0,
       "unresolved": 0,
-      "exact": false,
-      "publishedExact": false,
+      "exact": true,
+      "publishedExact": true,
       "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3",
-      "repairedParts": [
-        1
-      ],
-      "error": "dual-ASR consensus failed: S=0 D=4 I=0 unresolved=3"
+      "repairedParts": [],
+      "error": null
     },
     {
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -232,17 +220,15 @@
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
       "validationStatus": "failed",
-      "substitutions": 3,
+      "substitutions": 2,
       "deletions": 0,
-      "insertions": 1,
+      "insertions": 0,
       "unresolved": 0,
       "exact": false,
       "publishedExact": false,
       "fullSha256": "096f23d0d137747256248a09375d1764795f9fb9ad39c43ad2654637bcf206df",
-      "repairedParts": [
-        1
-      ],
-      "error": "dual-ASR consensus failed: S=8 D=0 I=1 unresolved=1"
+      "repairedParts": [],
+      "error": "dual-ASR consensus failed: S=4 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
@@ -275,10 +261,8 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "bf977577f07c000c92a6c1ddd4e2b04a5f30785da4e8967f19fe3c4d43e0b304",
-      "repairedParts": [
-        1
-      ],
-      "error": "dual-ASR consensus failed: S=2 D=0 I=0 unresolved=0"
+      "repairedParts": [],
+      "error": "dual-ASR consensus failed: S=6 D=7 I=0 unresolved=0"
     }
   ]
 }

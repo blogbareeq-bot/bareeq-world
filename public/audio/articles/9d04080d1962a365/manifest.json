@@ -1,0 +1,814 @@
+{
+  "version": 3,
+  "generatorVersion": 10,
+  "syncVersion": 1,
+  "speechScriptHash": "fc5a9729972c2054e92fb5bd2e8fdadf073f7f09478c50c42042fbb5f9be7019",
+  "speechInput": "reviewed-contextual-speech-script",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "language": "ar",
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+  "title": "كيف تتعامل مع المواقف الصعبة؟ إطار عملي للهدوء واتخاذ القرار",
+  "audioKey": "9d04080d1962a365",
+  "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
+  "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3",
+  "defaultVoice": "sadaltager",
+  "voices": [
+    {
+      "id": "sadaltager",
+      "label": "سادالتاجر (Sadaltager)",
+      "description": "معرفي طبيعي مناسب لمقالات بريق",
+      "providerVoice": "Sadaltager",
+      "totalDurationSeconds": 730.368
+    }
+  ],
+  "syncMethod": "paragraph-weighted",
+  "performanceInstructions": "### TASK\nSynthesize the approved Arabic transcript below as speech. TRANSCRIPT is the authoritative, linguistically reviewed Speech Script. Speak only its words, exactly as written. Every written Arabic diacritic is binding: do not reinterpret a vocalized word as another reading. Preserve each token's exact lexical and morphological form; never replace it with a more common, related, or neighboring form. For example, if the transcript says «تصعد», pronounce «تصعد» exactly and never substitute «تصاعد». Do not add, omit, paraphrase, or reorder any word. Do not normalize a written token into another lexical or morphological form. Do not read these directions or labels aloud.\n\n### AUDIO PROFILE\nA mature, well-read Arabic narrator for Bareeq, a refined knowledge blog for curious adult readers.\n\n### SCENE\nA contemporary Arabic recording studio in daylight. The narrator speaks naturally to one attentive listener in a calm, professional setting.\n\n### DIRECTOR'S NOTES\nUse clear Modern Standard Arabic. Sound natural, human, warm, and intellectually engaging. Use a normal conversational volume, never a whisper or a breathy delivery. Keep a comfortable medium pace with subtle organic variation. Articulate clearly without over-pronouncing words or sounding like a news anchor. Let questions carry gentle curiosity, explanations sound calm and confident, and conclusions feel reflective and quietly uplifting. Avoid theatrical acting, advertising energy, excessive solemnity, and monotone delivery.",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "encodingTool": "ffmpeg-libmp3lame",
+  "disclosure": "الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.",
+  "parts": [
+    {
+      "characters": 1555,
+      "sync": [
+        {
+          "id": "b0001",
+          "type": "paragraph",
+          "match": "قد يبدأ الموقف الصعب بخبر لم تتوقعه أو خلاف يشتد في دقائق أو قرار يضغط عليك لأن أثره طويل في تلك اللحظة يميل الذهن إلى ط",
+          "start": 0.03665,
+          "end": 0.175268
+        },
+        {
+          "id": "b0002",
+          "type": "paragraph",
+          "match": "لكن كثيرا من المواقف لا تمنحنا يقينا كاملا والضغط نفسه قد يجعل التركيز أصعب وتعرف منظمة الصحة العالمية الضغط بأنه حالة م",
+          "start": 0.175268,
+          "end": 0.352697
+        },
+        {
+          "id": "b0003",
+          "type": "paragraph",
+          "match": "لذلك لا يقدم هذا المقال وصفة لكل أزمة ولا بديلا عن الرعاية النفسية أو الطبية أو القانونية عند الحاجة ما يقدمه هو إطار لا",
+          "start": 0.352697,
+          "end": 0.474902
+        },
+        {
+          "id": "b0004",
+          "type": "paragraph",
+          "match": "الإطار يتكون من خمس حركات",
+          "start": 0.474902,
+          "end": 0.49252
+        },
+        {
+          "id": "b0005",
+          "type": "paragraph",
+          "match": "ثبت نفسك حدد ما تعرفه فرق بين القابل وغير القابل للتحكم اختر خطوة قابلة للمراجعة اطلب المساندة عند الحاجة",
+          "start": 0.49252,
+          "end": 0.570762
+        },
+        {
+          "id": "b0006",
+          "type": "h2",
+          "match": "1 ثبت نفسك قبل أن توسع المشكلة",
+          "start": 0.570762,
+          "end": 0.596238
+        },
+        {
+          "id": "b0007",
+          "type": "paragraph",
+          "match": "عندما يرتفع الضغط قد يصبح الانتباه أضيق وقد يصعب النوم أو التركيز أو الاسترخاء لا يعني ذلك أن كل قرار تحت الضغط سيكون خا",
+          "start": 0.596238,
+          "end": 0.736421
+        },
+        {
+          "id": "b0008",
+          "type": "paragraph",
+          "match": "التثبيت هنا لا يعني إجبار نفسك على الهدوء أو إنكار ما حدث الفكرة هي إعادة مساحة صغيرة بين الحدث ورد الفعل",
+          "start": 0.736421,
+          "end": 0.810839
+        },
+        {
+          "id": "b0009",
+          "type": "paragraph",
+          "match": "يمكن أن تبدأ بأشياء بسيطة وآمنة ابتعد قليلا عن النقاش إذا كان يزداد حدة وجه انتباهك إلى ما حولك حافظ على روتين أساسي قدر",
+          "start": 0.810839,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0001",
+        "b0002",
+        "b0003",
+        "b0004",
+        "b0005",
+        "b0006",
+        "b0007",
+        "b0008",
+        "b0009"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/9d04080d1962a365/part-001-8c19a87968a3.clean.mp3",
+          "bytes": 1703277,
+          "durationSeconds": 141.936,
+          "sha256": "73a654bbfff77d66e385c878642a4c9f6fe04246b81f4885ac14677c4d1d96ab"
+        }
+      }
+    },
+    {
+      "characters": 1404,
+      "sync": [
+        {
+          "id": "b0010",
+          "type": "paragraph",
+          "match": "وفي موقف لا يحتمل التأجيل خطر مباشر حالة طبية طارئة أو التزام قانوني بموعد لا تجعل أحتاج إلى الهدوء سببا لتأخير الإجراء ",
+          "start": 0,
+          "end": 0.122063
+        },
+        {
+          "id": "b0011",
+          "type": "paragraph",
+          "match": "السؤال في هذه المرحلة ما الذي يساعدني على استعادة قدر كاف من التركيز للخطوة التالية",
+          "start": 0.122063,
+          "end": 0.181262
+        },
+        {
+          "id": "b0012",
+          "type": "h2",
+          "match": "2 حدد ما تعرفه وافصل الحقيقة عن القصة",
+          "start": 0.181262,
+          "end": 0.21494
+        },
+        {
+          "id": "b0013",
+          "type": "paragraph",
+          "match": "الأحداث الصعبة تأتي غالبا مع فراغات في المعلومات والذهن يكره الفراغ لذلك قد يملؤه بتوقعات تبدو كأنها حقائق",
+          "start": 0.21494,
+          "end": 0.289234
+        },
+        {
+          "id": "b0014",
+          "type": "paragraph",
+          "match": "افترض أن مديرك طلب لقاء عاجلا من دون تفاصيل الحقيقة هي هناك لقاء عاجل أما سيتم إنهاء عملي فاحتمال لا حقيقة وقد يكون الاح",
+          "start": 0.289234,
+          "end": 0.437944
+        },
+        {
+          "id": "b0015",
+          "type": "paragraph",
+          "match": "اكتب ولو ذهنيا ثلاث خانات",
+          "start": 0.437944,
+          "end": 0.460301
+        },
+        {
+          "id": "b0016",
+          "type": "list-item",
+          "match": "ما أعرفه معلومات مؤكدة أو قابلة للتحقق",
+          "start": 0.460301,
+          "end": 0.49045
+        },
+        {
+          "id": "b0017",
+          "type": "list-item",
+          "match": "ما أرجحه تفسير محتمل تدعمه بعض الإشارات",
+          "start": 0.49045,
+          "end": 0.520735
+        },
+        {
+          "id": "b0018",
+          "type": "list-item",
+          "match": "ما أخشاه سيناريو ممكن لكنه غير مثبت",
+          "start": 0.520735,
+          "end": 0.550477
+        },
+        {
+          "id": "b0019",
+          "type": "paragraph",
+          "match": "هذا الفصل لا يلغي القلق لكنه يمنع الخوف من ارتداء هيئة معلومة",
+          "start": 0.550477,
+          "end": 0.598002
+        },
+        {
+          "id": "b0020",
+          "type": "paragraph",
+          "match": "وعندما تكون المعلومات متضاربة حاول الرجوع إلى المصدر الأقرب للحدث نص العقد بدل نقل شفهي نتيجة الفحص بدل تعليق عابر رسالة",
+          "start": 0.598002,
+          "end": 0.724884
+        },
+        {
+          "id": "b0021",
+          "type": "paragraph",
+          "match": "السؤال في هذه المرحلة ما الحقيقة التي أملكها الآن وما الذي ما زال مجرد تفسير",
+          "start": 0.724884,
+          "end": 0.784476
+        },
+        {
+          "id": "b0022",
+          "type": "h2",
+          "match": "3 فرق بين ما تستطيع التأثير فيه وما خرج من يدك",
+          "start": 0.784476,
+          "end": 0.82577
+        },
+        {
+          "id": "b0023",
+          "type": "paragraph",
+          "match": "الموقف الصعب يحتوي عادة على عناصر من النوعين قد لا تستطيع تغيير قرار صدر لكن تستطيع تحديد طريقة الرد لا تستطيع التحكم في",
+          "start": 0.82577,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0010",
+        "b0011",
+        "b0012",
+        "b0013",
+        "b0014",
+        "b0015",
+        "b0016",
+        "b0017",
+        "b0018",
+        "b0019",
+        "b0020",
+        "b0021",
+        "b0022",
+        "b0023"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/9d04080d1962a365/part-002-f9ced673c18e.clean.mp3",
+          "bytes": 1615149,
+          "durationSeconds": 134.592,
+          "sha256": "a33255ca8324e6a3baa21abeefe7382cdc520ffa8177f1651638b12c47e79bd5"
+        }
+      }
+    },
+    {
+      "characters": 1594,
+      "sync": [
+        {
+          "id": "b0024",
+          "type": "paragraph",
+          "match": "المقصود ليس ترديد عبارة لا تفكر فيما لا تستطيع تغييره فالإنسان يحتاج أحيانا إلى وقت للحزن أو الاستيعاب المقصود أن العمل ",
+          "start": 0,
+          "end": 0.094489
+        },
+        {
+          "id": "b0025",
+          "type": "paragraph",
+          "match": "قسم الصورة إلى قائمتين",
+          "start": 0.094489,
+          "end": 0.108759
+        },
+        {
+          "id": "b0026",
+          "type": "h3",
+          "match": "خارج سيطرتي الآن",
+          "start": 0.108759,
+          "end": 0.11836
+        },
+        {
+          "id": "b0027",
+          "type": "list-item",
+          "match": "قرار شخص آخر بعد صدوره",
+          "start": 0.11836,
+          "end": 0.136747
+        },
+        {
+          "id": "b0028",
+          "type": "list-item",
+          "match": "ما قيل بالفعل",
+          "start": 0.136747,
+          "end": 0.149012
+        },
+        {
+          "id": "b0029",
+          "type": "list-item",
+          "match": "نتيجة ماضية لا يمكن إرجاعها",
+          "start": 0.149012,
+          "end": 0.167999
+        },
+        {
+          "id": "b0030",
+          "type": "list-item",
+          "match": "ظروف عامة لا أملك تغييرها منفردا",
+          "start": 0.167999,
+          "end": 0.190226
+        },
+        {
+          "id": "b0031",
+          "type": "h3",
+          "match": "أستطيع التأثير فيه",
+          "start": 0.190226,
+          "end": 0.200067
+        },
+        {
+          "id": "b0032",
+          "type": "list-item",
+          "match": "المعلومات التي أجمعها",
+          "start": 0.200067,
+          "end": 0.213293
+        },
+        {
+          "id": "b0033",
+          "type": "list-item",
+          "match": "الشخص الذي أتواصل معه",
+          "start": 0.213293,
+          "end": 0.229039
+        },
+        {
+          "id": "b0034",
+          "type": "list-item",
+          "match": "الحدود التي أضعها",
+          "start": 0.229039,
+          "end": 0.241785
+        },
+        {
+          "id": "b0035",
+          "type": "list-item",
+          "match": "الوثائق التي أحتفظ بها",
+          "start": 0.241785,
+          "end": 0.257651
+        },
+        {
+          "id": "b0036",
+          "type": "list-item",
+          "match": "الوقت الذي أخصصه للنوم أو الحركة أو الراحة",
+          "start": 0.257651,
+          "end": 0.285999
+        },
+        {
+          "id": "b0037",
+          "type": "list-item",
+          "match": "الخطوة التي أتخذها اليوم",
+          "start": 0.285999,
+          "end": 0.302105
+        },
+        {
+          "id": "b0038",
+          "type": "paragraph",
+          "match": "إذا لم تجد شيئا في القائمة الثانية صغر السؤال أكثر قد لا تستطيع حل الأزمة لكن ربما تستطيع تحديد موعد أو حفظ مستند أو تأج",
+          "start": 0.302105,
+          "end": 0.407947
+        },
+        {
+          "id": "b0039",
+          "type": "paragraph",
+          "match": "السؤال في هذه المرحلة ما الجزء الصغير من المشكلة الذي يمر عبر يدي فعلا",
+          "start": 0.407947,
+          "end": 0.456206
+        },
+        {
+          "id": "b0040",
+          "type": "h2",
+          "match": "4 اختر الخطوة التالية القابلة للمراجعة",
+          "start": 0.456206,
+          "end": 0.479033
+        },
+        {
+          "id": "b0041",
+          "type": "paragraph",
+          "match": "تحت الضغط ننجذب إلى القرارات الكبيرة لأنها تمنح إحساسا بأننا استعدنا السيطرة لكن القرار الأكبر ليس دائما القرار الأفضل",
+          "start": 0.479033,
+          "end": 0.54749
+        },
+        {
+          "id": "b0042",
+          "type": "paragraph",
+          "match": "إذا لم تكن كل المعلومات متاحة ابحث عن خطوة تحقق ثلاثة شروط",
+          "start": 0.54749,
+          "end": 0.587432
+        },
+        {
+          "id": "b0043",
+          "type": "list-item",
+          "match": "تقلل الغموض أو تحميك من خسارة واضحة",
+          "start": 0.587432,
+          "end": 0.612419
+        },
+        {
+          "id": "b0044",
+          "type": "list-item",
+          "match": "لا تغلق خيارات كثيرة بلا ضرورة",
+          "start": 0.612419,
+          "end": 0.634286
+        },
+        {
+          "id": "b0045",
+          "type": "list-item",
+          "match": "يمكن مراجعتها عندما تظهر معلومات جديدة",
+          "start": 0.634286,
+          "end": 0.657113
+        },
+        {
+          "id": "b0046",
+          "type": "paragraph",
+          "match": "مثلا في خلاف مهني قد تكون الخطوة الأفضل توثيق الوقائع وطلب لقاء محدد بدل إرسال رسالة طويلة تحت الانفعال وفي قرار مالي كب",
+          "start": 0.657113,
+          "end": 0.845683
+        },
+        {
+          "id": "b0047",
+          "type": "paragraph",
+          "match": "هذا لا يعني الهروب من القرارات الصعبة بعض القرارات لها موعد نهائي وبعضها يتطلب حسما الفكرة أن نميز بين ما يجب حسمه الآن ",
+          "start": 0.845683,
+          "end": 0.947757
+        },
+        {
+          "id": "b0048",
+          "type": "paragraph",
+          "match": "ويفيد هنا سؤالان",
+          "start": 0.947757,
+          "end": 0.958666
+        },
+        {
+          "id": "b0049",
+          "type": "list-item",
+          "match": "ما تكلفة الانتظار",
+          "start": 0.958666,
+          "end": 0.971412
+        },
+        {
+          "id": "b0050",
+          "type": "list-item",
+          "match": "وما تكلفة التصرف الآن إذا كان افتراضي خاطئا",
+          "start": 0.971412,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0024",
+        "b0025",
+        "b0026",
+        "b0027",
+        "b0028",
+        "b0029",
+        "b0030",
+        "b0031",
+        "b0032",
+        "b0033",
+        "b0034",
+        "b0035",
+        "b0036",
+        "b0037",
+        "b0038",
+        "b0039",
+        "b0040",
+        "b0041",
+        "b0042",
+        "b0043",
+        "b0044",
+        "b0045",
+        "b0046",
+        "b0047",
+        "b0048",
+        "b0049",
+        "b0050"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/9d04080d1962a365/part-003-3d006a39a3d3.clean.mp3",
+          "bytes": 1771533,
+          "durationSeconds": 147.624,
+          "sha256": "dbac79ababf774a331b230af33d05dd02288369f728e21565931ed112b969a65"
+        }
+      }
+    },
+    {
+      "characters": 1553,
+      "sync": [
+        {
+          "id": "b0051",
+          "type": "paragraph",
+          "match": "عندما تكون تكلفة الخطأ مرتفعة يرتفع وزن التحقق والاستشارة",
+          "start": 0,
+          "end": 0.035537
+        },
+        {
+          "id": "b0052",
+          "type": "h2",
+          "match": "5 اطلب المساندة عندما تصبح المشكلة أكبر من أداة واحدة",
+          "start": 0.035537,
+          "end": 0.071459
+        },
+        {
+          "id": "b0053",
+          "type": "paragraph",
+          "match": "الاستقلال لا يعني إدارة كل شيء وحدك أحيانا نحتاج معلومة من متخصص وأحيانا نحتاج شخصا يساعدنا على ترتيب الأفكار وأحيانا نح",
+          "start": 0.071459,
+          "end": 0.200539
+        },
+        {
+          "id": "b0054",
+          "type": "paragraph",
+          "match": "تؤكد منظمة الصحة العالمية أن التواصل مع أشخاص موثوقين قد يساعد في التعامل مع الضغط وأن من يجد صعوبة مستمرة في التكيف يمك",
+          "start": 0.200539,
+          "end": 0.303274
+        },
+        {
+          "id": "b0055",
+          "type": "paragraph",
+          "match": "اختر نوع المساندة بحسب المشكلة",
+          "start": 0.303274,
+          "end": 0.321521
+        },
+        {
+          "id": "b0056",
+          "type": "list-item",
+          "match": "معلومة متخصص أو جهة رسمية",
+          "start": 0.321521,
+          "end": 0.342277
+        },
+        {
+          "id": "b0057",
+          "type": "list-item",
+          "match": "قرار شخص خبير لا يملك مصلحة في توجيهك إلى خيار بعينه",
+          "start": 0.342277,
+          "end": 0.382037
+        },
+        {
+          "id": "b0058",
+          "type": "list-item",
+          "match": "دعم إنساني شخص يحسن الاستماع ولا يزيد التوتر",
+          "start": 0.382037,
+          "end": 0.412978
+        },
+        {
+          "id": "b0059",
+          "type": "list-item",
+          "match": "ضيق نفسي مستمر أو شديد مختص صحي مؤهل",
+          "start": 0.412978,
+          "end": 0.442925
+        },
+        {
+          "id": "b0060",
+          "type": "paragraph",
+          "match": "إذا كانت هناك أفكار عن إيذاء النفس أو خطر مباشر على شخص فالموقف ليس مساحة لمقال أو تمرين ذاتي يحتاج إلى مساعدة طارئة ومب",
+          "start": 0.442925,
+          "end": 0.543412
+        },
+        {
+          "id": "b0061",
+          "type": "paragraph",
+          "match": "السؤال في هذه المرحلة هل أحتاج إلى شجاعة أكبر أم إلى معلومة أو دعم لا أملكه وحدي",
+          "start": 0.543412,
+          "end": 0.603654
+        },
+        {
+          "id": "b0062",
+          "type": "h2",
+          "match": "كيف يبدو الإطار في موقف واقعي",
+          "start": 0.603654,
+          "end": 0.626161
+        },
+        {
+          "id": "b0063",
+          "type": "paragraph",
+          "match": "لنفترض أنك تلقيت رسالة تفيد بأن مشروعا تعمل عليه قد يتوقف ولا توجد تفاصيل أخرى",
+          "start": 0.626161,
+          "end": 0.679709
+        },
+        {
+          "id": "b0064",
+          "type": "paragraph",
+          "match": "ثبت نفسك لا ترسل عشر رسائل متتابعة وأنت مرتبك امنح نفسك دقائق لترتيب ما يلزم ما دام لا يوجد إجراء عاجل",
+          "start": 0.679709,
+          "end": 0.755018
+        },
+        {
+          "id": "b0065",
+          "type": "paragraph",
+          "match": "حدد ما تعرفه الرسالة تقول إن المشروع قد يتوقف لا تعرف القرار النهائي ولا السبب",
+          "start": 0.755018,
+          "end": 0.813062
+        },
+        {
+          "id": "b0066",
+          "type": "paragraph",
+          "match": "فرق بين القابل وغير القابل للتحكم لا تملك قرار الإدارة لكن تستطيع جمع مستنداتك ومعرفة حالة المهام وطلب توضيح رسمي",
+          "start": 0.813062,
+          "end": 0.888061
+        },
+        {
+          "id": "b0067",
+          "type": "paragraph",
+          "match": "اختر خطوة قابلة للمراجعة أرسل سؤالا محددا عن القرار والموعد المتوقع وجهز ملخصا لحالة عملك لا تتخذ قرار استقالة أو مواجهة",
+          "start": 0.888061,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0051",
+        "b0052",
+        "b0053",
+        "b0054",
+        "b0055",
+        "b0056",
+        "b0057",
+        "b0058",
+        "b0059",
+        "b0060",
+        "b0061",
+        "b0062",
+        "b0063",
+        "b0064",
+        "b0065",
+        "b0066",
+        "b0067"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/9d04080d1962a365/part-004-a4519babde9f.clean.mp3",
+          "bytes": 1770669,
+          "durationSeconds": 147.552,
+          "sha256": "3a8ee65a75b4b676a07581453c6a076ae21dfa1141788c5134862a64274af20e"
+        }
+      }
+    },
+    {
+      "characters": 1506,
+      "sync": [
+        {
+          "id": "b0068",
+          "type": "paragraph",
+          "match": "اطلب المساندة إذا ظهرت آثار تعاقدية أو مالية استشر الشخص المختص وإذا استمر الضغط وأصبح يعطل حياتك اطلب دعما صحيا مناسبا",
+          "start": 0,
+          "end": 0.081987
+        },
+        {
+          "id": "b0069",
+          "type": "paragraph",
+          "match": "لاحظ أن الإطار لم يحل المشكلة وظيفته أن يمنع الغموض من قيادة كل حركة",
+          "start": 0.081987,
+          "end": 0.134365
+        },
+        {
+          "id": "b0070",
+          "type": "h2",
+          "match": "ثلاثة أخطاء تجعل الموقف أثقل",
+          "start": 0.134365,
+          "end": 0.151342
+        },
+        {
+          "id": "b0071",
+          "type": "h3",
+          "match": "محاولة حل المستقبل كله اليوم",
+          "start": 0.151342,
+          "end": 0.16832
+        },
+        {
+          "id": "b0072",
+          "type": "paragraph",
+          "match": "السؤال كيف ستنتهي هذه القصة قد لا يملك جوابا الآن استبدله مؤقتا بـ ما الخطوة التي تحسن موقفي خلال الساعات أو الأيام القل",
+          "start": 0.16832,
+          "end": 0.259645
+        },
+        {
+          "id": "b0073",
+          "type": "h3",
+          "match": "مساواة المشاعر بالحقائق",
+          "start": 0.259645,
+          "end": 0.270668
+        },
+        {
+          "id": "b0074",
+          "type": "paragraph",
+          "match": "الخوف حقيقي بوصفه تجربة لكنه لا يثبت أن السيناريو المخيف سيقع والغضب قد يشير إلى أن حدا مهما تم تجاوزه لكنه لا يحدد وحده",
+          "start": 0.270668,
+          "end": 0.365591
+        },
+        {
+          "id": "b0075",
+          "type": "h3",
+          "match": "طلب نصيحة من كل شخص",
+          "start": 0.365591,
+          "end": 0.381428
+        },
+        {
+          "id": "b0076",
+          "type": "paragraph",
+          "match": "كثرة الآراء لا تعني جودة القرار اختر مصدرا مناسبا لكل نوع من الأسئلة وميز بين من يملك خبرة ومن يملك رأيا فقط",
+          "start": 0.381428,
+          "end": 0.462047
+        },
+        {
+          "id": "b0077",
+          "type": "h2",
+          "match": "بطاقة بريق للمواقف الصعبة",
+          "start": 0.462047,
+          "end": 0.475984
+        },
+        {
+          "id": "b0078",
+          "type": "paragraph",
+          "match": "عندما تضيق الصورة اختصر الإطار في خمس جمل",
+          "start": 0.475984,
+          "end": 0.505353
+        },
+        {
+          "id": "b0079",
+          "type": "list-item",
+          "match": "أحتاج أولا إلى قدر كاف من الثبات لا إلى شعور مثالي بالهدوء",
+          "start": 0.505353,
+          "end": 0.549584
+        },
+        {
+          "id": "b0080",
+          "type": "list-item",
+          "match": "سأفصل ما أعرفه عما أخشاه أو أرجحه",
+          "start": 0.549584,
+          "end": 0.575709
+        },
+        {
+          "id": "b0081",
+          "type": "list-item",
+          "match": "سأضع جهدي في الجزء الذي أستطيع التأثير فيه",
+          "start": 0.575709,
+          "end": 0.605636
+        },
+        {
+          "id": "b0082",
+          "type": "list-item",
+          "match": "سأختار الخطوة التالية الأقل إغلاقا للخيارات ما دام الوقت يسمح",
+          "start": 0.605636,
+          "end": 0.643417
+        },
+        {
+          "id": "b0083",
+          "type": "list-item",
+          "match": "سأطلب المساندة المناسبة إذا تجاوز الأمر ما أستطيع إدارته وحدي",
+          "start": 0.643417,
+          "end": 0.681072
+        },
+        {
+          "id": "b0084",
+          "type": "h2",
+          "match": "الخلاصة",
+          "start": 0.681072,
+          "end": 0.684747
+        },
+        {
+          "id": "b0085",
+          "type": "paragraph",
+          "match": "القوة في المواقف الصعبة ليست أن تملك الإجابة فورا ولا أن تمنع نفسك من الخوف أو الحزن القوة العملية أبسط من ذلك ألا تسمح ",
+          "start": 0.684747,
+          "end": 0.826536
+        },
+        {
+          "id": "b0086",
+          "type": "paragraph",
+          "match": "حين تصبح الصورة ثقيلة لا تحاول حملها كلها دفعة واحدة ثبت نفسك بما يكفي اعرف ما أمامك اختر الجزء الذي تستطيع التأثير فيه ",
+          "start": 0.826536,
+          "end": 0.928529
+        },
+        {
+          "id": "b0087",
+          "type": "paragraph",
+          "match": "فالقرار الجيد لا يحتاج دائما إلى يقين كامل لكنه يحتاج إلى مساحة كافية كي لا يتخذ الخوف القرار بالنيابة عنك",
+          "start": 0.928529,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0068",
+        "b0069",
+        "b0070",
+        "b0071",
+        "b0072",
+        "b0073",
+        "b0074",
+        "b0075",
+        "b0076",
+        "b0077",
+        "b0078",
+        "b0079",
+        "b0080",
+        "b0081",
+        "b0082",
+        "b0083",
+        "b0084",
+        "b0085",
+        "b0086",
+        "b0087"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/9d04080d1962a365/part-005-ce513f87186f.clean.mp3",
+          "bytes": 1904013,
+          "durationSeconds": 158.664,
+          "sha256": "2c0a4f64e96536285b2be18f0694a849cf0001ea9ee0364610d66e5335a2ab33"
+        }
+      }
+    }
+  ],
+  "schema": "bareeq.audio-production-manifest.v3",
+  "candidateFingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
+  "voice": "Sadaltager",
+  "toolVersion": 9,
+  "status": "published",
+  "generatedAt": "2026-09-28T07:41:06.919Z",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "ttsVoice": "Sadaltager",
+  "publishedFromCandidate": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
+  "publishedAt": "2026-09-28T07:41:06.919Z"
+}
