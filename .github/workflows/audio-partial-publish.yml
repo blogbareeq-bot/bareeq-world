@@ -12,9 +12,11 @@ on:
       - 'scripts/audio-gemini-tts.mjs'
       - 'scripts/audio-progressive-status.mjs'
       - 'scripts/audio-repair-session-report.mjs'
+      - 'scripts/audio-engine-strategy-guard.mjs'
       - 'scripts/test-audio-daily-progressive.mjs'
       - 'scripts/test-audio-segment-repair.mjs'
       - 'scripts/test-audio-dual-asr-adjudicate.mjs'
+      - 'scripts/test-audio-engine-strategy-guard.mjs'
   push:
     branches: [main]
     paths:
@@ -26,9 +28,11 @@ on:
       - 'scripts/audio-gemini-tts.mjs'
       - 'scripts/audio-progressive-status.mjs'
       - 'scripts/audio-repair-session-report.mjs'
+      - 'scripts/audio-engine-strategy-guard.mjs'
       - 'scripts/test-audio-daily-progressive.mjs'
       - 'scripts/test-audio-segment-repair.mjs'
       - 'scripts/test-audio-dual-asr-adjudicate.mjs'
+      - 'scripts/test-audio-engine-strategy-guard.mjs'
   # Gemini RPD resets at midnight Pacific. 08:20 UTC is safely after the
   # reset in both daylight-saving and standard time.
   schedule:
@@ -89,9 +93,11 @@ jobs:
           node scripts/test-audio-daily-progressive.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node scripts/test-audio-segment-repair.mjs
+          node scripts/test-audio-engine-strategy-guard.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-gemini-tts.mjs
           node --check scripts/audio-repair-session-report.mjs
+          node --check scripts/audio-engine-strategy-guard.mjs
 
   repair-publish:
     needs: schedule-gate
@@ -136,9 +142,11 @@ jobs:
           node scripts/test-audio-daily-progressive.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node scripts/test-audio-segment-repair.mjs
+          node scripts/test-audio-engine-strategy-guard.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-openrouter-campaign.mjs
           node --check scripts/audio-repair-session-report.mjs
+          node --check scripts/audio-engine-strategy-guard.mjs
 
       - name: Verify Gemini credential
         env:
@@ -190,10 +198,29 @@ jobs:
       - name: Mark repair session start
         run: echo "BAREEQ_REPAIR_SESSION_STARTED_AT=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_ENV"
 
+      - name: Apply Gemini-only strategy guard
+        run: |
+          set -euo pipefail
+          REMAINING=$(node scripts/audio-engine-strategy-guard.mjs --remaining)
+          if [ "${REMAINING}" -le 0 ]; then
+            EFFECTIVE=0
+            echo 'GEMINI_STRATEGY_KILL_SWITCH=PAUSED'
+          elif [ "${REMAINING}" -lt "${BAREEQ_REPAIR_MAX_REQUESTS}" ]; then
+            EFFECTIVE="${REMAINING}"
+          else
+            EFFECTIVE="${BAREEQ_REPAIR_MAX_REQUESTS}"
+          fi
+          echo "BAREEQ_REPAIR_EFFECTIVE_MAX_REQUESTS=${EFFECTIVE}" >> "$GITHUB_ENV"
+          echo "GEMINI_STRATEGY_ALLOWANCE remaining=${REMAINING} effectiveRunCap=${EFFECTIVE}"
+
       - name: Classify all pending audio, then repair the easiest failed parts
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/audio-progressive-repair.mjs --max-articles=10 "--skip=${BAREEQ_PROGRESSIVE_SKIP_ARTICLES}"
+        run: |
+          set -o pipefail
+          BAREEQ_REPAIR_MAX_REQUESTS="${BAREEQ_REPAIR_EFFECTIVE_MAX_REQUESTS}" \
+            node scripts/audio-progressive-repair.mjs --max-articles=10 "--skip=${BAREEQ_PROGRESSIVE_SKIP_ARTICLES}" \
+            | tee "$RUNNER_TEMP/bareeq-progressive-repair.log"
 
       - name: Publish every newly exact article immediately
         run: |
@@ -221,6 +248,9 @@ jobs:
           BAREEQ_SOURCE_ARTIFACT: bareeq-progressive-validation-${{ github.run_id }}
         run: node scripts/audio-progressive-status.mjs
 
+      - name: Update Gemini-only strategy state
+        run: node scripts/audio-engine-strategy-guard.mjs --record "--log=$RUNNER_TEMP/bareeq-progressive-repair.log"
+
       - name: Write classification, repair log, and session report
         env:
           BAREEQ_SOURCE_RUN_ID: ${{ github.run_id }}
@@ -247,6 +277,7 @@ jobs:
             docs/audio/PHASE-1-CLASSIFICATION.json
             docs/audio/REPAIR-LOG.json
             docs/audio/REPAIR-SESSION-LATEST.md
+            docs/audio/ENGINE-STRATEGY-STATE.json
             docs/audio/FINAL-COMPLETION-REPORT.md
             public/audio/manifest.json
           if-no-files-found: warn
@@ -259,7 +290,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f public/audio
-          git add docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json docs/audio/PROGRESSIVE-STATUS.json
+          git add docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json docs/audio/PROGRESSIVE-STATUS.json docs/audio/ENGINE-STRATEGY-STATE.json
           git add docs/audio/PHASE-0-READINESS.md docs/audio/PHASE-1-CLASSIFICATION.json docs/audio/REPAIR-LOG.json docs/audio/REPAIR-SESSION-LATEST.md
           test ! -f docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json || git add docs/audio/PUBLISHED-SADALTAGER-OPENROUTER-20260901.json
           test ! -f docs/audio/FINAL-COMPLETION-REPORT.md || git add docs/audio/FINAL-COMPLETION-REPORT.md
