@@ -1,0 +1,161 @@
+name: Bareeq OpenRouter Sadaltager pilot
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-openrouter-sadaltager-pilot.yml'
+      - 'scripts/audio-openrouter-sadaltager-pilot.mjs'
+      - 'scripts/audio-openrouter-sadaltager-pilot-evaluate.mjs'
+      - 'scripts/test-audio-openrouter-sadaltager-pilot.mjs'
+      - 'docs/audio/OPENROUTER-SADALTAGER-PILOT-SAMPLES.json'
+      - 'docs/audio/OPENROUTER-SADALTAGER-READINESS.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-openrouter-sadaltager-pilot.yml'
+      - 'scripts/audio-openrouter-sadaltager-pilot.mjs'
+      - 'scripts/audio-openrouter-sadaltager-pilot-evaluate.mjs'
+      - 'scripts/test-audio-openrouter-sadaltager-pilot.mjs'
+      - 'docs/audio/OPENROUTER-SADALTAGER-PILOT-SAMPLES.json'
+      - 'docs/audio/OPENROUTER-SADALTAGER-READINESS.md'
+  workflow_dispatch:
+    inputs:
+      execute_live:
+        description: 'Spend OpenRouter credits on exactly three isolated Gemini 3.1/Sadaltager samples, then run Dual-ASR. Never publishes.'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bareeq-openrouter-sadaltager-pilot-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Validate OpenRouter pilot without provider calls
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-openrouter-sadaltager-pilot.mjs
+          node --check scripts/audio-openrouter-sadaltager-pilot-evaluate.mjs
+          node --check scripts/test-audio-openrouter-sadaltager-pilot.mjs
+          node scripts/test-audio-openrouter-sadaltager-pilot.mjs
+          node scripts/audio-openrouter-sadaltager-pilot.mjs > openrouter-pilot-plan.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = JSON.parse(fs.readFileSync('openrouter-pilot-plan.json','utf8'));
+          if (p.mode !== 'dry-run' || p.providerRequests !== 0 || p.productionAudioTouched !== false || p.publicationAllowed !== false) {
+            throw new Error('OpenRouter pilot dry-run safety contract failed');
+          }
+          if (p.engine.model !== 'google/gemini-3.1-flash-tts-preview' || p.engine.voice !== 'Sadaltager') throw new Error('OpenRouter pilot changed model/voice identity');
+          if (!Array.isArray(p.samples) || p.samples.length !== 3) throw new Error('OpenRouter pilot must remain exactly three locked samples');
+          console.log('OPENROUTER_PILOT_DRY_RUN=PASS model=gemini-3.1-flash-tts-preview voice=Sadaltager samples=3 requests=0 publish=false');
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openrouter-sadaltager-pilot-plan-${{ github.run_id }}
+          path: openrouter-pilot-plan.json
+          retention-days: 30
+
+  key-probe:
+    needs: offline-contract
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Probe existing OpenRouter key without inference spend
+        run: |
+          set -euo pipefail
+          if [ -z "${OPENROUTER_API_KEY}" ]; then
+            printf '%s\n' '{"status":"missing","authorized":false,"note":"OPENROUTER_API_KEY secret is not configured."}' > openrouter-key-probe.json
+          else
+            node scripts/audio-openrouter-sadaltager-pilot.mjs --probe-key > openrouter-key-probe.json || true
+          fi
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = JSON.parse(fs.readFileSync('openrouter-key-probe.json','utf8'));
+          console.log(`OPENROUTER_KEY_PROBE status=${p.status} authorized=${p.authorized} freeTier=${p.isFreeTier ?? 'unknown'} limitRemaining=${p.keyLimitRemaining ?? 'unknown'}`);
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openrouter-key-probe-${{ github.run_id }}
+          path: openrouter-key-probe.json
+          retention-days: 30
+
+  live-pilot:
+    needs: offline-contract
+    if: github.event_name == 'workflow_dispatch' && inputs.execute_live == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      BAREEQ_OPENROUTER_TTS_PILOT_ACTIVATE: '1'
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Require existing provider credentials
+        run: |
+          set -euo pipefail
+          test -n "${OPENROUTER_API_KEY}" || { echo 'BLOCKED: OPENROUTER_API_KEY secret is missing'; exit 78; }
+          test -n "${GEMINI_API_KEY}" || { echo 'BLOCKED: GEMINI_API_KEY secret is missing for Dual-ASR'; exit 78; }
+          node scripts/audio-openrouter-sadaltager-pilot.mjs --probe-key > openrouter-key-probe.json
+          echo 'OPENROUTER_PILOT_CREDENTIALS=present'
+      - name: Generate exactly three paid OpenRouter samples
+        run: node scripts/audio-openrouter-sadaltager-pilot.mjs --live
+      - name: Run technical QA and independent Dual-ASR
+        id: evaluate
+        continue-on-error: true
+        run: node scripts/audio-openrouter-sadaltager-pilot-evaluate.mjs
+      - name: Enforce no-production mutation
+        run: |
+          set -euo pipefail
+          if ! git diff --quiet -- public/audio; then
+            echo 'FATAL: OpenRouter pilot touched public/audio'
+            git diff -- public/audio
+            exit 1
+          fi
+          node - <<'NODE'
+          const fs = require('fs');
+          const i = JSON.parse(fs.readFileSync('openrouter-sadaltager-pilot-artifacts/index.json','utf8'));
+          if (i.productionAudioTouched !== false || i.publicationAllowed !== false) throw new Error('pilot publication lock failed');
+          console.log('OPENROUTER_PILOT_PRODUCTION_ISOLATION=PASS');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: openrouter-sadaltager-pilot-live-${{ github.run_id }}
+          path: |
+            openrouter-sadaltager-pilot-artifacts/
+            openrouter-key-probe.json
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Require technical pilot success
+        if: steps.evaluate.outcome != 'success'
+        run: |
+          echo 'OPENROUTER_SADALTAGER_PILOT=FAIL_OR_INCOMPLETE — no production activation is authorized.'
+          exit 1
+      - name: Stop before production activation
+        run: |
+          echo 'OPENROUTER_SADALTAGER_PILOT=TECHNICAL_PASS_AWAITING_HUMAN_ENGINE_DECISION'
+          echo 'No production transport change or public/audio write is authorized by this workflow.'
