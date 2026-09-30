@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "36585991431",
-  "sourceArtifact": "bareeq-progressive-validation-36585991431",
-  "generatedAt": "2026-09-29T15:06:54.465Z",
+  "sourceRunId": "36733230815",
+  "sourceArtifact": "bareeq-progressive-validation-36733230815",
+  "generatedAt": "2026-09-30T14:59:40.709Z",
   "publicationComplete": false,
   "publishedCount": 7,
   "fallbackCount": 8,
@@ -170,7 +170,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -178,8 +178,10 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301",
-      "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=1"
+      "repairedParts": [
+        1
+      ],
+      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 0 reached"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
