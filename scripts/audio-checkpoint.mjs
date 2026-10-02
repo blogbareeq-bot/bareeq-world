@@ -14,6 +14,8 @@ import {
 import { candidateFingerprint, partFingerprint } from './audio-split.mjs';
 import { atomicWriteFile, atomicWriteJson } from './audio-io.mjs';
 import { buildCandidateManifest } from './audio-manifest.mjs';
+import { publicEngineIdentity } from './audio-engine-config.mjs';
+import { synthesisContractSha256 } from './audio-engine-config.mjs';
 
 export function checkpointPaths(articleId, fingerprint, root) {
   const dir = candidateDir(articleId, fingerprint, root);
@@ -60,6 +62,8 @@ function candidatePartRecords(article, splitPlan) {
 
 export async function initCheckpoint({ article, splitPlan, root }) {
   const fingerprint = candidateFingerprint(article, splitPlan);
+  const engine = publicEngineIdentity();
+  const contractSha256 = synthesisContractSha256();
   const paths = checkpointPaths(article.articleId, fingerprint, root);
   await mkdir(paths.partsDir, { recursive: true });
   await mkdir(paths.reportsDir, { recursive: true });
@@ -71,6 +75,10 @@ export async function initCheckpoint({ article, splitPlan, root }) {
         articleId: article.articleId,
         fingerprint,
         model: splitPlan.settings.name,
+        engineId: engine.engineId,
+        ttsModel: engine.model,
+        voice: engine.voice,
+        ...(contractSha256 ? { synthesisContractSha256: contractSha256 } : {}),
         splitVersion: splitPlan.settings.version,
         partCount: splitPlan.parts.length,
         completedParts: {},
@@ -91,9 +99,12 @@ export async function initCheckpoint({ article, splitPlan, root }) {
     candidateFingerprint: fingerprint,
     fullSha256: 'pending-merge',
     speechScriptHash: article.speechScriptHash,
-    provider: 'Google Gemini API',
-    model: PRODUCTION_TTS_MODEL,
-    voice: PRODUCTION_VOICE,
+    engineId: engine.engineId,
+    engine,
+    provider: engine.provider,
+    model: engine.model,
+    voice: engine.voice,
+    ...(contractSha256 ? { synthesisContractSha256: contractSha256 } : {}),
     generatorVersion: GENERATOR_VERSION,
     toolVersion: GENERATOR_VERSION,
     status: 'in-progress',

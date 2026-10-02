@@ -1,17 +1,20 @@
 import { mkdir, open, rename, rm } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 
 export async function atomicWriteFile(file, data) {
   await mkdir(path.dirname(file), { recursive: true });
-  const tmp = `${file}.${process.pid}.${Date.now()}.tmp`;
-  const handle = await open(tmp, 'w');
+  const tmp = `${file}.${process.pid}.${randomUUID()}.tmp`;
+  const handle = await open(tmp, 'wx');
   try {
     await handle.writeFile(data);
     await handle.sync();
-  } finally {
     await handle.close();
+    await rename(tmp, file);
+  } finally {
+    await handle.close().catch(() => {});
+    await rm(tmp, { force: true }).catch(() => {});
   }
-  await rename(tmp, file);
 }
 
 export async function atomicWriteJson(file, value) {

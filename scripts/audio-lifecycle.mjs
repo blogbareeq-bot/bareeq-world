@@ -87,17 +87,17 @@ export function evaluateGenerationAuthorization(post) {
   };
 }
 
-export function evaluateGenerated(record = {}) {
+export function evaluateGenerated(record = {}, expected = PRODUCTION_NARRATOR) {
   const reasons = [];
   if (!record.generated) reasons.push('no complete generated candidate exists');
-  if (record.provider && record.provider !== PRODUCTION_NARRATOR.provider) {
-    reasons.push(`generated provider is ${record.provider}, expected ${PRODUCTION_NARRATOR.provider}`);
+  if (record.provider && record.provider !== expected.provider) {
+    reasons.push(`generated provider is ${record.provider}, expected ${expected.provider}`);
   }
-  if (record.model && record.model !== PRODUCTION_NARRATOR.model) {
-    reasons.push(`generated model is ${record.model}, expected ${PRODUCTION_NARRATOR.model}`);
+  if (record.model && record.model !== expected.model) {
+    reasons.push(`generated model is ${record.model}, expected ${expected.model}`);
   }
-  if (record.voiceId && record.voiceId !== PRODUCTION_NARRATOR.voiceId) {
-    reasons.push(`generated voice is ${record.voiceId}, expected ${PRODUCTION_NARRATOR.voiceId}`);
+  if (record.voiceId && record.voiceId !== expected.voiceId) {
+    reasons.push(`generated voice is ${record.voiceId}, expected ${expected.voiceId}`);
   }
   return { stage: 'generated', passed: reasons.length === 0, reasons };
 }
@@ -158,9 +158,9 @@ export function evaluateTechnical(record = {}) {
   return { stage: 'technical_passed', passed: reasons.length === 0, reasons };
 }
 
-export function evaluatePublishability(post, record = {}) {
+export function evaluatePublishability(post, record = {}, expectedEngine = PRODUCTION_NARRATOR) {
   const generation = evaluateGenerationAuthorization(post);
-  const generated = evaluateGenerated(record);
+  const generated = evaluateGenerated(record, expectedEngine);
   const asr = evaluateAsr(record);
   const human = evaluateHumanListening(record);
   const technical = evaluateTechnical(record);
