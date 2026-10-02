@@ -5,10 +5,14 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/audio-targeted-exact-recovery.yml'
+      - 'scripts/audio-validate-consensus.mjs'
+      - 'scripts/test-audio-asr-fallback.mjs'
   push:
     branches: [main]
     paths:
       - '.github/workflows/audio-targeted-exact-recovery.yml'
+      - 'scripts/audio-validate-consensus.mjs'
+      - 'scripts/test-audio-asr-fallback.mjs'
 
 permissions:
   actions: read
@@ -43,9 +47,11 @@ jobs:
           set -euo pipefail
           node scripts/test-audio-daily-progressive.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
+          node scripts/test-audio-asr-fallback.mjs
           node scripts/test-audio-segment-repair.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
           node --check scripts/audio-progressive-repair.mjs
+          node --check scripts/audio-validate-consensus.mjs
           node --check scripts/audio-openrouter-campaign.mjs
           node --check scripts/audio-repair-session-report.mjs
           echo 'TARGETED_RECOVERY_OFFLINE=PASS requests=0 publication=false'
@@ -73,9 +79,11 @@ jobs:
           set -euo pipefail
           node scripts/test-audio-daily-progressive.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
+          node scripts/test-audio-asr-fallback.mjs
           node scripts/test-audio-segment-repair.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
           node --check scripts/audio-progressive-repair.mjs
+          node --check scripts/audio-validate-consensus.mjs
           node --check scripts/audio-openrouter-campaign.mjs
           node --check scripts/audio-repair-session-report.mjs
 
