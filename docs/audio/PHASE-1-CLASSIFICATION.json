@@ -1,7 +1,7 @@
 {
   "schema": "bareeq.audio-phase-1-classification.v1",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "generatedAt": "2026-10-02T21:05:24.200Z",
+  "generatedAt": "2026-10-02T21:13:22.086Z",
   "rule": "all pending candidates classified before repair; pending ordered by total Dual-ASR consensus errors",
   "exactGate": {
     "substitutions": 0,
@@ -16,7 +16,7 @@
       "title": "اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -31,7 +31,7 @@
       "baselineScore": 1,
       "acceptedScore": null,
       "rejectedScore": 8,
-      "latestError": "Gemini TTS quota exhausted after retries for part 1: request cap 0 reached",
+      "latestError": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=1",
       "estimatedTtsCharsNeeded": null,
       "estimateNote": "calculated at repair time from the targeted sentence/paragraph; no whole-article estimate is fabricated",
       "fallbackActive": true

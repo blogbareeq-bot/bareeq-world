@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "37064316611",
-  "sourceArtifact": "bareeq-targeted-recovery-37064316611",
-  "generatedAt": "2026-10-02T21:05:24.114Z",
+  "sourceRunId": "37065102882",
+  "sourceArtifact": "bareeq-targeted-recovery-37065102882",
+  "generatedAt": "2026-10-02T21:13:22.009Z",
   "publicationComplete": false,
   "publishedCount": 7,
   "fallbackCount": 8,
@@ -170,7 +170,7 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -181,7 +181,7 @@
       "repairedParts": [
         1
       ],
-      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 0 reached"
+      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=1"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
