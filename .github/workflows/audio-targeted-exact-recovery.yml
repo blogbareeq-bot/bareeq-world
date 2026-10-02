@@ -1,0 +1,268 @@
+name: Bareeq targeted exact recovery
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-targeted-exact-recovery.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-targeted-exact-recovery.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: bareeq-daily-progressive-audio
+  cancel-in-progress: false
+
+env:
+  BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
+  BAREEQ_BOOTSTRAP_RUN_ID: '33962242086'
+  BAREEQ_BOOTSTRAP_ARTIFACT: bareeq-progressive-validation-33962242086
+  BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
+  BAREEQ_STATUS_FILE: docs/audio/PROGRESSIVE-STATUS.json
+  BAREEQ_TARGET_ARTICLE: 'كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه'
+  BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+
+jobs:
+  offline-gates:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Verify targeted recovery dependencies without provider calls
+        run: |
+          set -euo pipefail
+          node scripts/test-audio-daily-progressive.mjs
+          node scripts/test-audio-dual-asr-adjudicate.mjs
+          node scripts/test-audio-segment-repair.mjs
+          node scripts/test-audio-engine-strategy-guard.mjs
+          node --check scripts/audio-progressive-repair.mjs
+          node --check scripts/audio-openrouter-campaign.mjs
+          node --check scripts/audio-repair-session-report.mjs
+          echo 'TARGETED_RECOVERY_OFFLINE=PASS requests=0 publication=false'
+
+  targeted-recovery:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout current production branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - name: Offline safety gates
+        run: |
+          set -euo pipefail
+          node scripts/test-audio-daily-progressive.mjs
+          node scripts/test-audio-dual-asr-adjudicate.mjs
+          node scripts/test-audio-segment-repair.mjs
+          node scripts/test-audio-engine-strategy-guard.mjs
+          node --check scripts/audio-progressive-repair.mjs
+          node --check scripts/audio-openrouter-campaign.mjs
+          node --check scripts/audio-repair-session-report.mjs
+
+      - name: Verify Gemini credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          test -n "${GEMINI_API_KEY}"
+          echo 'GEMINI_CREDENTIAL=present'
+
+      - name: Restore newest durable checkpoint
+        id: checkpoint
+        uses: actions/cache/restore@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-progressive-v3-targeted-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            bareeq-audio-progressive-v3-
+
+      - name: Bootstrap preserved checkpoint only if cache is absent
+        if: steps.checkpoint.outputs.cache-matched-key == ''
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.BAREEQ_BOOTSTRAP_ARTIFACT }}
+          path: .
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.BAREEQ_BOOTSTRAP_RUN_ID }}
+
+      - name: Verify checkpoint and freeze the seven exact baselines
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const campaign = process.env.BAREEQ_AUDIO_CAMPAIGN_ID;
+          const p = path.join('audio-candidates','_campaigns',campaign,'state.json');
+          const s = JSON.parse(fs.readFileSync(p,'utf8'));
+          const rows = Object.entries(s.articles || {});
+          if (s.generationComplete !== true || rows.length !== 15 || rows.some(([,x]) => x.generation?.status !== 'generated')) {
+            throw new Error('targeted recovery requires a generation-complete 15/15 checkpoint');
+          }
+          const exact = rows.filter(([,x]) => x.validation?.status === 'validated'
+            && x.validation?.fingerprint === x.generation?.fingerprint
+            && ['substitutions','deletions','insertions','unresolved'].every((k) => Number(x.validation?.consensus?.[k]) === 0));
+          if (exact.length < 7) throw new Error(`checkpoint regressed below seven exact articles: ${exact.length}`);
+          const frozen = Object.fromEntries(exact.map(([id,x]) => [id, {
+            fingerprint: x.generation.fingerprint,
+            fullSha256: x.validation.fullSha256 || null,
+          }]));
+          fs.writeFileSync('/tmp/bareeq-exact-baseline.json', JSON.stringify(frozen, null, 2));
+          console.log(`TARGETED_RECOVERY_CHECKPOINT=PASS exact_before=${exact.length}/15 target=${process.env.BAREEQ_TARGET_ARTICLE}`);
+          NODE
+
+      - name: Run up to three isolated stochastic trials on the nearest exact candidate
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_REPAIR_MAX_REQUESTS: '1'
+          BAREEQ_REPAIR_MAX_429_RETRIES: '2'
+          BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '1'
+          BAREEQ_REPAIR_MAX_TRIALS_PER_PART: '1'
+        run: |
+          set -euo pipefail
+          : > "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+          for attempt in 1 2 3; do
+            echo "TARGETED_RECOVERY_ATTEMPT=${attempt}/3" | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+            node scripts/audio-progressive-repair.mjs --max-articles=1 "--only=${BAREEQ_TARGET_ARTICLE}" \
+              | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+            STATUS=$(node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const p = path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json');
+          const s = JSON.parse(fs.readFileSync(p,'utf8'));
+          const x = s.articles?.[process.env.BAREEQ_TARGET_ARTICLE] || {};
+          const c = x.validation?.consensus || {};
+          const exact = x.validation?.status === 'validated'
+            && x.validation?.fingerprint === x.generation?.fingerprint
+            && ['substitutions','deletions','insertions','unresolved'].every((k) => Number(c[k]) === 0);
+          process.stdout.write(exact ? 'exact' : String(x.validation?.status || 'unknown'));
+          NODE
+            )
+            echo "TARGETED_RECOVERY_RESULT attempt=${attempt} status=${STATUS}" | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+            if [ "${STATUS}" = exact ]; then
+              echo 'TARGETED_RECOVERY_EXACT=PASS' | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+              break
+            fi
+            if [ "${STATUS}" = paused-quota ]; then
+              echo 'TARGETED_RECOVERY_QUOTA=PAUSED' | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+              break
+            fi
+            if [ "${attempt}" -lt 3 ]; then sleep 15; fi
+          done
+
+      - name: Prove all previously exact articles are byte-bound and unchanged
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const before = JSON.parse(fs.readFileSync('/tmp/bareeq-exact-baseline.json','utf8'));
+          const p = path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json');
+          const s = JSON.parse(fs.readFileSync(p,'utf8'));
+          for (const [id,b] of Object.entries(before)) {
+            const x = s.articles?.[id];
+            const c = x?.validation?.consensus || {};
+            const exact = x?.validation?.status === 'validated'
+              && x?.validation?.fingerprint === b.fingerprint
+              && x?.generation?.fingerprint === b.fingerprint
+              && (x?.validation?.fullSha256 || null) === b.fullSha256
+              && ['substitutions','deletions','insertions','unresolved'].every((k) => Number(c[k]) === 0);
+            if (!exact) throw new Error(`immutable exact baseline changed: ${id}`);
+          }
+          console.log(`TARGETED_RECOVERY_IMMUTABILITY=PASS frozen=${Object.keys(before).length}`);
+          NODE
+
+      - name: Publish every newly exact article
+        run: |
+          set -euo pipefail
+          node scripts/audio-rebind-validated-metadata.mjs
+          EXACT=$(node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const s = JSON.parse(fs.readFileSync(path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json'),'utf8'));
+          const exact = Object.values(s.articles || {}).filter((x) => x.validation?.status === 'validated'
+            && x.validation?.fingerprint === x.generation?.fingerprint
+            && ['substitutions','deletions','insertions','unresolved'].every((k) => Number(x.validation?.consensus?.[k]) === 0));
+          process.stdout.write(String(exact.length));
+          NODE
+          )
+          if [ "${EXACT}" -eq 15 ]; then
+            node scripts/audio-openrouter-campaign.mjs --mode=publish
+          else
+            node scripts/audio-openrouter-campaign.mjs --mode=publish-current
+          fi
+          echo "TARGETED_RECOVERY_PUBLICATION_GATE=PASS exact=${EXACT}/15"
+
+      - name: Write durable status and strategy evidence
+        env:
+          BAREEQ_SOURCE_RUN_ID: ${{ github.run_id }}
+          BAREEQ_SOURCE_ARTIFACT: bareeq-targeted-recovery-${{ github.run_id }}
+        run: |
+          node scripts/audio-progressive-status.mjs
+          node scripts/audio-engine-strategy-guard.mjs --record "--log=$RUNNER_TEMP/bareeq-targeted-recovery.log"
+          node scripts/audio-repair-session-report.mjs
+
+      - name: Save newest checkpoint
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: audio-candidates
+          key: bareeq-audio-progressive-v3-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Upload targeted recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-targeted-recovery-${{ github.run_id }}
+          path: |
+            audio-candidates/
+            docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
+            docs/audio/PROGRESSIVE-STATUS.json
+            docs/audio/PHASE-0-READINESS.md
+            docs/audio/PHASE-1-CLASSIFICATION.json
+            docs/audio/REPAIR-LOG.json
+            docs/audio/REPAIR-SESSION-LATEST.md
+            docs/audio/ENGINE-STRATEGY-STATE.json
+            docs/audio/FINAL-COMPLETION-REPORT.md
+            public/audio/manifest.json
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Commit and publish verified progress
+        run: |
+          set -euo pipefail
+          COUNT=$(node -p "JSON.parse(require('fs').readFileSync('docs/audio/PROGRESSIVE-STATUS.json','utf8')).exactCount")
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f public/audio
+          git add docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json docs/audio/PROGRESSIVE-STATUS.json docs/audio/ENGINE-STRATEGY-STATE.json
+          git add docs/audio/PHASE-0-READINESS.md docs/audio/PHASE-1-CLASSIFICATION.json docs/audio/REPAIR-LOG.json docs/audio/REPAIR-SESSION-LATEST.md
+          test ! -f docs/audio/FINAL-COMPLETION-REPORT.md || git add docs/audio/FINAL-COMPLETION-REPORT.md
+          if git diff --cached --quiet; then
+            echo "TARGETED_RECOVERY_TREE=already-current exact=${COUNT}/15"
+            exit 0
+          fi
+          git commit -m "audio: targeted recovery publish ${COUNT}/15 exact Sadaltager articles"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          echo "TARGETED_RECOVERY_TREE=pushed exact=${COUNT}/15"
