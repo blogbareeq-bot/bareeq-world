@@ -28,7 +28,7 @@ env:
   BAREEQ_BOOTSTRAP_ARTIFACT: bareeq-progressive-validation-33962242086
   BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
   BAREEQ_STATUS_FILE: docs/audio/PROGRESSIVE-STATUS.json
-  BAREEQ_TARGET_ARTICLE: 'كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه'
+  BAREEQ_TARGET_ARTICLE: 'اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا'
   BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
 
 jobs:
@@ -113,7 +113,7 @@ jobs:
           repository: ${{ github.repository }}
           run-id: ${{ env.BAREEQ_BOOTSTRAP_RUN_ID }}
 
-      - name: Verify checkpoint and freeze the seven exact baselines
+      - name: Verify checkpoint and freeze the exact baselines
         run: |
           set -euo pipefail
           node - <<'NODE'
