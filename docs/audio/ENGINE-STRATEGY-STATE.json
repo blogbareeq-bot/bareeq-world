@@ -7,6 +7,6 @@
   "status": "paused-for-engine-review",
   "reason": "Gemini-only kill switch reached: 20/20 successful TTS requests without another exact publication",
   "lastExactAt": "2026-09-28T07:41:06.988Z",
-  "lastRunId": "36884803156",
-  "updatedAt": "2026-10-01T15:31:29.017Z"
+  "lastRunId": "37022310129",
+  "updatedAt": "2026-10-02T14:48:01.228Z"
 }
