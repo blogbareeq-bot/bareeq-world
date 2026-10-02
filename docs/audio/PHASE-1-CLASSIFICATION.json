@@ -1,7 +1,7 @@
 {
   "schema": "bareeq.audio-phase-1-classification.v1",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "generatedAt": "2026-10-02T21:13:22.086Z",
+  "generatedAt": "2026-10-02T21:23:34.746Z",
   "rule": "all pending candidates classified before repair; pending ordered by total Dual-ASR consensus errors",
   "exactGate": {
     "substitutions": 0,
@@ -78,8 +78,8 @@
       "repairInProgress": false,
       "baselineScore": 2,
       "acceptedScore": null,
-      "rejectedScore": 20,
-      "latestError": "dual-ASR consensus failed: S=10 D=10 I=0 unresolved=0",
+      "rejectedScore": 18,
+      "latestError": "dual-ASR consensus failed: S=8 D=9 I=0 unresolved=1",
       "estimatedTtsCharsNeeded": null,
       "estimateNote": "calculated at repair time from the targeted sentence/paragraph; no whole-article estimate is fabricated",
       "fallbackActive": true
@@ -101,8 +101,8 @@
       "repairInProgress": false,
       "baselineScore": 2,
       "acceptedScore": null,
-      "rejectedScore": 4,
-      "latestError": "dual-ASR consensus failed: S=2 D=0 I=0 unresolved=2",
+      "rejectedScore": 3,
+      "latestError": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=2",
       "estimatedTtsCharsNeeded": null,
       "estimateNote": "calculated at repair time from the targeted sentence/paragraph; no whole-article estimate is fabricated",
       "fallbackActive": true
@@ -112,7 +112,7 @@
       "title": "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟",
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 5,
       "deletions": 0,
       "insertions": 0,
@@ -120,12 +120,14 @@
       "totalErrors": 5,
       "exact": false,
       "publishedExact": false,
-      "repairedParts": [],
+      "repairedParts": [
+        1
+      ],
       "repairInProgress": false,
       "baselineScore": 5,
       "acceptedScore": null,
       "rejectedScore": 7,
-      "latestError": "dual-ASR consensus failed: S=6 D=0 I=0 unresolved=1",
+      "latestError": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 2h36m25s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}",
       "estimatedTtsCharsNeeded": null,
       "estimateNote": "calculated at repair time from the targeted sentence/paragraph; no whole-article estimate is fabricated",
       "fallbackActive": true

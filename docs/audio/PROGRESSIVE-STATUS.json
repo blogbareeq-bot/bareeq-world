@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "37065102882",
-  "sourceArtifact": "bareeq-targeted-recovery-37065102882",
-  "generatedAt": "2026-10-02T21:13:22.009Z",
+  "sourceRunId": "37066012523",
+  "sourceArtifact": "bareeq-adaptive-fair-share-37066012523",
+  "generatedAt": "2026-10-02T21:23:34.667Z",
   "publicationComplete": false,
   "publishedCount": 7,
   "fallbackCount": 8,
@@ -66,7 +66,7 @@
       "audioKey": "de93f3d9f91c8b8b",
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 5,
       "deletions": 0,
       "insertions": 0,
@@ -74,8 +74,10 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
-      "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=6 D=0 I=0 unresolved=1"
+      "repairedParts": [
+        1
+      ],
+      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 2h36m25s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -128,7 +130,7 @@
       "publishedExact": false,
       "fullSha256": "597168624f702c027ede0c2a719de337149f853822ef634a715c840873703dd8",
       "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=2 D=0 I=0 unresolved=2"
+      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=2"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -268,7 +270,7 @@
       "publishedExact": false,
       "fullSha256": "bf977577f07c000c92a6c1ddd4e2b04a5f30785da4e8967f19fe3c4d43e0b304",
       "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=10 D=10 I=0 unresolved=0"
+      "error": "dual-ASR consensus failed: S=8 D=9 I=0 unresolved=1"
     }
   ]
 }
