@@ -1,9 +1,9 @@
 # Audio completion — Phase 0 readiness
 
-- Generated: 2026-10-02T14:48:01.272Z
+- Generated: 2026-10-02T20:53:45.591Z
 - Campaign: `sadaltager-openrouter-20260901-v1`
 - Existing production provider: **Google Gemini API / Sadaltager**
-- Provider credential verified in this workflow: **yes**
+- Provider credential verified in this workflow: **not attested**
 - Generation checkpoint: **15/15 complete**
 - Exact publication gate: **0 substitutions / 0 deletions / 0 insertions / 0 unresolved**
 - Production safety: existing exact audio remains immutable; rejected trials restore baseline.
@@ -11,4 +11,4 @@
 
 ## Gate
 
-**PASS for the existing production campaign.**
+**BLOCKED until the production credential/checkpoint gate passes.**

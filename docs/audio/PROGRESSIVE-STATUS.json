@@ -1,9 +1,9 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "37022310129",
-  "sourceArtifact": "bareeq-progressive-validation-37022310129",
-  "generatedAt": "2026-10-02T14:48:01.193Z",
+  "sourceRunId": "37063271777",
+  "sourceArtifact": "bareeq-targeted-recovery-37063271777",
+  "generatedAt": "2026-10-02T20:53:45.505Z",
   "publicationComplete": false,
   "publishedCount": 7,
   "fallbackCount": 8,
@@ -223,7 +223,7 @@
       "audioKey": "4d194dd1e6a739a8",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -234,7 +234,7 @@
       "repairedParts": [
         2
       ],
-      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=4"
+      "error": "ASR quota exhausted for gemini-3.5-transcribe"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",

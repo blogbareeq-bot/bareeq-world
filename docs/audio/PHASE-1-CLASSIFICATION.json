@@ -1,7 +1,7 @@
 {
   "schema": "bareeq.audio-phase-1-classification.v1",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "generatedAt": "2026-10-02T14:48:01.272Z",
+  "generatedAt": "2026-10-02T20:53:45.591Z",
   "rule": "all pending candidates classified before repair; pending ordered by total Dual-ASR consensus errors",
   "exactGate": {
     "substitutions": 0,
@@ -41,7 +41,7 @@
       "title": "كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -55,8 +55,8 @@
       "repairInProgress": false,
       "baselineScore": 1,
       "acceptedScore": 1,
-      "rejectedScore": 5,
-      "latestError": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=4",
+      "rejectedScore": 0,
+      "latestError": "ASR quota exhausted for gemini-3.5-transcribe",
       "estimatedTtsCharsNeeded": null,
       "estimateNote": "calculated at repair time from the targeted sentence/paragraph; no whole-article estimate is fabricated",
       "fallbackActive": true
