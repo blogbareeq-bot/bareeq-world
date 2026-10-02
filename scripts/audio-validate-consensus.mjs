@@ -1,10 +1,12 @@
 import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import {
+  ASR_MODEL_TRANSPORT,
   EXIT_HARD,
   EXIT_OK,
   EXIT_QUOTA,
   EXIT_USAGE,
+  FORBIDDEN_ASR_MODELS,
   INDEPENDENT_ASR_MODELS,
   candidateDir,
   sha256,
@@ -14,10 +16,18 @@ import { loadSpokenArticle } from './audio-split.mjs';
 import { uploadAudioFile, transcribeFullAudio } from './audio-asr-transcribe.mjs';
 import { deleteUploadedFile, emptyHttp } from './audio-files-api.mjs';
 import { adjudicateCandidate } from './audio-dual-asr-adjudicate.mjs';
-import { writeJson } from './audio-checkpoint.mjs';
+import { pathExists, writeJson } from './audio-checkpoint.mjs';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const TRANSIENT_HTTP = new Set([500, 502, 503, 504]);
+const FALLBACK_HTTP = new Set([404, 429, 500, 502, 503, 504]);
+// These remain diagnostics/resume transports until a primary ASR model is
+// genuinely unavailable. They are still independent model identifiers and
+// must pass the same exact 0/0/0/0 dual-model adjudication gate.
+export const ASR_FALLBACK_MODELS = Object.freeze([
+  'gemini-3.5-flash',
+  'gemini-3.6-flash',
+]);
 // Gemini transcription can return temporary 500 high-demand responses. Keep
 // retries bounded, but span several minutes so a healthy campaign is not
 // discarded during a short provider spike.
@@ -28,6 +38,30 @@ export function isTransientAsrFailure(error) {
   return TRANSIENT_HTTP.has(status);
 }
 
+export function isFallbackEligibleAsrFailure(error) {
+  const status = Number(error?.httpStatus || error?.result?.httpStatus || 0);
+  return FALLBACK_HTTP.has(status) || error?.exitCode === EXIT_QUOTA;
+}
+
+function supportedIndependentModel(model) {
+  return Boolean(model
+    && ASR_MODEL_TRANSPORT[model]
+    && !FORBIDDEN_ASR_MODELS.includes(model));
+}
+
+export function asrModelCandidates(primaryModel, alreadySelected = []) {
+  const selected = new Set(alreadySelected);
+  return [primaryModel, ...ASR_FALLBACK_MODELS]
+    .filter((model, index, values) => values.indexOf(model) === index)
+    .filter((model) => supportedIndependentModel(model) && !selected.has(model));
+}
+
+function storedAdjudicationModels(value) {
+  const models = Array.isArray(value?.models) ? value.models.filter(supportedIndependentModel) : [];
+  if (models.length !== 2 || new Set(models).size !== 2) return null;
+  return models;
+}
+
 function usableRawReport(report) {
   return report?.httpStatus === 200
     && typeof report?.transcript === 'string'
@@ -36,6 +70,88 @@ function usableRawReport(report) {
     && Number.isFinite(Number(report?.substitutions))
     && Number.isFinite(Number(report?.deletions))
     && Number.isFinite(Number(report?.insertions));
+}
+
+async function offlineReuseModels({ articleId, fingerprint, root, storeRoot }) {
+  const dir = candidateDir(articleId, fingerprint, storeRoot || root);
+  const adjudicationPath = path.join(dir, 'reports', 'asr-adjudication.json');
+  if (!await pathExists(adjudicationPath)) return INDEPENDENT_ASR_MODELS;
+  try {
+    const stored = JSON.parse(await readFile(adjudicationPath, 'utf8'));
+    return storedAdjudicationModels(stored) || INDEPENDENT_ASR_MODELS;
+  } catch {
+    return INDEPENDENT_ASR_MODELS;
+  }
+}
+
+async function transcribeWithBoundedRetries({
+  model,
+  article,
+  audioPath,
+  apiKey,
+  fetchImpl,
+  reportsDir,
+  fingerprint,
+  fullSha256,
+  uploaded,
+  retryDelaysMs,
+  retryLog,
+}) {
+  let finalReport = null;
+  let terminalError = null;
+  const maxAttempts = retryDelaysMs.length + 1;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      finalReport = await transcribeFullAudio({
+        model,
+        audioPath,
+        expectedText: article.spokenText,
+        apiKey,
+        fetchImpl,
+        outputPath: path.join(reportsDir, `asr-${model}.json`),
+        fingerprint,
+        fullSha256,
+        file: uploaded,
+        skipUpload: true,
+        article,
+        speechScriptHash: article.speechScriptHash,
+      });
+      retryLog.push({ model, attempt, outcome: 'http-200', exactMatch: finalReport.status === 'passed' });
+      return { report: finalReport, error: null };
+    } catch (error) {
+      const report = error.result || null;
+      if (usableRawReport(report)) {
+        // Exact mismatch is evidence for consensus, not a transport failure.
+        finalReport = report;
+        retryLog.push({
+          model,
+          attempt,
+          outcome: 'http-200-exact-mismatch',
+          substitutions: report.substitutions,
+          deletions: report.deletions,
+          insertions: report.insertions,
+        });
+        return { report: finalReport, error: null };
+      }
+      const status = Number(error?.httpStatus || report?.httpStatus || 0);
+      const transient = isTransientAsrFailure(error);
+      retryLog.push({
+        model,
+        attempt,
+        outcome: transient ? 'transient-error' : 'terminal-error',
+        httpStatus: status || null,
+        message: String(error.message || '').slice(0, 300),
+      });
+      if (transient && attempt < maxAttempts) {
+        await sleep(retryDelaysMs[attempt - 1]);
+        continue;
+      }
+      terminalError = error;
+      finalReport = report;
+      break;
+    }
+  }
+  return { report: finalReport, error: terminalError };
 }
 
 export async function validateWithConsensus({
@@ -52,15 +168,12 @@ export async function validateWithConsensus({
   }
 
   // Re-adjudicate already-bound raw reports before any network/provider call.
-  // This path is critical when only the deterministic adjudication policy
-  // changes. adjudicateCandidate verifies model IDs, fingerprint and full.mp3
-  // SHA-256 before it can reuse the reports. A genuine mismatch is returned to
-  // the caller as current evidence; missing/stale raw evidence falls through to
-  // a fresh provider validation below. After a TTS repair the old reports no
-  // longer match fullSha256, so they cannot be reused accidentally.
+  // If a previous quota fallback produced the bound evidence, reuse that exact
+  // recorded model pair instead of forcing the default pair and spending ASR.
   try {
-    const stored = await adjudicateCandidate({ articleId, fingerprint, root, storeRoot });
-    console.log(`ASR_OFFLINE_REUSE_PASS article=${articleId} fingerprint=${fingerprint}`);
+    const models = await offlineReuseModels({ articleId, fingerprint, root, storeRoot });
+    const stored = await adjudicateCandidate({ articleId, fingerprint, root, storeRoot, models });
+    console.log(`ASR_OFFLINE_REUSE_PASS article=${articleId} fingerprint=${fingerprint} models=${models.join(',')}`);
     return {
       status: 'validated',
       articleId,
@@ -69,6 +182,7 @@ export async function validateWithConsensus({
       consensus: stored.consensus,
       representationOnly: stored.representationOnly.length,
       modelDisagreements: stored.modelDisagreements.length,
+      models,
       retryAttempts: [],
       reusedRawAsr: true,
       exitCode: EXIT_OK,
@@ -110,6 +224,7 @@ export async function validateWithConsensus({
   let uploaded = null;
   const retryLog = [];
   const finalReports = [];
+  const selectedModels = [];
   let deletion = null;
   try {
     uploaded = await uploadAudioFile({ apiKey, bytes, displayName: `bareeq-${articleId}-${fingerprint.slice(0, 12)}.mp3`, fetchImpl });
@@ -127,80 +242,67 @@ export async function validateWithConsensus({
       generatedAt: new Date().toISOString(),
     });
 
-    for (const model of INDEPENDENT_ASR_MODELS) {
-      let finalReport = null;
-      let terminalError = null;
-      const maxAttempts = retryDelaysMs.length + 1;
-      for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-        try {
-          finalReport = await transcribeFullAudio({
-            model,
-            audioPath,
-            expectedText: article.spokenText,
-            apiKey,
-            fetchImpl,
-            outputPath: path.join(reportsDir, `asr-${model}.json`),
-            fingerprint,
-            fullSha256,
-            file: uploaded,
-            skipUpload: true,
-            article,
-            speechScriptHash: article.speechScriptHash,
-          });
-          retryLog.push({ model, attempt, outcome: 'http-200', exactMatch: finalReport.status === 'passed' });
-          terminalError = null;
-          break;
-        } catch (error) {
-          const report = error.result || null;
-          if (usableRawReport(report)) {
-            // Exact mismatch is evidence for consensus, not a transport failure.
-            finalReport = report;
+    for (const primaryModel of INDEPENDENT_ASR_MODELS) {
+      let acceptedReport = null;
+      let lastError = null;
+      const candidates = asrModelCandidates(primaryModel, selectedModels);
+      for (const model of candidates) {
+        const { report, error } = await transcribeWithBoundedRetries({
+          model,
+          article,
+          audioPath,
+          apiKey,
+          fetchImpl,
+          reportsDir,
+          fingerprint,
+          fullSha256,
+          uploaded,
+          retryDelaysMs,
+          retryLog,
+        });
+        if (usableRawReport(report)) {
+          acceptedReport = report;
+          selectedModels.push(model);
+          if (model !== primaryModel) {
             retryLog.push({
               model,
-              attempt,
-              outcome: 'http-200-exact-mismatch',
-              substitutions: report.substitutions,
-              deletions: report.deletions,
-              insertions: report.insertions,
+              primaryModel,
+              outcome: 'quota-fallback-selected',
+              selectedPair: [...selectedModels],
             });
-            terminalError = null;
-            break;
+            console.log(`ASR_MODEL_FALLBACK primary=${primaryModel} selected=${model} article=${articleId}`);
           }
-          const status = Number(error?.httpStatus || report?.httpStatus || 0);
-          const transient = isTransientAsrFailure(error);
-          retryLog.push({
-            model,
-            attempt,
-            outcome: transient ? 'transient-error' : 'terminal-error',
-            httpStatus: status || null,
-            message: String(error.message || '').slice(0, 300),
-          });
-          if (transient && attempt < maxAttempts) {
-            await sleep(retryDelaysMs[attempt - 1]);
-            continue;
-          }
-          terminalError = error;
-          finalReport = report;
           break;
         }
+        lastError = error;
+        if (!isFallbackEligibleAsrFailure(error)) break;
+        retryLog.push({
+          model,
+          primaryModel,
+          outcome: 'fallback-next-model',
+          httpStatus: Number(error?.httpStatus || error?.result?.httpStatus || 0) || null,
+          message: String(error?.message || '').slice(0, 300),
+        });
       }
-      if (!usableRawReport(finalReport)) {
+
+      if (!usableRawReport(acceptedReport)) {
         await writeJson(path.join(reportsDir, 'asr-retry-log.json'), {
-          schema: 'bareeq.audio-asr-retry.v1',
+          schema: 'bareeq.audio-asr-retry.v2',
           status: 'failed',
           fingerprint,
           candidateFingerprint: fingerprint,
           fullSha256,
+          selectedModels,
           attempts: retryLog,
           generatedAt: new Date().toISOString(),
         });
-        if (terminalError?.exitCode === EXIT_QUOTA || terminalError?.httpStatus === 429) throw terminalError;
-        throw Object.assign(new Error(`independent ASR ${model} unavailable after bounded transient retries`), {
+        if (lastError?.exitCode === EXIT_QUOTA || lastError?.httpStatus === 429) throw lastError;
+        throw Object.assign(new Error(`independent ASR ${primaryModel} and bounded fallback models unavailable`), {
           exitCode: EXIT_HARD,
-          cause: terminalError,
+          cause: lastError,
         });
       }
-      finalReports.push(finalReport);
+      finalReports.push(acceptedReport);
     }
   } finally {
     if (uploaded?.name) {
@@ -227,12 +329,16 @@ export async function validateWithConsensus({
     }
   }
 
+  if (selectedModels.length !== 2 || new Set(selectedModels).size !== 2) {
+    throw Object.assign(new Error(`dual-ASR requires two distinct successful models; selected=${selectedModels.join(',') || 'none'}`), { exitCode: EXIT_HARD });
+  }
   await writeJson(path.join(reportsDir, 'asr-retry-log.json'), {
-    schema: 'bareeq.audio-asr-retry.v1',
+    schema: 'bareeq.audio-asr-retry.v2',
     status: 'completed',
     fingerprint,
     candidateFingerprint: fingerprint,
     fullSha256,
+    selectedModels,
     attempts: retryLog,
     generatedAt: new Date().toISOString(),
   });
@@ -240,7 +346,7 @@ export async function validateWithConsensus({
     throw Object.assign(new Error('Files API cleanup failed; validation evidence is not closed'), { exitCode: EXIT_HARD });
   }
 
-  const adjudication = await adjudicateCandidate({ articleId, fingerprint, root, storeRoot });
+  const adjudication = await adjudicateCandidate({ articleId, fingerprint, root, storeRoot, models: selectedModels });
   return {
     status: 'validated',
     articleId,
@@ -249,6 +355,7 @@ export async function validateWithConsensus({
     consensus: adjudication.consensus,
     representationOnly: adjudication.representationOnly.length,
     modelDisagreements: adjudication.modelDisagreements.length,
+    models: selectedModels,
     retryAttempts: retryLog,
     reusedRawAsr: false,
     exitCode: EXIT_OK,
