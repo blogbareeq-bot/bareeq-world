@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { parseGeminiQuotaDetail } from './audio-gemini-tts.mjs';
 import {
   REVIEW_RECOVERY_ALLOWANCE,
   parseSuccessfulTts,
@@ -16,6 +17,15 @@ const seeded = {
 assert.equal(remainingAllowance(seeded, 7), 7);
 assert.equal(parseSuccessfulTts('PROGRESSIVE_REPAIR_SUMMARY exact=7/15 attemptedRounds=7 visited=7 tts={"sent":7,"successful":6,"quotaRejected":1,"maxRequests":10,"dailyQuotaExhausted":true,"budgetExhausted":false}'), 6);
 assert.equal(parseSuccessfulTts('unrelated log'), 0);
+
+const plainDaily429 = parseGeminiQuotaDetail(JSON.stringify({
+  error: {
+    message: 'Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 2h36m25s or upgrade your tier.',
+  },
+}));
+assert.equal(plainDaily429.daily, true);
+assert.equal(plainDaily429.retryDelay, '2h36m25s');
+assert.equal(plainDaily429.retryDelayMs, 9385000);
 
 const capped = recordRun(seeded, { currentExact: 7, successfulTts: 7, runId: 'next' });
 assert.equal(capped.successfulTtsSinceLastNewExact, 20);
@@ -65,4 +75,4 @@ assert.equal(reconciled.exactBaseline, 8);
 assert.equal(reconciled.successfulTtsSinceLastNewExact, 0);
 assert.equal(reconciled.status, 'active');
 
-console.log('Engine strategy guard tests passed: normal allowance is preserved; 20/20 grants one bounded boundary recovery; the explicit live 25->28 review window is exactly three calls; no-exact exhaustion closes it; quota-only blocks preserve it; and any new exact publication retires the temporary threshold back to 20.');
+console.log('Engine strategy guard tests passed: plain-text Gemini daily limits are parsed; normal allowance is preserved; 20/20 grants one bounded boundary recovery; the explicit live 25->28 review window is exactly three calls; no-exact exhaustion closes it; quota-only blocks preserve it; and any new exact publication retires the temporary threshold back to 20.');
