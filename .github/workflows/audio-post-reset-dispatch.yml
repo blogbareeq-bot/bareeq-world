@@ -2,15 +2,14 @@ name: Bareeq post-reset audio dispatcher
 
 on:
   schedule:
-    # Live Gemini 429 evidence on 2026-10-03 reported roughly 20h25m until
-    # reset at 03:34 UTC, placing the free-tier RPD reset near 00:00 UTC.
-    # Run shortly after midnight UTC instead of the obsolete Pacific-reset
-    # assumption used by the older coordinator schedule.
-    - cron: '10 0 * * *'
-    # Backup shortly after the same reset. It may dispatch again only while
-    # the reviewed recovery window still has unused successful TTS calls and
-    # no new exact article.
-    - cron: '45 0 * * *'
+    # Live Gemini 429 evidence on 2026-10-03 placed the Free Tier RPD reset
+    # essentially at 00:00 UTC. Start as close to the observed reset as is
+    # practical while leaving a one-minute safety margin for the provider.
+    - cron: '1 0 * * *'
+    # Fast backup in case GitHub delays or drops the first scheduled event.
+    # The state gate below prevents duplicate spending once the recovery
+    # window is exhausted or a new exact article is produced.
+    - cron: '11 0 * * *'
   workflow_dispatch:
   pull_request:
     branches: [main]
@@ -54,7 +53,7 @@ jobs:
           process.stdout.write(`should-dispatch=${shouldDispatch}\n`);
           console.error(`POST_RESET_GATE exact=${exact} baseline=${recoveryBaselineExact} successful=${successful} threshold=${threshold} targetReached=${targetReached} recoveryExhausted=${recoveryExhausted}`);
           NODE
-      - name: Dispatch progressive repair after quota reset
+      - name: Dispatch progressive repair immediately after quota reset
         if: steps.gate.outputs.should-dispatch == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
