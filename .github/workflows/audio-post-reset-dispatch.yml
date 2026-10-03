@@ -2,13 +2,15 @@ name: Bareeq post-reset audio dispatcher
 
 on:
   schedule:
-    # Deliberately after the existing 08:20 UTC primary. This dispatcher is a
-    # recovery path for days when an earlier push/manual run wrote status and
-    # caused the legacy schedule gate to treat the day as already processed.
-    - cron: '25 8 * * *'
-    # Off-peak backup. It may dispatch again only while the reviewed recovery
-    # window still has unused successful TTS calls and no new exact article.
-    - cron: '52 10 * * *'
+    # Live Gemini 429 evidence on 2026-10-03 reported roughly 20h25m until
+    # reset at 03:34 UTC, placing the free-tier RPD reset near 00:00 UTC.
+    # Run shortly after midnight UTC instead of the obsolete Pacific-reset
+    # assumption used by the older coordinator schedule.
+    - cron: '10 0 * * *'
+    # Backup shortly after the same reset. It may dispatch again only while
+    # the reviewed recovery window still has unused successful TTS calls and
+    # no new exact article.
+    - cron: '45 0 * * *'
   workflow_dispatch:
   pull_request:
     branches: [main]
