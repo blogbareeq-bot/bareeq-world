@@ -100,14 +100,12 @@ export function remainingAllowance(raw, currentExact) {
   const normalRemaining = Math.max(0, state.threshold - state.successfulTtsSinceLastNewExact);
   if (normalRemaining > 0) return normalRemaining;
 
-  // Engine-review recovery window: the kill switch is still authoritative,
-  // but when it has *just* reached the threshold allow one tightly bounded
-  // three-request recovery window. If those provider calls succeed without a
-  // new exact publication, recordRun moves the counter above the threshold and
-  // this allowance becomes permanently zero. If quota blocks every call, the
-  // counter remains at the threshold so a later run can retry without wasting
-  // successful requests.
-  const exactlyAtReviewBoundary = state.status === 'paused-for-engine-review'
+  // Only the canonical 20-request boundary may open the legacy three-request
+  // review window. A separately reviewed temporary threshold (for example
+  // 25->28) must close when it reaches that temporary threshold; otherwise
+  // every equality point would recursively mint another three requests.
+  const exactlyAtReviewBoundary = state.threshold === DEFAULT_THRESHOLD
+    && state.status === 'paused-for-engine-review'
     && state.successfulTtsSinceLastNewExact === state.threshold
     && Number(currentExact) === state.exactBaseline;
   return exactlyAtReviewBoundary ? REVIEW_RECOVERY_ALLOWANCE : 0;
