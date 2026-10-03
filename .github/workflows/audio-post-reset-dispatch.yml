@@ -7,8 +7,8 @@ on:
     # practical while leaving a one-minute safety margin for the provider.
     - cron: '1 0 * * *'
     # Fast backup in case GitHub delays or drops the first scheduled event.
-    # The state gate below prevents duplicate spending once the recovery
-    # window is exhausted or a new exact article is produced.
+    # The state gate below prevents duplicate spending once the strategy
+    # allowance is exhausted or publication is complete.
     - cron: '11 0 * * *'
   workflow_dispatch:
   pull_request:
@@ -43,25 +43,36 @@ jobs:
           const strategyFile = 'docs/audio/ENGINE-STRATEGY-STATE.json';
           const status = fs.existsSync(statusFile) ? JSON.parse(fs.readFileSync(statusFile, 'utf8')) : {};
           const strategy = fs.existsSync(strategyFile) ? JSON.parse(fs.readFileSync(strategyFile, 'utf8')) : {};
-          const recoveryBaselineExact = 7;
           const exact = Number(status.exactCount) || 0;
           const successful = Number(strategy.successfulTtsSinceLastNewExact) || 0;
           const threshold = Number(strategy.threshold) || 0;
-          const targetReached = exact > recoveryBaselineExact;
+          const publicationComplete = status.publicationComplete === true || exact >= 15;
           const recoveryExhausted = threshold > 0 && successful >= threshold;
-          const shouldDispatch = !targetReached && !recoveryExhausted;
+          const preferredId = 'كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه';
+          const preferred = Array.isArray(status.rows)
+            ? status.rows.find((row) => row.articleId === preferredId)
+            : null;
+          // At the current 7/15 checkpoint, spend the first post-reset request
+          // on the one-error, short-segment candidate instead of the wider
+          // fitness paragraph that already regressed in live testing.
+          const targetArticle = exact === 7 && preferred && preferred.exact !== true ? preferredId : '';
+          const shouldDispatch = !publicationComplete && !recoveryExhausted;
           process.stdout.write(`should-dispatch=${shouldDispatch}\n`);
-          console.error(`POST_RESET_GATE exact=${exact} baseline=${recoveryBaselineExact} successful=${successful} threshold=${threshold} targetReached=${targetReached} recoveryExhausted=${recoveryExhausted}`);
+          process.stdout.write(`target-article=${targetArticle}\n`);
+          console.error(`POST_RESET_GATE exact=${exact} successful=${successful} threshold=${threshold} complete=${publicationComplete} recoveryExhausted=${recoveryExhausted} target=${targetArticle || 'auto'}`);
           NODE
       - name: Dispatch progressive repair immediately after quota reset
         if: steps.gate.outputs.should-dispatch == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          TARGET_ARTICLE: ${{ steps.gate.outputs.target-article }}
         run: |
+          jq -n --arg ref main --arg target "${TARGET_ARTICLE}" \
+            '{ref:$ref, inputs:{only_article:$target}}' > "$RUNNER_TEMP/audio-dispatch.json"
           gh api --method POST \
             "repos/${{ github.repository }}/actions/workflows/audio-partial-publish.yml/dispatches" \
-            -f ref=main
-          echo 'POST_RESET_AUDIO_DISPATCH=sent'
+            --input "$RUNNER_TEMP/audio-dispatch.json"
+          echo "POST_RESET_AUDIO_DISPATCH=sent target=${TARGET_ARTICLE:-auto}"
       - name: Skip exhausted or completed recovery
         if: steps.gate.outputs.should-dispatch != 'true'
         run: echo 'POST_RESET_AUDIO_DISPATCH=skipped-no-recovery-needed'
