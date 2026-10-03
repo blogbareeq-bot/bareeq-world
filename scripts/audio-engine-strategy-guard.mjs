@@ -48,11 +48,16 @@ export function normalizeStrategyState(raw = {}, exactCount = 0) {
   };
 }
 
+function resetReviewedThresholdAfterNewExact(state) {
+  if (state.threshold !== DEFAULT_THRESHOLD) state.threshold = DEFAULT_THRESHOLD;
+}
+
 export function reconcileBeforeRun(raw, currentExact, generatedAt = null) {
   const state = normalizeStrategyState(raw, currentExact);
   if (Number(currentExact) > state.exactBaseline) {
     state.exactBaseline = Number(currentExact);
     state.successfulTtsSinceLastNewExact = 0;
+    resetReviewedThresholdAfterNewExact(state);
     state.status = 'active';
     state.reason = 'new-exact-publication-reset';
     state.lastExactAt = generatedAt || new Date().toISOString();
@@ -70,10 +75,11 @@ export function recordRun(raw, { currentExact, successfulTts = 0, runId = null, 
   const success = Math.max(0, Number(successfulTts) || 0);
   if (Number(currentExact) > state.exactBaseline) {
     // Count the current run's successful requests conservatively after the new
-    // exact milestone. This avoids silently giving Gemini more than the agreed
-    // 20-request window when the exact article was found during preclassification.
+    // exact milestone. Any temporary engine-review threshold extension is
+    // automatically retired as soon as it produces a new exact article.
     state.exactBaseline = Number(currentExact);
     state.successfulTtsSinceLastNewExact = success;
+    resetReviewedThresholdAfterNewExact(state);
     state.lastExactAt = generatedAt || new Date().toISOString();
     state.reason = 'new-exact-publication-reset-with-current-run-requests-counted';
   } else {
@@ -94,15 +100,12 @@ export function remainingAllowance(raw, currentExact) {
   const normalRemaining = Math.max(0, state.threshold - state.successfulTtsSinceLastNewExact);
   if (normalRemaining > 0) return normalRemaining;
 
-  // Engine-review recovery window: the kill switch is still authoritative,
-  // but when it has *just* reached the threshold allow one tightly bounded
-  // three-request recovery window. If those provider calls succeed without a
-  // new exact publication, recordRun moves the counter above the threshold and
-  // this allowance becomes permanently zero. If quota blocks every call, the
-  // counter remains at the threshold so a later run can retry without wasting
-  // successful requests. This avoids both an infinite daily loop and a hard
-  // deadlock at 7/15.
-  const exactlyAtReviewBoundary = state.status === 'paused-for-engine-review'
+  // Only the canonical 20-request boundary may open the legacy three-request
+  // review window. A separately reviewed temporary threshold (for example
+  // 25->28) must close when it reaches that temporary threshold; otherwise
+  // every equality point would recursively mint another three requests.
+  const exactlyAtReviewBoundary = state.threshold === DEFAULT_THRESHOLD
+    && state.status === 'paused-for-engine-review'
     && state.successfulTtsSinceLastNewExact === state.threshold
     && Number(currentExact) === state.exactBaseline;
   return exactlyAtReviewBoundary ? REVIEW_RECOVERY_ALLOWANCE : 0;

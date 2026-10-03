@@ -1,11 +1,11 @@
 {
   "schema": "bareeq.audio-engine-strategy.v1",
   "provider": "Gemini / Sadaltager",
-  "threshold": 20,
+  "threshold": 28,
   "exactBaseline": 7,
   "successfulTtsSinceLastNewExact": 25,
-  "status": "paused-for-engine-review",
-  "reason": "Gemini-only kill switch reached: 25/20 successful TTS requests without another exact publication",
+  "status": "active",
+  "reason": "engine review approved a bounded 3-successful-request recovery window from 25 to 28; reset threshold to 20 immediately after any new exact publication",
   "lastExactAt": "2026-09-28T07:41:06.988Z",
   "lastRunId": "37092513930",
   "updatedAt": "2026-10-03T03:14:56.282Z"

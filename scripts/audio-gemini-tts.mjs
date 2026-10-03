@@ -64,11 +64,19 @@ export function extractGenerateContentAudio(payload) {
 }
 
 function durationToMs(value) {
-  const match = String(value || '').trim().match(/^([0-9]+(?:\.[0-9]+)?)(ms|s|m|h)$/i);
-  if (!match) return null;
-  const amount = Number(match[1]);
-  const multiplier = { ms: 1, s: 1000, m: 60000, h: 3600000 }[match[2].toLowerCase()];
-  return Number.isFinite(amount) ? Math.round(amount * multiplier) : null;
+  const text = String(value || '').trim();
+  if (!text) return null;
+  const parts = [...text.matchAll(/([0-9]+(?:\.[0-9]+)?)(ms|h|m|s)/gi)];
+  if (!parts.length || parts.map((part) => part[0]).join('') !== text) return null;
+  const multiplier = { ms: 1, s: 1000, m: 60000, h: 3600000 };
+  const total = parts.reduce((sum, part) => sum + Number(part[1]) * multiplier[part[2].toLowerCase()], 0);
+  return Number.isFinite(total) ? Math.round(total) : null;
+}
+
+function retryDelayFromMessage(message) {
+  const match = String(message || '').match(/retry\s+in\s+((?:(?:[0-9]+(?:\.[0-9]+)?)(?:h|m|s|ms))+)/i);
+  if (!match) return { retryDelay: null, retryDelayMs: null };
+  return { retryDelay: match[1], retryDelayMs: durationToMs(match[1]) };
 }
 
 export function parseGeminiQuotaDetail(body) {
@@ -87,16 +95,21 @@ export function parseGeminiQuotaDetail(body) {
         dimensions: item?.quotaDimensions || null,
       }))
       .slice(0, 6);
-    const retryDelay = retryInfo?.retryDelay || null;
-    const daily = quota.some((item) => /per.?day|requests.?per.?day|rpd/i.test(`${item.metric} ${item.id}`));
-    return { message, retryDelay, retryDelayMs: durationToMs(retryDelay), quota, daily };
+    const messageRetry = retryDelayFromMessage(message);
+    const retryDelay = retryInfo?.retryDelay || messageRetry.retryDelay || null;
+    const retryDelayMs = durationToMs(retryInfo?.retryDelay) ?? messageRetry.retryDelayMs;
+    const daily = quota.some((item) => /per.?day|requests?.?per.?day|rpd/i.test(`${item.metric} ${item.id}`))
+      || /requests?\s+per\s+day|per\s+day\s+on\s+free\s+tier|daily\s+(?:request|quota|limit)/i.test(message);
+    return { message, retryDelay, retryDelayMs, quota, daily };
   } catch {
+    const message = String(body).replace(/[\r\n]+/g, ' ').slice(0, 500);
+    const messageRetry = retryDelayFromMessage(message);
     return {
-      message: String(body).replace(/[\r\n]+/g, ' ').slice(0, 500),
-      retryDelay: null,
-      retryDelayMs: null,
+      message,
+      retryDelay: messageRetry.retryDelay,
+      retryDelayMs: messageRetry.retryDelayMs,
       quota: [],
-      daily: false,
+      daily: /requests?\s+per\s+day|per\s+day\s+on\s+free\s+tier|daily\s+(?:request|quota|limit)/i.test(message),
     };
   }
 }
