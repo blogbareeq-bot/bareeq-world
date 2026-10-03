@@ -1,10 +1,10 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "37093577827",
-  "sourceArtifact": "bareeq-progressive-validation-37093577827",
+  "sourceRunId": "37095035049",
+  "sourceArtifact": "bareeq-progressive-validation-37095035049",
   "sourceEvent": "push",
-  "generatedAt": "2026-10-03T03:34:47.047Z",
+  "generatedAt": "2026-10-03T04:02:16.318Z",
   "publicationComplete": false,
   "publishedCount": 7,
   "fallbackCount": 8,
@@ -122,7 +122,7 @@
       "audioKey": "34e34b6f4633d928",
       "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
       "generationStatus": "generated",
-      "validationStatus": "failed",
+      "validationStatus": "paused-quota",
       "substitutions": 0,
       "deletions": 0,
       "insertions": 0,
@@ -130,8 +130,10 @@
       "exact": false,
       "publishedExact": false,
       "fullSha256": "597168624f702c027ede0c2a719de337149f853822ef634a715c840873703dd8",
-      "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=1 D=0 I=0 unresolved=2"
+      "repairedParts": [
+        4
+      ],
+      "error": "Gemini TTS quota exhausted after retries for part 4: request cap 2 reached"
     },
     {
       "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
@@ -184,7 +186,7 @@
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=1 D=7 I=0 unresolved=1"
+      "error": "dual-ASR consensus failed: S=0 D=7 I=0 unresolved=1"
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -226,7 +228,7 @@
       "audioKey": "4d194dd1e6a739a8",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
+      "validationStatus": "failed",
       "substitutions": 1,
       "deletions": 0,
       "insertions": 0,
@@ -237,7 +239,7 @@
       "repairedParts": [
         2
       ],
-      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 20h25m13s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":\"20h25m13s\",\"retryDelayMs\":73513000,\"quota\":[],\"daily\":true}"
+      "error": "dual-ASR consensus failed: S=4 D=0 I=0 unresolved=0"
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",

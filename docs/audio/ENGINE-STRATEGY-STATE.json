@@ -3,10 +3,10 @@
   "provider": "Gemini / Sadaltager",
   "threshold": 28,
   "exactBaseline": 7,
-  "successfulTtsSinceLastNewExact": 26,
-  "status": "active",
-  "reason": "Gemini successful requests recorded without a new exact publication",
+  "successfulTtsSinceLastNewExact": 28,
+  "status": "paused-for-engine-review",
+  "reason": "Gemini-only kill switch reached: 28/28 successful TTS requests without another exact publication",
   "lastExactAt": "2026-09-28T07:41:06.988Z",
-  "lastRunId": "37093577827",
-  "updatedAt": "2026-10-03T03:34:47.093Z"
+  "lastRunId": "37095035049",
+  "updatedAt": "2026-10-03T04:02:16.355Z"
 }
