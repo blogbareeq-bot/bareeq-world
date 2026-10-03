@@ -68,6 +68,7 @@ const summary = {
   campaignId: CAMPAIGN_ID,
   sourceRunId: process.env.BAREEQ_SOURCE_RUN_ID || null,
   sourceArtifact: process.env.BAREEQ_SOURCE_ARTIFACT || null,
+  sourceEvent: process.env.GITHUB_EVENT_NAME || null,
   generatedAt: new Date().toISOString(),
   publicationComplete: fullyPublished,
   publishedCount,
