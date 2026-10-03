@@ -33,14 +33,17 @@ on:
       - 'scripts/test-audio-segment-repair.mjs'
       - 'scripts/test-audio-dual-asr-adjudicate.mjs'
       - 'scripts/test-audio-engine-strategy-guard.mjs'
-  # Gemini RPD resets at midnight Pacific. 08:20 UTC is safely after the
-  # reset in both daylight-saving and standard time.
+  # The dedicated dispatcher starts at 00:01 UTC after the observed Gemini
+  # Free Tier reset. These are later direct fallbacks if that dispatch is lost.
   schedule:
-    - cron: '20 8 * * *'
-    # GitHub may drop a scheduled event; an off-peak backup keeps the campaign
-    # moving. The schedule gate below skips it when today's primary ran.
-    - cron: '47 10 * * *'
+    - cron: '31 0 * * *'
+    - cron: '1 1 * * *'
   workflow_dispatch:
+    inputs:
+      only_article:
+        description: 'Optional single article id for targeted post-reset recovery'
+        required: false
+        type: string
 
 permissions:
   actions: read
@@ -69,8 +72,6 @@ jobs:
           const fs = require('fs');
           const filename = 'docs/audio/PROGRESSIVE-STATUS.json';
           const status = fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, 'utf8')) : {};
-          // Primary and backup share a UTC date. A complete production run
-          // writes a fresh status before pushing, including quota-only pauses.
           const today = new Date().toISOString().slice(0, 10);
           const alreadyRan = typeof status.generatedAt === 'string'
             && status.generatedAt.slice(0, 10) === today;
@@ -106,22 +107,16 @@ jobs:
     timeout-minutes: 240
     env:
       BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
-      # One-time bootstrap only. Every successful run restores the newest v2
-      # cache instead of returning to this historical artifact.
       BAREEQ_BOOTSTRAP_RUN_ID: '33962242086'
       BAREEQ_BOOTSTRAP_ARTIFACT: bareeq-progressive-validation-33962242086
       BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
       BAREEQ_STATUS_FILE: docs/audio/PROGRESSIVE-STATUS.json
       BAREEQ_REPAIR_MAX_REQUESTS: '10'
       BAREEQ_REPAIR_MAX_429_RETRIES: '2'
-      # Publication-first: give each pending article one targeted trial per run.
-      # This spreads the scarce free Gemini allowance across the widest set of
-      # near-exact candidates; rejected trials restore the byte-identical baseline.
       BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '1'
       BAREEQ_REPAIR_MAX_TRIALS_PER_PART: '1'
-      # Temporarily leave this failed article on its existing live fallback;
-      # do not classify, regenerate or spend TTS/ASR quota on it.
       BAREEQ_PROGRESSIVE_SKIP_ARTICLES: 'اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع'
+      BAREEQ_PROGRESSIVE_ONLY_ARTICLE: ${{ inputs.only_article || '' }}
       BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
     steps:
       - name: Checkout current production branch
@@ -213,13 +208,18 @@ jobs:
           echo "BAREEQ_REPAIR_EFFECTIVE_MAX_REQUESTS=${EFFECTIVE}" >> "$GITHUB_ENV"
           echo "GEMINI_STRATEGY_ALLOWANCE remaining=${REMAINING} effectiveRunCap=${EFFECTIVE}"
 
-      - name: Classify all pending audio, then repair the easiest failed parts
+      - name: Classify pending audio, then repair the selected safest target
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           set -o pipefail
+          ONLY_ARGS=()
+          if [ -n "${BAREEQ_PROGRESSIVE_ONLY_ARTICLE:-}" ]; then
+            ONLY_ARGS+=("--only=${BAREEQ_PROGRESSIVE_ONLY_ARTICLE}")
+            echo "PROGRESSIVE_TARGETED_RECOVERY=${BAREEQ_PROGRESSIVE_ONLY_ARTICLE}"
+          fi
           BAREEQ_REPAIR_MAX_REQUESTS="${BAREEQ_REPAIR_EFFECTIVE_MAX_REQUESTS}" \
-            node scripts/audio-progressive-repair.mjs --max-articles=10 "--skip=${BAREEQ_PROGRESSIVE_SKIP_ARTICLES}" \
+            node scripts/audio-progressive-repair.mjs --max-articles=10 "--skip=${BAREEQ_PROGRESSIVE_SKIP_ARTICLES}" "${ONLY_ARGS[@]}" \
             | tee "$RUNNER_TEMP/bareeq-progressive-repair.log"
 
       - name: Publish every newly exact article immediately
