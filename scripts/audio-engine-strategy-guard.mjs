@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = process.cwd();
 export const DEFAULT_THRESHOLD = 20;
+export const REVIEW_RECOVERY_ALLOWANCE = 3;
 export const STRATEGY_PATH = path.join(ROOT, 'docs', 'audio', 'ENGINE-STRATEGY-STATE.json');
 export const STATUS_PATH = path.join(ROOT, 'docs', 'audio', 'PROGRESSIVE-STATUS.json');
 
@@ -90,7 +91,21 @@ export function recordRun(raw, { currentExact, successfulTts = 0, runId = null, 
 
 export function remainingAllowance(raw, currentExact) {
   const state = reconcileBeforeRun(raw, currentExact);
-  return Math.max(0, state.threshold - state.successfulTtsSinceLastNewExact);
+  const normalRemaining = Math.max(0, state.threshold - state.successfulTtsSinceLastNewExact);
+  if (normalRemaining > 0) return normalRemaining;
+
+  // Engine-review recovery window: the kill switch is still authoritative,
+  // but when it has *just* reached the threshold allow one tightly bounded
+  // three-request recovery window. If those provider calls succeed without a
+  // new exact publication, recordRun moves the counter above the threshold and
+  // this allowance becomes permanently zero. If quota blocks every call, the
+  // counter remains at the threshold so a later run can retry without wasting
+  // successful requests. This avoids both an infinite daily loop and a hard
+  // deadlock at 7/15.
+  const exactlyAtReviewBoundary = state.status === 'paused-for-engine-review'
+    && state.successfulTtsSinceLastNewExact === state.threshold
+    && Number(currentExact) === state.exactBaseline;
+  return exactlyAtReviewBoundary ? REVIEW_RECOVERY_ALLOWANCE : 0;
 }
 
 async function currentStatus() {
@@ -108,8 +123,9 @@ async function cli() {
   if (process.argv.includes('--remaining')) {
     state = reconcileBeforeRun(state, status.exactCount, status.generatedAt);
     await writeJson(STRATEGY_PATH, state);
-    const remaining = Math.max(0, state.threshold - state.successfulTtsSinceLastNewExact);
-    console.error(`GEMINI_STRATEGY remaining=${remaining} successfulSinceExact=${state.successfulTtsSinceLastNewExact} threshold=${state.threshold} exactBaseline=${state.exactBaseline}`);
+    const remaining = remainingAllowance(state, status.exactCount);
+    const recovery = remaining > 0 && state.successfulTtsSinceLastNewExact >= state.threshold;
+    console.error(`GEMINI_STRATEGY remaining=${remaining} successfulSinceExact=${state.successfulTtsSinceLastNewExact} threshold=${state.threshold} exactBaseline=${state.exactBaseline} reviewRecovery=${recovery}`);
     process.stdout.write(String(remaining));
     return;
   }
