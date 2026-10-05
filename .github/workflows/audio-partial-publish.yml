@@ -15,6 +15,12 @@ on:
       - 'scripts/audio-progressive-status.mjs'
       - 'scripts/audio-repair-session-report.mjs'
       - 'scripts/audio-engine-strategy-guard.mjs'
+      - 'scripts/audio-tts-freeze-guard.mjs'
+      - 'scripts/audio-state-consistency.mjs'
+      - 'scripts/test-audio-tts-freeze-guard.mjs'
+      - 'scripts/test-audio-state-consistency.mjs'
+      - 'docs/audio/TTS-FREEZE.json'
+      - 'docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md'
       - 'scripts/test-audio-daily-progressive.mjs'
       - 'scripts/test-audio-segment-repair.mjs'
       - 'scripts/test-audio-dual-asr-adjudicate.mjs'
@@ -33,6 +39,12 @@ on:
       - 'scripts/audio-progressive-status.mjs'
       - 'scripts/audio-repair-session-report.mjs'
       - 'scripts/audio-engine-strategy-guard.mjs'
+      - 'scripts/audio-tts-freeze-guard.mjs'
+      - 'scripts/audio-state-consistency.mjs'
+      - 'scripts/test-audio-tts-freeze-guard.mjs'
+      - 'scripts/test-audio-state-consistency.mjs'
+      - 'docs/audio/TTS-FREEZE.json'
+      - 'docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md'
       - 'scripts/test-audio-daily-progressive.mjs'
       - 'scripts/test-audio-segment-repair.mjs'
       - 'scripts/test-audio-dual-asr-adjudicate.mjs'
@@ -97,6 +109,10 @@ jobs:
           node scripts/test-audio-segment-repair.mjs
           node scripts/test-audio-micro-repair-preflight.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
+          node scripts/test-audio-tts-freeze-guard.mjs
+          node scripts/test-audio-state-consistency.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-gemini-tts.mjs
           node --check scripts/audio-repair-session-report.mjs
@@ -258,6 +274,7 @@ jobs:
       - name: Write classification, repair log, and session report
         env:
           BAREEQ_SOURCE_RUN_ID: ${{ github.run_id }}
+          BAREEQ_REPAIR_SESSION_LOG: ${{ runner.temp }}/bareeq-progressive-repair.log
         run: node scripts/audio-repair-session-report.mjs
 
       - name: Save newest checkpoint before git publication
