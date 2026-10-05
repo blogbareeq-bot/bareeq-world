@@ -72,6 +72,12 @@ jobs:
         env:
           BAREEQ_PROGRESSIVE_ONLY_ARTICLE: ${{ inputs.only_article || '' }}
         run: |
+          if [ "${{ github.event_name }}" != schedule ] && [ "${{ github.event_name }}" != workflow_dispatch ]; then
+            echo 'should-run=false' >> "$GITHUB_OUTPUT"
+            echo 'target-article=' >> "$GITHUB_OUTPUT"
+            echo 'verified-micro=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           node scripts/audio-engine-strategy-guard.mjs --workflow-gate >> "$GITHUB_OUTPUT"
 
   offline-gates:
