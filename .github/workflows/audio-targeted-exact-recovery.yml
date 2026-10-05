@@ -20,6 +20,14 @@ on:
         required: true
         type: boolean
         default: false
+      target_article:
+        description: 'Gate 5 approved article id. Required for any live synthesis after the freeze is lifted.'
+        required: true
+        type: string
+      decision_id:
+        description: 'Reviewed Gate 5 authorization/reference for this single synthesis experiment.'
+        required: true
+        type: string
 
 permissions:
   actions: read
@@ -37,7 +45,7 @@ env:
   BAREEQ_BOOTSTRAP_ARTIFACT: bareeq-progressive-validation-33962242086
   BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
   BAREEQ_STATUS_FILE: docs/audio/PROGRESSIVE-STATUS.json
-  BAREEQ_TARGET_ARTICLE: 'اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا'
+  BAREEQ_TARGET_ARTICLE: ${{ inputs.target_article }}
   BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
 
 jobs:
@@ -62,6 +70,7 @@ jobs:
           node scripts/test-audio-tts-freeze-guard.mjs
           node scripts/test-audio-tts-freeze-integration.mjs
           node scripts/test-audio-state-consistency.mjs
+          node scripts/test-audio-rejected-trial-evidence.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
           node scripts/audio-state-consistency.mjs
           node --check scripts/audio-progressive-repair.mjs
@@ -106,6 +115,13 @@ jobs:
           node --check scripts/audio-validate-consensus.mjs
           node --check scripts/audio-openrouter-campaign.mjs
           node --check scripts/audio-repair-session-report.mjs
+
+      - name: Verify explicit Gate 5 authorization metadata
+        run: |
+          set -euo pipefail
+          test -n "${BAREEQ_TARGET_ARTICLE}"
+          test -n "${{ inputs.decision_id }}"
+          echo "GATE5_AUTHORIZATION=present decision=${{ inputs.decision_id }} target=${BAREEQ_TARGET_ARTICLE}"
 
       - name: Verify Gemini credential
         env:
@@ -158,7 +174,7 @@ jobs:
           console.log(`TARGETED_RECOVERY_CHECKPOINT=PASS exact_before=${exact.length}/15 target=${process.env.BAREEQ_TARGET_ARTICLE}`);
           NODE
 
-      - name: Run up to three isolated stochastic trials on the nearest exact candidate
+      - name: Run exactly one Gate 5 authorized synthesis experiment
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BAREEQ_REPAIR_MAX_REQUESTS: '1'
@@ -168,11 +184,11 @@ jobs:
         run: |
           set -euo pipefail
           : > "$RUNNER_TEMP/bareeq-targeted-recovery.log"
-          for attempt in 1 2 3; do
-            echo "TARGETED_RECOVERY_ATTEMPT=${attempt}/3" | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
-            node scripts/audio-progressive-repair.mjs --max-articles=1 "--only=${BAREEQ_TARGET_ARTICLE}" \
-              | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
-            STATUS=$(node - <<'NODE'
+          echo "TARGETED_RECOVERY_ATTEMPT=1/1 decision=${{ inputs.decision_id }} target=${BAREEQ_TARGET_ARTICLE}" \
+            | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+          node scripts/audio-progressive-repair.mjs --max-articles=1 "--only=${BAREEQ_TARGET_ARTICLE}" \
+            | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+          STATUS=$(node - <<'NODE'
           const fs = require('fs');
           const path = require('path');
           const p = path.join('audio-candidates','_campaigns',process.env.BAREEQ_AUDIO_CAMPAIGN_ID,'state.json');
@@ -184,18 +200,13 @@ jobs:
             && ['substitutions','deletions','insertions','unresolved'].every((k) => Number(c[k]) === 0);
           process.stdout.write(exact ? 'exact' : String(x.validation?.status || 'unknown'));
           NODE
-            )
-            echo "TARGETED_RECOVERY_RESULT attempt=${attempt} status=${STATUS}" | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
-            if [ "${STATUS}" = exact ]; then
-              echo 'TARGETED_RECOVERY_EXACT=PASS' | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
-              break
-            fi
-            if [ "${STATUS}" = paused-quota ]; then
-              echo 'TARGETED_RECOVERY_QUOTA=PAUSED' | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
-              break
-            fi
-            if [ "${attempt}" -lt 3 ]; then sleep 15; fi
-          done
+          )
+          echo "TARGETED_RECOVERY_RESULT attempt=1 status=${STATUS}" | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+          if [ "${STATUS}" = exact ]; then
+            echo 'TARGETED_RECOVERY_EXACT=PASS' | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+          elif [ "${STATUS}" = paused-quota ]; then
+            echo 'TARGETED_RECOVERY_QUOTA=PAUSED' | tee -a "$RUNNER_TEMP/bareeq-targeted-recovery.log"
+          fi
 
       - name: Prove all previously exact articles are byte-bound and unchanged
         run: |

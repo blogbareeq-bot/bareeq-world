@@ -1,4 +1,4 @@
-import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import {
@@ -388,10 +388,42 @@ async function regenerateSynchronizedSegment({
       correctionHintApplied: Boolean(correctionHint),
     });
     console.log(`PROGRESSIVE_SEGMENT_REPAIR_DONE ${article.articleId} part=${repair.partIndex + 1} segment=${repair.segmentId} replacement=${spliced.replacementSeconds.toFixed(3)}s output=${spliced.outputSeconds.toFixed(3)}s`);
-    return { repair, splicePlan, spliced };
+    return { repair, splicePlan, spliced, replacementAudio: generated.audio };
   } finally {
     await rm(tempRoot, { recursive: true, force: true });
   }
+}
+
+export async function preserveRejectedTrialEvidence({
+  articleId,
+  fingerprint,
+  baselineDir,
+  trialDir,
+  replacementAudio = null,
+  metadata = {},
+  runId = process.env.GITHUB_RUN_ID || 'local',
+  root = ROOT,
+}) {
+  const safeRunId = String(runId || 'local').replace(/[^a-zA-Z0-9._-]/g, '_');
+  const evidenceDir = path.join(root, 'audio-candidates', '_diagnostics', safeRunId, articleId, fingerprint);
+  await rm(evidenceDir, { recursive: true, force: true });
+  await mkdir(evidenceDir, { recursive: true });
+  await cp(baselineDir, path.join(evidenceDir, 'baseline'), { recursive: true });
+  await cp(trialDir, path.join(evidenceDir, 'trial'), { recursive: true });
+  if (replacementAudio?.length) {
+    await writeFile(path.join(evidenceDir, 'replacement.mp3'), replacementAudio);
+  }
+  const manifest = {
+    schema: 'bareeq.audio-rejected-trial-evidence.v1',
+    capturedAt: new Date().toISOString(),
+    runId: safeRunId,
+    articleId,
+    fingerprint,
+    hasReplacementAudio: Boolean(replacementAudio?.length),
+    ...metadata,
+  };
+  await writeFile(path.join(evidenceDir, 'metadata.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+  return evidenceDir;
 }
 
 async function repairArticle({
@@ -527,9 +559,10 @@ async function repairArticle({
   };
 
   console.log(`PROGRESSIVE_REPAIR_START ${articleId} fingerprint=${fingerprint} parts=${parts.join(',')} tokens=${indices.length} consensus=${JSON.stringify(adjudication.consensus)}`);
+  let segmentRepair = null;
   try {
     const failedInTrialPart = failedPartMap.get(trialPartIndex)?.indices || [];
-    const segmentRepair = await regenerateSynchronizedSegment({
+    segmentRepair = await regenerateSynchronizedSegment({
       article,
       splitPlan: plan,
       fingerprint,
@@ -612,6 +645,24 @@ async function repairArticle({
       };
       console.log(`PROGRESSIVE_REPAIR_IMPROVED ${articleId} part=${parts[0]} score=${baselineScore}->${trialScore}`);
     } else {
+      const evidenceDir = await preserveRejectedTrialEvidence({
+        articleId,
+        fingerprint,
+        baselineDir: backupDir,
+        trialDir: dir,
+        replacementAudio: segmentRepair?.replacementAudio || null,
+        metadata: {
+          part: parts[0],
+          baselineScore,
+          trialScore: Number.isFinite(trialScore) ? trialScore : null,
+          quota,
+          spliceStartSeconds: segmentRepair?.splicePlan?.start?.seconds ?? null,
+          spliceEndSeconds: segmentRepair?.splicePlan?.end?.seconds ?? null,
+          repairedSegmentId: segmentRepair?.repair?.segmentId || null,
+        },
+      });
+      const evidencePath = path.relative(ROOT, evidenceDir).replaceAll('\\', '/');
+      console.log(`PROGRESSIVE_REPAIR_EVIDENCE_PRESERVED ${articleId} path=${evidencePath}`);
       await restoreBaseline();
       row.validation = {
         ...previousValidation,
@@ -623,6 +674,7 @@ async function repairArticle({
         rejectedPart: parts[0],
         rejectedScore: Number.isFinite(trialScore) ? trialScore : null,
         baselineScore,
+        diagnosticEvidencePath: evidencePath,
         error: String(error?.message || error || '').slice(0, 700),
         updatedAt: new Date().toISOString(),
       };

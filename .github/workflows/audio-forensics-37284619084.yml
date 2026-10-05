@@ -27,18 +27,20 @@ jobs:
           node --check scripts/audio-forensics-37284619084.mjs
           node --check scripts/test-audio-forensics-37284619084.mjs
           node scripts/test-audio-forensics-37284619084.mjs
+          node scripts/test-audio-rejected-trial-evidence.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
           echo 'FORENSICS_CONTRACT=PASS providerRequests=0'
 
   inspect-retained-artifact:
-    if: github.event_name == 'workflow_dispatch'
+    # Artifact forensics is read-only and provider-frozen, so run it on the
+    # review PR as well as manual dispatch. This turns Gate 2 into evidence,
+    # not a deferred/manual promise.
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request'
     needs: contract
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Prove provider freeze before evidence download
         run: node scripts/audio-tts-freeze-guard.mjs --expect-frozen
