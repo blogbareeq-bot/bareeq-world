@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Enforce repository TTS freeze
+        run: node scripts/audio-tts-freeze-guard.mjs --require-unfrozen
+
       - name: Generate remaining comparison samples
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
