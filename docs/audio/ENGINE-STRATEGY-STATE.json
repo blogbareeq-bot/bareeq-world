@@ -3,17 +3,17 @@
   "provider": "Gemini / Sadaltager",
   "threshold": 30,
   "exactBaseline": 7,
-  "successfulTtsSinceLastNewExact": 28,
+  "successfulTtsSinceLastNewExact": 29,
   "status": "active",
-  "reason": "User-requested verified micro-cut recovery: at most two one-request runs; historical 28 calls preserved",
+  "reason": "Gemini successful requests recorded without a new exact publication",
+  "lastExactAt": "2026-09-28T07:41:06.988Z",
+  "lastRunId": "37284619084",
+  "updatedAt": "2026-10-05T08:37:39.483Z",
   "targetedRecovery": {
     "id": "verified-micro-cut-20261005",
     "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
     "maxRuns": 2,
-    "runs": 0,
-    "lastAttemptDay": null
-  },
-  "lastExactAt": "2026-09-28T07:41:06.988Z",
-  "lastRunId": "37270741630",
-  "updatedAt": "2026-10-05T06:06:54.987Z"
+    "runs": 1,
+    "lastAttemptDay": "2026-10-05"
+  }
 }
