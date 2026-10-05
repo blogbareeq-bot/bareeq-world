@@ -1,3 +1,5 @@
+import { assertTtsUnfrozen } from './audio-tts-freeze-guard.mjs';
+
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -119,6 +121,7 @@ async function synthesizeSample({ sample, bindings, accessToken, projectId, outp
 }
 
 export async function runPilot({ live = false, samplesPath = DEFAULT_SAMPLES, outputRoot = DEFAULT_OUTPUT, env = process.env, fetchImpl = fetch } = {}) {
+  if (live && fetchImpl === fetch) await assertTtsUnfrozen({ operation: 'chirp3-live-pilot' });
   const config = await loadJson(samplesPath);
   if (!Array.isArray(config.samples) || config.samples.length !== 3) throw new Error('Chirp pilot requires exactly three locked samples.');
   if (config.engine?.voice !== PILOT_ENGINE.voice || config.engine?.languageCode !== PILOT_ENGINE.languageCode) {
