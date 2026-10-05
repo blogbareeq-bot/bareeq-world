@@ -247,4 +247,4 @@ assert.ok(offlineMismatchMarker >= 0 && offlineMismatchMarker < providerUpload,
 assert.ok(apiKeyGate < providerUpload,
   'provider validation must remain credential-gated after offline reuse is unavailable');
 
-console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation, explicit Arabic ب tokenization, silent visual arrows, approved orthography, and offline raw-ASR reuse stay guarded; human listening stays mandatory.');
+console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation, explicit Arabic ب tokenization, silent visual arrows, approved orthography, and offline raw-ASR reuse stay guarded; human-listening requirements remain governed by the campaign publication policy.');
