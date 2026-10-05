@@ -44,9 +44,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Enforce repository TTS freeze
-        run: node scripts/audio-tts-freeze-guard.mjs --require-unfrozen
-
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
@@ -60,6 +57,10 @@ jobs:
           node scripts/test-audio-asr-fallback.mjs
           node scripts/test-audio-segment-repair.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
+          node scripts/test-audio-tts-freeze-guard.mjs
+          node scripts/test-audio-state-consistency.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-validate-consensus.mjs
           node --check scripts/audio-openrouter-campaign.mjs
@@ -76,6 +77,9 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+
+      - name: Enforce repository TTS freeze
+        run: node scripts/audio-tts-freeze-guard.mjs --require-unfrozen
 
       - uses: actions/setup-node@v4
         with:
