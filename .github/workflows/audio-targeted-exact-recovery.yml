@@ -70,6 +70,7 @@ jobs:
           node scripts/test-audio-tts-freeze-guard.mjs
           node scripts/test-audio-tts-freeze-integration.mjs
           node scripts/test-audio-state-consistency.mjs
+          node scripts/test-audio-rejected-trial-evidence.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
           node scripts/audio-state-consistency.mjs
           node --check scripts/audio-progressive-repair.mjs
