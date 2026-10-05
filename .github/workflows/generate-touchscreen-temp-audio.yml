@@ -36,6 +36,9 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
+      - name: Enforce repository TTS freeze
+        run: node scripts/audio-tts-freeze-guard.mjs --require-unfrozen
+
       - name: Verify temporary legacy TTS secret and article lock
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
