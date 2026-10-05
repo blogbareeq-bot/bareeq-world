@@ -1,0 +1,63 @@
+name: Bareeq adjudication v5 offline replay
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-dual-asr-adjudicate.mjs'
+      - 'scripts/audio-adjudication-v5-offline.mjs'
+      - 'scripts/test-audio-dual-asr-adjudicate.mjs'
+      - '.github/workflows/audio-adjudication-v5.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  adjudication-v5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Prove synthesis remains frozen
+        run: node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+
+      - name: Validate adjudication policy and negative controls
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-adjudication-v5-offline.mjs
+          node scripts/test-audio-dual-asr-adjudicate.mjs
+
+      - name: Download retained source evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-progressive-validation-37284619084
+          path: adjudication-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37284619084'
+
+      - name: Replay seven active pending candidates offline
+        run: |
+          set -euo pipefail
+          node scripts/audio-adjudication-v5-offline.mjs \
+            --root=adjudication-input \
+            --out-json=adjudication-output/ADJUDICATION-V5.json \
+            --out-md=adjudication-output/ADJUDICATION-V5.md
+          cat adjudication-output/ADJUDICATION-V5.md
+          echo 'ADJUDICATION_V5_PROVIDER_CALLS=0'
+
+      - name: Prove production audio unchanged
+        run: git diff --exit-code -- public/audio
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-adjudication-v5-${{ github.run_id }}
+          path: adjudication-output/
+          if-no-files-found: error
+          retention-days: 90

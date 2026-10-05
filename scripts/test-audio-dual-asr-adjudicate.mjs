@@ -90,8 +90,11 @@ assert.equal(passed.passed, true);
 assert.deepEqual(passed.consensus, { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 });
 assert.equal(passed.representationOnly.length, 4);
 assert.equal(passed.modelDisagreements.length, 2);
-assert.equal(passed.policy.humanListeningStillRequired, true);
 assert.equal(passed.policy.version, ADJUDICATION_POLICY_VERSION);
+assert.equal(ADJUDICATION_POLICY_VERSION, 5);
+assert.equal(passed.policy.verificationRepresentation.synthesisFingerprintMutation, false);
+assert.equal(passed.policy.verificationRepresentation.newEquivalenceRulesInV5, false);
+assert.match(passed.policy.humanListeningPolicy, /campaign publication policy governs/);
 
 const deleteA = structuredClone(fixedFirst);
 deleteA.differences.push({ type: 'deletion', expected: 'النتيجة', actual: null, expectedIndex: idx('النتيجة'), actualIndex: idx('النتيجة') });
@@ -244,4 +247,4 @@ assert.ok(offlineMismatchMarker >= 0 && offlineMismatchMarker < providerUpload,
 assert.ok(apiKeyGate < providerUpload,
   'provider validation must remain credential-gated after offline reuse is unavailable');
 
-console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation, explicit Arabic ب tokenization, silent visual arrows, approved orthography, and offline raw-ASR reuse stay guarded; human listening stays mandatory.');
+console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation, explicit Arabic ب tokenization, silent visual arrows, approved orthography, and offline raw-ASR reuse stay guarded; human-listening requirements remain governed by the campaign publication policy.');

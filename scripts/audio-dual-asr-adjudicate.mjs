@@ -15,7 +15,7 @@ import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { loadSpokenArticle } from './audio-split.mjs';
 import { boundIdentity } from './audio-report.mjs';
 
-export const ADJUDICATION_POLICY_VERSION = 4;
+export const ADJUDICATION_POLICY_VERSION = 5;
 
 const NUMBER_FORMS = new Map([
   [0, ['0', '٠', 'صفر']],
@@ -273,7 +273,13 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       fuzzyMatching: false,
       stemming: false,
       synonyms: false,
-      humanListeningStillRequired: true,
+      verificationRepresentation: {
+        version: 1,
+        purpose: 'comparison-only canonical verification; synthesis text and fingerprints are not mutated',
+        synthesisFingerprintMutation: false,
+        newEquivalenceRulesInV5: false,
+      },
+      humanListeningPolicy: 'campaign publication policy governs; adjudication neither requires nor waives full-file listening',
     },
     consensus: {
       substitutions,
