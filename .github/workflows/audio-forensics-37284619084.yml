@@ -27,6 +27,7 @@ jobs:
           node --check scripts/audio-forensics-37284619084.mjs
           node --check scripts/test-audio-forensics-37284619084.mjs
           node scripts/test-audio-forensics-37284619084.mjs
+          node scripts/test-audio-rejected-trial-evidence.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
           echo 'FORENSICS_CONTRACT=PASS providerRequests=0'
 
