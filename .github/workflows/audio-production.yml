@@ -132,6 +132,10 @@ jobs:
           node scripts/audio-production.mjs --mode=dry-run
           echo 'Dry-run complete. No TTS/ASR request was sent. generate-candidate does not publish.'
 
+      - name: Enforce repository TTS freeze before generation
+        if: inputs.mode == 'generate-candidate'
+        run: node scripts/audio-tts-freeze-guard.mjs --require-unfrozen
+
       - name: Generate candidate
         id: generate
         if: inputs.mode == 'generate-candidate'

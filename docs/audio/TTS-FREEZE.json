@@ -1,0 +1,36 @@
+{
+  "schema": "bareeq.audio-tts-freeze.v1",
+  "active": true,
+  "effectiveAt": "2026-10-05T11:15:00Z",
+  "reason": "Recovery Decision v1: freeze all synthesis while operational truth, forensics, adjudication v5, and validator research run offline.",
+  "sourceRunId": "37284619084",
+  "evidenceArtifact": {
+    "id": 11334211844,
+    "name": "bareeq-progressive-validation-37284619084",
+    "expiresAt": "2027-01-03T08:35:52Z"
+  },
+  "strategySnapshot": {
+    "exact": 7,
+    "total": 15,
+    "fallback": 8,
+    "activePending": 7,
+    "excluded": 1,
+    "successfulTtsSinceLastNewExact": 29,
+    "threshold": 30
+  },
+  "excludedArticles": [
+    "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع"
+  ],
+  "policy": "docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md",
+  "allowed": [
+    "offline-validation",
+    "artifact-forensics",
+    "offline-adjudication",
+    "read-only-validator-calibration"
+  ],
+  "prohibited": [
+    "tts-synthesis",
+    "automatic-provider-dispatch",
+    "automatic-threshold-extension"
+  ]
+}

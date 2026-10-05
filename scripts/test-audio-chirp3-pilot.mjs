@@ -42,7 +42,7 @@ assert.equal(dry.productionAudioTouched, false);
 assert.equal(dry.publicationAllowed, false);
 
 await assert.rejects(
-  () => runPilot({ live: true, env: {} }),
+  () => runPilot({ live: true, env: {}, fetchImpl: async () => { throw new Error('unexpected provider call'); } }),
   /Live Chirp pilot is locked/,
 );
 

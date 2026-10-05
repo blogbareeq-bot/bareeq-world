@@ -114,6 +114,8 @@ jobs:
           node-version-file: .node-version
           cache: npm
       - run: npm ci
+      - name: Enforce repository TTS freeze
+        run: node scripts/audio-tts-freeze-guard.mjs --require-unfrozen
       - name: Require existing provider credentials
         run: |
           set -euo pipefail

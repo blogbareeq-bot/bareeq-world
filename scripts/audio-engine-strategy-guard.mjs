@@ -7,6 +7,7 @@ export const DEFAULT_THRESHOLD = 20;
 export const REVIEW_RECOVERY_ALLOWANCE = 3;
 export const STRATEGY_PATH = path.join(ROOT, 'docs', 'audio', 'ENGINE-STRATEGY-STATE.json');
 export const STATUS_PATH = path.join(ROOT, 'docs', 'audio', 'PROGRESSIVE-STATUS.json');
+export const FREEZE_PATH = path.join(ROOT, 'docs', 'audio', 'TTS-FREEZE.json');
 
 async function readJson(file, fallback = null) {
   try {
@@ -159,6 +160,14 @@ async function cli() {
   const status = await currentStatus();
   let state = await loadState(status);
   if (process.argv.includes('--workflow-gate')) {
+    const freeze = await readJson(FREEZE_PATH, { active: false });
+    if (freeze?.active === true) {
+      console.log('should-run=false');
+      console.log('target-article=');
+      console.log('verified-micro=false');
+      console.error(`BAREEQ_TTS_FREEZE=ACTIVE sourceRun=${freeze.sourceRunId || 'n/a'}`);
+      return;
+    }
     const gate = productionGate(status, state, process.env.GITHUB_EVENT_NAME, process.env.BAREEQ_PROGRESSIVE_ONLY_ARTICLE);
     console.log(`should-run=${gate.shouldRun}`);
     console.log(`target-article=${gate.targetArticle}`);
@@ -168,10 +177,13 @@ async function cli() {
   if (process.argv.includes('--remaining')) {
     state = reconcileBeforeRun(state, status.exactCount, status.generatedAt);
     await writeJson(STRATEGY_PATH, state);
-    const allowed = !process.env.GITHUB_EVENT_NAME || productionGate(status, state,
-      process.env.GITHUB_EVENT_NAME, process.env.BAREEQ_PROGRESSIVE_ONLY_ARTICLE).shouldRun;
+    const freeze = await readJson(FREEZE_PATH, { active: false });
+    const allowed = freeze?.active !== true
+      && (!process.env.GITHUB_EVENT_NAME || productionGate(status, state,
+        process.env.GITHUB_EVENT_NAME, process.env.BAREEQ_PROGRESSIVE_ONLY_ARTICLE).shouldRun);
     const remaining = allowed ? remainingAllowance(state, status.exactCount) : 0;
     const recovery = remaining > 0 && state.successfulTtsSinceLastNewExact >= state.threshold;
+    if (freeze?.active === true) console.error('BAREEQ_TTS_FREEZE=ACTIVE remaining=0');
     console.error(`GEMINI_STRATEGY remaining=${remaining} successfulSinceExact=${state.successfulTtsSinceLastNewExact} threshold=${state.threshold} exactBaseline=${state.exactBaseline} reviewRecovery=${recovery}`);
     process.stdout.write(String(remaining));
     return;

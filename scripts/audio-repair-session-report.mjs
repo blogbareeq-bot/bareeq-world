@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { parseSuccessfulTts } from './audio-engine-strategy-guard.mjs';
 
 const ROOT = process.cwd();
 const CAMPAIGN_ID = process.env.BAREEQ_AUDIO_CAMPAIGN_ID?.trim() || 'sadaltager-openrouter-20260901-v1';
@@ -7,6 +8,9 @@ const STATUS_FILE = process.env.BAREEQ_STATUS_FILE?.trim() || path.join('docs', 
 const SESSION_STARTED_AT = process.env.BAREEQ_REPAIR_SESSION_STARTED_AT || null;
 const SOURCE_RUN_ID = process.env.BAREEQ_SOURCE_RUN_ID || null;
 const PROVIDER_CREDENTIAL_VERIFIED = process.env.BAREEQ_PROVIDER_CREDENTIAL_VERIFIED === '1';
+const LOG_ARG = process.argv.find((arg) => arg.startsWith('--log='));
+const SESSION_LOG_PATH = process.env.BAREEQ_REPAIR_SESSION_LOG || LOG_ARG?.slice('--log='.length) || null;
+const EXCLUDED_ARTICLES = new Set(['اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع']);
 
 const output = {
   phase0: path.join(ROOT, 'docs', 'audio', 'PHASE-0-READINESS.md'),
@@ -98,6 +102,7 @@ for (const item of snapshot.articles) {
     estimatedTtsCharsNeeded: null,
     estimateNote: isExact ? 'none; already exact' : 'calculated at repair time from the targeted sentence/paragraph; no whole-article estimate is fabricated',
     fallbackActive: !publishedIds.has(item.articleId),
+    excludedFromCurrentCampaign: EXCLUDED_ARTICLES.has(item.articleId),
   });
   for (const [index, entry] of logs.entries()) {
     repairEntries.push({
@@ -110,20 +115,21 @@ for (const item of snapshot.articles) {
 }
 
 const pending = classificationRows
-  .filter((row) => !row.exact)
+  .filter((row) => !row.exact && !row.excludedFromCurrentCampaign)
   .sort((a, b) => (a.totalErrors ?? Number.MAX_SAFE_INTEGER) - (b.totalErrors ?? Number.MAX_SAFE_INTEGER)
     || a.articleId.localeCompare(b.articleId, 'ar'));
+const excludedRows = classificationRows.filter((row) => !row.exact && row.excludedFromCurrentCampaign);
 const exactRows = classificationRows.filter((row) => row.exact);
-const ordered = [...pending, ...exactRows.sort((a, b) => a.articleId.localeCompare(b.articleId, 'ar'))];
+const ordered = [...pending, ...excludedRows, ...exactRows.sort((a, b) => a.articleId.localeCompare(b.articleId, 'ar'))];
 
 const generatedAt = new Date().toISOString();
 const classification = {
   schema: 'bareeq.audio-phase-1-classification.v1',
   campaignId: CAMPAIGN_ID,
   generatedAt,
-  rule: 'all pending candidates classified before repair; pending ordered by total Dual-ASR consensus errors',
+  rule: 'seven active pending candidates are classified before repair; intentionally excluded articles remain frozen outside the current completion campaign',
   exactGate: { substitutions: 0, deletions: 0, insertions: 0, unresolved: 0 },
-  provider: 'Google Gemini API / Sadaltager (existing production campaign)',
+  provider: 'Google Gemini API / Sadaltager (current repair provider; campaign id retains historical OpenRouter naming)',
   rows: ordered,
 };
 
@@ -140,7 +146,10 @@ const sessionStartMs = isoMillis(SESSION_STARTED_AT);
 const sessionEntries = sessionStartMs === null
   ? []
   : repairEntries.filter((entry) => (isoMillis(entry.at) ?? 0) >= sessionStartMs);
-const sessionProviderCalls = sessionEntries.reduce((sum, entry) => sum + (Number(entry.providerCalls) || 0), 0);
+const requestLogProviderCalls = sessionEntries.reduce((sum, entry) => sum + (Number(entry.providerCalls) || 0), 0);
+const workflowLogText = SESSION_LOG_PATH ? await readFile(SESSION_LOG_PATH, 'utf8').catch(() => '') : '';
+const workflowSuccessfulTts = parseSuccessfulTts(workflowLogText);
+const sessionProviderCalls = Math.max(requestLogProviderCalls, workflowSuccessfulTts);
 const sessionChars = sessionEntries.reduce((sum, entry) => sum + (Number(entry.chars) || Number(entry.textChars) || 0), 0);
 
 await mkdir(path.dirname(output.phase0), { recursive: true });
@@ -152,7 +161,10 @@ await writeFile(output.repairLog, `${JSON.stringify(repairLog, null, 2)}\n`);
 const pendingLines = pending.length
   ? pending.map((row, index) => `${index + 1}. ${row.title} — errors=${row.totalErrors ?? 'unknown'}; validation=${row.validationStatus}`).join('\n')
   : 'None.';
-const sessionReport = `# تقرير جلسة الإصلاح — ${generatedAt.slice(0, 10)}\n\n## ملخص\n- Run: ${SOURCE_RUN_ID || 'n/a'}\n- بداية الجلسة: ${SESSION_STARTED_AT || 'n/a'}\n- مقالات Exact: **${status.exactCount}/15**\n- مقالات منشورة Exact: **${status.publishedCount}/15**\n- مقالات على fallback: **${status.fallbackCount}**\n- طلبات المزود المسجلة في هذه الجلسة: **${sessionProviderCalls}**\n- أحرف TTS المسجلة صراحة في request logs: **${sessionChars}**\n\n## ترتيب المقالات المتبقية\n${pendingLines}\n\n## قواعد الجلسة\n- لا نشر دون 0/0/0/0 + Technical QA + sync/fingerprint gates.\n- أي trial مرفوض يعود إلى baseline ولا يعاد فورًا في الجولة نفسها.\n- لا إعادة توليد للمقالات Exact.\n`;
+const excludedLines = excludedRows.length
+  ? excludedRows.map((row) => `- ${row.title} — EXCLUDED/FROZEN; fallback remains active`).join('\n')
+  : 'None.';
+const sessionReport = `# تقرير جلسة الإصلاح — ${generatedAt.slice(0, 10)}\n\n## ملخص\n- Run: ${SOURCE_RUN_ID || 'n/a'}\n- بداية الجلسة: ${SESSION_STARTED_AT || 'n/a'}\n- مقالات Exact: **${status.exactCount}/15**\n- مقالات منشورة Exact: **${status.publishedCount}/15**\n- مقالات على fallback: **${status.fallbackCount}**\n- طلبات المزود المسجلة في هذه الجلسة: **${sessionProviderCalls}**\n- مصدر عداد الجلسة: **max(request-log calls, progressive workflow summary)**\n- أحرف TTS المسجلة صراحة في request logs: **${sessionChars}**\n\n## المقالات النشطة المتبقية (7 كحد أقصى)\n${pendingLines}\n\n## مستبعد من الحملة الحالية\n${excludedLines}\n\n## قواعد الجلسة\n- لا نشر دون 0/0/0/0 + Technical QA + sync/fingerprint gates.\n- أي trial مرفوض يعود إلى baseline ولا يعاد فورًا في الجولة نفسها.\n- لا إعادة توليد للمقالات Exact.\n`;
 await writeFile(output.session, sessionReport);
 
 if (status.publicationComplete === true && status.exactCount === 15 && status.publishedCount === 15) {

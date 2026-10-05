@@ -13,13 +13,22 @@ on:
       - '.github/workflows/audio-targeted-exact-recovery.yml'
       - 'scripts/audio-validate-consensus.mjs'
       - 'scripts/test-audio-asr-fallback.mjs'
+  workflow_dispatch:
+    inputs:
+      execute_live:
+        description: 'Explicit live targeted recovery; repository TTS freeze must first be lifted by reviewed code change.'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   actions: read
   contents: write
 
 concurrency:
-  group: bareeq-daily-progressive-audio
+  # Offline PR/push validation must not cancel sibling audio workflows.
+  # Actual provider jobs below share a separate live-only lock.
+  group: bareeq-audio-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 env:
@@ -33,7 +42,7 @@ env:
 
 jobs:
   offline-gates:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,6 +59,11 @@ jobs:
           node scripts/test-audio-asr-fallback.mjs
           node scripts/test-audio-segment-repair.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
+          node scripts/test-audio-tts-freeze-guard.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
+          node scripts/test-audio-state-consistency.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-validate-consensus.mjs
           node --check scripts/audio-openrouter-campaign.mjs
@@ -57,7 +71,10 @@ jobs:
           echo 'TARGETED_RECOVERY_OFFLINE=PASS requests=0 publication=false'
 
   targeted-recovery:
-    if: github.event_name == 'push'
+    concurrency:
+      group: bareeq-live-progressive-audio
+      cancel-in-progress: false
+    if: github.event_name == 'workflow_dispatch' && inputs.execute_live == true
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -66,6 +83,9 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+
+      - name: Enforce repository TTS freeze
+        run: node scripts/audio-tts-freeze-guard.mjs --require-unfrozen
 
       - uses: actions/setup-node@v4
         with:
