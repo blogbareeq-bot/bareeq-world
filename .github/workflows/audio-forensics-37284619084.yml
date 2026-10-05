@@ -1,0 +1,74 @@
+name: Bareeq audio forensic evidence inspection
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-forensics-37284619084.yml'
+      - 'scripts/audio-forensics-37284619084.mjs'
+      - 'scripts/test-audio-forensics-37284619084.mjs'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Validate forensic code without providers
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-forensics-37284619084.mjs
+          node --check scripts/test-audio-forensics-37284619084.mjs
+          node scripts/test-audio-forensics-37284619084.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          echo 'FORENSICS_CONTRACT=PASS providerRequests=0'
+
+  inspect-retained-artifact:
+    if: github.event_name == 'workflow_dispatch'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Prove provider freeze before evidence download
+        run: node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+
+      - name: Download retained run 37284619084 evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-progressive-validation-37284619084
+          path: forensics-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37284619084'
+
+      - name: Inspect retained candidate evidence
+        run: |
+          set -euo pipefail
+          node scripts/audio-forensics-37284619084.mjs \
+            --root=forensics-input \
+            --out-json=forensics-output/FORENSICS-37284619084.json \
+            --out-md=forensics-output/FORENSICS-37284619084.md
+          cat forensics-output/FORENSICS-37284619084.md
+
+      - name: Prove production audio was not touched
+        run: |
+          git diff --exit-code -- public/audio
+          echo 'FORENSICS_PRODUCTION_AUDIO=UNCHANGED'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-forensics-37284619084-${{ github.run_id }}
+          path: forensics-output/
+          if-no-files-found: error
+          retention-days: 90
