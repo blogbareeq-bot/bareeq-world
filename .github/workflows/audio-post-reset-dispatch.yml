@@ -43,6 +43,8 @@ jobs:
           const strategyFile = 'docs/audio/ENGINE-STRATEGY-STATE.json';
           const status = fs.existsSync(statusFile) ? JSON.parse(fs.readFileSync(statusFile, 'utf8')) : {};
           const strategy = fs.existsSync(strategyFile) ? JSON.parse(fs.readFileSync(strategyFile, 'utf8')) : {};
+          const freezeFile = 'docs/audio/TTS-FREEZE.json';
+          const freeze = fs.existsSync(freezeFile) ? JSON.parse(fs.readFileSync(freezeFile, 'utf8')) : { active: false };
           const exact = Number(status.exactCount) || 0;
           const successful = Number(strategy.successfulTtsSinceLastNewExact) || 0;
           const threshold = Number(strategy.threshold) || 0;
@@ -60,10 +62,10 @@ jobs:
           // on the one-error, short-segment candidate instead of the wider
           // fitness paragraph that already regressed in live testing.
           const targetArticle = exact === 7 && preferred && preferred.exact !== true ? preferredId : '';
-          const shouldDispatch = !publicationComplete && !recoveryExhausted && !recoveryBlocked;
+          const shouldDispatch = freeze.active !== true && !publicationComplete && !recoveryExhausted && !recoveryBlocked;
           process.stdout.write(`should-dispatch=${shouldDispatch}\n`);
           process.stdout.write(`target-article=${targetArticle}\n`);
-          console.error(`POST_RESET_GATE exact=${exact} successful=${successful} threshold=${threshold} complete=${publicationComplete} recoveryExhausted=${recoveryExhausted} target=${targetArticle || 'auto'}`);
+          console.error(`POST_RESET_GATE freeze=${freeze.active === true} exact=${exact} successful=${successful} threshold=${threshold} complete=${publicationComplete} recoveryExhausted=${recoveryExhausted} target=${targetArticle || 'auto'}`);
           NODE
       - name: Dispatch progressive repair immediately after quota reset
         if: steps.gate.outputs.should-dispatch == 'true'
