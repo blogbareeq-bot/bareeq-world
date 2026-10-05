@@ -1,11 +1,18 @@
 {
   "schema": "bareeq.audio-engine-strategy.v1",
   "provider": "Gemini / Sadaltager",
-  "threshold": 28,
+  "threshold": 30,
   "exactBaseline": 7,
   "successfulTtsSinceLastNewExact": 28,
-  "status": "paused-for-engine-review",
-  "reason": "Gemini-only kill switch reached: 28/28 successful TTS requests without another exact publication",
+  "status": "active",
+  "reason": "User-requested verified micro-cut recovery: at most two one-request runs; historical 28 calls preserved",
+  "targetedRecovery": {
+    "id": "verified-micro-cut-20261005",
+    "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+    "maxRuns": 2,
+    "runs": 0,
+    "lastAttemptDay": null
+  },
   "lastExactAt": "2026-09-28T07:41:06.988Z",
   "lastRunId": "37270741630",
   "updatedAt": "2026-10-05T06:06:54.987Z"

@@ -7,6 +7,8 @@ on:
       - '.github/workflows/audio-partial-publish.yml'
       - 'scripts/audio-progressive-repair.mjs'
       - 'scripts/audio-segment-repair.mjs'
+      - 'scripts/audio-micro-repair-preflight.mjs'
+      - 'scripts/test-audio-micro-repair-preflight.mjs'
       - 'scripts/audio-normalize-parts.mjs'
       - 'scripts/audio-dual-asr-adjudicate.mjs'
       - 'scripts/audio-gemini-tts.mjs'
@@ -23,6 +25,8 @@ on:
       - '.github/workflows/audio-partial-publish.yml'
       - 'scripts/audio-progressive-repair.mjs'
       - 'scripts/audio-segment-repair.mjs'
+      - 'scripts/audio-micro-repair-preflight.mjs'
+      - 'scripts/test-audio-micro-repair-preflight.mjs'
       - 'scripts/audio-normalize-parts.mjs'
       - 'scripts/audio-dual-asr-adjudicate.mjs'
       - 'scripts/audio-gemini-tts.mjs'
@@ -58,29 +62,26 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
+      target-article: ${{ steps.check.outputs.target-article }}
+      verified-micro: ${{ steps.check.outputs.verified-micro }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
       - id: check
+        env:
+          BAREEQ_PROGRESSIVE_ONLY_ARTICLE: ${{ inputs.only_article || '' }}
         run: |
-          if [ "${{ github.event_name }}" != schedule ]; then
-            echo 'should-run=true' >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" != schedule ] && [ "${{ github.event_name }}" != workflow_dispatch ]; then
+            echo 'should-run=false' >> "$GITHUB_OUTPUT"
+            echo 'target-article=' >> "$GITHUB_OUTPUT"
+            echo 'verified-micro=false' >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          node - <<'NODE' >> "$GITHUB_OUTPUT"
-          const fs = require('fs');
-          const filename = 'docs/audio/PROGRESSIVE-STATUS.json';
-          const status = fs.existsSync(filename) ? JSON.parse(fs.readFileSync(filename, 'utf8')) : {};
-          const today = new Date().toISOString().slice(0, 10);
-          const alreadyRan = typeof status.generatedAt === 'string'
-            && status.generatedAt.slice(0, 10) === today;
-          process.stdout.write(`should-run=${!alreadyRan}\n`);
-          console.error(`SCHEDULE_GATE date=${today} already-ran=${alreadyRan}`);
-          NODE
+          node scripts/audio-engine-strategy-guard.mjs --workflow-gate >> "$GITHUB_OUTPUT"
 
   offline-gates:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -94,6 +95,7 @@ jobs:
           node scripts/test-audio-daily-progressive.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node scripts/test-audio-segment-repair.mjs
+          node scripts/test-audio-micro-repair-preflight.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-gemini-tts.mjs
@@ -102,7 +104,7 @@ jobs:
 
   repair-publish:
     needs: schedule-gate
-    if: github.event_name != 'pull_request' && needs.schedule-gate.outputs.should-run == 'true'
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && needs.schedule-gate.outputs.should-run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 240
     env:
@@ -111,12 +113,13 @@ jobs:
       BAREEQ_BOOTSTRAP_ARTIFACT: bareeq-progressive-validation-33962242086
       BAREEQ_PARTIAL_MARKER: docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
       BAREEQ_STATUS_FILE: docs/audio/PROGRESSIVE-STATUS.json
-      BAREEQ_REPAIR_MAX_REQUESTS: '10'
+      BAREEQ_REPAIR_MAX_REQUESTS: ${{ needs.schedule-gate.outputs.verified-micro == 'true' && '1' || '10' }}
       BAREEQ_REPAIR_MAX_429_RETRIES: '2'
       BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '1'
       BAREEQ_REPAIR_MAX_TRIALS_PER_PART: '1'
       BAREEQ_PROGRESSIVE_SKIP_ARTICLES: 'اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع'
-      BAREEQ_PROGRESSIVE_ONLY_ARTICLE: ${{ inputs.only_article || '' }}
+      BAREEQ_PROGRESSIVE_ONLY_ARTICLE: ${{ needs.schedule-gate.outputs.target-article }}
+      BAREEQ_REPAIR_REQUIRE_VERIFIED_MICRO: ${{ needs.schedule-gate.outputs.verified-micro == 'true' && '1' || '0' }}
       BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
     steps:
       - name: Checkout current production branch
@@ -137,6 +140,7 @@ jobs:
           node scripts/test-audio-daily-progressive.mjs
           node scripts/test-audio-dual-asr-adjudicate.mjs
           node scripts/test-audio-segment-repair.mjs
+          node scripts/test-audio-micro-repair-preflight.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-openrouter-campaign.mjs

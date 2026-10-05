@@ -6,6 +6,7 @@ import {
   recordRun,
   reconcileBeforeRun,
   remainingAllowance,
+  productionGate,
 } from './audio-engine-strategy-guard.mjs';
 
 const seeded = {
@@ -76,3 +77,25 @@ assert.equal(reconciled.successfulTtsSinceLastNewExact, 0);
 assert.equal(reconciled.status, 'active');
 
 console.log('Engine strategy guard tests passed: plain-text Gemini daily limits are parsed; normal allowance is preserved; 20/20 grants one bounded boundary recovery; the explicit live 25->28 review window is exactly three calls; no-exact exhaustion closes it; quota-only blocks preserve it; and any new exact publication retires the temporary threshold back to 20.');
+
+const targeted = { threshold: 30, exactBaseline: 7, successfulTtsSinceLastNewExact: 28,
+  targetedRecovery: { articleId: 'target', maxRuns: 2, runs: 0, lastAttemptDay: null } };
+const current = { exactCount: 7, publicationComplete: false, generatedAt: '2026-10-04T01:00:00Z' };
+for (const event of ['push', 'pull_request', 'unknown']) {
+  assert.equal(productionGate(current, targeted, event, '', '2026-10-05').shouldRun, false);
+}
+assert.equal(productionGate(current, targeted, 'workflow_dispatch', '', '2026-10-05').targetArticle, 'target');
+assert.equal(productionGate(current, targeted, 'workflow_dispatch', 'other', '2026-10-05').shouldRun, false);
+assert.equal(productionGate(current, targeted, 'schedule', '', '2026-10-05').shouldRun, true);
+assert.equal(productionGate({ ...current, exactCount: 15 }, targeted, 'workflow_dispatch').shouldRun, false);
+const attempt = recordRun(targeted, { currentExact: 7, successfulTts: 1, runId: 'attempt-1', attemptDay: '2026-10-05' });
+assert.equal(attempt.successfulTtsSinceLastNewExact, 29);
+assert.equal(attempt.targetedRecovery.runs, 1);
+assert.equal(productionGate(current, attempt, 'workflow_dispatch', '', '2026-10-05').shouldRun, false);
+assert.equal(productionGate(current, attempt, 'schedule', '', '2026-10-06').shouldRun, true);
+assert.equal(recordRun(attempt, { currentExact: 7, successfulTts: 1, runId: 'attempt-1', attemptDay: '2026-10-05' }).successfulTtsSinceLastNewExact, 29);
+const lastAttempt = recordRun(attempt, { currentExact: 7, successfulTts: 0, runId: 'attempt-2', attemptDay: '2026-10-06' });
+assert.equal(remainingAllowance(lastAttempt, 7), 0, 'failed boundary preflight cannot mint endless daily ASR runs');
+assert.equal(lastAttempt.status, 'paused-for-engine-review');
+assert.equal(recordRun(attempt, { currentExact: 8, successfulTts: 1, runId: 'exact' }).targetedRecovery, null);
+console.log('Targeted recovery gates passed: push spends zero, target cannot change, one run per day, two runs total, idempotent accounting.');

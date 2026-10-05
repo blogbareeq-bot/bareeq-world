@@ -48,6 +48,10 @@ jobs:
           const threshold = Number(strategy.threshold) || 0;
           const publicationComplete = status.publicationComplete === true || exact >= 15;
           const recoveryExhausted = threshold > 0 && successful >= threshold;
+          const recovery = strategy.targetedRecovery;
+          const today = new Date().toISOString().slice(0, 10);
+          const recoveryBlocked = recovery && (Number(recovery.runs) >= Number(recovery.maxRuns)
+            || recovery.lastAttemptDay === today);
           const preferredId = 'كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه';
           const preferred = Array.isArray(status.rows)
             ? status.rows.find((row) => row.articleId === preferredId)
@@ -56,7 +60,7 @@ jobs:
           // on the one-error, short-segment candidate instead of the wider
           // fitness paragraph that already regressed in live testing.
           const targetArticle = exact === 7 && preferred && preferred.exact !== true ? preferredId : '';
-          const shouldDispatch = !publicationComplete && !recoveryExhausted;
+          const shouldDispatch = !publicationComplete && !recoveryExhausted && !recoveryBlocked;
           process.stdout.write(`should-dispatch=${shouldDispatch}\n`);
           process.stdout.write(`target-article=${targetArticle}\n`);
           console.error(`POST_RESET_GATE exact=${exact} successful=${successful} threshold=${threshold} complete=${publicationComplete} recoveryExhausted=${recoveryExhausted} target=${targetArticle || 'auto'}`);
