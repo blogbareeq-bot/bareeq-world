@@ -18,6 +18,7 @@ on:
       - 'scripts/audio-tts-freeze-guard.mjs'
       - 'scripts/audio-state-consistency.mjs'
       - 'scripts/test-audio-tts-freeze-guard.mjs'
+      - 'scripts/test-audio-tts-freeze-integration.mjs'
       - 'scripts/test-audio-state-consistency.mjs'
       - 'docs/audio/TTS-FREEZE.json'
       - 'docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md'
@@ -42,6 +43,7 @@ on:
       - 'scripts/audio-tts-freeze-guard.mjs'
       - 'scripts/audio-state-consistency.mjs'
       - 'scripts/test-audio-tts-freeze-guard.mjs'
+      - 'scripts/test-audio-tts-freeze-integration.mjs'
       - 'scripts/test-audio-state-consistency.mjs'
       - 'docs/audio/TTS-FREEZE.json'
       - 'docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md'
@@ -112,6 +114,7 @@ jobs:
           node scripts/test-audio-micro-repair-preflight.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
           node scripts/test-audio-tts-freeze-guard.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
           node scripts/test-audio-state-consistency.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
           node scripts/audio-state-consistency.mjs
