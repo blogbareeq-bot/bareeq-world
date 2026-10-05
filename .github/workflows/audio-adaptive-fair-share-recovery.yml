@@ -24,7 +24,9 @@ permissions:
   contents: write
 
 concurrency:
-  group: bareeq-daily-progressive-audio
+  # Offline PR/push validation must not cancel sibling audio workflows.
+  # Actual provider jobs below share a separate live-only lock.
+  group: bareeq-audio-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 env:
@@ -62,6 +64,9 @@ jobs:
           echo 'ADAPTIVE_FAIR_SHARE_OFFLINE=PASS requests=0 publication=false'
 
   fair-share-recovery:
+    concurrency:
+      group: bareeq-live-progressive-audio
+      cancel-in-progress: false
     if: github.event_name == 'workflow_dispatch' && inputs.execute_live == true
     runs-on: ubuntu-latest
     timeout-minutes: 120
