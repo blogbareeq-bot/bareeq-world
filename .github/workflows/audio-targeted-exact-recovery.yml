@@ -60,6 +60,7 @@ jobs:
           node scripts/test-audio-segment-repair.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
           node scripts/test-audio-tts-freeze-guard.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
           node scripts/test-audio-state-consistency.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
           node scripts/audio-state-consistency.mjs
