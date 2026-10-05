@@ -1,3 +1,5 @@
+import { assertTtsUnfrozen } from './audio-tts-freeze-guard.mjs';
+
 import { spawn } from 'node:child_process';
 import {
   EXIT_CONFIG,
@@ -67,6 +69,7 @@ export async function synthesizeOpenRouterPart({
   fetchImpl = globalThis.fetch,
   ffmpegPath,
 }) {
+  if (fetchImpl === globalThis.fetch) await assertTtsUnfrozen({ operation: 'openrouter-tts' });
   if (!apiKey?.trim()) {
     throw Object.assign(new Error('OPENROUTER_API_KEY is absent. No OpenRouter TTS request was sent.'), { exitCode: EXIT_CONFIG });
   }
