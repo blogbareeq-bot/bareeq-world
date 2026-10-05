@@ -76,6 +76,23 @@ export async function loadBoundEvidence({
   }
 
   const validate = reports.validate;
+  const candidateEngine = reports['candidate-manifest'];
+  const engineId = candidateEngine?.engineId || candidateEngine?.engine?.engineId || 'gemini';
+  if (engineId !== 'gemini') {
+    for (const [label, payload] of Object.entries(reports)) {
+      const actualVoice = label === 'player-manifest'
+        ? payload.voices?.find((voice) => voice.id === payload.defaultVoice)?.providerVoice
+        : payload.ttsVoice || payload.voice;
+      const actualModel = payload.ttsModel || payload.model;
+      if (payload.engineId !== engineId || payload.provider !== candidateEngine.provider
+        || actualModel !== candidateEngine.model || actualVoice !== candidateEngine.voice
+        || !candidateEngine.synthesisContractSha256
+        || payload.synthesisContractSha256 !== candidateEngine.synthesisContractSha256) {
+        failures.push(`${label}: TTS engine/model/voice provenance mismatch`);
+      }
+    }
+    if (validate?.selectedTtsEngine?.engineId !== engineId) failures.push('validation selected a different TTS engine');
+  }
   const evidenceModels = Array.isArray(validate?.asrAdjudication?.models) && validate.asrAdjudication.models.length === 2
     ? validate.asrAdjudication.models
     : INDEPENDENT_ASR_MODELS;
@@ -95,6 +112,11 @@ export async function loadBoundEvidence({
     reports[label] = payload;
     failures.push(...missingBoundFields(payload).map((reason) => `${label}: ${reason}`));
     failures.push(...assertBoundReport(payload, expected, label));
+    if (engineId !== 'gemini' && (payload.engineId !== engineId || payload.provider !== candidateEngine.provider
+      || payload.ttsModel !== candidateEngine.model || payload.ttsVoice !== candidateEngine.voice
+      || payload.synthesisContractSha256 !== candidateEngine.synthesisContractSha256)) {
+      failures.push(`${label}: ASR evidence has a different TTS engine/model/voice`);
+    }
   }
 
   const asrFirst = reports['asr-first'];
@@ -136,14 +158,27 @@ export async function loadBoundEvidence({
       ...baseItems.filter((item) => item.label !== 'validate').map((item) => item.file),
       ...evidenceModels.map((model) => `reports/asr-${model}.json`),
       ...(validate.asrAdjudication ? ['reports/asr-adjudication.json'] : []),
+      ...['reports/normalization.json', 'reports/local-asr-preflight.json']
+        .filter((relative) => validate.reportDigests[relative]),
     ];
     for (const relative of digestFiles) {
       const absolute = path.join(dir, relative);
-      if (!await pathExists(absolute)) continue;
+      if (!await pathExists(absolute)) {
+        if (relative === 'reports/normalization.json' || relative === 'reports/local-asr-preflight.json') {
+          failures.push(`missing ${relative} bound by validate.reportDigests`);
+        }
+        continue;
+      }
       const actual = sha256(await readFile(absolute));
       if (validate.reportDigests[relative] !== actual) {
         failures.push(`${relative} SHA-256 does not match validate.reportDigests`);
       }
+    }
+  }
+  if (validate?.localAsrPreflight?.enabled) {
+    const localAsr = await readJsonIfPresent(path.join(dir, 'reports', 'local-asr-preflight.json'));
+    if (!localAsr || localAsr.status !== 'passed' || localAsr.audioSha256 !== fullSha256) {
+      failures.push('local ASR preflight is not passed and bound to full.mp3');
     }
   }
   if (reports.sync && reports.sync.passed === false) failures.push('sync report is not passed');

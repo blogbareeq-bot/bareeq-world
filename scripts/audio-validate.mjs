@@ -10,7 +10,7 @@ import {
   sha256,
   GENERATOR_VERSION,
 } from './audio-constants.mjs';
-import { loadSpokenArticle, splitSpokenArticle, partFingerprint, activeSplitSettings } from './audio-split.mjs';
+import { loadSpokenArticle, splitSpokenArticle, candidateFingerprint, partFingerprint, activeSplitSettings } from './audio-split.mjs';
 import { expectedSyncIds, validateSyncMap } from './audio-sync.mjs';
 import { checkpointPaths, pathExists, writeJson, writePlayerCompatibleCandidateManifest } from './audio-checkpoint.mjs';
 import { mergeCandidateParts } from './audio-merge.mjs';
@@ -19,9 +19,11 @@ import { transcribeDualAsr } from './audio-asr-transcribe.mjs';
 import { publicPartSrc } from './audio-manifest.mjs';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { partFileName } from './audio-checkpoint.mjs';
-import { boundIdentity } from './audio-report.mjs';
+import { boundIdentity, assertSafeArticleId, assertSha256Fingerprint } from './audio-report.mjs';
 import { ORIGINAL_REPORTS } from './audio-evidence.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
+import { publicEngineIdentity, selectedEngineProfile, synthesisContractSha256 } from './audio-engine-config.mjs';
+import { runLocalAsrPreflight } from './audio-local-asr-preflight.mjs';
 import {
   TRANSITION_NORMALIZATION,
   normalizeCandidatePart,
@@ -42,7 +44,11 @@ async function defaultLiveDuration(articleId, root) {
 }
 
 function stamp(article, fingerprint, fullSha256, status, schema, extra = {}) {
-  return boundIdentity({ article, fingerprint, fullSha256, status, schema, extra });
+  const engine = publicEngineIdentity();
+  return boundIdentity({ article, fingerprint, fullSha256, status, schema, model: engine.model,
+    extra: { engineId: engine.engineId, provider: engine.provider, voice: engine.voice,
+      ttsModel: engine.model, ttsVoice: engine.voice,
+      ...(engine.local ? { synthesisContractSha256: synthesisContractSha256() } : {}), ...extra } });
 }
 
 export async function validateCandidate({
@@ -56,11 +62,11 @@ export async function validateCandidate({
   apiKey = process.env.GEMINI_API_KEY,
   skipAsr = false,
 }) {
-  if (!articleId) {
-    throw Object.assign(new Error('validate-candidate requires --article'), { exitCode: EXIT_USAGE });
+  if (!assertSafeArticleId(articleId)) {
+    throw Object.assign(new Error('validate-candidate requires a safe --article ID'), { exitCode: EXIT_USAGE });
   }
-  if (!fingerprint) {
-    throw Object.assign(new Error('validate-candidate requires --fingerprint; it will not pick the latest candidate'), { exitCode: EXIT_USAGE });
+  if (!assertSha256Fingerprint(fingerprint)) {
+    throw Object.assign(new Error('validate-candidate requires a SHA-256 --fingerprint; it will not pick the latest candidate'), { exitCode: EXIT_USAGE });
   }
   const article = await loadSpokenArticle(articleId, root);
   const duration = liveDurationSeconds === undefined ? await defaultLiveDuration(articleId, root) : liveDurationSeconds;
@@ -70,6 +76,23 @@ export async function validateCandidate({
   const paths = checkpointPaths(articleId, resolvedFingerprint, storeRoot || root);
   if (!await pathExists(dir)) {
     throw Object.assign(new Error(`validate-candidate refused: candidate missing at ${dir}`), { exitCode: EXIT_HARD });
+  }
+  const initialManifest = await pathExists(paths.manifestFile) ? JSON.parse(await readFile(paths.manifestFile, 'utf8')) : {};
+  const candidateEngineId = initialManifest.engineId || initialManifest.engine?.engineId || 'gemini';
+  const selectedEngine = selectedEngineProfile();
+  const selectedEngineId = selectedEngine.id;
+  if (candidateEngineId !== selectedEngineId) {
+    throw Object.assign(new Error(`validate-candidate engine mismatch: candidate=${candidateEngineId}, selected=${selectedEngineId}. Set BAREEQ_TTS_ENGINE to the candidate engine explicitly.`), { exitCode: EXIT_CONFIG });
+  }
+  if (candidateEngineId !== 'gemini' && (initialManifest.model !== selectedEngine.model
+    || initialManifest.voice !== selectedEngine.voice || initialManifest.provider !== selectedEngine.provider)) {
+    throw Object.assign(new Error('validate-candidate TTS model/voice/provider mismatch.'), { exitCode: EXIT_CONFIG });
+  }
+  if (candidateEngineId !== 'gemini' && candidateFingerprint(article, splitPlan) !== resolvedFingerprint) {
+    throw Object.assign(new Error('validate-candidate synthesis contract fingerprint mismatch.'), { exitCode: EXIT_CONFIG });
+  }
+  if (candidateEngineId !== 'gemini' && initialManifest.synthesisContractSha256 !== synthesisContractSha256()) {
+    throw Object.assign(new Error('validate-candidate synthesis contract identity mismatch.'), { exitCode: EXIT_CONFIG });
   }
 
   const partFiles = [];
@@ -226,6 +249,18 @@ export async function validateCandidate({
   };
   await writeJson(path.join(paths.reportsDir, 'technical-qa.json'), technical);
 
+  let localAsrPreflight = null;
+  if (!skipAsr) {
+    localAsrPreflight = await runLocalAsrPreflight({
+      audioPath: paths.fullFile,
+      expectedText: article.spokenText,
+      outputPath: path.join(paths.reportsDir, 'local-asr-preflight.json'),
+    });
+    if (localAsrPreflight.enabled && localAsrPreflight.status !== 'passed') {
+      throw Object.assign(new Error(`Local ASR preflight rejected candidate before paid/remote ASR: S=${localAsrPreflight.substitutions} D=${localAsrPreflight.deletions} I=${localAsrPreflight.insertions}`), { exitCode: EXIT_HARD, report: localAsrPreflight });
+    }
+  }
+
   const asrReports = [];
   let filesApiUploads = 0;
   let asrInteractions = 0;
@@ -300,6 +335,9 @@ export async function validateCandidate({
     if (await pathExists(file)) reportDigests[item.file] = sha256(await readFile(file));
   }
   reportDigests['reports/normalization.json'] = sha256(await readFile(path.join(paths.reportsDir, 'normalization.json')));
+  if (await pathExists(path.join(paths.reportsDir, 'local-asr-preflight.json'))) {
+    reportDigests['reports/local-asr-preflight.json'] = sha256(await readFile(path.join(paths.reportsDir, 'local-asr-preflight.json')));
+  }
 
   const report = {
     ...stamp(article, resolvedFingerprint, fullSha256, 'validated', 'bareeq.audio-validate.v2'),
@@ -309,6 +347,7 @@ export async function validateCandidate({
     technical,
     sync: syncReport,
     asrReports,
+    localAsrPreflight,
     filesApiUploads,
     asrInteractions,
     asrProviderCalls: httpCounts.totalHttpRequests || (filesApiUploads + asrInteractions),
@@ -321,7 +360,8 @@ export async function validateCandidate({
     totalHttpRequests: httpCounts.totalHttpRequests,
     liveUntouched: technical.liveUntouched,
     playerManifestValid: true,
-    narrator: PRODUCTION_NARRATOR,
+    narrator: candidateEngineId === 'gemini' ? PRODUCTION_NARRATOR : publicEngineIdentity(),
+    selectedTtsEngine: publicEngineIdentity(),
     generatorVersion: GENERATOR_VERSION,
     exitCode: EXIT_OK,
   };

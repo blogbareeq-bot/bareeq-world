@@ -1,0 +1,97 @@
+name: Audio Engine V2 acoustic trial
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/audio-v2-acoustic-trial.yml'
+      - 'scripts/audio-v2-acoustic-prepare.mjs'
+      - 'scripts/audio-v2-acoustic-spaces.py'
+      - 'scripts/audio-v2-acoustic-assess.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bareeq-audio-v2-acoustic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  acoustic-trial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      BAREEQ_TTS_ENGINE: gemini
+      BAREEQ_LOCAL_TTS_ENABLE: '0'
+      BAREEQ_LOCAL_ASR_PREFLIGHT: '0'
+      BAREEQ_SEGMENT_CACHE_ENABLE: '0'
+      BAREEQ_AUDIO_ENGINE_V2_PUBLISH: '0'
+      BAREEQ_AUDIO_PUBLISH_GIT: '0'
+      BAREEQ_AUDIO_PUBLISH_PUSH: '0'
+    steps:
+      - name: Checkout review branch
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Install locked Node dependencies
+        run: npm ci
+
+      - name: Install Gradio client only
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'gradio_client==2.7.1'
+
+      - name: Prepare three published Sadaltager baselines
+        run: node scripts/audio-v2-acoustic-prepare.mjs
+
+      - name: Generate VoxCPM2 and MOSS-TTS v1.5 samples
+        run: python scripts/audio-v2-acoustic-spaces.py --dir=audio-acoustic-trials --retries=3
+
+      - name: Objective QA and independent dual-ASR
+        id: assess
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-v2-acoustic-assess.mjs --dir=audio-acoustic-trials
+
+      - name: Prove publication stayed disabled
+        if: always()
+        run: |
+          test "$BAREEQ_AUDIO_ENGINE_V2_PUBLISH" = "0"
+          test "$BAREEQ_AUDIO_PUBLISH_GIT" = "0"
+          test "$BAREEQ_AUDIO_PUBLISH_PUSH" = "0"
+          git diff --exit-code -- public/audio
+
+      - name: Upload acoustic evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: audio-v2-acoustic-trial-${{ github.run_id }}
+          path: audio-acoustic-trials/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Enforce complete evidence
+        if: always()
+        run: |
+          test -f audio-acoustic-trials/assessment.json
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('audio-acoustic-trials/assessment.json', 'utf8'));
+          if (report.publicationAttempted !== false || report.publicationLockObserved !== true) {
+            throw new Error('Acoustic trial violated publication lock.');
+          }
+          if (report.complete !== true) {
+            throw new Error('Acoustic trial evidence is incomplete; inspect the uploaded artifact.');
+          }
+          console.log(`ACOUSTIC_TRIAL_COMPLETE eligible=${report.eligible.length} rejected=${report.rejected.length}`);
+          console.log('Human listening remains mandatory before any local-engine publication.');
+          NODE
