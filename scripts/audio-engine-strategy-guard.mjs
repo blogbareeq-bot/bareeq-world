@@ -45,6 +45,7 @@ export function normalizeStrategyState(raw = {}, exactCount = 0) {
     lastExactAt: raw.lastExactAt || null,
     lastRunId: raw.lastRunId || null,
     updatedAt: raw.updatedAt || null,
+    targetedRecovery: raw.targetedRecovery || null,
   };
 }
 
@@ -61,6 +62,7 @@ export function reconcileBeforeRun(raw, currentExact, generatedAt = null) {
     state.status = 'active';
     state.reason = 'new-exact-publication-reset';
     state.lastExactAt = generatedAt || new Date().toISOString();
+    state.targetedRecovery = null;
   }
   if (state.successfulTtsSinceLastNewExact >= state.threshold) {
     state.status = 'paused-for-engine-review';
@@ -70,8 +72,9 @@ export function reconcileBeforeRun(raw, currentExact, generatedAt = null) {
   return state;
 }
 
-export function recordRun(raw, { currentExact, successfulTts = 0, runId = null, generatedAt = null } = {}) {
+export function recordRun(raw, { currentExact, successfulTts = 0, runId = null, generatedAt = null, attemptDay = null } = {}) {
   const state = normalizeStrategyState(raw, currentExact);
+  if (runId && runId === state.lastRunId) return state;
   const success = Math.max(0, Number(successfulTts) || 0);
   if (Number(currentExact) > state.exactBaseline) {
     // Count the current run's successful requests conservatively after the new
@@ -81,6 +84,7 @@ export function recordRun(raw, { currentExact, successfulTts = 0, runId = null, 
     state.successfulTtsSinceLastNewExact = success;
     resetReviewedThresholdAfterNewExact(state);
     state.lastExactAt = generatedAt || new Date().toISOString();
+    state.targetedRecovery = null;
     state.reason = 'new-exact-publication-reset-with-current-run-requests-counted';
   } else {
     state.successfulTtsSinceLastNewExact += success;
@@ -91,12 +95,24 @@ export function recordRun(raw, { currentExact, successfulTts = 0, runId = null, 
     state.reason = `Gemini-only kill switch reached: ${state.successfulTtsSinceLastNewExact}/${state.threshold} successful TTS requests without another exact publication`;
   }
   state.lastRunId = runId || state.lastRunId;
+  if (state.targetedRecovery && attemptDay && state.lastRunId !== raw.lastRunId) {
+    state.targetedRecovery = {
+      ...state.targetedRecovery,
+      runs: (Number(state.targetedRecovery.runs) || 0) + 1,
+      lastAttemptDay: attemptDay,
+    };
+    if (state.targetedRecovery.runs >= state.targetedRecovery.maxRuns) {
+      state.status = 'paused-for-engine-review';
+      state.reason = 'Verified micro-repair review exhausted its two bounded runs';
+    }
+  }
   state.updatedAt = new Date().toISOString();
   return state;
 }
 
 export function remainingAllowance(raw, currentExact) {
   const state = reconcileBeforeRun(raw, currentExact);
+  if (state.targetedRecovery && Number(state.targetedRecovery.runs) >= Number(state.targetedRecovery.maxRuns)) return 0;
   const normalRemaining = Math.max(0, state.threshold - state.successfulTtsSinceLastNewExact);
   if (normalRemaining > 0) return normalRemaining;
 
@@ -111,6 +127,25 @@ export function remainingAllowance(raw, currentExact) {
   return exactlyAtReviewBoundary ? REVIEW_RECOVERY_ALLOWANCE : 0;
 }
 
+export function productionGate(status = {}, raw = {}, event = '', requestedArticle = '', today = new Date().toISOString().slice(0, 10)) {
+  const recovery = raw.targetedRecovery;
+  const exact = Number(status.exactCount) || 0;
+  const preferred = 'كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه';
+  const target = recovery?.articleId || requestedArticle
+    || (exact === 7 && status.rows?.some((row) => row.articleId === preferred && row.exact !== true) ? preferred : '');
+  const allowedEvent = event === 'schedule' || event === 'workflow_dispatch';
+  const exhausted = recovery && (Number(recovery.runs) >= Number(recovery.maxRuns)
+    || recovery.lastAttemptDay === today
+    || (requestedArticle && requestedArticle !== recovery.articleId));
+  const alreadyScheduledToday = event === 'schedule' && status.generatedAt?.slice(0, 10) === today;
+  return {
+    shouldRun: Boolean(allowedEvent && !status.publicationComplete && exact < 15 && !exhausted
+      && !alreadyScheduledToday && remainingAllowance(raw, exact) > 0),
+    targetArticle: target,
+    verifiedMicro: Boolean(recovery),
+  };
+}
+
 async function currentStatus() {
   return await readJson(STATUS_PATH, { exactCount: 0, generatedAt: null, sourceRunId: null });
 }
@@ -123,10 +158,19 @@ async function loadState(status) {
 async function cli() {
   const status = await currentStatus();
   let state = await loadState(status);
+  if (process.argv.includes('--workflow-gate')) {
+    const gate = productionGate(status, state, process.env.GITHUB_EVENT_NAME, process.env.BAREEQ_PROGRESSIVE_ONLY_ARTICLE);
+    console.log(`should-run=${gate.shouldRun}`);
+    console.log(`target-article=${gate.targetArticle}`);
+    console.log(`verified-micro=${gate.verifiedMicro}`);
+    return;
+  }
   if (process.argv.includes('--remaining')) {
     state = reconcileBeforeRun(state, status.exactCount, status.generatedAt);
     await writeJson(STRATEGY_PATH, state);
-    const remaining = remainingAllowance(state, status.exactCount);
+    const allowed = !process.env.GITHUB_EVENT_NAME || productionGate(status, state,
+      process.env.GITHUB_EVENT_NAME, process.env.BAREEQ_PROGRESSIVE_ONLY_ARTICLE).shouldRun;
+    const remaining = allowed ? remainingAllowance(state, status.exactCount) : 0;
     const recovery = remaining > 0 && state.successfulTtsSinceLastNewExact >= state.threshold;
     console.error(`GEMINI_STRATEGY remaining=${remaining} successfulSinceExact=${state.successfulTtsSinceLastNewExact} threshold=${state.threshold} exactBaseline=${state.exactBaseline} reviewRecovery=${recovery}`);
     process.stdout.write(String(remaining));
@@ -144,6 +188,7 @@ async function cli() {
       successfulTts,
       runId,
       generatedAt: status.generatedAt,
+      attemptDay: new Date().toISOString().slice(0, 10),
     });
     await writeJson(STRATEGY_PATH, state);
     console.log(`GEMINI_STRATEGY_RECORDED run=${runId || 'n/a'} successful=${successfulTts} sinceExact=${state.successfulTtsSinceLastNewExact}/${state.threshold} exact=${status.exactCount} status=${state.status}`);

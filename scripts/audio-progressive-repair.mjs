@@ -30,9 +30,12 @@ import { encodePcm48kToMp3 } from './audio-normalize-parts.mjs';
 import {
   buildMicroPart,
   locateSegmentRepair,
+  locateSentenceRepair,
+  planMicroSpliceCandidates,
   planSegmentSplice,
   spliceSegmentPcm,
 } from './audio-segment-repair.mjs';
+import { verifyMicroCut } from './audio-micro-repair-preflight.mjs';
 
 const ROOT = process.cwd();
 const CAMPAIGN_ID = process.env.BAREEQ_AUDIO_CAMPAIGN_ID?.trim() || 'sadaltager-openrouter-20260901-v1';
@@ -70,6 +73,9 @@ export function createBudgetedSynthesizer({ apiKey, sleepImpl = sleep, transport
   );
 
   const synthesize = async (args) => {
+    if (!transportEntries && process.env.GITHUB_EVENT_NAME === 'push') {
+      throw new Error('Production TTS is disabled for push events');
+    }
     const partNumber = Number(args?.part?.partIndex) + 1;
     for (const [transport, synth] of transports) {
       for (let attempt = 1; attempt <= retryAttempts; attempt += 1) {
@@ -269,6 +275,14 @@ function buildCorrectionHint(adjudication = {}, range) {
   return problems.join('; ');
 }
 
+export function buildPositiveCorrectionHint(adjudication = {}, indices = []) {
+  const selected = new Set(indices);
+  const words = [...(adjudication.substantiveDifferences || []), ...(adjudication.unresolved || [])]
+    .filter((diff) => selected.has(Number(diff.expectedIndex)))
+    .map((diff) => diff.expected).filter(Boolean);
+  return `Read only the approved transcript. Clearly preserve the complete form of ${[...new Set(words)].map((word) => `«${word}»`).join(', ')}. Preserve every suffix. End with a natural question intonation when the transcript is a question.`;
+}
+
 function unpackRepairSynthesis(value) {
   if (Buffer.isBuffer(value)) return { audio: value, transport: 'developer-interactions' };
   if (Buffer.isBuffer(value?.audio)) return { audio: value.audio, transport: value.transport || 'unknown' };
@@ -282,23 +296,50 @@ async function regenerateSynchronizedSegment({
   failedIndices: indices,
   correctionHint,
   synth,
+  models,
 }) {
-  const repair = locateSegmentRepair(splitPlan, indices);
+  const verifiedMicro = process.env.BAREEQ_REPAIR_REQUIRE_VERIFIED_MICRO === '1';
+  const repair = verifiedMicro ? locateSentenceRepair(splitPlan, indices) : locateSegmentRepair(splitPlan, indices);
   if (!repair) return null;
   const paths = checkpointPaths(article.articleId, fingerprint, ROOT);
   const existing = await loadCompletedPart(paths, article, splitPlan, repair.part);
   if (!existing) return null;
 
-  // Resolve both cut points before spending a TTS request. A paragraph is only
-  // eligible when its weighted sync estimates land near real silence on both
-  // sides; otherwise the caller safely falls back to whole-part replacement.
+  // Resolve both cut points before TTS. Reviewed micro-recovery additionally
+  // proves the extracted words with two independent models and forbids a
+  // fallback to wider regeneration.
   const originalPcm = await decodePcm(existing.file);
   let splicePlan;
-  try {
-    splicePlan = planSegmentSplice(originalPcm, repair);
-  } catch (error) {
-    console.log(`PROGRESSIVE_SEGMENT_REPAIR_SKIP ${article.articleId} segment=${repair.segmentId} reason=${JSON.stringify(String(error?.message || error))}`);
-    return null;
+  if (verifiedMicro) {
+    const plans = planMicroSpliceCandidates(originalPcm, repair);
+    const preflightRoot = await mkdtemp(path.join(tmpdir(), 'bareeq-cut-preflight-'));
+    try {
+      for (const [index, plan] of plans.entries()) {
+        const cutFile = path.join(preflightRoot, `cut-${index}.mp3`);
+        const cutPcm = originalPcm.subarray(plan.start.sample * 2, plan.end.sample * 2);
+        await writeFile(cutFile, await encodePcm48kToMp3(cutPcm));
+        const proof = await verifyMicroCut({ audioPath: cutFile, repair, models });
+        console.log(`PROGRESSIVE_MICRO_PREFLIGHT ${article.articleId} cut=${plan.start.seconds.toFixed(3)}-${plan.end.seconds.toFixed(3)} passed=${proof.passed} transcripts=${JSON.stringify(proof.reports.map((report) => report.transcript))}`);
+        if (proof.passed) {
+          splicePlan = plan;
+          await writeJson(path.join(paths.dir, 'micro-cut-preflight.json'), {
+            articleId: article.articleId, fingerprint, segmentId: repair.segmentId,
+            text: repair.text, failedIndices: indices, splicePlan: plan, ...proof,
+          });
+          break;
+        }
+      }
+    } finally {
+      await rm(preflightRoot, { recursive: true, force: true });
+    }
+    if (!splicePlan) return null;
+  } else {
+    try {
+      splicePlan = planSegmentSplice(originalPcm, repair);
+    } catch (error) {
+      console.log(`PROGRESSIVE_SEGMENT_REPAIR_SKIP ${article.articleId} segment=${repair.segmentId} reason=${JSON.stringify(String(error?.message || error))}`);
+      return null;
+    }
   }
   console.log(`PROGRESSIVE_SEGMENT_REPAIR_START ${article.articleId} part=${repair.partIndex + 1} segment=${repair.segmentId} cut=${splicePlan.start.seconds.toFixed(3)}-${splicePlan.end.seconds.toFixed(3)}s textBytes=${repair.text.length}`);
 
@@ -470,7 +511,9 @@ async function repairArticle({
   const hints = {};
   for (const [partIndex, entry] of failedPartMap) {
     if (partIndex !== trialPartIndex) continue;
-    const hint = buildCorrectionHint(adjudication, entry.range);
+    const hint = process.env.BAREEQ_REPAIR_REQUIRE_VERIFIED_MICRO === '1'
+      ? buildPositiveCorrectionHint(adjudication, entry.indices)
+      : buildCorrectionHint(adjudication, entry.range);
     hints[String(partIndex + 1)] = hint || 'Read the reviewed transcript verbatim; preserve every spoken token and ending.';
   }
 
@@ -493,8 +536,12 @@ async function repairArticle({
       failedIndices: failedInTrialPart,
       correctionHint: hints[String(trialPartIndex + 1)],
       synth,
+      models: adjudication.models,
     });
     if (!segmentRepair) {
+      if (process.env.BAREEQ_REPAIR_REQUIRE_VERIFIED_MICRO === '1') {
+        throw new Error('No independently verified sentence cut; whole-part regeneration is disabled');
+      }
       process.env.BAREEQ_FORCE_TTS_PARTS = parts.join(',');
       process.env.BAREEQ_TTS_CORRECTION_HINTS_JSON = JSON.stringify(hints);
       const generated = await runProductionMode({

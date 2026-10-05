@@ -169,6 +169,72 @@ export function locateSegmentRepair(splitPlan, failedIndices) {
   };
 }
 
+// Keep reviewed words and punctuation intact. Timing remains an estimate;
+// verbatim ASR must prove which words the cut actually contains.
+export function locateSentenceRepair(splitPlan, failedIndices) {
+  const repair = locateSegmentRepair(splitPlan, failedIndices);
+  if (!repair) return null;
+  const sentences = repair.text.match(/[^.!؟؛]+[.!؟؛]*/gu)?.map((x) => x.trim()).filter(Boolean) || [];
+  if (JSON.stringify(sentences.flatMap(tokenizeVerbal)) !== JSON.stringify(tokenizeVerbal(repair.text))) return null;
+  let offset = repair.tokenStart;
+  let charOffset = 0;
+  for (const text of sentences) {
+    const count = tokenizeVerbal(text).length;
+    const textStart = repair.text.indexOf(text, charOffset);
+    const textEnd = textStart + text.length;
+    if (repair.failedIndices.every((index) => index >= offset && index < offset + count)) {
+      const span = repair.sync.end - repair.sync.start;
+      return {
+        ...repair, text, items: [{ ...repair.items[0], text }],
+        tokenStart: offset, tokenEnd: offset + count - 1,
+        sync: {
+          ...repair.sync,
+          start: repair.sync.start + span * textStart / repair.text.length,
+          end: repair.sync.start + span * textEnd / repair.text.length,
+        },
+      };
+    }
+    offset += count;
+    charOffset = textEnd;
+  }
+  return null;
+}
+
+export function planMicroSpliceCandidates(originalPcm, repair, { maxCandidates = 8, ...settings } = {}) {
+  if (!originalPcm?.length || !repair?.sync) return [];
+  const options = { ...DEFAULT_BOUNDARY_SETTINGS, boundaryMinSilenceMs: 180, ...settings };
+  const sampleRate = options.sampleRate;
+  const totalSamples = Math.floor(originalPcm.length / 2);
+  const durationSeconds = totalSamples / sampleRate;
+  const targetStart = repair.sync.start * durationSeconds;
+  const targetEnd = repair.sync.end * durationSeconds;
+  const predictedSeconds = targetEnd - targetStart;
+  const runs = detectSilenceRuns(originalPcm, options)
+    .filter((run) => run.durationSeconds >= options.boundaryMinSilenceMs / 1000);
+  const starts = runs.filter((run) => Math.abs(run.centerSeconds - targetStart) <= options.maxDistanceSeconds);
+  const ends = runs.filter((run) => Math.abs(run.centerSeconds - targetEnd) <= options.maxDistanceSeconds);
+  const candidates = [];
+  for (const left of starts) for (const right of ends) {
+    const start = boundaryFromRun(left, sampleRate);
+    const end = boundaryFromRun(right, sampleRate);
+    const removedSeconds = end.seconds - start.seconds;
+    const ratio = removedSeconds / Math.max(0.001, predictedSeconds);
+    if (start.sample <= 0 || end.sample >= totalSamples || end.sample <= start.sample
+      || ratio < 0.55 || ratio > 1.65 || removedSeconds > 12) continue;
+    const distanceSeconds = Math.abs(start.seconds - targetStart) + Math.abs(end.seconds - targetEnd);
+    candidates.push({
+      sampleRate, totalSamples, durationSeconds, start, end, removedSeconds, predictedSeconds,
+      silenceRunCount: runs.length,
+      boundarySelection: {
+        score: Math.abs(removedSeconds - predictedSeconds) + 0.15 * distanceSeconds,
+        distanceSeconds, spanErrorSeconds: Math.abs(removedSeconds - predictedSeconds),
+      },
+    });
+  }
+  return candidates.sort((a, b) => a.boundarySelection.score - b.boundarySelection.score)
+    .slice(0, Math.max(1, Math.min(8, maxCandidates)));
+}
+
 export function planSegmentSplice(originalPcm, repair, settings = DEFAULT_BOUNDARY_SETTINGS) {
   if (!originalPcm?.length || !repair?.sync) throw new Error('segment splice requires original PCM and a synchronized repair segment');
   const sampleRate = Number(settings.sampleRate) || 48000;
