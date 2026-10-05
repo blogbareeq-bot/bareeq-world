@@ -13,6 +13,13 @@ on:
       - '.github/workflows/audio-targeted-exact-recovery.yml'
       - 'scripts/audio-validate-consensus.mjs'
       - 'scripts/test-audio-asr-fallback.mjs'
+  workflow_dispatch:
+    inputs:
+      execute_live:
+        description: 'Explicit live targeted recovery; repository TTS freeze must first be lifted by reviewed code change.'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   actions: read
@@ -33,10 +40,13 @@ env:
 
 jobs:
   offline-gates:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Enforce repository TTS freeze
+        run: node scripts/audio-tts-freeze-guard.mjs --require-unfrozen
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
@@ -57,7 +67,7 @@ jobs:
           echo 'TARGETED_RECOVERY_OFFLINE=PASS requests=0 publication=false'
 
   targeted-recovery:
-    if: github.event_name == 'push'
+    if: github.event_name == 'workflow_dispatch' && inputs.execute_live == true
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
