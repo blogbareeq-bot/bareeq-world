@@ -1,3 +1,5 @@
+import { assertTtsUnfrozen } from './audio-tts-freeze-guard.mjs';
+
 import { spawn } from 'node:child_process';
 import { buildGeminiPrompt } from './speech-prompt.mjs';
 import {
@@ -194,6 +196,7 @@ async function decodeAndEncodePcmAudio(outputAudio, ffmpegPath, label) {
 }
 
 export async function synthesizeGeminiPart({ apiKey, part, context, voice = PRODUCTION_VOICE, model = PRODUCTION_TTS_MODEL, fetchImpl = globalThis.fetch, ffmpegPath }) {
+  if (fetchImpl === globalThis.fetch) await assertTtsUnfrozen({ operation: 'gemini-interactions-tts' });
   if (!apiKey?.trim()) throw Object.assign(new Error('GEMINI_API_KEY is absent. No TTS request was sent.'), { exitCode: EXIT_CONFIG });
   const endpoint = geminiTtsEndpoint();
   let response;
@@ -221,6 +224,7 @@ export async function synthesizeGeminiPart({ apiKey, part, context, voice = PROD
 }
 
 export async function synthesizeGeminiGenerateContentPart({ apiKey, part, context, voice = PRODUCTION_VOICE, model = PRODUCTION_TTS_MODEL, fetchImpl = globalThis.fetch, ffmpegPath }) {
+  if (fetchImpl === globalThis.fetch) await assertTtsUnfrozen({ operation: 'gemini-generate-content-tts' });
   if (!apiKey?.trim()) throw Object.assign(new Error('GEMINI_API_KEY is absent. No generateContent TTS request was sent.'), { exitCode: EXIT_CONFIG });
   const endpoint = geminiGenerateContentEndpoint(model);
   let response;
@@ -252,6 +256,7 @@ export async function synthesizeGeminiGenerateContentPart({ apiKey, part, contex
 }
 
 export async function resolveProductionSynthesizer({ apiKey = process.env.GEMINI_API_KEY, fetchImpl = globalThis.fetch } = {}) {
+  if (fetchImpl === globalThis.fetch) await assertTtsUnfrozen({ operation: 'gemini-production-synthesizer' });
   if (typeof process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK === 'function') return process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK;
   if (process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1') {
     return async ({ article, part, splitPlan, correctionHint }) => synthesizeGeminiGenerateContentPart({
