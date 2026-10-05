@@ -1,10 +1,10 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "37182178839",
-  "sourceArtifact": "bareeq-progressive-validation-37182178839",
+  "sourceRunId": "37270741630",
+  "sourceArtifact": "bareeq-progressive-validation-37270741630",
   "sourceEvent": "schedule",
-  "generatedAt": "2026-10-04T06:14:10.406Z",
+  "generatedAt": "2026-10-05T06:06:54.939Z",
   "publicationComplete": false,
   "publishedCount": 7,
   "fallbackCount": 8,
