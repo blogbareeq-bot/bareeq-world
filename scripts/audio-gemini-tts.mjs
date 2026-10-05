@@ -256,7 +256,6 @@ export async function synthesizeGeminiGenerateContentPart({ apiKey, part, contex
 }
 
 export async function resolveProductionSynthesizer({ apiKey = process.env.GEMINI_API_KEY, fetchImpl = globalThis.fetch } = {}) {
-  if (fetchImpl === globalThis.fetch) await assertTtsUnfrozen({ operation: 'gemini-production-synthesizer' });
   if (typeof process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK === 'function') return process.env.BAREEQ_AUDIO_SYNTHESIZE_HOOK;
   if (process.env.BAREEQ_GEMINI_GENERATE_CONTENT === '1') {
     return async ({ article, part, splitPlan, correctionHint }) => synthesizeGeminiGenerateContentPart({
