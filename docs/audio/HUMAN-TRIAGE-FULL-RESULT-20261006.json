@@ -1,0 +1,204 @@
+{
+  "schema": "bareeq.audio-human-triage-ingested.v1",
+  "packageId": "triage-37284619084-83e2e3a7db",
+  "reviewerResultsSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2",
+  "exportedAt": "2026-10-06T11:34:39.589Z",
+  "ingestedAt": "2026-10-06",
+  "controls": {
+    "total": 7,
+    "expectedPronunciationConfirmed": 7,
+    "actualAudioError": 0,
+    "inconclusive": 0,
+    "pass": true
+  },
+  "pending": {
+    "total": 29,
+    "expectedPronunciationConfirmed": 16,
+    "actualAudioErrorSelections": 13,
+    "representationEquivalent": 0,
+    "inconclusive": 0,
+    "targetValidActualAudioError": 11,
+    "targetReviewRequired": 2
+  },
+  "targetReviewRequired": [
+    {
+      "caseId": "T06",
+      "articleId": "هل-الحدس-ذكاء-خفي-ام-اختصار-مضلل-متى-نثق-بشعورنا-الاول",
+      "title": "هل الحدس ذكاء خفي أم اختصار مضلل؟ متى نثق بشعورنا الأول؟",
+      "targetExpected": "إذن",
+      "automatedObserved": "إذا",
+      "reviewerDecision": "ACTUAL_AUDIO_ERROR",
+      "reviewerNote": "إحدى عشر تم قراءتها (إثنا عشر)",
+      "reason": "Reviewer note describes the adjacent 11→12 defect already represented by T22, not the T06 target token."
+    },
+    {
+      "caseId": "T31",
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "title": "اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا",
+      "targetExpected": "أقسى",
+      "automatedObserved": "أقصى",
+      "reviewerDecision": "ACTUAL_AUDIO_ERROR",
+      "reviewerNote": "كلمة (برنامج) لم يتم نقطها جيدا بالتنوين",
+      "reason": "Reviewer note describes a different nearby word, so the intended أقسى/أقصى dispute was not explicitly adjudicated."
+    }
+  ],
+  "confirmedFalsePositiveCandidates": [
+    "T02",
+    "T04",
+    "T07",
+    "T08",
+    "T09",
+    "T10",
+    "T11",
+    "T12",
+    "T16",
+    "T17",
+    "T19",
+    "T20",
+    "T21",
+    "T24",
+    "T26",
+    "T34"
+  ],
+  "confirmedTargetAudioErrors": [
+    "T03",
+    "T13",
+    "T14",
+    "T15",
+    "T22",
+    "T23",
+    "T25",
+    "T28",
+    "T29",
+    "T32",
+    "T36"
+  ],
+  "defectClusters": [
+    {
+      "id": "passports-missing-la",
+      "cases": [
+        "T03"
+      ],
+      "article": "لماذا تفتح بعض جوازات السفر أبواب العالم أكثر من غيرها؟",
+      "description": "Expected لا was not spoken."
+    },
+    {
+      "id": "intuition-eleven-read-twelve",
+      "cases": [
+        "T22"
+      ],
+      "article": "هل الحدس ذكاء خفي أم اختصار مضلل؟ متى نثق بشعورنا الأول؟",
+      "description": "11 / إحدى عشر was spoken as 12 / إثنا عشر."
+    },
+    {
+      "id": "satellites-quwa-quwwa",
+      "cases": [
+        "T13"
+      ],
+      "article": "لماذا لا تسقط الأقمار الصناعية من السماء؟",
+      "description": "قوى was spoken as قوة."
+    },
+    {
+      "id": "touchscreen-alshasha-alshashat",
+      "cases": [
+        "T14"
+      ],
+      "article": "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟",
+      "description": "الشاشة was spoken as الشاشات."
+    },
+    {
+      "id": "touchscreen-bihi-biha",
+      "cases": [
+        "T29"
+      ],
+      "article": "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟",
+      "description": "به was spoken as بها."
+    },
+    {
+      "id": "touchscreen-innahu-annahu",
+      "cases": [
+        "T32"
+      ],
+      "article": "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟",
+      "description": "إنه was spoken as أنه."
+    },
+    {
+      "id": "softpower-omitted-question",
+      "cases": [
+        "T15",
+        "T23",
+        "T25",
+        "T28",
+        "T36"
+      ],
+      "article": "حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟",
+      "description": "The phrase ما علاقة اللغة بالقوة الناعمة was omitted; five token-level deletions are one localized audio defect cluster."
+    }
+  ],
+  "articleSummary": [
+    {
+      "article": "كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟",
+      "pendingCases": 1,
+      "humanConfirmedExpected": 1,
+      "confirmedTargetAudioErrors": 0,
+      "targetReviewRequired": 0,
+      "provisionalState": "OFFLINE_ADJUDICATION_CANDIDATE_NO_TTS"
+    },
+    {
+      "article": "لماذا تفتح بعض جوازات السفر أبواب العالم أكثر من غيرها؟",
+      "pendingCases": 2,
+      "humanConfirmedExpected": 1,
+      "confirmedTargetAudioErrors": 1,
+      "targetReviewRequired": 0,
+      "provisionalState": "AUDIO_REPAIR_REQUIRED"
+    },
+    {
+      "article": "لماذا لا تسقط الأقمار الصناعية من السماء؟",
+      "pendingCases": 2,
+      "humanConfirmedExpected": 1,
+      "confirmedTargetAudioErrors": 1,
+      "targetReviewRequired": 0,
+      "provisionalState": "AUDIO_REPAIR_REQUIRED"
+    },
+    {
+      "article": "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟",
+      "pendingCases": 5,
+      "humanConfirmedExpected": 2,
+      "confirmedTargetAudioErrors": 3,
+      "targetReviewRequired": 0,
+      "provisionalState": "AUDIO_REPAIR_REQUIRED"
+    },
+    {
+      "article": "حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟",
+      "pendingCases": 9,
+      "humanConfirmedExpected": 4,
+      "confirmedTargetAudioErrors": 5,
+      "targetReviewRequired": 0,
+      "provisionalState": "ONE_LOCALIZED_OMISSION_CLUSTER_PLUS_FALSE_POSITIVES"
+    },
+    {
+      "article": "هل الحدس ذكاء خفي أم اختصار مضلل؟ متى نثق بشعورنا الأول؟",
+      "pendingCases": 9,
+      "humanConfirmedExpected": 7,
+      "confirmedTargetAudioErrors": 1,
+      "targetReviewRequired": 1,
+      "provisionalState": "ONE_CONFIRMED_AUDIO_ERROR_PLUS_ONE_TARGET_REVIEW"
+    },
+    {
+      "article": "اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا",
+      "pendingCases": 1,
+      "humanConfirmedExpected": 0,
+      "confirmedTargetAudioErrors": 0,
+      "targetReviewRequired": 1,
+      "provisionalState": "TARGET_REVIEW_REQUIRED_WITH_INCIDENTAL_PRONUNCIATION_NOTE"
+    }
+  ],
+  "invariants": {
+    "ttsCalls": 0,
+    "newAsrCalls": 0,
+    "productionMutation": false,
+    "exactState": "7/15",
+    "strategyState": "29/30",
+    "gate5": "CLOSED"
+  }
+}

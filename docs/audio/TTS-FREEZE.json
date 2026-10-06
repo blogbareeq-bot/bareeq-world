@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Recovery Decision v1: synthesis remains frozen. Gate 4 Pilot #1 passed and localized two disputes; corroboration/human arbitration is required before Gate 5.",
+  "reason": "Recovery Decision v1: synthesis remains frozen. Full blind Human Triage completed with 7/7 Exact controls confirmed; two target cases require short second-pass review before offline adjudication.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "complete Human Arbitration/corroboration for the two localized disputes; full calibration Run 4/4 remains prepared but NOT authorized; Gate 5 and TTS stay closed",
+    "nextAction": "complete target-specific second-pass review for T06 (إذن/إذا) and T31 (أقسى/أقصى), then apply binding human evidence offline and rerun the production Exact gate; Gate 5 and TTS remain closed",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -49,6 +49,16 @@
     "triggerIncident": "gate4-pr-path-retrigger-20261006",
     "classificationSemantics": "docs/audio/GATE-4-CLASSIFICATIONS-v1.md",
     "fullCalibrationPlan": "docs/audio/GATE-4-CALIBRATION-PLAN-v1.md",
-    "gate5Criteria": "docs/audio/GATE-5-DECISION-CRITERIA-v1.md"
+    "gate5Criteria": "docs/audio/GATE-5-DECISION-CRITERIA-v1.md",
+    "humanTriage": {
+      "packageId": "triage-37284619084-83e2e3a7db",
+      "reviewerResultsSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2",
+      "exactControls": "7/7 confirmed",
+      "pending": "16 expected-pronunciation confirmations / 11 target-valid actual audio errors / 2 target re-reviews",
+      "targetReReview": [
+        "T06",
+        "T31"
+      ]
+    }
   }
 }
