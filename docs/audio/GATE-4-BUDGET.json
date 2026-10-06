@@ -33,24 +33,41 @@
     "note": "These runs are retained as historical infrastructure debugging attempts and do not consume the scientific budget."
   },
   "infrastructureRecovery": {
-    "status": "owner-approved",
+    "status": "completed",
     "maxAdditionalRuns": 1,
-    "consumedRuns": 0,
+    "consumedRuns": 1,
     "ownerApprovalDate": "2026-10-06",
     "purpose": "Install ffmpeg explicitly, pass a mandatory smoke test, then run the unchanged bounded pilot if and only if the smoke test passes.",
     "automaticExtension": false,
-    "onFailure": "stop-and-require-new-owner-decision"
+    "onFailure": "stop-and-require-new-owner-decision",
+    "runId": 37419623624,
+    "smokeResult": "PASS",
+    "completedAt": "2026-10-06"
   },
   "scientificBudget": {
     "maxRuns": 4,
-    "consumedRuns": 0,
+    "consumedRuns": 1,
     "accountingRule": "A scientific run is consumed only if the workflow reaches the forced-alignment comparison step after the smoke test passes.",
-    "onScientificFailure": "record-scientific-negative-result-and-do-not-auto-extend"
+    "onScientificFailure": "record-scientific-negative-result-and-do-not-auto-extend",
+    "lastRun": {
+      "runId": 37419623624,
+      "result": "PILOT_PASS",
+      "exactControls": 2,
+      "pendingControls": 2,
+      "artifactId": 11392387341,
+      "criteria": {
+        "exactCoverage": true,
+        "negativeControls": true,
+        "pendingLocalized": true
+      }
+    }
   },
   "firstPilot": {
     "exactControls": 2,
     "activePending": 2,
-    "fullCampaignExpansionRequiresPilotPass": true
+    "fullCampaignExpansionRequiresPilotPass": true,
+    "result": "PASS",
+    "completedAt": "2026-10-06"
   },
   "overBudgetAction": "remain-frozen-and-require-project-owner-approval"
 }
