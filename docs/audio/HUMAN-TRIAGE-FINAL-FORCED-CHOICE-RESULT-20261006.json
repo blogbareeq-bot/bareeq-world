@@ -1,0 +1,47 @@
+{
+  "schema": "bareeq.audio-human-triage-final-forced-choice-ingested.v1",
+  "packageId": "triage-final-forced-choice-T06-T31",
+  "reviewerResultsSha256": "56178f4ac2e3814a7533cb4c0f566ef9f417a61dd6c300fd5c814ec49112df9e",
+  "exportedAt": "2026-10-06T12:18:53.280Z",
+  "ingestedAt": "2026-10-06",
+  "results": [
+    {
+      "caseId": "F01",
+      "sourceCaseId": "T06",
+      "target": "إذن / إذا",
+      "heard": null,
+      "ownerClarification": "لا فرق بينهما في النطق",
+      "disposition": "VALIDATOR_AMBIGUITY_PHONETIC_COLLISION",
+      "ttsAuthorized": false,
+      "rationale": "The listener does not consider the two candidates reliably distinguishable by sound in this context; no audio defect may be inferred from ASR spelling alone."
+    },
+    {
+      "caseId": "F02",
+      "sourceCaseId": "T31",
+      "target": "أقسى / أقصى",
+      "heard": "أقسى",
+      "disposition": "EXPECTED_PRONUNCIATION_CONFIRMED",
+      "ttsAuthorized": false,
+      "rationale": "Final forced-choice review heard the expected token أقسى."
+    }
+  ],
+  "closedTriageTotals": {
+    "pendingMismatches": 29,
+    "expectedPronunciationConfirmed": 17,
+    "actualAudioErrors": 11,
+    "validatorAmbiguityPhonetic": 1,
+    "unresolved": 0
+  },
+  "articleConsequences": {
+    "fitness": "OFFLINE_ADJUDICATION_CANDIDATE_NO_TTS",
+    "intuition": "AUDIO_REPAIR_REQUIRED_FOR_CONFIRMED_11_TO_12_DEFECT; T06 is non-actionable phonetic ambiguity"
+  },
+  "invariants": {
+    "ttsCalls": 0,
+    "newAsrCalls": 0,
+    "productionMutation": false,
+    "exactState": "7/15",
+    "strategyState": "29/30",
+    "gate5": "CLOSED"
+  }
+}
