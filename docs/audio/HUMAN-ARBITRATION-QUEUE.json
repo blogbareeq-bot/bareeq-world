@@ -7,7 +7,7 @@
   "items": [
     {
       "id": "gate4-fitness-aqsa-aqsa-20261006",
-      "status": "target-specific-final-review-required",
+      "status": "human-confirmed-expected-pronunciation",
       "sourceRunId": 37419623624,
       "classification": "VALIDATOR_AMBIGUITY",
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
@@ -28,11 +28,11 @@
         "INCONCLUSIVE"
       ],
       "humanTriageCaseId": "T31",
-      "humanDecision": "ACTUAL_AUDIO_ERROR",
+      "humanDecision": "EXPECTED_PRONUNCIATION_CONFIRMED",
       "humanNote": "كلمة (برنامج) لم يتم نقطها جيدا بالتنوين",
-      "targetBinding": "second-pass-inconclusive",
+      "targetBinding": "valid-final-forced-choice",
       "incidentalFinding": "Nearby word برنامج was flagged for pronunciation/tanween quality.",
-      "nextAction": "forced-choice target review with complete context: أقسى vs أقصى vs غير واضح",
+      "nextAction": "offline-adjudication-then-rerun-production-exact-gate",
       "ttsAuthorized": false,
       "secondPass": {
         "packageId": "triage-second-pass-T06-T31",
@@ -40,6 +40,12 @@
         "decision": "INCONCLUSIVE",
         "note": "الجملة ليست مكتملة",
         "reviewerResultsSha256": "5e6e0f39eb9688411d6e7d63c0c5281ee8cf805001f7d9511a32435c9a247df7"
+      },
+      "finalForcedChoice": {
+        "packageId": "triage-final-forced-choice-T06-T31",
+        "caseId": "F02",
+        "heard": "أقسى",
+        "reviewerResultsSha256": "56178f4ac2e3814a7533cb4c0f566ef9f417a61dd6c300fd5c814ec49112df9e"
       }
     },
     {
@@ -72,16 +78,16 @@
     },
     {
       "id": "triage-intuition-ithan-itha-20261006",
-      "status": "target-specific-final-review-required",
+      "status": "validator-ambiguity-phonetic-collision",
       "sourcePackageId": "triage-37284619084-83e2e3a7db",
       "humanTriageCaseId": "T06",
       "articleId": "هل-الحدس-ذكاء-خفي-ام-اختصار-مضلل-متى-نثق-بشعورنا-الاول",
       "expectedText": "إذن",
       "asrObserved": "إذا",
-      "humanDecision": "ACTUAL_AUDIO_ERROR",
+      "humanDecision": "INCONCLUSIVE_BY_SOUND",
       "humanNote": "إحدى عشر تم قراءتها (إثنا عشر)",
-      "targetBinding": "second-pass-still-invalid-note-refers-to-adjacent-defect",
-      "nextAction": "forced-choice target review: إذن vs إذا vs غير واضح",
+      "targetBinding": "phonetic-ambiguity-no-audio-error-inference",
+      "nextAction": "no TTS for this token; article remains blocked by its separately confirmed numeric audio defect",
       "ttsAuthorized": false,
       "secondPass": {
         "packageId": "triage-second-pass-T06-T31",
@@ -89,6 +95,13 @@
         "decision": "ACTUAL_AUDIO_ERROR",
         "note": "11 تنطق (إثنا عشر)",
         "reviewerResultsSha256": "5e6e0f39eb9688411d6e7d63c0c5281ee8cf805001f7d9511a32435c9a247df7"
+      },
+      "finalForcedChoice": {
+        "packageId": "triage-final-forced-choice-T06-T31",
+        "caseId": "F01",
+        "heard": null,
+        "ownerClarification": "لا فرق بينهما في النطق",
+        "reviewerResultsSha256": "56178f4ac2e3814a7533cb4c0f566ef9f417a61dd6c300fd5c814ec49112df9e"
       }
     }
   ],
