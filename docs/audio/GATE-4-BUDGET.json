@@ -1,18 +1,17 @@
 {
-  "schema": "bareeq.audio-gate4-budget.v1",
+  "schema": "bareeq.audio-gate4-budget.v2",
   "effectiveAt": "2026-10-06",
   "reviewDeadline": "2026-10-13",
   "ttsSuccessfulRequests": 0,
   "paidApiBudgetUsd": 0,
   "externalAsrProviderCalls": 0,
-  "maxResearchWorkflowRuns": 4,
   "maxWallMinutesPerRun": 45,
-  "maxAggregateRunnerMinutes": 180,
   "maxArtifactBytesPerRun": 1073741824,
   "gate4ArtifactRetentionDays": 30,
   "rejectedTrialRetentionDays": 90,
   "networkPolicy": {
     "allowed": [
+      "Ubuntu package installation required by the approved infrastructure smoke test",
       "package downloads",
       "model downloads required by the approved alignment pilot"
     ],
@@ -22,49 +21,36 @@
       "uploading campaign audio to unapproved third-party APIs"
     ]
   },
+  "historicalInfrastructureRuns": {
+    "count": 4,
+    "runIds": [
+      37417696932,
+      37417896711,
+      37418147860,
+      37418230047
+    ],
+    "scientificVerdict": "NOT_REACHED",
+    "note": "These runs are retained as historical infrastructure debugging attempts and do not consume the scientific budget."
+  },
+  "infrastructureRecovery": {
+    "status": "owner-approved",
+    "maxAdditionalRuns": 1,
+    "consumedRuns": 0,
+    "ownerApprovalDate": "2026-10-06",
+    "purpose": "Install ffmpeg explicitly, pass a mandatory smoke test, then run the unchanged bounded pilot if and only if the smoke test passes.",
+    "automaticExtension": false,
+    "onFailure": "stop-and-require-new-owner-decision"
+  },
+  "scientificBudget": {
+    "maxRuns": 4,
+    "consumedRuns": 0,
+    "accountingRule": "A scientific run is consumed only if the workflow reaches the forced-alignment comparison step after the smoke test passes.",
+    "onScientificFailure": "record-scientific-negative-result-and-do-not-auto-extend"
+  },
   "firstPilot": {
     "exactControls": 2,
     "activePending": 2,
     "fullCampaignExpansionRequiresPilotPass": true
   },
-  "overBudgetAction": "remain-frozen-and-require-project-owner-approval",
-  "status": "exhausted",
-  "researchRunsConsumed": 4,
-  "lastUpdatedAt": "2026-10-06",
-  "pilotOutcome": {
-    "status": "INFRASTRUCTURE_BUDGET_EXHAUSTED",
-    "scientificVerdict": "NOT_REACHED",
-    "pullRequest": 62,
-    "runs": [
-      {
-        "runId": 37417696932,
-        "result": "integration-failure",
-        "reason": "CPU torch/torchvision wheel mismatch prevented Wav2Vec2 import"
-      },
-      {
-        "runId": 37417896711,
-        "result": "integration-failure",
-        "reason": "alignment model loaded but WhisperX audio loader could not find ffmpeg"
-      },
-      {
-        "runId": 37418147860,
-        "result": "preflight-failure",
-        "reason": "hard-coded /usr/bin/ffmpeg was absent on runner"
-      },
-      {
-        "runId": 37418230047,
-        "result": "preflight-failure",
-        "reason": "command -v ffmpeg returned empty; runner image has no ffmpeg in PATH"
-      }
-    ],
-    "invariantEvidence": {
-      "ttsCalls": 0,
-      "paidApiCalls": 0,
-      "productionAudioMutation": false,
-      "exactState": "7/15",
-      "strategyState": "29/30"
-    },
-    "nextActionRequiresOwnerApproval": true,
-    "proposedBoundedAmendment": "one additional research run only, installing ffmpeg explicitly from Ubuntu packages before the unchanged alignment pilot"
-  }
+  "overBudgetAction": "remain-frozen-and-require-project-owner-approval"
 }
