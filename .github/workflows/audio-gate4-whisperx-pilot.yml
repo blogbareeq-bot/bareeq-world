@@ -53,7 +53,11 @@ jobs:
           cat gate4-output/PILOT-MANIFEST.json
 
       - name: Verify local audio tooling
-        run: ffmpeg -version | head -1
+        run: |
+          set -euo pipefail
+          test -x /usr/bin/ffmpeg
+          /usr/bin/ffmpeg -version | head -1
+          echo 'BAREEQ_FFMPEG=/usr/bin/ffmpeg' >> "$GITHUB_ENV"
 
       - name: Install CPU alignment stack
         run: |
@@ -76,6 +80,7 @@ jobs:
           cat gate4-output/GATE4-WHISPERX-PILOT.json
 
       - name: Prove production audio unchanged
+        if: always()
         run: |
           git diff --exit-code -- public/audio
           echo 'GATE4_PRODUCTION_AUDIO=UNCHANGED'
