@@ -27,5 +27,44 @@
     "activePending": 2,
     "fullCampaignExpansionRequiresPilotPass": true
   },
-  "overBudgetAction": "remain-frozen-and-require-project-owner-approval"
+  "overBudgetAction": "remain-frozen-and-require-project-owner-approval",
+  "status": "exhausted",
+  "researchRunsConsumed": 4,
+  "lastUpdatedAt": "2026-10-06",
+  "pilotOutcome": {
+    "status": "INFRASTRUCTURE_BUDGET_EXHAUSTED",
+    "scientificVerdict": "NOT_REACHED",
+    "pullRequest": 62,
+    "runs": [
+      {
+        "runId": 37417696932,
+        "result": "integration-failure",
+        "reason": "CPU torch/torchvision wheel mismatch prevented Wav2Vec2 import"
+      },
+      {
+        "runId": 37417896711,
+        "result": "integration-failure",
+        "reason": "alignment model loaded but WhisperX audio loader could not find ffmpeg"
+      },
+      {
+        "runId": 37418147860,
+        "result": "preflight-failure",
+        "reason": "hard-coded /usr/bin/ffmpeg was absent on runner"
+      },
+      {
+        "runId": 37418230047,
+        "result": "preflight-failure",
+        "reason": "command -v ffmpeg returned empty; runner image has no ffmpeg in PATH"
+      }
+    ],
+    "invariantEvidence": {
+      "ttsCalls": 0,
+      "paidApiCalls": 0,
+      "productionAudioMutation": false,
+      "exactState": "7/15",
+      "strategyState": "29/30"
+    },
+    "nextActionRequiresOwnerApproval": true,
+    "proposedBoundedAmendment": "one additional research run only, installing ffmpeg explicitly from Ubuntu packages before the unchanged alignment pilot"
+  }
 }
