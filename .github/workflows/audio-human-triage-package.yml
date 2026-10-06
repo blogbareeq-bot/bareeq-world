@@ -75,6 +75,10 @@ jobs:
           if (internal.totals.activePendingArticles !== 7) throw new Error('expected 7 active pending articles');
           if (internal.ttsCalls !== 0 || internal.asrCalls !== 0 || internal.providerCalls !== 0) throw new Error('triage package must make zero provider calls');
           if (reviewer.caseCount !== 36 || reviewer.cases.length !== 36) throw new Error('reviewer package count mismatch');
+          for (const c of reviewer.cases) {
+            if ('title' in c || 'articleId' in c || 'kind' in c) throw new Error(`reviewer identity leak in ${c.caseId}`);
+            if (!/^clips\/T\d{2}\.mp3$/.test(c.clipFile)) throw new Error(`reviewer clip filename is not blind: ${c.clipFile}`);
+          }
           const leaked = JSON.stringify(reviewer);
           for (const token of ['AUDIO_ERROR_CANDIDATE','VALIDATOR_AMBIGUITY','confirmedBy','substantiveDifferences']) {
             if (leaked.includes(token)) throw new Error(`reviewer package leaked automated evidence: ${token}`);
