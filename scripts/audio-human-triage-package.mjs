@@ -361,14 +361,16 @@ export async function buildHumanTriagePackage({
   };
   assertBlindManifest(reviewerManifest);
 
-  const mapping=Object.fromEntries(reviewerCases.map((reviewer,index)=>[
-    reviewer.caseId,
-    {
-      ...rawCases[index],
+  const mapping={};
+  for(let index=0;index<reviewerCases.length;index+=1){
+    const reviewer=reviewerCases[index];
+    const raw=rawCases[index];
+    mapping[reviewer.caseId]={
+      ...raw,
       reviewerCaseId:reviewer.caseId,
-      clipSha256:sha256(await readFile(path.join(outDir,rawCases[index].clipFile))),
-    }
-  ]));
+      clipSha256:sha256(await readFile(path.join(outDir,raw.clipFile))),
+    };
+  }
   const articleSummary=active.map((row)=>({
     articleId:row.articleId,
     title:row.title,
