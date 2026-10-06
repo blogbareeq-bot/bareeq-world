@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, json, math, os
+import argparse, json, math, os, subprocess
 from pathlib import Path
 
 import numpy as np
@@ -23,6 +23,18 @@ def words_from_result(result):
     for seg in (result.get("segments",[]) if isinstance(result,dict) else []):
         out.extend(seg.get("words",[]) or [])
     return out
+
+def load_audio_16k(path):
+    ffmpeg = os.environ.get("BAREEQ_FFMPEG", "/usr/bin/ffmpeg")
+    if not os.path.isfile(ffmpeg) or not os.access(ffmpeg, os.X_OK):
+        raise RuntimeError(f"approved ffmpeg binary is unavailable: {ffmpeg}")
+    cmd = [
+        ffmpeg, "-nostdin", "-threads", "0", "-i", str(path),
+        "-f", "s16le", "-ac", "1", "-acodec", "pcm_s16le",
+        "-ar", str(SAMPLE_RATE), "-"
+    ]
+    completed = subprocess.run(cmd, capture_output=True, check=True)
+    return np.frombuffer(completed.stdout, np.int16).astype(np.float32) / 32768.0
 
 def crop_audio(audio, start_ratio, end_ratio, pad_seconds=4.0, max_seconds=45.0):
     duration=len(audio)/SAMPLE_RATE
@@ -76,7 +88,7 @@ def main():
     results=[]
     positive_scores=[]
     for entry in manifest["entries"]:
-        audio=whisperx.load_audio(entry["audioPath"])
+        audio=load_audio_16k(entry["audioPath"])
         clip, clip_start, clip_end=crop_audio(audio,entry["startRatio"],entry["endRatio"])
         original=align_text(model,metadata,clip,entry["verificationText"])
         positive_scores.extend(original["scores"])
