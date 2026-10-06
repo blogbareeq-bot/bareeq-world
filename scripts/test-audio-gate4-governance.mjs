@@ -8,6 +8,7 @@ function fixture() {
       ttsSuccessfulRequests:0, paidApiBudgetUsd:0, externalAsrProviderCalls:0,
       maxResearchWorkflowRuns:4, maxWallMinutesPerRun:45, maxAggregateRunnerMinutes:180,
       gate4ArtifactRetentionDays:30, rejectedTrialRetentionDays:90,
+      status:'active', researchRunsConsumed:0,
     },
     freeze: {
       schema:'bareeq.audio-tts-freeze.v1', active:true,
@@ -40,3 +41,19 @@ const badFreeze=fixture(); badFreeze.freeze.active=false;
 assert.throws(()=>validateGate4Governance(badFreeze),/TTS freeze must remain active/);
 
 console.log('Gate 4 governance tests passed: budget, freeze, state, review cadence, and arbitration policy are fail-closed.');
+
+
+const exhausted=fixture();
+exhausted.budget.status='exhausted';
+exhausted.budget.researchRunsConsumed=4;
+exhausted.budget.pilotOutcome={nextActionRequiresOwnerApproval:true};
+exhausted.freeze.reviewPolicy.gate4Status='INFRASTRUCTURE_BUDGET_EXHAUSTED';
+exhausted.freeze.reviewPolicy.additionalResearchRunsAuthorized=0;
+assert.equal(
+  validateGate4Governance({...exhausted,now:new Date('2026-10-06T00:00:00Z')}).action,
+  'OWNER_DECISION_REQUIRED_RESEARCH_BUDGET_EXHAUSTED'
+);
+
+const over=fixture();
+over.budget.researchRunsConsumed=5;
+assert.throws(()=>validateGate4Governance(over),/research run budget exceeded/);
