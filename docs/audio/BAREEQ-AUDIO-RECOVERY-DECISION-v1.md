@@ -11,10 +11,11 @@
 
 The project is no longer allowed to spend synthesis requests as a default debugging mechanism.
 
-Two rules are now policy:
+Three rules are now policy:
 
 1. **No TTS request may leave the repository unless the experiment can produce new information even if the audio candidate fails.**
 2. **If the problem can be solved by correctly reinterpreting existing evidence, audio regeneration is prohibited.**
+3. **If the available evidence is insufficient for a decision, that insufficiency is recorded as a formal result; no technical conclusion or synthesis decision may be invented without evidence.**
 
 The current provider state is frozen until Gates 0–4 below are satisfied and Gate 5 authorizes one explicit action.
 
@@ -174,6 +175,10 @@ All available raw ASR evidence for the seven active pending articles has been re
 
 ## 9. Gate 4 — Validator v5 research
 
+The bounded execution contract is `docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md` and the resource cap is `docs/audio/GATE-4-BUDGET.json`.
+
+Gate 4 is explicitly time/resource bounded. Missing its review deadline does **not** lift the freeze; the project remains fail-closed until the owner reviews continuation.
+
 Dual-ASR is not removed by default. Validator v5 adds independent evidence:
 
 `expected spoken text -> canonical verification text -> Arabic phonetic/G2P representation -> forced alignment -> word/segment confidence -> independent ASR -> adjudication -> human arbitration only at genuine conflict`
@@ -186,11 +191,11 @@ Dual-ASR is not removed by default. Validator v5 adds independent evidence:
 - a validator that breaks accepted exact audio or passes known true errors remains research-only and cannot replace v4.
 
 ### Exit condition
-Validator v5 either demonstrates improved discrimination on positive and negative controls, or is explicitly rejected with evidence.
+Validator v5 either demonstrates improved discrimination on positive and negative controls, or is explicitly rejected with evidence. Detailed PASS / PARTIAL / FAIL criteria are defined in the Gate 4 contract. Gate 4 failure does not authorize TTS, threshold extension, or a redefinition of Exact.
 
 ## 10. Human arbitration
 
-Human review is a dispute resolver, not a bypass for technical QA.
+Human review is a dispute resolver, not a bypass for technical QA. The operational policy is `docs/audio/HUMAN-ARBITRATION-v1.md` and the active queue is `docs/audio/HUMAN-ARBITRATION-QUEUE.json`.
 
 The reviewer receives:
 - expected text
@@ -246,6 +251,8 @@ It may be used after a separate budget/engine decision when:
 PR #37 remains **Draft / Frozen / No Merge**. Useful architecture may later be extracted in small, independently tested PRs.
 
 ## 13. GitHub Actions and cost
+
+Gate 4 is capped at 0 TTS requests, $0 paid API budget, 4 research workflow runs, 45 minutes per run, and 180 aggregate runner minutes unless the owner explicitly approves a bounded amendment. Research artifacts retain for 30 days; rejected-trial diagnostics retain for at least 90 days.
 
 Infrastructure optimization is not a prerequisite for Gate 2.
 

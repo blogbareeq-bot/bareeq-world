@@ -1,0 +1,52 @@
+name: Bareeq audio recovery governance
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md'
+      - 'docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md'
+      - 'docs/audio/GATE-4-BUDGET.json'
+      - 'docs/audio/HUMAN-ARBITRATION-v1.md'
+      - 'docs/audio/HUMAN-ARBITRATION-QUEUE.json'
+      - 'docs/audio/TTS-FREEZE.json'
+      - 'scripts/audio-gate4-governance.mjs'
+      - 'scripts/test-audio-gate4-governance.mjs'
+      - '.github/workflows/audio-recovery-governance.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md'
+      - 'docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md'
+      - 'docs/audio/GATE-4-BUDGET.json'
+      - 'docs/audio/HUMAN-ARBITRATION-v1.md'
+      - 'docs/audio/HUMAN-ARBITRATION-QUEUE.json'
+      - 'docs/audio/TTS-FREEZE.json'
+      - 'scripts/audio-gate4-governance.mjs'
+      - 'scripts/test-audio-gate4-governance.mjs'
+      - '.github/workflows/audio-recovery-governance.yml'
+  schedule:
+    - cron: '17 2 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Verify recovery governance
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-gate4-governance.mjs
+          node scripts/test-audio-gate4-governance.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+          echo 'RECOVERY_GOVERNANCE_PROVIDER_CALLS=0'
