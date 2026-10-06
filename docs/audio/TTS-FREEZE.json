@@ -32,5 +32,12 @@
     "tts-synthesis",
     "automatic-provider-dispatch",
     "automatic-threshold-extension"
-  ]
+  ],
+  "reviewPolicy": {
+    "cadenceDays": 7,
+    "nextReviewAt": "2026-10-13T00:00:00Z",
+    "missedReviewAction": "remain-frozen",
+    "gate4Contract": "docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md",
+    "gate4Budget": "docs/audio/GATE-4-BUDGET.json"
+  }
 }
