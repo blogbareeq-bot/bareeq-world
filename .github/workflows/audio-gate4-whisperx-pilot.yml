@@ -59,8 +59,13 @@ jobs:
         run: |
           set -euo pipefail
           python -m pip install --upgrade pip
-          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.8.0 torchaudio==2.8.0
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0
           python -m pip install whisperx==3.8.6
+          python - <<'PY'
+          import torch, torchvision, torchaudio
+          from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
+          print(f'GATE4_ALIGNMENT_STACK torch={torch.__version__} torchvision={torchvision.__version__} torchaudio={torchaudio.__version__}')
+          PY
 
       - name: Run Arabic forced-alignment pilot
         run: |
