@@ -5,7 +5,9 @@
 **TTS:** prohibited  
 **Production mutation:** prohibited  
 **Owner review deadline:** 2026-10-13  
-**Parent policy:** `docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md`
+**Parent policy:** `docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md`  
+**Classification semantics:** `docs/audio/GATE-4-CLASSIFICATIONS-v1.md`  
+**Full calibration plan:** `docs/audio/GATE-4-CALIBRATION-PLAN-v1.md`
 
 ## 1. Question Gate 4 is allowed to answer
 
@@ -87,6 +89,20 @@ The pilot is **viable** only if all of the following hold:
 
 Failure of any mandatory item keeps the validator research-only and blocks expansion.
 
+### Meaning of Pilot PASS
+
+A Pilot `PASS` proves **viability of the bounded research path only**: the aligner
+runs on Arabic campaign audio, preserves the tested Exact controls, responds to the
+tested lexical negatives, and localizes the tested pending disputes.
+
+It does **not** prove production readiness, generalization to all pending articles,
+or a calibrated decision threshold. The normative interpretation is
+`docs/audio/GATE-4-CLASSIFICATIONS-v1.md`.
+
+The Pilot #1 value `0.6114` is a descriptive small-sample statistic from the four
+original pilot segments and is explicitly prohibited from acting as a production
+threshold.
+
 ### Mandatory infrastructure smoke test
 Before any scientific pilot attempt, the workflow must prove all of the following in the same runner environment:
 - ffmpeg is installed and executable;
@@ -99,7 +115,8 @@ A smoke-test failure is classified as `INFRASTRUCTURE_FAILURE`; it does **not** 
 
 ## 5. Full Gate 4 acceptance criteria
 
-After a viable pilot, the expanded calibration must satisfy:
+After a viable pilot, the expanded calibration defined in
+`docs/audio/GATE-4-CALIBRATION-PLAN-v1.md` must satisfy:
 
 - 7/7 immutable Exact articles process successfully.
 - 7/7 Exact originals remain free of hard `ACTUAL_AUDIO_ERROR` classifications.
@@ -121,9 +138,17 @@ Gate 4 uses two separate budgets:
 - **Scientific budget:** up to 4 runs that actually reach forced-alignment comparison.
 - **Infrastructure budget:** separately authorized recovery runs used only to make the approved scientific environment executable.
 
-The historical four failed attempts are classified as infrastructure attempts because `SCIENTIFIC_VERDICT=NOT_REACHED`. The project owner has approved exactly **one** additional infrastructure-recovery run on 2026-10-06. There is no automatic second extension.
+The historical four failed attempts are classified as infrastructure attempts because `SCIENTIFIC_VERDICT=NOT_REACHED`.
 
-If that recovery run passes the smoke test and reaches forced alignment, the same workflow also counts as Scientific Run 1.
+Current accounting after the approved pilot and the PR-trigger incident:
+- infrastructure recovery: 1/1 consumed;
+- scientific executions reaching forced-alignment comparison: 3/4 consumed;
+- remaining scientific capacity: 1 run;
+- currently authorized additional scientific runs: **0**.
+
+The final scientific slot is reserved for a single full-calibration/generalization
+run only if the project owner explicitly authorizes it. Preparing the calibration
+plan is not authorization to execute it.
 
 ## 6. Gate 4 failure criteria
 
@@ -141,9 +166,14 @@ A failed Gate 4 is an acceptable project result. **Gate 4 failure does not autho
 
 ## 7. Exit paths
 
-### PASS
-Gate 4 produces calibrated, reproducible diagnostic evidence. Gate 5 may consider
-a single controlled action for a confirmed baseline audio error.
+### PILOT_PASS
+The bounded pilot demonstrates validator viability, not full calibration. Current
+state: `PILOT_PASS_CORROBORATION_REQUIRED`.
+
+### FULL_CALIBRATION_PASS
+Only the owner-authorized expanded calibration can support claims of broader
+generalization. Even then, Gate 5 may consider synthesis only for a separately
+corroborated `ACTUAL_AUDIO_ERROR`.
 
 ### PARTIAL
 Alignment is useful but one or more cases remain ambiguous. Route only those

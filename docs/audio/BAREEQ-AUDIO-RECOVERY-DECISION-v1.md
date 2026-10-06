@@ -230,6 +230,17 @@ Human arbitration cannot override a proven damaged/corrupt audio file or a faile
 
 ## 11. Gate 5 — synthesis decision
 
+The binding entry/decision contract is
+`docs/audio/GATE-5-DECISION-CRITERIA-v1.md`.
+
+Gate 4 classification semantics are defined in
+`docs/audio/GATE-4-CLASSIFICATIONS-v1.md`.
+
+The remaining full-calibration run is prepared in
+`docs/audio/GATE-4-CALIBRATION-PLAN-v1.md` but is **not authorized** by this policy.
+
+
+
 Only after Gates 0–4:
 
 | Proven result | Required action |

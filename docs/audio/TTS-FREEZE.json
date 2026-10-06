@@ -41,11 +41,14 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "complete corroboration/Human Arbitration for localized disputes; no TTS and no automatic Gate 4 expansion",
+    "nextAction": "complete Human Arbitration/corroboration for the two localized disputes; full calibration Run 4/4 remains prepared but NOT authorized; Gate 5 and TTS stay closed",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
     "lastGate4ArtifactId": 11392387341,
-    "triggerIncident": "gate4-pr-path-retrigger-20261006"
+    "triggerIncident": "gate4-pr-path-retrigger-20261006",
+    "classificationSemantics": "docs/audio/GATE-4-CLASSIFICATIONS-v1.md",
+    "fullCalibrationPlan": "docs/audio/GATE-4-CALIBRATION-PLAN-v1.md",
+    "gate5Criteria": "docs/audio/GATE-5-DECISION-CRITERIA-v1.md"
   }
 }

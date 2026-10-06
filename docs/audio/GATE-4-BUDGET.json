@@ -102,5 +102,23 @@
     "containment": "PR #65 closed without merge; scientific workflows must be manual-only going forward.",
     "productionImpact": false,
     "ttsImpact": 0
+  },
+  "pilotStatistic": {
+    "name": "positiveScoreP05",
+    "value": 0.6114,
+    "sourceScope": "word-level scores from the original verification text across all four Pilot #1 entries",
+    "status": "descriptive-only",
+    "productionThreshold": false,
+    "falsePositiveRateKnown": false,
+    "falseNegativeRateKnown": false
+  },
+  "fullCalibration": {
+    "plan": "docs/audio/GATE-4-CALIBRATION-PLAN-v1.md",
+    "remainingScientificSlots": 1,
+    "authorized": false,
+    "ownerApprovalRequired": true,
+    "intendedScope": "7 Exact + 7 deterministic Exact lexical negatives + representation controls + 7 active pending",
+    "ttsBudget": 0,
+    "paidApiBudgetUsd": 0
   }
 }
