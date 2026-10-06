@@ -7,7 +7,7 @@
   "items": [
     {
       "id": "gate4-fitness-aqsa-aqsa-20261006",
-      "status": "target-re-review-required",
+      "status": "target-specific-final-review-required",
       "sourceRunId": 37419623624,
       "classification": "VALIDATOR_AMBIGUITY",
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
@@ -30,10 +30,17 @@
       "humanTriageCaseId": "T31",
       "humanDecision": "ACTUAL_AUDIO_ERROR",
       "humanNote": "كلمة (برنامج) لم يتم نقطها جيدا بالتنوين",
-      "targetBinding": "invalid-note-refers-to-nearby-word",
+      "targetBinding": "second-pass-inconclusive",
       "incidentalFinding": "Nearby word برنامج was flagged for pronunciation/tanween quality.",
-      "nextAction": "tight-target-second-pass-review",
-      "ttsAuthorized": false
+      "nextAction": "forced-choice target review with complete context: أقسى vs أقصى vs غير واضح",
+      "ttsAuthorized": false,
+      "secondPass": {
+        "packageId": "triage-second-pass-T06-T31",
+        "caseId": "R02",
+        "decision": "INCONCLUSIVE",
+        "note": "الجملة ليست مكتملة",
+        "reviewerResultsSha256": "5e6e0f39eb9688411d6e7d63c0c5281ee8cf805001f7d9511a32435c9a247df7"
+      }
     },
     {
       "id": "gate4-autocomplete-bayanati-bayanat-20261006",
@@ -65,7 +72,7 @@
     },
     {
       "id": "triage-intuition-ithan-itha-20261006",
-      "status": "target-re-review-required",
+      "status": "target-specific-final-review-required",
       "sourcePackageId": "triage-37284619084-83e2e3a7db",
       "humanTriageCaseId": "T06",
       "articleId": "هل-الحدس-ذكاء-خفي-ام-اختصار-مضلل-متى-نثق-بشعورنا-الاول",
@@ -73,9 +80,16 @@
       "asrObserved": "إذا",
       "humanDecision": "ACTUAL_AUDIO_ERROR",
       "humanNote": "إحدى عشر تم قراءتها (إثنا عشر)",
-      "targetBinding": "invalid-note-refers-to-adjacent-T22-defect",
-      "nextAction": "tight-target-second-pass-review",
-      "ttsAuthorized": false
+      "targetBinding": "second-pass-still-invalid-note-refers-to-adjacent-defect",
+      "nextAction": "forced-choice target review: إذن vs إذا vs غير واضح",
+      "ttsAuthorized": false,
+      "secondPass": {
+        "packageId": "triage-second-pass-T06-T31",
+        "caseId": "R01",
+        "decision": "ACTUAL_AUDIO_ERROR",
+        "note": "11 تنطق (إثنا عشر)",
+        "reviewerResultsSha256": "5e6e0f39eb9688411d6e7d63c0c5281ee8cf805001f7d9511a32435c9a247df7"
+      }
     }
   ],
   "updatedAt": "2026-10-06"
