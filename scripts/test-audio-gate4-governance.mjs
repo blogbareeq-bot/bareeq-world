@@ -51,3 +51,19 @@ const badState=fixture(); badState.strategy.successfulTtsSinceLastNewExact=30;
 assert.throws(()=>validateGate4Governance(badState),/Strategic TTS state moved/);
 
 console.log('Gate 4 governance v2 passed: infrastructure and scientific budgets are separated, one owner-approved recovery run is bounded, and TTS remains frozen.');
+
+
+const completed=fixture();
+completed.budget.infrastructureRecovery.status='completed';
+completed.budget.infrastructureRecovery.consumedRuns=1;
+completed.budget.scientificBudget.consumedRuns=1;
+completed.freeze.reviewPolicy.additionalResearchRunsAuthorized=0;
+completed.freeze.reviewPolicy.gate4Status='PILOT_PASS_CORROBORATION_REQUIRED';
+assert.equal(
+  validateGate4Governance({...completed,now:new Date('2026-10-06T00:00:00Z')}).action,
+  'PILOT_PASS_CORROBORATION_REQUIRED'
+);
+
+const completedWithExtra=structuredClone(completed);
+completedWithExtra.freeze.reviewPolicy.additionalResearchRunsAuthorized=1;
+assert.throws(()=>validateGate4Governance(completedWithExtra),/No additional Gate 4 recovery run/);
