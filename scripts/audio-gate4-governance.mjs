@@ -22,6 +22,14 @@ export function validateGate4Governance({ budget, freeze, status, strategy, queu
   if (Number(budget.paidApiBudgetUsd) !== 0) fail('Gate 4 paid API budget must be zero');
   if (Number(budget.externalAsrProviderCalls) !== 0) fail('Gate 4 external ASR provider calls must be zero');
   if (Number(budget.maxResearchWorkflowRuns) < 1 || Number(budget.maxResearchWorkflowRuns) > 4) fail('Gate 4 research run cap must be 1..4');
+  const consumedRuns = Math.max(0, Number(budget.researchRunsConsumed) || 0);
+  if (consumedRuns > Number(budget.maxResearchWorkflowRuns)) fail('Gate 4 research run budget exceeded');
+  if (budget.status === 'exhausted') {
+    if (consumedRuns !== Number(budget.maxResearchWorkflowRuns)) fail('Exhausted Gate 4 budget must consume the full approved run cap');
+    if (budget?.pilotOutcome?.nextActionRequiresOwnerApproval !== true) fail('Exhausted Gate 4 budget must require owner approval');
+    if (freeze?.reviewPolicy?.gate4Status !== 'INFRASTRUCTURE_BUDGET_EXHAUSTED') fail('Freeze must record Gate 4 budget exhaustion');
+    if (Number(freeze?.reviewPolicy?.additionalResearchRunsAuthorized) !== 0) fail('No additional Gate 4 research runs may be authorized implicitly');
+  }
   if (Number(budget.maxWallMinutesPerRun) > 45) fail('Gate 4 run wall-time cap exceeds 45 minutes');
   if (Number(budget.maxAggregateRunnerMinutes) > 180) fail('Gate 4 aggregate runner cap exceeds 180 minutes');
   if (Number(budget.gate4ArtifactRetentionDays) > 30) fail('Gate 4 research retention exceeds approved 30 days');
@@ -65,7 +73,9 @@ export function validateGate4Governance({ budget, freeze, status, strategy, queu
     strategy: '29/30',
     overdue,
     nextReviewAt: freeze.reviewPolicy.nextReviewAt,
-    action: overdue ? 'OWNER_REVIEW_REQUIRED_FREEZE_REMAINS_ACTIVE' : 'GOVERNANCE_CURRENT',
+    action: budget.status === 'exhausted'
+      ? 'OWNER_DECISION_REQUIRED_RESEARCH_BUDGET_EXHAUSTED'
+      : (overdue ? 'OWNER_REVIEW_REQUIRED_FREEZE_REMAINS_ACTIVE' : 'GOVERNANCE_CURRENT'),
   };
 }
 
