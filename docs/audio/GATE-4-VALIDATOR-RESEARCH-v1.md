@@ -183,6 +183,18 @@ The queue is `docs/audio/HUMAN-ARBITRATION-QUEUE.json`.
 No human decision can bypass Technical QA, corruption checks, identity binding,
 or the publication gate.
 
+## 9.1 Scientific workflow trigger policy
+
+After the first pilot, scientific Gate 4 execution is **manual-only**. A scientific workflow must not run on `push` or `pull_request`.
+
+Every future scientific run requires:
+- explicit owner/decision authorization;
+- a remaining scientific-budget slot;
+- the TTS freeze to remain active;
+- no paid API or provider calls unless separately approved.
+
+A documentation commit must never be able to retrigger scientific compute.
+
 ## 10. Evidence retention
 
 - rejected synthesis trial diagnostics: minimum **90 days**;
