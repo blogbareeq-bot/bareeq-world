@@ -14,3 +14,7 @@ assert.throws(()=>assertBlindManifest({cases:[{caseId:'T01',classification:'AUDI
 assert.throws(()=>assertBlindManifest({cases:[{caseId:'T01',note:'VALIDATOR_AMBIGUITY'}]}),/automated verdict/);
 
 console.log('Human triage package tests passed: deterministic blind ordering and reviewer evidence redaction.');
+
+
+assert.equal(assertBlindManifest({cases:[{caseId:'T02',articleOrdinal:1,caseOrdinalInArticle:1,expectedContext:'نص',clipFile:'clips/T02.mp3'}]}),true);
+assert.throws(()=>assertBlindManifest({cases:[{caseId:'T02',articleOrdinal:1,caseOrdinalInArticle:1,expectedContext:'نص',clipFile:'clips/control-secret.mp3'}]}),/hidden evidence/);
