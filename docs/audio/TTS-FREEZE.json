@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Recovery Decision v1: synthesis remains frozen; Gate 4 pilot exhausted its approved 4-run research budget before a scientific alignment verdict.",
+  "reason": "Recovery Decision v1: synthesis remains frozen. Owner approved exactly one Gate 4 infrastructure-recovery run with mandatory smoke test; scientific budget remains separate.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -39,8 +39,10 @@
     "missedReviewAction": "remain-frozen",
     "gate4Contract": "docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md",
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
-    "gate4Status": "INFRASTRUCTURE_BUDGET_EXHAUSTED",
-    "additionalResearchRunsAuthorized": 0,
-    "nextAction": "project-owner decision required before any Gate 4 budget extension"
+    "gate4Status": "OWNER_APPROVED_SINGLE_INFRASTRUCTURE_RECOVERY",
+    "additionalResearchRunsAuthorized": 1,
+    "nextAction": "project-owner decision required before any Gate 4 budget extension",
+    "ownerApprovalDate": "2026-10-06",
+    "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension"
   }
 }
