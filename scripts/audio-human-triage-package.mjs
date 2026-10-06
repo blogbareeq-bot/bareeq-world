@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, rename } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,8 +34,8 @@ export function assertBlindManifest(manifest) {
       if (forbidden.test(key)) throw new Error(`reviewer manifest leaks hidden evidence key: ${key}`);
     }
     const blob = JSON.stringify(row);
-    if (/AUDIO_ERROR_CANDIDATE|VALIDATOR_AMBIGUITY|substantiveDifferences|modelDisagreements/.test(blob)) {
-      throw new Error(`reviewer manifest leaks automated verdict in ${row.caseId}`);
+    if (/AUDIO_ERROR_CANDIDATE|VALIDATOR_AMBIGUITY|substantiveDifferences|modelDisagreements|control-|pending-/.test(blob)) {
+      throw new Error(`reviewer manifest leaks hidden evidence in ${row.caseId}`);
     }
   }
   return true;
@@ -268,7 +268,7 @@ function renderProgress(){
 const root=document.getElementById('cases');
 for(const c of manifest.cases){
  const box=document.createElement('section'); box.className='case'; box.dataset.id=c.caseId;
- box.innerHTML='<h2>'+c.caseId+' — '+c.title+'</h2>'+
+ box.innerHTML='<h2>'+c.caseId+'</h2>'+
    '<div class="meta">المقال '+c.articleOrdinal+' / الحالة '+c.caseOrdinalInArticle+'</div>'+
    '<p class="context"><strong>النص المتوقع:</strong> '+c.expectedContext+'</p>'+
    '<audio controls preload="none" src="'+c.clipFile+'"></audio>'+
@@ -341,13 +341,22 @@ export async function buildHumanTriagePackage({
     const sameBefore=rawCases.slice(0,index).filter(x=>x.articleId===row.articleId).length;
     return {
       caseId:`T${String(index+1).padStart(2,'0')}`,
-      title:row.title,
       articleOrdinal:articleOrder.get(row.articleId),
       caseOrdinalInArticle:sameBefore+1,
       expectedContext:row.expectedContext,
-      clipFile:row.clipFile,
+      clipFile:`clips/T${String(index+1).padStart(2,'0')}.mp3`,
     };
   });
+
+  for(let index=0;index<reviewerCases.length;index+=1){
+    const reviewer=reviewerCases[index];
+    const raw=rawCases[index];
+    const from=path.join(outDir,raw.clipFile);
+    const blinded=reviewer.clipFile;
+    const to=path.join(outDir,blinded);
+    await rename(from,to);
+    raw.clipFile=blinded;
+  }
 
   const packageId=`triage-${status.sourceRunId || 'unknown'}-${sha256(rawCases.map(x=>x.rawId).join('|')).slice(0,10)}`;
   const reviewerManifest={
