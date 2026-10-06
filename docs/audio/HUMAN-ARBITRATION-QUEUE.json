@@ -1,0 +1,8 @@
+{
+  "schema": "bareeq.audio-human-arbitration-queue.v1",
+  "status": "active",
+  "createdAt": "2026-10-06",
+  "policy": "docs/audio/HUMAN-ARBITRATION-v1.md",
+  "scope": "localized Gate 4 disputes only",
+  "items": []
+}
