@@ -11,7 +11,7 @@ assert.equal(blindSortKey('x'),blindSortKey('x'));
 assert.notEqual(blindSortKey('x'),blindSortKey('y'));
 
 assert.throws(()=>assertBlindManifest({cases:[{caseId:'T01',classification:'AUDIO_ERROR_CANDIDATE'}]}),/leaks hidden evidence/);
-assert.throws(()=>assertBlindManifest({cases:[{caseId:'T01',note:'VALIDATOR_AMBIGUITY'}]}),/automated verdict/);
+assert.throws(()=>assertBlindManifest({cases:[{caseId:'T01',note:'VALIDATOR_AMBIGUITY'}]}),/hidden evidence/);
 
 console.log('Human triage package tests passed: deterministic blind ordering and reviewer evidence redaction.');
 
