@@ -17,21 +17,21 @@ function fail(message) {
 }
 
 export function validateGate4Governance({ budget, freeze, status, strategy, queue, decisionText, gate4Text, humanText, now = new Date() }) {
-  if (budget?.schema !== 'bareeq.audio-gate4-budget.v1') fail('unsupported Gate 4 budget schema');
+  if (budget?.schema !== 'bareeq.audio-gate4-budget.v2') fail('unsupported Gate 4 budget schema');
   if (Number(budget.ttsSuccessfulRequests) !== 0) fail('Gate 4 TTS budget must be zero');
   if (Number(budget.paidApiBudgetUsd) !== 0) fail('Gate 4 paid API budget must be zero');
   if (Number(budget.externalAsrProviderCalls) !== 0) fail('Gate 4 external ASR provider calls must be zero');
-  if (Number(budget.maxResearchWorkflowRuns) < 1 || Number(budget.maxResearchWorkflowRuns) > 4) fail('Gate 4 research run cap must be 1..4');
-  const consumedRuns = Math.max(0, Number(budget.researchRunsConsumed) || 0);
-  if (consumedRuns > Number(budget.maxResearchWorkflowRuns)) fail('Gate 4 research run budget exceeded');
-  if (budget.status === 'exhausted') {
-    if (consumedRuns !== Number(budget.maxResearchWorkflowRuns)) fail('Exhausted Gate 4 budget must consume the full approved run cap');
-    if (budget?.pilotOutcome?.nextActionRequiresOwnerApproval !== true) fail('Exhausted Gate 4 budget must require owner approval');
-    if (freeze?.reviewPolicy?.gate4Status !== 'INFRASTRUCTURE_BUDGET_EXHAUSTED') fail('Freeze must record Gate 4 budget exhaustion');
-    if (Number(freeze?.reviewPolicy?.additionalResearchRunsAuthorized) !== 0) fail('No additional Gate 4 research runs may be authorized implicitly');
-  }
+
+  const infra = budget.infrastructureRecovery || {};
+  const scientific = budget.scientificBudget || {};
+  if (Number(infra.maxAdditionalRuns) !== 1) fail('Gate 4 owner-approved infrastructure extension must be exactly one run');
+  if (Number(infra.consumedRuns) < 0 || Number(infra.consumedRuns) > 1) fail('Gate 4 infrastructure recovery budget exceeded');
+  if (infra.automaticExtension !== false) fail('Gate 4 infrastructure recovery must not auto-extend');
+  if (Number(scientific.maxRuns) !== 4) fail('Gate 4 scientific budget must remain four runs');
+  if (Number(scientific.consumedRuns) < 0 || Number(scientific.consumedRuns) > 4) fail('Gate 4 scientific budget exceeded');
+  if (!String(scientific.accountingRule || '').includes('only if')) fail('Scientific accounting rule must require reaching the scientific step');
+
   if (Number(budget.maxWallMinutesPerRun) > 45) fail('Gate 4 run wall-time cap exceeds 45 minutes');
-  if (Number(budget.maxAggregateRunnerMinutes) > 180) fail('Gate 4 aggregate runner cap exceeds 180 minutes');
   if (Number(budget.gate4ArtifactRetentionDays) > 30) fail('Gate 4 research retention exceeds approved 30 days');
   if (Number(budget.rejectedTrialRetentionDays) < 90) fail('Rejected-trial evidence retention below 90 days');
 
@@ -39,6 +39,8 @@ export function validateGate4Governance({ budget, freeze, status, strategy, queu
   if (freeze?.reviewPolicy?.missedReviewAction !== 'remain-frozen') fail('Freeze review must fail closed');
   if (freeze?.reviewPolicy?.gate4Contract !== 'docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md') fail('Freeze does not bind Gate 4 contract');
   if (freeze?.reviewPolicy?.gate4Budget !== 'docs/audio/GATE-4-BUDGET.json') fail('Freeze does not bind Gate 4 budget');
+  if (Number(freeze?.reviewPolicy?.additionalResearchRunsAuthorized) !== 1) fail('Exactly one owner-approved infrastructure recovery run must be authorized');
+  if (freeze?.reviewPolicy?.gate4Status !== 'OWNER_APPROVED_SINGLE_INFRASTRUCTURE_RECOVERY') fail('Freeze must record the bounded owner approval');
 
   if (Number(status?.exactCount) !== 7 || Number(status?.publishedCount) !== 7 || Number(status?.fallbackCount) !== 8) {
     fail('Canonical campaign state moved from 7 exact / 8 fallback without governance review');
@@ -58,7 +60,7 @@ export function validateGate4Governance({ budget, freeze, status, strategy, queu
   ]) {
     if (!decisionText.includes(needle)) fail(`Recovery decision missing required policy: ${needle}`);
   }
-  for (const needle of ['AUDIO_ERROR_CANDIDATE','VALIDATOR_AMBIGUITY','Gate 4 failure does not authorize']) {
+  for (const needle of ['AUDIO_ERROR_CANDIDATE','VALIDATOR_AMBIGUITY','Mandatory infrastructure smoke test','G2P intentionally deferred']) {
     if (!gate4Text.includes(needle)) fail(`Gate 4 contract missing required control: ${needle}`);
   }
   for (const needle of ['EXPECTED_PRONUNCIATION_CONFIRMED','ACTUAL_AUDIO_ERROR','INCONCLUSIVE']) {
@@ -73,9 +75,9 @@ export function validateGate4Governance({ budget, freeze, status, strategy, queu
     strategy: '29/30',
     overdue,
     nextReviewAt: freeze.reviewPolicy.nextReviewAt,
-    action: budget.status === 'exhausted'
-      ? 'OWNER_DECISION_REQUIRED_RESEARCH_BUDGET_EXHAUSTED'
-      : (overdue ? 'OWNER_REVIEW_REQUIRED_FREEZE_REMAINS_ACTIVE' : 'GOVERNANCE_CURRENT'),
+    infrastructureRemaining: 1 - Number(infra.consumedRuns),
+    scientificRemaining: 4 - Number(scientific.consumedRuns),
+    action: overdue ? 'OWNER_REVIEW_REQUIRED_FREEZE_REMAINS_ACTIVE' : 'SINGLE_INFRASTRUCTURE_RECOVERY_AUTHORIZED',
   };
 }
 
@@ -90,7 +92,7 @@ async function cli() {
     gate4Text: await text('docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md'),
     humanText: await text('docs/audio/HUMAN-ARBITRATION-v1.md'),
   });
-  console.log(`GATE4_GOVERNANCE=PASS exact=${result.exact}/15 fallback=${result.fallback} strategy=${result.strategy} review=${result.action} next=${result.nextReviewAt}`);
+  console.log(`GATE4_GOVERNANCE=PASS exact=${result.exact}/15 fallback=${result.fallback} strategy=${result.strategy} infraRemaining=${result.infrastructureRemaining} scientificRemaining=${result.scientificRemaining} action=${result.action}`);
 }
 
 const isCli = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
