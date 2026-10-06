@@ -4,5 +4,53 @@
   "createdAt": "2026-10-06",
   "policy": "docs/audio/HUMAN-ARBITRATION-v1.md",
   "scope": "localized Gate 4 disputes only",
-  "items": []
+  "items": [
+    {
+      "id": "gate4-fitness-aqsa-aqsa-20261006",
+      "status": "pending",
+      "sourceRunId": 37419623624,
+      "classification": "VALIDATOR_AMBIGUITY",
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+      "expectedText": "أقسى",
+      "asrObserved": "أقصى",
+      "partIndex": 0,
+      "clipStartSeconds": 100.014,
+      "clipEndSeconds": 132.454,
+      "targetStartInClipSeconds": 11.767,
+      "targetEndInClipSeconds": 12.107,
+      "targetAlignmentScore": 0.859,
+      "gate4PositiveP05": 0.6114,
+      "requestedDecision": [
+        "EXPECTED_PRONUNCIATION_CONFIRMED",
+        "ACTUAL_AUDIO_ERROR",
+        "REPRESENTATION_EQUIVALENT",
+        "INCONCLUSIVE"
+      ]
+    },
+    {
+      "id": "gate4-autocomplete-bayanati-bayanat-20261006",
+      "status": "pending",
+      "sourceRunId": 37419623624,
+      "classification": "AUDIO_ERROR_CANDIDATE",
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+      "expectedText": "بياناتي",
+      "asrObserved": "بيانات",
+      "partIndex": 1,
+      "clipStartSeconds": 33.999,
+      "clipEndSeconds": 45.668,
+      "targetStartInClipSeconds": 1.621,
+      "targetEndInClipSeconds": 1.922,
+      "targetAlignmentScore": 0.367,
+      "gate4PositiveP05": 0.6114,
+      "requestedDecision": [
+        "EXPECTED_PRONUNCIATION_CONFIRMED",
+        "ACTUAL_AUDIO_ERROR",
+        "REPRESENTATION_EQUIVALENT",
+        "INCONCLUSIVE"
+      ]
+    }
+  ],
+  "updatedAt": "2026-10-06"
 }
