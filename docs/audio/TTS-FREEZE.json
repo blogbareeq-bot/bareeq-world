@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Recovery Decision v1: synthesis remains frozen. Full blind Human Triage completed with 7/7 Exact controls confirmed; two target cases require short second-pass review before offline adjudication.",
+  "reason": "Recovery Decision v1: synthesis remains frozen. Full blind Human Triage is complete, but T06 and T31 remain target-unresolved after second-pass review; a final forced-choice target review is required before offline adjudication.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "complete target-specific second-pass review for T06 (إذن/إذا) and T31 (أقسى/أقصى), then apply binding human evidence offline and rerun the production Exact gate; Gate 5 and TTS remain closed",
+    "nextAction": "complete one final forced-choice target review for T06 (إذن/إذا) and T31 (أقسى/أقصى) with no automated labels; then apply binding human evidence offline; Gate 5 and TTS remain closed",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -58,7 +58,13 @@
       "targetReReview": [
         "T06",
         "T31"
-      ]
+      ],
+      "secondPass": {
+        "packageId": "triage-second-pass-T06-T31",
+        "reviewerResultsSha256": "5e6e0f39eb9688411d6e7d63c0c5281ee8cf805001f7d9511a32435c9a247df7",
+        "T06": "UNRESOLVED_TARGET_NOTE_BOUND_TO_ADJACENT_11_TO_12_DEFECT",
+        "T31": "INCONCLUSIVE_INCOMPLETE_CONTEXT"
+      }
     }
   }
 }

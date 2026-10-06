@@ -1,0 +1,37 @@
+{
+  "schema": "bareeq.audio-human-triage-second-pass-ingested.v1",
+  "packageId": "triage-second-pass-T06-T31",
+  "reviewerResultsSha256": "5e6e0f39eb9688411d6e7d63c0c5281ee8cf805001f7d9511a32435c9a247df7",
+  "exportedAt": "2026-10-06T12:08:28.990Z",
+  "ingestedAt": "2026-10-06",
+  "results": [
+    {
+      "caseId": "R01",
+      "sourceCaseId": "T06",
+      "target": "إذن / إذا",
+      "reviewerDecision": "ACTUAL_AUDIO_ERROR",
+      "reviewerNote": "11 تنطق (إثنا عشر)",
+      "targetBinding": "INVALID",
+      "disposition": "TARGET_STILL_UNRESOLVED",
+      "reason": "The note again describes the already-confirmed adjacent 11→12 defect, not the target إذن/إذا."
+    },
+    {
+      "caseId": "R02",
+      "sourceCaseId": "T31",
+      "target": "أقسى / أقصى",
+      "reviewerDecision": "INCONCLUSIVE",
+      "reviewerNote": "الجملة ليست مكتملة",
+      "targetBinding": "VALID_INCONCLUSIVE",
+      "disposition": "TARGET_STILL_UNRESOLVED",
+      "reason": "Reviewer explicitly could not decide the target because the supplied sentence context was incomplete."
+    }
+  ],
+  "invariants": {
+    "ttsCalls": 0,
+    "newAsrCalls": 0,
+    "productionMutation": false,
+    "exactState": "7/15",
+    "strategyState": "29/30",
+    "gate5": "CLOSED"
+  }
+}
