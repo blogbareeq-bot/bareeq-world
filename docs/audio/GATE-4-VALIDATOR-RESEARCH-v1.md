@@ -47,6 +47,10 @@ Any G2P/phonetic layer must:
 - include positive and negative controls;
 - never promote a candidate to Exact by itself.
 
+### Stage A design decision — G2P intentionally deferred
+
+The first pilot intentionally tests text/character forced alignment **before** adding Arabic G2P. This is an experimental design choice to reduce variables, not a rejection of G2P. Stage B G2P is considered only if Stage A proves technically viable but leaves pronunciation ambiguity that text alignment cannot resolve.
+
 ## 3. Pilot scope
 
 The first research run is deliberately small:
@@ -83,6 +87,16 @@ The pilot is **viable** only if all of the following hold:
 
 Failure of any mandatory item keeps the validator research-only and blocks expansion.
 
+### Mandatory infrastructure smoke test
+Before any scientific pilot attempt, the workflow must prove all of the following in the same runner environment:
+- ffmpeg is installed and executable;
+- the pinned CPU torch / torchvision / torchaudio stack imports successfully;
+- WhisperX and Wav2Vec2 alignment dependencies import successfully;
+- the Arabic alignment model loads successfully;
+- one retained campaign MP3 can be decoded locally.
+
+A smoke-test failure is classified as `INFRASTRUCTURE_FAILURE`; it does **not** consume the scientific-run budget. It consumes only the separately authorized infrastructure-recovery run. No scientific step may execute after a failed smoke test.
+
 ## 5. Full Gate 4 acceptance criteria
 
 After a viable pilot, the expanded calibration must satisfy:
@@ -100,6 +114,16 @@ After a viable pilot, the expanded calibration must satisfy:
 - Any `AUDIO_ERROR_CANDIDATE` requires independent corroboration or human
   arbitration before Gate 5 can authorize synthesis.
 - Forced alignment alone can never publish or promote a candidate to Exact.
+
+## 5.1 Budget classification
+
+Gate 4 uses two separate budgets:
+- **Scientific budget:** up to 4 runs that actually reach forced-alignment comparison.
+- **Infrastructure budget:** separately authorized recovery runs used only to make the approved scientific environment executable.
+
+The historical four failed attempts are classified as infrastructure attempts because `SCIENTIFIC_VERDICT=NOT_REACHED`. The project owner has approved exactly **one** additional infrastructure-recovery run on 2026-10-06. There is no automatic second extension.
+
+If that recovery run passes the smoke test and reaches forced alignment, the same workflow also counts as Scientific Run 1.
 
 ## 6. Gate 4 failure criteria
 
