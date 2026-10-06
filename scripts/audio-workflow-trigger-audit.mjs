@@ -43,7 +43,10 @@ export function isGate4ScientificWorkflow(name,text) {
 }
 
 export function isProviderCapableWorkflow(text) {
-  return /(GEMINI_API_KEY|OPENROUTER_API_KEY|AZURE_SPEECH_KEY|GOOGLE_APPLICATION_CREDENTIALS|audio-gemini|tts-transport|synthesize[-_ ]?audio|generate[-_ ]?audio)/i.test(text);
+  // "Provider-capable" means the workflow visibly wires credentials or a provider
+  // secret into the job. Merely invoking generate-audio --sync-plan or mentioning
+  // a TTS script is not enough: those paths can be offline/dry-run only.
+  return /(GEMINI_API_KEY|GOOGLE_API_KEY|OPENROUTER_API_KEY|AZURE_SPEECH_KEY|GOOGLE_APPLICATION_CREDENTIALS|secrets\.[A-Z0-9_]*(?:GEMINI|OPENROUTER|AZURE|TTS|SPEECH))/i.test(text);
 }
 
 export function hasFreezeGuard(text) {
