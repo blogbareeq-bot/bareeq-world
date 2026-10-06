@@ -55,9 +55,11 @@ jobs:
       - name: Verify local audio tooling
         run: |
           set -euo pipefail
-          test -x /usr/bin/ffmpeg
-          /usr/bin/ffmpeg -version | head -1
-          echo 'BAREEQ_FFMPEG=/usr/bin/ffmpeg' >> "$GITHUB_ENV"
+          FFMPEG_PATH="$(command -v ffmpeg)"
+          test -n "${FFMPEG_PATH}"
+          test -x "${FFMPEG_PATH}"
+          "${FFMPEG_PATH}" -version | head -1
+          echo "BAREEQ_FFMPEG=${FFMPEG_PATH}" >> "$GITHUB_ENV"
 
       - name: Install CPU alignment stack
         run: |
