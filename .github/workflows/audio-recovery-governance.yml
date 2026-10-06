@@ -7,6 +7,18 @@ on:
       - 'docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md'
       - 'docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md'
       - 'docs/audio/GATE-4-BUDGET.json'
+      - 'docs/audio/GATE-4-CLASSIFICATIONS-v1.md'
+      - 'docs/audio/GATE-4-CALIBRATION-PLAN-v1.md'
+      - 'docs/audio/GATE-5-DECISION-CRITERIA-v1.md'
+      - 'docs/audio/PR-62-ARCHIVE.md'
+      - 'scripts/audio-workflow-trigger-audit.mjs'
+      - 'scripts/test-audio-workflow-trigger-audit.mjs'
+      - 'docs/audio/GATE-4-CLASSIFICATIONS-v1.md'
+      - 'docs/audio/GATE-4-CALIBRATION-PLAN-v1.md'
+      - 'docs/audio/GATE-5-DECISION-CRITERIA-v1.md'
+      - 'docs/audio/PR-62-ARCHIVE.md'
+      - 'scripts/audio-workflow-trigger-audit.mjs'
+      - 'scripts/test-audio-workflow-trigger-audit.mjs'
       - 'docs/audio/HUMAN-ARBITRATION-v1.md'
       - 'docs/audio/HUMAN-ARBITRATION-QUEUE.json'
       - 'docs/audio/TTS-FREEZE.json'
@@ -46,6 +58,8 @@ jobs:
           set -euo pipefail
           node --check scripts/audio-gate4-governance.mjs
           node scripts/test-audio-gate4-governance.mjs
+          node scripts/test-audio-workflow-trigger-audit.mjs
+          node scripts/audio-workflow-trigger-audit.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
           node scripts/audio-state-consistency.mjs
           node scripts/audio-gate4-governance.mjs
