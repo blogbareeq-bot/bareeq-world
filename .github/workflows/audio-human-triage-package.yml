@@ -1,0 +1,96 @@
+name: Bareeq full human triage package
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-human-triage-package.mjs'
+      - 'scripts/test-audio-human-triage-package.mjs'
+      - 'docs/audio/GEMINI-QUOTA-OBSERVATION-20261006.md'
+      - '.github/workflows/audio-human-triage-package.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  build-triage-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Prove provider freeze and canonical state
+        run: |
+          set -euo pipefail
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+
+      - name: Validate triage code
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-human-triage-package.mjs
+          node scripts/test-audio-human-triage-package.mjs
+
+      - name: Install local audio cutter
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          echo "BAREEQ_FFMPEG=$(command -v ffmpeg)" >> "$GITHUB_ENV"
+          echo "BAREEQ_FFPROBE=$(command -v ffprobe)" >> "$GITHUB_ENV"
+
+      - name: Download retained immutable evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-progressive-validation-37284619084
+          path: triage-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37284619084'
+
+      - name: Build blind human triage package
+        run: |
+          set -euo pipefail
+          node scripts/audio-human-triage-package.mjs \
+            --root=triage-input \
+            --out=human-triage-output
+
+      - name: Assert package contract
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const internal = JSON.parse(await readFile('human-triage-output/internal-evidence.json','utf8'));
+          const reviewer = JSON.parse(await readFile('human-triage-output/reviewer-manifest.json','utf8'));
+          if (internal.totals.cases !== 36) throw new Error(`expected 36 total cases, got ${internal.totals.cases}`);
+          if (internal.totals.pendingMismatches !== 29) throw new Error(`expected 29 pending mismatches, got ${internal.totals.pendingMismatches}`);
+          if (internal.totals.exactControls !== 7) throw new Error(`expected 7 Exact controls, got ${internal.totals.exactControls}`);
+          if (internal.totals.activePendingArticles !== 7) throw new Error('expected 7 active pending articles');
+          if (internal.ttsCalls !== 0 || internal.asrCalls !== 0 || internal.providerCalls !== 0) throw new Error('triage package must make zero provider calls');
+          if (reviewer.caseCount !== 36 || reviewer.cases.length !== 36) throw new Error('reviewer package count mismatch');
+          const leaked = JSON.stringify(reviewer);
+          for (const token of ['AUDIO_ERROR_CANDIDATE','VALIDATOR_AMBIGUITY','confirmedBy','substantiveDifferences']) {
+            if (leaked.includes(token)) throw new Error(`reviewer package leaked automated evidence: ${token}`);
+          }
+          console.log('HUMAN_TRIAGE_CONTRACT=PASS cases=36 pending=29 controls=7 providerCalls=0');
+          NODE
+
+      - name: Prove production audio unchanged
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- public/audio
+          echo 'HUMAN_TRIAGE_PRODUCTION_AUDIO=UNCHANGED'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-human-triage-${{ github.run_id }}
+          path: human-triage-output/
+          if-no-files-found: error
+          retention-days: 30
