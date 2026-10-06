@@ -1,0 +1,31 @@
+{
+  "schema": "bareeq.audio-gate4-budget.v1",
+  "effectiveAt": "2026-10-06",
+  "reviewDeadline": "2026-10-13",
+  "ttsSuccessfulRequests": 0,
+  "paidApiBudgetUsd": 0,
+  "externalAsrProviderCalls": 0,
+  "maxResearchWorkflowRuns": 4,
+  "maxWallMinutesPerRun": 45,
+  "maxAggregateRunnerMinutes": 180,
+  "maxArtifactBytesPerRun": 1073741824,
+  "gate4ArtifactRetentionDays": 30,
+  "rejectedTrialRetentionDays": 90,
+  "networkPolicy": {
+    "allowed": [
+      "package downloads",
+      "model downloads required by the approved alignment pilot"
+    ],
+    "prohibited": [
+      "TTS provider requests",
+      "paid transcription APIs",
+      "uploading campaign audio to unapproved third-party APIs"
+    ]
+  },
+  "firstPilot": {
+    "exactControls": 2,
+    "activePending": 2,
+    "fullCampaignExpansionRequiresPilotPass": true
+  },
+  "overBudgetAction": "remain-frozen-and-require-project-owner-approval"
+}
