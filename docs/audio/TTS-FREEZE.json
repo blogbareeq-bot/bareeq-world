@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Recovery Decision v1: freeze all synthesis while operational truth, forensics, adjudication v5, and validator research run offline.",
+  "reason": "Recovery Decision v1: synthesis remains frozen; Gate 4 pilot exhausted its approved 4-run research budget before a scientific alignment verdict.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -38,6 +38,9 @@
     "nextReviewAt": "2026-10-13T00:00:00Z",
     "missedReviewAction": "remain-frozen",
     "gate4Contract": "docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md",
-    "gate4Budget": "docs/audio/GATE-4-BUDGET.json"
+    "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
+    "gate4Status": "INFRASTRUCTURE_BUDGET_EXHAUSTED",
+    "additionalResearchRunsAuthorized": 0,
+    "nextAction": "project-owner decision required before any Gate 4 budget extension"
   }
 }
