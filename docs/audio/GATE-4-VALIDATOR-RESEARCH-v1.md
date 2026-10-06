@@ -113,8 +113,7 @@ Gate 4 is formally rejected if any of these occur:
 - after the approved research budget, both one-error cases remain unlocalized and
   diagnostically indistinguishable.
 
-A failed Gate 4 is an acceptable project result. It does not authorize threshold
-extension or synthesis.
+A failed Gate 4 is an acceptable project result. **Gate 4 failure does not authorize** TTS, threshold extension, alternate-engine spending, or any redefinition of Exact.
 
 ## 7. Exit paths
 
