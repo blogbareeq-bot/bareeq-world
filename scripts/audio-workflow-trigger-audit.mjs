@@ -25,7 +25,7 @@ export function triggersFromWorkflow(text) {
   const block=topLevelOnBlock(text);
   const found=new Set();
   for(const name of ['workflow_dispatch','push','pull_request','schedule','workflow_call']){
-    const re=new RegExp('(?:^|[\\s\\[,])'+name.replace('_','_')+'\\s*(?=[:,\\]])','m');
+    const re=new RegExp('(?:^|[\\s\\[,])'+name+'\\s*(?=[:,\\]])','m');
     if(re.test(block)) found.add(name);
   }
   return [...found];
@@ -42,17 +42,35 @@ export function isGate4ScientificWorkflow(name,text) {
   );
 }
 
+export function isProviderCapableWorkflow(text) {
+  return /(GEMINI_API_KEY|OPENROUTER_API_KEY|AZURE_SPEECH_KEY|GOOGLE_APPLICATION_CREDENTIALS|audio-gemini|tts-transport|synthesize[-_ ]?audio|generate[-_ ]?audio)/i.test(text);
+}
+
+export function hasFreezeGuard(text) {
+  return /(audio-tts-freeze-guard\.mjs|BAREEQ_TTS_FREEZE|expect-frozen)/i.test(text);
+}
+
 export function auditWorkflow(name,text) {
   const triggers=triggersFromWorkflow(text);
   const scientific=isGate4ScientificWorkflow(name,text);
+  const providerCapable=isProviderCapableWorkflow(text);
+  const freezeGuard=hasFreezeGuard(text);
+  const automatic=triggers.some(t=>['push','pull_request','schedule'].includes(t));
   const errors=[];
+  const warnings=[];
+
   if(scientific){
     if(!triggers.includes('workflow_dispatch')) errors.push('Gate 4 scientific workflow must include workflow_dispatch');
     for(const forbidden of ['push','pull_request','schedule']){
       if(triggers.includes(forbidden)) errors.push(`Gate 4 scientific workflow must not use ${forbidden}`);
     }
   }
-  return {name,scientific,triggers,errors};
+
+  if(providerCapable && automatic && !freezeGuard){
+    warnings.push('provider-capable automatic workflow has no visible freeze guard; manual review required');
+  }
+
+  return {name,scientific,providerCapable,freezeGuard,automatic,triggers,errors,warnings};
 }
 
 export async function auditDirectory(dir=WORKFLOWS){
@@ -67,9 +85,15 @@ export async function auditDirectory(dir=WORKFLOWS){
 async function cli(){
   const rows=await auditDirectory();
   const scientific=rows.filter(r=>r.scientific);
+  const providerAuto=rows.filter(r=>r.providerCapable&&r.automatic);
   const errors=rows.flatMap(r=>r.errors.map(error=>({workflow:r.name,error})));
-  console.log(`AUDIO_WORKFLOW_TRIGGER_AUDIT workflows=${rows.length} gate4Scientific=${scientific.length} errors=${errors.length}`);
+  const warnings=rows.flatMap(r=>r.warnings.map(warning=>({workflow:r.name,warning})));
+
+  console.log(`AUDIO_WORKFLOW_TRIGGER_AUDIT workflows=${rows.length} gate4Scientific=${scientific.length} providerAuto=${providerAuto.length} errors=${errors.length} warnings=${warnings.length}`);
   for(const row of scientific) console.log(`GATE4_TRIGGER ${row.name} triggers=${row.triggers.join(',')||'none'}`);
+  for(const row of providerAuto) console.log(`PROVIDER_AUTO ${row.name} triggers=${row.triggers.join(',')||'none'} freezeGuard=${row.freezeGuard}`);
+  for(const w of warnings) console.warn(`TRIGGER_AUDIT_WARN ${w.workflow}: ${w.warning}`);
+
   if(errors.length){
     for(const e of errors) console.error(`TRIGGER_AUDIT_FAIL ${e.workflow}: ${e.error}`);
     process.exitCode=2;
