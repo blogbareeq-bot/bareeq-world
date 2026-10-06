@@ -1,0 +1,84 @@
+name: Bareeq Gate 4 Arabic alignment pilot
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-gate4-prepare-pilot.mjs'
+      - 'scripts/audio-gate4-whisperx-pilot.py'
+      - '.github/workflows/audio-gate4-whisperx-pilot.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  gate4-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TRANSFORMERS_NO_ADVISORY_WARNINGS: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Enforce frozen research state
+        run: |
+          set -euo pipefail
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-gate4-governance.mjs
+
+      - name: Download immutable campaign evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-progressive-validation-37284619084
+          path: gate4-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37284619084'
+
+      - name: Prepare two Exact and two one-error control segments
+        run: |
+          set -euo pipefail
+          node scripts/audio-gate4-prepare-pilot.mjs --root=gate4-input --out=gate4-output/PILOT-MANIFEST.json
+          cat gate4-output/PILOT-MANIFEST.json
+
+      - name: Verify local audio tooling
+        run: ffmpeg -version | head -1
+
+      - name: Install CPU alignment stack
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.8.0 torchaudio==2.8.0
+          python -m pip install whisperx==3.8.6
+
+      - name: Run Arabic forced-alignment pilot
+        run: |
+          set -euo pipefail
+          python scripts/audio-gate4-whisperx-pilot.py \
+            --manifest gate4-output/PILOT-MANIFEST.json \
+            --out gate4-output/GATE4-WHISPERX-PILOT.json
+          cat gate4-output/GATE4-WHISPERX-PILOT.json
+
+      - name: Prove production audio unchanged
+        run: |
+          git diff --exit-code -- public/audio
+          echo 'GATE4_PRODUCTION_AUDIO=UNCHANGED'
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-gate4-whisperx-pilot-${{ github.run_id }}
+          path: gate4-output/
+          if-no-files-found: warn
+          retention-days: 30
