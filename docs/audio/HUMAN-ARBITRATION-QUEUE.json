@@ -3,11 +3,11 @@
   "status": "active",
   "createdAt": "2026-10-06",
   "policy": "docs/audio/HUMAN-ARBITRATION-v1.md",
-  "scope": "localized Gate 4 disputes only",
+  "scope": "localized Gate 4 and full Human Triage disputes",
   "items": [
     {
       "id": "gate4-fitness-aqsa-aqsa-20261006",
-      "status": "pending",
+      "status": "target-re-review-required",
       "sourceRunId": 37419623624,
       "classification": "VALIDATOR_AMBIGUITY",
       "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
@@ -26,11 +26,18 @@
         "ACTUAL_AUDIO_ERROR",
         "REPRESENTATION_EQUIVALENT",
         "INCONCLUSIVE"
-      ]
+      ],
+      "humanTriageCaseId": "T31",
+      "humanDecision": "ACTUAL_AUDIO_ERROR",
+      "humanNote": "كلمة (برنامج) لم يتم نقطها جيدا بالتنوين",
+      "targetBinding": "invalid-note-refers-to-nearby-word",
+      "incidentalFinding": "Nearby word برنامج was flagged for pronunciation/tanween quality.",
+      "nextAction": "tight-target-second-pass-review",
+      "ttsAuthorized": false
     },
     {
       "id": "gate4-autocomplete-bayanati-bayanat-20261006",
-      "status": "pending",
+      "status": "human-confirmed-expected-pronunciation",
       "sourceRunId": 37419623624,
       "classification": "AUDIO_ERROR_CANDIDATE",
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
@@ -49,7 +56,26 @@
         "ACTUAL_AUDIO_ERROR",
         "REPRESENTATION_EQUIVALENT",
         "INCONCLUSIVE"
-      ]
+      ],
+      "humanTriageCaseId": "T34",
+      "humanDecision": "EXPECTED_PRONUNCIATION_CONFIRMED",
+      "targetBinding": "valid",
+      "nextAction": "offline-adjudication-then-rerun-production-exact-gate",
+      "ttsAuthorized": false
+    },
+    {
+      "id": "triage-intuition-ithan-itha-20261006",
+      "status": "target-re-review-required",
+      "sourcePackageId": "triage-37284619084-83e2e3a7db",
+      "humanTriageCaseId": "T06",
+      "articleId": "هل-الحدس-ذكاء-خفي-ام-اختصار-مضلل-متى-نثق-بشعورنا-الاول",
+      "expectedText": "إذن",
+      "asrObserved": "إذا",
+      "humanDecision": "ACTUAL_AUDIO_ERROR",
+      "humanNote": "إحدى عشر تم قراءتها (إثنا عشر)",
+      "targetBinding": "invalid-note-refers-to-adjacent-T22-defect",
+      "nextAction": "tight-target-second-pass-review",
+      "ttsAuthorized": false
     }
   ],
   "updatedAt": "2026-10-06"
