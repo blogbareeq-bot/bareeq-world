@@ -26,6 +26,12 @@ The current provider state is frozen until Gates 0–4 below are satisfied and G
 
 This remains the long-term product target.
 
+### Verified Exact vs Equivalent Quality
+
+**Verified Exact** means the current canonical publication gate passes exactly: 0 substitutions, 0 deletions, 0 insertions, 0 unresolved, plus Technical QA, sync/fingerprint checks, and bound full-file SHA.
+
+**Equivalent Quality** is a separate long-term product classification that may only be used when calibrated non-ASR evidence plus the required human arbitration proves the spoken result equivalent in quality and meaning. It does **not** silently become Exact and does **not** change the current campaign accounting without a separate owner-approved policy change.
+
 ### Current completion campaign
 The active campaign contains:
 - 7 already-exact immutable articles.

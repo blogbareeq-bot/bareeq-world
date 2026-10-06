@@ -33,24 +33,74 @@
     "note": "These runs are retained as historical infrastructure debugging attempts and do not consume the scientific budget."
   },
   "infrastructureRecovery": {
-    "status": "owner-approved",
+    "status": "completed",
     "maxAdditionalRuns": 1,
-    "consumedRuns": 0,
+    "consumedRuns": 1,
     "ownerApprovalDate": "2026-10-06",
     "purpose": "Install ffmpeg explicitly, pass a mandatory smoke test, then run the unchanged bounded pilot if and only if the smoke test passes.",
     "automaticExtension": false,
-    "onFailure": "stop-and-require-new-owner-decision"
+    "onFailure": "stop-and-require-new-owner-decision",
+    "runId": 37419623624,
+    "smokeResult": "PASS",
+    "completedAt": "2026-10-06"
   },
   "scientificBudget": {
     "maxRuns": 4,
-    "consumedRuns": 0,
+    "consumedRuns": 3,
     "accountingRule": "A scientific run is consumed only if the workflow reaches the forced-alignment comparison step after the smoke test passes.",
-    "onScientificFailure": "record-scientific-negative-result-and-do-not-auto-extend"
+    "onScientificFailure": "record-scientific-negative-result-and-do-not-auto-extend",
+    "primaryAuthorizedRun": {
+      "runId": 37419623624,
+      "result": "PILOT_PASS",
+      "artifactId": 11392387341
+    },
+    "unauthorizedDuplicateRetriggers": [
+      {
+        "runId": 37420002259,
+        "result": "PILOT_PASS_DUPLICATE",
+        "decisionUse": "reproducibility-only"
+      },
+      {
+        "runId": 37420022897,
+        "result": "PILOT_PASS_DUPLICATE",
+        "decisionUse": "reproducibility-only"
+      }
+    ],
+    "failedTriggerRun": {
+      "runId": 37420013411,
+      "result": "GOVERNANCE_BLOCKED_BEFORE_SCIENTIFIC_STEP",
+      "countsAgainstScientificBudget": false
+    },
+    "executionPolicy": {
+      "manualOnly": true,
+      "additionalRunsAuthorized": 0,
+      "pullRequestTriggerProhibited": true,
+      "pushTriggerProhibited": true,
+      "ownerDecisionRequired": true
+    }
   },
   "firstPilot": {
     "exactControls": 2,
     "activePending": 2,
-    "fullCampaignExpansionRequiresPilotPass": true
+    "fullCampaignExpansionRequiresPilotPass": true,
+    "result": "PASS",
+    "authorizedRunId": 37419623624,
+    "reproducedByUnauthorizedDuplicates": [
+      37420002259,
+      37420022897
+    ],
+    "criteria": {
+      "exactCoverage": true,
+      "negativeControls": true,
+      "pendingLocalized": true
+    }
   },
-  "overBudgetAction": "remain-frozen-and-require-project-owner-approval"
+  "overBudgetAction": "remain-frozen-and-require-project-owner-approval",
+  "triggerIncident": {
+    "id": "gate4-pr-path-retrigger-20261006",
+    "cause": "GitHub pull_request paths filter was re-evaluated against the full PR diff on documentation commits, retriggering the scientific workflow.",
+    "containment": "PR #65 closed without merge; scientific workflows must be manual-only going forward.",
+    "productionImpact": false,
+    "ttsImpact": 0
+  }
 }
