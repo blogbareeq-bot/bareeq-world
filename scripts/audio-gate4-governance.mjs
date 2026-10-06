@@ -39,8 +39,16 @@ export function validateGate4Governance({ budget, freeze, status, strategy, queu
   if (freeze?.reviewPolicy?.missedReviewAction !== 'remain-frozen') fail('Freeze review must fail closed');
   if (freeze?.reviewPolicy?.gate4Contract !== 'docs/audio/GATE-4-VALIDATOR-RESEARCH-v1.md') fail('Freeze does not bind Gate 4 contract');
   if (freeze?.reviewPolicy?.gate4Budget !== 'docs/audio/GATE-4-BUDGET.json') fail('Freeze does not bind Gate 4 budget');
-  if (Number(freeze?.reviewPolicy?.additionalResearchRunsAuthorized) !== 1) fail('Exactly one owner-approved infrastructure recovery run must be authorized');
-  if (freeze?.reviewPolicy?.gate4Status !== 'OWNER_APPROVED_SINGLE_INFRASTRUCTURE_RECOVERY') fail('Freeze must record the bounded owner approval');
+  const gate4Status = String(freeze?.reviewPolicy?.gate4Status || '');
+  const authorizedRuns = Number(freeze?.reviewPolicy?.additionalResearchRunsAuthorized);
+  if (Number(infra.consumedRuns) === 0) {
+    if (authorizedRuns !== 1) fail('Exactly one owner-approved infrastructure recovery run must be authorized before execution');
+    if (gate4Status !== 'OWNER_APPROVED_SINGLE_INFRASTRUCTURE_RECOVERY') fail('Freeze must record the bounded owner approval before execution');
+  } else {
+    if (authorizedRuns !== 0) fail('No additional Gate 4 recovery run may remain authorized after the approved run is consumed');
+    if (gate4Status !== 'PILOT_PASS_CORROBORATION_REQUIRED') fail('Completed Gate 4 pilot must require corroboration before Gate 5');
+    if (Number(scientific.consumedRuns) !== 1) fail('Successful pilot must consume exactly one scientific run');
+  }
 
   if (Number(status?.exactCount) !== 7 || Number(status?.publishedCount) !== 7 || Number(status?.fallbackCount) !== 8) {
     fail('Canonical campaign state moved from 7 exact / 8 fallback without governance review');
@@ -77,7 +85,11 @@ export function validateGate4Governance({ budget, freeze, status, strategy, queu
     nextReviewAt: freeze.reviewPolicy.nextReviewAt,
     infrastructureRemaining: 1 - Number(infra.consumedRuns),
     scientificRemaining: 4 - Number(scientific.consumedRuns),
-    action: overdue ? 'OWNER_REVIEW_REQUIRED_FREEZE_REMAINS_ACTIVE' : 'SINGLE_INFRASTRUCTURE_RECOVERY_AUTHORIZED',
+    action: overdue
+      ? 'OWNER_REVIEW_REQUIRED_FREEZE_REMAINS_ACTIVE'
+      : (Number(infra.consumedRuns) === 1
+        ? 'PILOT_PASS_CORROBORATION_REQUIRED'
+        : 'SINGLE_INFRASTRUCTURE_RECOVERY_AUTHORIZED'),
   };
 }
 
