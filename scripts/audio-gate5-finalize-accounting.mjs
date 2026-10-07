@@ -37,7 +37,7 @@ export async function finalizeGate5({root=process.cwd(),logPath}){
     runId:process.env.GITHUB_RUN_ID||null,
     decisionId:auth.decisionId,
     successfulTtsRequests:successful,
-    providerAttempted:/PROGRESSIVE_REPAIR_(?:TTS_OK|DAILY_QUOTA_STOP|RATE_WAIT)/.test(log),
+    providerAttempted:/GATE5_PROVIDER_ATTEMPT/.test(log) || /"sent":\s*[1-9]/.test(log) || /PROGRESSIVE_REPAIR_(?:TTS_OK|DAILY_QUOTA_STOP|RATE_WAIT)/.test(log),
     validationStatus:row.validation?.status||null,
     consensus:row.validation?.consensus||null,
     fingerprint:row.generation?.fingerprint||null,
