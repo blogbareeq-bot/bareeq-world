@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/audio-passports-retained-splice.py'
       - '.github/workflows/audio-passports-retained-splice.yml'
+      - 'scripts/audio-completion15-map.mjs'
 permissions:
   actions: read
   contents: read
@@ -25,7 +26,15 @@ jobs:
           repository: ${{ github.repository }}
           run-id: '37604910773'
       - name: Install local ASR
-        run: python -m pip install faster-whisper==1.2.0 requests numpy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install faster-whisper==1.2.0 requests numpy
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Map all pending targets to approved speech sources
+        run: node scripts/audio-completion15-map.mjs retained-recovery completion15-preflight
       - name: Build review candidate without provider keys
         run: python scripts/audio-passports-retained-splice.py --root retained-recovery --out retained-splice
       - name: Prove published audio is unchanged
@@ -35,5 +44,12 @@ jobs:
         with:
           name: bareeq-passports-retained-splice-${{ github.run_id }}
           path: retained-splice/
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-completion15-map-${{ github.run_id }}
+          path: completion15-preflight/
           if-no-files-found: error
           retention-days: 90
