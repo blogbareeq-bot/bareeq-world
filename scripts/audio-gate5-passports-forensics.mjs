@@ -235,45 +235,59 @@ export async function analyzeGate5PassportsArtifact({root,repoRoot=process.cwd()
   const newOutsidePart4=newIssues.filter(x=>x.partNumber!==4);
 
   const baseRecord=baseParts[3], trialRecord=trialParts[3];
-  const basePartFile=path.join(baseline,'parts',baseRecord.file);
-  const trialPartFile=path.join(trial,'parts',trialRecord.file);
-  const [basePcm,trialPcm]=await Promise.all([decodePcm(basePartFile),decodePcm(trialPartFile)]);
-  const spliceStart=Number(meta.spliceStartSeconds??trialRecord.spliceStartSeconds);
-  const spliceEnd=Number(meta.spliceEndSeconds??trialRecord.spliceEndSeconds);
-  const replacementSeconds=Number(trialRecord.replacementSeconds);
-  if(!Number.isFinite(spliceStart)||!Number.isFinite(spliceEnd)||!Number.isFinite(replacementSeconds)) throw new Error('splice timing evidence missing');
-
-  const prefixDuration=Math.min(2,Math.max(0.5,spliceStart-0.75));
-  const prefixStart=Math.max(0,spliceStart-0.5-prefixDuration);
-  const basePrefix=pcmSlice(basePcm,prefixStart,prefixDuration);
-  const trialPrefix=pcmSlice(trialPcm,prefixStart,prefixDuration);
-
-  const suffixDuration=2;
-  const baseSuffixStart=spliceEnd+0.5;
-  const trialSuffixStart=spliceStart+replacementSeconds+0.5;
-  const baseSuffix=pcmSlice(basePcm,baseSuffixStart,suffixDuration);
-  const trialSuffix=pcmSlice(trialPcm,trialSuffixStart,suffixDuration);
-
-  const prefixSimilarity=bestCorrelation(basePrefix,trialPrefix);
-  const suffixSimilarity=bestCorrelation(baseSuffix,trialSuffix);
-  const startBoundary=boundaryMetrics(trialPcm,spliceStart);
-  const endBoundary=boundaryMetrics(trialPcm,spliceStart+replacementSeconds);
-  const boundaryArtifact=Boolean(startBoundary.click||startBoundary.gap||startBoundary.overlap||endBoundary.click||endBoundary.gap||endBoundary.overlap);
-  const waveformOutsideSplicePreserved=Boolean((prefixSimilarity.correlation??0)>0.985&&(suffixSimilarity.correlation??0)>0.985);
+  const spliceStartRaw=meta.spliceStartSeconds??trialRecord.spliceStartSeconds;
+  const spliceEndRaw=meta.spliceEndSeconds??trialRecord.spliceEndSeconds;
+  const replacementRaw=trialRecord.replacementSeconds;
+  const hasSegmentSplice=[spliceStartRaw,spliceEndRaw,replacementRaw].every(v=>Number.isFinite(Number(v)));
+  let waveform={
+    mode:hasSegmentSplice?'SEGMENT_SPLICE':'WHOLE_PART_REGENERATION',
+    outsideChangedPartByteIdentical:unchangedParts.length===7,
+    outsideSplice:null,
+    spliceBoundaries:null,
+  };
+  if(hasSegmentSplice){
+    const basePartFile=path.join(baseline,'parts',baseRecord.file);
+    const trialPartFile=path.join(trial,'parts',trialRecord.file);
+    const [basePcm,trialPcm]=await Promise.all([decodePcm(basePartFile),decodePcm(trialPartFile)]);
+    const spliceStart=Number(spliceStartRaw), spliceEnd=Number(spliceEndRaw), replacementSeconds=Number(replacementRaw);
+    const prefixDuration=Math.min(2,Math.max(0.5,spliceStart-0.75));
+    const prefixStart=Math.max(0,spliceStart-0.5-prefixDuration);
+    const basePrefix=pcmSlice(basePcm,prefixStart,prefixDuration);
+    const trialPrefix=pcmSlice(trialPcm,prefixStart,prefixDuration);
+    const suffixDuration=2;
+    const baseSuffixStart=spliceEnd+0.5;
+    const trialSuffixStart=spliceStart+replacementSeconds+0.5;
+    const baseSuffix=pcmSlice(basePcm,baseSuffixStart,suffixDuration);
+    const trialSuffix=pcmSlice(trialPcm,trialSuffixStart,suffixDuration);
+    const prefixSimilarity=bestCorrelation(basePrefix,trialPrefix);
+    const suffixSimilarity=bestCorrelation(baseSuffix,trialSuffix);
+    const startBoundary=boundaryMetrics(trialPcm,spliceStart);
+    const endBoundary=boundaryMetrics(trialPcm,spliceStart+replacementSeconds);
+    const boundaryArtifact=Boolean(startBoundary.click||startBoundary.gap||startBoundary.overlap||endBoundary.click||endBoundary.gap||endBoundary.overlap);
+    waveform={
+      mode:'SEGMENT_SPLICE',
+      outsideChangedPartByteIdentical:unchangedParts.length===7,
+      outsideSplice:{prefix:prefixSimilarity,suffix:suffixSimilarity,preserved:Boolean((prefixSimilarity.correlation??0)>0.985&&(suffixSimilarity.correlation??0)>0.985)},
+      spliceBoundaries:{start:startBoundary,end:endBoundary,artifactDetected:boundaryArtifact},
+      splice:{startSeconds:spliceStart,endSeconds:spliceEnd,replacementSeconds},
+    };
+  }
 
   const targetRawModelsMatching=models.filter(model=>(t03Raw[model]||[]).length===0);
   const targetFixedByRawAsr=targetRawModelsMatching.length===2;
   const targetFixedByConsensus=!t03StillAdjudicated;
 
   const definiteAsrInstability=newOutsidePart4.filter(x=>x.audioPartByteIdentical===true);
+  const changedPartConsensus=newInsidePart4.filter(x=>x.bucket==='substantive');
+  const changedPartUnresolved=newInsidePart4.filter(x=>x.bucket==='unresolved');
   const changedRegionConsensus=newInsideTargetSegment.filter(x=>x.bucket==='substantive');
   const changedRegionUnresolved=newInsideTargetSegment.filter(x=>x.bucket==='unresolved');
   const adjacentChangedPartIssues=newInsidePart4.filter(x=>!x.insideTargetSegment&&x.adjacentToTargetSegment);
 
   const causes=[];
   if(definiteAsrInstability.length) causes.push('ASR_INSTABILITY');
-  if(changedRegionConsensus.length) causes.push('TTS_REGRESSION');
-  if(boundaryArtifact||!waveformOutsideSplicePreserved) causes.push('SPLICE_REGRESSION');
+  if(changedPartConsensus.length) causes.push('TTS_REGRESSION');
+  if(waveform.mode==='SEGMENT_SPLICE' && (waveform.spliceBoundaries?.artifactDetected || waveform.outsideSplice?.preserved===false)) causes.push('SPLICE_REGRESSION');
   if(!causes.length&&newInsidePart4.length) causes.push('TTS_OR_ASR_AMBIGUITY');
   const forensicClassification=causes.length>1?'MIXED_CAUSE':(causes[0]||'NO_REGRESSION_PROVEN');
 
@@ -304,13 +318,8 @@ export async function analyzeGate5PassportsArtifact({root,repoRoot=process.cwd()
       changedParts,unchangedParts,
       baselineFullSha256:sha256(baseFull),trialFullSha256:sha256(trialFull),
       fullAudioChanged:sha256(baseFull)!==sha256(trialFull),
-      splice:{startSeconds:spliceStart,endSeconds:spliceEnd,replacementSeconds},
-      waveformOutsideSplice:{
-        prefix:prefixSimilarity,
-        suffix:suffixSimilarity,
-        preserved:waveformOutsideSplicePreserved,
-      },
-      spliceBoundaries:{start:startBoundary,end:endBoundary,artifactDetected:boundaryArtifact},
+      repairMode:waveform.mode,
+      waveform,
     },
     baseline:{consensus:baseRawAdj.consensus,issues:baselineIssues},
     trial:{
@@ -322,15 +331,19 @@ export async function analyzeGate5PassportsArtifact({root,repoRoot=process.cwd()
       newIssuesInsideTargetSegment:newInsideTargetSegment,
       newIssuesOutsideRegeneratedPart:newOutsidePart4,
       definiteAsrInstabilityOnByteIdenticalAudio:definiteAsrInstability,
+      changedPartConsensusErrors:changedPartConsensus,
+      changedPartUnresolved,
       changedRegionConsensusErrors:changedRegionConsensus,
-      changedRegionUnresolved:changedRegionUnresolved,
+      changedRegionUnresolved,
       adjacentChangedPartIssues,
     },
     forensicClassification,
     causeEvidence:{
       asrInstability:definiteAsrInstability.map(x=>({expectedIndex:x.expectedIndex,expected:x.expected,actual:x.actual??null,partNumber:x.partNumber,segmentId:x.segmentId,rawModelEvidence:x.rawModelEvidence})),
-      ttsRegression:changedRegionConsensus.map(x=>({expectedIndex:x.expectedIndex,expected:x.expected,actual:x.actual??null,segmentId:x.segmentId,rawModelEvidence:x.rawModelEvidence})),
-      spliceRegression:{boundaryArtifact,waveformOutsideSplicePreserved,startBoundary,endBoundary,prefixCorrelation:prefixSimilarity.correlation,suffixCorrelation:suffixSimilarity.correlation},
+      ttsRegression:changedPartConsensus.map(x=>({expectedIndex:x.expectedIndex,expected:x.expected,actual:x.actual??null,partNumber:x.partNumber,segmentId:x.segmentId,insideTargetSegment:x.insideTargetSegment,rawModelEvidence:x.rawModelEvidence})),
+      spliceRegression:waveform.mode==='SEGMENT_SPLICE'
+        ? {applicable:true,boundaryArtifact:waveform.spliceBoundaries?.artifactDetected??null,waveformOutsideSplicePreserved:waveform.outsideSplice?.preserved??null,startBoundary:waveform.spliceBoundaries?.start??null,endBoundary:waveform.spliceBoundaries?.end??null,prefixCorrelation:waveform.outsideSplice?.prefix?.correlation??null,suffixCorrelation:waveform.outsideSplice?.suffix?.correlation??null}
+        : {applicable:false,reason:'No segment splice occurred; safe boundaries were not found and the execution fell back to whole-part 4 regeneration.'},
     },
     conclusion:{
       publishable:false,
@@ -373,14 +386,16 @@ This is strong dual-ASR evidence that the targeted repair itself succeeded. It i
 - Replacement duration: **${r.repairSurface.splice.replacementSeconds.toFixed(3)}s**
 - Part 6 / T02 audio byte-identical: **${r.carriedHumanEvidence.audioBytesUnchanged}**
 
-## 3. Waveform outside the splice
+## 3. Audio-change geometry
 
-- Prefix correlation baseline↔trial: **${Number(r.repairSurface.waveformOutsideSplice.prefix.correlation).toFixed(6)}**
-- Suffix correlation baseline↔trial: **${Number(r.repairSurface.waveformOutsideSplice.suffix.correlation).toFixed(6)}**
-- Outside-splice waveform preserved: **${r.repairSurface.waveformOutsideSplice.preserved}**
-- Start boundary click/gap/overlap: **${r.repairSurface.spliceBoundaries.start.click}/${r.repairSurface.spliceBoundaries.start.gap}/${r.repairSurface.spliceBoundaries.start.overlap}**
-- End boundary click/gap/overlap: **${r.repairSurface.spliceBoundaries.end.click}/${r.repairSurface.spliceBoundaries.end.gap}/${r.repairSurface.spliceBoundaries.end.overlap}**
-- Splice artifact detected: **${r.repairSurface.spliceBoundaries.artifactDetected}**
+- Repair mode: **${r.repairSurface.repairMode}**
+- Audio outside part 4 byte-identical: **${r.repairSurface.waveform.outsideChangedPartByteIdentical}**
+${r.repairSurface.repairMode==='SEGMENT_SPLICE'
+  ? `- Outside-splice prefix correlation: **${Number(r.repairSurface.waveform.outsideSplice.prefix.correlation).toFixed(6)}**
+- Outside-splice suffix correlation: **${Number(r.repairSurface.waveform.outsideSplice.suffix.correlation).toFixed(6)}**
+- Outside-splice waveform preserved: **${r.repairSurface.waveform.outsideSplice.preserved}**
+- Splice artifact detected: **${r.repairSurface.waveform.spliceBoundaries.artifactDetected}**`
+  : '- No splice occurred. Safe synchronized-segment boundaries were unavailable, so the execution regenerated the entire fourth part. SPLICE_REGRESSION is therefore not applicable to this trial.'}
 
 ## 4. Fresh trial consensus
 
@@ -399,9 +414,10 @@ ${inside}
 ## 5. Cause evidence
 
 - Definite ASR-instability issues on byte-identical parts: **${r.trial.definiteAsrInstabilityOnByteIdenticalAudio.length}**
-- Consensus lexical errors inside regenerated target segment: **${r.trial.changedRegionConsensusErrors.length}**
-- Unresolved disagreements inside regenerated target segment: **${r.trial.changedRegionUnresolved.length}**
-- Splice artifact detected: **${r.repairSurface.spliceBoundaries.artifactDetected}**
+- Consensus lexical errors anywhere inside regenerated part 4: **${r.trial.changedPartConsensusErrors.length}**
+- Unresolved disagreements inside regenerated part 4: **${r.trial.changedPartUnresolved.length}**
+- Consensus lexical errors inside target segment b0030: **${r.trial.changedRegionConsensusErrors.length}**
+- Splice regression applicable: **${r.causeEvidence.spliceRegression.applicable}**
 
 ## 6. Decision
 
