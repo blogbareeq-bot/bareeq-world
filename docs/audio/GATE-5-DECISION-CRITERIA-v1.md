@@ -14,7 +14,7 @@ A case may be presented to Gate 5 only when all of these are true:
 3. A claimed audio defect has independent corroboration or a binding Human
    Arbitration decision of `ACTUAL_AUDIO_ERROR`.
 4. Technical QA does not show corruption/damage that should be fixed without TTS.
-5. The seven current Exact publications remain unchanged.
+5. All current Exact publications remain unchanged. The canonical baseline at the time of the current Gate 5 plan is **9/15 Exact**.
 6. The fallback for the target article remains safe and live.
 7. Request 30/30 is still unused.
 8. A written experiment plan states:
