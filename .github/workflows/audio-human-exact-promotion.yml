@@ -117,16 +117,22 @@ jobs:
       - name: Restrict production-audio delta to the two promoted articles
         run: |
           set -euo pipefail
+          test -f public/audio/articles/43993d7a722d81d4/manifest.json
+          test -f public/audio/articles/4d194dd1e6a739a8/manifest.json
           node --input-type=module <<'NODE'
           import { execFileSync } from 'node:child_process';
-          const out=execFileSync('git',['status','--porcelain','--','public/audio'],{encoding:'utf8'});
-          const paths=out.trim().split(/\r?\n/).filter(Boolean).map(line=>line.slice(3));
+          import { readFile } from 'node:fs/promises';
           const allowed=['public/audio/articles/43993d7a722d81d4/','public/audio/articles/4d194dd1e6a739a8/'];
-          for(const p of paths){
-            if(!allowed.some(prefix=>p===prefix.slice(0,-1)||p.startsWith(prefix))) throw new Error(`unexpected public/audio mutation: ${p}`);
+          const tracked=execFileSync('git',['diff','--name-only','--','public/audio'],{encoding:'utf8'})
+            .trim().split(/\r?\n/).filter(Boolean);
+          for(const p of tracked){
+            if(!allowed.some(prefix=>p.startsWith(prefix))) throw new Error(`unexpected tracked public/audio mutation: ${p}`);
           }
-          if(!paths.length) throw new Error('expected two promoted public/audio directories but found no production delta');
-          console.log('HUMAN_PROMOTION_AUDIO_DELTA=PASS changed='+paths.length);
+          const record=JSON.parse(await readFile('docs/audio/HUMAN-EXACT-PROMOTION-20261007.json','utf8'));
+          if(record.promotedCount!==2) throw new Error('promotion record does not contain exactly two articles');
+          const keys=new Set(record.promoted.map(x=>x.audioKey));
+          if(!keys.has('43993d7a722d81d4')||!keys.has('4d194dd1e6a739a8')) throw new Error('promotion audioKey set is not the approved pair');
+          console.log('HUMAN_PROMOTION_AUDIO_DELTA=PASS ignored-new-dirs=2 tracked-changes='+tracked.length);
           NODE
 
       - uses: actions/upload-artifact@v4
