@@ -23,14 +23,19 @@ async function writeJson(file, value) {
 }
 
 export function parseSuccessfulTts(logText = '') {
-  const matches = [...String(logText).matchAll(/PROGRESSIVE_REPAIR_SUMMARY[^\n]*tts=(\{[^\n]+\})/g)];
-  if (!matches.length) return 0;
-  try {
-    const stats = JSON.parse(matches.at(-1)[1]);
-    return Math.max(0, Number(stats.successful) || 0);
-  } catch {
-    return 0;
+  const text = String(logText);
+  const explicitSuccesses = (text.match(/PROGRESSIVE_REPAIR_TTS_OK/g) || []).length;
+  const matches = [...text.matchAll(/PROGRESSIVE_REPAIR_SUMMARY[^\n]*tts=(\{[^\n]+\})/g)];
+  let summary = 0;
+  if (matches.length) {
+    try {
+      const stats = JSON.parse(matches.at(-1)[1]);
+      summary = Math.max(0, Number(stats.successful) || 0);
+    } catch {
+      summary = 0;
+    }
   }
+  return Math.max(explicitSuccesses, summary);
 }
 
 export function normalizeStrategyState(raw = {}, exactCount = 0) {
