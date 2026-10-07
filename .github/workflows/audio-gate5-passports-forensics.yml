@@ -78,8 +78,9 @@ jobs:
           if(r.repairSurface.unchangedParts.length!==7) throw new Error('expected seven byte-identical unchanged parts');
           if(r.carriedHumanEvidence.audioBytesUnchanged!==true) throw new Error('T02 region changed unexpectedly');
           if(r.trial.issues.some(x=>x.partNumber==null || x.segmentId==null)) throw new Error('forensic issue mapping contains null part/segment');
-          if(typeof r.repairSurface.waveformOutsideSplice.preserved!=='boolean') throw new Error('waveform comparison missing');
-          if(typeof r.repairSurface.spliceBoundaries.artifactDetected!=='boolean') throw new Error('splice-boundary analysis missing');
+          if(r.repairSurface.repairMode!=='WHOLE_PART_REGENERATION' && r.repairSurface.repairMode!=='SEGMENT_SPLICE') throw new Error('repair mode missing');
+          if(r.repairSurface.waveform.outsideChangedPartByteIdentical!==true) throw new Error('audio outside changed part is not byte-identical');
+          if(r.repairSurface.repairMode==='SEGMENT_SPLICE' && typeof r.repairSurface.waveform.spliceBoundaries?.artifactDetected!=='boolean') throw new Error('splice-boundary analysis missing');
           if(!['ASR_INSTABILITY','TTS_REGRESSION','SPLICE_REGRESSION','MIXED_CAUSE','TTS_OR_ASR_AMBIGUITY','NO_REGRESSION_PROVEN'].includes(r.forensicClassification)) throw new Error('invalid forensic classification');
           console.log(`GATE5_FORENSICS_CONTRACT=PASS classification=${r.forensicClassification} targetFixed=${r.target.fixedByBothRawModels} publish=false ttsAuthorized=false`);
           NODE
