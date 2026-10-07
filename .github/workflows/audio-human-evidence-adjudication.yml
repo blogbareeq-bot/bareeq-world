@@ -76,7 +76,7 @@ jobs:
           if(r.activePending!==7) throw new Error(`expected 7 active pending, got ${r.activePending}`);
           if(r.ttsCalls!==0 || r.newAsrCalls!==0 || r.providerCalls!==0) throw new Error('provider-call invariant failed');
           for(const row of r.rows){
-            if(!row.fingerprint || !row.fullSha256 || row.technicalQaBound!==true) throw new Error(`identity/QA binding missing for ${row.articleId}`);
+            if(!row.fingerprint || !row.fullSha256 || row.technicalQa?.passed!==true || row.sync?.passed!==true || row.candidateManifestBound!==true) throw new Error(`identity/QA/sync binding missing for ${row.articleId}`);
             if(row.exactAfterHumanEvidence){
               const c=row.finalConsensus;
               if(Number(c.substitutions)||Number(c.deletions)||Number(c.insertions)||Number(c.unresolved)) throw new Error(`non-zero Exact result for ${row.articleId}`);
