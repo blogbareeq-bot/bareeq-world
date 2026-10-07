@@ -35,8 +35,17 @@ export function validateGate4Governance({
   if(freeze?.reviewPolicy?.fullCalibrationPlan!=='docs/audio/GATE-4-CALIBRATION-PLAN-v1.md') fail('calibration plan is not bound');
   if(freeze?.reviewPolicy?.gate5Criteria!=='docs/audio/GATE-5-DECISION-CRITERIA-v1.md') fail('Gate 5 criteria are not bound');
 
-  if(Number(status?.exactCount)!==7 || Number(status?.publishedCount)!==7 || Number(status?.fallbackCount)!==8) fail('Canonical campaign state moved from 7 exact / 8 fallback');
-  if(Number(strategy?.exactBaseline)!==7 || Number(strategy?.successfulTtsSinceLastNewExact)!==29 || Number(strategy?.threshold)!==30) fail('Strategic TTS state moved from 29/30');
+  const exact=Number(status?.exactCount);
+  const published=Number(status?.publishedCount);
+  const fallback=Number(status?.fallbackCount);
+  if(!Number.isInteger(exact) || exact<7 || exact>14) fail('Canonical campaign Exact count must remain within the governed 7..14 range');
+  if(published!==exact) fail('All governed Exact articles must be publishedExact');
+  if(fallback!==15-exact) fail('Fallback count must equal 15 - Exact');
+  if(Number(strategy?.exactBaseline)!==exact) fail('strategy exact baseline must match current Exact count');
+  if(Number(strategy?.successfulTtsSinceLastNewExact)!==29 || Number(strategy?.threshold)!==30) fail('Strategic TTS budget must remain 29/30');
+  const snap=freeze?.strategySnapshot||{};
+  if(snap.exact!=null && Number(snap.exact)!==exact) fail('freeze Exact snapshot drift');
+  if(snap.fallback!=null && Number(snap.fallback)!==fallback) fail('freeze fallback snapshot drift');
 
   if(queue?.schema!=='bareeq.audio-human-arbitration-queue.v1' || queue.status!=='active' || !Array.isArray(queue.items) || queue.items.length<2) fail('localized disputes must remain queued');
 
@@ -51,7 +60,7 @@ export function validateGate4Governance({
   const due=Date.parse(freeze.reviewPolicy.nextReviewAt||'');
   const overdue=Number.isFinite(due)&&now.getTime()>due;
   return {
-    exact:7,fallback:8,strategy:'29/30',overdue,
+    exact,fallback,strategy:'29/30',overdue,
     scientificConsumed:3,scientificRemaining:1,
     fullCalibrationAuthorized:false,
     gate5:'CLOSED',

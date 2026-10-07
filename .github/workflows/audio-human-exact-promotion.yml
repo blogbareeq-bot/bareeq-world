@@ -1,0 +1,166 @@
+name: Bareeq promote human-verified Exact
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-promote-human-exact.mjs'
+      - 'scripts/audio-gate4-governance.mjs'
+      - 'scripts/test-audio-gate4-promotion.mjs'
+      - '.github/workflows/audio-human-exact-promotion.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/audio-promote-human-exact.mjs'
+      - 'scripts/audio-gate4-governance.mjs'
+      - 'scripts/test-audio-gate4-promotion.mjs'
+      - '.github/workflows/audio-human-exact-promotion.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: bareeq-human-exact-promotion
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - name: Verify policy before restoring evidence
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-promote-human-exact.mjs
+          node scripts/test-audio-human-evidence-adjudication.mjs
+          node scripts/test-audio-gate4-governance.mjs
+          node scripts/test-audio-gate4-promotion.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+
+      - name: Download immutable campaign evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-progressive-validation-37284619084
+          path: restore-source
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37284619084'
+
+      - name: Download blind triage mapping
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-human-triage-37449866365
+          path: triage-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37449866365'
+
+      - name: Restore campaign candidates only
+        run: |
+          set -euo pipefail
+          rm -rf audio-candidates
+          cp -a restore-source/audio-candidates ./audio-candidates
+          test -f audio-candidates/_campaigns/sadaltager-openrouter-20260901-v1/state.json
+          echo 'HUMAN_PROMOTION_CHECKPOINT=RESTORED'
+
+      - name: Promote the two human-verified candidates
+        run: |
+          set -euo pipefail
+          node scripts/audio-promote-human-exact.mjs --root=. --triage-root=triage-input
+          echo 'HUMAN_PROMOTION_PROVIDER_CALLS=0'
+
+      - name: Recompute canonical status
+        env:
+          BAREEQ_SOURCE_RUN_ID: ${{ github.run_id }}
+          BAREEQ_SOURCE_ARTIFACT: bareeq-human-exact-promotion-${{ github.run_id }}
+        run: node scripts/audio-progressive-status.mjs
+
+      - name: Verify 9/15 production tree
+        run: |
+          set -euo pipefail
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const status=JSON.parse(await readFile('docs/audio/PROGRESSIVE-STATUS.json','utf8'));
+          const marker=JSON.parse(await readFile('docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json','utf8'));
+          const strategy=JSON.parse(await readFile('docs/audio/ENGINE-STRATEGY-STATE.json','utf8'));
+          const freeze=JSON.parse(await readFile('docs/audio/TTS-FREEZE.json','utf8'));
+          if(status.exactCount!==9 || status.publishedCount!==9 || status.fallbackCount!==6) throw new Error('canonical status is not 9/15 exact + 6 fallback');
+          if(marker.publishedCount!==9 || marker.fallbackCount!==6) throw new Error('partial marker is not 9/6');
+          if(strategy.exactBaseline!==9 || strategy.successfulTtsSinceLastNewExact!==29 || strategy.threshold!==30) throw new Error('strategy is not 9 Exact with preserved 29/30');
+          if(freeze.active!==true || freeze.strategySnapshot?.exact!==9 || freeze.strategySnapshot?.fallback!==6) throw new Error('freeze snapshot is not 9/6');
+          const promoted=new Set(['اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا','كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه']);
+          const exactRows=status.rows.filter(r=>r.exact);
+          for(const id of promoted){
+            const row=exactRows.find(r=>r.articleId===id);
+            if(!row || !row.publishedExact) throw new Error(`promoted article not Exact/published: ${id}`);
+            if(Number(row.substitutions)||Number(row.deletions)||Number(row.insertions)||Number(row.unresolved)) throw new Error(`promoted article not 0/0/0/0: ${id}`);
+          }
+          console.log('HUMAN_PROMOTION_CANONICAL=PASS exact=9/15 published=9 fallback=6 strategy=29/30');
+          NODE
+
+      - name: Restrict production-audio delta to the two promoted articles
+        run: |
+          set -euo pipefail
+          test -f public/audio/articles/43993d7a722d81d4/manifest.json
+          test -f public/audio/articles/4d194dd1e6a739a8/manifest.json
+          node --input-type=module <<'NODE'
+          import { execFileSync } from 'node:child_process';
+          import { readFile } from 'node:fs/promises';
+          const allowed=['public/audio/articles/43993d7a722d81d4/','public/audio/articles/4d194dd1e6a739a8/'];
+          const tracked=execFileSync('git',['diff','--name-only','--','public/audio'],{encoding:'utf8'})
+            .trim().split(/\r?\n/).filter(Boolean);
+          for(const p of tracked){
+            if(!allowed.some(prefix=>p.startsWith(prefix))) throw new Error(`unexpected tracked public/audio mutation: ${p}`);
+          }
+          const record=JSON.parse(await readFile('docs/audio/HUMAN-EXACT-PROMOTION-20261007.json','utf8'));
+          if(record.promotedCount!==2) throw new Error('promotion record does not contain exactly two articles');
+          const keys=new Set(record.promoted.map(x=>x.audioKey));
+          if(!keys.has('43993d7a722d81d4')||!keys.has('4d194dd1e6a739a8')) throw new Error('promotion audioKey set is not the approved pair');
+          console.log('HUMAN_PROMOTION_AUDIO_DELTA=PASS ignored-new-dirs=2 tracked-changes='+tracked.length);
+          NODE
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-human-exact-promotion-${{ github.run_id }}
+          path: |
+            docs/audio/HUMAN-EXACT-PROMOTION-20261007.json
+            docs/audio/PROGRESSIVE-STATUS.json
+            docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
+            docs/audio/ENGINE-STRATEGY-STATE.json
+            docs/audio/TTS-FREEZE.json
+            public/audio/articles/43993d7a722d81d4/
+            public/audio/articles/4d194dd1e6a739a8/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Commit verified promotion to main
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f public/audio/articles/43993d7a722d81d4 public/audio/articles/4d194dd1e6a739a8
+          git add docs/audio/HUMAN-EXACT-PROMOTION-20261007.json
+          git add docs/audio/PROGRESSIVE-STATUS.json docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
+          git add docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json
+          git commit -m 'audio: publish 9/15 Exact after binding human adjudication'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          echo 'HUMAN_PROMOTION_MAIN_PUSH=PASS exact=9/15'
