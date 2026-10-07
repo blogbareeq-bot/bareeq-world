@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Global synthesis remains frozen at 29/30. Project owner authorized exactly one Gate 5 TTS success for passports; only the dedicated target/decision envelope may bypass the freeze.",
+  "reason": "The authorized Gate 5 passports execution ended without a successful TTS response. Global synthesis remains frozen; automatic retry is prohibited.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Execute the dedicated one-request passports Gate 5 experiment. No other TTS is authorized.",
+    "nextAction": "Inspect the failed/quota execution evidence. Any retry requires a new explicit decision; automatic retry is prohibited.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -88,8 +88,9 @@
       "segmentId": "b0030",
       "expectedToken": "لا",
       "successfulTtsRequestsRequired": 1,
-      "successfulTtsRequestsAuthorized": 1,
-      "status": "AUTHORIZED_ONE_REQUEST"
+      "successfulTtsRequestsAuthorized": 0,
+      "status": "ATTEMPTED_NO_SUCCESS",
+      "successfulTtsRequestsConsumed": 0
     }
   }
 }

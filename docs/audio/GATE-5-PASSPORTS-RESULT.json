@@ -1,0 +1,21 @@
+{
+  "schema": "bareeq.audio-gate5-passports-result.v1",
+  "generatedAt": "2026-10-07T06:22:12.271Z",
+  "runId": "37580906493",
+  "decisionId": "GATE5-PASSPORTS-v1",
+  "successfulTtsRequests": 0,
+  "providerAttempted": false,
+  "validationStatus": "repair-failed",
+  "consensus": {
+    "substitutions": 0,
+    "deletions": 0,
+    "insertions": 0,
+    "unresolved": 2
+  },
+  "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+  "fullSha256": "597168624f702c027ede0c2a719de337149f853822ef634a715c840873703dd8",
+  "diagnosticEvidencePath": null,
+  "publicationAttempted": false,
+  "publicAudioMutated": false,
+  "nextAction": "no successful TTS was consumed; authorization is closed to prevent automatic retry"
+}

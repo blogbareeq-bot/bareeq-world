@@ -4,16 +4,16 @@
   "threshold": 30,
   "exactBaseline": 9,
   "successfulTtsSinceLastNewExact": 29,
-  "status": "active",
-  "reason": "Two new Exact publications were promoted from binding Human Triage evidence with 0 TTS; the 29/30 strategic TTS counter is intentionally unchanged.",
+  "status": "paused-for-engine-review",
+  "reason": "Verified micro-repair review exhausted its two bounded runs",
   "lastExactAt": "2026-10-07T05:45:49.363Z",
-  "lastRunId": "37284619084",
-  "updatedAt": "2026-10-07T05:45:49.363Z",
+  "lastRunId": "37580906493",
+  "updatedAt": "2026-10-07T06:22:12.216Z",
   "targetedRecovery": {
     "id": "verified-micro-cut-20261005",
     "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
     "maxRuns": 2,
-    "runs": 1,
-    "lastAttemptDay": "2026-10-05"
+    "runs": 2,
+    "lastAttemptDay": "2026-10-07"
   }
 }
