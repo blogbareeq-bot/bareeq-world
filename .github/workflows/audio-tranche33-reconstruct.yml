@@ -1,0 +1,91 @@
+name: Bareeq tranche33 saved word reconstruction
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-tranche33-reconstruct.yml'
+      - 'scripts/audio-tranche33-reconstruct.mjs'
+      - 'scripts/audio-tranche33-reconstruct.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  reconstruct:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - name: Verify frozen synthesis and local prerequisites
+        run: |
+          node scripts/test-audio-tts-freeze-integration.mjs
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install faster-whisper==1.2.0 requests numpy
+          python -c 'from faster_whisper import WhisperModel'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-asr-resume-37624565442
+          path: qa-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37624565442'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-reviewed-asr-37624565442
+          path: source-review
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37624565442'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-preflight-37621094251
+          path: preflight-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37621094251'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-passports-retained-splice-37605942739
+          path: passports-splice
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37605942739'
+      - name: Restore existing candidates and counted donor clips
+        run: node scripts/audio-tranche33-reconstruct.mjs
+      - name: Insert exact heading and retain only the confirmed plural donor word
+        run: python scripts/audio-tranche33-reconstruct.py
+      - name: Fresh full-file QA and distinct-model ASR
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche33-reconstruct.mjs --validate
+      - name: Preserve bound compact review
+        run: |
+          node scripts/audio-tranche33-review-pack.mjs
+          cp source-review/micro-independent-review.json tranche33-review/
+      - name: Prove no publication or TTS accounting mutation
+        if: always()
+        run: git diff --exit-code -- public/audio docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json docs/audio/TTS-THRESHOLD-AMENDMENT-33.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-tranche33-reconstructed-review-${{ github.run_id }}
+          path: tranche33-review/
+          retention-days: 90
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-tranche33-reconstructed-${{ github.run_id }}
+          path: |
+            tranche33-execution/
+            audio-candidates/
+          retention-days: 90
+          if-no-files-found: warn
