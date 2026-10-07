@@ -8,6 +8,7 @@ const json=async p=>JSON.parse(await readFile(p,'utf8'));
 const root=process.argv[2], out=process.argv[3];
 if(!root||!out) throw new Error('usage: script retained-root output-root');
 const inventory=await json(path.join(root,'inventory.json'));
+if(inventory.currentExact!==9 || inventory.pending.length!==6 || inventory.protectedExactArticles.length!==9) throw new Error('canonical 9/15 recovery scope drift');
 const live=await json('docs/audio/LIVE-AUDIO-OBSERVED-20260828.json');
 const confirmed={
  'how-touchscreens-work':[[184,'الشاشة'],[489,'إنه'],[1304,'به']],
@@ -40,5 +41,5 @@ for(const row of inventory.pending){
  rows.push({...row,variants:undefined,targets,scope:confirmed[row.articleId]?'confirmed-repair':'morning-review-mini-campaign',publicationPermitted:false});
 }
 await mkdir(out,{recursive:true});
-await writeFile(path.join(out,'completion15-map.json'),JSON.stringify({schema:'bareeq.audio-completion15-map.v1',currentExact:9,targetExact:15,providerCalls:0,ttsCalls:0,protectedExact:inventory.protectedExact,rows},null,2)+'\n');
+await writeFile(path.join(out,'completion15-map.json'),JSON.stringify({schema:'bareeq.audio-completion15-map.v1',currentExact:9,targetExact:15,providerCalls:0,ttsCalls:0,protectedExact:inventory.protectedExactArticles,rows},null,2)+'\n');
 console.log(JSON.stringify(rows.map(x=>({articleId:x.articleId,targets:x.targets.length,parts:[...new Set(x.targets.map(t=>t.partNumber))]}))));
