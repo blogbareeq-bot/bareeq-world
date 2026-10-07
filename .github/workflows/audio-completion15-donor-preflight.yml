@@ -1,0 +1,56 @@
+name: Bareeq remaining15 retained donor preflight
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-completion15-donor-preflight.yml'
+      - 'scripts/audio-completion15-donor-preflight.mjs'
+      - 'scripts/audio-completion15-donor-preflight.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  donor-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local byte verification tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: retained-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-remaining15-review-37623097600
+          path: remaining-review
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37623097600'
+      - name: Verify full/part identities for retained donors
+        run: node scripts/audio-completion15-donor-preflight.mjs
+      - name: Check quiet word boundaries and complete morning end-of-part clip
+        run: python scripts/audio-completion15-donor-preflight.py
+      - name: Prove unchanged published audio and accounting
+        if: always()
+        run: git diff --exit-code -- public/audio docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json docs/audio/TTS-THRESHOLD-AMENDMENT-33.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-remaining15-donor-preflight-${{ github.run_id }}
+          path: donor15-result/
+          retention-days: 90
+          if-no-files-found: warn
