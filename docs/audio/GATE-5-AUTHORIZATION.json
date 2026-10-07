@@ -7,9 +7,14 @@
   "expectedToken": "لا",
   "strategyBefore": "29/30",
   "successfulTtsRequestsRequired": 1,
-  "successfulTtsRequestsAuthorized": 0,
-  "authorizationStatus": "NOT_AUTHORIZED",
+  "successfulTtsRequestsAuthorized": 1,
+  "authorizationStatus": "AUTHORIZED",
   "automaticExpansion": false,
   "publicationOnFailure": false,
-  "note": "Changing successfulTtsRequestsAuthorized from 0 to 1 requires explicit project-owner authorization for exactly one successful TTS request. A successful synthesis counts as request 30/30 even if rejected."
+  "note": "Owner explicitly authorized exactly one successful TTS request for the prepared passports Gate 5 experiment. The execution workflow additionally caps total TTS HTTP requests at one.",
+  "decisionId": "GATE5-PASSPORTS-v1",
+  "authorizedAt": "2026-10-07T09:11:00+03:00",
+  "authorizedBy": "project-owner",
+  "authorizationText": "أعتمد طلب TTS ناجح واحد فقط لمقال جوازات السفر ضمن Gate 5.",
+  "attemptsAuthorized": "one bounded execution; maximum one provider request in the execution workflow"
 }

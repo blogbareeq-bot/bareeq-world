@@ -73,7 +73,8 @@ export function createBudgetedSynthesizer({ apiKey, sleepImpl = sleep, transport
   );
 
   const synthesize = async (args) => {
-    if (!transportEntries && process.env.GITHUB_EVENT_NAME === 'push') {
+    if (!transportEntries && process.env.GITHUB_EVENT_NAME === 'push'
+      && process.env.BAREEQ_GATE5_AUTHORIZED !== '1') {
       throw new Error('Production TTS is disabled for push events');
     }
     const partNumber = Number(args?.part?.partIndex) + 1;

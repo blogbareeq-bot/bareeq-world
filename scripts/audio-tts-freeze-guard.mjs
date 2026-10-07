@@ -3,6 +3,28 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const FREEZE_PATH = path.join(process.cwd(), 'docs', 'audio', 'TTS-FREEZE.json');
+export const GATE5_AUTH_PATH = path.join(process.cwd(), 'docs', 'audio', 'GATE-5-AUTHORIZATION.json');
+
+export async function gate5OverrideAuthorized({
+  authorizationFile = GATE5_AUTH_PATH,
+  operation = 'tts-synthesis',
+  env = process.env,
+} = {}) {
+  if (env.BAREEQ_GATE5_AUTHORIZED !== '1') return null;
+  if (!/^gemini-(?:interactions|generate-content)-tts$/.test(operation)) return null;
+  const auth = JSON.parse(await readFile(authorizationFile, 'utf8'));
+  const ok = auth?.schema === 'bareeq.audio-gate5-authorization.v1'
+    && auth.authorizationStatus === 'AUTHORIZED'
+    && Number(auth.successfulTtsRequestsAuthorized) === 1
+    && Number(auth.successfulTtsRequestsRequired) === 1
+    && auth.targetArticleId === env.BAREEQ_GATE5_TARGET_ARTICLE
+    && auth.decisionId === env.BAREEQ_GATE5_DECISION_ID
+    && auth.targetCaseId === 'T03'
+    && Number(auth.targetPartNumber) === 4
+    && auth.targetSegmentId === 'b0030'
+    && auth.expectedToken === 'لا';
+  return ok ? auth : null;
+}
 
 export async function readTtsFreeze(file = FREEZE_PATH) {
   const raw = JSON.parse(await readFile(file, 'utf8'));
@@ -20,6 +42,11 @@ export async function ttsIsFrozen(file = FREEZE_PATH) {
 export async function assertTtsUnfrozen({ file = FREEZE_PATH, operation = 'tts-synthesis' } = {}) {
   const state = await readTtsFreeze(file);
   if (state.active === true) {
+    const override = await gate5OverrideAuthorized({ operation });
+    if (override) {
+      console.error(`BAREEQ_TTS_GATE5_OVERRIDE=AUTHORIZED decision=${override.decisionId} target=${override.targetArticleId} successfulRequests=1`);
+      return { ...state, gate5Override: true, gate5Authorization: override };
+    }
     const error = new Error(`BAREEQ_TTS_FROZEN operation=${operation} reason=${state.reason || 'policy'}`);
     error.code = 'BAREEQ_TTS_FROZEN';
     error.exitCode = 78;

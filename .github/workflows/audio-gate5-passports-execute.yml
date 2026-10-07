@@ -1,0 +1,251 @@
+name: Bareeq Gate 5 passports execution
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-gate5-passports-execute.yml'
+      - 'scripts/audio-tts-freeze-guard.mjs'
+      - 'scripts/audio-progressive-repair.mjs'
+      - 'scripts/audio-engine-strategy-guard.mjs'
+      - 'scripts/audio-gate5-passports-prepare-execution.mjs'
+      - 'scripts/audio-gate5-finalize-accounting.mjs'
+      - 'scripts/test-audio-gate5-execution.mjs'
+      - 'docs/audio/GATE-5-AUTHORIZATION.json'
+      - 'docs/audio/TTS-FREEZE.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-gate5-passports-execute.yml'
+      - 'scripts/audio-tts-freeze-guard.mjs'
+      - 'scripts/audio-progressive-repair.mjs'
+      - 'scripts/audio-engine-strategy-guard.mjs'
+      - 'scripts/audio-gate5-passports-prepare-execution.mjs'
+      - 'scripts/audio-gate5-finalize-accounting.mjs'
+      - 'docs/audio/GATE-5-AUTHORIZATION.json'
+      - 'docs/audio/TTS-FREEZE.json'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: bareeq-gate5-passports
+  cancel-in-progress: false
+
+env:
+  BAREEQ_AUDIO_CAMPAIGN_ID: sadaltager-openrouter-20260901-v1
+  BAREEQ_GATE5_TARGET_ARTICLE: why-some-passports-are-stronger
+  BAREEQ_GATE5_DECISION_ID: GATE5-PASSPORTS-v1
+
+jobs:
+  offline-gates:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Verify one-request execution envelope without provider calls
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-gate5-passports-prepare-execution.mjs
+          node --check scripts/audio-gate5-finalize-accounting.mjs
+          node --check scripts/audio-progressive-repair.mjs
+          node scripts/test-audio-gate5-execution.mjs
+          node scripts/test-audio-tts-freeze-guard.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
+          node scripts/test-audio-engine-strategy-guard.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+          echo 'GATE5_EXECUTION_OFFLINE=PASS providerCalls=0 publication=false'
+
+  authorization-gate:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      execute: ${{ steps.auth.outputs.execute }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: auth
+        name: Check exact owner authorization
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXECUTE=$(node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const auth=JSON.parse(await readFile('docs/audio/GATE-5-AUTHORIZATION.json','utf8'));
+          const status=JSON.parse(await readFile('docs/audio/PROGRESSIVE-STATUS.json','utf8'));
+          const strategy=JSON.parse(await readFile('docs/audio/ENGINE-STRATEGY-STATE.json','utf8'));
+          const freeze=JSON.parse(await readFile('docs/audio/TTS-FREEZE.json','utf8'));
+          const ok=auth.schema==='bareeq.audio-gate5-authorization.v1'
+            && auth.authorizationStatus==='AUTHORIZED'
+            && auth.decisionId==='GATE5-PASSPORTS-v1'
+            && auth.targetArticleId==='why-some-passports-are-stronger'
+            && auth.targetCaseId==='T03'
+            && Number(auth.targetPartNumber)===4
+            && auth.targetSegmentId==='b0030'
+            && auth.expectedToken==='لا'
+            && Number(auth.successfulTtsRequestsAuthorized)===1
+            && Number(auth.successfulTtsRequestsRequired)===1
+            && status.exactCount===9 && status.publishedCount===9 && status.fallbackCount===6
+            && Number(strategy.successfulTtsSinceLastNewExact)===29 && Number(strategy.threshold)===30
+            && freeze.active===true;
+          process.stdout.write(ok?'true':'false');
+          NODE
+          )
+          echo "execute=$EXECUTE" >> "$GITHUB_OUTPUT"
+          echo "GATE5_AUTH_GATE execute=$EXECUTE"
+
+  execute:
+    needs: authorization-gate
+    if: needs.authorization-gate.outputs.execute == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      BAREEQ_GATE5_AUTHORIZED: '1'
+      BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+      BAREEQ_REPAIR_MAX_REQUESTS: '1'
+      BAREEQ_REPAIR_MAX_429_RETRIES: '1'
+      BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '1'
+      BAREEQ_REPAIR_MAX_TRIALS_PER_PART: '1'
+      BAREEQ_REPAIR_REQUIRE_VERIFIED_MICRO: '0'
+    steps:
+      - name: Checkout production main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - name: Verify authorization and credential
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$GEMINI_API_KEY"
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+          node scripts/test-audio-gate5-execution.mjs
+          echo 'GATE5_EXECUTION_CREDENTIAL=present'
+
+      - name: Restore immutable campaign evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-progressive-validation-37284619084
+          path: restore-source
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37284619084'
+
+      - name: Restore candidate checkpoint only
+        run: |
+          set -euo pipefail
+          rm -rf audio-candidates
+          cp -a restore-source/audio-candidates ./audio-candidates
+          test -f audio-candidates/_campaigns/sadaltager-openrouter-20260901-v1/state.json
+          echo 'GATE5_CHECKPOINT=RESTORED_IMMUTABLE'
+
+      - name: Download binding Human Triage map
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-human-triage-37449866365
+          path: triage-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37449866365'
+
+      - name: Prepare T03-only execution overlay
+        run: |
+          set -euo pipefail
+          node scripts/audio-gate5-passports-prepare-execution.mjs --root=. --triage-root=triage-input
+
+      - name: Execute at most one TTS HTTP request
+        id: experiment
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        shell: bash
+        run: |
+          set -uo pipefail
+          LOG="$RUNNER_TEMP/gate5-passports.log"
+          : > "$LOG"
+          echo 'GATE5_PROVIDER_ATTEMPT maxHttpRequests=1 maxSuccessful=1 target=T03 article=why-some-passports-are-stronger' | tee -a "$LOG"
+          set +e
+          node scripts/audio-progressive-repair.mjs --max-articles=1 --only=why-some-passports-are-stronger 2>&1 | tee -a "$LOG"
+          CODE=${PIPESTATUS[0]}
+          set -e
+          echo "exit_code=$CODE" >> "$GITHUB_OUTPUT"
+          echo "GATE5_EXPERIMENT_PROCESS_EXIT=$CODE" | tee -a "$LOG"
+          # Accounting/inspection must always run; provider result determines final state.
+          exit 0
+
+      - name: Record strategic TTS accounting
+        run: |
+          set -euo pipefail
+          node scripts/audio-engine-strategy-guard.mjs --record "--log=$RUNNER_TEMP/gate5-passports.log"
+
+      - name: Close authorization after this bounded attempt
+        run: |
+          set -euo pipefail
+          node scripts/audio-gate5-finalize-accounting.mjs --root=. "--log=$RUNNER_TEMP/gate5-passports.log"
+          cat docs/audio/GATE-5-PASSPORTS-RESULT.json
+
+      - name: Prove no publication occurred
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- public/audio
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const auth=JSON.parse(await readFile('docs/audio/GATE-5-AUTHORIZATION.json','utf8'));
+          const result=JSON.parse(await readFile('docs/audio/GATE-5-PASSPORTS-RESULT.json','utf8'));
+          const strategy=JSON.parse(await readFile('docs/audio/ENGINE-STRATEGY-STATE.json','utf8'));
+          if(Number(result.successfulTtsRequests)>1) throw new Error('more than one successful TTS request');
+          if(Number(auth.successfulTtsRequestsAuthorized)!==0) throw new Error('authorization was not closed after attempt');
+          if(result.successfulTtsRequests===1 && Number(strategy.successfulTtsSinceLastNewExact)!==30) throw new Error('successful TTS was not accounted as 30/30');
+          if(result.publicationAttempted!==false || result.publicAudioMutated!==false) throw new Error('Gate 5 trial attempted publication');
+          console.log(`GATE5_EXECUTION_SAFETY=PASS successfulTts=${result.successfulTtsRequests} strategy=${strategy.successfulTtsSinceLastNewExact}/${strategy.threshold} publication=false`);
+          NODE
+
+      - name: Upload complete Gate 5 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-gate5-passports-${{ github.run_id }}
+          path: |
+            audio-candidates/
+            docs/audio/GATE-5-AUTHORIZATION.json
+            docs/audio/GATE-5-PASSPORTS-RESULT.json
+            docs/audio/ENGINE-STRATEGY-STATE.json
+            docs/audio/TTS-FREEZE.json
+            ${{ runner.temp }}/gate5-passports.log
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Commit accounting only — never audio
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/audio/GATE-5-AUTHORIZATION.json docs/audio/GATE-5-PASSPORTS-RESULT.json
+          git add docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json
+          if git diff --cached --quiet; then
+            echo 'GATE5_ACCOUNTING_TREE=already-current'
+            exit 0
+          fi
+          git commit -m 'audio: record bounded Gate 5 passports execution'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          echo 'GATE5_ACCOUNTING_TREE=pushed'
