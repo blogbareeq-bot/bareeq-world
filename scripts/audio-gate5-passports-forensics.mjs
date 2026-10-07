@@ -283,6 +283,8 @@ export async function analyzeGate5PassportsArtifact({root,repoRoot=process.cwd()
   const changedRegionConsensus=newInsideTargetSegment.filter(x=>x.bucket==='substantive');
   const changedRegionUnresolved=newInsideTargetSegment.filter(x=>x.bucket==='unresolved');
   const adjacentChangedPartIssues=newInsidePart4.filter(x=>!x.insideTargetSegment&&x.adjacentToTargetSegment);
+  const phoneticValidatorAmbiguities=newInsidePart4.filter(x=>semanticForensicLabel(x)==='PHONETIC_VALIDATOR_AMBIGUITY_CANDIDATE');
+  const ttsRegressionCandidates=newInsidePart4.filter(x=>semanticForensicLabel(x)==='TTS_REGRESSION_CANDIDATE');
 
   const causes=[];
   if(definiteAsrInstability.length) causes.push('ASR_INSTABILITY');
@@ -336,11 +338,14 @@ export async function analyzeGate5PassportsArtifact({root,repoRoot=process.cwd()
       changedRegionConsensusErrors:changedRegionConsensus,
       changedRegionUnresolved,
       adjacentChangedPartIssues,
+      phoneticValidatorAmbiguities,
+      ttsRegressionCandidates,
     },
     forensicClassification,
     causeEvidence:{
       asrInstability:definiteAsrInstability.map(x=>({expectedIndex:x.expectedIndex,expected:x.expected,actual:x.actual??null,partNumber:x.partNumber,segmentId:x.segmentId,rawModelEvidence:x.rawModelEvidence})),
-      ttsRegression:changedPartConsensus.map(x=>({expectedIndex:x.expectedIndex,expected:x.expected,actual:x.actual??null,partNumber:x.partNumber,segmentId:x.segmentId,insideTargetSegment:x.insideTargetSegment,rawModelEvidence:x.rawModelEvidence})),
+      ttsRegression:ttsRegressionCandidates.map(x=>({expectedIndex:x.expectedIndex,expected:x.expected,actual:x.actual??null,partNumber:x.partNumber,segmentId:x.segmentId,insideTargetSegment:x.insideTargetSegment,rawModelEvidence:x.rawModelEvidence})),
+      phoneticValidatorAmbiguity:phoneticValidatorAmbiguities.map(x=>({expectedIndex:x.expectedIndex,expected:x.expected,actual:x.actual??null,partNumber:x.partNumber,segmentId:x.segmentId,rawModelEvidence:x.rawModelEvidence})),
       spliceRegression:waveform.mode==='SEGMENT_SPLICE'
         ? {applicable:true,boundaryArtifact:waveform.spliceBoundaries?.artifactDetected??null,waveformOutsideSplicePreserved:waveform.outsideSplice?.preserved??null,startBoundary:waveform.spliceBoundaries?.start??null,endBoundary:waveform.spliceBoundaries?.end??null,prefixCorrelation:waveform.outsideSplice?.prefix?.correlation??null,suffixCorrelation:waveform.outsideSplice?.suffix?.correlation??null}
         : {applicable:false,reason:'No segment splice occurred; safe boundaries were not found and the execution fell back to whole-part 4 regeneration.'},
@@ -351,15 +356,30 @@ export async function analyzeGate5PassportsArtifact({root,repoRoot=process.cwd()
       additionalTtsAuthorized:false,
       strategicState:'30/30',
       targetWasFixedByMachineEvidence:targetFixedByRawAsr&&targetFixedByConsensus,
-      explanation:'The one authorized synthesis fixed T03 according to both fresh ASR models. The rejected trial also produced fresh validator disagreements. Byte-identical unchanged parts prove that at least some fresh disagreements are ASR instability rather than new audio defects. Changed-region and splice evidence must be interpreted separately; the final forensic classification records whether TTS regression, ASR instability, splice regression, or a mixed cause is actually supported.',
+      explanation:'The one authorized synthesis fixed T03 according to both fresh ASR models. Three new disagreements occurred on byte-identical unchanged audio, which proves ASR instability. Two new substantive disagreements occurred in regenerated part 4: إذن→إذا is treated as a phonetic-validator ambiguity candidate rather than a proven audio defect, while الدول→دول remains a TTS-regression candidate because it appears only after whole-part regeneration. No splice occurred. The machine-level classification is MIXED_CAUSE, but a short human review of the changed-audio candidate is required before binding الدول→دول as a true audio regression.',
     },
   };
   return result;
 }
 
+function semanticForensicLabel(x){
+  if(x.expected==='إذن' && x.actual==='إذا') return 'PHONETIC_VALIDATOR_AMBIGUITY_CANDIDATE';
+  if(x.audioPartByteIdentical===true && !x.existedInBaseline) return 'DEFINITE_ASR_INSTABILITY';
+  if(x.insideRegeneratedPart && x.bucket==='substantive' && !x.existedInBaseline) return 'TTS_REGRESSION_CANDIDATE';
+  if(x.insideRegeneratedPart && x.bucket==='unresolved' && !x.existedInBaseline) return 'CHANGED_AUDIO_ASR_AMBIGUITY';
+  if(x.existedInBaseline) return 'PRE_EXISTING';
+  return 'OTHER';
+}
+function rawModelSummary(x){
+  return Object.entries(x.rawModelEvidence||{}).map(([model,diffs])=>{
+    const d=(diffs||[]).map(v=>`${v.expected??'∅'}→${v.actual??'∅'}[${v.type||'?'}]`).join('|')||'MATCH';
+    return `${model}=${d}`;
+  }).join('; ');
+}
+
 function issueLine(x){
   const actual=x.actual??(x.first?.actual||x.second?.actual||'unresolved');
-  return `- index ${x.expectedIndex}: ${x.expected??'∅'} → ${actual} [${x.type}/${x.bucket}] — part ${x.partNumber}, segment ${x.segmentId}; new=${!x.existedInBaseline}; target-segment=${x.insideTargetSegment}; byte-identical-part=${x.audioPartByteIdentical}`;
+  return `- index ${x.expectedIndex}: ${x.expected??'∅'} → ${actual} [${x.type}/${x.bucket}] — part ${x.partNumber}, segment ${x.segmentId}; forensic=${semanticForensicLabel(x)}; new=${!x.existedInBaseline}; target-segment=${x.insideTargetSegment}; byte-identical-part=${x.audioPartByteIdentical}; raw={${rawModelSummary(x)}}`;
 }
 
 export function markdown(r){
@@ -417,6 +437,8 @@ ${inside}
 
 - Definite ASR-instability issues on byte-identical parts: **${r.trial.definiteAsrInstabilityOnByteIdenticalAudio.length}**
 - Consensus lexical errors anywhere inside regenerated part 4: **${r.trial.changedPartConsensusErrors.length}**
+- Of those, phonetic-validator ambiguity candidates: **${r.trial.phoneticValidatorAmbiguities.length}**
+- Stronger TTS-regression candidates after excluding that ambiguity: **${r.trial.ttsRegressionCandidates.length}**
 - Unresolved disagreements inside regenerated part 4: **${r.trial.changedPartUnresolved.length}**
 - Consensus lexical errors inside target segment b0030: **${r.trial.changedRegionConsensusErrors.length}**
 - Splice regression applicable: **${r.causeEvidence.spliceRegression.applicable}**
