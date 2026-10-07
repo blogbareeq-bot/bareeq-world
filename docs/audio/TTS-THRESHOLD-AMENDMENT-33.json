@@ -1,8 +1,8 @@
 {
   "schema": "bareeq.audio-tts-threshold-amendment.v1",
   "decisionId": "COMPLETION15-TRANCHE33-v1",
-  "authorizationStatus": "AUTHORIZED",
-  "executionStatus": "PREFLIGHT_PASSED",
+  "authorizationStatus": "IN_PROGRESS",
+  "executionStatus": "EXECUTING",
   "authorizedBy": "project-owner",
   "authorizedAt": "2026-10-07T15:05:49+03:00",
   "authorizationText": "ارفع الحد إلى 33",
@@ -111,7 +111,12 @@
         }
       ],
       "expectedSegmentText": "ما علاقة اللغة بالقوة الناعمة؟",
-      "successfulTtsConsumed": 0
+      "successfulTtsConsumed": 0,
+      "dispatchAttempt": {
+        "runId": "37622809292",
+        "attemptNumber": 1,
+        "status": "RESERVED"
+      }
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -129,7 +134,12 @@
         }
       ],
       "expectedSegmentText": "لكن الاختصار ليس مرادفًا للخطأ. فقد راجع جيرد جيجيرينزر وولفغانغ غايسماير أبحاثًا تبين أن بعض القواعد البسيطة يمكن أن تَكُونَ فعالة عندما تتلاءم مع بنية البيئة، وأن تجاهل جزء من المعلومات قد يحسن الحكم في ظروف معينة بدل أن يفسده. [11]",
-      "successfulTtsConsumed": 0
+      "successfulTtsConsumed": 0,
+      "dispatchAttempt": {
+        "runId": "37622809292",
+        "attemptNumber": 1,
+        "status": "RESERVED"
+      }
     },
     {
       "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
@@ -147,7 +157,12 @@
         }
       ],
       "expectedSegmentText": "السبب ليس أن الأجسام تميل طبيعيًا إلى التوقف، بل لأن هناك قوى تعيق حركتها، مثل:",
-      "successfulTtsConsumed": 0
+      "successfulTtsConsumed": 0,
+      "dispatchAttempt": {
+        "runId": "37622809292",
+        "attemptNumber": 1,
+        "status": "RESERVED"
+      }
     }
   ],
   "technicalJustification": "Prior passports trial regenerated a whole part and introduced a real lexical regression. Proposed experiments replace only source-bound defective questions/clauses, preserve surrounding PCM and all other parts, and retain rejected candidates before rollback. No automatic candidate retry.",
@@ -173,5 +188,11 @@
     "headSha": "5c1fcd43f12a9476783378c332a2ff112647784b",
     "sha256": "6f6787839b669f0acced81c20967c62d802adb1c8a258bc595c94f410a9198fd",
     "path": "docs/audio/TRANCHE33-PREFLIGHT.json"
+  },
+  "executionClaim": {
+    "runId": "37622809292",
+    "runAttempt": 1,
+    "headSha": "2dd496658e0fd44eb7983b5313f34c787600f7dd",
+    "claimedAt": "2026-10-07T12:42:36.981Z"
   }
 }

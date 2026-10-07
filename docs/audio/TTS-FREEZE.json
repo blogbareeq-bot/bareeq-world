@@ -98,7 +98,7 @@
       "successfulRequestsAuthorized": 3,
       "successfulRequestsConsumed": 0,
       "maximumStrategyThreshold": 33,
-      "executionStatus": "PREFLIGHT_PASSED"
+      "executionStatus": "EXECUTING"
     }
   }
 }
