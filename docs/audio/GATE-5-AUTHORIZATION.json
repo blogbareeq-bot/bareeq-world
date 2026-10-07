@@ -1,0 +1,15 @@
+{
+  "schema": "bareeq.audio-gate5-authorization.v1",
+  "targetArticleId": "why-some-passports-are-stronger",
+  "targetCaseId": "T03",
+  "targetPartNumber": 4,
+  "targetSegmentId": "b0030",
+  "expectedToken": "لا",
+  "strategyBefore": "29/30",
+  "successfulTtsRequestsRequired": 1,
+  "successfulTtsRequestsAuthorized": 0,
+  "authorizationStatus": "NOT_AUTHORIZED",
+  "automaticExpansion": false,
+  "publicationOnFailure": false,
+  "note": "Changing successfulTtsRequestsAuthorized from 0 to 1 requires explicit project-owner authorization for exactly one successful TTS request. A successful synthesis counts as request 30/30 even if rejected."
+}
