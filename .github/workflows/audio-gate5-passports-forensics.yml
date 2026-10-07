@@ -1,0 +1,80 @@
+name: Bareeq Gate 5 passports forensics
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-gate5-passports-forensics.mjs'
+      - '.github/workflows/audio-gate5-passports-forensics.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  forensics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Prove 30/30 freeze before analysis
+        run: |
+          set -euo pipefail
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const strategy=JSON.parse(await readFile('docs/audio/ENGINE-STRATEGY-STATE.json','utf8'));
+          const auth=JSON.parse(await readFile('docs/audio/GATE-5-AUTHORIZATION.json','utf8'));
+          if(Number(strategy.successfulTtsSinceLastNewExact)!==30 || Number(strategy.threshold)!==30) throw new Error('expected strategic state 30/30');
+          if(auth.authorizationStatus!=='CONSUMED' || Number(auth.successfulTtsRequestsAuthorized)!==0 || Number(auth.successfulTtsRequestsConsumed)!==1) throw new Error('Gate 5 authorization is not consumed/closed');
+          console.log('GATE5_FORENSICS_FREEZE=PASS strategy=30/30 authorization=CONSUMED');
+          NODE
+
+      - name: Download retained rejected-trial evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: gate5-artifact
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+
+      - name: Analyze baseline vs rejected trial offline
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-gate5-passports-forensics.mjs
+          node scripts/audio-gate5-passports-forensics.mjs \
+            --root=gate5-artifact \
+            --out=gate5-forensics-output
+          cat gate5-forensics-output/GATE-5-PASSPORTS-POSTMORTEM.md
+          echo 'GATE5_FORENSICS_PROVIDER_CALLS=0'
+
+      - name: Assert forensic safety
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const r=JSON.parse(await readFile('gate5-forensics-output/GATE-5-PASSPORTS-POSTMORTEM.json','utf8'));
+          if(r.conclusion.publishable!==false) throw new Error('forensics must not authorize publication');
+          if(r.conclusion.additionalTtsAuthorized!==false) throw new Error('forensics must not authorize more TTS');
+          if(r.conclusion.strategicState!=='30/30') throw new Error('forensics lost 30/30 state');
+          if(r.repairSurface.changedParts.length!==1 || r.repairSurface.changedParts[0].partNumber!==4) throw new Error('trial changed more than part 4');
+          if(r.carriedHumanEvidence.audioBytesUnchanged!==true) throw new Error('T02 region changed unexpectedly');
+          console.log(`GATE5_FORENSICS_CONTRACT=PASS verdict=${r.verdict} targetFixed=${r.target.fixedByBothRawModels} publish=false ttsAuthorized=false`);
+          NODE
+
+      - name: Prove repository audio unchanged
+        run: git diff --exit-code -- public/audio
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-gate5-passports-postmortem-${{ github.run_id }}
+          path: gate5-forensics-output/
+          if-no-files-found: error
+          retention-days: 90
