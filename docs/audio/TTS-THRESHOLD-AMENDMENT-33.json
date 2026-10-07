@@ -10,7 +10,7 @@
   "newThreshold": 33,
   "successfulRequestBaseline": 30,
   "additionalSuccessfulRequestsAuthorized": 3,
-  "successfulRequestsConsumed": 1,
+  "successfulRequestsConsumed": 2,
   "automaticExpansion": false,
   "automaticProviderDispatch": false,
   "qualityPolicyUnchanged": true,
@@ -135,11 +135,12 @@
         }
       ],
       "expectedSegmentText": "لكن الاختصار ليس مرادفًا للخطأ. فقد راجع جيرد جيجيرينزر وولفغانغ غايسماير أبحاثًا تبين أن بعض القواعد البسيطة يمكن أن تَكُونَ فعالة عندما تتلاءم مع بنية البيئة، وأن تجاهل جزء من المعلومات قد يحسن الحكم في ظروف معينة بدل أن يفسده. [11]",
-      "successfulTtsConsumed": 0,
+      "successfulTtsConsumed": 1,
       "dispatchAttempt": {
         "runId": "37622809292",
         "attemptNumber": 1,
-        "status": "RESERVED"
+        "status": "SUCCESSFUL_RESPONSE",
+        "responseAt": "2026-10-07T12:42:46.992Z"
       }
     },
     {

@@ -3,12 +3,12 @@
   "provider": "Gemini / Sadaltager",
   "threshold": 33,
   "exactBaseline": 9,
-  "successfulTtsSinceLastNewExact": 31,
+  "successfulTtsSinceLastNewExact": 32,
   "status": "active",
   "reason": "Owner-approved bounded extension: three successful targeted TTS requests; global provider freeze remains active.",
   "lastExactAt": "2026-10-07T05:45:49.363Z",
   "lastRunId": "37622809292",
-  "updatedAt": "2026-10-07T12:42:41.256Z",
+  "updatedAt": "2026-10-07T12:42:46.992Z",
   "targetedRecovery": null,
   "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-33.json"
 }
