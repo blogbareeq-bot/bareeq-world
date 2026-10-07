@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-threshold-amendment.v1",
   "decisionId": "COMPLETION15-TRANCHE33-v1",
   "authorizationStatus": "AUTHORIZED",
-  "executionStatus": "PREFLIGHT_REQUIRED",
+  "executionStatus": "PREFLIGHT_PASSED",
   "authorizedBy": "project-owner",
   "authorizedAt": "2026-10-07T15:05:49+03:00",
   "authorizationText": "ارفع الحد إلى 33",
@@ -166,5 +166,12 @@
     "targetPublishedExact": 15,
     "morningIncludedForReview": true,
     "morningTtsAuthorized": false
+  },
+  "preflight": {
+    "runId": "37621094251",
+    "artifactId": "11481518992",
+    "headSha": "5c1fcd43f12a9476783378c332a2ff112647784b",
+    "sha256": "6f6787839b669f0acced81c20967c62d802adb1c8a258bc595c94f410a9198fd",
+    "path": "docs/audio/TRANCHE33-PREFLIGHT.json"
   }
 }

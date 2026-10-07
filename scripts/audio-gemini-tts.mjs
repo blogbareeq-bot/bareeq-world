@@ -223,8 +223,9 @@ export async function synthesizeGeminiPart({ apiKey, part, context, voice = PROD
   return decodeAndEncodePcmAudio(extractGeminiAudio(payload), ffmpegPath, 'Gemini Interactions TTS');
 }
 
-export async function synthesizeGeminiGenerateContentPart({ apiKey, part, context, voice = PRODUCTION_VOICE, model = PRODUCTION_TTS_MODEL, fetchImpl = globalThis.fetch, ffmpegPath }) {
-  if (fetchImpl === globalThis.fetch) await assertTtsUnfrozen({ operation: 'gemini-generate-content-tts' });
+export async function synthesizeGeminiGenerateContentPart({ apiKey, part, context, voice = PRODUCTION_VOICE, model = PRODUCTION_TTS_MODEL, fetchImpl = globalThis.fetch, ffmpegPath, tranche33Context, onSuccessfulAudio }) {
+  if (tranche33Context && (model !== PRODUCTION_TTS_MODEL || voice !== PRODUCTION_VOICE)) throw new Error('Tranche33 provider model and voice are immutable');
+  if (fetchImpl === globalThis.fetch) await assertTtsUnfrozen({ operation: 'gemini-generate-content-tts', tranche33Context, text:part.text });
   if (!apiKey?.trim()) throw Object.assign(new Error('GEMINI_API_KEY is absent. No generateContent TTS request was sent.'), { exitCode: EXIT_CONFIG });
   const endpoint = geminiGenerateContentEndpoint(model);
   let response;
@@ -251,7 +252,10 @@ export async function synthesizeGeminiGenerateContentPart({ apiKey, part, contex
   let payload;
   try { payload = await response.json(); }
   catch (error) { throw Object.assign(new Error(`Gemini generateContent TTS returned invalid JSON: ${error.message}`), { exitCode: EXIT_HARD }); }
-  const audio = await decodeAndEncodePcmAudio(extractGenerateContentAudio(payload), ffmpegPath, 'Gemini generateContent TTS');
+  const outputAudio = extractGenerateContentAudio(payload);
+  // Persist a successful provider response before encoding or quality review.
+  if(outputAudio && onSuccessfulAudio) await onSuccessfulAudio(outputAudio);
+  const audio = await decodeAndEncodePcmAudio(outputAudio, ffmpegPath, 'Gemini generateContent TTS');
   return { audio, transport: 'developer-generate-content', endpoint, projectId: null, model, voice };
 }
 

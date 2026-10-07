@@ -1,0 +1,257 @@
+{
+  "schema": "bareeq.audio-tranche33-preflight.v1",
+  "decisionId": "COMPLETION15-TRANCHE33-v1",
+  "sourceRunId": "37581607040",
+  "providerCalls": 0,
+  "ttsCalls": 0,
+  "targets": [
+    {
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "baselineFullSha256": "8046a0551920ed9cce4422610738917dc18da95f367e6aa6348450fd828c76df",
+      "successfulTtsMaximum": 1,
+      "targets": [
+        {
+          "expectedIndex": 214,
+          "expected": "ما",
+          "humanConfirmed": true,
+          "segmentId": "b0014",
+          "partNumber": 1,
+          "partLocalIndex": 214
+        },
+        {
+          "expectedIndex": 215,
+          "expected": "علاقة",
+          "humanConfirmed": true,
+          "segmentId": "b0014",
+          "partNumber": 1,
+          "partLocalIndex": 215
+        },
+        {
+          "expectedIndex": 216,
+          "expected": "اللغة",
+          "humanConfirmed": true,
+          "segmentId": "b0014",
+          "partNumber": 1,
+          "partLocalIndex": 216
+        },
+        {
+          "expectedIndex": 217,
+          "expected": "بالقوة",
+          "humanConfirmed": true,
+          "segmentId": "b0014",
+          "partNumber": 1,
+          "partLocalIndex": 217
+        },
+        {
+          "expectedIndex": 218,
+          "expected": "الناعمة",
+          "humanConfirmed": true,
+          "segmentId": "b0014",
+          "partNumber": 1,
+          "partLocalIndex": 218
+        }
+      ],
+      "expectedSegmentText": "ما علاقة اللغة بالقوة الناعمة؟",
+      "successfulTtsConsumed": 0,
+      "id": "R1",
+      "sourceFile": "target-1-baseline-part.mp3",
+      "sourcePartSha256": "8efb09bbe5fda56a88b8d8431e64b86dc8941150ea940f0aca91df779348a3de",
+      "sourceCheckpointRecord": {
+        "partIndex": 0,
+        "fingerprint": "46b2bb66706685bb7ec6d9e8cd80d597a6edae63487ac2d6071e942856be1e3e",
+        "file": "part-001-46b2bb667066.mp3",
+        "sha256": "8efb09bbe5fda56a88b8d8431e64b86dc8941150ea940f0aca91df779348a3de",
+        "bytes": 1808685,
+        "savedAt": "2026-09-24T11:44:03.399Z",
+        "resumed": false,
+        "transport": "developer-interactions",
+        "targetedRegeneration": true,
+        "targetedSegmentRepair": true,
+        "repairedSegmentId": "b0015",
+        "correctionHintApplied": true,
+        "previousSha256": "cbbeb1ca89b5cc4bee2ee149eea7e8c070c8eca0362d57282e7d48caeee8c917",
+        "spliceStartSeconds": 123.845,
+        "spliceEndSeconds": 150.745,
+        "replacementSeconds": 26.51
+      },
+      "partIndex": 0,
+      "partNumber": 1,
+      "repairExpectedStart": 214,
+      "repairExpectedEnd": 218,
+      "repairText": "ما علاقة اللغة بالقوة الناعمة؟",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "articleTitle": "حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟",
+      "insertionExpected": true,
+      "preflightPassed": true,
+      "cutStartSeconds": 123.4,
+      "cutEndSeconds": 123.4,
+      "quietStart": {
+        "sample": 5923200,
+        "rmsDb": -51.82656212867372,
+        "peakDb": -42.043003417569324
+      },
+      "quietEnd": {
+        "sample": 5923200,
+        "rmsDb": -51.82656212867372,
+        "peakDb": -42.043003417569324
+      },
+      "anchors": {
+        "before": [
+          "اسهل",
+          "لمن",
+          "يجيدها"
+        ],
+        "after": [
+          "يرتبط",
+          "مفهوم",
+          "القوة"
+        ]
+      },
+      "baselineContextFile": "R1-baseline-context.mp3",
+      "baselineContextSha256": "6e003a7ec2f1425bd37e04f08188146cdcb9a5365d84e701104421d668000d55",
+      "baselineRegionTranscript": ""
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "baselineFullSha256": "3dc0c8e0ed2b4eb579354a84b1344a49c17aa1bb69c5bcaa4ae306331bd67611",
+      "successfulTtsMaximum": 1,
+      "targets": [
+        {
+          "expectedIndex": 632,
+          "expected": "11",
+          "humanConfirmed": true,
+          "segmentId": "b0027",
+          "partNumber": 3,
+          "partLocalIndex": 174
+        }
+      ],
+      "expectedSegmentText": "لكن الاختصار ليس مرادفًا للخطأ. فقد راجع جيرد جيجيرينزر وولفغانغ غايسماير أبحاثًا تبين أن بعض القواعد البسيطة يمكن أن تَكُونَ فعالة عندما تتلاءم مع بنية البيئة، وأن تجاهل جزء من المعلومات قد يحسن الحكم في ظروف معينة بدل أن يفسده. [11]",
+      "successfulTtsConsumed": 0,
+      "id": "R2",
+      "sourceFile": "target-2-baseline-part.mp3",
+      "sourcePartSha256": "ed759ff2010239738d9927fbbb24df76ff10d6bdb38ca5bfa67f3731cd6d1b67",
+      "sourceCheckpointRecord": {
+        "partIndex": 2,
+        "fingerprint": "dece0787f1a647c62168d9fbc91bf2e6d039d355dbb8bbd0a5444ce2b5865b6a",
+        "file": "part-003-dece0787f1a6.mp3",
+        "sha256": "ed759ff2010239738d9927fbbb24df76ff10d6bdb38ca5bfa67f3731cd6d1b67",
+        "bytes": 1261773,
+        "savedAt": "2026-09-05T11:27:17.504Z",
+        "resumed": false,
+        "transport": "developer-interactions",
+        "targetedRegeneration": true,
+        "correctionHintApplied": true
+      },
+      "partIndex": 2,
+      "partNumber": 3,
+      "repairExpectedStart": 165,
+      "repairExpectedEnd": 174,
+      "repairText": "قد يحسن الحكم في ظروف معينة بدل أن يفسده. [11]",
+      "speechScriptHash": "6cf7e840cf44a28cbbb9a436a39247176381c4c32bbe31f570f4f899e9d94c93",
+      "articleTitle": "هل الحدس ذكاء خفي أم اختصار مضلل؟ متى نثق بشعورنا الأول؟",
+      "insertionExpected": false,
+      "preflightPassed": true,
+      "cutStartSeconds": 89.055,
+      "cutEndSeconds": 93.96497916666667,
+      "quietStart": {
+        "sample": 4274640,
+        "rmsDb": -50.29892232498774,
+        "peakDb": -32.011562348393355
+      },
+      "quietEnd": {
+        "sample": 4510319,
+        "rmsDb": -46.43941493108014,
+        "peakDb": -35.51755181019252
+      },
+      "anchors": {
+        "before": [
+          "جزء",
+          "من",
+          "المعلومات"
+        ],
+        "after": [
+          "اذن",
+          "المشكلة",
+          "ليست"
+        ]
+      },
+      "baselineContextFile": "R2-baseline-context.mp3",
+      "baselineContextSha256": "6c27b8f668a7ddacf23636e9ab280924d83e1a7d930e9bb3a0ecfb15adca7669",
+      "baselineRegionTranscript": "قد يحسن الحكم في ظروف معينة بدل أن يفسده إثن عشر"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "baselineFullSha256": "bf977577f07c000c92a6c1ddd4e2b04a5f30785da4e8967f19fe3c4d43e0b304",
+      "successfulTtsMaximum": 1,
+      "targets": [
+        {
+          "expectedIndex": 700,
+          "expected": "قوى",
+          "humanConfirmed": true,
+          "segmentId": "b0047",
+          "partNumber": 3,
+          "partLocalIndex": 125
+        }
+      ],
+      "expectedSegmentText": "السبب ليس أن الأجسام تميل طبيعيًا إلى التوقف، بل لأن هناك قوى تعيق حركتها، مثل:",
+      "successfulTtsConsumed": 0,
+      "id": "R3",
+      "sourceFile": "target-3-baseline-part.mp3",
+      "sourcePartSha256": "ea04646e1d818e10720c494fc0bd59e1fd574c0672e6df7b4c8c475f682394b1",
+      "sourceCheckpointRecord": {
+        "partIndex": 2,
+        "fingerprint": "1a0bea3ef8153f7ef5a75ae21364f88dacfe20cd76726e664f678825bc0262a0",
+        "file": "part-003-1a0bea3ef815.mp3",
+        "sha256": "ea04646e1d818e10720c494fc0bd59e1fd574c0672e6df7b4c8c475f682394b1",
+        "bytes": 1836045,
+        "savedAt": "2026-09-01T17:27:14.547Z",
+        "resumed": false,
+        "transport": "openrouter-speech",
+        "targetedRegeneration": false,
+        "correctionHintApplied": false
+      },
+      "partIndex": 2,
+      "partNumber": 3,
+      "repairExpectedStart": 122,
+      "repairExpectedEnd": 128,
+      "repairText": "بل لأن هناك قوى تعيق حركتها، مثل:",
+      "speechScriptHash": "d8b98cccc75c2ab62964608ebd65e4bed1b201d59c94b5780a525d74a3213a78",
+      "articleTitle": "لماذا لا تسقط الأقمار الصناعية من السماء؟",
+      "insertionExpected": false,
+      "preflightPassed": true,
+      "cutStartSeconds": 67.95997916666667,
+      "cutEndSeconds": 71.31997916666667,
+      "quietStart": {
+        "sample": 3262079,
+        "rmsDb": -58.0052972478251,
+        "peakDb": -46.787173518080735
+      },
+      "quietEnd": {
+        "sample": 3423359,
+        "rmsDb": -44.55000580937373,
+        "peakDb": -30.171124540236352
+      },
+      "anchors": {
+        "before": [
+          "طبيعيا",
+          "الي",
+          "التوقف"
+        ],
+        "after": [
+          "الاحتكاك",
+          "مع",
+          "الارض"
+        ]
+      },
+      "baselineContextFile": "R3-baseline-context.mp3",
+      "baselineContextSha256": "adb6b8125efb80f2c066f0634da668e183a4278171d3ff69194731648df2e4be",
+      "baselineRegionTranscript": "بل أن هناك قوة تعيق حركتها مثل"
+    }
+  ],
+  "passedTargets": 3,
+  "publicationPerformed": false,
+  "originalArtifactResultSha256": "cf39bafaf99a2884950b230987f8fd8f14ac21364493d9c88aceef716322865d"
+}
