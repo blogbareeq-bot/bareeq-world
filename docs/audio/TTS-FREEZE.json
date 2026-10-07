@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Synthesis remains frozen. Human-evidence offline adjudication promoted two existing candidates to Exact with 0 TTS; campaign is now 9/15 Exact with 6 safe fallbacks.",
+  "reason": "Synthesis remains frozen at 29/30. Gate 5 readiness selected the passports article for one isolated micro-repair, but successful TTS authorization remains 0.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "assess the five remaining active articles by their confirmed localized audio defects before any Gate 5 synthesis decision; TTS remains frozen at 29/30",
+    "nextAction": "Await explicit project-owner authorization for exactly 1 successful TTS request before the prepared passports Gate 5 experiment; otherwise remain frozen.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -64,7 +64,10 @@
         "reviewerResultsSha256": "5e6e0f39eb9688411d6e7d63c0c5281ee8cf805001f7d9511a32435c9a247df7",
         "T06": "UNRESOLVED_TARGET_NOTE_BOUND_TO_ADJACENT_11_TO_12_DEFECT",
         "T31": "INCONCLUSIVE_INCOMPLETE_CONTEXT"
-      }
+      },
+      "closed": true,
+      "finalTotals": "17 expected-pronunciation confirmations / 11 actual audio errors / 1 phonetic validator ambiguity / 0 unresolved",
+      "remainingConfirmedDefectiveArticles": 5
     },
     "humanExactPromotion": {
       "status": "PROMOTED",
@@ -75,6 +78,18 @@
       ],
       "ttsCalls": 0,
       "newAsrCalls": 0
+    },
+    "gate5PreparedPlan": "docs/audio/GATE-5-EXPERIMENT-PASSPORTS-v1.md",
+    "gate5Authorization": "docs/audio/GATE-5-AUTHORIZATION.json",
+    "gate5SelectedTarget": {
+      "articleId": "why-some-passports-are-stronger",
+      "caseId": "T03",
+      "partNumber": 4,
+      "segmentId": "b0030",
+      "expectedToken": "لا",
+      "successfulTtsRequestsRequired": 1,
+      "successfulTtsRequestsAuthorized": 0,
+      "status": "PREPARED_NOT_AUTHORIZED"
     }
   }
 }
