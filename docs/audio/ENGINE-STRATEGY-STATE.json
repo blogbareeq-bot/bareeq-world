@@ -3,11 +3,11 @@
   "provider": "Gemini / Sadaltager",
   "threshold": 30,
   "exactBaseline": 9,
-  "successfulTtsSinceLastNewExact": 29,
-  "status": "active",
-  "reason": "Gate 5 passports retry authorized from the same unconsumed owner approval; global TTS freeze remains active outside the dedicated envelope.",
+  "successfulTtsSinceLastNewExact": 30,
+  "status": "paused-for-engine-review",
+  "reason": "Gemini-only kill switch reached: 30/30 successful TTS requests without another exact publication",
   "lastExactAt": "2026-10-07T05:45:49.363Z",
-  "lastRunId": "37580906493",
-  "updatedAt": "2026-10-07T06:23:00Z",
+  "lastRunId": "37581607040",
+  "updatedAt": "2026-10-07T06:31:05.101Z",
   "targetedRecovery": null
 }
