@@ -1,0 +1,72 @@
+name: Bareeq Gate 5 readiness
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-gate5-readiness.mjs'
+      - 'scripts/test-audio-gate5-readiness.mjs'
+      - 'docs/audio/GATE-5-DECISION-CRITERIA-v1.md'
+      - '.github/workflows/audio-gate5-readiness.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Prove current freeze and strategy
+        run: |
+          set -euo pipefail
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+          node scripts/test-audio-gate5-readiness.mjs
+
+      - name: Download binding Human Triage mapping
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-human-triage-37449866365
+          path: triage-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37449866365'
+
+      - name: Rank five remaining defect candidates
+        run: |
+          set -euo pipefail
+          node scripts/audio-gate5-readiness.mjs --triage-root=triage-input --out=gate5-readiness-output
+          cat gate5-readiness-output/GATE5-READINESS.md
+          echo 'GATE5_READINESS_PROVIDER_CALLS=0'
+
+      - name: Assert no synthesis authorization
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const r=JSON.parse(await readFile('gate5-readiness-output/GATE5-READINESS.json','utf8'));
+          if(r.recommended.authorizationStatus!=='NOT_AUTHORIZED') throw new Error('Gate 5 TTS was implicitly authorized');
+          if(r.recommended.successfulTtsRequestsRequired!==1) throw new Error('recommended experiment must require exactly one successful TTS request');
+          if(r.ttsCalls!==0 || r.newAsrCalls!==0 || r.providerCalls!==0) throw new Error('readiness analysis made provider calls');
+          if(r.exactState!=='9/15' || r.strategy!=='29/30') throw new Error('canonical state drift');
+          console.log('GATE5_READINESS_CONTRACT=PASS exact=9/15 strategy=29/30 authorization=0');
+          NODE
+
+      - name: Prove production audio unchanged
+        run: git diff --exit-code -- public/audio
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-gate5-readiness-${{ github.run_id }}
+          path: gate5-readiness-output/
+          if-no-files-found: error
+          retention-days: 90
