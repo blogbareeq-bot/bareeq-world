@@ -129,6 +129,12 @@ async function publishOne({root,row,evidence}){
 }
 
 export async function promoteHumanExact({root=process.cwd(),triageRoot}){
+  // This completed migration must never reset later strategic accounting.
+  const canonical=await json(path.join(root,'docs','audio','PROGRESSIVE-STATUS.json'));
+  const currentStrategy=await json(path.join(root,'docs','audio','ENGINE-STRATEGY-STATE.json'));
+  if(canonical.exactCount!==7||canonical.publishedCount!==7||canonical.fallbackCount!==8||currentStrategy.threshold!==30||currentStrategy.successfulTtsSinceLastNewExact!==29){
+    throw new Error('Historical 7-to-9 promotion refused: campaign has advanced; preserve current audio and request counters.');
+  }
   const adjudication=await runHumanOfflineAdjudication({artifactRoot:root,triageRoot,repoRoot:root});
   const rows=adjudication.rows.filter(r=>r.exactAfterHumanEvidence);
   const ids=new Set(rows.map(r=>r.articleId));
@@ -248,3 +254,4 @@ async function cli(){
 }
 const isCli=process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url);
 if(isCli) await cli();
+

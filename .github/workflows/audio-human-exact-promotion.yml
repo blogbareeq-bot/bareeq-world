@@ -1,20 +1,8 @@
 name: Bareeq promote human-verified Exact
 
+# Historical 7→9 promotion is complete. Never replay it on PR/push changes.
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'scripts/audio-promote-human-exact.mjs'
-      - 'scripts/audio-gate4-governance.mjs'
-      - 'scripts/test-audio-gate4-promotion.mjs'
-      - '.github/workflows/audio-human-exact-promotion.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'scripts/audio-promote-human-exact.mjs'
-      - 'scripts/audio-gate4-governance.mjs'
-      - 'scripts/test-audio-gate4-promotion.mjs'
-      - '.github/workflows/audio-human-exact-promotion.yml'
+  workflow_dispatch:
 
 permissions:
   actions: read
@@ -32,6 +20,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Refuse replay after historical milestone
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const s=JSON.parse(await readFile('docs/audio/PROGRESSIVE-STATUS.json','utf8'));
+          const e=JSON.parse(await readFile('docs/audio/ENGINE-STRATEGY-STATE.json','utf8'));
+          if(s.exactCount!==7||s.publishedCount!==7||s.fallbackCount!==8||e.threshold!==30||e.successfulTtsSinceLastNewExact!==29) throw new Error('Historical 7→9 promotion cannot be replayed on the current campaign.');
+          NODE
 
       - uses: actions/setup-node@v4
         with:
@@ -164,3 +161,4 @@ jobs:
           git rebase origin/main
           git push origin HEAD:main
           echo 'HUMAN_PROMOTION_MAIN_PUSH=PASS exact=9/15'
+

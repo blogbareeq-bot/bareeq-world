@@ -15,6 +15,8 @@ on:
       - 'docs/audio/HUMAN-ARBITRATION-QUEUE.json'
       - 'docs/audio/TTS-FREEZE.json'
       - 'scripts/audio-gate4-governance.mjs'
+      - 'scripts/audio-promote-human-exact.mjs'
+      - '.github/workflows/audio-human-exact-promotion.yml'
       - 'scripts/audio-tts-threshold-amendment.mjs'
       - 'scripts/test-audio-tts-threshold-amendment.mjs'
       - 'docs/audio/TTS-THRESHOLD-AMENDMENT-33.json'
@@ -36,6 +38,8 @@ on:
       - 'docs/audio/HUMAN-ARBITRATION-QUEUE.json'
       - 'docs/audio/TTS-FREEZE.json'
       - 'scripts/audio-gate4-governance.mjs'
+      - 'scripts/audio-promote-human-exact.mjs'
+      - '.github/workflows/audio-human-exact-promotion.yml'
       - 'scripts/audio-tts-threshold-amendment.mjs'
       - 'scripts/test-audio-tts-threshold-amendment.mjs'
       - 'docs/audio/TTS-THRESHOLD-AMENDMENT-33.json'
@@ -64,6 +68,9 @@ jobs:
           set -euo pipefail
           node --check scripts/audio-gate4-governance.mjs
           node scripts/test-audio-gate4-governance.mjs
+          node --check scripts/audio-promote-human-exact.mjs
+          node scripts/test-audio-gate4-promotion.mjs
+          node scripts/test-audio-human-promotion-no-replay.mjs
           node scripts/test-audio-workflow-trigger-audit.mjs
           node scripts/audio-workflow-trigger-audit.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
@@ -72,4 +79,3 @@ jobs:
           node scripts/audio-tts-threshold-amendment.mjs
           node scripts/audio-gate4-governance.mjs
           echo 'RECOVERY_GOVERNANCE_PROVIDER_CALLS=0'
-
