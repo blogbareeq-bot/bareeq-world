@@ -4,16 +4,10 @@
   "threshold": 30,
   "exactBaseline": 9,
   "successfulTtsSinceLastNewExact": 29,
-  "status": "paused-for-engine-review",
-  "reason": "Verified micro-repair review exhausted its two bounded runs",
+  "status": "active",
+  "reason": "Gate 5 passports retry authorized from the same unconsumed owner approval; global TTS freeze remains active outside the dedicated envelope.",
   "lastExactAt": "2026-10-07T05:45:49.363Z",
   "lastRunId": "37580906493",
-  "updatedAt": "2026-10-07T06:22:12.216Z",
-  "targetedRecovery": {
-    "id": "verified-micro-cut-20261005",
-    "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
-    "maxRuns": 2,
-    "runs": 2,
-    "lastAttemptDay": "2026-10-07"
-  }
+  "updatedAt": "2026-10-07T06:23:00Z",
+  "targetedRecovery": null
 }
