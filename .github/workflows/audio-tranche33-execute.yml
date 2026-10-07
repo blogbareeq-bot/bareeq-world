@@ -45,8 +45,31 @@ jobs:
           node scripts/audio-gate4-governance.mjs
           node scripts/audio-state-consistency.mjs
           python -m py_compile scripts/audio-tranche33-splice.py
+  authorization-gate:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.authorization.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - id: authorization
+        name: Skip closed or previously claimed tranches before setup
+        run: |
+          node --input-type=module <<'NODE'
+          import {appendFile} from 'node:fs/promises';
+          import {readThresholdAmendment} from './scripts/audio-tts-threshold-amendment.mjs';
+          const {amendment:a,remaining}=await readThresholdAmendment();
+          const ready=process.env.GITHUB_RUN_ATTEMPT==='1' && remaining===3
+            && a.authorizationStatus==='AUTHORIZED' && a.executionStatus==='PREFLIGHT_PASSED'
+            && !a.executionClaim;
+          await appendFile(process.env.GITHUB_OUTPUT,`ready=${ready}\n`);
+          console.log(`TRANCHE33_DISPATCH_GATE ready=${ready} remaining=${remaining}`);
+          NODE
   execute:
-    if: github.event_name == 'push' && github.run_attempt == 1
+    needs: authorization-gate
+    if: github.event_name == 'push' && github.run_attempt == 1 && needs.authorization-gate.outputs.ready == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 75
     steps:
@@ -66,7 +89,8 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
-          python -m pip install faster-whisper==1.2.0 numpy
+          python -m pip install faster-whisper==1.2.0 requests numpy
+          python -c 'from faster_whisper import WhisperModel'
       - name: Verify authorization before any provider access
         run: |
           node scripts/audio-tts-threshold-amendment.mjs
