@@ -1,0 +1,39 @@
+name: Bareeq passports retained-audio splice
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-passports-retained-splice.py'
+      - '.github/workflows/audio-passports-retained-splice.yml'
+permissions:
+  actions: read
+  contents: read
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-retained-recovery-preflight-37604910773
+          path: retained-recovery
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37604910773'
+      - name: Install local ASR
+        run: python -m pip install faster-whisper==1.2.0 requests numpy
+      - name: Build review candidate without provider keys
+        run: python scripts/audio-passports-retained-splice.py --root retained-recovery --out retained-splice
+      - name: Prove published audio is unchanged
+        run: git diff --exit-code -- public/audio
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-passports-retained-splice-${{ github.run_id }}
+          path: retained-splice/
+          if-no-files-found: error
+          retention-days: 90
