@@ -218,7 +218,7 @@ ${JSON.stringify(r.target.rawModelEvidence,null,2)}
 
 ## Fresh trial consensus
 
-`S=${r.trial.consensus.substitutions} D=${r.trial.consensus.deletions} I=${r.trial.consensus.insertions} unresolved=${r.trial.consensus.unresolved}`
+\`S=${r.trial.consensus.substitutions} D=${r.trial.consensus.deletions} I=${r.trial.consensus.insertions} unresolved=${r.trial.consensus.unresolved}\`
 
 ${issueLines}
 
