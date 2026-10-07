@@ -32,7 +32,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y ffmpeg
           python -m pip install --upgrade pip
-          python -m pip install 'faster-whisper==1.2.0'
+          python -m pip install 'faster-whisper==1.2.0' requests
           ffmpeg -version | head -1
 
       - name: Download retained Gate 5 artifact
