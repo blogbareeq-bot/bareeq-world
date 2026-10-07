@@ -2,7 +2,7 @@ import argparse,pathlib,json,hashlib,subprocess,re,unicodedata,wave
 import numpy as np
 RATE=48000
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
-def norm(s):return re.sub(r'[^0-9\u0621-\u064a]','', ''.join(c for c in unicodedata.normalize('NFKD',s) if not unicodedata.combining(c)).replace('ى','ي').replace('ـ',''))
+def norm(s):return re.sub(r'[^0-9\u0621-\u064a]','', ''.join(c for c in unicodedata.normalize('NFKD',s) if not unicodedata.combining(c)).translate(str.maketrans('٠١٢٣٤٥٦٧٨٩','0123456789')).replace('ى','ي').replace('ـ',''))
 def pcm(p):return np.frombuffer(subprocess.check_output(['ffmpeg','-v','error','-i',str(p),'-f','s16le','-ac','1','-ar',str(RATE),'-']),dtype='<i2').copy()
 def wav(p,x):
  with wave.open(str(p),'wb') as f:f.setparams((1,2,RATE,0,'NONE','not compressed'));f.writeframes(x.astype('<i2').tobytes())
@@ -22,6 +22,7 @@ for r in p['targets']:
   gen=root/(r['id']+'-generated.mp3');record=next(x for x in result['targets'] if x['id']==r['id']);assert sha(gen)==record['generatedSha256']
   segs,_=model.transcribe(str(gen),language='ar',beam_size=5,word_timestamps=True,vad_filter=False,condition_on_previous_text=False);words=[w.word for s in segs for w in s.words or []];actual=[norm(w) for w in words if norm(w)];expected=[norm(w) for w in re.findall(r'[0-9\u0621-\u064a\u064b-\u065f]+',r['repairText'])]
   expected=[u for t in expected for u in (['احد','عشر'] if t=='11' else [t])]
+  actual=[u for t in actual for u in (['احد','عشر'] if t=='11' else [t])]
   (root/(r['id']+'-micro-asr.json')).write_text(json.dumps({'expected':expected,'actual':actual,'passed':expected==actual,'generatedSha256':sha(gen)},ensure_ascii=False,indent=2)+'\n')
   if actual!=expected:raise ValueError('Local micro ASR differs; retain generated audio for review, do not splice or retry')
   original=pathlib.Path('audio-candidates')/r['articleId']/r['fingerprint']/'parts'/r['sourceCheckpointRecord']['file'];assert sha(original)==r['sourcePartSha256'];base=pcm(original);donor,ds,de=trim(pcm(gen));a=round(r['cutStartSeconds']*RATE);b=round(r['cutEndSeconds']*RATE)
