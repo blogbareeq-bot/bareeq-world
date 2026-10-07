@@ -64,9 +64,15 @@ jobs:
           if(r.conclusion.publishable!==false) throw new Error('forensics must not authorize publication');
           if(r.conclusion.additionalTtsAuthorized!==false) throw new Error('forensics must not authorize more TTS');
           if(r.conclusion.strategicState!=='30/30') throw new Error('forensics lost 30/30 state');
+          if(r.schema!=='bareeq.audio-gate5-passports-forensics.v2') throw new Error('unexpected forensics schema');
           if(r.repairSurface.changedParts.length!==1 || r.repairSurface.changedParts[0].partNumber!==4) throw new Error('trial changed more than part 4');
+          if(r.repairSurface.unchangedParts.length!==7) throw new Error('expected seven byte-identical unchanged parts');
           if(r.carriedHumanEvidence.audioBytesUnchanged!==true) throw new Error('T02 region changed unexpectedly');
-          console.log(`GATE5_FORENSICS_CONTRACT=PASS verdict=${r.verdict} targetFixed=${r.target.fixedByBothRawModels} publish=false ttsAuthorized=false`);
+          if(r.trial.issues.some(x=>x.partNumber==null || x.segmentId==null)) throw new Error('forensic issue mapping contains null part/segment');
+          if(typeof r.repairSurface.waveformOutsideSplice.preserved!=='boolean') throw new Error('waveform comparison missing');
+          if(typeof r.repairSurface.spliceBoundaries.artifactDetected!=='boolean') throw new Error('splice-boundary analysis missing');
+          if(!['ASR_INSTABILITY','TTS_REGRESSION','SPLICE_REGRESSION','MIXED_CAUSE','TTS_OR_ASR_AMBIGUITY','NO_REGRESSION_PROVEN'].includes(r.forensicClassification)) throw new Error('invalid forensic classification');
+          console.log(`GATE5_FORENSICS_CONTRACT=PASS classification=${r.forensicClassification} targetFixed=${r.target.fixedByBothRawModels} publish=false ttsAuthorized=false`);
           NODE
 
       - name: Prove repository audio unchanged
