@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Gate 5 passports experiment consumed the single authorized successful TTS request. Global synthesis remains frozen at 30/30; no further TTS is authorized.",
+  "reason": "Global synthesis remains frozen. Owner approved the bounded 30 to 33 amendment for three named targeted repairs; execution requires scoped preflight and cannot dispatch automatically.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -16,7 +16,7 @@
     "activePending": 5,
     "excluded": 1,
     "successfulTtsSinceLastNewExact": 30,
-    "threshold": 30
+    "threshold": 33
   },
   "excludedArticles": [
     "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع"
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Inspect and adjudicate the retained passports trial evidence. No further TTS is authorized.",
+    "nextAction": "Preflight the three owner-authorized targeted repairs. Historical passports authorization remains consumed.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -91,6 +91,14 @@
       "successfulTtsRequestsAuthorized": 0,
       "status": "EXECUTED_CONSUMED",
       "successfulTtsRequestsConsumed": 1
+    },
+    "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-33.json",
+    "boundedTranche": {
+      "decisionId": "COMPLETION15-TRANCHE33-v1",
+      "successfulRequestsAuthorized": 3,
+      "successfulRequestsConsumed": 0,
+      "maximumStrategyThreshold": 33,
+      "executionStatus": "PREFLIGHT_REQUIRED"
     }
   }
 }

@@ -288,3 +288,12 @@ Before any paid-engine or multi-candidate strategy is adopted, document:
 - No automatic publication of a non-exact candidate.
 - Rejected trials must preserve diagnostic evidence before rollback wherever technically possible.
 - Existing fallback remains live until a replacement passes the approved gate.
+
+
+## 15. Owner-approved bounded amendment — 2026-10-07
+
+Owner instruction: `ارفع الحد إلى 33`. The strategic threshold is now **33**, with **30** successful requests already consumed and exactly **3** additional successful requests authorized in `TTS-THRESHOLD-AMENDMENT-33.json`.
+
+The three named targets are the soft-power omitted question, intuition reference 11, and satellites قوى. Each target receives at most one successful request, after audio-bound micro-repair preflight. This amendment authorizes no automatic provider dispatch, no whole-part regeneration, no automatic retries, no further Gate 4 research, and no lowering of Exact/publication gates. The global TTS freeze remains active outside the scoped execution route. Existing nine Exact audio identities remain immutable. Historical Gate 5 passports authorization remains consumed.
+
+The current completion goal includes all 15 articles as directed by the owner. Morning review may proceed as a separate preflight mini-campaign; no morning TTS request is included in this three-request allowance. New Exact publications do not replenish the three-request allowance. Any unverified or rejected successful generation still consumes its request.
