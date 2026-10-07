@@ -10,7 +10,7 @@
   "newThreshold": 33,
   "successfulRequestBaseline": 30,
   "additionalSuccessfulRequestsAuthorized": 3,
-  "successfulRequestsConsumed": 0,
+  "successfulRequestsConsumed": 1,
   "automaticExpansion": false,
   "automaticProviderDispatch": false,
   "qualityPolicyUnchanged": true,
@@ -111,11 +111,12 @@
         }
       ],
       "expectedSegmentText": "ما علاقة اللغة بالقوة الناعمة؟",
-      "successfulTtsConsumed": 0,
+      "successfulTtsConsumed": 1,
       "dispatchAttempt": {
         "runId": "37622809292",
         "attemptNumber": 1,
-        "status": "RESERVED"
+        "status": "SUCCESSFUL_RESPONSE",
+        "responseAt": "2026-10-07T12:42:41.256Z"
       }
     },
     {
