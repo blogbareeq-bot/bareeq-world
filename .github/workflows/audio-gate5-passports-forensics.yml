@@ -36,6 +36,13 @@ jobs:
           console.log('GATE5_FORENSICS_FREEZE=PASS strategy=30/30 authorization=CONSUMED');
           NODE
 
+      - name: Install ffmpeg for waveform forensics
+        run: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version | head -1
+
       - name: Download retained rejected-trial evidence
         uses: actions/download-artifact@v4
         with:
