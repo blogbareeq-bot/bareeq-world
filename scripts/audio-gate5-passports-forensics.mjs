@@ -1,4 +1,4 @@
-import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readdir, readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tokenizeVerbal } from './audio-exact-match.mjs';
@@ -473,12 +473,29 @@ async function exportHumanForensicReview({trial,trialManifest,out}){
   const tools=await resolveFfmpeg();
   const reviewDir=path.join(out,'human-review');
   await mkdir(reviewDir,{recursive:true});
+
+  // manifest sync timestamps are article-global, while `input` is part 4 only.
+  // Rebase every target timestamp to the first sync item in part 4 before cutting.
+  const finiteSync=sync
+    .filter(x=>Number.isFinite(Number(x.start)) && Number.isFinite(Number(x.end)))
+    .sort((a,b)=>Number(a.start)-Number(b.start));
+  if(!finiteSync.length) throw new Error('part 4 sync has no finite timestamps');
+  const partGlobalStart=Number(finiteSync[0].start);
+
+  // Always include the complete regenerated part as a fallback for human listening.
+  const fullPartFile='PART4-FULL.mp3';
+  await copyFile(input,path.join(reviewDir,fullPartFile));
+
   const cases=[];
   for(const [caseId,spec] of Object.entries(record)){
     const s=sync.find(x=>x.id===spec.segmentId);
     if(!s || !Number.isFinite(Number(s.start)) || !Number.isFinite(Number(s.end))) throw new Error(`sync missing for ${spec.segmentId}`);
-    const start=Math.max(0,Number(s.start)-0.55);
-    const duration=Math.max(1.2,Number(s.end)-Number(s.start)+1.10);
+    const localStart=Math.max(0,Number(s.start)-partGlobalStart);
+    const localEnd=Math.max(localStart,Number(s.end)-partGlobalStart);
+
+    // Deliberately wide context: 3 seconds before and after the synchronized segment.
+    const start=Math.max(0,localStart-3.0);
+    const duration=Math.max(6.0,(localEnd-localStart)+6.0);
     const file=`${caseId}.mp3`;
     const cmd=await runCommand(tools.ffmpeg,[
       '-hide_banner','-loglevel','error','-y',
@@ -487,7 +504,17 @@ async function exportHumanForensicReview({trial,trialManifest,out}){
       path.join(reviewDir,file),
     ],{timeoutMs:120000});
     if(cmd.code!==0) throw new Error(`ffmpeg human-review clip failed ${caseId}: ${cmd.stderr.slice(0,500)}`);
-    cases.push({caseId,...spec,clipFile:file,startSeconds:start,durationSeconds:duration});
+    cases.push({
+      caseId,...spec,clipFile:file,
+      globalStartSeconds:Number(s.start),
+      globalEndSeconds:Number(s.end),
+      partGlobalStartSeconds:partGlobalStart,
+      localSegmentStartSeconds:localStart,
+      localSegmentEndSeconds:localEnd,
+      clipStartSeconds:start,
+      clipDurationSeconds:duration,
+      fullPartFile,
+    });
   }
   const review={
     schema:'bareeq.audio-gate5-passports-human-forensics.v1',
@@ -500,10 +527,10 @@ async function exportHumanForensicReview({trial,trialManifest,out}){
   await writeFile(path.join(reviewDir,'manifest.json'),JSON.stringify(review,null,2)+'\n');
   const html=`<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>بريق — مراجعة Forensics</title>
 <style>body{font-family:system-ui,Tahoma,sans-serif;max-width:760px;margin:auto;padding:24px;background:#f6f7f8}.case{background:white;border:1px solid #ddd;border-radius:14px;padding:18px;margin:16px 0}audio{width:100%;margin:10px 0}.choices label{display:block;padding:9px;margin:7px 0;background:#f4f4f4;border-radius:8px}button{font:inherit;padding:10px 16px;border-radius:8px;border:1px solid #aaa}</style>
-<h1>مراجعة Forensics — جوازات السفر</h1><p>هذه المقاطع من المرشح المرفوض المحفوظ، وليست توليدًا جديدًا. ركز فقط على الكلمة المطلوبة.</p><div id="root"></div><button id="export">تصدير النتيجة JSON</button>
+<h1>مراجعة Forensics — جوازات السفر</h1><p>هذه المقاطع من المرشح المرفوض المحفوظ، وليست توليدًا جديدًا. تم تصحيح التوقيت ليكون محليًا داخل Part 4، وأُضيف سياق واسع قبل وبعد كل موضع.</p><p><strong>إذا شعرت أن أي مقطع ما زال غير كافٍ:</strong> استمع إلى <code>PART4-FULL.mp3</code> كاملًا داخل نفس المجلد.</p><div id="root"></div><button id="export">تصدير النتيجة JSON</button>
 <script>const cases=${JSON.stringify(cases)};const a={};const root=document.getElementById('root');for(const c of cases){const d=document.createElement('section');d.className='case';d.innerHTML=\`<h2>\${c.caseId}</h2><p><strong>\${c.question}</strong></p><audio controls src="\${c.clipFile}"></audio><div class="choices">\${c.choices.map(v=>\`<label><input type="radio" name="\${c.caseId}" value="\${v}"> \${v}</label>\`).join('')}</div>\`;d.querySelectorAll('input').forEach(i=>i.onchange=()=>a[c.caseId]=i.value);root.appendChild(d)}document.getElementById('export').onclick=()=>{const p={schema:'bareeq.audio-gate5-passports-human-forensics-results.v1',sourceRunId:'${RUN_ID}',results:cases.map(c=>({caseId:c.caseId,answer:a[c.caseId]||null}))};const b=new Blob([JSON.stringify(p,null,2)],{type:'application/json'});const x=document.createElement('a');x.href=URL.createObjectURL(b);x.download='bareeq-passports-forensics-review-results.json';x.click();URL.revokeObjectURL(x.href)}</script></html>`;
   await writeFile(path.join(reviewDir,'review.html'),html);
-  await writeFile(path.join(reviewDir,'README.txt'),'افتح review.html، استمع إلى H01 وH02، اختر ما تسمعه، ثم صدّر JSON. لا يوجد أي اتصال خارجي أو توليد جديد.\n');
+  await writeFile(path.join(reviewDir,'README.txt'),'افتح review.html واستمع إلى H01 وH02. المقاطع مبنية على توقيت محلي داخل Part 4 مع 3 ثوانٍ سياق قبل وبعد كل segment. إذا احتجت سياقًا أكبر فاستمع إلى PART4-FULL.mp3 كاملًا. ثم صدّر JSON. لا يوجد أي اتصال خارجي أو توليد جديد.\n');
   return review;
 }
 
