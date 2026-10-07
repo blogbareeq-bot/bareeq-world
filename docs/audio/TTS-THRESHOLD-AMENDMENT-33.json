@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-threshold-amendment.v1",
   "decisionId": "COMPLETION15-TRANCHE33-v1",
   "authorizationStatus": "CONSUMED",
-  "executionStatus": "EXECUTING",
+  "executionStatus": "EXECUTED",
   "authorizedBy": "project-owner",
   "authorizedAt": "2026-10-07T15:05:49+03:00",
   "authorizationText": "ارفع الحد إلى 33",
