@@ -115,6 +115,7 @@ jobs:
       BAREEQ_REPAIR_MAX_ROUNDS_PER_ARTICLE: '1'
       BAREEQ_REPAIR_MAX_TRIALS_PER_PART: '1'
       BAREEQ_REPAIR_REQUIRE_VERIFIED_MICRO: '0'
+      BAREEQ_GATE5_TTS_TRANSPORT: generate-content
     steps:
       - name: Checkout production main
         uses: actions/checkout@v4
@@ -171,6 +172,20 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/audio-gate5-passports-prepare-execution.mjs --root=. --triage-root=triage-input
+
+      - name: Prove T03-only overlay survived current-policy refresh
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const p='audio-candidates/why-some-passports-are-stronger/2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b/reports/asr-adjudication.json';
+          const r=JSON.parse(await readFile(p,'utf8'));
+          const total=Object.values(r.consensus||{}).reduce((a,b)=>a+Number(b||0),0);
+          const issue=[...(r.substantiveDifferences||[]),...(r.unresolved||[])];
+          if(total!==1 || issue.length!==1 || Number(issue[0].expectedIndex)!==818) throw new Error('Gate 5 overlay is not T03-only');
+          if(r.gate5HumanOverlay?.removedFalsePositiveCase!=='T02' || r.gate5HumanOverlay?.preservedTargetCase!=='T03') throw new Error('Gate 5 human overlay metadata missing');
+          console.log('GATE5_T03_ONLY_OVERLAY=PASS unresolved=1 targetIndex=818 carry=T02');
+          NODE
 
       - name: Execute at most one TTS HTTP request
         id: experiment

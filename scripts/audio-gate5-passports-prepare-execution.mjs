@@ -2,6 +2,7 @@ import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { sha256 } from './audio-constants.mjs';
+import { adjudicateCandidate, ADJUDICATION_POLICY_VERSION } from './audio-dual-asr-adjudicate.mjs';
 
 const ARTICLE='why-some-passports-are-stronger';
 const FALSE_POSITIVE='T02';
@@ -55,8 +56,19 @@ export async function prepareGate5Passports({root=process.cwd(),triageRoot}){
   const dir=path.join(root,'audio-candidates',ARTICLE,row.fingerprint);
   const adjudicationPath=path.join(dir,'reports','asr-adjudication.json');
   const backupPath=path.join(dir,'reports','asr-adjudication.pre-gate5.json');
+
+  // Refresh the immutable raw ASR evidence through the current production
+  // adjudication policy before applying the temporary Human Triage overlay.
+  // The baseline is expected to fail with two unresolved items; adjudicateCandidate
+  // still writes the current-policy report before throwing.
+  try {
+    await adjudicateCandidate({ articleId:ARTICLE, fingerprint:row.fingerprint, root });
+  } catch (error) {
+    if (!error?.result?.consensus) throw error;
+  }
   const report=await json(adjudicationPath);
   if((report.fingerprint||report.candidateFingerprint)!==row.fingerprint||report.fullSha256!==row.fullSha256) throw new Error('baseline adjudication identity mismatch');
+  if(Number(report.policy?.version)!==ADJUDICATION_POLICY_VERSION) throw new Error('baseline adjudication did not refresh to current policy');
   await copyFile(adjudicationPath,backupPath);
   const removed=removeExactIssue(report,fp,FALSE_POSITIVE);
   recompute(report);

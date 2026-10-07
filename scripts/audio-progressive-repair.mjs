@@ -52,10 +52,12 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // contains "per day"; treating a 36-second reset as terminal previously threw
 // away requests that were still usable in the same run.
 export function createBudgetedSynthesizer({ apiKey, sleepImpl = sleep, transportEntries = null } = {}) {
-  const transports = transportEntries || [
-    ['developer-interactions', synthesizeGeminiPart],
-    ['developer-generate-content', synthesizeGeminiGenerateContentPart],
-  ];
+  const transports = transportEntries || (process.env.BAREEQ_GATE5_TTS_TRANSPORT === 'generate-content'
+    ? [['developer-generate-content', synthesizeGeminiGenerateContentPart]]
+    : [
+      ['developer-interactions', synthesizeGeminiPart],
+      ['developer-generate-content', synthesizeGeminiGenerateContentPart],
+    ]);
   const minSpacingMs = Number(process.env.BAREEQ_REPAIR_MIN_INTERVAL_MS || 9000);
   const maxRequests = Number(process.env.BAREEQ_REPAIR_MAX_REQUESTS || 10);
   const retryAttempts = Number(process.env.BAREEQ_REPAIR_MAX_429_RETRIES || 2);
