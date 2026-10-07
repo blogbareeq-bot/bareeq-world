@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateThresholdAmendment, AMENDMENT_PATH } from './audio-tts-threshold-amendment.mjs';
 
 const ROOT=process.cwd();
 async function json(rel){ return JSON.parse(await readFile(path.join(ROOT,rel),'utf8')); }
@@ -9,7 +10,7 @@ function fail(message){ const error=new Error(message); error.code='BAREEQ_GATE4
 
 export function validateGate4Governance({
   budget,freeze,status,strategy,queue,decisionText,gate4Text,humanText,
-  classificationText,calibrationText,gate5Text,pr62Text,now=new Date()
+  classificationText,calibrationText,gate5Text,pr62Text,thresholdAmendment=null,now=new Date()
 }){
   if(budget?.schema!=='bareeq.audio-gate4-budget.v2') fail('unsupported Gate 4 budget schema');
   if(Number(budget.ttsSuccessfulRequests)!==0) fail('Gate 4 TTS budget must be zero');
@@ -42,7 +43,11 @@ export function validateGate4Governance({
   if(published!==exact) fail('All governed Exact articles must be publishedExact');
   if(fallback!==15-exact) fail('Fallback count must equal 15 - Exact');
   if(Number(strategy?.exactBaseline)!==exact) fail('strategy exact baseline must match current Exact count');
-  if(Number(strategy?.successfulTtsSinceLastNewExact)!==29 || Number(strategy?.threshold)!==30) fail('Strategic TTS budget must remain 29/30');
+  if(thresholdAmendment){
+    validateThresholdAmendment({amendment:thresholdAmendment,strategy,freeze,status});
+  } else if(Number(strategy?.successfulTtsSinceLastNewExact)!==29 || Number(strategy?.threshold)!==30) {
+    fail('Strategic TTS budget must remain 29/30 without a recorded owner-approved amendment');
+  }
   const snap=freeze?.strategySnapshot||{};
   if(snap.exact!=null && Number(snap.exact)!==exact) fail('freeze Exact snapshot drift');
   if(snap.fallback!=null && Number(snap.fallback)!==fallback) fail('freeze fallback snapshot drift');
@@ -60,7 +65,7 @@ export function validateGate4Governance({
   const due=Date.parse(freeze.reviewPolicy.nextReviewAt||'');
   const overdue=Number.isFinite(due)&&now.getTime()>due;
   return {
-    exact,fallback,strategy:'29/30',overdue,
+    exact,fallback,strategy:`${strategy.successfulTtsSinceLastNewExact}/${strategy.threshold}`,overdue,
     scientificConsumed:3,scientificRemaining:1,
     fullCalibrationAuthorized:false,
     gate5:'CLOSED',
@@ -82,6 +87,7 @@ async function cli(){
     calibrationText:await text('docs/audio/GATE-4-CALIBRATION-PLAN-v1.md'),
     gate5Text:await text('docs/audio/GATE-5-DECISION-CRITERIA-v1.md'),
     pr62Text:await text('docs/audio/PR-62-ARCHIVE.md'),
+    thresholdAmendment:await json(AMENDMENT_PATH).catch(error=>{if(error.code==='ENOENT')return null;throw error;}),
   });
   console.log(`GATE4_GOVERNANCE=PASS exact=${result.exact}/15 strategy=${result.strategy} scientific=${result.scientificConsumed}/4 remaining=${result.scientificRemaining} calibrationAuthorized=${result.fullCalibrationAuthorized} gate5=${result.gate5} action=${result.action}`);
 }
