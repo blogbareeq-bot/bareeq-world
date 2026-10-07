@@ -82,17 +82,17 @@ export function applyHumanEvidence({baseResult, mappings, resolvedCases, ambigui
 
   for(const caseId of [...resolvedCases].sort()){
     const mapping=mappings[caseId];
-    if(!mapping || mapping.kind!=='pending') continue;
+    if(!mapping || mapping.kind!=='pending') throw new Error(`${caseId}: missing pending-case mapping`);
     removeOneIssue(result,mapping,caseId,'EXPECTED_PRONUNCIATION_CONFIRMED');
   }
   for(const caseId of [...ambiguityCases].sort()){
     const mapping=mappings[caseId];
-    if(!mapping || mapping.kind!=='pending') continue;
+    if(!mapping || mapping.kind!=='pending') throw new Error(`${caseId}: missing pending-case mapping`);
     removeOneIssue(result,mapping,caseId,'VALIDATOR_AMBIGUITY_PHONETIC_COLLISION');
   }
   for(const caseId of [...actualCases].sort()){
     const mapping=mappings[caseId];
-    if(!mapping || mapping.kind!=='pending') continue;
+    if(!mapping || mapping.kind!=='pending') throw new Error(`${caseId}: missing pending-case mapping`);
     result.humanConfirmedAudioErrors.push({
       caseId,
       articleId:mapping.articleId,
