@@ -87,17 +87,19 @@ jobs:
           test -f gate5-forensics-output/human-review/review.html
           test -f gate5-forensics-output/human-review/H01.mp3
           test -f gate5-forensics-output/human-review/H02.mp3
-          test -f gate5-forensics-output/human-review/PART4-FULL.mp3
+          test -f gate5-forensics-output/human-review/CONTEXT-b0029-b0031.mp3
           node --input-type=module <<'NODE'
           import { readFile } from 'node:fs/promises';
           const m=JSON.parse(await readFile('gate5-forensics-output/human-review/manifest.json','utf8'));
           for(const c of m.cases){
-            if(!(c.localSegmentStartSeconds>=0)) throw new Error(`negative local segment start for ${c.caseId}`);
-            if(!(c.clipDurationSeconds>=6)) throw new Error(`review clip too short for ${c.caseId}`);
+            if(!(c.globalSegmentStartSeconds>=0)) throw new Error(`negative global segment start for ${c.caseId}`);
+            if(!(c.clipDurationSeconds>=10)) throw new Error(`review clip too short for ${c.caseId}`);
+            if(c.source!=='trial/full.mp3') throw new Error(`review clip is not sourced from trial/full.mp3: ${c.caseId}`);
           }
-          console.log('GATE5_FORENSICS_REVIEW_TIMING=PASS rebased-to-part-local=true wide-context=true');
+          if(m.schema!=='bareeq.audio-gate5-passports-human-forensics.v2' || m.sourceAudio!=='trial/full.mp3') throw new Error('review manifest is not full-trial v2');
+          console.log('GATE5_FORENSICS_REVIEW_TIMING=PASS source=trial/full.mp3 article-global-sync=true wide-context=true');
           NODE
-          echo 'GATE5_FORENSICS_HUMAN_REVIEW=PASS cases=2 fullPart=1 providerCalls=0'
+          echo 'GATE5_FORENSICS_HUMAN_REVIEW=PASS cases=2 combinedContext=1 providerCalls=0'
 
       - name: Prove repository audio unchanged
         run: git diff --exit-code -- public/audio
