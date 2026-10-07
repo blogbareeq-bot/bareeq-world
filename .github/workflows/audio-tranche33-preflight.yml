@@ -1,0 +1,48 @@
+name: Bareeq authorized tranche 33 preflight
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-tranche33-prepare-preflight.mjs'
+      - 'scripts/audio-tranche33-preflight.py'
+      - '.github/workflows/audio-tranche33-preflight.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local audio tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install faster-whisper==1.2.0 requests numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: retained-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+      - name: Verify authorization and retained part identities
+        run: node scripts/audio-tranche33-prepare-preflight.mjs retained-evidence tranche33-preflight
+      - name: Locate actual audio boundaries without provider access
+        run: python scripts/audio-tranche33-preflight.py --root tranche33-preflight
+      - name: Prove published audio is unchanged
+        run: git diff --exit-code -- public/audio
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-tranche33-preflight-${{ github.run_id }}
+          path: tranche33-preflight/
+          if-no-files-found: error
+          retention-days: 90
