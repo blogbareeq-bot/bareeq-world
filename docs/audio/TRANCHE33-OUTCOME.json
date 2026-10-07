@@ -1,0 +1,270 @@
+{
+  "schema": "bareeq.audio-tranche33-outcome.v1",
+  "generatedAt": "2026-10-07T13:23:51.544244+00:00",
+  "threshold": 33,
+  "successfulTtsSinceLastNewExact": 33,
+  "additionalSuccessfulRequestsConsumed": 3,
+  "additionalSuccessfulRequestsRemaining": 0,
+  "publishedExact": 9,
+  "targetPublishedExact": 15,
+  "publicationPerformed": false,
+  "qualityPolicyUnchanged": true,
+  "protectedExact": [
+    {
+      "articleId": "ai-agents-future-now",
+      "fingerprint": "7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488",
+      "fullSha256": "34fa55716fe40389283e40c3fc0fca3b8d7f2cf386a2f835edccabeb1d9b659b"
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "fingerprint": "429adbe4ebdabd03e5c77d122255a29c7840ec58b7f32a8e59e18b91aba2db21",
+      "fullSha256": "d7f00585b47dc3ece44c73ac0f62763ffb41a1e4f602ddeae1aabd3d65fd0567"
+    },
+    {
+      "articleId": "altadakhom-explained-simply",
+      "fingerprint": "58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45",
+      "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135"
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
+      "fullSha256": "dc2217a45d1872ab0de9010897ad22028f0e5e93fddb07178d1f6aa2f7f66a71"
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+      "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301"
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "fingerprint": "a7f364df849199a8f4096863f95739a948e2788cf0d4d65d1e94acec022765b6",
+      "fullSha256": "1586e603c9e59b9967a51a980b4d2f7b58af262ee2aff24a77eab948d2e969e6"
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
+      "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+      "fullSha256": "e8204d5a43005b8dbcf05745167a88225491c69ec94d1d69a72120b36c70990b"
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "fingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
+      "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7"
+    }
+  ],
+  "candidateResults": [
+    {
+      "id": "R1",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "clipSha256": "4c1842ea7f1f5db24ca967e1437df6e8e3eb1d651002783bf18ed4bf7bc690b5",
+      "fullSha256Role": "assembled-candidate",
+      "publicationPerformed": false,
+      "successfulTtsConsumed": 1,
+      "clipFile": "R1-review.mp3",
+      "status": "FULL_CONSENSUS_FAILED_NOT_ELIGIBLE_FOR_PUBLICATION",
+      "checks": {
+        "technical-qa": {
+          "status": "passed",
+          "passed": true,
+          "reportSha256": "2afdcd4df5bb78d27fabcc40afb8a2aa971f78d656cd3894d916e8563000e3d8"
+        },
+        "sync": {
+          "status": "passed",
+          "passed": true,
+          "reportSha256": "8be4e0bc14db899bf5b6e93df56f4b221624be57992599554f3425d6ebc55ca3"
+        },
+        "asr-adjudication": {
+          "status": "failed",
+          "passed": false,
+          "reportSha256": "4e2a5aa92d0f1859ad9ecc8396f354b014ef4ff886974d395000eba3d5852d93",
+          "models": [
+            "gemini-3.5-flash-lite",
+            "gemini-3.5-flash"
+          ],
+          "consensus": {
+            "substitutions": 6,
+            "deletions": 1,
+            "insertions": 0,
+            "unresolved": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "R2",
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "clipSha256": "2b1dae260969c6ade7ee37f760c51a61435e73f5b010b4b582f8f410e9eec4d5",
+      "fullSha256Role": "assembled-candidate",
+      "publicationPerformed": false,
+      "successfulTtsConsumed": 1,
+      "clipFile": "R2-review.mp3",
+      "status": "FULL_CONSENSUS_FAILED_NOT_ELIGIBLE_FOR_PUBLICATION",
+      "checks": {
+        "technical-qa": {
+          "status": "passed",
+          "passed": true,
+          "reportSha256": "1c6292d92157d26f1cf495b90796a40933d2bb2aeba5e21d049dd35ea66f88ad"
+        },
+        "sync": {
+          "status": "passed",
+          "passed": true,
+          "reportSha256": "66adfa635a9f45d9be137093fa5355a4e1967d6c315890435b2d51b87ef26cd3"
+        },
+        "asr-adjudication": {
+          "status": "failed",
+          "passed": false,
+          "reportSha256": "ff3b6da67de60ff25cbcf7b2c4fb6f89d1efef49f0142484809468703f823a3c",
+          "models": [
+            "gemini-3.5-flash-lite",
+            "gemini-3.5-flash"
+          ],
+          "consensus": {
+            "substitutions": 2,
+            "deletions": 1,
+            "insertions": 0,
+            "unresolved": 7
+          }
+        }
+      }
+    },
+    {
+      "id": "R3",
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "fullSha256": "bf977577f07c000c92a6c1ddd4e2b04a5f30785da4e8967f19fe3c4d43e0b304",
+      "clipSha256": "0dbf695c383bc9b3b3f0dafa3d1148dbd06fac4c78f6b245932aa24e1e6edb31",
+      "fullSha256Role": "baseline-only-not-repaired",
+      "publicationPerformed": false,
+      "successfulTtsConsumed": 1,
+      "clipFile": "R3-review.mp3",
+      "status": "RETAINED_GENERATED_MICRO_REQUIRES_LISTENING",
+      "generatedSha256": "0dbf695c383bc9b3b3f0dafa3d1148dbd06fac4c78f6b245932aa24e1e6edb31",
+      "reason": "No safe source-derived quiet word boundary",
+      "fullCandidateCreated": false
+    },
+    {
+      "id": "P0",
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "clipSha256": "60883801b89954470c1b580b512a9fec65af683c740b2448ef470cfb480302fc",
+      "fullSha256Role": "assembled-candidate",
+      "publicationPerformed": false,
+      "successfulTtsConsumed": 0,
+      "clipFile": "P0-review.mp3",
+      "status": "FULL_CONSENSUS_FAILED_NOT_ELIGIBLE_FOR_PUBLICATION",
+      "checks": {
+        "technical-qa": {
+          "status": "passed",
+          "passed": true,
+          "reportSha256": "30e6bd18f7b93124c4b7bbd97d8d31def353488879af3e60a8131c8309a989a7"
+        },
+        "sync": {
+          "status": "passed",
+          "passed": true,
+          "reportSha256": "93612ba2abc14a2a6ed6eb88b1c42433968edfa6bc8acaece775a6cbffd75ecc"
+        },
+        "asr-adjudication": {
+          "status": "failed",
+          "passed": false,
+          "reportSha256": "3601946f751c65ebd9495307aac7c86e25400306ac9f8e200e710e9df94e05ed",
+          "models": [
+            "gemini-3.5-flash-lite",
+            "gemini-3.5-flash"
+          ],
+          "consensus": {
+            "substitutions": 3,
+            "deletions": 2,
+            "insertions": 0,
+            "unresolved": 1
+          }
+        }
+      },
+      "priorOwnerWordDecision": {
+        "words": [
+          "لا",
+          "دول"
+        ],
+        "decision": "EXPECTED_PRONUNCIATION_CONFIRMED",
+        "scope": "same retained review clip; does not approve unrelated new full-file conflicts",
+        "clipSha256": "60883801b89954470c1b580b512a9fec65af683c740b2448ef470cfb480302fc",
+        "source": "current conversation"
+      }
+    }
+  ],
+  "touchscreenDonorPreflight": [
+    {
+      "caseId": "S1",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "baselineFullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
+      "targetExpected": "الشاشة",
+      "partIndex": 0,
+      "sourcePartSha256": "3011ca271efdbff22cb716a2b2ec8dccd6837d0fb4ac7b94107b7ff3046881ac",
+      "status": "NO_SAFE_TARGET_CUT",
+      "reason": "Uncertain single-word target localization"
+    },
+    {
+      "caseId": "S2",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "baselineFullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
+      "targetExpected": "إنه",
+      "partIndex": 1,
+      "sourcePartSha256": "e5fd5068dfec285aaf560c92151297214a0153dca866306af077a86c123388dd",
+      "status": "NO_SAFE_TARGET_CUT",
+      "reason": "Uncertain single-word target localization"
+    },
+    {
+      "caseId": "S3",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "baselineFullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
+      "targetExpected": "به",
+      "partIndex": 5,
+      "sourcePartSha256": "8d9d3e2f4d2a3a9118dfa66027340f8206cabfaefadb7f1314a35badaa3dcf7e",
+      "status": "NO_SAFE_RETAINED_DONOR",
+      "targetCutSamples": [
+        1775280,
+        1795200
+      ],
+      "safeDonors": [],
+      "rejectedDonors": [
+        {
+          "partIndex": 1,
+          "actualWordIndex": 219,
+          "reason": "Donor timing incompatible"
+        }
+      ]
+    }
+  ],
+  "morning": {
+    "humanReviewPerformed": false,
+    "reviewCases": 15,
+    "readyClips": 15,
+    "ttsAuthorized": false,
+    "baselineFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496"
+  },
+  "evidenceRuns": {
+    "generation": "37622809292",
+    "freshSecondAsr": "37624565442",
+    "reconstruction": "37626334800",
+    "remainingReview": "37623097600",
+    "retainedDonorPreflight": "37626745406"
+  },
+  "nextActions": [
+    "Review R3 generated connective without repeating already confirmed passport words.",
+    "Adjudicate remaining full-file ASR conflicts against candidate SHA; old full-file approvals cannot be copied blindly.",
+    "Review morning clips in rounds of at most seven.",
+    "No further synthesis within the consumed 33 threshold.",
+    "Publish only after ordinary gates and bound human evidence pass."
+  ]
+}
