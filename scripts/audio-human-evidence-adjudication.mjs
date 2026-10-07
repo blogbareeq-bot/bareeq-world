@@ -153,6 +153,18 @@ export async function runHumanOfflineAdjudication({artifactRoot,triageRoot,repoR
       if(report.fullSha256!==fullSha256) throw new Error(`${row.articleId}: ASR full SHA mismatch`);
       reports.push(report);
     }
+    const [technical,sync,manifest]=await Promise.all([
+      json(path.join(reportsDir,'technical-qa.json')),
+      json(path.join(reportsDir,'sync.json')),
+      json(path.join(dir,'manifest.candidate.json')),
+    ]);
+    const technicalPassed=technical.passed===true || technical.status==='passed';
+    const syncPassed=sync.passed===true || sync.status==='passed';
+    if(!technicalPassed) throw new Error(`${row.articleId}: Technical QA is not passed`);
+    if(!syncPassed) throw new Error(`${row.articleId}: sync is not passed`);
+    if((manifest.candidateFingerprint||manifest.fingerprint)!==row.fingerprint) throw new Error(`${row.articleId}: candidate manifest fingerprint mismatch`);
+    if(manifest.fullSha256 && manifest.fullSha256!==fullSha256) throw new Error(`${row.articleId}: candidate manifest full SHA mismatch`);
+
     const article=await loadSpokenArticle(row.articleId,repoRoot);
     const base=adjudicateDualAsr({
       expectedText:article.spokenText,
@@ -185,7 +197,9 @@ export async function runHumanOfflineAdjudication({artifactRoot,triageRoot,repoR
       title:row.title,
       fingerprint:row.fingerprint,
       fullSha256,
-      technicalQaBound:true,
+      technicalQa:{passed:technicalPassed,status:technical.status||null},
+      sync:{passed:syncPassed,status:sync.status||null},
+      candidateManifestBound:true,
       baseConsensus:adjudicated.baseConsensus,
       finalConsensus:adjudicated.consensus,
       baseScore:score(adjudicated.baseConsensus),
