@@ -25,10 +25,20 @@ for(const [index,t] of a.targets.entries()){
  let cursor=0;const ranges=article.items.map(item=>{const n=tokenizeVerbal(item.text).length;const r={...item,start:cursor,end:cursor+n-1};cursor+=n;return r;});
  const item=ranges.find(x=>(x.runtimeId||x.segmentId)===t.targets[0].segmentId);if(!item||t.targets.some(x=>x.expectedIndex<item.start||x.expectedIndex>item.end))throw new Error('target segment drift');
  const partStart=plan.parts.slice(0,partIndex).reduce((n,p)=>n+tokenizeVerbal(p.text).length,0);
- const expected=tokenizeVerbal(part.text),start=item.start-partStart,end=item.end-partStart;
+ const expected=tokenizeVerbal(part.text);
+ // Keep the retained proper names and preceding correct clauses byte-for-byte.
+ const repairText=t.articleId==='intuition-first-impression-decisions-signature'
+  ? 'قد يحسن الحكم في ظروف معينة بدل أن يفسده. [11]'
+  : t.articleId==='لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء'
+    ? 'بل لأن هناك قوى تعيق حركتها، مثل:' : item.text;
+ const repairTokens=tokenizeVerbal(repairText),itemTokens=tokenizeVerbal(item.text);
+ const matches=itemTokens.flatMap((_,i)=>itemTokens.slice(i,i+repairTokens.length).join('\u0000')===repairTokens.join('\u0000')?[i]:[]);
+ if(matches.length!==1)throw new Error('repair must be a unique verbatim approved segment suffix');
+ const start=item.start-partStart+matches[0],end=start+repairTokens.length-1;
+ if(t.targets.some(x=>x.expectedIndex-partStart<start||x.expectedIndex-partStart>end))throw new Error('repair fails to cover authorized targets');
  if(start<0||end>=expected.length)throw new Error('segment crosses part boundary');
  const filename=`target-${index+1}-baseline-part.mp3`;await copyFile(source,path.join(out,filename));
- rows.push({...t,id:`R${index+1}`,sourceFile:filename,sourcePartSha256:sourceSha,sourceCheckpointRecord:record,partIndex,partNumber:partIndex+1,partExpectedTokens:expected,repairExpectedStart:start,repairExpectedEnd:end,repairText:item.text,speechScriptHash:article.speechScriptHash,articleTitle:article.title,insertionExpected:t.articleId==='language-soft-power-politics'});
+ rows.push({...t,id:`R${index+1}`,sourceFile:filename,sourcePartSha256:sourceSha,sourceCheckpointRecord:record,partIndex,partNumber:partIndex+1,partExpectedTokens:expected,repairExpectedStart:start,repairExpectedEnd:end,repairText,speechScriptHash:article.speechScriptHash,articleTitle:article.title,insertionExpected:t.articleId==='language-soft-power-politics'});
 }
 await writeFile(path.join(out,'preflight-input.json'),JSON.stringify({schema:'bareeq.audio-tranche33-preflight-input.v1',decisionId:a.decisionId,sourceRunId:'37581607040',providerCalls:0,ttsCalls:0,targets:rows},null,2)+'\n');
 console.log('TRANCHE33_INPUT=PASS targets=3 tts=0 provider=0');

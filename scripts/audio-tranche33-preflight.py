@@ -17,15 +17,16 @@ def transcribe(model,p):
  return [{'start':w.start,'end':w.end,'raw':w.word,'norm':norm(w.word)} for s in segments for w in (s.words or []) if norm(w.word)]
 def anchors(expected,actual,start,end):
  blocks=SequenceMatcher(None,expected,actual,autojunk=False).get_matching_blocks()
- left=[b for b in blocks if b.size>=3 and b.a+b.size<=start and start-(b.a+b.size)<=25]
- right=[b for b in blocks if b.size>=3 and b.a>end and b.a-end<=25]
+ # Matching blocks can cross a requested boundary; use only the flank outside it.
+ left=[(min(b.a+b.size,start),b.b+min(b.size,start-b.a)) for b in blocks if b.a<=start-3 and min(b.a+b.size,start)>=start-25]
+ right=[(max(b.a,end+1),b.b+max(0,end+1-b.a)) for b in blocks if b.a+b.size>=end+4 and max(b.a,end+1)<=end+25]
  if not left or not right:raise ValueError('No strong flanking anchors')
- l=max(left,key=lambda b:b.a+b.size);r=min(right,key=lambda b:b.a)
- if l.a+l.size!=start or r.a!=end+1:raise ValueError('Segment boundary does not align exactly; refuse uncertain splice')
- lt=actual[l.b+l.size-3:l.b+l.size];rt=actual[r.b:r.b+3]
+ l=max(left);r=min(right)
+ if l[0]!=start or r[0]!=end+1:raise ValueError('Segment boundary does not align exactly; refuse uncertain splice')
+ lt=actual[l[1]-3:l[1]];rt=actual[r[1]:r[1]+3]
  for t in [lt,rt]:
   if sum(actual[i:i+len(t)]==t for i in range(len(actual)-len(t)+1))!=1:raise ValueError('Non-unique anchor')
- return l.b+l.size-1,r.b,{'before':lt,'after':rt}
+ return l[1]-1,r[1],{'before':lt,'after':rt}
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--root',type=pathlib.Path,required=True);args=ap.parse_args();root=args.root;j=json.loads((root/'preflight-input.json').read_text())
  from faster_whisper import WhisperModel
