@@ -1,0 +1,505 @@
+{
+  "version": 3,
+  "generatorVersion": 10,
+  "syncVersion": 1,
+  "speechScriptHash": "42dcf30b9b8b603709af43f193080270659babc091678a079ae2173563c2a057",
+  "speechInput": "reviewed-contextual-speech-script",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "language": "ar",
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+  "title": "اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا",
+  "audioKey": "43993d7a722d81d4",
+  "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+  "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301",
+  "defaultVoice": "sadaltager",
+  "voices": [
+    {
+      "id": "sadaltager",
+      "label": "سادالتاجر (Sadaltager)",
+      "description": "معرفي طبيعي مناسب لمقالات بريق",
+      "providerVoice": "Sadaltager",
+      "totalDurationSeconds": 553.896
+    }
+  ],
+  "syncMethod": "paragraph-weighted",
+  "performanceInstructions": "### TASK\nSynthesize the approved Arabic transcript below as speech. TRANSCRIPT is the authoritative, linguistically reviewed Speech Script. Speak only its words, exactly as written. Every written Arabic diacritic is binding: do not reinterpret a vocalized word as another reading. Preserve each token's exact lexical and morphological form; never replace it with a more common, related, or neighboring form. For example, if the transcript says «تصعد», pronounce «تصعد» exactly and never substitute «تصاعد». Do not add, omit, paraphrase, or reorder any word. Do not normalize a written token into another lexical or morphological form. Do not read these directions or labels aloud.\n\n### AUDIO PROFILE\nA mature, well-read Arabic narrator for Bareeq, a refined knowledge blog for curious adult readers.\n\n### SCENE\nA contemporary Arabic recording studio in daylight. The narrator speaks naturally to one attentive listener in a calm, professional setting.\n\n### DIRECTOR'S NOTES\nUse clear Modern Standard Arabic. Sound natural, human, warm, and intellectually engaging. Use a normal conversational volume, never a whisper or a breathy delivery. Keep a comfortable medium pace with subtle organic variation. Articulate clearly without over-pronouncing words or sounding like a news anchor. Let questions carry gentle curiosity, explanations sound calm and confident, and conclusions feel reflective and quietly uplifting. Avoid theatrical acting, advertising energy, excessive solemnity, and monotone delivery.",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "encodingTool": "ffmpeg-libmp3lame",
+  "disclosure": "الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.",
+  "parts": [
+    {
+      "characters": 1584,
+      "sync": [
+        {
+          "id": "b0001",
+          "type": "paragraph",
+          "match": "لا يحمل سن الأربعين زرا خفيا يغير الجسد في ليلة واحدة هذه هي العدسة التي نقرأ بها كتاب اللياقة بعد الأربعين ثلاثة مفاتيح",
+          "start": 0.03156,
+          "end": 0.191834
+        },
+        {
+          "id": "b0002",
+          "type": "paragraph",
+          "match": "هذه قراءة تحريرية لأفكار الكتاب وليست إعادة نشر لفصوله وقد أضيفت إليها إرشادات صحية حديثة من جهات رسمية والمقال للتثقيف ",
+          "start": 0.191834,
+          "end": 0.376722
+        },
+        {
+          "id": "b0003",
+          "type": "h2",
+          "match": "بطاقة الكتاب",
+          "start": 0.376722,
+          "end": 0.383668
+        },
+        {
+          "id": "b0004",
+          "type": "list-item",
+          "match": "العنوان اللياقة بعد الأربعين ثلاثة مفاتيح لتحظى بمظهر جيد وشعور رائع",
+          "start": 0.383668,
+          "end": 0.427491
+        },
+        {
+          "id": "b0005",
+          "type": "list-item",
+          "match": "المؤلف دون نافا",
+          "start": 0.427491,
+          "end": 0.442027
+        },
+        {
+          "id": "b0006",
+          "type": "list-item",
+          "match": "النقل إلى العربية عمرو الملاخ وفق الغلاف العربي",
+          "start": 0.442027,
+          "end": 0.475241
+        },
+        {
+          "id": "b0007",
+          "type": "list-item",
+          "match": "الناشر شركة العبيكان للنشر",
+          "start": 0.475241,
+          "end": 0.493818
+        },
+        {
+          "id": "b0008",
+          "type": "list-item",
+          "match": "الرقم الدولي للنسخة الرقمية العربية 9789960549699",
+          "start": 0.493818,
+          "end": 0.520604
+        },
+        {
+          "id": "b0009",
+          "type": "h2",
+          "match": "ما الفكرة المركزية في الكتاب",
+          "start": 0.520604,
+          "end": 0.540709
+        },
+        {
+          "id": "b0010",
+          "type": "paragraph",
+          "match": "لا يعامل نافا اللياقة بوصفها ساعات تمرين منفصلة عن بقية الحياة الفكرة الأهم هي أن القدرة على الحركة والطاقة اليومية تتأث",
+          "start": 0.540709,
+          "end": 0.663084
+        },
+        {
+          "id": "b0011",
+          "type": "paragraph",
+          "match": "هذه النظرة مفيدة لأنها تنقل السؤال من ما أقسى برنامج أستطيع احتماله إلى ما النظام الذي أستطيع أن أعيش معه لكن فائدتها لا",
+          "start": 0.663084,
+          "end": 0.818888
+        },
+        {
+          "id": "b0012",
+          "type": "h2",
+          "match": "ثلاث أفكار عملية نخرج بها من القراءة",
+          "start": 0.818888,
+          "end": 0.842125
+        },
+        {
+          "id": "b0013",
+          "type": "h3",
+          "match": "1 التوازن أهم من مطاردة رقم واحد",
+          "start": 0.842125,
+          "end": 0.86804
+        },
+        {
+          "id": "b0014",
+          "type": "paragraph",
+          "match": "الوزن مقياس واحد لكنه لا يصف وحده القوة أو القدرة على صعود الدرج أو جودة النوم أو سهولة أداء المهام اليومية لذلك يقترح ا",
+          "start": 0.86804,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0001",
+        "b0002",
+        "b0003",
+        "b0004",
+        "b0005",
+        "b0006",
+        "b0007",
+        "b0008",
+        "b0009",
+        "b0010",
+        "b0011",
+        "b0012",
+        "b0013",
+        "b0014"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/43993d7a722d81d4/part-001-f548bd23a932.clean.mp3",
+          "bytes": 1875213,
+          "durationSeconds": 156.264,
+          "sha256": "3707fe71ab9ad2a84b56945194c22e0b0cf535ddc1179f9402465462b01cb0bb"
+        }
+      }
+    },
+    {
+      "characters": 1467,
+      "sync": [
+        {
+          "id": "b0015",
+          "type": "h3",
+          "match": "2 الدعم والمساءلة يصنعان فرقا",
+          "start": 0,
+          "end": 0.021653
+        },
+        {
+          "id": "b0016",
+          "type": "paragraph",
+          "match": "يمنح الكتاب مساحة واضحة للتشجيع والدعم وبناء نظام للمساءلة والتطبيق البسيط لهذه الفكرة هو اختيار شخص موثوق تشاركه موعد ا",
+          "start": 0.021653,
+          "end": 0.1513
+        },
+        {
+          "id": "b0017",
+          "type": "h3",
+          "match": "3 الخطة الجيدة تفصل على صاحبها",
+          "start": 0.1513,
+          "end": 0.176042
+        },
+        {
+          "id": "b0018",
+          "type": "paragraph",
+          "match": "يرفض الكتاب ضمنيا فكرة البرنامج الواحد المناسب للجميع ابدأ من خطك أنت كم تتحرك الآن ما الحركات المريحة ما الذي يسبب ألما",
+          "start": 0.176042,
+          "end": 0.360601
+        },
+        {
+          "id": "b0019",
+          "type": "h2",
+          "match": "أين نحتاج إلى ميزان علمي حديث",
+          "start": 0.360601,
+          "end": 0.38494
+        },
+        {
+          "id": "b0020",
+          "type": "paragraph",
+          "match": "الكتاب يحفز على تغيير شامل لكن التوصيات الصحية يجب أن تقرأ مع الإرشادات الأحدث توصي منظمة الصحة العالمية البالغين عموما ",
+          "start": 0.38494,
+          "end": 0.538631
+        },
+        {
+          "id": "b0021",
+          "type": "paragraph",
+          "match": "هذا الرقم وجهة تدريجية وليس شرطا للأسبوع الأول عشر دقائق منتظمة أفضل من حصة شديدة تقود إلى الألم أو الانقطاع كما أن الأل",
+          "start": 0.538631,
+          "end": 0.677856
+        },
+        {
+          "id": "b0022",
+          "type": "h2",
+          "match": "تطبيق عملي لأربعة أسابيع",
+          "start": 0.677856,
+          "end": 0.692497
+        },
+        {
+          "id": "b0023",
+          "type": "h3",
+          "match": "الأسبوع الأول احم الموعد",
+          "start": 0.692497,
+          "end": 0.708736
+        },
+        {
+          "id": "b0024",
+          "type": "list-item",
+          "match": "ثلاث جولات مشي مريحة مدة كل منها من 10 إلى 15 دقيقة",
+          "start": 0.708736,
+          "end": 0.754419
+        },
+        {
+          "id": "b0025",
+          "type": "list-item",
+          "match": "تسجيل ما أنجز فعلا دون جلد للذات",
+          "start": 0.754419,
+          "end": 0.783715
+        },
+        {
+          "id": "b0026",
+          "type": "h3",
+          "match": "الأسبوع الثاني أضف القوة",
+          "start": 0.783715,
+          "end": 0.79982
+        },
+        {
+          "id": "b0027",
+          "type": "list-item",
+          "match": "الاستمرار في المشي",
+          "start": 0.79982,
+          "end": 0.814219
+        },
+        {
+          "id": "b0028",
+          "type": "list-item",
+          "match": "حصتان قصيرتان من حركات أساسية مناسبة للحالة مع يوم راحة بينهما",
+          "start": 0.814219,
+          "end": 0.858559
+        },
+        {
+          "id": "b0029",
+          "type": "h3",
+          "match": "الأسبوع الثالث غير عنصرا واحدا",
+          "start": 0.858559,
+          "end": 0.878694
+        },
+        {
+          "id": "b0030",
+          "type": "paragraph",
+          "match": "زد المدة أو عدد الجولات زيادة صغيرة لا الاثنين معا إذا كان التعافي جيدا ولا توجد أعراض مقلقة يمكن جعل بعض الدقائق أسرع ق",
+          "start": 0.878694,
+          "end": 0.973283
+        },
+        {
+          "id": "b0031",
+          "type": "h3",
+          "match": "الأسبوع الرابع راجع النظام لا إرادتك فقط",
+          "start": 0.973283,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0015",
+        "b0016",
+        "b0017",
+        "b0018",
+        "b0019",
+        "b0020",
+        "b0021",
+        "b0022",
+        "b0023",
+        "b0024",
+        "b0025",
+        "b0026",
+        "b0027",
+        "b0028",
+        "b0029",
+        "b0030",
+        "b0031"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/43993d7a722d81d4/part-002-e40b107d32f0.clean.mp3",
+          "bytes": 1620621,
+          "durationSeconds": 135.048,
+          "sha256": "cf70dd0a38f091368fc2c6ebf8bc847a6922c4a7f40928d62eb9becfa4b24e4f"
+        }
+      }
+    },
+    {
+      "characters": 1640,
+      "sync": [
+        {
+          "id": "b0032",
+          "type": "paragraph",
+          "match": "اسأل أي موعد التزمت به ما العائق المتكرر ومن يمكنه دعمك ثم ابن الشهر التالي على إجابات واقعية بدل خطة مثالية لا تناسب يو",
+          "start": 0,
+          "end": 0.090722
+        },
+        {
+          "id": "b0033",
+          "type": "h2",
+          "match": "التغذية والمكملات بلا مبالغة",
+          "start": 0.090722,
+          "end": 0.104581
+        },
+        {
+          "id": "b0034",
+          "type": "paragraph",
+          "match": "لا يوجد طعام واحد يعيد الشباب كما أن المكملات ليست ضرورة تلقائية بعد الأربعين توضح صحائف المعاهد الوطنية للصحة أن الاحتي",
+          "start": 0.104581,
+          "end": 0.278911
+        },
+        {
+          "id": "b0035",
+          "type": "h2",
+          "match": "القوة بعد الأربعين ليست مشروع استعادة الماضي",
+          "start": 0.278911,
+          "end": 0.302704
+        },
+        {
+          "id": "b0036",
+          "type": "paragraph",
+          "match": "أحد الأخطاء الشائعة في الحديث عن منتصف العمر هو بناء الخطة كلها على مقارنة الجسد بنسخة أصغر منه السؤال الأفضل ما القدرة ",
+          "start": 0.302704,
+          "end": 0.509757
+        },
+        {
+          "id": "b0037",
+          "type": "paragraph",
+          "match": "توصيات النشاط البدني للبالغين لا تقتصر على الحركة الهوائية فهي تضم أيضا تقوية العضلات وهذه نقطة مهمة لأن القوة جزء من ال",
+          "start": 0.509757,
+          "end": 0.717312
+        },
+        {
+          "id": "b0038",
+          "type": "h2",
+          "match": "كيف تعرف أنك تتقدم من دون مطاردة الألم",
+          "start": 0.717312,
+          "end": 0.746281
+        },
+        {
+          "id": "b0039",
+          "type": "paragraph",
+          "match": "راقب مؤشرات بسيطة هل صارت الجولة المعتادة أسهل هل تستطيع أداء حركة بجودة أفضل أو تكرارات أكثر قليلا هل تتعافى في وقت منا",
+          "start": 0.746281,
+          "end": 0.869627
+        },
+        {
+          "id": "b0040",
+          "type": "paragraph",
+          "match": "زيادة الحمل أو المدة تصبح مفيدة عندما تأتي تدريجيا أما الألم الحاد وألم الصدر والدوار غير المعتاد وضيق النفس الشديد غير ",
+          "start": 0.869627,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0032",
+        "b0033",
+        "b0034",
+        "b0035",
+        "b0036",
+        "b0037",
+        "b0038",
+        "b0039",
+        "b0040"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/43993d7a722d81d4/part-003-da5fd2aa1d53.clean.mp3",
+          "bytes": 1652877,
+          "durationSeconds": 137.736,
+          "sha256": "e1f1d6df0e2db26b35af1a2d309432f7713a4f1110a8b3e7fbf2326066f78a58"
+        }
+      }
+    },
+    {
+      "characters": 1452,
+      "sync": [
+        {
+          "id": "b0041",
+          "type": "h2",
+          "match": "النوم والتعافي جزء من الخطة",
+          "start": 0,
+          "end": 0.018121
+        },
+        {
+          "id": "b0042",
+          "type": "paragraph",
+          "match": "من السهل أن ننظر إلى التدريب وحده وننسى ما يحدث بين الحصص النوم الكافي وتوزيع الجهد وأيام التعافي تساعد على جعل الخطة قا",
+          "start": 0.018121,
+          "end": 0.201684
+        },
+        {
+          "id": "b0043",
+          "type": "h2",
+          "match": "التغذية ابحث عن النمط قبل المنتج",
+          "start": 0.201684,
+          "end": 0.224832
+        },
+        {
+          "id": "b0044",
+          "type": "paragraph",
+          "match": "في منتصف العمر تكثر الرسائل التي تعد بمكمل أو مسحوق يعوض كل شيء القراءة الأكثر اتزانا تبدأ بالنمط الغذائي العام ثم تبحث ",
+          "start": 0.224832,
+          "end": 0.497023
+        },
+        {
+          "id": "b0045",
+          "type": "h2",
+          "match": "اختبار الاستمرار",
+          "start": 0.497023,
+          "end": 0.505062
+        },
+        {
+          "id": "b0046",
+          "type": "paragraph",
+          "match": "قبل اختيار برنامج اسأل هل أستطيع تكرار هذا بعد شهر إذا كانت الإجابة لا فالمشكلة ليست دائما في قوة الإرادة قد تكون الخطة ",
+          "start": 0.505062,
+          "end": 0.707127
+        },
+        {
+          "id": "b0047",
+          "type": "h2",
+          "match": "الحكم على الكتاب",
+          "start": 0.707127,
+          "end": 0.718027
+        },
+        {
+          "id": "b0048",
+          "type": "paragraph",
+          "match": "قوة الكتاب في توسيع معنى اللياقة من تمرين إلى نظام حياة ودعم واستمرارية أما ما يحتاجه القارئ فهو فصل التحفيز العام عن ال",
+          "start": 0.718027,
+          "end": 0.846683
+        },
+        {
+          "id": "b0049",
+          "type": "paragraph",
+          "match": "أفضل بداية ليست الأكثر قسوة بل الأكثر أمانا وقابلية للتكرار خطوة صغيرة تستطيع العودة إليها الأسبوع المقبل أهم من اندفاعة",
+          "start": 0.846683,
+          "end": 0.939371
+        },
+        {
+          "id": "b0050",
+          "type": "paragraph",
+          "match": "ولقراءة أخرى في تحويل الاهتمام إلى ممارسة قابلة للبناء اقرأ لا تبحث عن شغفك ابنه",
+          "start": 0.939371,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0041",
+        "b0042",
+        "b0043",
+        "b0044",
+        "b0045",
+        "b0046",
+        "b0047",
+        "b0048",
+        "b0049",
+        "b0050"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/43993d7a722d81d4/part-004-f04df29c5e2b.clean.mp3",
+          "bytes": 1498221,
+          "durationSeconds": 124.848,
+          "sha256": "24102f63eef4e33a9b9c7797bce2073ed4ec139a54cce9d86db75bf1b96d2313"
+        }
+      }
+    }
+  ],
+  "schema": "bareeq.audio-production-manifest.v3",
+  "candidateFingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+  "voice": "Sadaltager",
+  "toolVersion": 9,
+  "status": "published",
+  "generatedAt": "2026-10-07T05:45:49.336Z",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "ttsVoice": "Sadaltager",
+  "publishedAt": "2026-10-07T05:45:49.336Z",
+  "publishedFromCandidate": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+  "verificationMethod": "human-evidence-offline-v1",
+  "humanAdjudicationSha256": "1c49540f42a36ad2fe55b86c42a32ccfcfe9a8adee2305810bda76df6ea43b29"
+}

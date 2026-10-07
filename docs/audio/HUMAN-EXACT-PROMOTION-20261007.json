@@ -1,0 +1,46 @@
+{
+  "schema": "bareeq.audio-human-exact-promotion.v1",
+  "generatedAt": "2026-10-07T05:45:49.364Z",
+  "sourceRunId": "37284619084",
+  "promotedCount": 2,
+  "exactAfterPromotion": 9,
+  "fallbackAfterPromotion": 6,
+  "strategy": "29/30",
+  "ttsCalls": 0,
+  "newAsrCalls": 0,
+  "providerCalls": 0,
+  "promoted": [
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "title": "اللياقة بعد الأربعين: قراءة عملية في كتاب دون نافا",
+      "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+      "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301",
+      "audioKey": "43993d7a722d81d4",
+      "consensus": {
+        "substitutions": 0,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "humanResolved": [
+        "T31"
+      ]
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "title": "كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟",
+      "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+      "fullSha256": "e8204d5a43005b8dbcf05745167a88225491c69ec94d1d69a72120b36c70990b",
+      "audioKey": "4d194dd1e6a739a8",
+      "consensus": {
+        "substitutions": 0,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "humanResolved": [
+        "T34"
+      ]
+    }
+  ]
+}

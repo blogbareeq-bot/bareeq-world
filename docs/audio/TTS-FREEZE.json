@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Recovery Decision v1: synthesis remains frozen. Human Triage is complete; offline adjudication is next and Gate 5 remains closed.",
+  "reason": "Synthesis remains frozen. Human-evidence offline adjudication promoted two existing candidates to Exact with 0 TTS; campaign is now 9/15 Exact with 6 safe fallbacks.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -10,10 +10,10 @@
     "expiresAt": "2027-01-03T08:35:52Z"
   },
   "strategySnapshot": {
-    "exact": 7,
+    "exact": 9,
     "total": 15,
-    "fallback": 8,
-    "activePending": 7,
+    "fallback": 6,
+    "activePending": 5,
     "excluded": 1,
     "successfulTtsSinceLastNewExact": 29,
     "threshold": 30
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "apply binding human evidence offline, rerun the production Exact gate, then assess only remaining confirmed defects; Gate 5 and TTS remain closed",
+    "nextAction": "assess the five remaining active articles by their confirmed localized audio defects before any Gate 5 synthesis decision; TTS remains frozen at 29/30",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -65,6 +65,16 @@
         "T06": "UNRESOLVED_TARGET_NOTE_BOUND_TO_ADJACENT_11_TO_12_DEFECT",
         "T31": "INCONCLUSIVE_INCOMPLETE_CONTEXT"
       }
+    },
+    "humanExactPromotion": {
+      "status": "PROMOTED",
+      "exact": "9/15",
+      "promotedArticles": [
+        "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+        "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه"
+      ],
+      "ttsCalls": 0,
+      "newAsrCalls": 0
     }
   }
 }

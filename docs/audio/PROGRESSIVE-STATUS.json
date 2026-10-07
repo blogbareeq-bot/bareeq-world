@@ -1,14 +1,14 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "37284619084",
-  "sourceArtifact": "bareeq-progressive-validation-37284619084",
-  "sourceEvent": "workflow_dispatch",
-  "generatedAt": "2026-10-05T08:37:39.432Z",
+  "sourceRunId": "37577891527",
+  "sourceArtifact": "bareeq-human-exact-promotion-37577891527",
+  "sourceEvent": "push",
+  "generatedAt": "2026-10-07T05:45:49.423Z",
   "publicationComplete": false,
-  "publishedCount": 7,
-  "fallbackCount": 8,
-  "exactCount": 7,
+  "publishedCount": 9,
+  "fallbackCount": 6,
+  "exactCount": 9,
   "rows": [
     {
       "articleId": "ai-agents-future-now",
@@ -175,18 +175,18 @@
       "audioKey": "43993d7a722d81d4",
       "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": 1,
+      "validationStatus": "validated",
+      "substitutions": 0,
       "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
-      "exact": false,
-      "publishedExact": false,
+      "exact": true,
+      "publishedExact": true,
       "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301",
       "repairedParts": [
         1
       ],
-      "error": "Gemini TTS quota exhausted after retries for part 1: request cap 0 reached"
+      "error": null
     },
     {
       "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
@@ -228,18 +228,18 @@
       "audioKey": "4d194dd1e6a739a8",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "generationStatus": "generated",
-      "validationStatus": "failed",
-      "substitutions": 1,
+      "validationStatus": "validated",
+      "substitutions": 0,
       "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
-      "exact": false,
-      "publishedExact": false,
+      "exact": true,
+      "publishedExact": true,
       "fullSha256": "e8204d5a43005b8dbcf05745167a88225491c69ec94d1d69a72120b36c70990b",
       "repairedParts": [
         2
       ],
-      "error": "dual-ASR consensus failed: S=4 D=0 I=0 unresolved=0"
+      "error": null
     },
     {
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",

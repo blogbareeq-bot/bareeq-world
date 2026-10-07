@@ -1,0 +1,378 @@
+{
+  "version": 3,
+  "generatorVersion": 10,
+  "syncVersion": 1,
+  "speechScriptHash": "c754a8a5f702cc4d5b549e8e4cd54e4f0968642ef5be87f881c24f7548310a93",
+  "speechInput": "reviewed-contextual-speech-script",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "language": "ar",
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+  "title": "كيف يتوقع محرك البحث ما ستكتبه قبل أن تكمله؟",
+  "audioKey": "4d194dd1e6a739a8",
+  "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+  "fullSha256": "e8204d5a43005b8dbcf05745167a88225491c69ec94d1d69a72120b36c70990b",
+  "defaultVoice": "sadaltager",
+  "voices": [
+    {
+      "id": "sadaltager",
+      "label": "سادالتاجر (Sadaltager)",
+      "description": "معرفي طبيعي مناسب لمقالات بريق",
+      "providerVoice": "Sadaltager",
+      "totalDurationSeconds": 413.568
+    }
+  ],
+  "syncMethod": "paragraph-weighted",
+  "performanceInstructions": "### TASK\nSynthesize the approved Arabic transcript below as speech. TRANSCRIPT is the authoritative, linguistically reviewed Speech Script. Speak only its words, exactly as written. Every written Arabic diacritic is binding: do not reinterpret a vocalized word as another reading. Preserve each token's exact lexical and morphological form; never replace it with a more common, related, or neighboring form. For example, if the transcript says «تصعد», pronounce «تصعد» exactly and never substitute «تصاعد». Do not add, omit, paraphrase, or reorder any word. Do not normalize a written token into another lexical or morphological form. Do not read these directions or labels aloud.\n\n### AUDIO PROFILE\nA mature, well-read Arabic narrator for Bareeq, a refined knowledge blog for curious adult readers.\n\n### SCENE\nA contemporary Arabic recording studio in daylight. The narrator speaks naturally to one attentive listener in a calm, professional setting.\n\n### DIRECTOR'S NOTES\nUse clear Modern Standard Arabic. Sound natural, human, warm, and intellectually engaging. Use a normal conversational volume, never a whisper or a breathy delivery. Keep a comfortable medium pace with subtle organic variation. Articulate clearly without over-pronouncing words or sounding like a news anchor. Let questions carry gentle curiosity, explanations sound calm and confident, and conclusions feel reflective and quietly uplifting. Avoid theatrical acting, advertising energy, excessive solemnity, and monotone delivery.",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "encodingTool": "ffmpeg-libmp3lame",
+  "disclosure": "الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.",
+  "parts": [
+    {
+      "characters": 1483,
+      "sync": [
+        {
+          "id": "b0001",
+          "type": "paragraph",
+          "match": "تكتب حرفين في مربع البحث فتظهر العبارة التي كنت على وشك إكمالها تبدو اللحظة كأن النظام قرأ ما في ذهنك لكنه في الواقع ينف",
+          "start": 0.034548,
+          "end": 0.173047
+        },
+        {
+          "id": "b0002",
+          "type": "paragraph",
+          "match": "سنستخدم الإكمال التلقائي في google مثالا لأن الشركة تشرح بعض عوامله علنا قد تستخدم الخدمات الأخرى آليات مختلفة لذلك لا ي",
+          "start": 0.173047,
+          "end": 0.278657
+        },
+        {
+          "id": "b0003",
+          "type": "h2",
+          "match": "التوقع ليس قراءة للأفكار",
+          "start": 0.278657,
+          "end": 0.293242
+        },
+        {
+          "id": "b0004",
+          "type": "paragraph",
+          "match": "لو بدأ شخص جملة أفضل طريقة لتعلم فقد تتوقع كلمات مثل اللغة أو البرمجة أنت لم تعرف قصده يقينا بل رتبت احتمالات مألوفة",
+          "start": 0.293242,
+          "end": 0.384789
+        },
+        {
+          "id": "b0005",
+          "type": "paragraph",
+          "match": "يفعل النظام شيئا شبيها على نطاق أوسع يبدأ بما كتبه المستخدم ثم يبحث عن تكملات مرتبطة ظهرت في طلبات بحث حقيقية ويرتب ما ي",
+          "start": 0.384789,
+          "end": 0.49614
+        },
+        {
+          "id": "b0006",
+          "type": "h2",
+          "match": "من أين تأتي الاقتراحات",
+          "start": 0.49614,
+          "end": 0.513828
+        },
+        {
+          "id": "b0007",
+          "type": "paragraph",
+          "match": "وفق شرح google الرسمي تبدأ الأنظمة بالنظر في الاستعلامات الشائعة والرائجة التي تتوافق مع الحروف المدخلة وتدخل عوامل إضاف",
+          "start": 0.513828,
+          "end": 0.601991
+        },
+        {
+          "id": "b0008",
+          "type": "list-item",
+          "match": "لغة الباحث",
+          "start": 0.601991,
+          "end": 0.612454
+        },
+        {
+          "id": "b0009",
+          "type": "list-item",
+          "match": "الموقع التقريبي لأن الكلمات والأماكن تختلف بين المناطق",
+          "start": 0.612454,
+          "end": 0.647123
+        },
+        {
+          "id": "b0010",
+          "type": "list-item",
+          "match": "حداثة الاهتمام بموضوع ما",
+          "start": 0.647123,
+          "end": 0.665079
+        },
+        {
+          "id": "b0011",
+          "type": "list-item",
+          "match": "الكلمات التي سبقت الجزء الحالي في العبارة الطويلة",
+          "start": 0.665079,
+          "end": 0.69762
+        },
+        {
+          "id": "b0012",
+          "type": "paragraph",
+          "match": "لهذا قد يرى شخصان اقتراحات مختلفة أو تتبدل القائمة نفسها بعد حدث رياضي أو خبر بارز",
+          "start": 0.69762,
+          "end": 0.758513
+        },
+        {
+          "id": "b0013",
+          "type": "h2",
+          "match": "لماذا تتغير القائمة مع كل حرف",
+          "start": 0.758513,
+          "end": 0.782758
+        },
+        {
+          "id": "b0014",
+          "type": "paragraph",
+          "match": "كل حرف جديد يضيق مجموعة الاحتمالات عبارة تبدأ بـ سفر تسمح بوجهات وأسئلة كثيرة لكن إضافة اسم مدينة أو شهر تستبعد جزءا كبي",
+          "start": 0.782758,
+          "end": 0.905656
+        },
+        {
+          "id": "b0015",
+          "type": "paragraph",
+          "match": "لا يعني ظهور اقتراح أنه الأكثر بحثا دائما فقد تعطي الأنظمة وزنا للحداثة أو للموقع أو للسياق اللغوي",
+          "start": 0.905656,
+          "end": 0.974711
+        },
+        {
+          "id": "b0016",
+          "type": "h2",
+          "match": "الاقتراح ليس نتيجة بحث ولا حكما بالحقيقة",
+          "start": 0.974711,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0001",
+        "b0002",
+        "b0003",
+        "b0004",
+        "b0005",
+        "b0006",
+        "b0007",
+        "b0008",
+        "b0009",
+        "b0010",
+        "b0011",
+        "b0012",
+        "b0013",
+        "b0014",
+        "b0015",
+        "b0016"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/4d194dd1e6a739a8/part-001-cc20fb62e368.clean.mp3",
+          "bytes": 1704717,
+          "durationSeconds": 142.056,
+          "sha256": "b3c3abbbb71093b26d027681c463c43c14115e166471abfc314f062dc35d6d35"
+        }
+      }
+    },
+    {
+      "characters": 1523,
+      "sync": [
+        {
+          "id": "b0017",
+          "type": "paragraph",
+          "match": "هذه نقطة مهمة الإكمال التلقائي يساعد على صياغة الطلب بينما نتائج البحث تحاول الإجابة عنه ظهور عبارة في القائمة لا يثبت أ",
+          "start": 0,
+          "end": 0.113418
+        },
+        {
+          "id": "b0018",
+          "type": "paragraph",
+          "match": "توضح google أنها تستخدم سياسات وأنظمة لمنع توقعات قد تكون عنيفة أو جنسية صريحة أو مسيئة أو خطرة وقد تمنع توقعا إذا كان م",
+          "start": 0.113418,
+          "end": 0.264498
+        },
+        {
+          "id": "b0019",
+          "type": "h2",
+          "match": "هل تعتمد التوقعات على بياناتي الشخصية",
+          "start": 0.264498,
+          "end": 0.290038
+        },
+        {
+          "id": "b0020",
+          "type": "paragraph",
+          "match": "لا يمكن الإجابة عن هذا السؤال لكل خدمة بإجابة واحدة قد تختلف التجربة بحسب إعدادات الحساب والمنتج والمنطقة وتتغير السياسا",
+          "start": 0.290038,
+          "end": 0.463647
+        },
+        {
+          "id": "b0021",
+          "type": "paragraph",
+          "match": "لذلك من الأدق مراجعة إعدادات الخصوصية ووثائق الخدمة نفسها بدل افتراض أن كل اقتراح شخصي أو أن أي تشابه دليل على التجسس",
+          "start": 0.463647,
+          "end": 0.546814
+        },
+        {
+          "id": "b0022",
+          "type": "h2",
+          "match": "ماذا يحدث بين الحرف والاقتراح",
+          "start": 0.546814,
+          "end": 0.56844
+        },
+        {
+          "id": "b0023",
+          "type": "paragraph",
+          "match": "يمكن تخيل العملية في ثلاث مراحل مبسطة أولا يصل إلى النظام بادئة البحث التي كتبتها ثم يستدعي مجموعة من العبارات المرشحة و",
+          "start": 0.56844,
+          "end": 0.717535
+        },
+        {
+          "id": "b0024",
+          "type": "paragraph",
+          "match": "في علوم الحاسوب توجد هياكل بيانات مثل trie تساعد على البحث السريع في الكلمات التي تشترك في بداية واحدة لكن هذا لا يعني أ",
+          "start": 0.717535,
+          "end": 0.97392
+        },
+        {
+          "id": "b0025",
+          "type": "h2",
+          "match": "لماذا يبدو الاقتراح أحيانا شخصيا جدا",
+          "start": 0.97392,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0017",
+        "b0018",
+        "b0019",
+        "b0020",
+        "b0021",
+        "b0022",
+        "b0023",
+        "b0024",
+        "b0025"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/4d194dd1e6a739a8/part-002-4c97feaec94b.clean.mp3",
+          "bytes": 1716237,
+          "durationSeconds": 143.016,
+          "sha256": "006e4b12fe5e8a792668356cf49aeb2c70747cb4a030eee15a149dc90be704a2"
+        }
+      }
+    },
+    {
+      "characters": 1560,
+      "sync": [
+        {
+          "id": "b0026",
+          "type": "paragraph",
+          "match": "هناك أسباب تجعل المصادفة تبدو أكثر إثارة مما هي عليه كثير من الناس يكتبون عبارات متشابهة والسياق مثل اللغة والمنطقة والح",
+          "start": 0,
+          "end": 0.13093
+        },
+        {
+          "id": "b0027",
+          "type": "paragraph",
+          "match": "لهذا لا يكفي ظهور عبارة دقيقة لتستنتج أن النظام سمعك أو قرأ ملفا خاصا إذا أردت معرفة أثر حسابك أو نشاطك فالطريق الصحيح ه",
+          "start": 0.13093,
+          "end": 0.255663
+        },
+        {
+          "id": "b0028",
+          "type": "h2",
+          "match": "اقتراح شائع لا يعني رأيا عاما",
+          "start": 0.255663,
+          "end": 0.275769
+        },
+        {
+          "id": "b0029",
+          "type": "paragraph",
+          "match": "عندما يعرض النظام جملة بعد اسم شخص أو بلد أو قضية يمكن أن تبدو كأنها تلخيص لما يفكر فيه الناس لكنها ناتج ترتيب تحكمه بيا",
+          "start": 0.275769,
+          "end": 0.494045
+        },
+        {
+          "id": "b0030",
+          "type": "h2",
+          "match": "تجربة صغيرة تكشف الفكرة",
+          "start": 0.494045,
+          "end": 0.507788
+        },
+        {
+          "id": "b0031",
+          "type": "paragraph",
+          "match": "اكتب بادئة عامة في أوقات مختلفة أو غير اللغة أو المنطقة عندما تسمح الإعدادات بذلك وراقب كيف تتبدل القائمة ثم أضف كلمة مح",
+          "start": 0.507788,
+          "end": 0.650998
+        },
+        {
+          "id": "b0032",
+          "type": "paragraph",
+          "match": "هذه التجربة تعيد الإكمال التلقائي إلى حجمه الحقيقي تنبؤ سريع ومفيد لكنه مشروط بما يعرفه النظام عن العبارة والسياق وليس ي",
+          "start": 0.650998,
+          "end": 0.74337
+        },
+        {
+          "id": "b0033",
+          "type": "h2",
+          "match": "الخلاصة",
+          "start": 0.74337,
+          "end": 0.74706
+        },
+        {
+          "id": "b0034",
+          "type": "paragraph",
+          "match": "لا يعرف محرك البحث ما ستكتبه يقينا هو يختار من تكملات محتملة بناء على أنماط وسياق ثم يحدث الترتيب مع كل حرف وكلما كانت ا",
+          "start": 0.74706,
+          "end": 0.873091
+        },
+        {
+          "id": "b0035",
+          "type": "paragraph",
+          "match": "الفارق الصغير في الكلمات مهم إنها توقعات وليست أفكارا مقروءة واقتراحات وليست حقائق",
+          "start": 0.873091,
+          "end": 0.924501
+        },
+        {
+          "id": "b0036",
+          "type": "paragraph",
+          "match": "وإذا أثار فضولك ما يحدث للأجسام التي تتحرك بسرعات عالية فانتقل إلى شرح لماذا لا تسقط الأقمار الصناعية من السماء",
+          "start": 0.924501,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0026",
+        "b0027",
+        "b0028",
+        "b0029",
+        "b0030",
+        "b0031",
+        "b0032",
+        "b0033",
+        "b0034",
+        "b0035",
+        "b0036"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/4d194dd1e6a739a8/part-003-bf85bfb61e31.clean.mp3",
+          "bytes": 1541997,
+          "durationSeconds": 128.496,
+          "sha256": "08c876f562a1cfc7679e7ba0913fa9620fe56b0a135e1998d778f05425a53c24"
+        }
+      }
+    }
+  ],
+  "schema": "bareeq.audio-production-manifest.v3",
+  "candidateFingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+  "voice": "Sadaltager",
+  "toolVersion": 9,
+  "status": "published",
+  "generatedAt": "2026-10-07T05:45:49.359Z",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "ttsVoice": "Sadaltager",
+  "publishedAt": "2026-10-07T05:45:49.359Z",
+  "publishedFromCandidate": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+  "verificationMethod": "human-evidence-offline-v1",
+  "humanAdjudicationSha256": "3fd903a69f259806c44936b433f3485cae2d46791ab1e2c897ce4b418a6dc0d7"
+}
