@@ -15,7 +15,7 @@
     "fallback": 6,
     "activePending": 5,
     "excluded": 1,
-    "successfulTtsSinceLastNewExact": 32,
+    "successfulTtsSinceLastNewExact": 33,
     "threshold": 33
   },
   "excludedArticles": [
@@ -96,7 +96,7 @@
     "boundedTranche": {
       "decisionId": "COMPLETION15-TRANCHE33-v1",
       "successfulRequestsAuthorized": 3,
-      "successfulRequestsConsumed": 2,
+      "successfulRequestsConsumed": 3,
       "maximumStrategyThreshold": 33,
       "executionStatus": "EXECUTING"
     }

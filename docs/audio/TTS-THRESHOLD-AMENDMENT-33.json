@@ -1,7 +1,7 @@
 {
   "schema": "bareeq.audio-tts-threshold-amendment.v1",
   "decisionId": "COMPLETION15-TRANCHE33-v1",
-  "authorizationStatus": "IN_PROGRESS",
+  "authorizationStatus": "CONSUMED",
   "executionStatus": "EXECUTING",
   "authorizedBy": "project-owner",
   "authorizedAt": "2026-10-07T15:05:49+03:00",
@@ -10,7 +10,7 @@
   "newThreshold": 33,
   "successfulRequestBaseline": 30,
   "additionalSuccessfulRequestsAuthorized": 3,
-  "successfulRequestsConsumed": 2,
+  "successfulRequestsConsumed": 3,
   "automaticExpansion": false,
   "automaticProviderDispatch": false,
   "qualityPolicyUnchanged": true,
@@ -159,11 +159,12 @@
         }
       ],
       "expectedSegmentText": "السبب ليس أن الأجسام تميل طبيعيًا إلى التوقف، بل لأن هناك قوى تعيق حركتها، مثل:",
-      "successfulTtsConsumed": 0,
+      "successfulTtsConsumed": 1,
       "dispatchAttempt": {
         "runId": "37622809292",
         "attemptNumber": 1,
-        "status": "RESERVED"
+        "status": "SUCCESSFUL_RESPONSE",
+        "responseAt": "2026-10-07T12:43:08.721Z"
       }
     }
   ],
