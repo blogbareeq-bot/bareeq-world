@@ -40,7 +40,13 @@ export function isTransientAsrFailure(error) {
 
 export function isFallbackEligibleAsrFailure(error) {
   const status = Number(error?.httpStatus || error?.result?.httpStatus || 0);
-  return FALLBACK_HTTP.has(status) || error?.exitCode === EXIT_QUOTA;
+  const report=error?.result;
+  let backendMessage=null;
+  try{backendMessage=JSON.parse(report?.rawTranscript||'').error?.message;}catch{}
+  const unsupportedThinkingBackend=status===400
+    && (report?.requestedModel||report?.model)==='gemini-3.5-transcribe'
+    && backendMessage==='Thinking is not enabled for this model';
+  return FALLBACK_HTTP.has(status) || error?.exitCode === EXIT_QUOTA || unsupportedThinkingBackend;
 }
 
 function supportedIndependentModel(model) {
