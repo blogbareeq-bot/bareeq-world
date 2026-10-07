@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { tranche33OverrideAuthorized } from './audio-tranche33-authorization.mjs';
 
 export const FREEZE_PATH = path.join(process.cwd(), 'docs', 'audio', 'TTS-FREEZE.json');
 export const GATE5_AUTH_PATH = path.join(process.cwd(), 'docs', 'audio', 'GATE-5-AUTHORIZATION.json');
@@ -39,9 +40,14 @@ export async function ttsIsFrozen(file = FREEZE_PATH) {
   return state.active === true;
 }
 
-export async function assertTtsUnfrozen({ file = FREEZE_PATH, operation = 'tts-synthesis' } = {}) {
+export async function assertTtsUnfrozen({ file = FREEZE_PATH, operation = 'tts-synthesis', tranche33Context, text } = {}) {
   const state = await readTtsFreeze(file);
   if (state.active === true) {
+    const tranche = await tranche33OverrideAuthorized({operation, context:tranche33Context, text});
+    if(tranche){
+      console.error(`BAREEQ_TRANCHE33_OVERRIDE=AUTHORIZED decision=${tranche.decisionId} target=${tranche.targetArticleId} maxHttpAttempts=1`);
+      return {...state,tranche33Authorization:tranche};
+    }
     const override = await gate5OverrideAuthorized({ operation });
     if (override) {
       console.error(`BAREEQ_TTS_GATE5_OVERRIDE=AUTHORIZED decision=${override.decisionId} target=${override.targetArticleId} successfulRequests=1`);

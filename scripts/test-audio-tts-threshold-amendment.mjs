@@ -13,12 +13,12 @@ for(const edit of [
  x=>x.amendment.automaticProviderDispatch=true,
  x=>x.freeze.active=false,
  x=>x.strategy.threshold=34,
- x=>x.strategy.successfulTtsSinceLastNewExact=31,
+ x=>x.strategy.successfulTtsSinceLastNewExact+=1,
  x=>x.amendment.targets[0].successfulTtsMaximum=2,
- x=>x.amendment.targets[0].baselineFullSha256='0'.repeat(64),
+ x=>x.amendment.targets[0].fingerprint='0'.repeat(64),
  x=>x.amendment.protectedExact[0].fullSha256='0'.repeat(64),
  x=>x.amendment.authorizedBy='automation',
- x=>x.amendment.authorizationStatus='CONSUMED',
+ x=>{x.amendment.authorizationStatus='CONSUMED';x.amendment.successfulRequestsConsumed=0;for(const t of x.amendment.targets)t.successfulTtsConsumed=0;x.strategy.successfulTtsSinceLastNewExact=30;x.freeze.strategySnapshot.successfulTtsSinceLastNewExact=30;},
 ]){const bad=structuredClone(f);edit(bad);assert.throws(()=>validateThresholdAmendment(bad));}
 const closed=structuredClone(f);closed.amendment.authorizationStatus='CONSUMED';closed.amendment.successfulRequestsConsumed=3;for(const t of closed.amendment.targets)t.successfulTtsConsumed=1;closed.strategy.successfulTtsSinceLastNewExact=33;closed.freeze.strategySnapshot.successfulTtsSinceLastNewExact=33;
 assert.equal(validateThresholdAmendment(closed).remaining,0);

@@ -1,0 +1,117 @@
+name: Bareeq owner authorized tranche33 execution
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-tranche33-*.mjs'
+      - 'scripts/audio-tranche33-splice.py'
+      - 'scripts/test-audio-tranche33-authorization.mjs'
+      - 'scripts/audio-gemini-tts.mjs'
+      - 'scripts/audio-tts-freeze-guard.mjs'
+      - 'docs/audio/TRANCHE33-PREFLIGHT.json'
+      - '.github/workflows/audio-tranche33-execute.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-tranche33-execute.yml'
+      - 'scripts/audio-tranche33-execute.mjs'
+permissions:
+  actions: read
+  contents: write
+concurrency:
+  group: bareeq-owner-tranche33
+  cancel-in-progress: false
+jobs:
+  offline:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Verify scope, immutable voice, frozen general dispatch and accounting
+        run: |
+          node --check scripts/audio-tranche33-execute.mjs
+          node --check scripts/audio-tranche33-validate.mjs
+          node scripts/test-audio-tranche33-authorization.mjs
+          node scripts/test-audio-tts-freeze-guard.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
+          node scripts/test-audio-tts-threshold-amendment.mjs
+          node scripts/audio-tts-threshold-amendment.mjs
+          node scripts/audio-gate4-governance.mjs
+          node scripts/audio-state-consistency.mjs
+          python -m py_compile scripts/audio-tranche33-splice.py
+  execute:
+    if: github.event_name == 'push' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - name: Install local audio tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install faster-whisper==1.2.0 numpy
+      - name: Verify authorization before any provider access
+        run: |
+          node scripts/audio-tts-threshold-amendment.mjs
+          node scripts/test-audio-tranche33-authorization.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: retained-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-passports-retained-splice-37605942739
+          path: passports-splice
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37605942739'
+      - name: Claim once and generate at most one micro clip per authorized target
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche33-execute.mjs
+      - name: Check generated clips and preserve audio outside verified cuts
+        run: python scripts/audio-tranche33-splice.py
+      - name: Fresh full-file production QA and dual ASR for accepted candidates
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche33-validate.mjs
+      - name: Verify published audio remains immutable
+        if: always()
+        run: git diff --exit-code -- public/audio
+      - name: Retain all candidates, provider receipts and accounting for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-tranche33-execution-${{ github.run_id }}
+          path: |
+            tranche33-execution/
+            audio-candidates/
+            docs/audio/TTS-THRESHOLD-AMENDMENT-33.json
+            docs/audio/TRANCHE33-PREFLIGHT.json
+            docs/audio/ENGINE-STRATEGY-STATE.json
+            docs/audio/TTS-FREEZE.json
+          retention-days: 90
+          if-no-files-found: warn
