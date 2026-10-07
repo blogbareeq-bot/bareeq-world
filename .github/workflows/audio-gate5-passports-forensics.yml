@@ -84,6 +84,10 @@ jobs:
           if(!['ASR_INSTABILITY','TTS_REGRESSION','SPLICE_REGRESSION','MIXED_CAUSE','TTS_OR_ASR_AMBIGUITY','NO_REGRESSION_PROVEN'].includes(r.forensicClassification)) throw new Error('invalid forensic classification');
           console.log(`GATE5_FORENSICS_CONTRACT=PASS classification=${r.forensicClassification} targetFixed=${r.target.fixedByBothRawModels} publish=false ttsAuthorized=false`);
           NODE
+          test -f gate5-forensics-output/human-review/review.html
+          test -f gate5-forensics-output/human-review/H01.mp3
+          test -f gate5-forensics-output/human-review/H02.mp3
+          echo 'GATE5_FORENSICS_HUMAN_REVIEW=PASS cases=2 providerCalls=0'
 
       - name: Prove repository audio unchanged
         run: git diff --exit-code -- public/audio
