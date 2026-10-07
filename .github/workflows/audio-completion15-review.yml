@@ -1,0 +1,51 @@
+name: Bareeq remaining15 zero TTS review
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-completion15-prepare-review.mjs'
+      - 'scripts/audio-completion15-review.py'
+      - '.github/workflows/audio-completion15-review.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local audio review tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install faster-whisper==1.2.0 requests numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: retained-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+      - name: Verify source and approved transcript identities
+        run: node scripts/audio-completion15-prepare-review.mjs retained-evidence remaining15-review
+      - name: Build localized source-bound review clips without provider access
+        run: python scripts/audio-completion15-review.py
+      - name: Prove no publication or TTS accounting change
+        run: git diff --exit-code -- public/audio docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json docs/audio/TTS-THRESHOLD-AMENDMENT-33.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-remaining15-review-${{ github.run_id }}
+          path: |
+            remaining15-review/*.json
+            remaining15-review/*.mp3
+            remaining15-review/*.html
+          retention-days: 90
+          if-no-files-found: error
