@@ -44,6 +44,9 @@ assert.equal(isFallbackEligibleAsrFailure({ httpStatus: 429 }), true);
 assert.equal(isFallbackEligibleAsrFailure({ httpStatus: 503 }), true);
 assert.equal(isFallbackEligibleAsrFailure({ httpStatus: 404 }), true);
 assert.equal(isFallbackEligibleAsrFailure({ httpStatus: 400 }), false);
+const backendFailure={httpStatus:400,result:{requestedModel:'gemini-3.5-transcribe',rawTranscript:JSON.stringify({error:{message:'Thinking is not enabled for this model'}})}};
+assert.equal(isFallbackEligibleAsrFailure(backendFailure),true);
+for(const edit of [x=>x.httpStatus=401,x=>x.result.requestedModel='gemini-3.5-flash',x=>x.result.rawTranscript=JSON.stringify({error:{message:'Invalid request parameter'}}),x=>x.result.rawTranscript='not JSON']){const bad=structuredClone(backendFailure);edit(bad);assert.equal(isFallbackEligibleAsrFailure(bad),false);}
 assert.equal(isFallbackEligibleAsrFailure({ exitCode: 75 }), true);
 
 console.log('ASR quota fallback tests passed: primary models remain preferred, only supported independent models are eligible, and the exact dual-model gate stays distinct.');

@@ -1,0 +1,76 @@
+name: Bareeq tranche33 independent ASR resume
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-tranche33-resume-asr.yml'
+      - 'scripts/audio-tranche33-resume-asr.mjs'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  resume-asr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Verify bounded model fallback and frozen synthesis
+        run: |
+          node scripts/test-audio-asr-fallback.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
+          node scripts/audio-tts-threshold-amendment.mjs
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-qa-recovery-37623352579
+          path: qa-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37623352579'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-review-37623352579
+          path: source-review
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37623352579'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-passports-retained-splice-37605942739
+          path: passports-splice
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37605942739'
+      - name: Resume the missing independent ASR only and diagnose micro disputes
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche33-resume-asr.mjs
+      - name: Update bound review package
+        run: |
+          node scripts/audio-tranche33-review-pack.mjs
+          cp tranche33-execution/micro-independent-review.json tranche33-review/
+      - name: Prove publication and TTS accounting remain unchanged
+        if: always()
+        run: git diff --exit-code -- public/audio docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json docs/audio/TTS-THRESHOLD-AMENDMENT-33.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-tranche33-reviewed-asr-${{ github.run_id }}
+          path: tranche33-review/
+          retention-days: 90
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-tranche33-asr-resume-${{ github.run_id }}
+          path: |
+            tranche33-execution/
+            audio-candidates/
+          retention-days: 90
+          if-no-files-found: warn
