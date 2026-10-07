@@ -442,7 +442,7 @@ async function cli(){
   await mkdir(out,{recursive:true});
   await writeFile(path.join(out,'GATE-5-PASSPORTS-POSTMORTEM.json'),JSON.stringify(result,null,2)+'\n');
   await writeFile(path.join(out,'GATE-5-PASSPORTS-POSTMORTEM.md'),markdown(result));
-  console.log(`GATE5_FORENSICS=PASS classification=${result.forensicClassification} targetFixed=${result.target.fixedByBothRawModels} newIssues=${result.trial.newIssues.length} newOutsidePart4=${result.trial.newIssuesOutsideRegeneratedPart.length} newInsideTarget=${result.trial.newIssuesInsideTargetSegment.length} spliceArtifact=${result.repairSurface.spliceBoundaries.artifactDetected} tts=0 provider=0`);
+  console.log(`GATE5_FORENSICS=PASS classification=${result.forensicClassification} targetFixed=${result.target.fixedByBothRawModels} newIssues=${result.trial.newIssues.length} newOutsidePart4=${result.trial.newIssuesOutsideRegeneratedPart.length} newInsideTarget=${result.trial.newIssuesInsideTargetSegment.length} repairMode=${result.repairSurface.repairMode} spliceApplicable=${result.causeEvidence.spliceRegression.applicable} tts=0 provider=0`);
 }
 const isCli=process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url);
 if(isCli) await cli();
