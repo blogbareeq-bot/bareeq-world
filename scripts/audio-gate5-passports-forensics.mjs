@@ -5,6 +5,7 @@ import { tokenizeVerbal } from './audio-exact-match.mjs';
 import { sha256, QUOTA_SPLIT } from './audio-constants.mjs';
 import { loadSpokenArticle, splitSpokenArticle, activeSplitSettings } from './audio-split.mjs';
 import { decodePcm, spliceWindowMetrics } from './audio-merge.mjs';
+import { resolveFfmpeg, runCommand } from './audio-ffmpeg.mjs';
 
 const RUN_ID='37581607040';
 const ARTICLE='why-some-passports-are-stronger';
@@ -457,6 +458,55 @@ ${r.conclusion.explanation}
 `;
 }
 
+
+async function exportHumanForensicReview({trial,trialManifest,out}){
+  const part=trialManifest.parts?.[3];
+  const sync=part?.sync||[];
+  const record={
+    H01:{segmentId:'b0030',question:'هل تسمع كلمة «لا» في بداية/موضع العبارة المستهدفة؟',choices:['نعم، لا موجودة','لا، كلمة لا مفقودة','غير واضح']},
+    H02:{segmentId:'b0031',question:'في الكلمة المستهدفة، ماذا تسمع؟',choices:['الدول','دول','غير واضح']},
+  };
+  const trialCheckpoint=await json(path.join(trial,'checkpoint.json'));
+  const partRecord=trialCheckpoint.completedParts?.['3'];
+  if(!partRecord?.file) throw new Error('trial part 4 file missing for human forensic review');
+  const input=path.join(trial,'parts',partRecord.file);
+  const tools=await resolveFfmpeg();
+  const reviewDir=path.join(out,'human-review');
+  await mkdir(reviewDir,{recursive:true});
+  const cases=[];
+  for(const [caseId,spec] of Object.entries(record)){
+    const s=sync.find(x=>x.id===spec.segmentId);
+    if(!s || !Number.isFinite(Number(s.start)) || !Number.isFinite(Number(s.end))) throw new Error(`sync missing for ${spec.segmentId}`);
+    const start=Math.max(0,Number(s.start)-0.55);
+    const duration=Math.max(1.2,Number(s.end)-Number(s.start)+1.10);
+    const file=`${caseId}.mp3`;
+    const cmd=await runCommand(tools.ffmpeg,[
+      '-hide_banner','-loglevel','error','-y',
+      '-ss',start.toFixed(3),'-i',input,'-t',duration.toFixed(3),
+      '-vn','-ac','1','-ar','24000','-codec:a','libmp3lame','-q:a','3',
+      path.join(reviewDir,file),
+    ],{timeoutMs:120000});
+    if(cmd.code!==0) throw new Error(`ffmpeg human-review clip failed ${caseId}: ${cmd.stderr.slice(0,500)}`);
+    cases.push({caseId,...spec,clipFile:file,startSeconds:start,durationSeconds:duration});
+  }
+  const review={
+    schema:'bareeq.audio-gate5-passports-human-forensics.v1',
+    sourceRunId:RUN_ID,
+    articleId:ARTICLE,
+    fingerprint:FP,
+    instructions:'استمع إلى كل مقطع واحكم فقط على الكلمة المحددة في السؤال. لا تعتمد على نتيجة ASR.',
+    cases,
+  };
+  await writeFile(path.join(reviewDir,'manifest.json'),JSON.stringify(review,null,2)+'\n');
+  const html=`<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>بريق — مراجعة Forensics</title>
+<style>body{font-family:system-ui,Tahoma,sans-serif;max-width:760px;margin:auto;padding:24px;background:#f6f7f8}.case{background:white;border:1px solid #ddd;border-radius:14px;padding:18px;margin:16px 0}audio{width:100%;margin:10px 0}.choices label{display:block;padding:9px;margin:7px 0;background:#f4f4f4;border-radius:8px}button{font:inherit;padding:10px 16px;border-radius:8px;border:1px solid #aaa}</style>
+<h1>مراجعة Forensics — جوازات السفر</h1><p>هذه المقاطع من المرشح المرفوض المحفوظ، وليست توليدًا جديدًا. ركز فقط على الكلمة المطلوبة.</p><div id="root"></div><button id="export">تصدير النتيجة JSON</button>
+<script>const cases=${JSON.stringify(cases)};const a={};const root=document.getElementById('root');for(const c of cases){const d=document.createElement('section');d.className='case';d.innerHTML=\`<h2>\${c.caseId}</h2><p><strong>\${c.question}</strong></p><audio controls src="\${c.clipFile}"></audio><div class="choices">\${c.choices.map(v=>\`<label><input type="radio" name="\${c.caseId}" value="\${v}"> \${v}</label>\`).join('')}</div>\`;d.querySelectorAll('input').forEach(i=>i.onchange=()=>a[c.caseId]=i.value);root.appendChild(d)}document.getElementById('export').onclick=()=>{const p={schema:'bareeq.audio-gate5-passports-human-forensics-results.v1',sourceRunId:'${RUN_ID}',results:cases.map(c=>({caseId:c.caseId,answer:a[c.caseId]||null}))};const b=new Blob([JSON.stringify(p,null,2)],{type:'application/json'});const x=document.createElement('a');x.href=URL.createObjectURL(b);x.download='bareeq-passports-forensics-review-results.json';x.click();URL.revokeObjectURL(x.href)}</script></html>`;
+  await writeFile(path.join(reviewDir,'review.html'),html);
+  await writeFile(path.join(reviewDir,'README.txt'),'افتح review.html، استمع إلى H01 وH02، اختر ما تسمعه، ثم صدّر JSON. لا يوجد أي اتصال خارجي أو توليد جديد.\n');
+  return review;
+}
+
 async function cli(){
   const root=path.resolve(arg('root','gate5-artifact'));
   const out=path.resolve(arg('out','gate5-forensics-output'));
@@ -464,7 +514,12 @@ async function cli(){
   await mkdir(out,{recursive:true});
   await writeFile(path.join(out,'GATE-5-PASSPORTS-POSTMORTEM.json'),JSON.stringify(result,null,2)+'\n');
   await writeFile(path.join(out,'GATE-5-PASSPORTS-POSTMORTEM.md'),markdown(result));
-  console.log(`GATE5_FORENSICS=PASS classification=${result.forensicClassification} targetFixed=${result.target.fixedByBothRawModels} newIssues=${result.trial.newIssues.length} newOutsidePart4=${result.trial.newIssuesOutsideRegeneratedPart.length} newInsideTarget=${result.trial.newIssuesInsideTargetSegment.length} repairMode=${result.repairSurface.repairMode} spliceApplicable=${result.causeEvidence.spliceRegression.applicable} tts=0 provider=0`);
+  const suffix=`audio-candidates/_diagnostics/${RUN_ID}/${ARTICLE}/${FP}/metadata.json`;
+  const metadataPath=await findFile(root,suffix);
+  const trial=path.join(path.dirname(metadataPath),'trial');
+  const trialManifest=await json(path.join(trial,'manifest.candidate.json'));
+  await exportHumanForensicReview({trial,trialManifest,out});
+  console.log(`GATE5_FORENSICS=PASS classification=${result.forensicClassification} targetFixed=${result.target.fixedByBothRawModels} newIssues=${result.trial.newIssues.length} newOutsidePart4=${result.trial.newIssuesOutsideRegeneratedPart.length} newInsideTarget=${result.trial.newIssuesInsideTargetSegment.length} repairMode=${result.repairSurface.repairMode} spliceApplicable=${result.causeEvidence.spliceRegression.applicable} humanReview=2 tts=0 provider=0`);
 }
 const isCli=process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url);
 if(isCli) await cli();
