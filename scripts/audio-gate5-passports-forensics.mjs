@@ -382,8 +382,10 @@ This is strong dual-ASR evidence that the targeted repair itself succeeded. It i
 
 - Changed generated parts: **${r.repairSurface.changedParts.map(x=>x.partNumber).join(', ')}**
 - Byte-identical unchanged parts: **${r.repairSurface.unchangedParts.map(x=>x.partNumber).join(', ')}**
-- Target splice: **${r.repairSurface.splice.startSeconds.toFixed(3)}s → ${r.repairSurface.splice.endSeconds.toFixed(3)}s**
-- Replacement duration: **${r.repairSurface.splice.replacementSeconds.toFixed(3)}s**
+${r.repairSurface.repairMode==='SEGMENT_SPLICE'
+  ? `- Target splice: **${r.repairSurface.waveform.splice.startSeconds.toFixed(3)}s → ${r.repairSurface.waveform.splice.endSeconds.toFixed(3)}s**
+- Replacement duration: **${r.repairSurface.waveform.splice.replacementSeconds.toFixed(3)}s**`
+  : '- Target operation: **whole part 4 regeneration** (segment splice was skipped because safe boundaries were unavailable)'}
 - Part 6 / T02 audio byte-identical: **${r.carriedHumanEvidence.audioBytesUnchanged}**
 
 ## 3. Audio-change geometry
