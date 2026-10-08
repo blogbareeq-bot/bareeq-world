@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Re-review morning M9; four morning repair regions and other-article candidate conflicts remain. Synthesis stays frozen at consumed 33/33.",
+    "nextAction": "Morning review closed. Prepared seven-target proposal awaits owner threshold decision; no synthesis or authorization change at consumed 33/33.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -104,13 +104,13 @@
     "morningHumanReview": {
       "record": "docs/audio/MORNING-HUMAN-REVIEW-20261008.json",
       "reviewedCases": 15,
-      "expectedPronunciationConfirmed": 9,
+      "expectedPronunciationConfirmed": 10,
       "actualAudioErrors": 5,
-      "inconclusiveCaseIds": [
-        "M9"
-      ],
+      "inconclusiveCaseIds": [],
       "repairRegions": 4,
-      "ttsAuthorized": false
-    }
+      "ttsAuthorized": false,
+      "status": "COMPLETE"
+    },
+    "pendingRepairProposal": "docs/audio/TARGETED-REPAIR-PROPOSAL-40.json"
   }
 }

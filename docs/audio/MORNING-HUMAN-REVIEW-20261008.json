@@ -1,6 +1,6 @@
 {
   "schema": "bareeq.audio-morning-human-review.v1",
-  "generatedAt": "2026-10-08T11:50:49.025921+00:00",
+  "generatedAt": "2026-10-08T12:02:45.141154+00:00",
   "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
   "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
   "fullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
@@ -12,16 +12,18 @@
     {
       "path": "docs/audio/BOUND-REVIEW-REMAINING.json",
       "sha256": "344c80c0c59b856b88817748cbc9b974a405c95dedbd90cc4264e4c8b511a968"
+    },
+    {
+      "path": "docs/audio/BOUND-REVIEW-M9.json",
+      "sha256": "77d835d99d215996f92123339c7e17e8f5ed91cd9ea601091ec603d761211ab5"
     }
   ],
   "reviewCases": 15,
   "reviewedCases": 15,
   "unreviewedCases": [],
-  "expectedPronunciationConfirmed": 9,
+  "expectedPronunciationConfirmed": 10,
   "actualAudioErrorCases": 5,
-  "inconclusiveCases": [
-    "M9"
-  ],
+  "inconclusiveCases": [],
   "expectedCases": [
     "M1",
     "M2",
@@ -29,6 +31,7 @@
     "M5",
     "M6",
     "M7",
+    "M9",
     "M10",
     "M12",
     "M15"
@@ -337,17 +340,22 @@
       "clipSource": "retained baseline part",
       "validatorVersion": "audio-completion15-review-v1",
       "humanReviewPerformed": true,
-      "decision": "INCONCLUSIVE",
-      "rationale": "غير محسوم",
+      "decision": "EXPECTED_PRONUNCIATION_CONFIRMED",
+      "rationale": "إحكام",
       "reviewer": "صاحب المشروع",
-      "decisionDate": "2026-10-08T11:44:59.762Z",
+      "decisionDate": "2026-10-08T11:56:26.720Z",
       "expectedIndices": [
         1967
       ],
       "expectedText": "المقال الواحد قد يجمع واقعة شخصية وسيرة كاتب وإشارة دينية ومثلًا شعبيًا. هذا الثراء يجعل الكتاب قابلًا للقراءة المتقطعة، لكنه يخلق أحيانًا استطرادًا وتفاوتًا في إحكام المقالات. بعض النصوص تظل في الذاكرة كمشهد كامل، وبعضها يبدو كخزان من الحكايات والأقوال أكثر من كونه بناءً واحدًا.",
       "segmentId": "b0068",
       "bindingVerified": true,
-      "submissionSha256": "344c80c0c59b856b88817748cbc9b974a405c95dedbd90cc4264e4c8b511a968"
+      "submissionSha256": "77d835d99d215996f92123339c7e17e8f5ed91cd9ea601091ec603d761211ab5",
+      "supersedes": {
+        "decision": "INCONCLUSIVE",
+        "submissionSha256": "344c80c0c59b856b88817748cbc9b974a405c95dedbd90cc4264e4c8b511a968",
+        "sourceRound": "docs/audio/BOUND-REVIEW-REMAINING.json"
+      }
     },
     {
       "caseId": "M10",
@@ -508,5 +516,6 @@
       "bindingVerified": true,
       "submissionSha256": "344c80c0c59b856b88817748cbc9b974a405c95dedbd90cc4264e4c8b511a968"
     }
-  ]
+  ],
+  "humanReviewStatus": "COMPLETE"
 }

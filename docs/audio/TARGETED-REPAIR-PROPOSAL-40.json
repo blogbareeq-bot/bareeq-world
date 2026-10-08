@@ -1,0 +1,468 @@
+{
+  "schema": "bareeq.audio-targeted-repair-proposal.v1",
+  "decisionId": "COMPLETION15-PROPOSED-TRANCHE40-v1",
+  "preparedAt": "2026-10-08T12:02:45.144036+00:00",
+  "status": "AWAITING_OWNER_THRESHOLD_DECISION",
+  "authorized": false,
+  "currentThreshold": 33,
+  "successfulTtsSinceLastNewExact": 33,
+  "proposedThreshold": 40,
+  "proposedAdditionalRequests": 7,
+  "maximumRequestsPerRepair": 1,
+  "generationPerformed": false,
+  "ttsCalls": 0,
+  "newAsrCalls": 0,
+  "targetArticles": [
+    "how-touchscreens-work",
+    "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع"
+  ],
+  "scopeIncludesCurrentlyExcludedMorningArticle": true,
+  "executionOrder": "Complete touchscreen repairs and full-file QA first, then morning repairs and full-file QA; preserve checkpoints after each target.",
+  "requests": [
+    {
+      "requestNumber": 1,
+      "caseIds": [
+        "S1"
+      ],
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "baselineFullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
+      "sourcePartNumber": 1,
+      "sourcePartSha256": "3011ca271efdbff22cb716a2b2ec8dccd6837d0fb4ac7b94107b7ff3046881ac",
+      "expectedIndices": [
+        184
+      ],
+      "targetErrors": [
+        {
+          "caseId": "S1",
+          "expected": [
+            {
+              "type": "substitution",
+              "expectedIndex": 184,
+              "expected": "الشاشة",
+              "actual": "الشاشات",
+              "confirmedBy": [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-transcribe"
+              ]
+            }
+          ]
+        }
+      ],
+      "approvedSegmentId": "b0009",
+      "canonicalSpeechSegmentId": "paragraph-a63067d6c146",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "sourceSpeechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "generationText": "وَتَتَكَوَّنُ الشَّاشَةُ المُقَاوِمِيَّةُ التَّقْلِيدِيَّةُ مِنْ طَبَقَتَيْنِ رَقِيقَتَيْنِ مُوَصِّلَتَيْنِ يَفْصِلُ بَيْنَهُمَا فَرَاغٌ صَغِيرٌ جِدًّا.",
+      "generationTextSha256": "a315650636cd680bd8cc494f54bd543db8f98657a54909ff106924f94c4aa6ec",
+      "numberPronunciationHint": null,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_NOT_AUTHORIZED",
+      "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
+      "preserveAllOtherSourceAudio": true
+    },
+    {
+      "requestNumber": 2,
+      "caseIds": [
+        "S2"
+      ],
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "baselineFullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
+      "sourcePartNumber": 2,
+      "sourcePartSha256": "e5fd5068dfec285aaf560c92151297214a0153dca866306af077a86c123388dd",
+      "expectedIndices": [
+        489
+      ],
+      "targetErrors": [
+        {
+          "caseId": "S2",
+          "expected": [
+            {
+              "type": "substitution",
+              "expectedIndex": 489,
+              "expected": "إنه",
+              "actual": "أنه",
+              "confirmedBy": [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-transcribe"
+              ]
+            }
+          ]
+        }
+      ],
+      "approvedSegmentId": "b0026",
+      "canonicalSpeechSegmentId": "paragraph-bab0f9f4d74b",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "sourceSpeechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "generationText": "كَمَا أَنَّ الجِسْمَ يَكُونُ مُقْتَرِنًا سَعَوِيًّا بِالأَرْضِ وَالبِيئَةِ المُحِيطَة؛ أَيْ إِنَّهُ لَيْسَ مَوْصُولًا بِسِلْكِ تَأْرِيض، لَكِنَّهُ يُصْبِحُ جُزْءًا مِنَ البِيئَةِ الكَهْرَبَائِيَّةِ الَّتِي يُرَاقِبُهَا المُسْتَشْعِر.",
+      "generationTextSha256": "b9a6aaa6fce706365cd38fb5b9e7620a8ea90ce9e34eaf39d522052ff9ce7aae",
+      "numberPronunciationHint": null,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_NOT_AUTHORIZED",
+      "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
+      "preserveAllOtherSourceAudio": true
+    },
+    {
+      "requestNumber": 3,
+      "caseIds": [
+        "S3"
+      ],
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "baselineFullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
+      "sourcePartNumber": 6,
+      "sourcePartSha256": "8d9d3e2f4d2a3a9118dfa66027340f8206cabfaefadb7f1314a35badaa3dcf7e",
+      "expectedIndices": [
+        1304
+      ],
+      "targetErrors": [
+        {
+          "caseId": "S3",
+          "expected": [
+            {
+              "type": "substitution",
+              "expectedIndex": 1304,
+              "expected": "به",
+              "actual": "بها",
+              "confirmedBy": [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-transcribe"
+              ]
+            }
+          ]
+        }
+      ],
+      "approvedSegmentId": "b0060",
+      "canonicalSpeechSegmentId": "paragraph-19d2ec759bbc",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "sourceSpeechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "generationText": "الاسْتِشْعَارُ يَحْدُثُ فِي الطَّبَقَاتِ الإِلِكْتْرُونِيَّةِ المُرْتَبِطَةِ بِهِ، وَقَدْ تَخْتَلِفُ طَرِيقَةُ دَمْجِ هَذِهِ الطَّبَقَاتِ مِنْ شَاشَةٍ إِلَى أُخْرَى.",
+      "generationTextSha256": "dc569c0d6ca586b9c3d50a63b44ce2194ea6d806c8ddc10996afe0f4778e6f62",
+      "numberPronunciationHint": null,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_NOT_AUTHORIZED",
+      "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
+      "preserveAllOtherSourceAudio": true
+    },
+    {
+      "requestNumber": 4,
+      "caseIds": [
+        "M3"
+      ],
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "baselineFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+      "sourcePartNumber": 4,
+      "sourcePartSha256": "31dacaa06184b96dc516a26efca406a1ef13aced020aa722fb15065ccb616686",
+      "expectedIndices": [
+        964
+      ],
+      "targetErrors": [
+        {
+          "caseId": "M3",
+          "expected": [
+            {
+              "type": "substitution",
+              "expectedIndex": 964,
+              "expected": "أجره",
+              "actual": "أزره",
+              "confirmedBy": [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-transcribe"
+              ]
+            }
+          ]
+        }
+      ],
+      "approvedSegmentId": "b0035",
+      "canonicalSpeechSegmentId": "paragraph-5129c2ea9e2b",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourceSpeechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "generationText": "شاب ضئيل الجسم يرفض أن يقتطع رئيس العمل نصف أجره، ومهاجر يتجاوز القيود بقوة إرادته، وفتاة ترفض فوزًا سهلًا على خصم أضعف.",
+      "generationTextSha256": "6da5ebb34e04b37a1d72305089b2e34d7b740bf54f135000ac54cca14e288290",
+      "numberPronunciationHint": null,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_NOT_AUTHORIZED",
+      "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
+      "preserveAllOtherSourceAudio": true
+    },
+    {
+      "requestNumber": 5,
+      "caseIds": [
+        "M8"
+      ],
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "baselineFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+      "sourcePartNumber": 6,
+      "sourcePartSha256": "3b4fa79bf76fe5082abe08a5e9f3751ce579f4b0397a33d8ada7823c87d16d06",
+      "expectedIndices": [
+        1732
+      ],
+      "targetErrors": [
+        {
+          "caseId": "M8",
+          "expected": [
+            {
+              "type": "substitution",
+              "expectedIndex": 1732,
+              "expected": "إنه",
+              "actual": "إنها",
+              "confirmedBy": [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-transcribe"
+              ]
+            }
+          ]
+        }
+      ],
+      "approvedSegmentId": "b0055",
+      "canonicalSpeechSegmentId": "paragraph-84786c144020",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourceSpeechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "generationText": "الفعل هنا ليس بطولة خارقة؛ إنه مقاومة يومية للانطفاء.",
+      "generationTextSha256": "e0c25a2b3675032df17a563408146a42976b06c9d5b701ca0008172623170183",
+      "numberPronunciationHint": null,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_NOT_AUTHORIZED",
+      "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
+      "preserveAllOtherSourceAudio": true
+    },
+    {
+      "requestNumber": 6,
+      "caseIds": [
+        "M11"
+      ],
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "baselineFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+      "sourcePartNumber": 9,
+      "sourcePartSha256": "60273a7102ccd78b192ac64f26c2ef495b02b13856c8cde8f2d4319118f6a287",
+      "expectedIndices": [
+        2457
+      ],
+      "targetErrors": [
+        {
+          "caseId": "M11",
+          "expected": [
+            {
+              "expectedIndex": 2457,
+              "expected": "24",
+              "first": {
+                "type": "substitution",
+                "expected": "24",
+                "actual": "عشر",
+                "expectedIndex": 2457,
+                "actualIndex": 2462
+              },
+              "second": {
+                "type": "substitution",
+                "expected": "24",
+                "actual": "12",
+                "expectedIndex": 2457,
+                "actualIndex": 2455
+              },
+              "reason": "both-models-diverged-differently"
+            }
+          ]
+        }
+      ],
+      "approvedSegmentId": "b0086",
+      "canonicalSpeechSegmentId": "list-item-acd2554f9c00",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourceSpeechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "generationText": "اليوم الأول - أجّل الحكم: اكتب قرارًا كبيرًا يشغلك، ثم دوّن ما الذي قد يتغير إذا منحت نفسك 24 ساعة ومعلومة إضافية ومحادثة صادقة.",
+      "generationTextSha256": "acd2554f9c0093a7b03667c5494d99bd2e8aa29950efd7621fc3801804e11e4b",
+      "numberPronunciationHint": "24 = أربعًا وعشرين ساعة",
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_NOT_AUTHORIZED",
+      "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
+      "preserveAllOtherSourceAudio": true
+    },
+    {
+      "requestNumber": 7,
+      "caseIds": [
+        "M13",
+        "M14"
+      ],
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "baselineFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+      "sourcePartNumber": 10,
+      "sourcePartSha256": "ec73836621e36de12ef4015dabe5bdb64f7048c9fe5952f3eadf02e02c1e27db",
+      "expectedIndices": [
+        2612,
+        2613,
+        2614,
+        2615,
+        2617
+      ],
+      "targetErrors": [
+        {
+          "caseId": "M13",
+          "expected": [
+            {
+              "type": "deletion",
+              "expectedIndex": 2612,
+              "expected": "وما",
+              "actual": null,
+              "confirmedBy": [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-transcribe"
+              ]
+            },
+            {
+              "type": "deletion",
+              "expectedIndex": 2613,
+              "expected": "يحتاج",
+              "actual": null,
+              "confirmedBy": [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-transcribe"
+              ]
+            },
+            {
+              "type": "deletion",
+              "expectedIndex": 2614,
+              "expected": "إلى",
+              "actual": null,
+              "confirmedBy": [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-transcribe"
+              ]
+            },
+            {
+              "type": "deletion",
+              "expectedIndex": 2615,
+              "expected": "مساعدة",
+              "actual": null,
+              "confirmedBy": [
+                "gemini-3.5-flash-lite",
+                "gemini-3.5-transcribe"
+              ]
+            }
+          ]
+        },
+        {
+          "caseId": "M14",
+          "expected": [
+            {
+              "expectedIndex": 2617,
+              "expected": "يستحق",
+              "first": {
+                "type": "substitution",
+                "expected": "يستحق",
+                "actual": "يستطيع",
+                "expectedIndex": 2617,
+                "actualIndex": 2618
+              },
+              "second": {
+                "type": "substitution",
+                "expected": "يستحق",
+                "actual": "تستطيع",
+                "expectedIndex": 2617,
+                "actualIndex": 2611
+              },
+              "reason": "both-models-diverged-differently"
+            }
+          ]
+        }
+      ],
+      "approvedSegmentId": "b0093",
+      "canonicalSpeechSegmentId": "paragraph-0e64a4dba798",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourceSpeechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "generationText": "يكفي في نهاية الأسبوع أن تَعْرِفَ بوضوح أكبر ما تستطيع فعله، وما يحتاج إلى مساعدة، وما يستحق أن تراه من جديد.",
+      "generationTextSha256": "f02e98edefff19bbb1bca2ee31c77b93c933a1f8804c45b0c5b978fae5e66373",
+      "numberPronunciationHint": null,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_NOT_AUTHORIZED",
+      "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
+      "preserveAllOtherSourceAudio": true
+    }
+  ],
+  "preflightPassed": false,
+  "preflightPending": [
+    "restore bound raw source parts",
+    "establish whole-sentence source cuts without clipped speech"
+  ],
+  "notSufficientToGuarantee15Exact": "The other three candidates still need resolution of their full-file ASR conflicts. Seven targeted requests are a bounded first attempt, not a promise of successful repairs.",
+  "otherCandidatesNeedNoTtsByDefault": [
+    "language-soft-power-politics",
+    "intuition-first-impression-decisions-signature",
+    "why-some-passports-are-stronger"
+  ],
+  "publicationRequirements": [
+    "ordinary publishability gates",
+    "fresh dual-ASR full-file validation",
+    "SHA-bound human decisions only on unchanged reviewed audio",
+    "technical audio QA",
+    "sync QA",
+    "no changed source text to disguise an audio defect"
+  ],
+  "protectedExact": [
+    {
+      "articleId": "ai-agents-future-now",
+      "fingerprint": "7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488",
+      "fullSha256": "34fa55716fe40389283e40c3fc0fca3b8d7f2cf386a2f835edccabeb1d9b659b"
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "fingerprint": "429adbe4ebdabd03e5c77d122255a29c7840ec58b7f32a8e59e18b91aba2db21",
+      "fullSha256": "d7f00585b47dc3ece44c73ac0f62763ffb41a1e4f602ddeae1aabd3d65fd0567"
+    },
+    {
+      "articleId": "altadakhom-explained-simply",
+      "fingerprint": "58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45",
+      "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135"
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
+      "fullSha256": "dc2217a45d1872ab0de9010897ad22028f0e5e93fddb07178d1f6aa2f7f66a71"
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+      "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301"
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "fingerprint": "a7f364df849199a8f4096863f95739a948e2788cf0d4d65d1e94acec022765b6",
+      "fullSha256": "1586e603c9e59b9967a51a980b4d2f7b58af262ee2aff24a77eab948d2e969e6"
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
+      "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+      "fullSha256": "e8204d5a43005b8dbcf05745167a88225491c69ec94d1d69a72120b36c70990b"
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "fingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
+      "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d"
+    }
+  ],
+  "productionDeploymentAccountGate": [
+    "CLOUDFLARE_API_TOKEN",
+    "CLOUDFLARE_ACCOUNT_ID"
+  ],
+  "currentLiveDeploymentVerified": false
+}

@@ -1,6 +1,6 @@
 {
   "schema": "bareeq.audio-tranche33-outcome.v1",
-  "generatedAt": "2026-10-08T11:50:49.026689+00:00",
+  "generatedAt": "2026-10-08T12:02:45.144534+00:00",
   "threshold": 33,
   "successfulTtsSinceLastNewExact": 33,
   "additionalSuccessfulRequestsConsumed": 3,
@@ -258,9 +258,9 @@
     "readyClips": 15,
     "ttsAuthorized": false,
     "baselineFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
-    "humanReviewStatus": "REVIEWED_WITH_ONE_INCONCLUSIVE",
+    "humanReviewStatus": "COMPLETE",
     "reviewedCases": 15,
-    "expectedPronunciationConfirmed": 9,
+    "expectedPronunciationConfirmed": 10,
     "actualAudioErrors": 5,
     "remainingReviewCases": 0,
     "actualErrorCases": [
@@ -270,10 +270,8 @@
       "M13",
       "M14"
     ],
-    "inconclusiveCases": 1,
-    "inconclusiveCaseIds": [
-      "M9"
-    ],
+    "inconclusiveCases": 0,
+    "inconclusiveCaseIds": [],
     "repairRegions": 4,
     "reviewRecord": "docs/audio/MORNING-HUMAN-REVIEW-20261008.json",
     "publicationEligible": false
@@ -286,12 +284,13 @@
     "retainedDonorPreflight": "37626745406"
   },
   "nextActions": [
-    "Re-review only morning M9; 14 source-bound target decisions are conclusive.",
-    "Four morning repair regions remain blocked by consumed 33/33 synthesis authorization; preserve M13 and M14 as one overlapping context repair.",
-    "Adjudicate remaining other-article full-file ASR conflicts against the actual candidate SHA.",
-    "No further synthesis or automatic threshold extension.",
-    "Production deployment requires configured Cloudflare credentials; repository Exact count is 10/15 and does not certify a live deployment."
+    "Morning listening review closed: 10 expected-pronunciation confirmations and 5 actual error cases in four repair regions.",
+    "Owner threshold decision required before the proposed seven targets: docs/audio/TARGETED-REPAIR-PROPOSAL-40.json.",
+    "Proposal is not authorization; synthesis remains frozen at consumed 33/33.",
+    "Resolve other three candidates full-file ASR conflicts against actual candidate SHA.",
+    "Production deployment requires configured Cloudflare credentials; repository Exact count is still 10/15."
   ],
   "reviewRound1": "docs/audio/BOUND-REVIEW-ROUND1.json",
-  "reviewRemaining": "docs/audio/BOUND-REVIEW-REMAINING.json"
+  "reviewRemaining": "docs/audio/BOUND-REVIEW-REMAINING.json",
+  "reviewM9": "docs/audio/BOUND-REVIEW-M9.json"
 }
