@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "articleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
+  "speechScriptHash": "f134e73df1c195a8e24bcad2e989cb078af36b06d4a5b0adeca89e7f428cacf4",
+  "status": "pending-review",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 55,
+  "selectedSegments": [
+    {
+      "segmentId": "paragraph-b08384246328",
+      "challenges": [
+        "baseline pronunciation and pacing review"
+      ]
+    },
+    {
+      "segmentId": "paragraph-e527c93265de",
+      "challenges": [
+        "baseline pronunciation and pacing review"
+      ]
+    },
+    {
+      "segmentId": "paragraph-e7279d95d711",
+      "challenges": [
+        "baseline pronunciation and pacing review"
+      ]
+    },
+    {
+      "segmentId": "paragraph-9722d1223e17",
+      "challenges": [
+        "baseline pronunciation and pacing review"
+      ]
+    },
+    {
+      "segmentId": "paragraph-9090c18ff6f2",
+      "challenges": [
+        "baseline pronunciation and pacing review"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "5df5695ae9450f050757456dbc1609a40f679d42dc5a80fefc05d2795590700a"
+}
