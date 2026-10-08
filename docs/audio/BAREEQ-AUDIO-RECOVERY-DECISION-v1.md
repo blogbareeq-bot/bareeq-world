@@ -297,3 +297,19 @@ Owner instruction: `ارفع الحد إلى 33`. The strategic threshold is now
 The three named targets are the soft-power omitted question, intuition reference 11, and satellites قوى. Each target receives at most one successful request, after audio-bound micro-repair preflight. This amendment authorizes no automatic provider dispatch, no whole-part regeneration, no automatic retries, no further Gate 4 research, and no lowering of Exact/publication gates. The global TTS freeze remains active outside the scoped execution route. Existing nine Exact audio identities remain immutable. Historical Gate 5 passports authorization remains consumed.
 
 The current completion goal includes all 15 articles as directed by the owner. Morning review may proceed as a separate preflight mini-campaign; no morning TTS request is included in this three-request allowance. New Exact publications do not replenish the three-request allowance. Any unverified or rejected successful generation still consumes its request.
+
+
+## 16. Owner-approved priority — new content before renewal — 2026-10-08
+
+Owner instruction: `اجعل صوت المقالات الجديدة أولا في مسار الصوت (الجديد قبل التجديد)`.
+
+This creates a binding queue rule across Bareeq audio work:
+
+1. A published non-draft article with no live audio manifest has synthesis priority over any article that already has live audio.
+2. Legacy fallback replacement, pronunciation renewal, Exact-quality repair, and voice refresh may not consume TTS while a new article is waiting for its first live audio.
+3. New-content articles are processed FIFO by `publishedAt`.
+4. Offline work on legacy articles may continue when it consumes no TTS: artifact forensics, adjudication, existing-candidate validation, technical QA, human review, and approved publication.
+5. This rule does not unfreeze TTS, add quota, extend a threshold, or waive Speech Script, listening, Technical QA, ASR, sync, fingerprint, or publication gates.
+6. When a future owner-approved TTS allowance becomes available, it is allocated to the new-content queue first. Only after the new-content queue is empty may legacy renewal synthesis resume.
+
+Machine enforcement is defined in `docs/audio/AUDIO-PRIORITY-NEW-BEFORE-RENEWAL-v1.md` and `scripts/audio-priority-guard.mjs`.
