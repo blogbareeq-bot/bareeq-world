@@ -1,0 +1,66 @@
+name: Bareeq remaining three saved candidates review without TTS
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-completion40-prepare-review.mjs'
+      - 'scripts/audio-completion40-review.py'
+      - '.github/workflows/audio-completion40-other-review.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: bareeq-completion40-other-review
+  cancel-in-progress: false
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local review tools without provider credentials
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install faster-whisper==1.2.0 requests numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-reconstructed-37626334800
+          path: saved-candidates
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37626334800'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: saved-baselines
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-human-triage-37449866365
+          path: saved-triage
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37449866365'
+      - name: Bind unchanged human decisions and isolate remaining full-file conflicts
+        run: node scripts/audio-completion40-prepare-review.mjs saved-candidates saved-baselines saved-triage completion40-other-review
+      - name: Build source-bound listening clips locally without TTS or new ASR provider calls
+        run: python scripts/audio-completion40-review.py completion40-other-review
+      - name: Verify all ten published files stay unchanged
+        if: always()
+        run: git diff --exit-code -- public/audio
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-completion40-other-review-${{ github.run_id }}
+          path: completion40-other-review/
+          retention-days: 90
+          if-no-files-found: error
