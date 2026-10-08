@@ -75,7 +75,7 @@ jobs:
           cat /tmp/bareeq-preview.log
           exit 1
 
-      - name: Real-browser viewport QA — 15 stories × 4 viewports
+      - name: Real-browser viewport QA — all stories × 4 viewports
         env:
           CI: '1'
           BAREEQ_PREVIEW_URL: http://127.0.0.1:4321
