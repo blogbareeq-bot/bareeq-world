@@ -494,5 +494,12 @@
     "runAttempt": 1,
     "headSha": "ad952374efa11abddf7f431eff7707c2a3561963",
     "claimedAt": "2026-10-08T12:34:06.025Z"
+  },
+  "touchscreenQa": {
+    "completed": true,
+    "runId": "37777589258",
+    "status": "FULL_QA_OR_ASR_FAILED_RETAINED",
+    "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+    "resultSha256": "6dec2718030cfc81864411bb763af15a6200ff5d97c489a83022eead45a1a586"
   }
 }
