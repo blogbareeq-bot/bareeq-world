@@ -6,8 +6,8 @@
   "authorizedAt": "2026-10-08T12:06:47Z",
   "approvedProposal": "docs/audio/TARGETED-REPAIR-PROPOSAL-40.json",
   "approvedProposalSha256": "fcd80ffc7c1b6050ddd14ac87f8091c84b1713dcf83f9cbadccbccca5fba8134",
-  "authorizationStatus": "AUTHORIZED",
-  "executionStatus": "PREFLIGHT_PASSED",
+  "authorizationStatus": "IN_PROGRESS",
+  "executionStatus": "EXECUTING",
   "previousThreshold": 33,
   "newThreshold": 40,
   "successfulRequestBaseline": 33,
@@ -464,5 +464,11 @@
     "passedTargets": 7,
     "ttsCalls": 0,
     "providerCalls": 0
+  },
+  "executionClaim": {
+    "runId": "37777589258",
+    "runAttempt": 1,
+    "headSha": "ad952374efa11abddf7f431eff7707c2a3561963",
+    "claimedAt": "2026-10-08T12:34:06.025Z"
   }
 }
