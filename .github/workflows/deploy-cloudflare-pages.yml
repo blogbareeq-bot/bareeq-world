@@ -37,7 +37,8 @@ jobs:
             echo "available=true" >> "$GITHUB_OUTPUT"
           else
             echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Cloudflare credentials are not configured; production deploy is skipped."
+            echo "::error::Cloudflare credentials are not configured. Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to repository Actions secrets before production deployment."
+            exit 1
           fi
 
       - name: Install dependencies
