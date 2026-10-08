@@ -533,5 +533,12 @@
     "status": "FULL_QA_OR_ASR_FAILED_RETAINED",
     "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
     "resultSha256": "6dec2718030cfc81864411bb763af15a6200ff5d97c489a83022eead45a1a586"
+  },
+  "morningQa": {
+    "completed": true,
+    "runId": "37777589258",
+    "status": "FULL_QA_OR_ASR_FAILED_RETAINED",
+    "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+    "resultSha256": "b9c7215ec92ac65721fafe825c610acf574fb748b4a8aa7cf3d8b507b6b30934"
   }
 }
