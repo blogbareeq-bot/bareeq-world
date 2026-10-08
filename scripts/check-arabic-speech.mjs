@@ -11,11 +11,15 @@ try {
     `--json-output=${inventoryFile}`,
   ], { cwd: ROOT, stdio: 'inherit' });
   const inventory = JSON.parse(await readFile(inventoryFile, 'utf8'));
-  if (inventory.articleCount !== 15) throw new Error(`Expected 15 published Speech Script inventories, found ${inventory.articleCount}.`);
+  if (inventory.articleCount < 15) throw new Error(`Expected at least the established 15 published Speech Script inventories, found ${inventory.articleCount}.`);
   if (inventory.synthesisAllowed !== 0) throw new Error('Provider publication/synthesisAllowed must stay 0 until later listening/ASR gates pass.');
   const pilots = inventory.articles.filter((article) => article.bucket === 'A');
-  if (pilots.length !== 15) {
-    throw new Error(`Expected all 15 published Speech Scripts in bucket A after reviewed vocalization; found ${pilots.length}.`);
+  if (pilots.length < 15) {
+    throw new Error(`The established 15 reviewed Speech Scripts must remain in bucket A; found ${pilots.length}.`);
+  }
+  const accounted = (inventory.counts?.passed ?? 0) + (inventory.counts?.needsReview ?? 0) + (inventory.counts?.highRisk ?? 0);
+  if (accounted !== inventory.articleCount) {
+    throw new Error(`Speech Script inventory accounting mismatch: ${accounted}/${inventory.articleCount}.`);
   }
   const required = ['how-touchscreens-work', 'why-some-passports-are-stronger'];
   for (const id of required) {
