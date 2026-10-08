@@ -1,0 +1,84 @@
+name: Bareeq passports local-ASR locator
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-locate-passports-target-local.py'
+      - '.github/workflows/audio-passports-local-asr-locator.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  locate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ffmpeg and local ASR
+        run: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          python -m pip install 'faster-whisper==1.2.0' requests
+          ffmpeg -version | head -1
+
+      - name: Download retained Gate 5 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: gate5-artifact
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+
+      - name: Locate target from retained audio only
+        run: |
+          set -euo pipefail
+          python scripts/audio-locate-passports-target-local.py \
+            --root=gate5-artifact \
+            --out=local-asr-target-review \
+            --model=small \
+            --ffmpeg=/usr/bin/ffmpeg
+          cat local-asr-target-review/manifest.json
+
+      - name: Fail closed unless extracted clips re-transcribe to target anchors
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('local-asr-target-review/manifest.json').read_text(encoding='utf-8'))
+          assert p['schema']=='bareeq.audio-passports-local-asr-locator.v1'
+          assert p['providerCalls']==0 and p['ttsCalls']==0 and p['newProviderAsrCalls']==0
+          assert len(p['cases'])==2
+          by={c['caseId']:c for c in p['cases']}
+          assert len(by['H01']['anchorHits'])>=2
+          assert len(by['H02']['anchorHits'])>=2
+          assert 'السياسة' in by['H01']['validationTranscript'] or 'حاضرة' in by['H01']['validationTranscript']
+          assert Path('local-asr-target-review/H01-VALIDATED.mp3').stat().st_size>10000
+          assert Path('local-asr-target-review/H02-VALIDATED.mp3').stat().st_size>10000
+          print('LOCAL_ASR_REVIEW_CONTRACT=PASS target-clips-verified=true providerCalls=0')
+          PY
+
+      - name: Prove production audio untouched
+        run: git diff --exit-code -- public/audio
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-passports-local-asr-review-${{ github.run_id }}
+          path: local-asr-target-review/
+          if-no-files-found: error
+          retention-days: 90

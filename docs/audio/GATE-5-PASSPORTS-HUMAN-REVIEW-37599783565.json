@@ -1,0 +1,53 @@
+{
+  "schema": "bareeq.audio-passports-forensic-human-review.v1",
+  "reviewedAt": "2026-10-07T09:53:51Z",
+  "reviewerRole": "project_owner",
+  "reviewMethod": "direct_listening",
+  "sourceRunId": "37581607040",
+  "locatorRunId": "37599783565",
+  "locatorArtifactId": 11472871018,
+  "locatorCommit": "bf44c289cc47fa398c70b1faf9237a4b99f1fbe1",
+  "articleId": "why-some-passports-are-stronger",
+  "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+  "sourceAudioSha256": "e8c0c00bccc88e3cf5d35b6c08844ef7be7880429464ff83f02620ce65f92ab2",
+  "sourceDurationSeconds": 1081.032,
+  "cases": [
+    {
+      "caseId": "H01",
+      "expectedToken": "لا",
+      "heardToken": "لا",
+      "userStatement": "كلمة (لا) واضحة",
+      "decision": "EXPECTED_PRONUNCIATION_CONFIRMED",
+      "clipFile": "H01-VALIDATED.mp3",
+      "clipSha256": "46b33a79a978d98cb188675abb0b5d9164f28eb427759a05846516b68fde1ee9",
+      "clipStartSeconds": 445.24,
+      "clipEndSeconds": 476.44,
+      "sourceAudioSha256": "e8c0c00bccc88e3cf5d35b6c08844ef7be7880429464ff83f02620ce65f92ab2"
+    },
+    {
+      "caseId": "H02",
+      "expectedToken": "الدول",
+      "heardToken": "دول",
+      "userStatement": "كلمة (دول) مسموعة",
+      "decision": "ACTUAL_AUDIO_ERROR",
+      "clipFile": "H02-VALIDATED.mp3",
+      "clipSha256": "5fb8d466a9ee39131c8a00515a70ba765aa52e7ab079fd26e66ec1bbf71993de",
+      "clipStartSeconds": 470.32,
+      "clipEndSeconds": 496.04,
+      "sourceAudioSha256": "e8c0c00bccc88e3cf5d35b6c08844ef7be7880429464ff83f02620ce65f92ab2"
+    }
+  ],
+  "conclusion": {
+    "classification": "MIXED_CAUSE",
+    "targetedMissingLa": "FIXED_CONFIRMED_BY_HUMAN",
+    "dawlaTokenRegression": "الدول→دول",
+    "dawlaTokenRegressionStatus": "CONFIRMED_BY_HUMAN",
+    "priorAsrInstabilityEvidenceRunId": "37592270415",
+    "candidateDecision": "REJECTED_KEEP_BASELINE",
+    "eligibleForExactPromotion": false,
+    "scope": "Forensic evidence only; does not amend raw ASR reports, publish audio, or change campaign accounting.",
+    "newTtsCalls": 0,
+    "newProviderAsrCalls": 0,
+    "productionAudioChanged": false
+  }
+}
