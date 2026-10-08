@@ -21,15 +21,20 @@ def edge_anchor(expected,actual,blocks,edge,left):
   if left:
    stop=min(b.a+b.size,edge);size=stop-b.a
    if stop==edge and size>=2:
-    count=min(5,size);at=b.b+stop-b.a;tokens=actual[at-count:at];candidates.append((at-1,tokens,count))
+    count=min(5,size);at=b.b+stop-b.a;tokens=actual[at-count:at];candidates.append((at-1,tokens,count,edge))
   else:
    start=max(b.a,edge);size=b.a+b.size-start
    if start==edge and size>=2:
-    count=min(5,size);at=b.b+start-b.a;tokens=actual[at:at+count];candidates.append((at,tokens,count))
+    count=min(5,size);at=b.b+start-b.a;tokens=actual[at:at+count];candidates.append((at,tokens,count,edge))
  safe=[]
- for at,tokens,count in candidates:
+ for at,tokens,count,edge in candidates:
   if len(''.join(tokens))<8:continue
-  if sum(actual[i:i+count]==tokens for i in range(len(actual)-count+1))==1:safe.append((at,tokens))
+  if sum(actual[i:i+count]==tokens for i in range(len(actual)-count+1))==1:safe.append((at,tokens));continue
+  # A repeated two-word flank needs a longer unique context. Permit one local
+  # transcription mismatch only when the adjacent two tokens still match.
+  if count==2 and left and at>=4 and edge>=5:
+   extended=actual[at-4:at+1];expected_context=expected[edge-5:edge]
+   if sum(x==y for x,y in zip(extended,expected_context))>=4 and sum(actual[i:i+5]==extended for i in range(len(actual)-4))==1:safe.append((at,extended))
  if len(safe)!=1:raise ValueError('Missing or ambiguous unique adjacent sentence anchor')
  return safe[0]
 def anchors(expected,actual,start,end):
