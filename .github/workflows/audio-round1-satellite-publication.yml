@@ -1,0 +1,123 @@
+name: Bareeq bound round1 satellite publication
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-round1-satellite-publication.yml'
+      - 'scripts/audio-round1-satellite-certify.mjs'
+      - 'scripts/audio-round1-satellite-binding.mjs'
+      - 'scripts/test-audio-round1-satellite-binding.mjs'
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: bareeq-round1-satellite-publication
+  cancel-in-progress: false
+jobs:
+  eligibility:
+    runs-on: ubuntu-latest
+    outputs:
+      eligible: ${{ steps.check.outputs.eligible }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - id: check
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,appendFile} from 'node:fs/promises';
+          const s=JSON.parse(await readFile('docs/audio/PROGRESSIVE-STATUS.json','utf8'));
+          const e=JSON.parse(await readFile('docs/audio/ENGINE-STRATEGY-STATE.json','utf8'));
+          const id='لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء';
+          const row=s.rows.find(x=>x.articleId===id);
+          if(e.threshold!==33||e.successfulTtsSinceLastNewExact!==33)throw Error('Consumed accounting changed');
+          if(s.exactCount===10&&row?.publishedExact&&row.fullSha256==='8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d'){
+            await appendFile(process.env.GITHUB_OUTPUT,'eligible=false\n');console.log('ROUND1_PUBLICATION_ALREADY_COMPLETED');
+          }else if(s.exactCount===9&&s.publishedCount===9&&row&&!row.publishedExact){
+            await appendFile(process.env.GITHUB_OUTPUT,'eligible=true\n');
+          }else throw Error('Unexpected campaign state');
+          NODE
+  publish:
+    needs: eligibility
+    if: needs.eligibility.outputs.eligible == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Validate narrow binding and frozen synthesis
+        run: |
+          node scripts/test-audio-round1-satellite-binding.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-round1-satellite-evidence-37761005721
+          path: round1-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37761005721'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-reconstructed-37626334800
+          path: baseline-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37626334800'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-human-triage-37449866365
+          path: triage-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37449866365'
+      - name: Certify unchanged T21 source and stage only the reviewed satellite
+        run: node scripts/audio-round1-satellite-certify.mjs
+      - name: Verify consistent 10/15 state and preserved freeze
+        run: |
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+          git diff --exit-code -- docs/audio/TTS-THRESHOLD-AMENDMENT-33.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-round1-satellite-published-${{ github.run_id }}
+          path: |
+            docs/audio/ROUND1-SATELLITE-*.json
+            docs/audio/PROGRESSIVE-STATUS.json
+            docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
+            docs/audio/ENGINE-STRATEGY-STATE.json
+            docs/audio/TTS-FREEZE.json
+            docs/audio/TRANCHE33-OUTCOME.json
+            audio-candidates/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Restrict staged delta and commit reviewed publication to this PR
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          test "$HEAD_BRANCH" = 'audio/round1-satellite-publication-20261008'
+          test "$(git ls-remote origin "refs/heads/$HEAD_BRANCH" | cut -f1)" = "$EXPECTED_HEAD"
+          node --input-type=module <<'NODE'
+          import {execFileSync} from 'node:child_process';
+          import {audioKeyFor} from './scripts/audio-constants.mjs';
+          const prefix='public/audio/articles/'+audioKeyFor('لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء')+'/';
+          const files=execFileSync('git',['diff','--name-only','--','public/audio'],{encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
+          if(files.some(x=>!x.startsWith(prefix)))throw Error('Unexpected published audio delta');
+          console.log('ROUND1_PUBLIC_AUDIO_DELTA=VERIFIED '+prefix);
+          NODE
+          SAT_KEY=$(node --input-type=module -e "import {audioKeyFor} from './scripts/audio-constants.mjs'; console.log(audioKeyFor('لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء'))")
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "public/audio/articles/$SAT_KEY"
+          git add docs/audio/ROUND1-SATELLITE-*.json docs/audio/PROGRESSIVE-STATUS.json docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json docs/audio/TRANCHE33-OUTCOME.json
+          git commit -m 'audio: publish reviewed satellite as tenth Exact with no new TTS'
+          git push origin "HEAD:refs/heads/$HEAD_BRANCH"
