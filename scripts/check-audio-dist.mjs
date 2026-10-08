@@ -3,6 +3,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { PENDING_CLOUD, RETAINED_GEMINI } from './cloud-tts-rollout.mjs';
+import { LEGACY_AUDIO_BASELINE_SET, assertLegacyBaselinePublished } from './publishing-baseline.mjs';
 
 
 /*
@@ -52,10 +53,11 @@ for (const name of postFiles) {
   const source = await readFile(path.join(POSTS, name), 'utf8');
   if (!/^draft:\s*true\s*$/mi.test(source)) published.push(name.replace(/\.md$/, ''));
 }
-if (![13, 14, 15].includes(published.length)) throw new Error(`V4.21.6 audio-dist audit expected 13–15 published articles across supported release states, found ${published.length}.`);
+assertLegacyBaselinePublished(published, 'V4.21.6 audio-dist audit');
 if (!published.includes(NEW_ARTICLE)) throw new Error('V4.20 coworker article is missing from the published set.');
 
 let checkedArticles = 0;
+const pendingAudioArticles = [];
 let totalParts = 0;
 let totalFiles = 0;
 const providerCounts = new Map();
@@ -127,7 +129,15 @@ for (const id of published) {
   const manifestFile = path.join(DIST, 'audio', 'articles', key, 'manifest.json');
   let manifest;
   try { manifest = JSON.parse(await readFile(manifestFile, 'utf8')); }
-  catch { throw new Error(`${id}: production audio manifest is missing or invalid.`); }
+  catch {
+    if (LEGACY_AUDIO_BASELINE_SET.has(id)) throw new Error(`${id}: protected baseline production audio manifest is missing or invalid.`);
+    const html = await readFile(path.join(DIST, 'posts', id, 'index.html'), 'utf8');
+    if (!html.includes('aria-disabled="true"') || !html.includes('قيد الإعداد')) {
+      throw new Error(`${id}: audio is pending but the built article does not expose the safe disabled-listen state.`);
+    }
+    pendingAudioArticles.push(id);
+    continue;
+  }
 
   if (manifest.articleId !== id) throw new Error(`${id}: manifest articleId mismatch.`);
   if (manifest.disclosure !== 'الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.') throw new Error(`${id}: AI disclosure is missing.`);
@@ -214,7 +224,7 @@ for (const id of published) {
   checkedArticles += 1;
 }
 
-if (checkedArticles !== published.length) throw new Error(`V4.21.6 audio-dist audit expected ${published.length} complete audio articles, checked ${checkedArticles}.`);
+if (checkedArticles + pendingAudioArticles.length !== published.length) throw new Error(`V4.21.6 audio-dist audit accounted for ${checkedArticles + pendingAudioArticles.length}/${published.length} published articles.`);
 if (cloudActivated && (providerCounts.get('Cloud TTS Sadaltager') !== PENDING_CLOUD.length || providerCounts.get('Gemini Sadaltager') !== RETAINED_GEMINI.length)) throw new Error(`Activated rollout must publish exactly ${PENDING_CLOUD.length} Cloud TTS + ${RETAINED_GEMINI.length} retained Gemini articles.`);
 
 const textFiles = [];
@@ -248,4 +258,4 @@ for (const file of textFiles) {
 }
 
 const summary = [...providerCounts.entries()].map(([name, count]) => `${name}=${count}`).join(', ');
-console.log(`V4.21.6 mixed production audio audit passed: ${checkedArticles}/${published.length} articles, ${totalParts} synchronized parts, ${totalFiles} verified MP3 files; ${summary}; lazy provider metadata and no secret leakage.`);
+console.log(`V4.21.6 mixed production audio audit passed: ${checkedArticles} audio-ready + ${pendingAudioArticles.length} audio-pending = ${published.length} published article(s), ${totalParts} synchronized parts, ${totalFiles} verified MP3 files; ${summary}; protected baseline preserved, pending articles expose a disabled listen state, lazy provider metadata and no secret leakage.`);
