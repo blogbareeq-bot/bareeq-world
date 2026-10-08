@@ -1,0 +1,48 @@
+{
+  "schema": "bareeq.audio-bound-review-round.v1",
+  "roundId": "completion33-M9-20261008",
+  "sourceFile": "review-M9-decisions.json",
+  "sourceSubmissionSha256": "77d835d99d215996f92123339c7e17e8f5ed91cd9ea601091ec603d761211ab5",
+  "sourceLibraryFileId": "libfile_9f92243be7e48191b4d4ebdf216a95de",
+  "issuedPacketSha256": "07103dee39e632d497eb330d0a83b3ed42a56190bf1713ff941ab86a8affaf5b",
+  "ttsCalls": 0,
+  "newAsrCalls": 0,
+  "publicationPerformed": false,
+  "expectedPronunciationConfirmations": 1,
+  "actualAudioErrors": 0,
+  "inconclusive": 0,
+  "bindingChecksPassed": 1,
+  "decisions": [
+    {
+      "caseId": "M9",
+      "targetText": "إحكام",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+      "sourcePartSha256": "c53ad02e12263f1592ed6d9acc7f01d4831a138c73188370b8430357585b7756",
+      "partNumber": 7,
+      "clipSha256": "251096eec6e0fd29716bdfc7893320c9eb127ff6dcadab1eb88208190acc1eb3",
+      "clipStart": 112.48,
+      "clipEnd": 123.58,
+      "clipSource": "retained baseline part",
+      "validatorVersion": "audio-completion15-review-v1",
+      "humanReviewPerformed": true,
+      "decision": "EXPECTED_PRONUNCIATION_CONFIRMED",
+      "rationale": "إحكام",
+      "reviewer": "صاحب المشروع",
+      "decisionDate": "2026-10-08T11:56:26.720Z",
+      "expectedIndices": [
+        1967
+      ],
+      "expectedText": "المقال الواحد قد يجمع واقعة شخصية وسيرة كاتب وإشارة دينية ومثلًا شعبيًا. هذا الثراء يجعل الكتاب قابلًا للقراءة المتقطعة، لكنه يخلق أحيانًا استطرادًا وتفاوتًا في إحكام المقالات. بعض النصوص تظل في الذاكرة كمشهد كامل، وبعضها يبدو كخزان من الحكايات والأقوال أكثر من كونه بناءً واحدًا.",
+      "segmentId": "b0068",
+      "bindingVerified": true,
+      "submissionSha256": "77d835d99d215996f92123339c7e17e8f5ed91cd9ea601091ec603d761211ab5",
+      "supersedes": {
+        "decision": "INCONCLUSIVE",
+        "submissionSha256": "344c80c0c59b856b88817748cbc9b974a405c95dedbd90cc4264e4c8b511a968",
+        "sourceRound": "docs/audio/BOUND-REVIEW-REMAINING.json"
+      }
+    }
+  ]
+}

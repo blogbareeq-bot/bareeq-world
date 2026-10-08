@@ -1,0 +1,25 @@
+{
+  "schema": "bareeq.audio-human-review-submission.v1",
+  "publicationPerformed": false,
+  "decisions": [
+    {
+      "caseId": "M9",
+      "targetText": "إحكام",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+      "sourcePartSha256": "c53ad02e12263f1592ed6d9acc7f01d4831a138c73188370b8430357585b7756",
+      "partNumber": 7,
+      "clipSha256": "251096eec6e0fd29716bdfc7893320c9eb127ff6dcadab1eb88208190acc1eb3",
+      "clipStart": 112.48,
+      "clipEnd": 123.58,
+      "clipSource": "retained baseline part",
+      "validatorVersion": "audio-completion15-review-v1",
+      "humanReviewPerformed": true,
+      "decision": "EXPECTED_PRONUNCIATION_CONFIRMED",
+      "rationale": "إحكام",
+      "reviewer": "صاحب المشروع",
+      "decisionDate": "2026-10-08T11:56:26.720Z"
+    }
+  ]
+}
