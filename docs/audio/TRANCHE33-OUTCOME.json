@@ -1,6 +1,6 @@
 {
   "schema": "bareeq.audio-tranche33-outcome.v1",
-  "generatedAt": "2026-10-07T13:23:51.544244+00:00",
+  "generatedAt": "2026-10-08T11:50:49.026689+00:00",
   "threshold": 33,
   "successfulTtsSinceLastNewExact": 33,
   "additionalSuccessfulRequestsConsumed": 3,
@@ -54,6 +54,11 @@
       "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
       "fingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
       "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d"
     }
   ],
   "candidateResults": [
@@ -147,8 +152,8 @@
       "clipFile": "R3-review.mp3",
       "status": "PUBLISHED_AFTER_BOUND_HUMAN_ADJUDICATION",
       "generatedSha256": "0dbf695c383bc9b3b3f0dafa3d1148dbd06fac4c78f6b245932aa24e1e6edb31",
-      "reason": "No safe source-derived quiet word boundary",
-      "fullCandidateCreated": false,
+      "reason": "Owner-confirmed whole clause assembled from saved audio; fresh full QA and narrowly bound historical human evidence passed.",
+      "fullCandidateCreated": true,
       "publicationRecord": "docs/audio/ROUND1-SATELLITE-PUBLICATION.json"
     },
     {
@@ -253,14 +258,25 @@
     "readyClips": 15,
     "ttsAuthorized": false,
     "baselineFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
-    "humanReviewStatus": "PARTIAL",
-    "reviewedCases": 6,
-    "expectedPronunciationConfirmed": 5,
-    "actualAudioErrors": 1,
-    "remainingReviewCases": 9,
+    "humanReviewStatus": "REVIEWED_WITH_ONE_INCONCLUSIVE",
+    "reviewedCases": 15,
+    "expectedPronunciationConfirmed": 9,
+    "actualAudioErrors": 5,
+    "remainingReviewCases": 0,
     "actualErrorCases": [
-      "M3"
-    ]
+      "M3",
+      "M8",
+      "M11",
+      "M13",
+      "M14"
+    ],
+    "inconclusiveCases": 1,
+    "inconclusiveCaseIds": [
+      "M9"
+    ],
+    "repairRegions": 4,
+    "reviewRecord": "docs/audio/MORNING-HUMAN-REVIEW-20261008.json",
+    "publicationEligible": false
   },
   "evidenceRuns": {
     "generation": "37622809292",
@@ -270,11 +286,12 @@
     "retainedDonorPreflight": "37626745406"
   },
   "nextActions": [
-    "Review R3 generated connective without repeating already confirmed passport words.",
-    "Adjudicate remaining full-file ASR conflicts against candidate SHA; old full-file approvals cannot be copied blindly.",
-    "Review morning clips in rounds of at most seven.",
-    "No further synthesis within the consumed 33 threshold.",
-    "Publish only after ordinary gates and bound human evidence pass."
+    "Re-review only morning M9; 14 source-bound target decisions are conclusive.",
+    "Four morning repair regions remain blocked by consumed 33/33 synthesis authorization; preserve M13 and M14 as one overlapping context repair.",
+    "Adjudicate remaining other-article full-file ASR conflicts against the actual candidate SHA.",
+    "No further synthesis or automatic threshold extension.",
+    "Production deployment requires configured Cloudflare credentials; repository Exact count is 10/15 and does not certify a live deployment."
   ],
-  "reviewRound1": "docs/audio/BOUND-REVIEW-ROUND1.json"
+  "reviewRound1": "docs/audio/BOUND-REVIEW-ROUND1.json",
+  "reviewRemaining": "docs/audio/BOUND-REVIEW-REMAINING.json"
 }
