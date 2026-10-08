@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Satellite candidate promoted from saved audio with 0 TTS; global synthesis remains frozen at consumed 33/33.",
+  "reason": "General synthesis remains frozen; owner approved only the seven targets in amendment40 after safe whole-sentence preflight.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -16,7 +16,7 @@
     "activePending": 4,
     "excluded": 1,
     "successfulTtsSinceLastNewExact": 33,
-    "threshold": 33
+    "threshold": 40
   },
   "excludedArticles": [
     "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع"
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Morning review closed. Prepared seven-target proposal awaits owner threshold decision; no synthesis or authorization change at consumed 33/33.",
+    "nextAction": "Run zero-provider whole-sentence preflight, then touchscreen three repairs and full QA before morning four repairs and full QA.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -92,7 +92,7 @@
       "status": "EXECUTED_CONSUMED",
       "successfulTtsRequestsConsumed": 1
     },
-    "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-33.json",
+    "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-40.json",
     "boundedTranche": {
       "decisionId": "COMPLETION15-TRANCHE33-v1",
       "successfulRequestsAuthorized": 3,
@@ -108,9 +108,17 @@
       "actualAudioErrors": 5,
       "inconclusiveCaseIds": [],
       "repairRegions": 4,
-      "ttsAuthorized": false,
+      "ttsAuthorized": true,
       "status": "COMPLETE"
     },
-    "pendingRepairProposal": "docs/audio/TARGETED-REPAIR-PROPOSAL-40.json"
+    "boundedTranche40": {
+      "decisionId": "COMPLETION15-TRANCHE40-v1",
+      "successfulRequestsAuthorized": 7,
+      "successfulRequestsConsumed": 0,
+      "maximumStrategyThreshold": 40,
+      "executionStatus": "PREFLIGHT_REQUIRED",
+      "authorizationScope": "Seven fixed repair sentences only, including four morning regions; no retries or expansion."
+    },
+    "approvedRepairProposal": "docs/audio/TARGETED-REPAIR-PROPOSAL-40.json"
   }
 }
