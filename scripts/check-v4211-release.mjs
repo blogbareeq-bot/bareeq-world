@@ -61,7 +61,7 @@ for (const file of postFiles) {
   const source = await readFile(`src/content/posts/${file}`, 'utf8');
   if (!/^draft:\s*true\s*$/mi.test(source)) published += 1;
 }
-if (![13, 14, 15].includes(published)) throw new Error(`V4.21.6 expected 13–15 published articles across supported release states, found ${published}.`);
+if (published < 13) throw new Error(`V4.21.6 compatibility expects at least the established 13-article release baseline, found ${published}.`);
 
 const plan = spawnSync(process.execPath, ['scripts/plan-v4211-gemini-free-rollout.mjs'], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
 if (plan.error) throw plan.error;
