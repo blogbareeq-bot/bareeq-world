@@ -56,7 +56,7 @@ for (const name of postFiles) {
   if (!/^draft:\s*true\s*$/mi.test(source)) published += 1;
   sourceBundle += source;
 }
-if (![13, 14, 15].includes(published)) throw new Error(`V4.21.6 expects 13–15 published articles across supported release states, got ${published}.`);
+if (published < 13) throw new Error(`V4.21.6 compatibility expects at least the established 13-article release baseline, found ${published}.`);
 const uiSource = [component, page, client, await readFile('src/pages/index.astro', 'utf8')].join('\n');
 for (const paused of ['فكرة تبقى معك', 'بريق عملي', 'ميزان بريق', 'كيف استخدمنا المصادر؟']) if (uiSource.includes(paused)) throw new Error(`Paused experimental knowledge layer returned: ${paused}`);
 

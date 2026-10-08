@@ -71,7 +71,14 @@ export async function writeApprovedFixture(dir, { articleId = 'resume-fixture', 
     await mkdir(path.join(dir, 'scripts'), { recursive: true });
     await cp(path.join(copyRulesFrom, 'scripts', 'contextual-ambiguities.json'), path.join(dir, 'scripts', 'contextual-ambiguities.json'));
     await mkdir(path.join(dir, 'docs', 'audio'), { recursive: true });
-    await cp(path.join(copyRulesFrom, 'docs', 'audio', 'TTS-FREEZE.json'), path.join(dir, 'docs', 'audio', 'TTS-FREEZE.json'));
+    await writeFile(path.join(dir, 'docs', 'audio', 'TTS-FREEZE.json'), `${JSON.stringify({
+      schema: 'bareeq.audio-tts-freeze.v1',
+      active: false,
+      effectiveAt: '2026-08-29T00:00:00.000Z',
+      reason: 'Test fixture only: allow the mocked synthesis path to exercise quota/resume behavior. Production freeze is not modified.',
+      sourceRunId: 'test-fixture',
+      strategySnapshot: { successfulTtsSinceLastNewExact: 0, threshold: 0 },
+    }, null, 2)}\n`);
   }
   return { model, script, plan };
 }

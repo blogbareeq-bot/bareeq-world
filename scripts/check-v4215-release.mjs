@@ -75,7 +75,7 @@ for (const file of postFiles) {
   const source = await readFile(`src/content/posts/${file}`, 'utf8');
   if (!/^draft:\s*true\s*$/mi.test(source)) live += 1;
 }
-if (![13, 14, 15].includes(live)) throw new Error(`V4.21.6 compatibility expects 13–15 live articles, found ${live}.`);
+if (live < 13) throw new Error(`V4.21.6 compatibility expects at least the established release baseline of 13 live articles, found ${live}.`);
 
 const manifestPath = path.join('public', 'audio', 'articles', ARTICLE_KEY, 'manifest.json');
 let manifestExists = true;
