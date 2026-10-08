@@ -17,8 +17,8 @@ await mkdir(generatedRoot, { recursive: true });
 await mkdir(thumbnailRoot, { recursive: true });
 await mkdir(socialRoot, { recursive: true });
 
-const coverFiles = (await readdir(sourceRoot)).filter((name) => /\.(?:webp|png|jpe?g)$/i.test(name));
-const thumbnailFiles = (await readdir(thumbnailSourceRoot)).filter((name) => /\.(?:webp|png|jpe?g)$/i.test(name));
+const coverFiles = (await readdir(sourceRoot)).filter((name) => /\.(?:webp|png|jpe?g|svg)$/i.test(name));
+const thumbnailFiles = (await readdir(thumbnailSourceRoot)).filter((name) => /\.(?:webp|png|jpe?g|svg)$/i.test(name));
 const coverNames = new Set(coverFiles.map((file) => path.parse(file).name));
 const thumbnailNames = new Set(thumbnailFiles.map((file) => path.parse(file).name));
 const missingThumbnails = [...coverNames].filter((name) => !thumbnailNames.has(name));
