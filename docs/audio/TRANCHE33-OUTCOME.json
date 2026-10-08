@@ -5,9 +5,9 @@
   "successfulTtsSinceLastNewExact": 33,
   "additionalSuccessfulRequestsConsumed": 3,
   "additionalSuccessfulRequestsRemaining": 0,
-  "publishedExact": 9,
+  "publishedExact": 10,
   "targetPublishedExact": 15,
-  "publicationPerformed": false,
+  "publicationPerformed": true,
   "qualityPolicyUnchanged": true,
   "protectedExact": [
     {
@@ -139,16 +139,17 @@
       "id": "R3",
       "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
       "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
-      "fullSha256": "bf977577f07c000c92a6c1ddd4e2b04a5f30785da4e8967f19fe3c4d43e0b304",
+      "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d",
       "clipSha256": "0dbf695c383bc9b3b3f0dafa3d1148dbd06fac4c78f6b245932aa24e1e6edb31",
-      "fullSha256Role": "baseline-only-not-repaired",
-      "publicationPerformed": false,
+      "fullSha256Role": "published-repaired-candidate",
+      "publicationPerformed": true,
       "successfulTtsConsumed": 1,
       "clipFile": "R3-review.mp3",
-      "status": "RETAINED_GENERATED_MICRO_REQUIRES_LISTENING",
+      "status": "PUBLISHED_AFTER_BOUND_HUMAN_ADJUDICATION",
       "generatedSha256": "0dbf695c383bc9b3b3f0dafa3d1148dbd06fac4c78f6b245932aa24e1e6edb31",
       "reason": "No safe source-derived quiet word boundary",
-      "fullCandidateCreated": false
+      "fullCandidateCreated": false,
+      "publicationRecord": "docs/audio/ROUND1-SATELLITE-PUBLICATION.json"
     },
     {
       "id": "P0",
@@ -247,11 +248,19 @@
     }
   ],
   "morning": {
-    "humanReviewPerformed": false,
+    "humanReviewPerformed": true,
     "reviewCases": 15,
     "readyClips": 15,
     "ttsAuthorized": false,
-    "baselineFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496"
+    "baselineFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+    "humanReviewStatus": "PARTIAL",
+    "reviewedCases": 6,
+    "expectedPronunciationConfirmed": 5,
+    "actualAudioErrors": 1,
+    "remainingReviewCases": 9,
+    "actualErrorCases": [
+      "M3"
+    ]
   },
   "evidenceRuns": {
     "generation": "37622809292",
@@ -266,5 +275,6 @@
     "Review morning clips in rounds of at most seven.",
     "No further synthesis within the consumed 33 threshold.",
     "Publish only after ordinary gates and bound human evidence pass."
-  ]
+  ],
+  "reviewRound1": "docs/audio/BOUND-REVIEW-ROUND1.json"
 }

@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Owner-approved three-request tranche consumed: successful TTS counter 33/33. Global synthesis remains frozen; saved candidates have unresolved full-file consensus or localization gates and have not been published.",
+  "reason": "Satellite candidate promoted from saved audio with 0 TTS; global synthesis remains frozen at consumed 33/33.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -10,10 +10,10 @@
     "expiresAt": "2027-01-03T08:35:52Z"
   },
   "strategySnapshot": {
-    "exact": 9,
+    "exact": 10,
     "total": 15,
-    "fallback": 6,
-    "activePending": 5,
+    "fallback": 5,
+    "activePending": 4,
     "excluded": 1,
     "successfulTtsSinceLastNewExact": 33,
     "threshold": 33
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Adjudicate saved candidate full-file conflicts and review prepared clips. No additional TTS remains within the 33 threshold.",
+    "nextAction": "Review remaining full-file conflicts and morning cases; no synthesis remains authorized.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
