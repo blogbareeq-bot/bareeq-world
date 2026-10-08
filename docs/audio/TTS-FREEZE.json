@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Run zero-provider whole-sentence preflight, then touchscreen three repairs and full QA before morning four repairs and full QA.",
+    "nextAction": "Keep synthesis frozen under the current exhausted authorization. At the next owner-authorized TTS allowance, process published articles with no live audio before any legacy renewal or fallback/exactness repair.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -120,5 +120,13 @@
       "authorizationScope": "Seven fixed repair sentences only, including four morning regions; no retries or expansion."
     },
     "approvedRepairProposal": "docs/audio/TARGETED-REPAIR-PROPOSAL-40.json"
+  },
+  "queuePolicy": {
+    "schema": "bareeq.audio-priority-queue.v1",
+    "mode": "new-content-before-renewal",
+    "policy": "docs/audio/AUDIO-PRIORITY-NEW-BEFORE-RENEWAL-v1.md",
+    "enforcement": "scripts/audio-priority-guard.mjs",
+    "ownerApprovedAt": "2026-10-08",
+    "note": "Priority ordering only. Does not unfreeze synthesis or authorize additional TTS requests."
   }
 }
