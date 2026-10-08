@@ -15,6 +15,7 @@ on:
       - 'scripts/audio-progressive-status.mjs'
       - 'scripts/audio-repair-session-report.mjs'
       - 'scripts/audio-engine-strategy-guard.mjs'
+      - 'scripts/audio-priority-guard.mjs'
       - 'scripts/audio-tts-freeze-guard.mjs'
       - 'scripts/audio-state-consistency.mjs'
       - 'scripts/test-audio-tts-freeze-guard.mjs'
@@ -22,10 +23,12 @@ on:
       - 'scripts/test-audio-state-consistency.mjs'
       - 'docs/audio/TTS-FREEZE.json'
       - 'docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md'
+      - 'docs/audio/AUDIO-PRIORITY-NEW-BEFORE-RENEWAL-v1.md'
       - 'scripts/test-audio-daily-progressive.mjs'
       - 'scripts/test-audio-segment-repair.mjs'
       - 'scripts/test-audio-dual-asr-adjudicate.mjs'
       - 'scripts/test-audio-engine-strategy-guard.mjs'
+      - 'scripts/test-audio-priority-guard.mjs'
   push:
     branches: [main]
     paths:
@@ -40,6 +43,7 @@ on:
       - 'scripts/audio-progressive-status.mjs'
       - 'scripts/audio-repair-session-report.mjs'
       - 'scripts/audio-engine-strategy-guard.mjs'
+      - 'scripts/audio-priority-guard.mjs'
       - 'scripts/audio-tts-freeze-guard.mjs'
       - 'scripts/audio-state-consistency.mjs'
       - 'scripts/test-audio-tts-freeze-guard.mjs'
@@ -47,10 +51,12 @@ on:
       - 'scripts/test-audio-state-consistency.mjs'
       - 'docs/audio/TTS-FREEZE.json'
       - 'docs/audio/BAREEQ-AUDIO-RECOVERY-DECISION-v1.md'
+      - 'docs/audio/AUDIO-PRIORITY-NEW-BEFORE-RENEWAL-v1.md'
       - 'scripts/test-audio-daily-progressive.mjs'
       - 'scripts/test-audio-segment-repair.mjs'
       - 'scripts/test-audio-dual-asr-adjudicate.mjs'
       - 'scripts/test-audio-engine-strategy-guard.mjs'
+      - 'scripts/test-audio-priority-guard.mjs'
   # The dedicated dispatcher starts at 00:01 UTC after the observed Gemini
   # Free Tier reset. These are later direct fallbacks if that dispatch is lost.
   schedule:
@@ -94,6 +100,13 @@ jobs:
             echo 'verified-micro=false' >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          if ! node scripts/audio-priority-guard.mjs --allow-legacy; then
+            echo 'should-run=false' >> "$GITHUB_OUTPUT"
+            echo 'target-article=' >> "$GITHUB_OUTPUT"
+            echo 'verified-micro=false' >> "$GITHUB_OUTPUT"
+            echo 'LEGACY_PROGRESSIVE_AUDIO=PAUSED_NEW_CONTENT_FIRST'
+            exit 0
+          fi
           node scripts/audio-engine-strategy-guard.mjs --workflow-gate >> "$GITHUB_OUTPUT"
 
   offline-gates:
@@ -113,6 +126,7 @@ jobs:
           node scripts/test-audio-segment-repair.mjs
           node scripts/test-audio-micro-repair-preflight.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
+          node scripts/test-audio-priority-guard.mjs
           node scripts/test-audio-tts-freeze-guard.mjs
           node scripts/test-audio-tts-freeze-integration.mjs
           node scripts/test-audio-state-consistency.mjs
@@ -166,6 +180,7 @@ jobs:
           node scripts/test-audio-segment-repair.mjs
           node scripts/test-audio-micro-repair-preflight.mjs
           node scripts/test-audio-engine-strategy-guard.mjs
+          node scripts/test-audio-priority-guard.mjs
           node --check scripts/audio-progressive-repair.mjs
           node --check scripts/audio-openrouter-campaign.mjs
           node --check scripts/audio-repair-session-report.mjs
