@@ -29,17 +29,25 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Verify Cloudflare credentials
+      - name: Detect Cloudflare credentials
+        id: cloudflare
         shell: bash
         run: |
-          test -n "$CLOUDFLARE_API_TOKEN" || { echo "::error::Missing CLOUDFLARE_API_TOKEN/CF_API_TOKEN repository secret"; exit 2; }
-          test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo "::error::Missing CLOUDFLARE_ACCOUNT_ID/CF_ACCOUNT_ID repository secret"; exit 2; }
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Cloudflare credentials are not configured; production deploy is skipped."
+          fi
 
       - name: Install dependencies
+        if: steps.cloudflare.outputs.available == 'true'
         run: npm ci
 
       - name: Build production site
+        if: steps.cloudflare.outputs.available == 'true'
         run: npm run build
 
       - name: Deploy production
+        if: steps.cloudflare.outputs.available == 'true'
         run: npx --yes wrangler@4 pages deploy dist --project-name=bareeq-world --branch=main --commit-dirty=true
