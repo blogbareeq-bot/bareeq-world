@@ -91,9 +91,9 @@ assert.deepEqual(passed.consensus, { substitutions: 0, deletions: 0, insertions:
 assert.equal(passed.representationOnly.length, 4);
 assert.equal(passed.modelDisagreements.length, 2);
 assert.equal(passed.policy.version, ADJUDICATION_POLICY_VERSION);
-assert.equal(ADJUDICATION_POLICY_VERSION, 5);
+assert.equal(ADJUDICATION_POLICY_VERSION, 6);
 assert.equal(passed.policy.verificationRepresentation.synthesisFingerprintMutation, false);
-assert.equal(passed.policy.verificationRepresentation.newEquivalenceRulesInV5, false);
+assert.equal(passed.policy.verificationRepresentation.newEquivalenceRulesInV6, false);
 assert.match(passed.policy.humanListeningPolicy, /campaign publication policy governs/);
 
 const deleteA = structuredClone(fixedFirst);
@@ -246,5 +246,16 @@ assert.ok(offlineMismatchMarker >= 0 && offlineMismatchMarker < providerUpload,
   'a bound stored exact mismatch must return before any provider upload');
 assert.ok(apiKeyGate < providerUpload,
   'provider validation must remain credential-gated after offline reuse is unavailable');
+
+
+// An approved numeral spelling is still a matched independent transcription.
+for(const expected of ['3','1','2']){
+ const actual={'3':'ثلاثة','1':'واحد','2':'اثنان'}[expected];
+ const rs=INDEPENDENT_ASR_MODELS.map((model,i)=>({model,requestedModel:model,differences:[i===0?{type:'substitution',expected,actual,expectedIndex:0}:{type:'deletion',expected,actual:null,expectedIndex:0}]}));
+ const result=adjudicateDualAsr({expectedText:expected,reports:rs});assert.equal(result.passed,true);assert.equal(result.modelDisagreements.length,1);assert.equal(result.policy.verificationRepresentation.newEquivalenceRulesInV6,false);
+}
+const changedNumber=INDEPENDENT_ASR_MODELS.map((model,i)=>({model,requestedModel:model,differences:[i===0?{type:'substitution',expected:'3',actual:'أربعة',expectedIndex:0}:{type:'deletion',expected:'3',actual:null,expectedIndex:0}]}));
+assert.equal(adjudicateDualAsr({expectedText:'3',reports:changedNumber}).passed,false);
+assert.equal(representationEquivalent('24','12'),false);
 
 console.log('Dual-ASR adjudication tests passed: shared lexical errors fail; one-model ASR errors are recorded; narrow numeric representation, explicit Arabic ب tokenization, silent visual arrows, approved orthography, and offline raw-ASR reuse stay guarded; human-listening requirements remain governed by the campaign publication policy.');

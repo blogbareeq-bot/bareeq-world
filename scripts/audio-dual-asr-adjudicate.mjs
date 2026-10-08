@@ -15,7 +15,7 @@ import { pathExists, writeJson } from './audio-checkpoint.mjs';
 import { loadSpokenArticle } from './audio-split.mjs';
 import { boundIdentity } from './audio-report.mjs';
 
-export const ADJUDICATION_POLICY_VERSION = 5;
+export const ADJUDICATION_POLICY_VERSION = 6;
 
 const NUMBER_FORMS = new Map([
   [0, ['0', '٠', 'صفر']],
@@ -163,6 +163,28 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
       });
       continue;
     }
+    // An already-approved representation is a model match even when the other
+    // report uses a different operation (for example 3 -> ثلاثة versus deletion).
+    // Use the existing whitelist only; do not introduce any new equivalence.
+    const existingMatch = [a, b].map((diff, i) => diff.type === 'substitution'
+      && representationWithBoundaryEquivalent(expected, diff, insertions[i].get(index) || []));
+    if (existingMatch[0] !== existingMatch[1]) {
+      const matched = existingMatch[0] ? 0 : 1;
+      const matchingDiff = matched === 0 ? a : b;
+      if (procliticBoundaryEquivalent(expected, matchingDiff, insertions[matched].get(index) || [])) {
+        consumedInsertionBoundaries[matched].add(index);
+      }
+      modelDisagreements.push({
+        expectedIndex: index,
+        expected,
+        matchedByModel: models[matched],
+        divergentModel: models[1 - matched],
+        divergence: matched === 0 ? b : a,
+        matchedRepresentation: matchingDiff,
+        verdict: 'not-an-audio-error-because-the-other-independent-model-matched-an-existing-approved-representation',
+      });
+      continue;
+    }
     if (a.type === 'substitution' && b.type === 'substitution') {
       const aBoundary = procliticBoundaryEquivalent(expected, a, insertions[0].get(index) || []);
       const bBoundary = procliticBoundaryEquivalent(expected, b, insertions[1].get(index) || []);
@@ -277,7 +299,7 @@ export function adjudicateDualAsr({ expectedText, reports, articleId = null, fin
         version: 1,
         purpose: 'comparison-only canonical verification; synthesis text and fingerprints are not mutated',
         synthesisFingerprintMutation: false,
-        newEquivalenceRulesInV5: false,
+        newEquivalenceRulesInV6: false,
       },
       humanListeningPolicy: 'campaign publication policy governs; adjudication neither requires nor waives full-file listening',
     },
