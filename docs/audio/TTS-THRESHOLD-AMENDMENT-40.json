@@ -12,7 +12,7 @@
   "newThreshold": 40,
   "successfulRequestBaseline": 33,
   "additionalSuccessfulRequestsAuthorized": 7,
-  "successfulRequestsConsumed": 5,
+  "successfulRequestsConsumed": 6,
   "automaticExpansion": false,
   "automaticProviderDispatch": false,
   "automaticRetry": false,
@@ -389,13 +389,15 @@
       "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
       "preserveAllOtherSourceAudio": true,
       "id": "R40-06",
-      "successfulTtsConsumed": 0,
+      "successfulTtsConsumed": 1,
       "dispatchAttempt": {
         "runId": "37777589258",
         "attemptNumber": 1,
-        "status": "RESERVED",
-        "reservedAt": "2026-10-08T12:36:09.405Z"
-      }
+        "status": "SUCCESSFUL_RESPONSE",
+        "reservedAt": "2026-10-08T12:36:09.405Z",
+        "responseAt": "2026-10-08T12:36:18.974Z"
+      },
+      "providerReceiptSha256": "d3ed719e4e74cde8fd3382d9f231f93f4075cab726767392dd09c14dd4a3dafb"
     },
     {
       "requestNumber": 7,
