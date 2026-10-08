@@ -1,14 +1,14 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "37577891527",
-  "sourceArtifact": "bareeq-human-exact-promotion-37577891527",
-  "sourceEvent": "push",
-  "generatedAt": "2026-10-07T05:45:49.423Z",
+  "sourceRunId": "37762717921",
+  "sourceArtifact": "bareeq-round1-satellite-published-37762717921",
+  "sourceEvent": "pull_request",
+  "generatedAt": "2026-10-08T10:20:25.913Z",
   "publicationComplete": false,
-  "publishedCount": 9,
-  "fallbackCount": 6,
-  "exactCount": 9,
+  "publishedCount": 10,
+  "fallbackCount": 5,
+  "exactCount": 10,
   "rows": [
     {
       "articleId": "ai-agents-future-now",
@@ -264,16 +264,19 @@
       "audioKey": "45d512425faa533a",
       "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
       "generationStatus": "generated",
-      "validationStatus": "failed",
-      "substitutions": 2,
+      "validationStatus": "validated",
+      "substitutions": 0,
       "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
-      "exact": false,
-      "publishedExact": false,
-      "fullSha256": "bf977577f07c000c92a6c1ddd4e2b04a5f30785da4e8967f19fe3c4d43e0b304",
-      "repairedParts": [],
-      "error": "dual-ASR consensus failed: S=8 D=9 I=0 unresolved=1"
+      "exact": true,
+      "publishedExact": true,
+      "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d",
+      "repairedParts": [
+        2
+      ],
+      "error": null,
+      "verificationMethod": "bound-human-evidence-offline-round1"
     }
   ]
 }

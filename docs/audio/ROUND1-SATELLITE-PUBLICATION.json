@@ -1,0 +1,262 @@
+{
+  "schema": "bareeq.audio-round1-publication.v1",
+  "publishedAt": "2026-10-08T10:20:25.913Z",
+  "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+  "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+  "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d",
+  "audioKey": "45d512425faa533a",
+  "publishedExact": 10,
+  "fallbackCount": 5,
+  "consensus": {
+    "substitutions": 0,
+    "deletions": 0,
+    "insertions": 0,
+    "unresolved": 0
+  },
+  "rawConsensus": {
+    "substitutions": 1,
+    "deletions": 0,
+    "insertions": 0,
+    "unresolved": 0
+  },
+  "humanResolved": [
+    "T21"
+  ],
+  "reviewedRepairCase": "R3",
+  "protectedExact": [
+    {
+      "articleId": "ai-agents-future-now",
+      "fingerprint": "7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488",
+      "fullSha256": "34fa55716fe40389283e40c3fc0fca3b8d7f2cf386a2f835edccabeb1d9b659b"
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "fingerprint": "429adbe4ebdabd03e5c77d122255a29c7840ec58b7f32a8e59e18b91aba2db21",
+      "fullSha256": "d7f00585b47dc3ece44c73ac0f62763ffb41a1e4f602ddeae1aabd3d65fd0567"
+    },
+    {
+      "articleId": "altadakhom-explained-simply",
+      "fingerprint": "58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45",
+      "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135"
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
+      "fullSha256": "dc2217a45d1872ab0de9010897ad22028f0e5e93fddb07178d1f6aa2f7f66a71"
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+      "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301"
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "fingerprint": "a7f364df849199a8f4096863f95739a948e2788cf0d4d65d1e94acec022765b6",
+      "fullSha256": "1586e603c9e59b9967a51a980b4d2f7b58af262ee2aff24a77eab948d2e969e6"
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
+      "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+      "fullSha256": "e8204d5a43005b8dbcf05745167a88225491c69ec94d1d69a72120b36c70990b"
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "fingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
+      "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7"
+    }
+  ],
+  "successfulTtsCounter": 33,
+  "threshold": 33,
+  "ttsCalls": 0,
+  "newAsrCalls": 0,
+  "sourceQaRunId": "37761005721",
+  "sourceSubmissionSha256": "2c60f750220435000810b9c06ce5fc4732ad1569aac032671fcc952e2d1a5e91",
+  "derivativeProof": {
+    "schema": "bareeq.audio-reviewed-source-derivative.v1",
+    "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+    "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+    "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d",
+    "baselineFullSha256": "bf977577f07c000c92a6c1ddd4e2b04a5f30785da4e8967f19fe3c4d43e0b304",
+    "sourceQaRunId": "37761005721",
+    "sourceSubmissionSha256": "2c60f750220435000810b9c06ce5fc4732ad1569aac032671fcc952e2d1a5e91",
+    "reviewedMicro": {
+      "caseId": "R3",
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "baselineFullSha256": "bf977577f07c000c92a6c1ddd4e2b04a5f30785da4e8967f19fe3c4d43e0b304",
+      "fullSha256": null,
+      "generatedMicroSha256": "0dbf695c383bc9b3b3f0dafa3d1148dbd06fac4c78f6b245932aa24e1e6edb31",
+      "clipSha256": "0dbf695c383bc9b3b3f0dafa3d1148dbd06fac4c78f6b245932aa24e1e6edb31",
+      "clipStart": 0,
+      "clipEnd": 4.872,
+      "clipSource": "generated micro before assembly",
+      "validatorVersion": "audio-tranche33-reconstruct-v1",
+      "humanReviewPerformed": true,
+      "decision": "EXPECTED_PRONUNCIATION_CONFIRMED",
+      "rationale": "مطابق",
+      "reviewer": "صاحب المشروع",
+      "decisionDate": "2026-10-08T09:57:09.296Z",
+      "expectedIndices": [
+        697,
+        698,
+        699,
+        700,
+        701,
+        702,
+        703
+      ],
+      "expectedText": "بل لأن هناك قوى تعيق حركتها، مثل:",
+      "bindingVerified": true,
+      "submissionSha256": "2c60f750220435000810b9c06ce5fc4732ad1569aac032671fcc952e2d1a5e91"
+    },
+    "splice": {
+      "schema": "bareeq.audio-reviewed-micro-splice.v1",
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "partIndex": 2,
+      "partFile": "part-003-1a0bea3ef815.mp3",
+      "baselinePartSha256": "ea04646e1d818e10720c494fc0bd59e1fd574c0672e6df7b4c8c475f682394b1",
+      "generatedMicroSha256": "0dbf695c383bc9b3b3f0dafa3d1148dbd06fac4c78f6b245932aa24e1e6edb31",
+      "candidatePartSha256": "ee52711c5c8e35b0efba26f6480423033505d7dd3ff37113dbf61ec690a9fceb",
+      "sourceSubmissionSha256": "2c60f750220435000810b9c06ce5fc4732ad1569aac032671fcc952e2d1a5e91",
+      "reviewer": "صاحب المشروع",
+      "reviewedAt": "2026-10-08T09:57:09.296Z",
+      "method": "owner-confirmed-whole-clause-from-counted-saved-audio",
+      "baselineCutSamples": [
+        3262079,
+        3423359
+      ],
+      "donorTrimSamples": [
+        9120,
+        219840
+      ],
+      "insertedPcmSha256": "12f1656ce0afdedfa5cc4364dc3b75933225f2912a20ac893f4b909b9bf20e1e",
+      "outsidePcmIdentical": true,
+      "prefixCorrelation": 0.9998366179156859,
+      "suffixCorrelation": 0.9999206689537639,
+      "seamStep": 25,
+      "reviewClipStartInPart": 61.95997916666666,
+      "reviewClipEndInPart": 78.34997916666667,
+      "ttsCalls": 0,
+      "publicationPerformed": false,
+      "requiresFreshFullQa": true
+    },
+    "historicalCase": {
+      "caseId": "T21",
+      "originalMapping": {
+        "rawId": "pending-84af3b76718c",
+        "kind": "pending",
+        "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+        "title": "لماذا لا تسقط الأقمار الصناعية من السماء؟",
+        "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+        "fullSha256": "bf977577f07c000c92a6c1ddd4e2b04a5f30785da4e8967f19fe3c4d43e0b304",
+        "partIndex": 0,
+        "segmentId": "b0013",
+        "clipFile": "clips/T21.mp3",
+        "clipStartSeconds": 112.019,
+        "clipEndSeconds": 126.019,
+        "approximateTargetSecondsInClip": 7,
+        "expectedIndex": 221,
+        "expectedToken": "إذن",
+        "expectedContext": "فسوف يبدأ في السقوط مباشرة نحو الأرض ⟦إذن⟧ الأقمار الصناعية لا تبقى في الفضاء لأنها",
+        "issueType": "substitution",
+        "hidden": {
+          "source": "substantive",
+          "automatedType": "substitution",
+          "expectedIndex": 221,
+          "expected": "إذن",
+          "actual": "إذا",
+          "reason": null,
+          "confirmedBy": [
+            "gemini-3.5-flash-lite",
+            "gemini-3.5-transcribe"
+          ],
+          "first": null,
+          "second": null,
+          "models": [
+            "gemini-3.5-flash-lite",
+            "gemini-3.5-transcribe"
+          ]
+        },
+        "reviewerCaseId": "T21",
+        "clipSha256": "49b0547cf53a704ee5a2b3cc3069728e7810e5ec801718514281f07122766340"
+      },
+      "packageId": "triage-37284619084-83e2e3a7db",
+      "reviewerResultsSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2"
+    },
+    "unchangedParts": [
+      {
+        "partIndex": 0,
+        "file": "part-001-5b4f073c6549.mp3",
+        "sha256": "693165064718726a188094bb11cf32924a68fa2b7c8b5a24ff8dde2eb6e5f29d"
+      },
+      {
+        "partIndex": 1,
+        "file": "part-002-596a3de9d25b.mp3",
+        "sha256": "bbf2a447be6267e182caa506afd03b1945d3f99767019bdae7a3761d88e46a0b"
+      },
+      {
+        "partIndex": 3,
+        "file": "part-004-508cb21375fc.mp3",
+        "sha256": "632aa1e9a612773897fac4e7aa53611371648321bc5905d958997350fe80f755"
+      },
+      {
+        "partIndex": 4,
+        "file": "part-005-10e289aafa3e.mp3",
+        "sha256": "a34b44cf693fd096b615bff6183339c74a7ef35bbfb2d968c8b765c3b94edf69"
+      },
+      {
+        "partIndex": 5,
+        "file": "part-006-1e101bd4a277.mp3",
+        "sha256": "dc17bbe2a2555bfba30d1542def45f2eccee135e8d7e4588fe8f636f435e9d34"
+      }
+    ],
+    "rawAsrImmutable": true,
+    "baseAdjudicationImmutable": true,
+    "ttsCalls": 0,
+    "newAsrCalls": 0
+  },
+  "publishedParts": [
+    {
+      "src": "/audio/articles/45d512425faa533a/part-001-5b4f073c6549.clean.mp3",
+      "bytes": 1834605,
+      "durationSeconds": 152.88,
+      "sha256": "d3548926edb31b7464f7ed7cc44a1498613ed3902bb2fafa9fdc57ecb9f16d53"
+    },
+    {
+      "src": "/audio/articles/45d512425faa533a/part-002-596a3de9d25b.clean.mp3",
+      "bytes": 1856205,
+      "durationSeconds": 154.68,
+      "sha256": "3e4cdc837a7b5377a38f92df361fed52bba6d9c2f9c8592f9e71bd1ca5401c2f"
+    },
+    {
+      "src": "/audio/articles/45d512425faa533a/part-003-1a0bea3ef815.clean.mp3",
+      "bytes": 1841805,
+      "durationSeconds": 153.48,
+      "sha256": "859f14e927951fd0050b0995497ba0162b7389d55e5ef25150df897aa9dc4f75"
+    },
+    {
+      "src": "/audio/articles/45d512425faa533a/part-004-508cb21375fc.clean.mp3",
+      "bytes": 1649133,
+      "durationSeconds": 137.424,
+      "sha256": "d68d5ae991f0889310fd04fa1472b9fed5ef6453a6cb61b7ef4231a0c68c4021"
+    },
+    {
+      "src": "/audio/articles/45d512425faa533a/part-005-10e289aafa3e.clean.mp3",
+      "bytes": 1786221,
+      "durationSeconds": 148.848,
+      "sha256": "9934198c6340310aee9e41c2f3def1bb2692e8808cdd3dc003510f9c942ed6e5"
+    },
+    {
+      "src": "/audio/articles/45d512425faa533a/part-006-1e101bd4a277.clean.mp3",
+      "bytes": 1709037,
+      "durationSeconds": 142.416,
+      "sha256": "86ccec6718d2dbd4a26bfb819f1a005ace0d5818ef1ad97b0860b580d2bc06c4"
+    }
+  ]
+}

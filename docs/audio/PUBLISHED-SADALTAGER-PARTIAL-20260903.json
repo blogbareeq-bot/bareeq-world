@@ -5,10 +5,10 @@
   "voice": "Sadaltager",
   "publicationStatus": "partial-with-existing-live-fallback",
   "publicationComplete": false,
-  "publishedCount": 9,
-  "fallbackCount": 6,
+  "publishedCount": 10,
+  "fallbackCount": 5,
   "publicationPolicy": "docs/audio/PUBLICATION-POLICY-20260901.json",
-  "generatedAt": "2026-10-07T05:45:49.362Z",
+  "generatedAt": "2026-10-08T10:20:25.913Z",
   "articles": [
     {
       "articleId": "ai-agents-future-now",
@@ -54,6 +54,11 @@
       "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
       "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
       "fullSha256": "e8204d5a43005b8dbcf05745167a88225491c69ec94d1d69a72120b36c70990b"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d"
     }
   ],
   "fallbacks": [
@@ -75,10 +80,6 @@
     },
     {
       "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
-      "reason": "awaiting-exact-campaign-completion"
-    },
-    {
-      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
       "reason": "awaiting-exact-campaign-completion"
     }
   ]
