@@ -5,7 +5,7 @@
   "exactBaseline": 10,
   "successfulTtsSinceLastNewExact": 40,
   "status": "paused",
-  "reason": "Owner approved seven fixed source-bound repairs, one attempt each; global automatic dispatch remains frozen.",
+  "reason": "Bounded tranche40 attempts closed; unused budget cannot be retried automatically.",
   "lastExactAt": "2026-10-08T10:20:25.913Z",
   "lastRunId": "37777589258",
   "updatedAt": "2026-10-08T12:36:32.291Z",

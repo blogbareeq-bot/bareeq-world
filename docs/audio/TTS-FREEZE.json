@@ -116,7 +116,7 @@
       "successfulRequestsAuthorized": 7,
       "successfulRequestsConsumed": 7,
       "maximumStrategyThreshold": 40,
-      "executionStatus": "EXECUTING",
+      "executionStatus": "EXECUTED",
       "authorizationScope": "Seven fixed repair sentences only, including four morning regions; no retries or expansion."
     },
     "approvedRepairProposal": "docs/audio/TARGETED-REPAIR-PROPOSAL-40.json"
