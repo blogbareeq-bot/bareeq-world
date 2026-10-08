@@ -15,7 +15,7 @@
     "fallback": 5,
     "activePending": 4,
     "excluded": 1,
-    "successfulTtsSinceLastNewExact": 37,
+    "successfulTtsSinceLastNewExact": 38,
     "threshold": 40
   },
   "excludedArticles": [
@@ -114,7 +114,7 @@
     "boundedTranche40": {
       "decisionId": "COMPLETION15-TRANCHE40-v1",
       "successfulRequestsAuthorized": 7,
-      "successfulRequestsConsumed": 4,
+      "successfulRequestsConsumed": 5,
       "maximumStrategyThreshold": 40,
       "executionStatus": "EXECUTING",
       "authorizationScope": "Seven fixed repair sentences only, including four morning regions; no retries or expansion."
