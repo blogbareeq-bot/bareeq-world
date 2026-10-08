@@ -1,0 +1,4577 @@
+{
+  "version": 1,
+  "articleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
+  "sourceSnapshotHash": "d2c9b7f52340c4d123d33eb5a5280bdee6e33e5c77a0982acc49f70aae1588aa",
+  "sourceStructureHash": "13c349e9c81a3aa311d0a3abf34ae2af481ab151ba7144f35d0d877d5517882b",
+  "generatedAt": "2026-10-08T09:02:00.000Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر والقراءة الإضافية",
+    "segmentCount": 8,
+    "sourceHash": "02d2cbfe6bb33735a0ce2d1b3e553cd34835107c58bd326b13c435bdc61017f6"
+  },
+  "segments": [
+    {
+      "segmentId": "title-6d233410eb88",
+      "type": "title",
+      "sourceHash": "6d233410eb880c9576502293d2d1307f00fb8f6345ace5c0d4da80efeaa21bac",
+      "sourceText": "هل سرقت الشاشة تركيزنا؟ لماذا لم نعد نحتمل الدقائق الفارغة؟",
+      "spokenText": "هل سرقت الشاشة تركيزنا؟ لماذا لم نعد نحتمل الدقائق الفارغة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-b08384246328",
+      "type": "paragraph",
+      "sourceHash": "b083842463286d612254d96e2928fb71bd6f5081381f688b2917da658d691b4d",
+      "sourceText": "في المصعد، قبل أن يُغلق الباب، تخرج الهواتف.",
+      "spokenText": "في المصعد، قبل أن يُغلق الباب، تخرج الهواتف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-e527c93265de",
+      "type": "paragraph",
+      "sourceHash": "e527c93265def9cbbb8ec965af8da650e3c1f086da6b778cbd1b9d0c36362908",
+      "sourceText": "في الطابور، قبل أن نشعر بأننا ننتظر، تخرج الهواتف.",
+      "spokenText": "في الطابور، قبل أن نشعر بأننا ننتظر، تخرج الهواتف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-e7279d95d711",
+      "type": "paragraph",
+      "sourceHash": "e7279d95d711f4e022a2d5be2e21327037ba24e33917d4597ac0256dbefbee56",
+      "sourceText": "عند إشارة المرور، في الدقائق التي تسبق موعدًا، أثناء انتظار فنجان القهوة، وحتى في تلك الثواني القصيرة بين إطفاء المصباح ومحاولة النوم… تمتد اليد إلى الشاشة كما لو أنها تكمل حركة بدأها الجسد قبل أن يتخذ العقل قرارًا.",
+      "spokenText": "عند إشارة المرور، في الدقائق التي تسبق موعدًا، أثناء انتظار فنجان القهوة، وحتى في تلك الثواني القصيرة بين إطفاء المصباح ومحاولة النوم… تمتد اليد إلى الشاشة كما لو أنها تكمل حركة بدأها الجسد قبل أن يتخذ العقل قرارًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9722d1223e17",
+      "type": "paragraph",
+      "sourceHash": "9722d1223e17983df04dd0125d5351f209276c46944f3d83a459b9b9dcca48bf",
+      "sourceText": "ليس بالضرورة لأن رسالة مهمة وصلت.",
+      "spokenText": "ليس بالضرورة لأن رسالة مهمة وصلت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9090c18ff6f2",
+      "type": "paragraph",
+      "sourceHash": "9090c18ff6f2aace785a50d82fa49c773f70c1c49adb42373e13e32a7dbecb9e",
+      "sourceText": "ولا لأننا نبحث عن معلومة نحتاج إليها.",
+      "spokenText": "ولا لأننا نبحث عن معلومة نحتاج إليها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-35d414d76d85",
+      "type": "paragraph",
+      "sourceHash": "35d414d76d85e610fac69811b67f346c8ce9e4aec07bc324966be6fdc109126f",
+      "sourceText": "أحيانًا لا يوجد شيء نريده أصلًا.",
+      "spokenText": "أحيانًا لا يوجد شيء نريده أصلًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-daa83f0ae479",
+      "type": "paragraph",
+      "sourceHash": "daa83f0ae47930dcf9a4d77a05016660dda561d23328d86eff53265c2561a8f3",
+      "sourceText": "نفتح الهاتف، نتفقده، نغلقه، ثم نعود إليه بعد قليل؛ كأن الفراغ نفسه أصبح إشعارًا يحتاج إلى استجابة.",
+      "spokenText": "نفتح الهاتف، نتفقده، نغلقه، ثم نعود إليه بعد قليل؛ كأن الفراغ نفسه أصبح إشعارًا يحتاج إلى استجابة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-e77374f4da66",
+      "type": "paragraph",
+      "sourceHash": "e77374f4da66a3c3a920307762831b996854ebd00ab18499a3c681ead7530969",
+      "sourceText": "ومن هنا يبدأ السؤال الحقيقي:",
+      "spokenText": "ومن هنا يبدأ السؤال الحقيقي:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-e7051e68f4d8",
+      "type": "paragraph",
+      "sourceHash": "e7051e68f4d8b22e70be02091f83e2e3b31f23fa4927f16babc85dd08bce7f58",
+      "sourceText": "هل سرقت الشاشات تركيزنا، أم أنها غيّرت علاقتنا باللحظات التي لا يحدث فيها شيء؟",
+      "spokenText": "هل سرقت الشاشات تركيزنا، أم أنها غيّرت علاقتنا باللحظات التي لا يحدث فيها شيء؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-461224b0f52f",
+      "type": "h2",
+      "sourceHash": "461224b0f52fe7ca96329a452cb83efbc69fd9186dca9282939bc97a17b04431",
+      "sourceText": "الدقائق التي لم تكن فارغة تمامًا",
+      "spokenText": "الدقائق التي لم تكن فارغة تمامًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-963e9a17d97b",
+      "type": "paragraph",
+      "sourceHash": "963e9a17d97b8dc1a0bba709bcedb6d02b83e44be35080c6347bc1bb17a7f770",
+      "sourceText": "قبل أن يحمل كل منا نافذة لا تنطفئ إلى العالم، كانت في اليوم مساحات صغيرة لا اسم لها.",
+      "spokenText": "قبل أن يحمل كل منا نافذة لا تنطفئ إلى العالم، كانت في اليوم مساحات صغيرة لا اسم لها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-79b68fb1c99a",
+      "type": "paragraph",
+      "sourceHash": "79b68fb1c99a3ecd21271f861ce7bfa4584b77a6eb8b82118cd0601a0879a1d8",
+      "sourceText": "دقائق في سيارة. انتظار عند طبيب. مشوار قصير. جلوس قبل وصول صديق. نظرة طويلة من نافذة.",
+      "spokenText": "دقائق في سيارة. انتظار عند طبيب. مشوار قصير. جلوس قبل وصول صديق. نظرة طويلة من نافذة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-7c8c03a8031c",
+      "type": "paragraph",
+      "sourceHash": "7c8c03a8031c6b23f4cef1bf9e3e1043639682f04e2ba13ff4f660ec438c9fdb",
+      "sourceText": "لم نكن نقرر دائمًا ماذا نفعل بها، ولذلك كان العقل يفعل شيئًا من تلقاء نفسه.",
+      "spokenText": "لم نكن نقرر دائمًا ماذا نفعل بها، ولذلك كان العقل يفعل شيئًا من تلقاء نفسه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a1b9d7da30bf",
+      "type": "paragraph",
+      "sourceHash": "a1b9d7da30bf262b197326dc52810b61971d4aa941be73e270a4ea9c54a19313",
+      "sourceText": "يتذكر.",
+      "spokenText": "يتذكر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-00e09a296e78",
+      "type": "paragraph",
+      "sourceHash": "00e09a296e7801bd12525f19d286b5c909cf79cf529f79fa3740e58c8f748964",
+      "sourceText": "يربط بين فكرتين.",
+      "spokenText": "يربط بين فكرتين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-887802c397cc",
+      "type": "paragraph",
+      "sourceHash": "887802c397cc03b113effab1762f2ba29a53d9be3bc3b279e4e9e4e09e9b2a12",
+      "sourceText": "يعيد حديثًا قديمًا.",
+      "spokenText": "يعيد حديثًا قديمًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-3b9996418ccd",
+      "type": "paragraph",
+      "sourceHash": "3b9996418ccd0dc98cd2b28447dd1c7d545abefa6dc3be34020cdc1f2fbe7dc8",
+      "sourceText": "يلاحظ وجهًا في الطريق.",
+      "spokenText": "يلاحظ وجهًا في الطريق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-4bf236aa9169",
+      "type": "paragraph",
+      "sourceHash": "4bf236aa9169b2ad7807e70de662ced4608540b25bb01565af6ea74509a96e77",
+      "sourceText": "يتخيل.",
+      "spokenText": "يتخيل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-59fc5cc4a5a4",
+      "type": "paragraph",
+      "sourceHash": "59fc5cc4a5a497306ab98c6adaa64a3ada99926f7dcd6f8b46a80f8c7156ed32",
+      "sourceText": "يقلق أحيانًا، ويسرح أحيانًا، ويملّ كثيرًا.",
+      "spokenText": "يقلق أحيانًا، ويسرح أحيانًا، ويملّ كثيرًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-fdb102d836ea",
+      "type": "paragraph",
+      "sourceHash": "fdb102d836ea9fa86b9d675a93ac41682f493e5bc477ae9c634b2428ef1133c1",
+      "sourceText": "لم يكن الملل تجربة محببة بالضرورة، لكنه كان جزءًا طبيعيًا من إيقاع اليوم؛ مساحة منخفضة الإثارة بين حدثين.",
+      "spokenText": "لم يكن الملل تجربة محببة بالضرورة، لكنه كان جزءًا طبيعيًا من إيقاع اليوم؛ مساحة منخفضة الإثارة بين حدثين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-c6557cf05ba2",
+      "type": "paragraph",
+      "sourceHash": "c6557cf05ba21bce8b0ba0aa99de4c585a226810c17394bd4351d082f62cf5e9",
+      "sourceText": "أما الآن، ففي جيوبنا جهاز قادر على ملء أي فراغ تقريبًا خلال ثانية واحدة.",
+      "spokenText": "أما الآن، ففي جيوبنا جهاز قادر على ملء أي فراغ تقريبًا خلال ثانية واحدة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9954bd0e5fdc",
+      "type": "paragraph",
+      "sourceHash": "9954bd0e5fdca7c6a744577c06f15fdea0faa73ffe724e4f3adfa7090c07d1f2",
+      "sourceText": "لا نحتاج إلى قصة كاملة كي نتسلى؛ يكفي مقطع.",
+      "spokenText": "لا نحتاج إلى قصة كاملة كي نتسلى؛ يكفي مقطع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-b1be2ff80b78",
+      "type": "paragraph",
+      "sourceHash": "b1be2ff80b78d30e1d111a48eeb2205cf2a43fa487cbc60d8b438ad6bae50aad",
+      "sourceText": "ولا إلى حديث طويل كي نشعر بأن أحدًا موجود؛ تكفي رسالة.",
+      "spokenText": "ولا إلى حديث طويل كي نشعر بأن أحدًا موجود؛ تكفي رسالة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-01bf7de21138",
+      "type": "paragraph",
+      "sourceHash": "01bf7de211386797fc09b370206c4e800065355c0269f86b36caa310c7d3d57f",
+      "sourceText": "ولا إلى سؤال حقيقي كي نبحث؛ تكفي حركة إصبع.",
+      "spokenText": "ولا إلى سؤال حقيقي كي نبحث؛ تكفي حركة إصبع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-7e3b146a444e",
+      "type": "paragraph",
+      "sourceHash": "7e3b146a444e35b4e98de6860002f5f7b3a16b2d5df336acef73513adbadb1d6",
+      "sourceText": "وهذه في ذاتها معجزة تقنية. الهاتف ليس خصمًا للحياة الحديثة؛ إنه مكتبة وخريطة وكاميرا ومصرف ومكتب ووسيلة للوصول إلى من نحب.",
+      "spokenText": "وهذه في ذاتها معجزة تقنية. الهاتف ليس خصمًا للحياة الحديثة؛ إنه مكتبة وخريطة وكاميرا ومصرف ومكتب ووسيلة للوصول إلى من نحب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-dfe275eb7add",
+      "type": "paragraph",
+      "sourceHash": "dfe275eb7add560b6a01f00c1719facd2615037cf31de87052a671ce590311e1",
+      "sourceText": "المشكلة ليست أنه قادر على إنقاذنا من الملل.",
+      "spokenText": "المشكلة ليست أنه قادر على إنقاذنا من الملل.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-264cabb5c0cc",
+      "type": "paragraph",
+      "sourceHash": "264cabb5c0cc6f900575c5c75461c98829c4deaf75a8c92881c3bc668290a940",
+      "sourceText": "بل أنه قادر على فعل ذلك كل مرة.",
+      "spokenText": "بل أنه قادر على فعل ذلك كل مرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-06045a0bed5b",
+      "type": "paragraph",
+      "sourceHash": "06045a0bed5b68ff7f889215a1a8b2d8545041821ca5478e028d3eb72866ff41",
+      "sourceText": "وحين يصبح الهروب من الشعور أسهل من تحمله، نتعلم الهروب.",
+      "spokenText": "وحين يصبح الهروب من الشعور أسهل من تحمله، نتعلم الهروب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-c2659a4f2d30",
+      "type": "paragraph",
+      "sourceHash": "c2659a4f2d302a36f950f901f53a697ee382ed9d019ba8c54af5373e4d18b072",
+      "sourceText": "لسنا نتحدث هنا عن التركيز وحده.",
+      "spokenText": "لسنا نتحدث هنا عن التركيز وحده.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-6f84ba61782d",
+      "type": "paragraph",
+      "sourceHash": "6f84ba61782d78a968ce6f92bc025654323b2bc2188ad7bad3f661972273fe3c",
+      "sourceText": "نحن نتحدث أيضًا عن اختفاء حالة كانت تسمى ببساطة:",
+      "spokenText": "نحن نتحدث أيضًا عن اختفاء حالة كانت تسمى ببساطة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-7194d8f82d71",
+      "type": "paragraph",
+      "sourceHash": "7194d8f82d71576461ee5ffb14bb551f1d3567ace0e2aa57f17416793f3dd6bd",
+      "sourceText": "الانتظار.",
+      "spokenText": "الانتظار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-671993cafeeb",
+      "type": "h2",
+      "sourceHash": "671993cafeeb4bb7230c0e5bd5bd9f1d801273286b8a95716464b6174b5c7d38",
+      "sourceText": "هل أصبح تركيزنا أضعف؟",
+      "spokenText": "هل أصبح تركيزنا أضعف؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-34f0a8060be4",
+      "type": "paragraph",
+      "sourceHash": "34f0a8060be4f040f4125f6c4b7a64d6835c1c51a632063d1baf3745cdd5ba7e",
+      "sourceText": "الإجابة الأكثر أمانة هي: ليس بهذه البساطة.",
+      "spokenText": "الإجابة الأكثر أمانة هي: ليس بهذه البساطة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-754c04860678",
+      "type": "paragraph",
+      "sourceHash": "754c048606784c1ff42cde6488551ef639c9fdac92c86bcd8977c96c34582903",
+      "sourceText": "من السهل أن نروي القصة هكذا: ظهر الهاتف الذكي، فتقلص انتباه البشر.",
+      "spokenText": "من السهل أن نروي القصة هكذا: ظهر الهاتف الذكي، فتقلص انتباه البشر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-3304dd3e4b46",
+      "type": "paragraph",
+      "sourceHash": "3304dd3e4b4641ce754f5aa5378f076723b9f0ca4879044ec6e2535460b34e4f",
+      "sourceText": "لكن الانتباه ليس بطارية تحمل رقمًا ثابتًا يمكن أن نقارنه بين جيل وآخر. هو قدرة تتأثر بالنوم والضغط وصعوبة المهمة والبيئة وطبيعة ما نفعله.",
+      "spokenText": "لكن الانتباه ليس بطارية تحمل رقمًا ثابتًا يمكن أن نقارنه بين جيل وآخر. هو قدرة تتأثر بالنوم والضغط وصعوبة المهمة والبيئة وطبيعة ما نفعله.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-8133840127f8",
+      "type": "paragraph",
+      "sourceHash": "8133840127f8dae9ad294247d1fffc3f51ef689f3bed52318cd415c27ec11e7f",
+      "sourceText": "ما تشير إليه الأبحاث بصورة أوضح هو شيء أقل درامية، لكنه أكثر أهمية:",
+      "spokenText": "ما تشير إليه الأبحاث بصورة أوضح هو شيء أقل درامية، لكنه أكثر أهمية:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-b94d9f6d4547",
+      "type": "paragraph",
+      "sourceHash": "b94d9f6d454763b915ede342b9910359d3447071367468835e528edd929127c9",
+      "sourceText": "الانتباه يدفع ثمنًا عندما نقطعه وننقله باستمرار من سياق إلى آخر.",
+      "spokenText": "الانتباه يدفع ثمنًا عندما نقطعه وننقله باستمرار من سياق إلى آخر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-b3d62516a407",
+      "type": "paragraph",
+      "sourceHash": "b3d62516a407652e1de5d104dd25efe8d2ad1b8a1693470c0c666148cf7428c9",
+      "sourceText": "نحن لا ننجز مهمتين ذهنيتين معقدتين كاملتين في اللحظة نفسها كما قد يوحي تعبير «تعدد المهام». غالبًا نبدّل بينهما.",
+      "spokenText": "نحن لا ننجز مهمتين ذهنيتين معقدتين كاملتين في اللحظة نفسها كما قد يوحي تعبير «تعدد المهام». غالبًا نبدّل بينهما.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-145f746a5cb2",
+      "type": "paragraph",
+      "sourceHash": "145f746a5cb223b5b93636f4f929f9de0bdcef17b8c6c5e5b67f3b4cd51f6a80",
+      "sourceText": "وعندما نترك نصًا لنفحص رسالة، لا يكفي أن نغلق التطبيق كي نعود إلى المكان نفسه عقليًا. علينا أن نستعيد السؤال الذي كنا نفكر فيه، والخيط الذي وصلنا إليه، وقواعد المهمة التي كنا نستخدمها.",
+      "spokenText": "وعندما نترك نصًا لنفحص رسالة، لا يكفي أن نغلق التطبيق كي نعود إلى المكان نفسه عقليًا. علينا أن نستعيد السؤال الذي كنا نفكر فيه، والخيط الذي وصلنا إليه، وقواعد المهمة التي كنا نستخدمها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-8dee6e5f0667",
+      "type": "paragraph",
+      "sourceHash": "8dee6e5f0667315b2bfc31fedd607ca46651866435878438e823e2cd0e602682",
+      "sourceText": "ولهذا تتحدث أبحاث علم النفس عن كلفة تبديل المهمة؛ فالتجارب أظهرت أن الانتقال المتكرر بين المهام يستهلك وقتًا، وأن الكلفة ترتفع حين تكون المهمة أكثر تعقيدًا أو أقل ألفة. الجمعية الأمريكية لعلم النفس",
+      "spokenText": "ولهذا تتحدث أبحاث علم النفس عن كلفة تبديل المهمة؛ فالتجارب أظهرت أن الانتقال المتكرر بين المهام يستهلك وقتًا، وأن الكلفة ترتفع حين تكون المهمة أكثر تعقيدًا أو أقل ألفة. الجمعية الأمريكية لعلم النفس",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-ad550ee8cc12",
+      "type": "paragraph",
+      "sourceHash": "ad550ee8cc127b443fbaf9295ea065c76eafaf8c238e4c5bc4123097b7141f7d",
+      "sourceText": "وفي تحليل تجميعي نُشر عام 2025 وجمع نتائج 27 تجربة عشوائية شملت 2245 مشاركًا، كان تشتيت الهاتف أثناء التعلم مرتبطًا بانخفاض متوسط الحجم في التذكر الفوري. لا يعني ذلك أن الهاتف «يمحو الذاكرة»، بل أن تقسيم الانتباه بين التعلم ونشاط آخر له ثمن يمكن قياسه. Chen وآخرون، 2025",
+      "spokenText": "وفي تحليل تجميعي نُشر عام 2025 وجمع نتائج 27 تجربة عشوائية شملت 2245 مشاركًا، كان تشتيت الهاتف أثناء التعلم مرتبطًا بانخفاض متوسط الحجم في التذكر الفوري. لا يعني ذلك أن الهاتف «يمحو الذاكرة»، بل أن تقسيم الانتباه بين التعلم ونشاط آخر له ثمن يمكن قياسه. Chen وآخرون، 2025",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-0d6aba987c2a",
+      "type": "paragraph",
+      "sourceHash": "0d6aba987c2a4c99a21e297972c4d9767b4679807e300e426ad6d7ae90c7d507",
+      "sourceText": "الانقطاع، إذن، لا يستهلك فقط الثواني التي ننظر فيها إلى الشاشة.",
+      "spokenText": "الانقطاع، إذن، لا يستهلك فقط الثواني التي ننظر فيها إلى الشاشة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a8a3f7a76409",
+      "type": "paragraph",
+      "sourceHash": "a8a3f7a76409a6603642fb36a3e3c25469a97cd57c513509494f757d8e0e566a",
+      "sourceText": "هناك ثمن صغير عندما نغادر الفكرة، وثمن آخر عندما نحاول العودة إليها.",
+      "spokenText": "هناك ثمن صغير عندما نغادر الفكرة، وثمن آخر عندما نحاول العودة إليها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-cf5e8d974ab7",
+      "type": "paragraph",
+      "sourceHash": "cf5e8d974ab73b64232228ef25042524060cd55513ac2158acb1ffe6efaa6e73",
+      "sourceText": "ولهذا قد تقضي ساعة أمام كتاب أو تقرير، ثم تنهض وفي داخلك شعور غريب:",
+      "spokenText": "ولهذا قد تقضي ساعة أمام كتاب أو تقرير، ثم تنهض وفي داخلك شعور غريب:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-3b5cb54170af",
+      "type": "paragraph",
+      "sourceHash": "3b5cb54170af9ab04aeb59ff0e72457529bb29a7262d2f936146c1f73a3d2129",
+      "sourceText": "كنت حاضرًا طوال الساعة… من دون أن تكون حاضرًا فيها فعلًا.",
+      "spokenText": "كنت حاضرًا طوال الساعة… من دون أن تكون حاضرًا فيها فعلًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-1a5910c8c933",
+      "type": "h2",
+      "sourceHash": "1a5910c8c933c840f9a97ea1fd6aa6ac3acc5caaf0ecb84efc76b236da4ad9c6",
+      "sourceText": "الهاتف لا يقاطعنا دائمًا… نحن أيضًا نقاطعه",
+      "spokenText": "الهاتف لا يقاطعنا دائمًا… نحن أيضًا نقاطعه",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-318788538789",
+      "type": "paragraph",
+      "sourceHash": "318788538789f7f421fc328b19a6babea0d34e24efb74a7972852239b294f8f9",
+      "sourceText": "نحب أن نلوم الإشعارات.",
+      "spokenText": "نحب أن نلوم الإشعارات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-881c0e27f135",
+      "type": "paragraph",
+      "sourceHash": "881c0e27f1350f697a9a8845c68cd026de43958abdcd64c58895c0ab5e5881e4",
+      "sourceText": "رن الهاتف، فشتتني.",
+      "spokenText": "رن الهاتف، فشتتني.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-15e70eb01167",
+      "type": "paragraph",
+      "sourceHash": "15e70eb01167ec2537cb3c7daeb45abc89a1a35b46a9e2fa53a7e9957b4f1091",
+      "sourceText": "ظهر تنبيه، فقطع الفكرة.",
+      "spokenText": "ظهر تنبيه، فقطع الفكرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-6d0b7fbbd353",
+      "type": "paragraph",
+      "sourceHash": "6d0b7fbbd353dba72017a823073e09f7ed0acdc57e38ad47f6593ebdb9051f44",
+      "sourceText": "اهتز الجهاز، فأخذني بعيدًا.",
+      "spokenText": "اهتز الجهاز، فأخذني بعيدًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-43b66944048c",
+      "type": "paragraph",
+      "sourceHash": "43b66944048c57c50f1434e5b0eaaa7165e461344d1fb530e9d6f5731b4c7b1a",
+      "sourceText": "وهذا جزء حقيقي من القصة.",
+      "spokenText": "وهذا جزء حقيقي من القصة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-1c22bb6614fa",
+      "type": "paragraph",
+      "sourceHash": "1c22bb6614faaca3db70328434ba30f16086757c10897687d33d633d1bf3da15",
+      "sourceText": "بل إن دراسة منشورة عام 2026 وجدت أن إشعارات تشبه إشعارات وسائل التواصل أحدثت تباطؤًا مؤقتًا في المعالجة استمر قرابة سبع ثوانٍ في المهمة المستخدمة، وكان الاضطراب أكبر حين كان الإشعار أكثر صلة بالمشارك ومع كثرة عادات التفاعل مع الهاتف. Fournier وآخرون، 2026",
+      "spokenText": "بل إن دراسة منشورة عام 2026 وجدت أن إشعارات تشبه إشعارات وسائل التواصل أحدثت تباطؤًا مؤقتًا في المعالجة استمر قرابة سبع ثوانٍ في المهمة المستخدمة، وكان الاضطراب أكبر حين كان الإشعار أكثر صلة بالمشارك ومع كثرة عادات التفاعل مع الهاتف. Fournier وآخرون، 2026",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-6768512610f3",
+      "type": "paragraph",
+      "sourceHash": "6768512610f31dc22fbc844fd2eaed16525efbe10fd6e10bc03712cbce84d5c2",
+      "sourceText": "لكن الهاتف لا يحتاج دائمًا إلى استدعائنا.",
+      "spokenText": "لكن الهاتف لا يحتاج دائمًا إلى استدعائنا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-6e33a79184c5",
+      "type": "paragraph",
+      "sourceHash": "6e33a79184c5b0e7b9e29be47c4f82b476eca8ea2c55ef95e28bd2aaf4739055",
+      "sourceText": "لقد تعلمنا نحن أيضًا أن نستدعي المقاطعة.",
+      "spokenText": "لقد تعلمنا نحن أيضًا أن نستدعي المقاطعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-54872c0ed876",
+      "type": "paragraph",
+      "sourceHash": "54872c0ed8767d52190534090bc87935994a9c9d61ccdf8be470d44da9b9a680",
+      "sourceText": "في دراسة راقبت سلوك استخدام الهاتف في الحياة اليومية، كانت 89% من التفاعلات المسجلة قد بدأها المستخدمون أنفسهم، مقابل 11% فقط بدأت بإشعار. وهذه النسبة تخص عينة الدراسة ولا ينبغي تعميمها آليًا على كل مستخدم، لكنها تكشف جانبًا مهمًا: كثير من المقاطعات لا تصل من الخارج؛ نحن نذهب إليها. Heitmayer وLahlou، 2021",
+      "spokenText": "في دراسة راقبت سلوك استخدام الهاتف في الحياة اليومية، كانت 89% من التفاعلات المسجلة قد بدأها المستخدمون أنفسهم، مقابل 11% فقط بدأت بإشعار. وهذه النسبة تخص عينة الدراسة ولا ينبغي تعميمها آليًا على كل مستخدم، لكنها تكشف جانبًا مهمًا: كثير من المقاطعات لا تصل من الخارج؛ نحن نذهب إليها. Heitmayer وLahlou، 2021",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-bd18871638c7",
+      "type": "paragraph",
+      "sourceHash": "bd18871638c7e3b82b38f8a2d416a7f8ff01ecfc7e8ef577ef15b9376d7e7986",
+      "sourceText": "تتعثر فقرة صعبة… فنفتح الهاتف.",
+      "spokenText": "تتعثر فقرة صعبة… فنفتح الهاتف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-eff72be1e78e",
+      "type": "paragraph",
+      "sourceHash": "eff72be1e78eeb4e437b929a84bd91b890767f6298b0b0569798e94ba5d27c40",
+      "sourceText": "يتأخر تحميل ملف لثوانٍ… فنفتحه.",
+      "spokenText": "يتأخر تحميل ملف لثوانٍ… فنفتحه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-141021cc8a59",
+      "type": "paragraph",
+      "sourceHash": "141021cc8a59645bf76c3254c3fd6afca1a3142cfd9291051b0cbf32ae479535",
+      "sourceText": "يصبح الاجتماع أقل إثارة لدقيقتين… فننظر إليه.",
+      "spokenText": "يصبح الاجتماع أقل إثارة لدقيقتين… فننظر إليه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9657b030bb04",
+      "type": "paragraph",
+      "sourceHash": "9657b030bb04b677b3c743cb933073a92a38451570e19260324e9fcdf0e5274b",
+      "sourceText": "تسكت المحادثة لحظة… فتمتد اليد نحوه.",
+      "spokenText": "تسكت المحادثة لحظة… فتمتد اليد نحوه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-8a89b6e66793",
+      "type": "paragraph",
+      "sourceHash": "8a89b6e667933a8883641323019932978da8739a587125b19117c21549c5b4b2",
+      "sourceText": "وفي كل مرة، لا يحدث شيء درامي.",
+      "spokenText": "وفي كل مرة، لا يحدث شيء درامي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-1caf3db9343a",
+      "type": "paragraph",
+      "sourceHash": "1caf3db9343a01d527622b6c9f12cde898658ea7527aba8f0df77a7e79253430",
+      "sourceText": "لا نشعر أن جزءًا من قدرتنا على التركيز غادر الغرفة.",
+      "spokenText": "لا نشعر أن جزءًا من قدرتنا على التركيز غادر الغرفة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-73a8d00336c8",
+      "type": "paragraph",
+      "sourceHash": "73a8d00336c8ea4e48b824918ce85d9812a0e7f9ab93685ab55f15b366cb77c3",
+      "sourceText": "إنها مقاطعات صغيرة، ناعمة، تبدو بلا ثمن.",
+      "spokenText": "إنها مقاطعات صغيرة، ناعمة، تبدو بلا ثمن.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-8e77813687fe",
+      "type": "paragraph",
+      "sourceHash": "8e77813687fe25c638b27a4a38a9df17b6854aead5966d5b2aff7fcce916e292",
+      "sourceText": "لكن الحياة العقلية لا تُبنى من اللحظات الكبرى وحدها؛ إنها تُبنى أيضًا من استمرار اللحظة الصغيرة.",
+      "spokenText": "لكن الحياة العقلية لا تُبنى من اللحظات الكبرى وحدها؛ إنها تُبنى أيضًا من استمرار اللحظة الصغيرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-508af974a6e6",
+      "type": "paragraph",
+      "sourceHash": "508af974a6e635288717fec4f6693f434c9fce75c75159921302ef5d5c8b3a61",
+      "sourceText": "ربما لا تكون المشكلة فقط في أن أجهزتنا تعلمت كيف تستدعينا.",
+      "spokenText": "ربما لا تكون المشكلة فقط في أن أجهزتنا تعلمت كيف تستدعينا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-4afc367a250b",
+      "type": "paragraph",
+      "sourceHash": "4afc367a250b1e29cedbcc6afee41788810e3c132a56daf4a6c6fde4808265b0",
+      "sourceText": "ربما تعلمنا نحن كيف نستدعي الباب الجانبي قبل أن نحتاج إلى الخروج.",
+      "spokenText": "ربما تعلمنا نحن كيف نستدعي الباب الجانبي قبل أن نحتاج إلى الخروج.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-c26a35f1d815",
+      "type": "h2",
+      "sourceHash": "c26a35f1d8156e7f973a123f617e7a1daf899413eea38a9510d04cfa5fc40a32",
+      "sourceText": "لماذا أصبح الملل ثقيلًا؟",
+      "spokenText": "لماذا أصبح الملل ثقيلًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-c630e288832e",
+      "type": "paragraph",
+      "sourceHash": "c630e288832eb6549da258c86631b3d5c61ac2b97eba701b99f133ceafac6799",
+      "sourceText": "الملل شعور غريب.",
+      "spokenText": "الملل شعور غريب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-ff63d963cb44",
+      "type": "paragraph",
+      "sourceHash": "ff63d963cb4409a40b4b38682e0a4661c08220194b75aa2538e43840cb603a47",
+      "sourceText": "لا نحبه، لكنه ليس عطلًا يجب إصلاحه فورًا.",
+      "spokenText": "لا نحبه، لكنه ليس عطلًا يجب إصلاحه فورًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-5bd9973f6eca",
+      "type": "paragraph",
+      "sourceHash": "5bd9973f6eca1464da56b3dd268322d81cb615ddb05c0d723f127e8e2ecd7c23",
+      "sourceText": "كان الإنسان دائمًا يستطيع الهروب منه: بالحديث، والقراءة، والمشي، والعمل، وبألف وسيلة أخرى.",
+      "spokenText": "كان الإنسان دائمًا يستطيع الهروب منه: بالحديث، والقراءة، والمشي، والعمل، وبألف وسيلة أخرى.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-3daa2e863174",
+      "type": "paragraph",
+      "sourceHash": "3daa2e8631744ed17408b5e20676884c9858b7ae13e872ff9b1ed3cd404bcb22",
+      "sourceText": "ما تغير هو سرعة باب الهروب.",
+      "spokenText": "ما تغير هو سرعة باب الهروب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-7b5d50cd2b12",
+      "type": "paragraph",
+      "sourceHash": "7b5d50cd2b129fc9953199e8d41a893dd16d6d7fd94904fe8b58501c8ab605d0",
+      "sourceText": "بين الملل والهاتف أقل من ثانية.",
+      "spokenText": "بين الملل والهاتف أقل من ثانية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-595ae1f3ce6f",
+      "type": "paragraph",
+      "sourceHash": "595ae1f3ce6ffb1c807e36ffdd997d207781cc0fd5f370a427199659b108d36b",
+      "sourceText": "وهذه السرعة مهمة.",
+      "spokenText": "وهذه السرعة مهمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-615d8e45e1e3",
+      "type": "paragraph",
+      "sourceHash": "615d8e45e1e3db802be5c24c6ef99f10bb33628feb3f4b19e89302fbdd4463aa",
+      "sourceText": "لا تحتاج المكافأة التي نجدها على الشاشة إلى أن تكون رائعة.",
+      "spokenText": "لا تحتاج المكافأة التي نجدها على الشاشة إلى أن تكون رائعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-cfc605188bd5",
+      "type": "paragraph",
+      "sourceHash": "cfc605188bd507bcc5f5c679623a3b2f88ff6900725da6d2b06030da9433ef39",
+      "sourceText": "قد لا يعجبنا المقطع التالي.",
+      "spokenText": "قد لا يعجبنا المقطع التالي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-82ffbfd37e02",
+      "type": "paragraph",
+      "sourceHash": "82ffbfd37e0269c704441bef3fe4c9a278c78248de71674c3db864cd5e282cd6",
+      "sourceText": "ولا الصورة التالية.",
+      "spokenText": "ولا الصورة التالية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-2b6c394d0940",
+      "type": "paragraph",
+      "sourceHash": "2b6c394d09401c903153d8d9b191dc1bdc7987793bb9a508b40473ebb6205965",
+      "sourceText": "ولا الخبر التالي.",
+      "spokenText": "ولا الخبر التالي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-2991dad2c690",
+      "type": "paragraph",
+      "sourceHash": "2991dad2c690d92fc4d10fe30ff3509c712c7eda52042fc533d8a079b0f03307",
+      "sourceText": "لكننا لا نعرف ذلك قبل أن نراه.",
+      "spokenText": "لكننا لا نعرف ذلك قبل أن نراه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-21b89546ff92",
+      "type": "paragraph",
+      "sourceHash": "21b89546ff926df087ba77e562148fc0f4d490d2a1f1a31c64511c21efe66ee2",
+      "sourceText": "وهذا وحده يكفي أحيانًا لاستمرار السؤال:",
+      "spokenText": "وهذا وحده يكفي أحيانًا لاستمرار السؤال:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9fe1724f2d15",
+      "type": "paragraph",
+      "sourceHash": "9fe1724f2d15da7b07e010f7b238182f2921a42d7198b472d454c46022fd1403",
+      "sourceText": "وماذا بعد؟",
+      "spokenText": "وماذا بعد؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-fc2913fe0269",
+      "type": "paragraph",
+      "sourceHash": "fc2913fe026911fe8033358ee55fd2ea0f214012fdce394bac6e8c2553bb2fb1",
+      "sourceText": "ثم ماذا بعد؟",
+      "spokenText": "ثم ماذا بعد؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-fc2913fe0269-2",
+      "type": "paragraph",
+      "sourceHash": "fc2913fe026911fe8033358ee55fd2ea0f214012fdce394bac6e8c2553bb2fb1",
+      "sourceText": "ثم ماذا بعد؟",
+      "spokenText": "ثم ماذا بعد؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-757eb14a7ea6",
+      "type": "paragraph",
+      "sourceHash": "757eb14a7ea6929d4772671b8a135b9eba23da37bb310315f2d3ed6217358c20",
+      "sourceText": "حتى تتحول بعض الدقائق من شيء نعيش فيه إلى شيء نعبره بحثًا عن المثير التالي.",
+      "spokenText": "حتى تتحول بعض الدقائق من شيء نعيش فيه إلى شيء نعبره بحثًا عن المثير التالي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-1d2f4c32c1c6",
+      "type": "paragraph",
+      "sourceHash": "1d2f4c32c1c65b9f081fc443f37e6c94cdaa70d05750d3f9c1b86fdbea6a2e26",
+      "sourceText": "وتشير مراجعة منهجية وتحليل تجميعي نُشرا عام 2023 وشملا 59 دراسة إلى وجود ارتباط إيجابي بين الملل واستخدام الوسائط الرقمية، وإلى ارتباط أقوى مع الاستخدام الرقمي الإشكالي. لكن معظم الدراسات كانت مقطعية، والدراسات الطولية التي تسمح بفهم اتجاه السببية كانت قليلة؛ أي إن الأدلة لا تسمح بأن نقول ببساطة إن الهاتف «يسبب الملل» أو إن الملل وحده «يسبب الاستخدام المفرط». Camerini وآخرون، 2023",
+      "spokenText": "وتشير مراجعة منهجية وتحليل تجميعي نُشرا عام 2023 وشملا 59 دراسة إلى وجود ارتباط إيجابي بين الملل واستخدام الوسائط الرقمية، وإلى ارتباط أقوى مع الاستخدام الرقمي الإشكالي. لكن معظم الدراسات كانت مقطعية، والدراسات الطولية التي تسمح بفهم اتجاه السببية كانت قليلة؛ أي إن الأدلة لا تسمح بأن نقول ببساطة إن الهاتف «يسبب الملل» أو إن الملل وحده «يسبب الاستخدام المفرط». Camerini وآخرون، 2023",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-8b2f35c13a07",
+      "type": "paragraph",
+      "sourceHash": "8b2f35c13a07427dca7e7c81a42f58ec499960b5d60219a0a0f886acadfc27fc",
+      "sourceText": "العلاقة أكثر تشابكًا.",
+      "spokenText": "العلاقة أكثر تشابكًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-509933a2293e",
+      "type": "paragraph",
+      "sourceHash": "509933a2293e5bd5c5bbba8b8d617f79db6c96e885b93de44be7a041fe07de89",
+      "sourceText": "ومع ذلك يسهل تصور الحلقة:",
+      "spokenText": "ومع ذلك يسهل تصور الحلقة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-fe4ca751eac1",
+      "type": "paragraph",
+      "sourceHash": "fe4ca751eac1aacf4e5158f5d2a0a1b885e8c82c17024cffde4fcddb09c835c6",
+      "sourceText": "نشعر بفراغ بسيط.",
+      "spokenText": "نشعر بفراغ بسيط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-0c40df8d0228",
+      "type": "paragraph",
+      "sourceHash": "0c40df8d0228244b274ee4019288f4dc6afa31cec7452c42fc28246ee26a355e",
+      "sourceText": "نطلب إثارة سريعة.",
+      "spokenText": "نطلب إثارة سريعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-696eb6ea2712",
+      "type": "paragraph",
+      "sourceHash": "696eb6ea2712cc7f2bbe3062e8201a37aef3f71a48dda10ce003fc5c2ac5fb36",
+      "sourceText": "نعتاد وفرة الإثارة السريعة.",
+      "spokenText": "نعتاد وفرة الإثارة السريعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-77e4cdd4a7ab",
+      "type": "paragraph",
+      "sourceHash": "77e4cdd4a7abea5025ea61df90001cbba498864f471e2aceea35fdf91307b1c9",
+      "sourceText": "فتبدو اللحظة الهادئة، بالمقارنة، أكثر بطئًا.",
+      "spokenText": "فتبدو اللحظة الهادئة، بالمقارنة، أكثر بطئًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a26c9bb8d22a",
+      "type": "paragraph",
+      "sourceHash": "a26c9bb8d22a3e6f12367634a613b6ff01233936a44e5a07bc8fd2928be99d5c",
+      "sourceText": "فنعود إلى الشاشة أسرع.",
+      "spokenText": "فنعود إلى الشاشة أسرع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-eb82dfce6a65",
+      "type": "paragraph",
+      "sourceHash": "eb82dfce6a656d9f492c5ba6ad53ee3303e23db42cc3852765a8c75529c60751",
+      "sourceText": "لا لأن الصمت صار أسوأ مما كان.",
+      "spokenText": "لا لأن الصمت صار أسوأ مما كان.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9827403f6414",
+      "type": "paragraph",
+      "sourceHash": "9827403f6414f08f07e49c09476befee5efc73bac87bf92e27042e08c5d4bb25",
+      "sourceText": "بل لأن البديل صار حاضرًا دائمًا.",
+      "spokenText": "بل لأن البديل صار حاضرًا دائمًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-10c2bcf6f230",
+      "type": "h2",
+      "sourceHash": "10c2bcf6f2308d84194fb1ce59d4a007feb0eefb5899b8aea39f6832a0c9172b",
+      "sourceText": "عندما يصبح الانتباه سوقًا",
+      "spokenText": "عندما يصبح الانتباه سوقًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-5b35f01b7672",
+      "type": "paragraph",
+      "sourceHash": "5b35f01b76722bdd26fd952a15359c4c923b6347f7a4d6f15caee4bac97f0642",
+      "sourceText": "عندما نصف الهاتف بأنه «مشتت»، نظلمه قليلًا.",
+      "spokenText": "عندما نصف الهاتف بأنه «مشتت»، نظلمه قليلًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-02957d0254f8",
+      "type": "paragraph",
+      "sourceHash": "02957d0254f8314f0891c419fe4ef7a98fa5e0dd84229ff045dc43597b9fae2a",
+      "sourceText": "الهاتف نفسه ليس كائنًا له إرادة.",
+      "spokenText": "الهاتف نفسه ليس كائنًا له إرادة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-0f59ed537925",
+      "type": "paragraph",
+      "sourceHash": "0f59ed537925344f9ad406783e7f7d94000efdf086d5e70dbeba9fedd12c65a7",
+      "sourceText": "لكن كثيرًا من الخدمات التي نصل إليها عبره تعمل داخل ما يسمى اقتصاد الانتباه.",
+      "spokenText": "لكن كثيرًا من الخدمات التي نصل إليها عبره تعمل داخل ما يسمى اقتصاد الانتباه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-17e01c572c66",
+      "type": "paragraph",
+      "sourceHash": "17e01c572c66dbb6ff3b4c9620e79f0c69c9bb99c1ad075564706ff78e788c32",
+      "sourceText": "والانتباه مورد محدود.",
+      "spokenText": "والانتباه مورد محدود.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9ad34803fa4c",
+      "type": "paragraph",
+      "sourceHash": "9ad34803fa4c078c3d96d38b16c8291fc0112a80bcaa58d489eef9314806558d",
+      "sourceText": "كل دقيقة تمنحها لشيء لا تمنحها في اللحظة نفسها لشيء آخر.",
+      "spokenText": "كل دقيقة تمنحها لشيء لا تمنحها في اللحظة نفسها لشيء آخر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-72466e08907d",
+      "type": "paragraph",
+      "sourceHash": "72466e08907d6a0db59e9e0edad62c293a8dac8f61ee1d47a9585c3853bd62b2",
+      "sourceText": "ولذلك لا تتنافس المنصات فقط على أن يكون محتواها جيدًا، بل على أن تبدأ باستخدامها، وأن تستمر، وأن تعود.",
+      "spokenText": "ولذلك لا تتنافس المنصات فقط على أن يكون محتواها جيدًا، بل على أن تبدأ باستخدامها، وأن تستمر، وأن تعود.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-558a5c0772c0",
+      "type": "paragraph",
+      "sourceHash": "558a5c0772c0feb9640b4eb486e02341216322a9514f12e1851025283b78a71e",
+      "sourceText": "الإشعار.",
+      "spokenText": "الإشعار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-67b8d2ca4138",
+      "type": "paragraph",
+      "sourceHash": "67b8d2ca4138312e3c53e88c28257d25a5d2e0febeb666a76bec9f8ebf98b15d",
+      "sourceText": "الرقم الأحمر.",
+      "spokenText": "الرقم الأحمر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-41330bd88166",
+      "type": "paragraph",
+      "sourceHash": "41330bd881663f7d518b0a9752520ec97f56dc9d952fcebfb8000e730b9ce3a9",
+      "sourceText": "المقطع التالي.",
+      "spokenText": "المقطع التالي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-dbcdfdb1fcf2",
+      "type": "paragraph",
+      "sourceHash": "dbcdfdb1fcf21d53fbadddb8efbb21b644d81f92b464201dd580b68fa73bda40",
+      "sourceText": "التمرير الذي لا يصل إلى نهاية.",
+      "spokenText": "التمرير الذي لا يصل إلى نهاية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-21d6b4d5dbb4",
+      "type": "paragraph",
+      "sourceHash": "21d6b4d5dbb4b0dfc8925acb37ec186880b819e1196e7b7d9b2412dbcb0dc086",
+      "sourceText": "التوصية المبنية على ما شاهدته قبل لحظة.",
+      "spokenText": "التوصية المبنية على ما شاهدته قبل لحظة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-edf2764a9171",
+      "type": "paragraph",
+      "sourceHash": "edf2764a9171b7448594c11f701d4c13b78ded2d66698ee1e0b7a6541a24bd99",
+      "sourceText": "كل ذلك يقلل الاحتكاك بينك وبين الشيء التالي.",
+      "spokenText": "كل ذلك يقلل الاحتكاك بينك وبين الشيء التالي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a68e782c5a5c",
+      "type": "paragraph",
+      "sourceHash": "a68e782c5a5cafeb691475df7c6cfd5aee0d2deec49de2d3cdcac580c65bed6d",
+      "sourceText": "ولا تحتاج المنصة دائمًا إلى أن تسألك:",
+      "spokenText": "ولا تحتاج المنصة دائمًا إلى أن تسألك:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a3bec099ae58",
+      "type": "paragraph",
+      "sourceHash": "a3bec099ae5867ab38c10f45df33578d5ee04f3710b72c8f20392d5ca542207b",
+      "sourceText": "هل تريد خمس دقائق أخرى؟",
+      "spokenText": "هل تريد خمس دقائق أخرى؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-337ea117dd2f",
+      "type": "paragraph",
+      "sourceHash": "337ea117dd2fdf274e9f6575bc859088e22228bcc24990d2622fd638610d35d4",
+      "sourceText": "يكفي ألا تمنحك لحظة واضحة تقول فيها:",
+      "spokenText": "يكفي ألا تمنحك لحظة واضحة تقول فيها:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-3c7b0131888c",
+      "type": "paragraph",
+      "sourceHash": "3c7b0131888cc49529e1c92176af87c91153ad186d8fc9d2c466b0cd91f084f1",
+      "sourceText": "انتهيت.",
+      "spokenText": "انتهيت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-f1b9348eb99b",
+      "type": "paragraph",
+      "sourceHash": "f1b9348eb99b83f7bc0cfeb6fe98bdbef188d38d881f608b6b70b861a4c667d5",
+      "sourceText": "كان للكتاب صفحة أخيرة.",
+      "spokenText": "كان للكتاب صفحة أخيرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-c2fd5e383100",
+      "type": "paragraph",
+      "sourceHash": "c2fd5e38310026a282d0aa68547aa2078c60f9531522cd73a4defe820aabc40c",
+      "sourceText": "وللفيلم شارة نهاية.",
+      "spokenText": "وللفيلم شارة نهاية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-6260a342a0fe",
+      "type": "paragraph",
+      "sourceHash": "6260a342a0fe36fd0aa410604795720b4c86aba5e40546df0a02e8a8e90095ba",
+      "sourceText": "وللجريدة طرف تنتهي عنده الورقة.",
+      "spokenText": "وللجريدة طرف تنتهي عنده الورقة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-e53fc05d8ce4",
+      "type": "paragraph",
+      "sourceHash": "e53fc05d8ce422cd94899617c44f468eb4a62621bd0a6fa0f71d1097766b83e7",
+      "sourceText": "أما التدفق الرقمي فيستطيع، من حيث المبدأ، أن يستمر ما دامت يدك تستمر.",
+      "spokenText": "أما التدفق الرقمي فيستطيع، من حيث المبدأ، أن يستمر ما دامت يدك تستمر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-bcbb334a079d",
+      "type": "paragraph",
+      "sourceHash": "bcbb334a079dd4dbca8c2aba2301871fb1c0538e3740e85bc1ec394ad3f6a56d",
+      "sourceText": "وهذا فرق صغير في التصميم، هائل في السلوك:",
+      "spokenText": "وهذا فرق صغير في التصميم، هائل في السلوك:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a85d23781e9e",
+      "type": "paragraph",
+      "sourceHash": "a85d23781e9e105ebd43a109514433ec6f5b06ccbbda83df74126333362a7bb1",
+      "sourceText": "اختفاء نقاط التوقف الطبيعية.",
+      "spokenText": "اختفاء نقاط التوقف الطبيعية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-d2726e31232d",
+      "type": "h2",
+      "sourceHash": "d2726e31232de6a77984b08455b793893d250a0d37fe17ba5b271e9b162a71c6",
+      "sourceText": "ليست كل مشكلة في «وقت الشاشة»",
+      "spokenText": "ليست كل مشكلة في «وقت الشاشة»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-eaacd4415df5",
+      "type": "paragraph",
+      "sourceHash": "eaacd4415df5516815f584fc62b3dc33241401cd499a0f0c4deef047fee042e3",
+      "sourceText": "لهذا قد يكون سؤال:",
+      "spokenText": "لهذا قد يكون سؤال:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-45e4ab43347a",
+      "type": "paragraph",
+      "sourceHash": "45e4ab43347a47565cddc4d71da7506bc79664bf9fe0fe32ab5974bf93768a79",
+      "sourceText": "كم ساعة تستخدم هاتفك؟",
+      "spokenText": "كم ساعة تستخدم هاتفك؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-fc8ca714fcfa",
+      "type": "paragraph",
+      "sourceHash": "fc8ca714fcfaacdaee3994c3979f012a5170b068a7736627091ed7ed4cd38308",
+      "sourceText": "أقل فائدة مما نظن.",
+      "spokenText": "أقل فائدة مما نظن.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-ed6a4115427a",
+      "type": "paragraph",
+      "sourceHash": "ed6a4115427a205d87c5285332bf37aba0797983df0d8c2f0655420b3128b2b0",
+      "sourceText": "شخص يقضي ساعتين يقرأ كتابًا إلكترونيًا ويتحدث مع أسرته ويتعلم شيئًا جديدًا، ليس في الوضع نفسه لشخص يقضي الساعتين نفسيهما متنقلًا بين عشرات المقاطع والتطبيقات.",
+      "spokenText": "شخص يقضي ساعتين يقرأ كتابًا إلكترونيًا ويتحدث مع أسرته ويتعلم شيئًا جديدًا، ليس في الوضع نفسه لشخص يقضي الساعتين نفسيهما متنقلًا بين عشرات المقاطع والتطبيقات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-364061c6f86f",
+      "type": "paragraph",
+      "sourceHash": "364061c6f86f50ff87a60be17581a603056e07ee7f0df815c833247d2eccf886",
+      "sourceText": "ليست كل شاشة سواء.",
+      "spokenText": "ليست كل شاشة سواء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-ee63c5141bfd",
+      "type": "paragraph",
+      "sourceHash": "ee63c5141bfd6b75c430f018116ea604d859d1da01016175a0638e52a37d8be2",
+      "sourceText": "وليست كل دقيقة سواء.",
+      "spokenText": "وليست كل دقيقة سواء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-73c40ed97177",
+      "type": "paragraph",
+      "sourceHash": "73c40ed971776b1acda01e3465d317442ccd8d99821c188b0b35f950cf8d5661",
+      "sourceText": "السؤال الأكثر فائدة هو:",
+      "spokenText": "السؤال الأكثر فائدة هو:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-1d4c0ba73e46",
+      "type": "paragraph",
+      "sourceHash": "1d4c0ba73e46d28023c3abffe415737b1ab4acd9b762a1e9ef979c4cf39a1747",
+      "sourceText": "ماذا يفعل استخدام الشاشة بشكل انتباهك؟",
+      "spokenText": "ماذا يفعل استخدام الشاشة بشكل انتباهك؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-1388eb6957cf",
+      "type": "paragraph",
+      "sourceHash": "1388eb6957cfd2d04d123c6511c204b635d6ff8f13f4d3683715cb67015fa202",
+      "sourceText": "هل تستطيع البقاء مع فكرة طويلة؟",
+      "spokenText": "هل تستطيع البقاء مع فكرة طويلة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-5996761e2372",
+      "type": "paragraph",
+      "sourceHash": "5996761e2372ec4e502ae73aae110962e3c6de55fab6ef96870d7726bee0e9c2",
+      "sourceText": "هل تقرأ صفحات عدة من دون رغبة مفاجئة في فتح شيء آخر؟",
+      "spokenText": "هل تقرأ صفحات عدة من دون رغبة مفاجئة في فتح شيء آخر؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-2704b53dafcb",
+      "type": "paragraph",
+      "sourceHash": "2704b53dafcbe1a6d7b91ad6c207a9c53c52c740e201586b1088e75b4b3f7c54",
+      "sourceText": "هل تشاهد فيلمًا من دون تفقد الهاتف؟",
+      "spokenText": "هل تشاهد فيلمًا من دون تفقد الهاتف؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-e0ddb01e7344",
+      "type": "paragraph",
+      "sourceHash": "e0ddb01e73448a7264192002fbf4b0fddec25ee545f1a8882149894345a1f3fd",
+      "sourceText": "هل تجلس مع شخص من دون أن توضع شاشة مضيئة بينكما؟",
+      "spokenText": "هل تجلس مع شخص من دون أن توضع شاشة مضيئة بينكما؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-d7565ff10648",
+      "type": "paragraph",
+      "sourceHash": "d7565ff106480ee35db320e61a509c2090377fccbef5e6a544f574596ca74f22",
+      "sourceText": "هل تستطيع الانتظار دقائق قليلة من غير أن تحتاج إلى محتوى؟",
+      "spokenText": "هل تستطيع الانتظار دقائق قليلة من غير أن تحتاج إلى محتوى؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-1b42b1d4f80a",
+      "type": "paragraph",
+      "sourceHash": "1b42b1d4f80a9f89e7c3ecd489b5a48fd870d70ddf17ddc0c72339997cde971f",
+      "sourceText": "هذه الأسئلة لا تقيس الزمن.",
+      "spokenText": "هذه الأسئلة لا تقيس الزمن.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-5f959a70dd36",
+      "type": "paragraph",
+      "sourceHash": "5f959a70dd36db3cefa449cf27adb873207f2a109c3af3af420d41f7ba3d48d5",
+      "sourceText": "إنها تقيس شيئًا أعمق:",
+      "spokenText": "إنها تقيس شيئًا أعمق:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-32c80b7a8286",
+      "type": "paragraph",
+      "sourceHash": "32c80b7a8286fdcab868c197a163e095628ab0c80ace430bcd6c0458031bd819",
+      "sourceText": "قدرتنا على اختيار أين يذهب الانتباه.",
+      "spokenText": "قدرتنا على اختيار أين يذهب الانتباه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-6e4d8ae5322e",
+      "type": "paragraph",
+      "sourceHash": "6e4d8ae5322ee05fd15b393b6f0cc83b65179c78cc79ce6f456884550f8dfadf",
+      "sourceText": "ولهذا أيضًا يجب الحذر من الادعاءات المبالغ فيها.",
+      "spokenText": "ولهذا أيضًا يجب الحذر من الادعاءات المبالغ فيها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-ecb96130e96e",
+      "type": "paragraph",
+      "sourceHash": "ecb96130e96e63666a3a911d661e8b5fa08575acf302c087c54c3c3801137549",
+      "sourceText": "من أشهرها أن مجرد وجود الهاتف على الطاولة، حتى وهو صامت، يستنزف قدرتنا العقلية.",
+      "spokenText": "من أشهرها أن مجرد وجود الهاتف على الطاولة، حتى وهو صامت، يستنزف قدرتنا العقلية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-040ced01ad47",
+      "type": "paragraph",
+      "sourceHash": "040ced01ad4724c53348651b48388dc0effef989ae28bdc47e236900c9075412",
+      "sourceText": "كانت هناك دراسات دعمت الفكرة، لكن تحليلًا تجميعيًا نُشر عام 2024 جمع 166 حجم أثر من 53 عينة عبر 33 دراسة، تضم 4368 مشاركًا، ولم يجد أثرًا إجماليًا ذا دلالة إحصائية لمجرد وجود الهاتف على الأداء المعرفي. Hartanto وآخرون، 2024",
+      "spokenText": "كانت هناك دراسات دعمت الفكرة، لكن تحليلًا تجميعيًا نُشر عام 2024 جمع 166 حجم أثر من 53 عينة عبر 33 دراسة، تضم 4368 مشاركًا، ولم يجد أثرًا إجماليًا ذا دلالة إحصائية لمجرد وجود الهاتف على الأداء المعرفي. Hartanto وآخرون، 2024",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-18dd5fa0a53f",
+      "type": "paragraph",
+      "sourceHash": "18dd5fa0a53f4c597b93a8048cb57456c7410cbccaa6c887296dd598c7f495a2",
+      "sourceText": "هذه نتيجة مهمة.",
+      "spokenText": "هذه نتيجة مهمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-955bb3d073d8",
+      "type": "paragraph",
+      "sourceHash": "955bb3d073d8dd018ca28f8316e00eb95d4cfae22885f960065b6c1793e9045a",
+      "sourceText": "ليس لأنها تبرئ الهاتف من كل أثر.",
+      "spokenText": "ليس لأنها تبرئ الهاتف من كل أثر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-cc9b1db745a7",
+      "type": "paragraph",
+      "sourceHash": "cc9b1db745a767174ec18f15ea60ab3375a558faad266eb278523e3bdef5850c",
+      "sourceText": "بل لأنها تذكرنا بأن العلم الجيد لا يحتاج إلى تحويل الهاتف إلى شرير كي يحذرنا من سلوك حقيقي.",
+      "spokenText": "بل لأنها تذكرنا بأن العلم الجيد لا يحتاج إلى تحويل الهاتف إلى شرير كي يحذرنا من سلوك حقيقي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-61663c2daced",
+      "type": "paragraph",
+      "sourceHash": "61663c2daced68cb1d6a8efacb39127f2589f02274e4d1db2fceff143bb7a65e",
+      "sourceText": "المشكلة ليست سحرًا أسود تشعه قطعة زجاج.",
+      "spokenText": "المشكلة ليست سحرًا أسود تشعه قطعة زجاج.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a3fb5cb35bd2",
+      "type": "paragraph",
+      "sourceHash": "a3fb5cb35bd2f117cca854a8f06945a2addbd4055290cc09c739c47501da4db1",
+      "sourceText": "المشكلة أوضح في المقاطعات الفعلية، وتبديل المهام، والإشعارات، وعادات الفحص المتكرر.",
+      "spokenText": "المشكلة أوضح في المقاطعات الفعلية، وتبديل المهام، والإشعارات، وعادات الفحص المتكرر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-2abddaccc699",
+      "type": "h2",
+      "sourceHash": "2abddaccc69955ad8d8c5931503d0a261f7e933b8a98e683006d8ded77d32a4e",
+      "sourceText": "ماذا خسرنا عندما اختفت الفراغات؟",
+      "spokenText": "ماذا خسرنا عندما اختفت الفراغات؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-4bee313e123e",
+      "type": "paragraph",
+      "sourceHash": "4bee313e123ee553be9adf6d2c804092d476c91dff2b32b5bc702856166dc713",
+      "sourceText": "ربما خسرنا شيئًا يصعب قياسه بالدقائق.",
+      "spokenText": "ربما خسرنا شيئًا يصعب قياسه بالدقائق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-d64a86f9a141",
+      "type": "paragraph",
+      "sourceHash": "d64a86f9a14163a855a6a8634d4b7e5058a5be643a943ad3142e9c267769be2c",
+      "sourceText": "أن تجلس بلا شيء لا يعني بالضرورة أن شيئًا لا يحدث.",
+      "spokenText": "أن تجلس بلا شيء لا يعني بالضرورة أن شيئًا لا يحدث.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-7994d79ab926",
+      "type": "paragraph",
+      "sourceHash": "7994d79ab926ceae53bed37488d547651fbdb886552567958a26a4bf05628582",
+      "sourceText": "قد يظهر سؤال لم نمنحه وقتًا.",
+      "spokenText": "قد يظهر سؤال لم نمنحه وقتًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-65b9177e0986",
+      "type": "paragraph",
+      "sourceHash": "65b9177e098678b947e9a006d5f79ac50f1f7ad6afc62b4c6a54f408d4134730",
+      "sourceText": "قد تكتمل فكرة بدأت في الصباح.",
+      "spokenText": "قد تكتمل فكرة بدأت في الصباح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-73aef13e7568",
+      "type": "paragraph",
+      "sourceHash": "73aef13e7568d3b4386fea0b51bccd9bfd73793f77478cd15d46c6beb157a882",
+      "sourceText": "قد تتضح مشاعر كان الضجيج يغطيها.",
+      "spokenText": "قد تتضح مشاعر كان الضجيج يغطيها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a5b0a0411f4b",
+      "type": "paragraph",
+      "sourceHash": "a5b0a0411f4b76361cc799703acab575415fd68b24af1abe0d29c075eb0722b0",
+      "sourceText": "وقد لا يحدث شيء إطلاقًا.",
+      "spokenText": "وقد لا يحدث شيء إطلاقًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-ba79d7c70e75",
+      "type": "paragraph",
+      "sourceHash": "ba79d7c70e751a0915c0ead9e080211e69235eadcc344a59304cfdbbc40f3929",
+      "sourceText": "وهذا أيضًا مقبول.",
+      "spokenText": "وهذا أيضًا مقبول.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-7fb435ba3f3e",
+      "type": "paragraph",
+      "sourceHash": "7fb435ba3f3e2c94ddd64559963b6e1f331cf5bda842861a2b99fbb4a0d73e65",
+      "sourceText": "ليست كل دقيقة مطالبة بأن تكون منتجة.",
+      "spokenText": "ليست كل دقيقة مطالبة بأن تكون منتجة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-776024e10301",
+      "type": "paragraph",
+      "sourceHash": "776024e1030107290a03647bea7f59a1c149c362ea22da9d2ccd38d47728457e",
+      "sourceText": "وربما كان تحويل الصمت نفسه إلى فرصة إنتاج خطأ آخر من أخطاء عصر السرعة.",
+      "spokenText": "وربما كان تحويل الصمت نفسه إلى فرصة إنتاج خطأ آخر من أخطاء عصر السرعة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-92603d84c8b8",
+      "type": "paragraph",
+      "sourceHash": "92603d84c8b86591dc0d4062962a5cea2ae556d1a1107dfa3beecfdcba3e98b3",
+      "sourceText": "نحن لا نحتاج إلى الفراغ لكي نخرج منه بفكرة عظيمة.",
+      "spokenText": "نحن لا نحتاج إلى الفراغ لكي نخرج منه بفكرة عظيمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-0acd7f065887",
+      "type": "paragraph",
+      "sourceHash": "0acd7f065887b28d75a8d19b5348cd0c121024b6beef56a1c3e0f7bcc3c162d3",
+      "sourceText": "يكفي أحيانًا أن نحتاجه كي لا نكون مستهلكين لشيء طوال الوقت.",
+      "spokenText": "يكفي أحيانًا أن نحتاجه كي لا نكون مستهلكين لشيء طوال الوقت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-1ee5f871bd45",
+      "type": "paragraph",
+      "sourceHash": "1ee5f871bd45538b8d5956ddd6dcdd556e54b38b16b28b5f8f87ec23e141655d",
+      "sourceText": "أن ننظر من نافذة السيارة لأن الطريق موجود.",
+      "spokenText": "أن ننظر من نافذة السيارة لأن الطريق موجود.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-10f14ae31e34",
+      "type": "paragraph",
+      "sourceHash": "10f14ae31e3469f19d293750df6d9fe2df23e03edfcc54eedf07959dff62a88d",
+      "sourceText": "أن نمشي بلا سماعات أحيانًا.",
+      "spokenText": "أن نمشي بلا سماعات أحيانًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-378abaa6dfd6",
+      "type": "paragraph",
+      "sourceHash": "378abaa6dfd666080a8690ad8cba8ce6c393837df669de1432ce652ea63c13bb",
+      "sourceText": "أن نقف في المصعد ولا يحدث شيء.",
+      "spokenText": "أن نقف في المصعد ولا يحدث شيء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a7494268d629",
+      "type": "paragraph",
+      "sourceHash": "a7494268d629e5bf2accf9f9e0a7b1c813a14ae4a365fa4311c5e9dc3d38b2c0",
+      "sourceText": "أن ننتظر أحدًا، فننتظره فقط.",
+      "spokenText": "أن ننتظر أحدًا، فننتظره فقط.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-db2e2dedf44e",
+      "type": "paragraph",
+      "sourceHash": "db2e2dedf44ebeeedbd036ed079de6c5e6a0fb5307946c81d0b9b9ea2c447a89",
+      "sourceText": "تبدو هذه أفعالًا تافهة.",
+      "spokenText": "تبدو هذه أفعالًا تافهة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-ac6fc4be80fc",
+      "type": "paragraph",
+      "sourceHash": "ac6fc4be80fcf7f1cc312a56f8e6d698e8a3f69f3c4fa92331bd19a288affb1b",
+      "sourceText": "لكنها تمنح العقل تجربة أصبحت أقل شيوعًا:",
+      "spokenText": "لكنها تمنح العقل تجربة أصبحت أقل شيوعًا:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-6dee244d2a24",
+      "type": "paragraph",
+      "sourceHash": "6dee244d2a24317e68f214bf775c20c228c5c0c27f7a07f53e5237e0a5516b24",
+      "sourceText": "أن يبقى للحظة مع نفسه من دون أن يأتيه العالم كله عبر شاشة بحجم الكف.",
+      "spokenText": "أن يبقى للحظة مع نفسه من دون أن يأتيه العالم كله عبر شاشة بحجم الكف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-1c2bdec544f4",
+      "type": "h2",
+      "sourceHash": "1c2bdec544f4865cdc0dfea674b302a155bf08412b6a6b877824843706436d9b",
+      "sourceText": "استعادة القرار، لا إعلان الحرب",
+      "spokenText": "استعادة القرار، لا إعلان الحرب",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-28612cd62312",
+      "type": "paragraph",
+      "sourceHash": "28612cd62312bd56855165d078721679248f8211867ed82d69bdbd373dc8dbdb",
+      "sourceText": "الحل المغري هو القرار الكبير.",
+      "spokenText": "الحل المغري هو القرار الكبير.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-6bf28b0fa6d7",
+      "type": "paragraph",
+      "sourceHash": "6bf28b0fa6d75c4e96c913e38ab36d3847b7b746fa8802f72ffc147c512fe97e",
+      "sourceText": "أحذف التطبيقات.",
+      "spokenText": "أحذف التطبيقات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-fa95ee5652f4",
+      "type": "paragraph",
+      "sourceHash": "fa95ee5652f44576921f535f53c3bcb494a5eb4ecaf675a6a8f644c2c83ec964",
+      "sourceText": "أغلق الهاتف.",
+      "spokenText": "أغلق الهاتف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-2c0f546710f8",
+      "type": "paragraph",
+      "sourceHash": "2c0f546710f83edf2a9640903fc048239f33d3637607f6acef1ce20ff06d20e6",
+      "sourceText": "أختفي أسبوعًا.",
+      "spokenText": "أختفي أسبوعًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9824c29df66e",
+      "type": "paragraph",
+      "sourceHash": "9824c29df66e5873d9a5af852f388e0376e781c304bde8cf8d61bf2cfbc35b87",
+      "sourceText": "أبدأ «ديتوكسًا رقميًا».",
+      "spokenText": "أبدأ «ديتوكسًا رقميًا».",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-d04113279d08",
+      "type": "paragraph",
+      "sourceHash": "d04113279d08fb51b37fe9a6d2c513f5199bb3eef505789e3f48ed654d80ddc4",
+      "sourceText": "لكننا لا نحتاج إلى قرار بطولي يعيش يومين ثم ينهار.",
+      "spokenText": "لكننا لا نحتاج إلى قرار بطولي يعيش يومين ثم ينهار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-8c8e204795d6",
+      "type": "paragraph",
+      "sourceHash": "8c8e204795d69429c01404a0331c3625abaeff9ff5c5a4b2eca5acbc4988b32c",
+      "sourceText": "نحتاج إلى تعديلات صغيرة تجعل البقاء أسهل، وتجعل المقاطعة تحتاج إلى قرار بدل أن تكون هي الوضع الافتراضي.",
+      "spokenText": "نحتاج إلى تعديلات صغيرة تجعل البقاء أسهل، وتجعل المقاطعة تحتاج إلى قرار بدل أن تكون هي الوضع الافتراضي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-0855090264e8",
+      "type": "paragraph",
+      "sourceHash": "0855090264e89fbf48a90628750e0459bb687dd048f1bd2cb61e29e89f617e91",
+      "sourceText": "ابدأ بأكثر شيء يقتحمك من دون أن تحتاج إليه: الإشعارات غير الضرورية.",
+      "spokenText": "ابدأ بأكثر شيء يقتحمك من دون أن تحتاج إليه: الإشعارات غير الضرورية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-eb51d152889b",
+      "type": "paragraph",
+      "sourceHash": "eb51d152889bfd3bf0a9a80808417f5773941de10a70ddebb4d6938693a71a6a",
+      "sourceText": "وهنا أيضًا ليس «الأكثر صرامة» هو الأفضل دائمًا. ففي تجربة ميدانية عشوائية شملت 237 مشاركًا، كان تجميع الإشعارات وتسليمها ثلاث مرات يوميًا مرتبطًا بشعور أكبر بالانتباه والسيطرة وانخفاض الضغط، بينما ارتبط إيقافها تمامًا بقلق أكبر وخوف أكبر من فوات ما يحدث. Fitz وآخرون، 2019",
+      "spokenText": "وهنا أيضًا ليس «الأكثر صرامة» هو الأفضل دائمًا. ففي تجربة ميدانية عشوائية شملت 237 مشاركًا، كان تجميع الإشعارات وتسليمها ثلاث مرات يوميًا مرتبطًا بشعور أكبر بالانتباه والسيطرة وانخفاض الضغط، بينما ارتبط إيقافها تمامًا بقلق أكبر وخوف أكبر من فوات ما يحدث. Fitz وآخرون، 2019",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9418079069e0",
+      "type": "paragraph",
+      "sourceHash": "9418079069e0170ae5329c928354645a56ecb1cb5268c6eda12d9d13ddcb7609",
+      "sourceText": "الفكرة ليست أن هناك جدولًا سحريًا يناسب الجميع.",
+      "spokenText": "الفكرة ليست أن هناك جدولًا سحريًا يناسب الجميع.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-2cd5d129a195",
+      "type": "paragraph",
+      "sourceHash": "2cd5d129a195914283ccdc13d6e4f7801fa18d0963af0c44c6311700a0fb51fe",
+      "sourceText": "بل أن الإشعار ليس حقًا مكتسبًا لكل تطبيق.",
+      "spokenText": "بل أن الإشعار ليس حقًا مكتسبًا لكل تطبيق.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-d0ade6e5b9a0",
+      "type": "paragraph",
+      "sourceHash": "d0ade6e5b9a0417ebd11262175939fa14e8dd230539b07b6c153319c5e177aa6",
+      "sourceText": "ثم امنح مهمة واحدة فقط فترة محمية.",
+      "spokenText": "ثم امنح مهمة واحدة فقط فترة محمية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a988dc5eb8d2",
+      "type": "paragraph",
+      "sourceHash": "a988dc5eb8d2bc754500c89f7cbfe23deb21a694e8b7fcb52c1db9218fe9ee94",
+      "sourceText": "لا يومًا كاملًا.",
+      "spokenText": "لا يومًا كاملًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-ea419b106e91",
+      "type": "paragraph",
+      "sourceHash": "ea419b106e91d4c2bc63294a5db616881e1c535c6b083d4db339f8a51a7b31a6",
+      "sourceText": "ولا ثلاث ساعات من البطولة.",
+      "spokenText": "ولا ثلاث ساعات من البطولة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-bca4e6f787a5",
+      "type": "paragraph",
+      "sourceHash": "bca4e6f787a55b5c28401ed31fc582c8c18fda8d3d0bc37aad19cab4b24b414b",
+      "sourceText": "عشرين دقيقة لصفحات تقرؤها، أو فقرة تكتبها، أو عمل تحاول إنهاءه، ويكون الهاتف خلالها بعيدًا بما يكفي ألا تتحرك اليد إليه قبل أن يتحرك القرار.",
+      "spokenText": "عشرين دقيقة لصفحات تقرؤها، أو فقرة تكتبها، أو عمل تحاول إنهاءه، ويكون الهاتف خلالها بعيدًا بما يكفي ألا تتحرك اليد إليه قبل أن يتحرك القرار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-4e3842a32ab0",
+      "type": "paragraph",
+      "sourceHash": "4e3842a32ab0230cec54733686579b7eae8dcce6e7d335b1a0ccbb74d8bb40f0",
+      "sourceText": "وأخيرًا، أعد إلى يومك فاصلًا صغيرًا لا يحتوي شيئًا.",
+      "spokenText": "وأخيرًا، أعد إلى يومك فاصلًا صغيرًا لا يحتوي شيئًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-e40905d89074",
+      "type": "paragraph",
+      "sourceHash": "e40905d89074ec3055da7c2899915801811960ff65487e8a62827bb073432f35",
+      "sourceText": "مشي قصير بلا سماعات.",
+      "spokenText": "مشي قصير بلا سماعات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-ac32881992f3",
+      "type": "paragraph",
+      "sourceHash": "ac32881992f3eed90c9b621084c38f2495c65fefefafa84c28a287417b5e4538",
+      "sourceText": "قهوة بلا تمرير.",
+      "spokenText": "قهوة بلا تمرير.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-97e845e3e15a",
+      "type": "paragraph",
+      "sourceHash": "97e845e3e15a9e13acb578864d87bac2053cf50f6a3675db900b4043122b4835",
+      "sourceText": "انتظار بلا فتح تلقائي للشاشة.",
+      "spokenText": "انتظار بلا فتح تلقائي للشاشة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-1b0caed211e7",
+      "type": "paragraph",
+      "sourceHash": "1b0caed211e7de1b445db43d7431aa5c85504a44b80595aa1f1e8ce71978d2a5",
+      "sourceText": "ليس لأن الملل فضيلة.",
+      "spokenText": "ليس لأن الملل فضيلة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-bd8ab7764621",
+      "type": "paragraph",
+      "sourceHash": "bd8ab7764621048c404892ac331c475045ebb5c65856c0526dc0ebbd2586895d",
+      "sourceText": "بل لكي تتذكر أن الشعور بالفراغ لا يصدر أمرًا ملزمًا بالهروب.",
+      "spokenText": "بل لكي تتذكر أن الشعور بالفراغ لا يصدر أمرًا ملزمًا بالهروب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-c6adf3cb169e",
+      "type": "paragraph",
+      "sourceHash": "c6adf3cb169e88aab3e876ea035b2dd111e903086aa6aaac1f8d4b83dfacb98d",
+      "sourceText": "وقد يساعدك قبل فتح الهاتف سؤال صغير:",
+      "spokenText": "وقد يساعدك قبل فتح الهاتف سؤال صغير:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a6c4632967ad",
+      "type": "paragraph",
+      "sourceHash": "a6c4632967ade7bfb26eb2215b88d5f4b433c89ba79c76b87d637b5d33637971",
+      "sourceText": "ماذا أريد منه الآن؟",
+      "spokenText": "ماذا أريد منه الآن؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-8b23adeda5a8",
+      "type": "paragraph",
+      "sourceHash": "8b23adeda5a886c6a4b917924ffea86658ea073c929ecc12019850ec2058ed7c",
+      "sourceText": "رسالة؟",
+      "spokenText": "رسالة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-34026cf4fa49",
+      "type": "paragraph",
+      "sourceHash": "34026cf4fa49908b4018a53381c4db0908fdcca513f69634b4075c092527a7db",
+      "sourceText": "معلومة؟",
+      "spokenText": "معلومة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-da32f3bc251c",
+      "type": "paragraph",
+      "sourceHash": "da32f3bc251c2987e4509c21534dfa37f2c764e5f8a0cddf04f9a40af005e8f0",
+      "sourceText": "راحة؟",
+      "spokenText": "راحة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-cce7508e3848",
+      "type": "paragraph",
+      "sourceHash": "cce7508e3848474c749347cc571997a9ab85b6a2ba42a397f12e173e52db6d26",
+      "sourceText": "أم أن المهمة أمامي أصبحت صعبة فحسب؟",
+      "spokenText": "أم أن المهمة أمامي أصبحت صعبة فحسب؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-12b7d1dcc5c5",
+      "type": "paragraph",
+      "sourceHash": "12b7d1dcc5c5bad6cbd68badffadbda44f9ee673b7320a316708060ec1087d46",
+      "sourceText": "قد تفتحه بعد السؤال.",
+      "spokenText": "قد تفتحه بعد السؤال.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-f27cca93e45f",
+      "type": "paragraph",
+      "sourceHash": "f27cca93e45f0856d042b9a0f0d042ea38ea575fda80a33cfb1a6119a1a6beaf",
+      "sourceText": "لكن الفرق أن يدك هذه المرة وصلت إليه بعدك، لا قبلك.",
+      "spokenText": "لكن الفرق أن يدك هذه المرة وصلت إليه بعدك، لا قبلك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-86e7b6073d9d",
+      "type": "h2",
+      "sourceHash": "86e7b6073d9db78fec11d4cbbe4b90396da92f6e0f187b5aafb9aa48f488a714",
+      "sourceText": "لا تحوّل التركيز إلى امتحان أخلاقي",
+      "spokenText": "لا تحوّل التركيز إلى امتحان أخلاقي",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-bffad7205528",
+      "type": "paragraph",
+      "sourceHash": "bffad7205528b908b154610ba86ea5deb2d89e53c58fa8a2885c45ab8969c55e",
+      "sourceText": "من السهل أن ينتهي الحديث عن الهاتف إلى محاكمة.",
+      "spokenText": "من السهل أن ينتهي الحديث عن الهاتف إلى محاكمة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-3388c5f7395d",
+      "type": "paragraph",
+      "sourceHash": "3388c5f7395d884e73f95c3f83d614a84bc6b80dee0868d914f63330178a73f3",
+      "sourceText": "المنضبط قوي.",
+      "spokenText": "المنضبط قوي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-42448c22fc4d",
+      "type": "paragraph",
+      "sourceHash": "42448c22fc4da07f8b6422e1ffe58c497d039e69a11131e840c1d74b8cb14c33",
+      "sourceText": "والمشتت ضعيف.",
+      "spokenText": "والمشتت ضعيف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-878272b39c89",
+      "type": "paragraph",
+      "sourceHash": "878272b39c89953b22a8a33e880cf6ccab922d891200902b71d7c94a16afd55d",
+      "sourceText": "ومن لا يستطيع الابتعاد عن الشاشة يفتقر إلى الإرادة.",
+      "spokenText": "ومن لا يستطيع الابتعاد عن الشاشة يفتقر إلى الإرادة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-b0bbf2c23f0c",
+      "type": "paragraph",
+      "sourceHash": "b0bbf2c23f0c44aef097ce2a4ef2226365a87320654e53e333b486b9091b9a59",
+      "sourceText": "لكن الانتباه ليس مقياسًا لقيمة الإنسان.",
+      "spokenText": "لكن الانتباه ليس مقياسًا لقيمة الإنسان.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-5af4ba9c282c",
+      "type": "paragraph",
+      "sourceHash": "5af4ba9c282c471fcac565f9f3fcfe3bf2e2a33ca8b9a827508f110597f10239",
+      "sourceText": "والتشتت لا يولد دائمًا من الهاتف.",
+      "spokenText": "والتشتت لا يولد دائمًا من الهاتف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-371a05f83fea",
+      "type": "paragraph",
+      "sourceHash": "371a05f83fea83ac832519bbe0bc92fd22520c3a66bba198ad08babcd174a9c0",
+      "sourceText": "التعب يشتت.",
+      "spokenText": "التعب يشتت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-0f806251bb1e",
+      "type": "paragraph",
+      "sourceHash": "0f806251bb1ea9a06f1b0d07c0d7bb28b3ce815cd2ada9f6432bacc486b87aac",
+      "sourceText": "والقلق يشتت.",
+      "spokenText": "والقلق يشتت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-67cb1af11429",
+      "type": "paragraph",
+      "sourceHash": "67cb1af114297716e18c960d3e0c45dba202dc7fa6e6d6bb50a1b6aefd508860",
+      "sourceText": "وقلة النوم تشتت.",
+      "spokenText": "وقلة النوم تشتت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-115f8ed1f9b6",
+      "type": "paragraph",
+      "sourceHash": "115f8ed1f9b6f39b7d1669047eb76891e2ea279cf2331431718d1764c8e8ded4",
+      "sourceText": "والوحدة قد تدفع إلى الشاشة.",
+      "spokenText": "والوحدة قد تدفع إلى الشاشة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-0cd49c6fd48e",
+      "type": "paragraph",
+      "sourceHash": "0cd49c6fd48ea6e6c7cfac18f8c3463beec7020fd8c889e3251e2b0005f46a56",
+      "sourceText": "والمهمة الغامضة التي لا نعرف من أين نبدأها تجعل أي بديل صغير أكثر جاذبية.",
+      "spokenText": "والمهمة الغامضة التي لا نعرف من أين نبدأها تجعل أي بديل صغير أكثر جاذبية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-bfc383efc35f",
+      "type": "paragraph",
+      "sourceHash": "bfc383efc35f262957c610e2901a8f2780620bc7169bb3bab48592a3d7bb2f38",
+      "sourceText": "قد لا يكون فتح التطبيق رغبة في الترفيه أصلًا؛ قد يكون محاولة قصيرة لتجنب شعور غير مريح.",
+      "spokenText": "قد لا يكون فتح التطبيق رغبة في الترفيه أصلًا؛ قد يكون محاولة قصيرة لتجنب شعور غير مريح.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-424026f45f01",
+      "type": "paragraph",
+      "sourceHash": "424026f45f0150254f3d107481353d4ec6239f76b0265fcee6f6d89be20ce207",
+      "sourceText": "ولهذا قد يكون السؤال الأصدق أحيانًا:",
+      "spokenText": "ولهذا قد يكون السؤال الأصدق أحيانًا:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-edf5f08d8a5b",
+      "type": "paragraph",
+      "sourceHash": "edf5f08d8a5b33b88202fc4a1d1a2d0adf39b40a7aef949bb40fb6110f6a747b",
+      "sourceText": "ما الذي أهرب منه؟ وما الذي أحتاج إليه قبل أن أستطيع التركيز؟",
+      "spokenText": "ما الذي أهرب منه؟ وما الذي أحتاج إليه قبل أن أستطيع التركيز؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-b27fffe083df",
+      "type": "paragraph",
+      "sourceHash": "b27fffe083df95098a2da7955b9c03bd17fdec76272379b64218d743a150d8e8",
+      "sourceText": "وإذا أصبح التشتت شديدًا ومستمرًا، ويؤثر بوضوح في الدراسة أو العمل أو النوم والحياة اليومية، فلا ينبغي افتراض أن الهاتف هو التفسير الوحيد؛ فقد توجد عوامل صحية أو نفسية أو بيئية تستحق النظر إليها بجدية.",
+      "spokenText": "وإذا أصبح التشتت شديدًا ومستمرًا، ويؤثر بوضوح في الدراسة أو العمل أو النوم والحياة اليومية، فلا ينبغي افتراض أن الهاتف هو التفسير الوحيد؛ فقد توجد عوامل صحية أو نفسية أو بيئية تستحق النظر إليها بجدية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-9f87bcdaa17c",
+      "type": "paragraph",
+      "sourceHash": "9f87bcdaa17ca4b0fea95fe9cd1e3348883dbc39eaab2dacea9841443126ad33",
+      "sourceText": "ليس كل تعثر في الانتباه مشكلة إعدادات.",
+      "spokenText": "ليس كل تعثر في الانتباه مشكلة إعدادات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "h2-3416db84b985",
+      "type": "h2",
+      "sourceHash": "3416db84b9855fe20e8cdff6f2942a5b3cef4c3b40cbe290086a703a4bb8ca3c",
+      "sourceText": "ربما لم تسرق الشاشة تركيزنا",
+      "spokenText": "ربما لم تسرق الشاشة تركيزنا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-beb9e869a873",
+      "type": "paragraph",
+      "sourceHash": "beb9e869a87313abdbb3da7920e4d3541cdef6b10ab0881788795970151aac3a",
+      "sourceText": "وهنا نعود إلى السؤال الأول.",
+      "spokenText": "وهنا نعود إلى السؤال الأول.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-6a505ebe2809",
+      "type": "paragraph",
+      "sourceHash": "6a505ebe280971d43a0330a7e2e78487ad1e33976d79b13a02e4eac7af8002ba",
+      "sourceText": "هل سرقت الشاشة تركيزنا؟",
+      "spokenText": "هل سرقت الشاشة تركيزنا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-66e3198ac972",
+      "type": "paragraph",
+      "sourceHash": "66e3198ac9720f61fc2f19e97a241c0ed1ba28b9b9f4a773ac694447eab8dc54",
+      "sourceText": "ربما تخفي كلمة «سرقت» جزءًا من الصورة.",
+      "spokenText": "ربما تخفي كلمة «سرقت» جزءًا من الصورة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-2d205d424582",
+      "type": "paragraph",
+      "sourceHash": "2d205d424582105d9aa6aac46ba39a2c9a109a5a51a6dc43cedcd0ae76c6c098",
+      "sourceText": "فالسرقة تحدث من دون موافقة صاحب الشيء.",
+      "spokenText": "فالسرقة تحدث من دون موافقة صاحب الشيء.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-bfca5912300d",
+      "type": "paragraph",
+      "sourceHash": "bfca5912300dbd53720bfc0683806a3bedbbd3491acb5294cdd0f5591495ccbc",
+      "sourceText": "أما نحن، فكثيرًا ما نسلّم انتباهنا طوعًا؛ مرة بعد مرة، وبكميات صغيرة لا نشعر بقيمتها.",
+      "spokenText": "أما نحن، فكثيرًا ما نسلّم انتباهنا طوعًا؛ مرة بعد مرة، وبكميات صغيرة لا نشعر بقيمتها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-b6e28eb39a40",
+      "type": "paragraph",
+      "sourceHash": "b6e28eb39a408ac10c0674a5e0f6158d1b5bb348e4503551bff10f0c1e8023b6",
+      "sourceText": "ليس لأننا ضعفاء على نحو استثنائي.",
+      "spokenText": "ليس لأننا ضعفاء على نحو استثنائي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-3ca80b1b13ac",
+      "type": "paragraph",
+      "sourceHash": "3ca80b1b13aca4dc7768cd0f45d43129b442f2dcc389f101e8590326a24a9c5b",
+      "sourceText": "بل لأننا نعيش مع جهاز يستطيع أن يعرض لنا، في اللحظة نفسها، أصدقاءنا وأعمالنا وأخبار العالم وألعابنا وكتبنا وصورنا ومخاوفنا ورغباتنا؛ كل ما يمكن أن يوقظ الفضول في نافذة صغيرة.",
+      "spokenText": "بل لأننا نعيش مع جهاز يستطيع أن يعرض لنا، في اللحظة نفسها، أصدقاءنا وأعمالنا وأخبار العالم وألعابنا وكتبنا وصورنا ومخاوفنا ورغباتنا؛ كل ما يمكن أن يوقظ الفضول في نافذة صغيرة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-87ae60acbd8b",
+      "type": "paragraph",
+      "sourceHash": "87ae60acbd8b41d79edac2a93a862737f6d6de25fb597d78a90e4b8b501d96af",
+      "sourceText": "المنافسة غير عادلة قليلًا.",
+      "spokenText": "المنافسة غير عادلة قليلًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-fe5b3afe1719",
+      "type": "paragraph",
+      "sourceHash": "fe5b3afe1719818a5fc36b13eaaf5d000f7d86ab816af8f73b210fb1f50cd2c5",
+      "sourceText": "كتاب واحد أمام هاتف يحمل ألف باب.",
+      "spokenText": "كتاب واحد أمام هاتف يحمل ألف باب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-4805d9de318d",
+      "type": "paragraph",
+      "sourceHash": "4805d9de318d3250db7327bbacc29e599569e57935cae041d72fbd401936c852",
+      "sourceText": "محادثة واحدة أمام جهاز قد يصل منه أي شخص.",
+      "spokenText": "محادثة واحدة أمام جهاز قد يصل منه أي شخص.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-189b5e1dcc41",
+      "type": "paragraph",
+      "sourceHash": "189b5e1dcc413658e20f564b5d6b54fea3693f6ea163a78f613f7f6af5d584f2",
+      "sourceText": "ولحظة صامتة أمام مكتبة لا تنتهي من الصور والأصوات والحكايات.",
+      "spokenText": "ولحظة صامتة أمام مكتبة لا تنتهي من الصور والأصوات والحكايات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-11644afad5d6",
+      "type": "paragraph",
+      "sourceHash": "11644afad5d6faf3542643caebcfa67e3a5016cf54c43a90c33b3adcef50193b",
+      "sourceText": "لذلك لا يتعلق الأمر بالحنين إلى زمن بلا تقنية.",
+      "spokenText": "لذلك لا يتعلق الأمر بالحنين إلى زمن بلا تقنية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-0c9e75140fb8",
+      "type": "paragraph",
+      "sourceHash": "0c9e75140fb81f49564a4f69a92e29c2477acd52a08ef92f14f70f7522be8261",
+      "sourceText": "ولا بأن نجعل الملل فضيلة في ذاته.",
+      "spokenText": "ولا بأن نجعل الملل فضيلة في ذاته.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-28d0fca8566c",
+      "type": "paragraph",
+      "sourceHash": "28d0fca8566ce244ac26606c5c6115adefc8459492896e7089ae270ff1d1c18c",
+      "sourceText": "ولا بتحويل الهاتف إلى عدو.",
+      "spokenText": "ولا بتحويل الهاتف إلى عدو.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-93be464bd522",
+      "type": "paragraph",
+      "sourceHash": "93be464bd52276e19e2e5e3541e14230a881bffda0d0dec981031e0dd89cc277",
+      "sourceText": "إنه سؤال أبسط وأكثر أهمية:",
+      "spokenText": "إنه سؤال أبسط وأكثر أهمية:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-581583978cac",
+      "type": "paragraph",
+      "sourceHash": "581583978cacbcca919fb6695e881a03c56652e8d6021f63ecf76c94ae5876e2",
+      "sourceText": "هل ما زلنا نحن من يقرر متى ينتهي الشيء الذي أمامنا ويبدأ الشيء التالي؟",
+      "spokenText": "هل ما زلنا نحن من يقرر متى ينتهي الشيء الذي أمامنا ويبدأ الشيء التالي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-524d99bf1e17",
+      "type": "paragraph",
+      "sourceHash": "524d99bf1e174c494a2252688a6e657ed79f05944e5747c85f80c10a0b3ef083",
+      "sourceText": "إذا بقي القرار لنا، فالشاشة أداة مذهلة.",
+      "spokenText": "إذا بقي القرار لنا، فالشاشة أداة مذهلة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-05b6b49f334c",
+      "type": "paragraph",
+      "sourceHash": "05b6b49f334c7513ca1d2633f73d42fcfca74e9cdc7e9034b12539d33a08455e",
+      "sourceText": "أما إذا صرنا عاجزين عن عبور دقيقة هادئة من دون أن نطلب منها شيئًا، فربما لم تسرق الشاشة انتباهنا كله.",
+      "spokenText": "أما إذا صرنا عاجزين عن عبور دقيقة هادئة من دون أن نطلب منها شيئًا، فربما لم تسرق الشاشة انتباهنا كله.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-8711391fc2d3",
+      "type": "paragraph",
+      "sourceHash": "8711391fc2d3719d053bc4b243fa3384a1c6c55a1930ee36a8e5133c063d3630",
+      "sourceText": "لكنها أخذت شيئًا أصغر، وأكثر خفاءً:",
+      "spokenText": "لكنها أخذت شيئًا أصغر، وأكثر خفاءً:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    },
+    {
+      "segmentId": "paragraph-a42036936186",
+      "type": "paragraph",
+      "sourceHash": "a42036936186541f446f5f70c417ee68895edc7d3c660620bd18b461f0229d35",
+      "sourceText": "قدرتنا على أن نترك بعض اللحظات بلا شيء… حتى نرى ما الذي كان يمكن أن يظهر فيها.",
+      "spokenText": "قدرتنا على أن نترك بعض اللحظات بلا شيء… حتى نرى ما الذي كان يمكن أن يظهر فيها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      },
+      "pronunciationReview": {
+        "status": "not-performed",
+        "reviewer": "",
+        "reviewedAt": "",
+        "method": "pending linguistic and pronunciation review"
+      }
+    }
+  ],
+  "scriptHash": "f134e73df1c195a8e24bcad2e989cb078af36b06d4a5b0adeca89e7f428cacf4"
+}
