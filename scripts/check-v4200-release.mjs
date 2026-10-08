@@ -23,7 +23,7 @@ for (const name of files) {
   const source = await readFile(`src/content/posts/${name}`, 'utf8');
   if (!/^draft:\s*true$/mi.test(source)) live += 1;
 }
-if (![13, 14, 15].includes(live)) throw new Error(`V4.21.6 compatibility expects 13–15 live articles, got ${live}.`);
+if (live < 15) throw new Error(`V4.21.6 compatibility requires the protected 15-article baseline, got ${live}. Post-baseline articles are allowed.`);
 
 const redirects = await readFile('public/_redirects', 'utf8');
 for (const target of ['altadakhom-explained-simply', 'language-soft-power-politics']) if (!redirects.includes(target)) throw new Error(`Missing canonical redirect target ${target}`);
