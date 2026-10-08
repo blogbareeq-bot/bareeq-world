@@ -1,0 +1,77 @@
+name: Bareeq final five saved candidates bound review without TTS
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-completion40-final-review.mjs'
+      - 'scripts/audio-completion40-carry.py'
+      - 'scripts/audio-completion40-review.py'
+      - 'scripts/audio-dual-asr-adjudicate.mjs'
+      - '.github/workflows/audio-completion40-final-review.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: bareeq-completion40-final-review
+  cancel-in-progress: false
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local review tools without provider credentials
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install faster-whisper==1.2.0 requests numpy
+      - name: Test existing representation comparison semantics
+        run: node scripts/test-audio-dual-asr-adjudicate.mjs
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche40-execution-37777589258
+          path: saved-two
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37777589258'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-reconstructed-37626334800
+          path: saved-three
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37626334800'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: saved-baselines
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-human-triage-37449866365
+          path: saved-triage
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37449866365'
+      - name: Reuse immutable ASR and bind each previously heard region to actual saved bytes
+        run: node scripts/audio-completion40-final-review.mjs saved-two saved-three saved-baselines saved-triage completion40-final-review
+      - name: Build all remaining listening clips locally
+        run: python scripts/audio-completion40-review.py completion40-final-review
+      - name: Verify published audio and quota ledgers stay unchanged
+        if: always()
+        run: git diff --exit-code -- public/audio docs/audio
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-completion40-final-review-${{ github.run_id }}
+          path: completion40-final-review/
+          retention-days: 90
+          if-no-files-found: error
