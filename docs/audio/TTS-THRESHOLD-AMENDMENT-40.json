@@ -168,7 +168,13 @@
       "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
       "preserveAllOtherSourceAudio": true,
       "id": "R40-02",
-      "successfulTtsConsumed": 0
+      "successfulTtsConsumed": 0,
+      "dispatchAttempt": {
+        "runId": "37777589258",
+        "attemptNumber": 1,
+        "status": "RESERVED",
+        "reservedAt": "2026-10-08T12:34:18.225Z"
+      }
     },
     {
       "requestNumber": 3,
