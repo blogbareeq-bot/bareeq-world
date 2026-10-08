@@ -1,0 +1,173 @@
+name: Bareeq owner approved tranche40 execution and full QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-tranche40-*.mjs'
+      - 'scripts/audio-tranche40-splice.py'
+      - 'scripts/test-audio-tranche40-*.mjs'
+      - 'scripts/audio-gemini-tts.mjs'
+      - 'scripts/audio-tts-freeze-guard.mjs'
+      - 'docs/audio/TRANCHE40-PREFLIGHT.json'
+      - '.github/workflows/audio-tranche40-execute.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/audio-tranche40-execute.mjs'
+      - '.github/workflows/audio-tranche40-execute.yml'
+permissions:
+  actions: read
+  contents: write
+concurrency:
+  group: bareeq-owner-tranche40
+  cancel-in-progress: false
+jobs:
+  offline:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Check budget, source binding, order and replay rejection without TTS
+        run: |
+          node --check scripts/audio-tranche40-execute.mjs
+          node --check scripts/audio-tranche40-validate.mjs
+          python -m py_compile scripts/audio-tranche40-splice.py
+          node scripts/test-audio-tranche40-policy.mjs
+          node scripts/test-audio-tranche40-authorization.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
+          node scripts/test-audio-tts-threshold-amendment.mjs
+          node scripts/audio-gate4-governance.mjs
+          node scripts/audio-state-consistency.mjs
+  authorization-gate:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.authorization.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - id: authorization
+        run: |
+          node --input-type=module <<'NODE'
+          import {appendFile} from 'node:fs/promises';
+          import {readThresholdAmendment} from './scripts/audio-tts-threshold-amendment.mjs';
+          const {amendment:a,remaining}=await readThresholdAmendment();
+          const ready=process.env.GITHUB_RUN_ATTEMPT==='1' && remaining===7
+            && a.decisionId==='COMPLETION15-TRANCHE40-v1' && a.authorizationStatus==='AUTHORIZED'
+            && a.executionStatus==='PREFLIGHT_PASSED' && a.preflight?.passedTargets===7 && !a.executionClaim;
+          await appendFile(process.env.GITHUB_OUTPUT,`ready=${ready}\n`);
+          console.log(`TRANCHE40_GATE ready=${ready} remaining=${remaining}`);
+          NODE
+  execute:
+    needs: authorization-gate
+    if: github.event_name == 'push' && github.run_attempt == 1 && needs.authorization-gate.outputs.ready == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - name: Install audio tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install faster-whisper==1.2.0 requests numpy
+      - name: Verify dispatch scope before provider access
+        run: |
+          node scripts/test-audio-tranche40-authorization.mjs
+          node scripts/audio-tts-threshold-amendment.mjs
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: retained-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche40-preflight-37776521495
+          path: bound-preflight
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37776521495'
+      - name: Independently reproduce quiet cuts before any TTS
+        run: |
+          python scripts/audio-tranche40-preflight.py --root bound-preflight
+          cmp docs/audio/TRANCHE40-PREFLIGHT.json bound-preflight/preflight-result.json
+      - name: Generate the three touchscreen sentences once and checkpoint each response
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche40-execute.mjs touchscreen
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-tranche40-touchscreen-generated-${{ github.run_id }}
+          path: tranche40-execution/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Verify source preservation and assemble touchscreen candidate
+        run: python scripts/audio-tranche40-splice.py touchscreen
+      - name: Fresh touchscreen full-file technical, sync and independent dual ASR
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche40-validate.mjs touchscreen
+      - name: Retain touchscreen QA before beginning morning
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-tranche40-touchscreen-qa-${{ github.run_id }}
+          path: |
+            tranche40-execution/
+            audio-candidates/how-touchscreens-work/
+          retention-days: 90
+      - name: Generate the four morning regions once, after touchscreen QA
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche40-execute.mjs morning
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-tranche40-all-generated-${{ github.run_id }}
+          path: tranche40-execution/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Verify source preservation and assemble morning candidate
+        run: python scripts/audio-tranche40-splice.py morning
+      - name: Fresh morning full-file technical, sync and independent dual ASR
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche40-validate.mjs morning
+      - name: Verify the ten published articles remain byte identical
+        if: always()
+        run: git diff --exit-code -- public/audio
+      - name: Retain all candidates, successful responses, raw ASR and closed accounting
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-tranche40-execution-${{ github.run_id }}
+          path: |
+            tranche40-execution/
+            audio-candidates/
+            docs/audio/TTS-THRESHOLD-AMENDMENT-40.json
+            docs/audio/TRANCHE40-PREFLIGHT.json
+            docs/audio/ENGINE-STRATEGY-STATE.json
+            docs/audio/TTS-FREEZE.json
+          retention-days: 90
+          if-no-files-found: warn

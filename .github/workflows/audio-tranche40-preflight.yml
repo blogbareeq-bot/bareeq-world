@@ -16,7 +16,24 @@ concurrency:
   group: bareeq-tranche40-source-preflight
   cancel-in-progress: false
 jobs:
+  state:
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.state.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: state
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,appendFile} from 'node:fs/promises';
+          const a=JSON.parse(await readFile('docs/audio/TTS-THRESHOLD-AMENDMENT-40.json','utf8'));
+          const ready=a.executionStatus==='PREFLIGHT_REQUIRED' && a.successfulRequestsConsumed===0 && !a.executionClaim;
+          await appendFile(process.env.GITHUB_OUTPUT,`ready=${ready}\n`);
+          console.log(`SOURCE_PREFLIGHT_GATE ready=${ready}`);
+          NODE
   preflight:
+    needs: state
+    if: needs.state.outputs.ready == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
