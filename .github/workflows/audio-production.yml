@@ -81,6 +81,7 @@ jobs:
           node scripts/check-speech-scripts.mjs
           node scripts/test-audio-engine-final.mjs
           node scripts/test-audio-transition-normalization.mjs
+          node scripts/test-audio-priority-guard.mjs
 
       - name: Guard inputs
         run: |
@@ -115,6 +116,9 @@ jobs:
           if [ "$mode" = "publish-approved" ] && [ -z "$listening" ]; then
             echo 'publish-approved requires a listening evidence path'
             exit 2
+          fi
+          if [ "$mode" = "generate-candidate" ]; then
+            node scripts/audio-priority-guard.mjs --target="$article"
           fi
 
       - name: Restore candidate cache
