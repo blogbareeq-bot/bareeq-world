@@ -1,0 +1,73 @@
+name: Bareeq approved round1 satellite reconstruction
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-round1-satellite.yml'
+      - 'scripts/audio-round1-satellite.mjs'
+      - 'scripts/audio-round1-satellite-splice.py'
+      - 'docs/audio/BOUND-REVIEW-ROUND1.json'
+      - 'docs/audio/REVIEW-ROUND1-SUBMISSION.json'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: round1-satellite-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  reconstruct:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - name: Verify frozen synthesis and install byte tools
+        run: |
+          node scripts/test-audio-tts-freeze-integration.mjs
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install numpy requests
+          python -c 'import numpy, requests'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-reconstructed-37626334800
+          path: saved-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37626334800'
+      - name: Restore only the reviewed satellite baseline and saved donor
+        run: node scripts/audio-round1-satellite.mjs
+      - name: Reuse owner-confirmed clause with verified quiet seams
+        run: python scripts/audio-round1-satellite-splice.py
+      - name: Fresh full-file technical sync and independent ASR
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-round1-satellite.mjs --qa
+      - name: Prove no publication or TTS counter mutation
+        if: always()
+        run: git diff --exit-code -- public/audio docs/audio/PROGRESSIVE-STATUS.json docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json docs/audio/TTS-THRESHOLD-AMENDMENT-33.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-round1-satellite-review-${{ github.run_id }}
+          path: |
+            round1-output/*.json
+            round1-output/*.mp3
+          retention-days: 90
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-round1-satellite-evidence-${{ github.run_id }}
+          path: |
+            round1-output/
+            audio-candidates/
+          retention-days: 90
+          if-no-files-found: warn
