@@ -3,12 +3,12 @@
   "provider": "Gemini / Sadaltager",
   "threshold": 40,
   "exactBaseline": 10,
-  "successfulTtsSinceLastNewExact": 39,
+  "successfulTtsSinceLastNewExact": 40,
   "status": "paused",
   "reason": "Owner approved seven fixed source-bound repairs, one attempt each; global automatic dispatch remains frozen.",
   "lastExactAt": "2026-10-08T10:20:25.913Z",
   "lastRunId": "37777589258",
-  "updatedAt": "2026-10-08T12:36:18.975Z",
+  "updatedAt": "2026-10-08T12:36:32.291Z",
   "targetedRecovery": null,
   "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-40.json"
 }
