@@ -1,0 +1,1188 @@
+{
+  "version": 1,
+  "articleId": "screen-focus-empty-minutes",
+  "sourceSnapshotHash": "143dbb79b73abf137b477ff6eb4ecfa2c8223d9ee69ca63816e8731dbae8fb77",
+  "sourceStructureHash": "b5dc43d2508d0aca224af0460203d596c614b50ad310e009c457305ac764ccc3",
+  "generatedAt": "2026-10-08T07:45:00.000Z",
+  "reviewVersion": 1,
+  "status": "needs-linguistic-review",
+  "referenceExclusion": {
+    "heading": "المصادر والقراءة الإضافية",
+    "segmentCount": 8,
+    "sourceHash": "c7513de571573f0e35ee8b01c76ef93208a91875f6943f6ecb3617dcc0fdac1f"
+  },
+  "segments": [
+    {
+      "segmentId": "title-6d233410eb88",
+      "type": "title",
+      "sourceHash": "6d233410eb880c9576502293d2d1307f00fb8f6345ace5c0d4da80efeaa21bac",
+      "sourceText": "هل سرقت الشاشة تركيزنا؟ لماذا لم نعد نحتمل الدقائق الفارغة؟",
+      "spokenText": "هل سرقت الشاشة تركيزنا؟ لماذا لم نعد نحتمل الدقائق الفارغة؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b08384246328",
+      "type": "paragraph",
+      "sourceHash": "b083842463286d612254d96e2928fb71bd6f5081381f688b2917da658d691b4d",
+      "sourceText": "في المصعد، قبل أن يُغلق الباب، تخرج الهواتف.",
+      "spokenText": "في المصعد، قبل أن يُغلق الباب، تخرج الهواتف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e527c93265de",
+      "type": "paragraph",
+      "sourceHash": "e527c93265def9cbbb8ec965af8da650e3c1f086da6b778cbd1b9d0c36362908",
+      "sourceText": "في الطابور، قبل أن نشعر بأننا ننتظر، تخرج الهواتف.",
+      "spokenText": "في الطابور، قبل أن نشعر بأننا ننتظر، تخرج الهواتف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dbb4bd749c9e",
+      "type": "paragraph",
+      "sourceHash": "dbb4bd749c9eed8e24f73ca040d7112fad633d1bed3e016498adb8667641deb2",
+      "sourceText": "عند إشارة المرور، في الدقائق التي تسبق موعدًا، أثناء انتظار فنجان القهوة، وحتى في تلك الثواني القصيرة بين إطفاء المصباح ومحاولة النوم… تمتد اليد إلى الشاشة كما لو أنها تكمل حركة بدأها الجسد قبل أن يتخذ العقل قرارًا. ليس بالضرورة لأن رسالة مهمة وصلت. ولا لأننا نبحث عن معلومة نحتاج إليها. أحيانًا لا يوجد شيء نريده أصلًا. نفتح الهاتف، نتفقده، نغلقه، ثم نعود إليه بعد قليل؛ كأن الفراغ نفسه أصبح إشعارًا يحتاج إلى استجابة. ومن هنا يبدأ السؤال الحقيقي:",
+      "spokenText": "عند إشارة المرور، في الدقائق التي تسبق موعدًا، أثناء انتظار فنجان القهوة، وحتى في تلك الثواني القصيرة بين إطفاء المصباح ومحاولة النوم… تمتد اليد إلى الشاشة كما لو أنها تكمل حركة بدأها الجسد قبل أن يتخذ العقل قرارًا. ليس بالضرورة لأن رسالة مهمة وصلت. ولا لأننا نبحث عن معلومة نحتاج إليها. أحيانًا لا يوجد شيء نريده أصلًا. نفتح الهاتف، نتفقده، نغلقه، ثم نعود إليه بعد قليل؛ كأن الفراغ نفسه أصبح إشعارًا يحتاج إلى استجابة. ومن هنا يبدأ السؤال الحقيقي:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e7051e68f4d8",
+      "type": "paragraph",
+      "sourceHash": "e7051e68f4d8b22e70be02091f83e2e3b31f23fa4927f16babc85dd08bce7f58",
+      "sourceText": "هل سرقت الشاشات تركيزنا، أم أنها غيّرت علاقتنا باللحظات التي لا يحدث فيها شيء؟",
+      "spokenText": "هل سرقت الشاشات تركيزنا، أم أنها غيّرت علاقتنا باللحظات التي لا يحدث فيها شيء؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-461224b0f52f",
+      "type": "h2",
+      "sourceHash": "461224b0f52fe7ca96329a452cb83efbc69fd9186dca9282939bc97a17b04431",
+      "sourceText": "الدقائق التي لم تكن فارغة تمامًا",
+      "spokenText": "الدقائق التي لم تكن فارغة تمامًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-17d38c88ea21",
+      "type": "paragraph",
+      "sourceHash": "17d38c88ea216353b0b79421ace371c5d519b4fbc8a21be0b7a0e890e0268a35",
+      "sourceText": "قبل أن يحمل كل منا نافذة لا تنطفئ إلى العالم، كانت في اليوم مساحات صغيرة لا اسم لها. دقائق في سيارة. انتظار عند طبيب. مشوار قصير. جلوس قبل وصول صديق. نظرة طويلة من نافذة. لم نكن نقرر دائمًا ماذا نفعل بها، ولذلك كان العقل يفعل شيئًا من تلقاء نفسه. يتذكر. يربط بين فكرتين. يعيد حديثًا قديمًا. يلاحظ وجهًا في الطريق. يتخيل. يقلق أحيانًا، ويسرح أحيانًا، ويملّ كثيرًا. لم يكن الملل تجربة محببة بالضرورة، لكنه كان جزءًا طبيعيًا من إيقاع اليوم؛ مساحة منخفضة الإثارة بين حدثين.",
+      "spokenText": "قبل أن يحمل كل منا نافذة لا تنطفئ إلى العالم، كانت في اليوم مساحات صغيرة لا اسم لها. دقائق في سيارة. انتظار عند طبيب. مشوار قصير. جلوس قبل وصول صديق. نظرة طويلة من نافذة. لم نكن نقرر دائمًا ماذا نفعل بها، ولذلك كان العقل يفعل شيئًا من تلقاء نفسه. يتذكر. يربط بين فكرتين. يعيد حديثًا قديمًا. يلاحظ وجهًا في الطريق. يتخيل. يقلق أحيانًا، ويسرح أحيانًا، ويملّ كثيرًا. لم يكن الملل تجربة محببة بالضرورة، لكنه كان جزءًا طبيعيًا من إيقاع اليوم؛ مساحة منخفضة الإثارة بين حدثين.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-720070d5124d",
+      "type": "paragraph",
+      "sourceHash": "720070d5124d80b6c80f4e34f8fd1430a46b01a39f5d9782855b62d4d1f5ff1b",
+      "sourceText": "أما الآن، ففي جيوبنا جهاز قادر على ملء أي فراغ تقريبًا خلال ثانية واحدة. لا نحتاج إلى قصة كاملة كي نتسلى؛ يكفي مقطع. ولا إلى حديث طويل كي نشعر بأن أحدًا موجود؛ تكفي رسالة. ولا إلى سؤال حقيقي كي نبحث؛ تكفي حركة إصبع. وهذه في ذاتها معجزة تقنية. الهاتف ليس خصمًا للحياة الحديثة؛ إنه مكتبة وخريطة وكاميرا ومصرف ومكتب ووسيلة للوصول إلى من نحب. المشكلة ليست أنه قادر على إنقاذنا من الملل. بل أنه قادر على فعل ذلك كل مرة. وحين يصبح الهروب من الشعور أسهل من تحمله، نتعلم الهروب.",
+      "spokenText": "أما الآن، ففي جيوبنا جهاز قادر على ملء أي فراغ تقريبًا خلال ثانية واحدة. لا نحتاج إلى قصة كاملة كي نتسلى؛ يكفي مقطع. ولا إلى حديث طويل كي نشعر بأن أحدًا موجود؛ تكفي رسالة. ولا إلى سؤال حقيقي كي نبحث؛ تكفي حركة إصبع. وهذه في ذاتها معجزة تقنية. الهاتف ليس خصمًا للحياة الحديثة؛ إنه مكتبة وخريطة وكاميرا ومصرف ومكتب ووسيلة للوصول إلى من نحب. المشكلة ليست أنه قادر على إنقاذنا من الملل. بل أنه قادر على فعل ذلك كل مرة. وحين يصبح الهروب من الشعور أسهل من تحمله، نتعلم الهروب.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fbae220884a7",
+      "type": "paragraph",
+      "sourceHash": "fbae220884a73042c9d986994d1038d7d19564c6246ea5a94702c97b55b0e8e8",
+      "sourceText": "لسنا نتحدث هنا عن التركيز وحده. نحن نتحدث أيضًا عن اختفاء حالة كانت تسمى ببساطة:",
+      "spokenText": "لسنا نتحدث هنا عن التركيز وحده. نحن نتحدث أيضًا عن اختفاء حالة كانت تسمى ببساطة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7194d8f82d71",
+      "type": "paragraph",
+      "sourceHash": "7194d8f82d71576461ee5ffb14bb551f1d3567ace0e2aa57f17416793f3dd6bd",
+      "sourceText": "الانتظار.",
+      "spokenText": "الانتظار.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-671993cafeeb",
+      "type": "h2",
+      "sourceHash": "671993cafeeb4bb7230c0e5bd5bd9f1d801273286b8a95716464b6174b5c7d38",
+      "sourceText": "هل أصبح تركيزنا أضعف؟",
+      "spokenText": "هل أصبح تركيزنا أضعف؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a33c61874157",
+      "type": "paragraph",
+      "sourceHash": "a33c61874157909985c5eb2ec80833776d94830eda6fb2e8b2bff9c067bd5e26",
+      "sourceText": "الإجابة الأكثر أمانة هي: ليس بهذه البساطة. من السهل أن نروي القصة هكذا: ظهر الهاتف الذكي، فتقلص انتباه البشر. لكن الانتباه ليس بطارية تحمل رقمًا ثابتًا يمكن أن نقارنه بين جيل وآخر. هو قدرة تتأثر بالنوم والضغط وصعوبة المهمة والبيئة وطبيعة ما نفعله. ما تشير إليه الأبحاث بصورة أوضح هو شيء أقل درامية، لكنه أكثر أهمية:",
+      "spokenText": "الإجابة الأكثر أمانة هي: ليس بهذه البساطة. من السهل أن نروي القصة هكذا: ظهر الهاتف الذكي، فتقلص انتباه البشر. لكن الانتباه ليس بطارية تحمل رقمًا ثابتًا يمكن أن نقارنه بين جيل وآخر. هو قدرة تتأثر بالنوم والضغط وصعوبة المهمة والبيئة وطبيعة ما نفعله. ما تشير إليه الأبحاث بصورة أوضح هو شيء أقل درامية، لكنه أكثر أهمية:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-b94d9f6d4547",
+      "type": "paragraph",
+      "sourceHash": "b94d9f6d454763b915ede342b9910359d3447071367468835e528edd929127c9",
+      "sourceText": "الانتباه يدفع ثمنًا عندما نقطعه وننقله باستمرار من سياق إلى آخر.",
+      "spokenText": "الانتباه يدفع ثمنًا عندما نقطعه وننقله باستمرار من سياق إلى آخر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-02947f7280e6",
+      "type": "paragraph",
+      "sourceHash": "02947f7280e6bbe637444e49cb8f56dc7bee98a5aeaa5854c15da72a5770507b",
+      "sourceText": "نحن لا ننجز مهمتين ذهنيتين معقدتين كاملتين في اللحظة نفسها كما قد يوحي تعبير «تعدد المهام». غالبًا نبدّل بينهما. وعندما نترك نصًا لنفحص رسالة، لا يكفي أن نغلق التطبيق كي نعود إلى المكان نفسه عقليًا. علينا أن نستعيد السؤال الذي كنا نفكر فيه، والخيط الذي وصلنا إليه، وقواعد المهمة التي كنا نستخدمها.",
+      "spokenText": "نحن لا ننجز مهمتين ذهنيتين معقدتين كاملتين في اللحظة نفسها كما قد يوحي تعبير «تعدد المهام». غالبًا نبدّل بينهما. وعندما نترك نصًا لنفحص رسالة، لا يكفي أن نغلق التطبيق كي نعود إلى المكان نفسه عقليًا. علينا أن نستعيد السؤال الذي كنا نفكر فيه، والخيط الذي وصلنا إليه، وقواعد المهمة التي كنا نستخدمها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-24bb1f6ef784",
+      "type": "paragraph",
+      "sourceHash": "24bb1f6ef7848d2d896b0554e32bf9ef1a2bfd8214718d9bf17fe96405bbbf1c",
+      "sourceText": "ولهذا تتحدث أبحاث علم النفس عن كلفة تبديل المهمة؛ فالتجارب أظهرت أن الانتقال المتكرر بين المهام يستهلك وقتًا، وأن الكلفة ترتفع حين تكون المهمة أكثر تعقيدًا أو أقل ألفة. (الجمعية الأمريكية لعلم النفس)",
+      "spokenText": "ولهذا تتحدث أبحاث علم النفس عن كلفة تبديل المهمة؛ فالتجارب أظهرت أن الانتقال المتكرر بين المهام يستهلك وقتًا، وأن الكلفة ترتفع حين تكون المهمة أكثر تعقيدًا أو أقل ألفة. (الجمعية الأمريكية لعلم النفس)",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a18997c738a4",
+      "type": "paragraph",
+      "sourceHash": "a18997c738a4e20f6d90753b6808ee0409378d2497010fabba92783aedd69958",
+      "sourceText": "وفي تحليل تجميعي نُشر عام 2025 وجمع نتائج 27 تجربة عشوائية شملت 2245 مشاركًا، كان تشتيت الهاتف أثناء التعلم مرتبطًا بانخفاض متوسط الحجم في التذكر الفوري. لا يعني ذلك أن الهاتف «يمحو الذاكرة»، بل أن تقسيم الانتباه بين التعلم ونشاط آخر له ثمن يمكن قياسه. (Chen وآخرون، 2025) الانقطاع، إذن، لا يستهلك فقط الثواني التي ننظر فيها إلى الشاشة. هناك ثمن صغير عندما نغادر الفكرة، وثمن آخر عندما نحاول العودة إليها.",
+      "spokenText": "وفي تحليل تجميعي نُشر عام 2025 وجمع نتائج 27 تجربة عشوائية شملت 2245 مشاركًا، كان تشتيت الهاتف أثناء التعلم مرتبطًا بانخفاض متوسط الحجم في التذكر الفوري. لا يعني ذلك أن الهاتف «يمحو الذاكرة»، بل أن تقسيم الانتباه بين التعلم ونشاط آخر له ثمن يمكن قياسه. (Chen وآخرون، 2025) الانقطاع، إذن، لا يستهلك فقط الثواني التي ننظر فيها إلى الشاشة. هناك ثمن صغير عندما نغادر الفكرة، وثمن آخر عندما نحاول العودة إليها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1df5e1368c37",
+      "type": "paragraph",
+      "sourceHash": "1df5e1368c3746e3a07e2b848b50a34caa5ab984a8309c6ed9aada1ef611836b",
+      "sourceText": "ولهذا قد تقضي ساعة أمام كتاب أو تقرير، ثم تنهض وفي داخلك شعور غريب: كنت حاضرًا طوال الساعة… من دون أن تكون حاضرًا فيها فعلًا.",
+      "spokenText": "ولهذا قد تقضي ساعة أمام كتاب أو تقرير، ثم تنهض وفي داخلك شعور غريب: كنت حاضرًا طوال الساعة… من دون أن تكون حاضرًا فيها فعلًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-1a5910c8c933",
+      "type": "h2",
+      "sourceHash": "1a5910c8c933c840f9a97ea1fd6aa6ac3acc5caaf0ecb84efc76b236da4ad9c6",
+      "sourceText": "الهاتف لا يقاطعنا دائمًا… نحن أيضًا نقاطعه",
+      "spokenText": "الهاتف لا يقاطعنا دائمًا… نحن أيضًا نقاطعه",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-381e05145112",
+      "type": "paragraph",
+      "sourceHash": "381e0514511290c150d6b2623a6803159d6b693d0a0e7ec359cdc4d5241ebb9c",
+      "sourceText": "نحب أن نلوم الإشعارات. رن الهاتف، فشتتني. ظهر تنبيه، فقطع الفكرة. اهتز الجهاز، فأخذني بعيدًا. وهذا جزء حقيقي من القصة. بل إن دراسة منشورة عام 2026 وجدت أن إشعارات تشبه إشعارات وسائل التواصل أحدثت تباطؤًا مؤقتًا في المعالجة استمر قرابة سبع ثوانٍ في المهمة المستخدمة، وكان الاضطراب أكبر حين كان الإشعار أكثر صلة بالمشارك ومع كثرة عادات التفاعل مع الهاتف. (Fournier وآخرون، 2026) لكن الهاتف لا يحتاج دائمًا إلى استدعائنا.",
+      "spokenText": "نحب أن نلوم الإشعارات. رن الهاتف، فشتتني. ظهر تنبيه، فقطع الفكرة. اهتز الجهاز، فأخذني بعيدًا. وهذا جزء حقيقي من القصة. بل إن دراسة منشورة عام 2026 وجدت أن إشعارات تشبه إشعارات وسائل التواصل أحدثت تباطؤًا مؤقتًا في المعالجة استمر قرابة سبع ثوانٍ في المهمة المستخدمة، وكان الاضطراب أكبر حين كان الإشعار أكثر صلة بالمشارك ومع كثرة عادات التفاعل مع الهاتف. (Fournier وآخرون، 2026) لكن الهاتف لا يحتاج دائمًا إلى استدعائنا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-49eea1b5f50f",
+      "type": "paragraph",
+      "sourceHash": "49eea1b5f50f056d265503f66c50ba85f26acdd6b3e33242743dba7a6ce1f66a",
+      "sourceText": "لقد تعلمنا نحن أيضًا أن نستدعي المقاطعة. في دراسة راقبت سلوك استخدام الهاتف في الحياة اليومية، كانت 89% من التفاعلات المسجلة قد بدأها المستخدمون أنفسهم، مقابل 11% فقط بدأت بإشعار. وهذه النسبة تخص عينة الدراسة ولا ينبغي تعميمها آليًا على كل مستخدم، لكنها تكشف جانبًا مهمًا: كثير من المقاطعات لا تصل من الخارج؛ نحن نذهب إليها. (Heitmayer وLahlou، 2021) تتعثر فقرة صعبة… فنفتح الهاتف.",
+      "spokenText": "لقد تعلمنا نحن أيضًا أن نستدعي المقاطعة. في دراسة راقبت سلوك استخدام الهاتف في الحياة اليومية، كانت 89% من التفاعلات المسجلة قد بدأها المستخدمون أنفسهم، مقابل 11% فقط بدأت بإشعار. وهذه النسبة تخص عينة الدراسة ولا ينبغي تعميمها آليًا على كل مستخدم، لكنها تكشف جانبًا مهمًا: كثير من المقاطعات لا تصل من الخارج؛ نحن نذهب إليها. (Heitmayer وLahlou، 2021) تتعثر فقرة صعبة… فنفتح الهاتف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3ca9043c23ff",
+      "type": "paragraph",
+      "sourceHash": "3ca9043c23ff22c8a8365465e605ab02f77c50ed9d4c076a58d8cc86b512a1d9",
+      "sourceText": "يتأخر تحميل ملف لثوانٍ… فنفتحه. يصبح الاجتماع أقل إثارة لدقيقتين… فننظر إليه. تسكت المحادثة لحظة… فتمتد اليد نحوه. وفي كل مرة، لا يحدث شيء درامي. لا نشعر أن جزءًا من قدرتنا على التركيز غادر الغرفة. إنها مقاطعات صغيرة، ناعمة، تبدو بلا ثمن. لكن الحياة العقلية لا تُبنى من اللحظات الكبرى وحدها؛ إنها تُبنى أيضًا من استمرار اللحظة الصغيرة. ربما لا تكون المشكلة فقط في أن أجهزتنا تعلمت كيف تستدعينا. ربما تعلمنا نحن كيف نستدعي الباب الجانبي قبل أن نحتاج إلى الخروج.",
+      "spokenText": "يتأخر تحميل ملف لثوانٍ… فنفتحه. يصبح الاجتماع أقل إثارة لدقيقتين… فننظر إليه. تسكت المحادثة لحظة… فتمتد اليد نحوه. وفي كل مرة، لا يحدث شيء درامي. لا نشعر أن جزءًا من قدرتنا على التركيز غادر الغرفة. إنها مقاطعات صغيرة، ناعمة، تبدو بلا ثمن. لكن الحياة العقلية لا تُبنى من اللحظات الكبرى وحدها؛ إنها تُبنى أيضًا من استمرار اللحظة الصغيرة. ربما لا تكون المشكلة فقط في أن أجهزتنا تعلمت كيف تستدعينا. ربما تعلمنا نحن كيف نستدعي الباب الجانبي قبل أن نحتاج إلى الخروج.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-c26a35f1d815",
+      "type": "h2",
+      "sourceHash": "c26a35f1d8156e7f973a123f617e7a1daf899413eea38a9510d04cfa5fc40a32",
+      "sourceText": "لماذا أصبح الملل ثقيلًا؟",
+      "spokenText": "لماذا أصبح الملل ثقيلًا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ca8ebd407092",
+      "type": "paragraph",
+      "sourceHash": "ca8ebd40709274ece04fa7697b496dad7be445a593f638637af6b64eef6c1a02",
+      "sourceText": "الملل شعور غريب. لا نحبه، لكنه ليس عطلًا يجب إصلاحه فورًا. كان الإنسان دائمًا يستطيع الهروب منه: بالحديث، والقراءة، والمشي، والعمل، وبألف وسيلة أخرى. ما تغير هو سرعة باب الهروب. بين الملل والهاتف أقل من ثانية. وهذه السرعة مهمة. لا تحتاج المكافأة التي نجدها على الشاشة إلى أن تكون رائعة. قد لا يعجبنا المقطع التالي. ولا الصورة التالية. ولا الخبر التالي. لكننا لا نعرف ذلك قبل أن نراه. وهذا وحده يكفي أحيانًا لاستمرار السؤال:",
+      "spokenText": "الملل شعور غريب. لا نحبه، لكنه ليس عطلًا يجب إصلاحه فورًا. كان الإنسان دائمًا يستطيع الهروب منه: بالحديث، والقراءة، والمشي، والعمل، وبألف وسيلة أخرى. ما تغير هو سرعة باب الهروب. بين الملل والهاتف أقل من ثانية. وهذه السرعة مهمة. لا تحتاج المكافأة التي نجدها على الشاشة إلى أن تكون رائعة. قد لا يعجبنا المقطع التالي. ولا الصورة التالية. ولا الخبر التالي. لكننا لا نعرف ذلك قبل أن نراه. وهذا وحده يكفي أحيانًا لاستمرار السؤال:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-9fe1724f2d15",
+      "type": "paragraph",
+      "sourceHash": "9fe1724f2d15da7b07e010f7b238182f2921a42d7198b472d454c46022fd1403",
+      "sourceText": "وماذا بعد؟",
+      "spokenText": "وماذا بعد؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-e2c334e624f7",
+      "type": "paragraph",
+      "sourceHash": "e2c334e624f7e6c688d6c49520a73c4c60b1d4003e39f72afaf7e6885e95d83f",
+      "sourceText": "ثم ماذا بعد؟ ثم ماذا بعد؟ حتى تتحول بعض الدقائق من شيء نعيش فيه إلى شيء نعبره بحثًا عن المثير التالي.",
+      "spokenText": "ثم ماذا بعد؟ ثم ماذا بعد؟ حتى تتحول بعض الدقائق من شيء نعيش فيه إلى شيء نعبره بحثًا عن المثير التالي.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-dee692be2767",
+      "type": "paragraph",
+      "sourceHash": "dee692be27677d3102b86d204871a6266c615b4cf59385104267ba974d5dc3bb",
+      "sourceText": "وتشير مراجعة منهجية وتحليل تجميعي نُشرا عام 2023 وشملا 59 دراسة إلى وجود ارتباط إيجابي بين الملل واستخدام الوسائط الرقمية، وإلى ارتباط أقوى مع الاستخدام الرقمي الإشكالي. لكن معظم الدراسات كانت مقطعية، والدراسات الطولية التي تسمح بفهم اتجاه السببية كانت قليلة؛ أي إن الأدلة لا تسمح بأن نقول ببساطة إن الهاتف «يسبب الملل» أو إن الملل وحده «يسبب الاستخدام المفرط». (Camerini وآخرون، 2023) العلاقة أكثر تشابكًا. ومع ذلك يسهل تصور الحلقة:",
+      "spokenText": "وتشير مراجعة منهجية وتحليل تجميعي نُشرا عام 2023 وشملا 59 دراسة إلى وجود ارتباط إيجابي بين الملل واستخدام الوسائط الرقمية، وإلى ارتباط أقوى مع الاستخدام الرقمي الإشكالي. لكن معظم الدراسات كانت مقطعية، والدراسات الطولية التي تسمح بفهم اتجاه السببية كانت قليلة؛ أي إن الأدلة لا تسمح بأن نقول ببساطة إن الهاتف «يسبب الملل» أو إن الملل وحده «يسبب الاستخدام المفرط». (Camerini وآخرون، 2023) العلاقة أكثر تشابكًا. ومع ذلك يسهل تصور الحلقة:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-2b943152cc2f",
+      "type": "paragraph",
+      "sourceHash": "2b943152cc2ffe2e62f9f3db9d7f3fadadc826c42fafac0761137d50177adf82",
+      "sourceText": "نشعر بفراغ بسيط. نطلب إثارة سريعة. نعتاد وفرة الإثارة السريعة. فتبدو اللحظة الهادئة، بالمقارنة، أكثر بطئًا. فنعود إلى الشاشة أسرع. لا لأن الصمت صار أسوأ مما كان. بل لأن البديل صار حاضرًا دائمًا.",
+      "spokenText": "نشعر بفراغ بسيط. نطلب إثارة سريعة. نعتاد وفرة الإثارة السريعة. فتبدو اللحظة الهادئة، بالمقارنة، أكثر بطئًا. فنعود إلى الشاشة أسرع. لا لأن الصمت صار أسوأ مما كان. بل لأن البديل صار حاضرًا دائمًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-10c2bcf6f230",
+      "type": "h2",
+      "sourceHash": "10c2bcf6f2308d84194fb1ce59d4a007feb0eefb5899b8aea39f6832a0c9172b",
+      "sourceText": "عندما يصبح الانتباه سوقًا",
+      "spokenText": "عندما يصبح الانتباه سوقًا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7c74af7eacc7",
+      "type": "paragraph",
+      "sourceHash": "7c74af7eacc7f1bd9eb78ad420e0769082827eb1a00a4ddcdae6156a81e262de",
+      "sourceText": "عندما نصف الهاتف بأنه «مشتت»، نظلمه قليلًا. الهاتف نفسه ليس كائنًا له إرادة. لكن كثيرًا من الخدمات التي نصل إليها عبره تعمل داخل ما يسمى اقتصاد الانتباه. والانتباه مورد محدود. كل دقيقة تمنحها لشيء لا تمنحها في اللحظة نفسها لشيء آخر. ولذلك لا تتنافس المنصات فقط على أن يكون محتواها جيدًا، بل على أن تبدأ باستخدامها، وأن تستمر، وأن تعود. الإشعار. الرقم الأحمر. المقطع التالي. التمرير الذي لا يصل إلى نهاية. التوصية المبنية على ما شاهدته قبل لحظة.",
+      "spokenText": "عندما نصف الهاتف بأنه «مشتت»، نظلمه قليلًا. الهاتف نفسه ليس كائنًا له إرادة. لكن كثيرًا من الخدمات التي نصل إليها عبره تعمل داخل ما يسمى اقتصاد الانتباه. والانتباه مورد محدود. كل دقيقة تمنحها لشيء لا تمنحها في اللحظة نفسها لشيء آخر. ولذلك لا تتنافس المنصات فقط على أن يكون محتواها جيدًا، بل على أن تبدأ باستخدامها، وأن تستمر، وأن تعود. الإشعار. الرقم الأحمر. المقطع التالي. التمرير الذي لا يصل إلى نهاية. التوصية المبنية على ما شاهدته قبل لحظة.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3fbc496853a8",
+      "type": "paragraph",
+      "sourceHash": "3fbc496853a8058ba6e94246a6c197646f1fde306b97c497b24e73ba87c8a9f4",
+      "sourceText": "كل ذلك يقلل الاحتكاك بينك وبين الشيء التالي. ولا تحتاج المنصة دائمًا إلى أن تسألك:",
+      "spokenText": "كل ذلك يقلل الاحتكاك بينك وبين الشيء التالي. ولا تحتاج المنصة دائمًا إلى أن تسألك:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a3bec099ae58",
+      "type": "paragraph",
+      "sourceHash": "a3bec099ae5867ab38c10f45df33578d5ee04f3710b72c8f20392d5ca542207b",
+      "sourceText": "هل تريد خمس دقائق أخرى؟",
+      "spokenText": "هل تريد خمس دقائق أخرى؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-337ea117dd2f",
+      "type": "paragraph",
+      "sourceHash": "337ea117dd2fdf274e9f6575bc859088e22228bcc24990d2622fd638610d35d4",
+      "sourceText": "يكفي ألا تمنحك لحظة واضحة تقول فيها:",
+      "spokenText": "يكفي ألا تمنحك لحظة واضحة تقول فيها:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-3c7b0131888c",
+      "type": "paragraph",
+      "sourceHash": "3c7b0131888cc49529e1c92176af87c91153ad186d8fc9d2c466b0cd91f084f1",
+      "sourceText": "انتهيت.",
+      "spokenText": "انتهيت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6b4b013c0e6e",
+      "type": "paragraph",
+      "sourceHash": "6b4b013c0e6ecb5a3a9307aab9b43851895fa6fe6bf794926efe765682e947d0",
+      "sourceText": "كان للكتاب صفحة أخيرة. وللفيلم شارة نهاية. وللجريدة طرف تنتهي عنده الورقة. أما التدفق الرقمي فيستطيع، من حيث المبدأ، أن يستمر ما دامت يدك تستمر. وهذا فرق صغير في التصميم، هائل في السلوك:",
+      "spokenText": "كان للكتاب صفحة أخيرة. وللفيلم شارة نهاية. وللجريدة طرف تنتهي عنده الورقة. أما التدفق الرقمي فيستطيع، من حيث المبدأ، أن يستمر ما دامت يدك تستمر. وهذا فرق صغير في التصميم، هائل في السلوك:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a85d23781e9e",
+      "type": "paragraph",
+      "sourceHash": "a85d23781e9e105ebd43a109514433ec6f5b06ccbbda83df74126333362a7bb1",
+      "sourceText": "اختفاء نقاط التوقف الطبيعية.",
+      "spokenText": "اختفاء نقاط التوقف الطبيعية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-d2726e31232d",
+      "type": "h2",
+      "sourceHash": "d2726e31232de6a77984b08455b793893d250a0d37fe17ba5b271e9b162a71c6",
+      "sourceText": "ليست كل مشكلة في «وقت الشاشة»",
+      "spokenText": "ليست كل مشكلة في «وقت الشاشة»",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-eaacd4415df5",
+      "type": "paragraph",
+      "sourceHash": "eaacd4415df5516815f584fc62b3dc33241401cd499a0f0c4deef047fee042e3",
+      "sourceText": "لهذا قد يكون سؤال:",
+      "spokenText": "لهذا قد يكون سؤال:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-45e4ab43347a",
+      "type": "paragraph",
+      "sourceHash": "45e4ab43347a47565cddc4d71da7506bc79664bf9fe0fe32ab5974bf93768a79",
+      "sourceText": "كم ساعة تستخدم هاتفك؟",
+      "spokenText": "كم ساعة تستخدم هاتفك؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-c7bb269e23c8",
+      "type": "paragraph",
+      "sourceHash": "c7bb269e23c88d1901c1beb3d0eb3bd84fae517e9107f416bc31e19cdab4e736",
+      "sourceText": "أقل فائدة مما نظن. شخص يقضي ساعتين يقرأ كتابًا إلكترونيًا ويتحدث مع أسرته ويتعلم شيئًا جديدًا، ليس في الوضع نفسه لشخص يقضي الساعتين نفسيهما متنقلًا بين عشرات المقاطع والتطبيقات. ليست كل شاشة سواء. وليست كل دقيقة سواء. السؤال الأكثر فائدة هو:",
+      "spokenText": "أقل فائدة مما نظن. شخص يقضي ساعتين يقرأ كتابًا إلكترونيًا ويتحدث مع أسرته ويتعلم شيئًا جديدًا، ليس في الوضع نفسه لشخص يقضي الساعتين نفسيهما متنقلًا بين عشرات المقاطع والتطبيقات. ليست كل شاشة سواء. وليست كل دقيقة سواء. السؤال الأكثر فائدة هو:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1d4c0ba73e46",
+      "type": "paragraph",
+      "sourceHash": "1d4c0ba73e46d28023c3abffe415737b1ab4acd9b762a1e9ef979c4cf39a1747",
+      "sourceText": "ماذا يفعل استخدام الشاشة بشكل انتباهك؟",
+      "spokenText": "ماذا يفعل استخدام الشاشة بشكل انتباهك؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-01fe615052d8",
+      "type": "paragraph",
+      "sourceHash": "01fe615052d8153c9c7dd2cd0a5be6ab81fd66c5dcb7f5899ddf2007d7704757",
+      "sourceText": "هل تستطيع البقاء مع فكرة طويلة؟ هل تقرأ صفحات عدة من دون رغبة مفاجئة في فتح شيء آخر؟ هل تشاهد فيلمًا من دون تفقد الهاتف؟ هل تجلس مع شخص من دون أن توضع شاشة مضيئة بينكما؟ هل تستطيع الانتظار دقائق قليلة من غير أن تحتاج إلى محتوى؟ هذه الأسئلة لا تقيس الزمن. إنها تقيس شيئًا أعمق:",
+      "spokenText": "هل تستطيع البقاء مع فكرة طويلة؟ هل تقرأ صفحات عدة من دون رغبة مفاجئة في فتح شيء آخر؟ هل تشاهد فيلمًا من دون تفقد الهاتف؟ هل تجلس مع شخص من دون أن توضع شاشة مضيئة بينكما؟ هل تستطيع الانتظار دقائق قليلة من غير أن تحتاج إلى محتوى؟ هذه الأسئلة لا تقيس الزمن. إنها تقيس شيئًا أعمق:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-32c80b7a8286",
+      "type": "paragraph",
+      "sourceHash": "32c80b7a8286fdcab868c197a163e095628ab0c80ace430bcd6c0458031bd819",
+      "sourceText": "قدرتنا على اختيار أين يذهب الانتباه.",
+      "spokenText": "قدرتنا على اختيار أين يذهب الانتباه.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-495ac9b1d774",
+      "type": "paragraph",
+      "sourceHash": "495ac9b1d77463ffc50b616d06191f3798f0e76913cb7975f8477f5f8940353b",
+      "sourceText": "ولهذا أيضًا يجب الحذر من الادعاءات المبالغ فيها. من أشهرها أن مجرد وجود الهاتف على الطاولة، حتى وهو صامت، يستنزف قدرتنا العقلية. كانت هناك دراسات دعمت الفكرة، لكن تحليلًا تجميعيًا نُشر عام 2024 جمع 166 حجم أثر من 53 عينة عبر 33 دراسة، تضم 4368 مشاركًا، ولم يجد أثرًا إجماليًا ذا دلالة إحصائية لمجرد وجود الهاتف على الأداء المعرفي. (Hartanto وآخرون، 2024) هذه نتيجة مهمة. ليس لأنها تبرئ الهاتف من كل أثر.",
+      "spokenText": "ولهذا أيضًا يجب الحذر من الادعاءات المبالغ فيها. من أشهرها أن مجرد وجود الهاتف على الطاولة، حتى وهو صامت، يستنزف قدرتنا العقلية. كانت هناك دراسات دعمت الفكرة، لكن تحليلًا تجميعيًا نُشر عام 2024 جمع 166 حجم أثر من 53 عينة عبر 33 دراسة، تضم 4368 مشاركًا، ولم يجد أثرًا إجماليًا ذا دلالة إحصائية لمجرد وجود الهاتف على الأداء المعرفي. (Hartanto وآخرون، 2024) هذه نتيجة مهمة. ليس لأنها تبرئ الهاتف من كل أثر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-acbdf4a40a66",
+      "type": "paragraph",
+      "sourceHash": "acbdf4a40a66e304567dcdb225c61a4fc86dce4c572e28d9383eac7d04af3f75",
+      "sourceText": "بل لأنها تذكرنا بأن العلم الجيد لا يحتاج إلى تحويل الهاتف إلى شرير كي يحذرنا من سلوك حقيقي. المشكلة ليست سحرًا أسود تشعه قطعة زجاج. المشكلة أوضح في المقاطعات الفعلية، وتبديل المهام، والإشعارات، وعادات الفحص المتكرر.",
+      "spokenText": "بل لأنها تذكرنا بأن العلم الجيد لا يحتاج إلى تحويل الهاتف إلى شرير كي يحذرنا من سلوك حقيقي. المشكلة ليست سحرًا أسود تشعه قطعة زجاج. المشكلة أوضح في المقاطعات الفعلية، وتبديل المهام، والإشعارات، وعادات الفحص المتكرر.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-2abddaccc699",
+      "type": "h2",
+      "sourceHash": "2abddaccc69955ad8d8c5931503d0a261f7e933b8a98e683006d8ded77d32a4e",
+      "sourceText": "ماذا خسرنا عندما اختفت الفراغات؟",
+      "spokenText": "ماذا خسرنا عندما اختفت الفراغات؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ab17910106eb",
+      "type": "paragraph",
+      "sourceHash": "ab17910106eb04b2b5487a3a4ce45eeee2f560c351c8cd370f98a61ef9a4a341",
+      "sourceText": "ربما خسرنا شيئًا يصعب قياسه بالدقائق. أن تجلس بلا شيء لا يعني بالضرورة أن شيئًا لا يحدث. قد يظهر سؤال لم نمنحه وقتًا. قد تكتمل فكرة بدأت في الصباح. قد تتضح مشاعر كان الضجيج يغطيها. وقد لا يحدث شيء إطلاقًا. وهذا أيضًا مقبول. ليست كل دقيقة مطالبة بأن تكون منتجة. وربما كان تحويل الصمت نفسه إلى فرصة إنتاج خطأ آخر من أخطاء عصر السرعة. نحن لا نحتاج إلى الفراغ لكي نخرج منه بفكرة عظيمة. يكفي أحيانًا أن نحتاجه كي لا نكون مستهلكين لشيء طوال الوقت.",
+      "spokenText": "ربما خسرنا شيئًا يصعب قياسه بالدقائق. أن تجلس بلا شيء لا يعني بالضرورة أن شيئًا لا يحدث. قد يظهر سؤال لم نمنحه وقتًا. قد تكتمل فكرة بدأت في الصباح. قد تتضح مشاعر كان الضجيج يغطيها. وقد لا يحدث شيء إطلاقًا. وهذا أيضًا مقبول. ليست كل دقيقة مطالبة بأن تكون منتجة. وربما كان تحويل الصمت نفسه إلى فرصة إنتاج خطأ آخر من أخطاء عصر السرعة. نحن لا نحتاج إلى الفراغ لكي نخرج منه بفكرة عظيمة. يكفي أحيانًا أن نحتاجه كي لا نكون مستهلكين لشيء طوال الوقت.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-56547beb2286",
+      "type": "paragraph",
+      "sourceHash": "56547beb2286cd8cbec53240a47f7a5c24b731ef14b0c571c817082d8f715396",
+      "sourceText": "أن ننظر من نافذة السيارة لأن الطريق موجود. أن نمشي بلا سماعات أحيانًا. أن نقف في المصعد ولا يحدث شيء. أن ننتظر أحدًا، فننتظره فقط. تبدو هذه أفعالًا تافهة. لكنها تمنح العقل تجربة أصبحت أقل شيوعًا: أن يبقى للحظة مع نفسه من دون أن يأتيه العالم كله عبر شاشة بحجم الكف.",
+      "spokenText": "أن ننظر من نافذة السيارة لأن الطريق موجود. أن نمشي بلا سماعات أحيانًا. أن نقف في المصعد ولا يحدث شيء. أن ننتظر أحدًا، فننتظره فقط. تبدو هذه أفعالًا تافهة. لكنها تمنح العقل تجربة أصبحت أقل شيوعًا: أن يبقى للحظة مع نفسه من دون أن يأتيه العالم كله عبر شاشة بحجم الكف.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-1c2bdec544f4",
+      "type": "h2",
+      "sourceHash": "1c2bdec544f4865cdc0dfea674b302a155bf08412b6a6b877824843706436d9b",
+      "sourceText": "استعادة القرار، لا إعلان الحرب",
+      "spokenText": "استعادة القرار، لا إعلان الحرب",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-1e16c5afc391",
+      "type": "paragraph",
+      "sourceHash": "1e16c5afc39109d34fbbc833751235deb87251000eb3b48c6a0dff5f6a009a71",
+      "sourceText": "الحل المغري هو القرار الكبير. أحذف التطبيقات. أغلق الهاتف. أختفي أسبوعًا. أبدأ «ديتوكسًا رقميًا». لكننا لا نحتاج إلى قرار بطولي يعيش يومين ثم ينهار. نحتاج إلى تعديلات صغيرة تجعل البقاء أسهل، وتجعل المقاطعة تحتاج إلى قرار بدل أن تكون هي الوضع الافتراضي. ابدأ بأكثر شيء يقتحمك من دون أن تحتاج إليه: الإشعارات غير الضرورية.",
+      "spokenText": "الحل المغري هو القرار الكبير. أحذف التطبيقات. أغلق الهاتف. أختفي أسبوعًا. أبدأ «ديتوكسًا رقميًا». لكننا لا نحتاج إلى قرار بطولي يعيش يومين ثم ينهار. نحتاج إلى تعديلات صغيرة تجعل البقاء أسهل، وتجعل المقاطعة تحتاج إلى قرار بدل أن تكون هي الوضع الافتراضي. ابدأ بأكثر شيء يقتحمك من دون أن تحتاج إليه: الإشعارات غير الضرورية.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ae1de1f80eb5",
+      "type": "paragraph",
+      "sourceHash": "ae1de1f80eb5576d8e6b96cc9c48624c9f8c978ff205dc6c5ae88ab66e61d4fb",
+      "sourceText": "وهنا أيضًا ليس «الأكثر صرامة» هو الأفضل دائمًا. ففي تجربة ميدانية عشوائية شملت 237 مشاركًا، كان تجميع الإشعارات وتسليمها ثلاث مرات يوميًا مرتبطًا بشعور أكبر بالانتباه والسيطرة وانخفاض الضغط، بينما ارتبط إيقافها تمامًا بقلق أكبر وخوف أكبر من فوات ما يحدث. (Fitz وآخرون، 2019) الفكرة ليست أن هناك جدولًا سحريًا يناسب الجميع. بل أن الإشعار ليس حقًا مكتسبًا لكل تطبيق. ثم امنح مهمة واحدة فقط فترة محمية. لا يومًا كاملًا.",
+      "spokenText": "وهنا أيضًا ليس «الأكثر صرامة» هو الأفضل دائمًا. ففي تجربة ميدانية عشوائية شملت 237 مشاركًا، كان تجميع الإشعارات وتسليمها ثلاث مرات يوميًا مرتبطًا بشعور أكبر بالانتباه والسيطرة وانخفاض الضغط، بينما ارتبط إيقافها تمامًا بقلق أكبر وخوف أكبر من فوات ما يحدث. (Fitz وآخرون، 2019) الفكرة ليست أن هناك جدولًا سحريًا يناسب الجميع. بل أن الإشعار ليس حقًا مكتسبًا لكل تطبيق. ثم امنح مهمة واحدة فقط فترة محمية. لا يومًا كاملًا.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-fbe896c50e50",
+      "type": "paragraph",
+      "sourceHash": "fbe896c50e503cb91f2948968ad9899b82800082c72e64136635df67fbf36133",
+      "sourceText": "ولا ثلاث ساعات من البطولة. عشرين دقيقة لصفحات تقرؤها، أو فقرة تكتبها، أو عمل تحاول إنهاءه، ويكون الهاتف خلالها بعيدًا بما يكفي ألا تتحرك اليد إليه قبل أن يتحرك القرار. وأخيرًا، أعد إلى يومك فاصلًا صغيرًا لا يحتوي شيئًا. مشي قصير بلا سماعات. قهوة بلا تمرير. انتظار بلا فتح تلقائي للشاشة. ليس لأن الملل فضيلة. بل لكي تتذكر أن الشعور بالفراغ لا يصدر أمرًا ملزمًا بالهروب. وقد يساعدك قبل فتح الهاتف سؤال صغير:",
+      "spokenText": "ولا ثلاث ساعات من البطولة. عشرين دقيقة لصفحات تقرؤها، أو فقرة تكتبها، أو عمل تحاول إنهاءه، ويكون الهاتف خلالها بعيدًا بما يكفي ألا تتحرك اليد إليه قبل أن يتحرك القرار. وأخيرًا، أعد إلى يومك فاصلًا صغيرًا لا يحتوي شيئًا. مشي قصير بلا سماعات. قهوة بلا تمرير. انتظار بلا فتح تلقائي للشاشة. ليس لأن الملل فضيلة. بل لكي تتذكر أن الشعور بالفراغ لا يصدر أمرًا ملزمًا بالهروب. وقد يساعدك قبل فتح الهاتف سؤال صغير:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a6c4632967ad",
+      "type": "paragraph",
+      "sourceHash": "a6c4632967ade7bfb26eb2215b88d5f4b433c89ba79c76b87d637b5d33637971",
+      "sourceText": "ماذا أريد منه الآن؟",
+      "spokenText": "ماذا أريد منه الآن؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-ffa722607859",
+      "type": "paragraph",
+      "sourceHash": "ffa72260785926ab7db05608df431f7555b8a722cac1b8d55c8baf79b1d92087",
+      "sourceText": "رسالة؟ معلومة؟ راحة؟ أم أن المهمة أمامي أصبحت صعبة فحسب؟ قد تفتحه بعد السؤال. لكن الفرق أن يدك هذه المرة وصلت إليه بعدك، لا قبلك.",
+      "spokenText": "رسالة؟ معلومة؟ راحة؟ أم أن المهمة أمامي أصبحت صعبة فحسب؟ قد تفتحه بعد السؤال. لكن الفرق أن يدك هذه المرة وصلت إليه بعدك، لا قبلك.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-86e7b6073d9d",
+      "type": "h2",
+      "sourceHash": "86e7b6073d9db78fec11d4cbbe4b90396da92f6e0f187b5aafb9aa48f488a714",
+      "sourceText": "لا تحوّل التركيز إلى امتحان أخلاقي",
+      "spokenText": "لا تحوّل التركيز إلى امتحان أخلاقي",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-bbd58f31c93a",
+      "type": "paragraph",
+      "sourceHash": "bbd58f31c93a1ba36f6418377b3619dfbc98e824dc395d26bcc7dae97b4ece17",
+      "sourceText": "من السهل أن ينتهي الحديث عن الهاتف إلى محاكمة. المنضبط قوي. والمشتت ضعيف. ومن لا يستطيع الابتعاد عن الشاشة يفتقر إلى الإرادة. لكن الانتباه ليس مقياسًا لقيمة الإنسان. والتشتت لا يولد دائمًا من الهاتف. التعب يشتت. والقلق يشتت. وقلة النوم تشتت. والوحدة قد تدفع إلى الشاشة. والمهمة الغامضة التي لا نعرف من أين نبدأها تجعل أي بديل صغير أكثر جاذبية. قد لا يكون فتح التطبيق رغبة في الترفيه أصلًا؛ قد يكون محاولة قصيرة لتجنب شعور غير مريح. ولهذا قد يكون السؤال الأصدق أحيانًا:",
+      "spokenText": "من السهل أن ينتهي الحديث عن الهاتف إلى محاكمة. المنضبط قوي. والمشتت ضعيف. ومن لا يستطيع الابتعاد عن الشاشة يفتقر إلى الإرادة. لكن الانتباه ليس مقياسًا لقيمة الإنسان. والتشتت لا يولد دائمًا من الهاتف. التعب يشتت. والقلق يشتت. وقلة النوم تشتت. والوحدة قد تدفع إلى الشاشة. والمهمة الغامضة التي لا نعرف من أين نبدأها تجعل أي بديل صغير أكثر جاذبية. قد لا يكون فتح التطبيق رغبة في الترفيه أصلًا؛ قد يكون محاولة قصيرة لتجنب شعور غير مريح. ولهذا قد يكون السؤال الأصدق أحيانًا:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-edf5f08d8a5b",
+      "type": "paragraph",
+      "sourceHash": "edf5f08d8a5b33b88202fc4a1d1a2d0adf39b40a7aef949bb40fb6110f6a747b",
+      "sourceText": "ما الذي أهرب منه؟ وما الذي أحتاج إليه قبل أن أستطيع التركيز؟",
+      "spokenText": "ما الذي أهرب منه؟ وما الذي أحتاج إليه قبل أن أستطيع التركيز؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-54f0d06f6f4e",
+      "type": "paragraph",
+      "sourceHash": "54f0d06f6f4e81e9d9e9a7752a6362de2c48b503856f57e5c1d8b92b57b4e9db",
+      "sourceText": "وإذا أصبح التشتت شديدًا ومستمرًا، ويؤثر بوضوح في الدراسة أو العمل أو النوم والحياة اليومية، فلا ينبغي افتراض أن الهاتف هو التفسير الوحيد؛ فقد توجد عوامل صحية أو نفسية أو بيئية تستحق النظر إليها بجدية. ليس كل تعثر في الانتباه مشكلة إعدادات.",
+      "spokenText": "وإذا أصبح التشتت شديدًا ومستمرًا، ويؤثر بوضوح في الدراسة أو العمل أو النوم والحياة اليومية، فلا ينبغي افتراض أن الهاتف هو التفسير الوحيد؛ فقد توجد عوامل صحية أو نفسية أو بيئية تستحق النظر إليها بجدية. ليس كل تعثر في الانتباه مشكلة إعدادات.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "h2-3416db84b985",
+      "type": "h2",
+      "sourceHash": "3416db84b9855fe20e8cdff6f2942a5b3cef4c3b40cbe290086a703a4bb8ca3c",
+      "sourceText": "ربما لم تسرق الشاشة تركيزنا",
+      "spokenText": "ربما لم تسرق الشاشة تركيزنا",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-beb9e869a873",
+      "type": "paragraph",
+      "sourceHash": "beb9e869a87313abdbb3da7920e4d3541cdef6b10ab0881788795970151aac3a",
+      "sourceText": "وهنا نعود إلى السؤال الأول.",
+      "spokenText": "وهنا نعود إلى السؤال الأول.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-6a505ebe2809",
+      "type": "paragraph",
+      "sourceHash": "6a505ebe280971d43a0330a7e2e78487ad1e33976d79b13a02e4eac7af8002ba",
+      "sourceText": "هل سرقت الشاشة تركيزنا؟",
+      "spokenText": "هل سرقت الشاشة تركيزنا؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-be2ac0020a3f",
+      "type": "paragraph",
+      "sourceHash": "be2ac0020a3f049587d8350c09fd8a0ab7fba66e1124b3cbf06983d82e06659a",
+      "sourceText": "ربما تخفي كلمة «سرقت» جزءًا من الصورة. فالسرقة تحدث من دون موافقة صاحب الشيء. أما نحن، فكثيرًا ما نسلّم انتباهنا طوعًا؛ مرة بعد مرة، وبكميات صغيرة لا نشعر بقيمتها. ليس لأننا ضعفاء على نحو استثنائي. بل لأننا نعيش مع جهاز يستطيع أن يعرض لنا، في اللحظة نفسها، أصدقاءنا وأعمالنا وأخبار العالم وألعابنا وكتبنا وصورنا ومخاوفنا ورغباتنا؛ كل ما يمكن أن يوقظ الفضول في نافذة صغيرة. المنافسة غير عادلة قليلًا. كتاب واحد أمام هاتف يحمل ألف باب. محادثة واحدة أمام جهاز قد يصل منه أي شخص.",
+      "spokenText": "ربما تخفي كلمة «سرقت» جزءًا من الصورة. فالسرقة تحدث من دون موافقة صاحب الشيء. أما نحن، فكثيرًا ما نسلّم انتباهنا طوعًا؛ مرة بعد مرة، وبكميات صغيرة لا نشعر بقيمتها. ليس لأننا ضعفاء على نحو استثنائي. بل لأننا نعيش مع جهاز يستطيع أن يعرض لنا، في اللحظة نفسها، أصدقاءنا وأعمالنا وأخبار العالم وألعابنا وكتبنا وصورنا ومخاوفنا ورغباتنا؛ كل ما يمكن أن يوقظ الفضول في نافذة صغيرة. المنافسة غير عادلة قليلًا. كتاب واحد أمام هاتف يحمل ألف باب. محادثة واحدة أمام جهاز قد يصل منه أي شخص.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a3d0d6c56193",
+      "type": "paragraph",
+      "sourceHash": "a3d0d6c56193393d8b47e0ba2798470f930976ccd822373117ba74055b7ddcc8",
+      "sourceText": "ولحظة صامتة أمام مكتبة لا تنتهي من الصور والأصوات والحكايات. لذلك لا يتعلق الأمر بالحنين إلى زمن بلا تقنية. ولا بأن نجعل الملل فضيلة في ذاته. ولا بتحويل الهاتف إلى عدو. إنه سؤال أبسط وأكثر أهمية:",
+      "spokenText": "ولحظة صامتة أمام مكتبة لا تنتهي من الصور والأصوات والحكايات. لذلك لا يتعلق الأمر بالحنين إلى زمن بلا تقنية. ولا بأن نجعل الملل فضيلة في ذاته. ولا بتحويل الهاتف إلى عدو. إنه سؤال أبسط وأكثر أهمية:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-581583978cac",
+      "type": "paragraph",
+      "sourceHash": "581583978cacbcca919fb6695e881a03c56652e8d6021f63ecf76c94ae5876e2",
+      "sourceText": "هل ما زلنا نحن من يقرر متى ينتهي الشيء الذي أمامنا ويبدأ الشيء التالي؟",
+      "spokenText": "هل ما زلنا نحن من يقرر متى ينتهي الشيء الذي أمامنا ويبدأ الشيء التالي؟",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-7d0303ee25cf",
+      "type": "paragraph",
+      "sourceHash": "7d0303ee25cfea888170b25ab5aaa9c98d026cd760973b540854c8d3860d51aa",
+      "sourceText": "إذا بقي القرار لنا، فالشاشة أداة مذهلة. أما إذا صرنا عاجزين عن عبور دقيقة هادئة من دون أن نطلب منها شيئًا، فربما لم تسرق الشاشة انتباهنا كله. لكنها أخذت شيئًا أصغر، وأكثر خفاءً:",
+      "spokenText": "إذا بقي القرار لنا، فالشاشة أداة مذهلة. أما إذا صرنا عاجزين عن عبور دقيقة هادئة من دون أن نطلب منها شيئًا، فربما لم تسرق الشاشة انتباهنا كله. لكنها أخذت شيئًا أصغر، وأكثر خفاءً:",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    },
+    {
+      "segmentId": "paragraph-a42036936186",
+      "type": "paragraph",
+      "sourceHash": "a42036936186541f446f5f70c417ee68895edc7d3c660620bd18b461f0229d35",
+      "sourceText": "قدرتنا على أن نترك بعض اللحظات بلا شيء… حتى نرى ما الذي كان يمكن أن يظهر فيها.",
+      "spokenText": "قدرتنا على أن نترك بعض اللحظات بلا شيء… حتى نرى ما الذي كان يمكن أن يظهر فيها.",
+      "transformations": [],
+      "linguisticReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      },
+      "pronunciationReview": {
+        "status": "review-required",
+        "reviewer": "",
+        "reviewedAt": ""
+      }
+    }
+  ],
+  "scriptHash": "d4dd29f62d3458750a5570bf3dae15e379003ab7a72bffc5b41dcf3d95290f1a",
+  "notes": "Generated review inventory only for the new article. No synthesis performed; the existing published audio corpus is untouched."
+}
