@@ -45,8 +45,8 @@ for (const file of postFiles) {
   const source = await readFile(path.join('src/content/posts', file), 'utf8');
   if (!/^draft:\s*true\s*$/mi.test(source)) live += 1;
 }
-if (isDraft && live !== 14) throw new Error(`V4.21.6 RC expects 14 live articles while touchscreen remains draft, found ${live}.`);
-if (!isDraft && live !== 15) throw new Error(`V4.21.6 publication expects 15 live articles, found ${live}.`);
+const minimumLive = isDraft ? 14 : 15;
+if (live < minimumLive) throw new Error(`V4.21.6 compatibility requires at least ${minimumLive} live articles, found ${live}. Post-baseline articles are allowed.`);
 
 const manifestPath = path.join('public', 'audio', 'articles', AUDIO_KEY, 'manifest.json');
 let manifest = null;
