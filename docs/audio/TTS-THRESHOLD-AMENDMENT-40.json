@@ -164,7 +164,7 @@
       "numberPronunciationHint": null,
       "maximumRequests": 1,
       "automaticRetry": false,
-      "status": "PREFLIGHT_PASSED_READY_ONCE",
+      "status": "GENERATED_REQUIRES_QA",
       "preflightRequired": "Resolve source-derived whole-sentence cut; stop before generation if a safe boundary cannot be established.",
       "preserveAllOtherSourceAudio": true,
       "id": "R40-02",
