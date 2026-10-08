@@ -1,0 +1,146 @@
+{
+  "schema": "bareeq.audio-completion40-outcome.v1",
+  "generatedAt": "2026-10-08T13:19:58.183Z",
+  "authorizationDecision": "COMPLETION15-TRANCHE40-v1",
+  "executionRunId": "37777589258",
+  "reviewRunId": "37781294858",
+  "successfulAdditionalTts": 7,
+  "successfulTtsSinceLastNewExact": 40,
+  "threshold": 40,
+  "automaticRetry": false,
+  "automaticExpansion": false,
+  "provider": "Gemini / Sadaltager",
+  "originalSevenTargetIndicesAbsentFromFreshFullFileConflicts": true,
+  "technicalAndSynchronizationForBothNewFullFiles": "passed",
+  "publishedExactCount": 10,
+  "targetCount": 15,
+  "newlyPublishedExact": 0,
+  "publicationPerformed": false,
+  "protectedTenPublishedAudioUnchanged": true,
+  "offlineReview": {
+    "newTtsCalls": 0,
+    "newAsrProviderCalls": 0,
+    "adjudicationPolicyVersion": 6,
+    "newRepresentationEquivalenceRules": false,
+    "carriedPriorHumanDecisions": 10,
+    "remainingIssueDecisions": 28,
+    "listeningClips": 19
+  },
+  "issuedPacket": {
+    "path": "docs/audio/COMPLETION40-REVIEW-ISSUED-20261008.json",
+    "sha256": "9f6ded41d758c8bc56ae5c6ae9e06f3152a50a81ac1105fee5eccd4e1f084b95",
+    "shaEncoding": "UTF-8 JSON with sorted object keys and compact separators, as embedded in the HTML packet",
+    "libraryFileId": "libfile_caaefa672d808191a922a0983e89dc87",
+    "fileName": "bareeq-completion40-review.html",
+    "htmlSha256": "e0ab1ed0b7af6f3cd661e5850c3755acc1237458d07aa7c5153073293c52e39a",
+    "bytes": 5271520,
+    "embeddedAudioFiles": 26
+  },
+  "reviewArtifact": {
+    "id": 11552157826,
+    "name": "bareeq-completion40-final-review-37781294858",
+    "sha256": "1d62fb541fa358355496fde17097d52b7ba15edf03c40d7527cccc056d81e078"
+  },
+  "pending": [
+    {
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "consensus": {
+        "substitutions": 3,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "remainingIssueCount": 3,
+      "carriedHumanCases": [
+        "T07"
+      ]
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "consensus": {
+        "substitutions": 3,
+        "deletions": 3,
+        "insertions": 0,
+        "unresolved": 4
+      },
+      "remainingIssueCount": 10,
+      "carriedHumanCases": [
+        "M7",
+        "M9",
+        "M15"
+      ]
+    },
+    {
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "consensus": {
+        "substitutions": 3,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 1
+      },
+      "remainingIssueCount": 4,
+      "carriedHumanCases": [
+        "T08",
+        "T16",
+        "T19",
+        "T24"
+      ]
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "speechScriptHash": "6cf7e840cf44a28cbbb9a436a39247176381c4c32bbe31f570f4f899e9d94c93",
+      "consensus": {
+        "substitutions": 1,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 4
+      },
+      "remainingIssueCount": 5,
+      "carriedHumanCases": [
+        "T12",
+        "T20"
+      ]
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+      "consensus": {
+        "substitutions": 3,
+        "deletions": 2,
+        "insertions": 0,
+        "unresolved": 1
+      },
+      "remainingIssueCount": 6,
+      "carriedHumanCases": []
+    }
+  ],
+  "blockers": [
+    {
+      "code": "HUMAN_LISTENING_CONFLICTS",
+      "action": "Review the 19 bound clips and return the exported decisions; unresolved or true audio errors cannot be certified Exact."
+    },
+    {
+      "code": "CLOUDFLARE_CREDENTIALS_MISSING",
+      "failedRunId": "37779385333",
+      "failedStep": "Detect Cloudflare credentials",
+      "requiredSecretNames": [
+        "CLOUDFLARE_API_TOKEN",
+        "CLOUDFLARE_ACCOUNT_ID"
+      ],
+      "settingsUrl": "https://github.com/blogbareeq-bot/bareeq-world/settings/secrets/actions"
+    }
+  ]
+}

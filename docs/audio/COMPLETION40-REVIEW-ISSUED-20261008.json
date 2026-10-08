@@ -1,0 +1,1092 @@
+{
+  "schema": "bareeq.audio-completion40-issued-review.v1",
+  "packageId": "completion40-final-37781294858",
+  "createdAt": "2026-10-08T13:13:35.238788+00:00",
+  "sourceRuns": [
+    "37777589258",
+    "37626334800"
+  ],
+  "sourceReviewManifestSha256": "7edd77f7aae106b6f21daddf6adf94f32bd179fd75f63e3f1f69f8214187a014",
+  "publishedExactCount": 10,
+  "targetCount": 15,
+  "threshold": 40,
+  "successfulRequestsSinceLastExact": 40,
+  "newTtsInOfflineReview": 0,
+  "newAsrProviderCallsInOfflineReview": 0,
+  "publicationPerformed": false,
+  "adjudicationPolicyVersion": 6,
+  "newEquivalenceRules": false,
+  "cases": [
+    {
+      "caseId": "S-01-450",
+      "clipCaseId": "S-01",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "sourcePartSha256": "2b55394a800b9eee63493aac9d49eeaeed9ea8cab9b1fcf72102e955149b9a7b",
+      "partNumber": 2,
+      "clipSha256": "a3ad10b7b33b151ba446fa37fc701fc8b99002447bee4dbd1f6dbadb25499724",
+      "clipStart": 111.8,
+      "clipEnd": 120.94,
+      "expectedIndices": [
+        450
+      ],
+      "targetText": "عندما",
+      "expectedText": "فِي الشَّاشَةِ تُوجَدُ أَقْطَابٌ كَثِيرَةٌ مُرَتَّبَةٌ بِعِنَايَة، وَتَعْرِفُ دَارَةُ التَّحَكُّمِ الحَالَةَ الكَهْرَبَائِيَّةَ المُعْتَادَةَ لِلشَّبَكَةِ عِنْدَمَا لَا يَقْتَرِبُ مِنْهَا شَيْء.",
+      "segmentId": "b0023",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "S-02-608",
+      "clipCaseId": "S-02",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "sourcePartSha256": "bc6abec8bc88bc750c4a31d8a3d2772c48c59dc3d2dcd77a0fe8b2909ba9566a",
+      "partNumber": 3,
+      "clipSha256": "f565336e523b834026c7fa239b7f67c6ade9ca7c2aeaa81f1da86fb37d7faeb5",
+      "clipStart": 55.6,
+      "clipEnd": 66.14,
+      "expectedIndices": [
+        608
+      ],
+      "targetText": "النظام",
+      "expectedText": "يُمْكِنُ تَقْرِيبُ الصُّورَةِ بِتَخَيُّلِ مَجْمُوعَةِ مَسَارَاتٍ غَيْرِ مَرْئِيَّةٍ بَيْنَ نُقَاطٍ مُتَقَابِلَة؛ حِينَ تَدْخُلُ يَدُكَ بَيْنَهَا يَتَغَيَّرُ مَا يَصِلُ مِنْ أَحَدِ الطَّرَفَيْنِ إِلَى الآخَر، فَيَعْرِفُ النِّظَامُ أَنَّ شَيْئًا ظَهَرَ فِي تِلْكَ المِنْطَقَة. وَالتَّشْبِيهُ هُنَا لِلتَّقْرِيبِ فَقَط؛ فَالشَّاشَةُ لَا تَسْتَخْدِمُ أَشِعَّةً ضَوْئِيَّة، بَلْ تَقِيسُ تَغَيُّرًا كَهْرَبَائِيًّا دَقِيقًا فِي الاقْتِرَانِ السَّعَوِي.",
+      "segmentId": "b0029",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "S-03-1456",
+      "clipCaseId": "S-03",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "sourcePartSha256": "189513ca06ba5fb7e984ebab7f6125d0c542f80f57b4d612f82b139d3268503f",
+      "partNumber": 6,
+      "clipSha256": "f6f7445d20f6b2d023b6b2269859e74b45600f4dee15493a69c3039e0a939c76",
+      "clipStart": 112.5,
+      "clipEnd": 121.68,
+      "expectedIndices": [
+        1456
+      ],
+      "targetText": "يحتج",
+      "expectedText": "فِي المَرَّةِ القَادِمَةِ الَّتِي تَلْمَسُ فِيهَا شَاشَةَ هَاتِفِكَ، تَذَكَّرْ أَنَّ الزُّجَاجَ لَمْ يَحْتَجْ إِلَى أَنْ يَتَحَرَّكَ تَحْتَ إِصْبَعِكَ. الَّذِي تَغَيَّرَ هُوَ مَجَالٌ كَهْرَبَائِيٌّ بَالِغُ الصِّغَرِ دَاخِلَ شَبَكَةٍ لَا تَرَاهَا، ثُمَّ حَوَّلَتِ الإِلِكْتْرُونِيَّاتُ ذَلِكَ التَّغَيُّرَ إِلَى إِحْدَاثِيَّات، وَحَوَّلَ نِظَامُ التَّشْغِيلِ الإِحْدَاثِيَّاتِ إِلَى أَمْر.",
+      "segmentId": "b0067",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-01-87",
+      "clipCaseId": "M-01",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "07d0aa554898ae3b5a82591844ea995aabeaa17378db9c4a95346eafe837e456",
+      "partNumber": 1,
+      "clipSha256": "ebba9974b861dea4b884410bbd645bb4e94c7f147688d771e814aaa1f90f9931",
+      "clipStart": 47.96,
+      "clipEnd": 57.98,
+      "expectedIndices": [
+        87
+      ],
+      "targetText": "أربع",
+      "expectedText": "هذه هي الروح التي تجمع كتاب «أعط الصباح فرصة» لعبد الوهاب مطاوع. ليس الكتاب وصفة سريعة للسعادة، ولا خطابًا تحفيزيًا مبنيًا على شعارات لامعة؛ فالتفاؤل فيه عمل يومي لا زينة لغوية. إنه مجموعة من أربع وعشرين مقالة وحكاية إنسانية يتنقل فيها الكاتب بين ذاكرته الشخصية، ووجوه قابلها في السفر، وأصدقاء ابتعدوا، وكتب أحبها، ومواقف صحفية أحرجته، وسير مفكرين وفنانين. ومن هذا النسيج المتنوع يستخرج فكرة واحدة تتكرر بصور مختلفة: لا تتعجل إصدار الحكم الأخير على نفسك أو على الناس أو على الحياة.",
+      "segmentId": "b0002",
+      "issueType": "deletion",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-01-88",
+      "clipCaseId": "M-01",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "07d0aa554898ae3b5a82591844ea995aabeaa17378db9c4a95346eafe837e456",
+      "partNumber": 1,
+      "clipSha256": "ebba9974b861dea4b884410bbd645bb4e94c7f147688d771e814aaa1f90f9931",
+      "clipStart": 47.96,
+      "clipEnd": 57.98,
+      "expectedIndices": [
+        88
+      ],
+      "targetText": "وعشرين",
+      "expectedText": "هذه هي الروح التي تجمع كتاب «أعط الصباح فرصة» لعبد الوهاب مطاوع. ليس الكتاب وصفة سريعة للسعادة، ولا خطابًا تحفيزيًا مبنيًا على شعارات لامعة؛ فالتفاؤل فيه عمل يومي لا زينة لغوية. إنه مجموعة من أربع وعشرين مقالة وحكاية إنسانية يتنقل فيها الكاتب بين ذاكرته الشخصية، ووجوه قابلها في السفر، وأصدقاء ابتعدوا، وكتب أحبها، ومواقف صحفية أحرجته، وسير مفكرين وفنانين. ومن هذا النسيج المتنوع يستخرج فكرة واحدة تتكرر بصور مختلفة: لا تتعجل إصدار الحكم الأخير على نفسك أو على الناس أو على الحياة.",
+      "segmentId": "b0002",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-02-187",
+      "clipCaseId": "M-02",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "07d0aa554898ae3b5a82591844ea995aabeaa17378db9c4a95346eafe837e456",
+      "partNumber": 1,
+      "clipSha256": "d4eaee7848f6e1b8c1ee1109a9bfb7a12414ab778c92259ac2b0b4e3917a524a",
+      "clipStart": 111.52,
+      "clipEnd": 121.46,
+      "expectedIndices": [
+        187
+      ],
+      "targetText": "اثنين",
+      "expectedText": "وُلد محمد عبد الوهاب مطاوع عام 1940، واشتهر باسم عبد الوهاب مطاوع. عمل في الصحافة المصرية، وتولى «بريد الجمعة» في الأهرام عام 1982 وظل مرتبطًا به اثنين وعشرين عامًا، حتى صار واحدًا من أشهر كتّاب الصحافة الإنسانية. وهذه الخلفية ليست تفصيلًا خارج الكتاب؛ فهي المفتاح لفهم طريقته في النظر. مطاوع لا يبدأ من النظرية ثم يبحث عن مثال، بل يبدأ من إنسان: مريض في مستشفى، أو صديق في الغربة، أو عامل يرفض الظلم، أو رسالة قديمة في علبة معدنية. بعد ذلك يوسع الدائرة حتى تصبح الحكاية سؤالًا أخلاقيًا يخص القارئ.",
+      "segmentId": "b0005",
+      "issueType": "deletion",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-02-188",
+      "clipCaseId": "M-02",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "07d0aa554898ae3b5a82591844ea995aabeaa17378db9c4a95346eafe837e456",
+      "partNumber": 1,
+      "clipSha256": "d4eaee7848f6e1b8c1ee1109a9bfb7a12414ab778c92259ac2b0b4e3917a524a",
+      "clipStart": 111.52,
+      "clipEnd": 121.46,
+      "expectedIndices": [
+        188
+      ],
+      "targetText": "وعشرين",
+      "expectedText": "وُلد محمد عبد الوهاب مطاوع عام 1940، واشتهر باسم عبد الوهاب مطاوع. عمل في الصحافة المصرية، وتولى «بريد الجمعة» في الأهرام عام 1982 وظل مرتبطًا به اثنين وعشرين عامًا، حتى صار واحدًا من أشهر كتّاب الصحافة الإنسانية. وهذه الخلفية ليست تفصيلًا خارج الكتاب؛ فهي المفتاح لفهم طريقته في النظر. مطاوع لا يبدأ من النظرية ثم يبحث عن مثال، بل يبدأ من إنسان: مريض في مستشفى، أو صديق في الغربة، أو عامل يرفض الظلم، أو رسالة قديمة في علبة معدنية. بعد ذلك يوسع الدائرة حتى تصبح الحكاية سؤالًا أخلاقيًا يخص القارئ.",
+      "segmentId": "b0005",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-03-1386",
+      "clipCaseId": "M-03",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "b7fc921c45e0f5c6e67a1c3bf284798ecf58692cd779b0da6af801baaca98014",
+      "partNumber": 5,
+      "clipSha256": "8c1e8379838ea8502a8fa397f9266a83ea74b9c6810094c344e0f36d79251600",
+      "clipStart": 108.72,
+      "clipEnd": 120.64,
+      "expectedIndices": [
+        1386
+      ],
+      "targetText": "وهيئ",
+      "expectedText": "6. ابذل جهدك، وهيئ مكانًا للفرصة",
+      "segmentId": "b0047",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-04-2472",
+      "clipCaseId": "M-04",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "48ec1b2439fa12dfb98aecb3450738d20504ab9b73df020f40275323784fc3db",
+      "partNumber": 9,
+      "clipSha256": "0a4e93dc29f64b0f08a86f94d462b00ef370fc9cd66bf946409f509571d36e2b",
+      "clipStart": 104.12,
+      "clipEnd": 113.68,
+      "expectedIndices": [
+        2472
+      ],
+      "targetText": "امنح",
+      "expectedText": "اليوم الثاني - اتصل بصديق قلب: لا ترسل رمزًا سريعًا. امنح شخصًا تثق به عشر دقائق من كلام كامل أو إنصات كامل.",
+      "segmentId": "b0087",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-05-2743",
+      "clipCaseId": "M-05",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "ca9943ecdd75698d52505e249a55a61167ddd0aea9f2b406e91bb9b4b096e064",
+      "partNumber": 10,
+      "clipSha256": "b3718dcdbeb05527222809209163b282eae0a0b779b1f3d7634ad3f3afa7ceaa",
+      "clipStart": 87.64,
+      "clipEnd": 96.6,
+      "expectedIndices": [
+        2743
+      ],
+      "targetText": "أنه",
+      "expectedText": "هذا كتاب دافئ وذكي في التقاط الإنسان، وأقوى حين يحكي ويعترف، وأقل قوة حين يُحَوِّلُ الحكاية إلى قاعدة عامة. قيمته الأساسية ليست أنه يشرح لك الحياة، بل أنه يدرب عينك على رؤية ما كان يمر أمامها بلا انتباه.",
+      "segmentId": "b0099",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-06-2852",
+      "clipCaseId": "M-06",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "0bf687641c53182e26e6940a6bbdc2f63d66a116a2e299a69508a017738d57d5",
+      "partNumber": 11,
+      "clipSha256": "5967303c7beae6d5752db5f24c2f106fa63c8213a1fdcd877a62a870194ab26b",
+      "clipStart": 0,
+      "clipEnd": 7.8,
+      "expectedIndices": [
+        2852
+      ],
+      "targetText": "أربع",
+      "expectedText": "لا. هو مجموعة من أربع وعشرين مقالة أدبية وإنسانية تجمع بين الذكريات والرحلات والسير والحكايات والتأمل الأخلاقي.",
+      "segmentId": "b0105",
+      "issueType": "deletion",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-06-2853",
+      "clipCaseId": "M-06",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "0bf687641c53182e26e6940a6bbdc2f63d66a116a2e299a69508a017738d57d5",
+      "partNumber": 11,
+      "clipSha256": "5967303c7beae6d5752db5f24c2f106fa63c8213a1fdcd877a62a870194ab26b",
+      "clipStart": 0,
+      "clipEnd": 7.8,
+      "expectedIndices": [
+        2853
+      ],
+      "targetText": "وعشرين",
+      "expectedText": "لا. هو مجموعة من أربع وعشرين مقالة أدبية وإنسانية تجمع بين الذكريات والرحلات والسير والحكايات والتأمل الأخلاقي.",
+      "segmentId": "b0105",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "M-07-2914",
+      "clipCaseId": "M-07",
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "sourcePartSha256": "0bf687641c53182e26e6940a6bbdc2f63d66a116a2e299a69508a017738d57d5",
+      "partNumber": 11,
+      "clipSha256": "11ab6f0f66660f8643757495d373407197a9b796476a139749e8cfa830df357d",
+      "clipStart": 34.44,
+      "clipEnd": 43.94,
+      "expectedIndices": [
+        2914
+      ],
+      "targetText": "عملية",
+      "expectedText": "ليس بالمعنى الشائع. لا يقدم نظامًا أو تمارين أو وعودًا بالتحول السريع؛ هو أقرب إلى الأدب التأملي والصحافة الإنسانية، ويمكن استخراج تطبيقات عملية منه من دون تغيير طبيعته.",
+      "segmentId": "b0109",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C1-01-601",
+      "clipCaseId": "C1-01",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "sourcePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+      "partNumber": 3,
+      "clipSha256": "7891520ec12e68294cb2b592a1e4dbbee613cc15185933476e826a6573483555",
+      "clipStart": 56.86,
+      "clipEnd": 90.02,
+      "expectedIndices": [
+        601
+      ],
+      "targetText": "الفرنكوفونية",
+      "expectedText": "تقدم الفرنسية مثالًا واضحًا على قوة الاستمرارية المؤسسية. فشبكات الفرنكوفونية لا تتعامل مع اللغة كدروس منفصلة فقط، بل تربطها بالتعليم والثقافة والإعلام والاقتصاد والحضور الدولي. ويعرض تقرير المنظمة الدولية للفرنكوفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين. (المنظمة الدولية للفرنكوفونية)",
+      "segmentId": "b0029",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C1-01-621",
+      "clipCaseId": "C1-01",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "sourcePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+      "partNumber": 3,
+      "clipSha256": "7891520ec12e68294cb2b592a1e4dbbee613cc15185933476e826a6573483555",
+      "clipStart": 56.86,
+      "clipEnd": 90.02,
+      "expectedIndices": [
+        621
+      ],
+      "targetText": "للفرنكوفونية",
+      "expectedText": "تقدم الفرنسية مثالًا واضحًا على قوة الاستمرارية المؤسسية. فشبكات الفرنكوفونية لا تتعامل مع اللغة كدروس منفصلة فقط، بل تربطها بالتعليم والثقافة والإعلام والاقتصاد والحضور الدولي. ويعرض تقرير المنظمة الدولية للفرنكوفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين. (المنظمة الدولية للفرنكوفونية)",
+      "segmentId": "b0029",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C1-01-633",
+      "clipCaseId": "C1-01",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "sourcePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+      "partNumber": 3,
+      "clipSha256": "7891520ec12e68294cb2b592a1e4dbbee613cc15185933476e826a6573483555",
+      "clipStart": 56.86,
+      "clipEnd": 90.02,
+      "expectedIndices": [
+        633
+      ],
+      "targetText": "للفرنكوفونية",
+      "expectedText": "تقدم الفرنسية مثالًا واضحًا على قوة الاستمرارية المؤسسية. فشبكات الفرنكوفونية لا تتعامل مع اللغة كدروس منفصلة فقط، بل تربطها بالتعليم والثقافة والإعلام والاقتصاد والحضور الدولي. ويعرض تقرير المنظمة الدولية للفرنكوفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين. (المنظمة الدولية للفرنكوفونية)",
+      "segmentId": "b0029",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C1-02-1425",
+      "clipCaseId": "C1-02",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "sourcePartSha256": "67d9b8a9bf8af65e25d342a4847bd5366a896705d6cc66107107412b8d917261",
+      "partNumber": 6,
+      "clipSha256": "58c6ff937b1996e0c2951e05485d1f5d570694b71eb25a8c16e4bcf73c1ea105",
+      "clipStart": 106.98,
+      "clipEnd": 117.86,
+      "expectedIndices": [
+        1425
+      ],
+      "targetText": "وتساندهما",
+      "expectedText": "لا تنتشر اللغة بجمال مفرداتها وحده، ولا بقرار حكومي منفرد. إنها تتحرك حين تلتقي المصلحة بالرغبة، وتساندهما مؤسسة، وتضاعفهما المنصة، ثم يُحَوِّلُهُمَا الزمن إلى عادة.",
+      "segmentId": "b0068",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C2-01-415",
+      "clipCaseId": "C2-01",
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "speechScriptHash": "6cf7e840cf44a28cbbb9a436a39247176381c4c32bbe31f570f4f899e9d94c93",
+      "sourcePartSha256": "0aeb5d71a2adf960fc35293695c351ca38291dbc7ce4d02bf90edbaabb63f1bb",
+      "partNumber": 2,
+      "clipSha256": "7ead4bbbd5cc3550f4f11fe32fe7aaa4d56610f0c0849ca8a0813381b5fb6a49",
+      "clipStart": 97.52,
+      "clipEnd": 107.66,
+      "expectedIndices": [
+        415
+      ],
+      "targetText": "كانيمان",
+      "expectedText": "لكن طول الخبرة وحده لا يكفي. ففي دراستهما عن شروط الخبرة الحدسية، خلص دانيال كانيمان وغاري كلاين إلى أن الحكم الحدسي يكون أكثر قابلية للثقة حين تتوافر بيئة فيها أنماط يمكن تعلمها، وممارسة كافية، وتغذية راجعة تسمح بتصحيح الأحكام. [1]",
+      "segmentId": "b0018",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C2-02-453",
+      "clipCaseId": "C2-02",
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "speechScriptHash": "6cf7e840cf44a28cbbb9a436a39247176381c4c32bbe31f570f4f899e9d94c93",
+      "sourcePartSha256": "0aeb5d71a2adf960fc35293695c351ca38291dbc7ce4d02bf90edbaabb63f1bb",
+      "partNumber": 2,
+      "clipSha256": "f74e788a95899600c8dfd7e94fac794dd1e4d045eeb8320588ac1a7502851ce4",
+      "clipStart": 121.16,
+      "clipEnd": 128.16,
+      "expectedIndices": [
+        453
+      ],
+      "targetText": "تنمو",
+      "expectedText": "إذا كانت البيئة شديدة العشوائية، أو كانت نتائج القرارات غامضة ومتأخرة، فقد تنمو الثقة أسرع من المهارة.",
+      "segmentId": "b0019",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C2-02-457",
+      "clipCaseId": "C2-02",
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "speechScriptHash": "6cf7e840cf44a28cbbb9a436a39247176381c4c32bbe31f570f4f899e9d94c93",
+      "sourcePartSha256": "0aeb5d71a2adf960fc35293695c351ca38291dbc7ce4d02bf90edbaabb63f1bb",
+      "partNumber": 2,
+      "clipSha256": "f74e788a95899600c8dfd7e94fac794dd1e4d045eeb8320588ac1a7502851ce4",
+      "clipStart": 121.16,
+      "clipEnd": 128.16,
+      "expectedIndices": [
+        457
+      ],
+      "targetText": "المهارة",
+      "expectedText": "إذا كانت البيئة شديدة العشوائية، أو كانت نتائج القرارات غامضة ومتأخرة، فقد تنمو الثقة أسرع من المهارة.",
+      "segmentId": "b0019",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C2-03-566",
+      "clipCaseId": "C2-03",
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "speechScriptHash": "6cf7e840cf44a28cbbb9a436a39247176381c4c32bbe31f570f4f899e9d94c93",
+      "sourcePartSha256": "77c25721ee36135c8c5eec4bf2bb5ef01e9a2ae32fba20495bc89a0306e2bd6d",
+      "partNumber": 3,
+      "clipSha256": "0ef631c99241a7a1bb5ef69af8fc4aa57f4e13d2f14b2cdbb99a83265d530c0c",
+      "clipStart": 52.26,
+      "clipEnd": 63.54,
+      "expectedIndices": [
+        566
+      ],
+      "targetText": "وكانيمان",
+      "expectedText": "أظهر تفيرسكي وكانيمان أن البشر يستخدمون استدلالات سريعة تساعدهم على الحكم، لكنها قد تقود إلى أخطاء منتظمة؛ مثل المبالغة في وزن المعلومات اللافتة أو إهمال المعدلات الأساسية. [2]",
+      "segmentId": "b0026",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C2-04-600",
+      "clipCaseId": "C2-04",
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "speechScriptHash": "6cf7e840cf44a28cbbb9a436a39247176381c4c32bbe31f570f4f899e9d94c93",
+      "sourcePartSha256": "77c25721ee36135c8c5eec4bf2bb5ef01e9a2ae32fba20495bc89a0306e2bd6d",
+      "partNumber": 3,
+      "clipSha256": "d656df92953f01ff337d669ea1214e255e373b76c4a3f401c58fd5c156563870",
+      "clipStart": 72.86,
+      "clipEnd": 84.5,
+      "expectedIndices": [
+        600
+      ],
+      "targetText": "جيجيرينزر",
+      "expectedText": "لكن الاختصار ليس مرادفًا للخطأ. فقد راجع جيرد جيجيرينزر وولفغانغ غايسماير أبحاثًا تبين أن بعض القواعد البسيطة يمكن أن تَكُونَ فعالة عندما تتلاءم مع بنية البيئة، وأن تجاهل جزء من المعلومات قد يحسن الحكم في ظروف معينة بدل أن يفسده. [11]",
+      "segmentId": "b0027",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C3-01-173",
+      "clipCaseId": "C3-01",
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+      "sourcePartSha256": "018f82cd9424604e612e3cf8ae8490596e7429aaf10b02b7cf8ddc864a54f51e",
+      "partNumber": 1,
+      "clipSha256": "cf2a959ea8de2eb530e93c9bd6abe8652c08f2a9d12290a3139f987f05cf79ea",
+      "clipStart": 86.68,
+      "clipEnd": 96.72,
+      "expectedIndices": [
+        173
+      ],
+      "targetText": "إي",
+      "expectedText": "هذا الوصول الميسر يأخذ عادة ثلاث صور. الأولى هي الدخول دون تأشيرة مسبقة، مع بقاء شروط الدخول المعتادة التي تحددها الدولة المستقبلة. والثانية هي التأشيرة عند الوصول، حيث تُمنح في المطار أو المنفذ دون طلب مسبق. والثالثة هي التصريح الإلكتروني للسفر، المعروف اختصارًا باسم إِي تِي إِيه، وهو إذن سريع يُستخرج عبر الإنترنت قبل الرحلة بإجراءات مبسطة ودون مراجعة قنصلية.",
+      "segmentId": "b0006",
+      "issueType": "deletion",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C3-01-174",
+      "clipCaseId": "C3-01",
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+      "sourcePartSha256": "018f82cd9424604e612e3cf8ae8490596e7429aaf10b02b7cf8ddc864a54f51e",
+      "partNumber": 1,
+      "clipSha256": "cf2a959ea8de2eb530e93c9bd6abe8652c08f2a9d12290a3139f987f05cf79ea",
+      "clipStart": 86.68,
+      "clipEnd": 96.72,
+      "expectedIndices": [
+        174
+      ],
+      "targetText": "تي",
+      "expectedText": "هذا الوصول الميسر يأخذ عادة ثلاث صور. الأولى هي الدخول دون تأشيرة مسبقة، مع بقاء شروط الدخول المعتادة التي تحددها الدولة المستقبلة. والثانية هي التأشيرة عند الوصول، حيث تُمنح في المطار أو المنفذ دون طلب مسبق. والثالثة هي التصريح الإلكتروني للسفر، المعروف اختصارًا باسم إِي تِي إِيه، وهو إذن سريع يُستخرج عبر الإنترنت قبل الرحلة بإجراءات مبسطة ودون مراجعة قنصلية.",
+      "segmentId": "b0006",
+      "issueType": "deletion",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C3-01-175",
+      "clipCaseId": "C3-01",
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+      "sourcePartSha256": "018f82cd9424604e612e3cf8ae8490596e7429aaf10b02b7cf8ddc864a54f51e",
+      "partNumber": 1,
+      "clipSha256": "cf2a959ea8de2eb530e93c9bd6abe8652c08f2a9d12290a3139f987f05cf79ea",
+      "clipStart": 86.68,
+      "clipEnd": 96.72,
+      "expectedIndices": [
+        175
+      ],
+      "targetText": "إيه",
+      "expectedText": "هذا الوصول الميسر يأخذ عادة ثلاث صور. الأولى هي الدخول دون تأشيرة مسبقة، مع بقاء شروط الدخول المعتادة التي تحددها الدولة المستقبلة. والثانية هي التأشيرة عند الوصول، حيث تُمنح في المطار أو المنفذ دون طلب مسبق. والثالثة هي التصريح الإلكتروني للسفر، المعروف اختصارًا باسم إِي تِي إِيه، وهو إذن سريع يُستخرج عبر الإنترنت قبل الرحلة بإجراءات مبسطة ودون مراجعة قنصلية.",
+      "segmentId": "b0006",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C3-02-495",
+      "clipCaseId": "C3-02",
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+      "sourcePartSha256": "55cc210038961651e8c9f398b720c517d0766a32d04466c90ef9a0293b356d76",
+      "partNumber": 2,
+      "clipSha256": "1c5efaae95d6808cefe364299462ca6e47a85ceb577ff75406cb198bbee8238d",
+      "clipStart": 125.58000000000001,
+      "clipEnd": 133.896,
+      "expectedIndices": [
+        495
+      ],
+      "targetText": "تتداخل",
+      "expectedText": "هذا هو قلب الموضوع. عندما تقرر دولة إعفاء مواطني دولة أخرى من التأشيرة، فهي عمليًا تجيب عن سؤال واحد: ما حجم المخاطرة مقابل حجم الفائدة؟ وفي هذه الموازنة تتداخل عوامل عدة.",
+      "segmentId": "b0015",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C3-03-1050",
+      "clipCaseId": "C3-03",
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+      "sourcePartSha256": "f59b5d0a5912d718de6f1e11a29c04cf0fc71efb5df6300d6dfec3e7e973e6d7",
+      "partNumber": 5,
+      "clipSha256": "869cf117746238a864c116ce07ef63e6b539da36e307e1aeb7fcb56e9c0e433e",
+      "clipStart": 33.62,
+      "clipEnd": 45.22,
+      "expectedIndices": [
+        1050
+      ],
+      "targetText": "باسبورت",
+      "expectedText": "أما مؤشر بَاسْبُورْت إِنْدِكْس من أَرْتُون كَابِيتَال، فيعتمد منهجية مختلفة تجمع في درجة واحدة تسمى «درجة التنقل» الإعفاءَ الكامل والتأشيرة عند الوصول والتصريح الإلكتروني للسفر، بل وحتى التأشيرة الإلكترونية إِذَا كَانَتْ تَصْدُرُ خِلَالَ ثَلَاثَةِ أَيَّامٍ أو أقل بحسب منهجيته المعلنة، ويضع في نسخته لعام 2026 جواز الإمارات في المركز الأول. الجواز نفسه، بترتيبين مختلفين على مؤشرين مختلفين، والسبب ببساطة اختلاف المسطرة لا اختلاف الحقائق.",
+      "segmentId": "b0036",
+      "issueType": "unresolved",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    },
+    {
+      "caseId": "C3-03-1053",
+      "clipCaseId": "C3-03",
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+      "sourcePartSha256": "f59b5d0a5912d718de6f1e11a29c04cf0fc71efb5df6300d6dfec3e7e973e6d7",
+      "partNumber": 5,
+      "clipSha256": "869cf117746238a864c116ce07ef63e6b539da36e307e1aeb7fcb56e9c0e433e",
+      "clipStart": 33.62,
+      "clipEnd": 45.22,
+      "expectedIndices": [
+        1053
+      ],
+      "targetText": "أرتون",
+      "expectedText": "أما مؤشر بَاسْبُورْت إِنْدِكْس من أَرْتُون كَابِيتَال، فيعتمد منهجية مختلفة تجمع في درجة واحدة تسمى «درجة التنقل» الإعفاءَ الكامل والتأشيرة عند الوصول والتصريح الإلكتروني للسفر، بل وحتى التأشيرة الإلكترونية إِذَا كَانَتْ تَصْدُرُ خِلَالَ ثَلَاثَةِ أَيَّامٍ أو أقل بحسب منهجيته المعلنة، ويضع في نسخته لعام 2026 جواز الإمارات في المركز الأول. الجواز نفسه، بترتيبين مختلفين على مؤشرين مختلفين، والسبب ببساطة اختلاف المسطرة لا اختلاف الحقائق.",
+      "segmentId": "b0036",
+      "issueType": "substitution",
+      "validatorVersion": "audio-completion40-final-review-v1"
+    }
+  ],
+  "articles": [
+    {
+      "articleId": "how-touchscreens-work",
+      "title": "كيف تعرف شاشة هاتفك أين وضعت إصبعك؟",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "originalConsensus": {
+        "substitutions": 4,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "baseV6Consensus": {
+        "substitutions": 4,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "boundHumanConsensus": {
+        "substitutions": 3,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "rawReportBindings": [
+        {
+          "model": "gemini-3.5-flash-lite",
+          "sha256": "a18f19f284b8669dfd37a803386030f25b1afc85ee4148b7f06a583be8b88087"
+        },
+        {
+          "model": "gemini-3.5-transcribe",
+          "sha256": "f55be913beafbe9d76c8fb14b76f3f58d93b3a7994a4444a4a52c42784ba6b8c"
+        }
+      ],
+      "carriedHumanCases": [
+        {
+          "caseId": "T07",
+          "expectedIndex": 249,
+          "expectedToken": "ملاءمة",
+          "originalFullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
+          "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+          "sourcePartSha256": "3011ca271efdbff22cb716a2b2ec8dccd6837d0fb4ac7b94107b7ff3046881ac",
+          "candidatePartSha256": "6a59520842d49c0b66aa2ceed2cffa5b42e1a48be4698348d335540170548cd1",
+          "originalClipSha256": "560582f7bd45078396b9bb576576d985664158464b505f208ca346329bbef570",
+          "originalClipSeconds": [
+            149.107,
+            159.96
+          ],
+          "decisionDocument": "docs/audio/HUMAN-TRIAGE-FULL-RESULT-20261006.json",
+          "submissionSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2",
+          "method": "saved-splice-with-identical-outside-PCM-and-independently-correlated-encoded-review-region",
+          "sourceCutSeconds": [
+            116.71,
+            126.68
+          ],
+          "candidateClipShiftSeconds": 0.52,
+          "savedSpliceProofSha256": "694f1f9b87572fa1a971044570a08577138a87a7d38b5412fc9e8e9b2c0e4091",
+          "savedSpliceProof": {
+            "id": "R40-01",
+            "articleId": "how-touchscreens-work",
+            "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+            "publicationPerformed": false,
+            "status": "SPLICED_REQUIRES_FULL_QA",
+            "partFile": "part-001-716c4cfc7d0a.mp3",
+            "partIndex": 0,
+            "baselinePartSha256": "3011ca271efdbff22cb716a2b2ec8dccd6837d0fb4ac7b94107b7ff3046881ac",
+            "candidatePartFile": "R40-01-candidate-part.mp3",
+            "candidatePartSha256": "6a59520842d49c0b66aa2ceed2cffa5b42e1a48be4698348d335540170548cd1",
+            "outsidePcmIdentical": true,
+            "sourceCutSamples": [
+              5602080,
+              6080640
+            ],
+            "candidateInsertedSamples": [
+              5602080,
+              6105600
+            ],
+            "generatedSha256": "6309fa2eeaec8914b9074dece3daf7137a365f16b50c06f667f3e52f233bc137",
+            "donorTrimSamples": [
+              15360,
+              518880
+            ],
+            "sourcePrefixPcmSha256": "8fc8800537a6431e3710027e7a9a612c65b8bd1a28aa48fdce8557edff24718e",
+            "candidatePrefixPcmSha256": "8fc8800537a6431e3710027e7a9a612c65b8bd1a28aa48fdce8557edff24718e",
+            "sourceSuffixPcmSha256": "0f590a6adc6b729bc3737ae28bca545c7590b9ddb7dba2c63c254a0ee11c371d",
+            "candidateSuffixPcmSha256": "0f590a6adc6b729bc3737ae28bca545c7590b9ddb7dba2c63c254a0ee11c371d",
+            "prefixCorrelation": 0.9996823535045549,
+            "suffixCorrelation": 0.9998023415295348,
+            "seamStep": 204,
+            "repairedContextFile": "R40-01-repaired-context.mp3",
+            "repairedContextSha256": "c1071bdeb12fca1c06328740e3f7dc3b7f9c9e04a3f1056fdc645d8414764038",
+            "localMicroAsrExact": false
+          },
+          "independentReviewedRegionCorrelation": 0.999820607578537,
+          "sourceReviewedRegionPcmSha256": "d0d60ed8ff9df5d8894541ae227243a6a26ddfc92c497c9bcc4128db485e20e8",
+          "candidateReviewedRegionPcmSha256": "30ee0ae2432649e3ae9f17a6323b27adb8b45effeec999e50eae12b1ec2ef915",
+          "reviewedRegionSamples": 520944
+        }
+      ],
+      "remainingIssueCount": 3
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "title": "أعط الصباح فرصة لعبد الوهاب مطاوع: حين يصبح الأمل عملًا",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "speechScriptHash": "9dff62d6ef25d20c6928d2557d69068ba2e0fb2bf393ac74adf51489560f2ec5",
+      "originalConsensus": {
+        "substitutions": 5,
+        "deletions": 3,
+        "insertions": 0,
+        "unresolved": 6
+      },
+      "baseV6Consensus": {
+        "substitutions": 5,
+        "deletions": 3,
+        "insertions": 0,
+        "unresolved": 5
+      },
+      "boundHumanConsensus": {
+        "substitutions": 3,
+        "deletions": 3,
+        "insertions": 0,
+        "unresolved": 4
+      },
+      "rawReportBindings": [
+        {
+          "model": "gemini-3.5-flash-lite",
+          "sha256": "933f7424ee5a7e2e8ed25f916fda529525653bb41257677400bdd84e77d576e0"
+        },
+        {
+          "model": "gemini-3.5-transcribe",
+          "sha256": "33557748ef4e27e3b893d674cd23f884c383f82fa6b652524a599654b48e9210"
+        }
+      ],
+      "carriedHumanCases": [
+        {
+          "caseId": "M7",
+          "expectedIndex": 1449,
+          "expectedToken": "تحمي",
+          "originalFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+          "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+          "sourcePartSha256": "3b4fa79bf76fe5082abe08a5e9f3751ce579f4b0397a33d8ada7823c87d16d06",
+          "candidatePartSha256": "57c47d429fee7d2e2fd959c19e4ca2ff00eec9960d969ba802424b75e2a58961",
+          "originalClipSha256": "1d0293fb4f392c2727d7989a1fc9ca1b649b48a35e88f1a5696c0b056ca4092a",
+          "originalClipSeconds": [
+            0,
+            9.219999999999999
+          ],
+          "decisionDocument": "docs/audio/BOUND-REVIEW-REMAINING.json",
+          "submissionSha256": "344c80c0c59b856b88817748cbc9b974a405c95dedbd90cc4264e4c8b511a968",
+          "method": "saved-splice-with-identical-outside-PCM-and-independently-correlated-encoded-review-region",
+          "sourceCutSeconds": [
+            148.3,
+            153.54
+          ],
+          "candidateClipShiftSeconds": 0,
+          "savedSpliceProofSha256": "39197942258fae29dfb0aed0db0c0c2b32ba4220da5fd7ad2cd90870efb14337",
+          "savedSpliceProof": {
+            "id": "R40-05",
+            "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+            "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+            "publicationPerformed": false,
+            "status": "SPLICED_REQUIRES_FULL_QA",
+            "partFile": "part-006-8bcbfb90ad55.mp3",
+            "partIndex": 5,
+            "baselinePartSha256": "3b4fa79bf76fe5082abe08a5e9f3751ce579f4b0397a33d8ada7823c87d16d06",
+            "candidatePartFile": "R40-05-candidate-part.mp3",
+            "candidatePartSha256": "57c47d429fee7d2e2fd959c19e4ca2ff00eec9960d969ba802424b75e2a58961",
+            "outsidePcmIdentical": true,
+            "sourceCutSamples": [
+              7118400,
+              7369920
+            ],
+            "candidateInsertedSamples": [
+              7118400,
+              7467360
+            ],
+            "generatedSha256": "98c1ed5812d9d49346be37d4b5afcec61f2dab20bda0d60017801598288577a4",
+            "donorTrimSamples": [
+              16800,
+              365760
+            ],
+            "sourcePrefixPcmSha256": "61b03ff632c5c86a974cfa703aa9331b5782a55cd183b1c6eaf119d0e0427ba0",
+            "candidatePrefixPcmSha256": "61b03ff632c5c86a974cfa703aa9331b5782a55cd183b1c6eaf119d0e0427ba0",
+            "sourceSuffixPcmSha256": "a3c3df9cdb5bc11fedd8fb4dcfbf338a045a0b4360cdc1d732561e10c03aede2",
+            "candidateSuffixPcmSha256": "a3c3df9cdb5bc11fedd8fb4dcfbf338a045a0b4360cdc1d732561e10c03aede2",
+            "prefixCorrelation": 0.9997933850144709,
+            "suffixCorrelation": 0.9997393330452902,
+            "seamStep": 6,
+            "repairedContextFile": "R40-05-repaired-context.mp3",
+            "repairedContextSha256": "f28189bccfb87a7fb9495855ab6d764beafc87a08dbe00e250ce9175f69c100d",
+            "localMicroAsrExact": true
+          },
+          "independentReviewedRegionCorrelation": 0.9997048767141766,
+          "sourceReviewedRegionPcmSha256": "eaf646066bba2f8462882eeb97f9f7ac5fe0adff16bf56dec324f01737ad9bfb",
+          "candidateReviewedRegionPcmSha256": "b6511fb3d8f3ec5f4c79ef66cdadd2ec2772d4dc774cd7b84a8c45f39b2d34fb",
+          "reviewedRegionSamples": 442560
+        },
+        {
+          "caseId": "M9",
+          "expectedIndex": 1967,
+          "expectedToken": "إحكام",
+          "originalFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+          "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+          "sourcePartSha256": "c53ad02e12263f1592ed6d9acc7f01d4831a138c73188370b8430357585b7756",
+          "candidatePartSha256": "c53ad02e12263f1592ed6d9acc7f01d4831a138c73188370b8430357585b7756",
+          "originalClipSha256": "251096eec6e0fd29716bdfc7893320c9eb127ff6dcadab1eb88208190acc1eb3",
+          "originalClipSeconds": [
+            112.48,
+            123.58
+          ],
+          "decisionDocument": "docs/audio/BOUND-REVIEW-M9.json",
+          "submissionSha256": "77d835d99d215996f92123339c7e17e8f5ed91cd9ea601091ec603d761211ab5",
+          "method": "byte-identical-unchanged-raw-part"
+        },
+        {
+          "caseId": "M15",
+          "expectedIndex": 2899,
+          "expectedToken": "تمارين",
+          "originalFullSha256": "e4af470670fb43651c26d3501930624922e4ddd617064d4f83178c8aedaa4496",
+          "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+          "sourcePartSha256": "0bf687641c53182e26e6940a6bbdc2f63d66a116a2e299a69508a017738d57d5",
+          "candidatePartSha256": "0bf687641c53182e26e6940a6bbdc2f63d66a116a2e299a69508a017738d57d5",
+          "originalClipSha256": "c7b9931fac66a23b7e16af76f65f1be3381583eca535a839f3e3e21555ac0618",
+          "originalClipSeconds": [
+            25.8,
+            36.9
+          ],
+          "decisionDocument": "docs/audio/BOUND-REVIEW-REMAINING.json",
+          "submissionSha256": "344c80c0c59b856b88817748cbc9b974a405c95dedbd90cc4264e4c8b511a968",
+          "method": "byte-identical-unchanged-raw-part"
+        }
+      ],
+      "remainingIssueCount": 10
+    },
+    {
+      "articleId": "language-soft-power-politics",
+      "title": "حين تصبح اللغة نفوذًا: كيف تعبر القوة الناعمة الحدود؟",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "originalConsensus": {
+        "substitutions": 6,
+        "deletions": 1,
+        "insertions": 0,
+        "unresolved": 1
+      },
+      "baseV6Consensus": {
+        "substitutions": 6,
+        "deletions": 1,
+        "insertions": 0,
+        "unresolved": 1
+      },
+      "boundHumanConsensus": {
+        "substitutions": 3,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 1
+      },
+      "rawReportBindings": [
+        {
+          "model": "gemini-3.5-flash-lite",
+          "sha256": "161fc12159d065931c9e8c452c1a8b0d5807d6f96214fc75d451b935bd2b934a"
+        },
+        {
+          "model": "gemini-3.5-flash",
+          "sha256": "b4726652c633e479d6cbf68a0c9c5f8dc6c8fce19f1c5e067656307c6612e435"
+        }
+      ],
+      "carriedHumanCases": [
+        {
+          "caseId": "T08",
+          "expectedIndex": 1414,
+          "expectedToken": "وحده",
+          "originalFullSha256": "8046a0551920ed9cce4422610738917dc18da95f367e6aa6348450fd828c76df",
+          "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+          "sourcePartSha256": "67d9b8a9bf8af65e25d342a4847bd5366a896705d6cc66107107412b8d917261",
+          "candidatePartSha256": "67d9b8a9bf8af65e25d342a4847bd5366a896705d6cc66107107412b8d917261",
+          "originalClipSha256": "27e0c0c487576de07200c76ad80d0e0698283a72abf72a4b56904d7ff07c6e23",
+          "originalClipSeconds": [
+            93.628,
+            107.628
+          ],
+          "decisionDocument": "docs/audio/HUMAN-TRIAGE-FULL-RESULT-20261006.json",
+          "submissionSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2",
+          "method": "byte-identical-unchanged-raw-part"
+        },
+        {
+          "caseId": "T16",
+          "expectedIndex": 370,
+          "expectedToken": "تراكب",
+          "originalFullSha256": "8046a0551920ed9cce4422610738917dc18da95f367e6aa6348450fd828c76df",
+          "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+          "sourcePartSha256": "46dc9efa60e913244f2959be4f92408832f967f527eb8e13603de1534346d2ca",
+          "candidatePartSha256": "46dc9efa60e913244f2959be4f92408832f967f527eb8e13603de1534346d2ca",
+          "originalClipSha256": "b2132b4d85858645b21d1d352053d7b09a5b7c1eb52e58689c9cb16f3717b0f0",
+          "originalClipSeconds": [
+            54.945,
+            68.945
+          ],
+          "decisionDocument": "docs/audio/HUMAN-TRIAGE-FULL-RESULT-20261006.json",
+          "submissionSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2",
+          "method": "byte-identical-unchanged-raw-part"
+        },
+        {
+          "caseId": "T19",
+          "expectedIndex": 712,
+          "expectedToken": "آلاف",
+          "originalFullSha256": "8046a0551920ed9cce4422610738917dc18da95f367e6aa6348450fd828c76df",
+          "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+          "sourcePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+          "candidatePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+          "originalClipSha256": "2679137118b398338749b34a7c180900ff7ea463e0298810978d3e3bd7b257cf",
+          "originalClipSeconds": [
+            123.484,
+            137.484
+          ],
+          "decisionDocument": "docs/audio/HUMAN-TRIAGE-FULL-RESULT-20261006.json",
+          "submissionSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2",
+          "method": "byte-identical-unchanged-raw-part"
+        },
+        {
+          "caseId": "T24",
+          "expectedIndex": 711,
+          "expectedToken": "سبعة",
+          "originalFullSha256": "8046a0551920ed9cce4422610738917dc18da95f367e6aa6348450fd828c76df",
+          "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+          "sourcePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+          "candidatePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+          "originalClipSha256": "342587c714ada8b225587164cefe8949e726255b0be6eeca63a9caabad766d6f",
+          "originalClipSeconds": [
+            122.869,
+            136.869
+          ],
+          "decisionDocument": "docs/audio/HUMAN-TRIAGE-FULL-RESULT-20261006.json",
+          "submissionSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2",
+          "method": "byte-identical-unchanged-raw-part"
+        }
+      ],
+      "remainingIssueCount": 4
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "title": "هل الحدس ذكاء خفي أم اختصار مضلل؟ متى نثق بشعورنا الأول؟",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "speechScriptHash": "6cf7e840cf44a28cbbb9a436a39247176381c4c32bbe31f570f4f899e9d94c93",
+      "originalConsensus": {
+        "substitutions": 2,
+        "deletions": 1,
+        "insertions": 0,
+        "unresolved": 7
+      },
+      "baseV6Consensus": {
+        "substitutions": 2,
+        "deletions": 1,
+        "insertions": 0,
+        "unresolved": 4
+      },
+      "boundHumanConsensus": {
+        "substitutions": 1,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 4
+      },
+      "rawReportBindings": [
+        {
+          "model": "gemini-3.5-flash-lite",
+          "sha256": "8fdda4ec7abdb7f540663e4dea77b3d67ad602498bcf9f7231d1f6cbcc8c87b1"
+        },
+        {
+          "model": "gemini-3.5-flash",
+          "sha256": "9f18f5a0dee920701917a263a40f6bb8741ee7f39d47bace83a9cb611a104fa7"
+        }
+      ],
+      "carriedHumanCases": [
+        {
+          "caseId": "T12",
+          "expectedIndex": 564,
+          "expectedToken": "أظهر",
+          "originalFullSha256": "3dc0c8e0ed2b4eb579354a84b1344a49c17aa1bb69c5bcaa4ae306331bd67611",
+          "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+          "sourcePartSha256": "ed759ff2010239738d9927fbbb24df76ff10d6bdb38ca5bfa67f3731cd6d1b67",
+          "candidatePartSha256": "77c25721ee36135c8c5eec4bf2bb5ef01e9a2ae32fba20495bc89a0306e2bd6d",
+          "originalClipSha256": "930fe6343686fd7325ba3eb0f6ea541795b52a52ba08af327d72a1987553f004",
+          "originalClipSeconds": [
+            50.356,
+            64.356
+          ],
+          "decisionDocument": "docs/audio/HUMAN-TRIAGE-FULL-RESULT-20261006.json",
+          "submissionSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2",
+          "method": "saved-splice-with-identical-outside-PCM-and-independently-correlated-encoded-review-region",
+          "sourceCutSeconds": [
+            89.055,
+            93.96497916666667
+          ],
+          "candidateClipShiftSeconds": 0,
+          "savedSpliceProofSha256": "b7e8483ca21e7c4e23eb90077bc6f74f7c7534489601d111cecbcb72798c7a41",
+          "savedSpliceProof": {
+            "id": "R2",
+            "articleId": "intuition-first-impression-decisions-signature",
+            "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+            "publicationPerformed": false,
+            "status": "SPLICED_REQUIRES_FULL_QA",
+            "partFile": "part-003-dece0787f1a6.mp3",
+            "partIndex": 2,
+            "baselinePartSha256": "ed759ff2010239738d9927fbbb24df76ff10d6bdb38ca5bfa67f3731cd6d1b67",
+            "candidatePartFile": "R2-candidate-part.mp3",
+            "candidatePartSha256": "77c25721ee36135c8c5eec4bf2bb5ef01e9a2ae32fba20495bc89a0306e2bd6d",
+            "outsidePcmIdentical": true,
+            "donorTrimSamples": [
+              8640,
+              315840
+            ],
+            "prefixCorrelation": 0.9997921868403449,
+            "suffixCorrelation": 0.9996578220706833,
+            "seamStep": 42
+          },
+          "independentReviewedRegionCorrelation": 0.999845977737795,
+          "sourceReviewedRegionPcmSha256": "2b8d01b05b0733d8e1fedb3413be4aa1a6d6ae23251de816745365a83c3663b4",
+          "candidateReviewedRegionPcmSha256": "7c01ede6d63890f2ff72ac296e12794537f84fab4378aab0f053df84b7f763d3",
+          "reviewedRegionSamples": 672000
+        },
+        {
+          "caseId": "T20",
+          "expectedIndex": 911,
+          "expectedToken": "8",
+          "originalFullSha256": "3dc0c8e0ed2b4eb579354a84b1344a49c17aa1bb69c5bcaa4ae306331bd67611",
+          "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+          "sourcePartSha256": "fe5532c4eac366337502521d844fc435462f52d5f4fbbe873d5c80d971c42a10",
+          "candidatePartSha256": "fe5532c4eac366337502521d844fc435462f52d5f4fbbe873d5c80d971c42a10",
+          "originalClipSha256": "e09e8539ac29fcc61c8e523e4675e08e527650c9d61a783eb9ee20c3d4857b29",
+          "originalClipSeconds": [
+            5.244,
+            19.244
+          ],
+          "decisionDocument": "docs/audio/HUMAN-TRIAGE-FULL-RESULT-20261006.json",
+          "submissionSha256": "b9c228e77d3960c3d3b343062590b50eb59a3ec505dc73b6e8ecf5e90dffc2d2",
+          "method": "byte-identical-unchanged-raw-part"
+        }
+      ],
+      "remainingIssueCount": 5
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "title": "لماذا تفتح بعض جوازات السفر أبواب العالم أكثر من غيرها؟",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+      "originalConsensus": {
+        "substitutions": 3,
+        "deletions": 2,
+        "insertions": 0,
+        "unresolved": 1
+      },
+      "baseV6Consensus": {
+        "substitutions": 3,
+        "deletions": 2,
+        "insertions": 0,
+        "unresolved": 1
+      },
+      "boundHumanConsensus": {
+        "substitutions": 3,
+        "deletions": 2,
+        "insertions": 0,
+        "unresolved": 1
+      },
+      "rawReportBindings": [
+        {
+          "model": "gemini-3.5-flash-lite",
+          "sha256": "8c8b0ad5c0e7370dda50067cf29f85f0505b4b57ebae8a5b20dc45992de18ea0"
+        },
+        {
+          "model": "gemini-3.5-flash",
+          "sha256": "f633abdeb2ff00021f008e926796ddf41e1743b4554872523aecc6668cfce09d"
+        }
+      ],
+      "carriedHumanCases": [],
+      "remainingIssueCount": 6
+    }
+  ]
+}
