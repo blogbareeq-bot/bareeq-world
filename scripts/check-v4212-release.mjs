@@ -77,7 +77,7 @@ for (const file of postFiles) {
     throw new Error('AI tag split remains in the agents article.');
   }
 }
-if (![13, 14, 15].includes(published)) throw new Error(`V4.21.6 expects 13–15 published articles across supported release states, found ${published}.`);
+if (published < 15) throw new Error(`V4.21.6 requires the protected 15-article published baseline, found ${published}. Post-baseline articles are allowed.`);
 
 const satellite = await readFile('src/content/posts/لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء.md', 'utf8');
 if (!satellite.includes('فيتحول السقوط إلى مدار')) throw new Error('Satellite summary was not corrected.');
