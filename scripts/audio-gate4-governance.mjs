@@ -87,7 +87,7 @@ async function cli(){
     calibrationText:await text('docs/audio/GATE-4-CALIBRATION-PLAN-v1.md'),
     gate5Text:await text('docs/audio/GATE-5-DECISION-CRITERIA-v1.md'),
     pr62Text:await text('docs/audio/PR-62-ARCHIVE.md'),
-    thresholdAmendment:await json(AMENDMENT_PATH).catch(error=>{if(error.code==='ENOENT')return null;throw error;}),
+    thresholdAmendment:await json((await json('docs/audio/ENGINE-STRATEGY-STATE.json')).thresholdAmendment||AMENDMENT_PATH).catch(error=>{if(error.code==='ENOENT')return null;throw error;}),
   });
   console.log(`GATE4_GOVERNANCE=PASS exact=${result.exact}/15 strategy=${result.strategy} scientific=${result.scientificConsumed}/4 remaining=${result.scientificRemaining} calibrationAuthorized=${result.fullCalibrationAuthorized} gate5=${result.gate5} action=${result.action}`);
 }

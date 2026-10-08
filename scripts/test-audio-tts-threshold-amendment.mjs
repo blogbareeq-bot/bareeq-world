@@ -4,6 +4,9 @@ import {validateThresholdAmendment} from './audio-tts-threshold-amendment.mjs';
 import {assertTtsUnfrozen} from './audio-tts-freeze-guard.mjs';
 const json=async p=>JSON.parse(await readFile(p,'utf8'));
 const f={amendment:await json('docs/audio/TTS-THRESHOLD-AMENDMENT-33.json'),strategy:await json('docs/audio/ENGINE-STRATEGY-STATE.json'),freeze:await json('docs/audio/TTS-FREEZE.json'),status:await json('docs/audio/PROGRESSIVE-STATUS.json')};
+// Test the historical 30..33 envelope independently of the active amendment.
+f.strategy.threshold=33;f.strategy.successfulTtsSinceLastNewExact=30+f.amendment.successfulRequestsConsumed;
+f.freeze.strategySnapshot.threshold=33;f.freeze.strategySnapshot.successfulTtsSinceLastNewExact=f.strategy.successfulTtsSinceLastNewExact;
 assert.equal(validateThresholdAmendment(f).remaining,3-f.amendment.successfulRequestsConsumed);
 await assert.rejects(()=>assertTtsUnfrozen({operation:'gemini-generate-content-tts'}),e=>e.code==='BAREEQ_TTS_FROZEN');
 for(const edit of [

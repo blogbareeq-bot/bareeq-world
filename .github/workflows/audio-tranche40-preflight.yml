@@ -1,0 +1,69 @@
+name: Bareeq owner approved tranche40 source preflight
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-tranche40-prepare-preflight.mjs'
+      - 'scripts/audio-tranche40-preflight.py'
+      - 'scripts/audio-tranche40-policy.mjs'
+      - 'scripts/test-audio-tranche40-policy.mjs'
+      - 'docs/audio/TTS-THRESHOLD-AMENDMENT-40.json'
+      - '.github/workflows/audio-tranche40-preflight.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: bareeq-tranche40-source-preflight
+  cancel-in-progress: false
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify owner budget and preserve general freeze
+        run: |
+          node scripts/test-audio-tranche40-policy.mjs
+          node scripts/test-audio-tts-threshold-amendment.mjs
+          node scripts/audio-tts-threshold-amendment.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-gate4-governance.mjs
+          node scripts/audio-state-consistency.mjs
+      - name: Install local audio tools only
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: retained-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-remaining15-review-37623097600
+          path: saved-review
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37623097600'
+      - name: Verify canonical sentences and source part byte identities
+        run: node scripts/audio-tranche40-prepare-preflight.mjs retained-evidence saved-review tranche40-preflight
+      - name: Locate whole-sentence quiet cuts with saved local timings
+        run: python scripts/audio-tranche40-preflight.py --root tranche40-preflight
+      - name: Prove ten published files remain unchanged
+        run: git diff --exit-code -- public/audio
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-tranche40-preflight-${{ github.run_id }}
+          path: tranche40-preflight/
+          if-no-files-found: error
+          retention-days: 90
