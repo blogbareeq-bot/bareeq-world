@@ -139,5 +139,5 @@ if (failures.length) {
   await writeFile(resolve(artifactDir, 'failures.txt'), `${failures.join('\n')}\n`, 'utf8');
   throw new Error(`[viewport-qa] ${failures.length} real-browser issue(s); see artifacts/window-viewport/failures.txt`);
 }
-await writeFile(resolve(artifactDir, 'PASS.txt'), `${stories.length}/15 stories × ${VIEWPORTS.length} viewports = ${stories.length * VIEWPORTS.length} production-page checks passed.\n`, 'utf8');
-console.log(`[viewport-qa] PASS: ${stories.length}/15 stories × ${VIEWPORTS.length} real viewports = ${stories.length * VIEWPORTS.length} production-page checks.`);
+await writeFile(resolve(artifactDir, 'PASS.txt'), `${stories.length} stories × ${VIEWPORTS.length} viewports = ${stories.length * VIEWPORTS.length} production-page checks passed.\n`, 'utf8');
+console.log(`[viewport-qa] PASS: ${stories.length} stories × ${VIEWPORTS.length} real viewports = ${stories.length * VIEWPORTS.length} production-page checks.`);
