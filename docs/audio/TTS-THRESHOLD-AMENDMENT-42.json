@@ -299,8 +299,9 @@
         "id": "REPAIR2-C1",
         "model": "gemini-3.5-flash",
         "runId": "38122766909",
-        "status": "RESERVED",
-        "reservedAt": "2026-10-11T07:54:11.498Z"
+        "status": "FAILED_NO_RETRY",
+        "reservedAt": "2026-10-11T07:54:11.498Z",
+        "error": "ASR gemini-3.5-flash failed (503): {\"error\":{\"message\":\"gemini-3.5-flash is currently experiencing high demand, spikes in demand are usually temporary. Please try again later.\",\"code\":\"service_unavailable\"}}"
       }
     ],
     "status": "IN_PROGRESS"
