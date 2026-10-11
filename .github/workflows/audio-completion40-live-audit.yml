@@ -2,21 +2,55 @@ name: Bareeq completion40 production audio audit
 on:
   pull_request:
     branches: [main]
-    paths: ['.github/workflows/audio-completion40-live-audit.yml']
+    paths: ['.github/workflows/audio-completion40-live-audit.yml', 'scripts/audio-published-build-guard.mjs', 'scripts/test-audio-published-build-guard.mjs', 'scripts/run-v4211-audio.mjs']
   push:
     branches: [main]
-    paths: ['.github/workflows/audio-completion40-live-audit.yml']
+    paths: ['.github/workflows/audio-completion40-live-audit.yml', 'scripts/audio-published-build-guard.mjs', 'scripts/test-audio-published-build-guard.mjs', 'scripts/run-v4211-audio.mjs']
 permissions:
   contents: read
+  checks: read
 jobs:
-  live-audit:
+  build-protection:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Verify build protection on the actual published corpus
+        run: |
+          node scripts/test-audio-published-build-guard.mjs
+          node --input-type=module <<'NODE'
+          import {snapshotPublishedAudio} from './scripts/audio-published-build-guard.mjs';import {writeFile} from 'node:fs/promises';await writeFile('published-before-build.json',JSON.stringify(await snapshotPublishedAudio()));
+          NODE
+          npm run build
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';import {createHash} from 'node:crypto';import {assertPublishedAudioUnchanged} from './scripts/audio-published-build-guard.mjs';
+          const before=JSON.parse(await readFile('published-before-build.json'));await assertPublishedAudioUnchanged(before);
+          for(const a of before.articles)for(const [file,sha] of Object.entries(a.files)){const b=await readFile('dist/audio/articles/'+a.audioKey+'/'+file);if(createHash('sha256').update(b).digest('hex')!==sha)throw new Error('Built output changed a protected audio file '+a.articleId+'/'+file);}
+          console.log('PUBLISHED_AUDIO_DIST=PASS exact='+before.articles.length+' every protected source file copied unchanged');
+          NODE
+  live-audit:
+    if: github.event_name == 'push'
+    needs: build-protection
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Wait for this main commit to deploy through Cloudflare
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node --input-type=module <<'NODE'
+          import {execFileSync} from 'node:child_process';
+          for(let i=0;i<32;i++){const j=JSON.parse(execFileSync('gh',['api',`repos/${process.env.GITHUB_REPOSITORY}/commits/${process.env.GITHUB_SHA}/check-runs`],{encoding:'utf8'})),cf=j.check_runs.find(x=>x.name==='Cloudflare Pages');if(cf?.conclusion==='success'){console.log('NATIVE_CLOUDFLARE_MAIN=PASS '+process.env.GITHUB_SHA);process.exit(0);}if(cf?.conclusion==='failure')throw new Error('Native Cloudflare deployment failed');await new Promise(r=>setTimeout(r,15000));}throw new Error('Cloudflare main deployment timed out');
+          NODE
       - name: Verify live production manifests and all new audio parts
         run: |
           node --input-type=module <<'NODE'

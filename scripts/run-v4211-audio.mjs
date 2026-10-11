@@ -4,6 +4,7 @@ import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { PENDING_CLOUD, RETAINED_GEMINI, TEMPORARY_HAMED_ARTICLES } from './cloud-tts-rollout.mjs';
+import { snapshotPublishedAudio, assertPublishedAudioUnchanged } from './audio-published-build-guard.mjs';
 
 const NODE = process.execPath;
 const LEGACY_HAMED_CACHE = [
@@ -17,6 +18,11 @@ const LEGACY_HAMED_CACHE = [
 ];
 const COWORKER = 'ai-as-coworker-future-of-human-work';
 const SKIP_STALE_FALLBACKS = [...LEGACY_HAMED_CACHE, COWORKER].join(',');
+const publishedAudioBefore = await snapshotPublishedAudio();
+const SKIP_PUBLISHED_AND_STALE = [...new Set([
+  ...SKIP_STALE_FALLBACKS.split(','),
+  ...publishedAudioBefore.articles.map(x=>x.articleId),
+])].join(',');
 const ALL_ARTICLES = [...RETAINED_GEMINI, ...PENDING_CLOUD];
 
 const sha = (value) => createHash('sha256').update(value).digest('hex');
@@ -105,8 +111,8 @@ if (freeArticleLimitRaw !== '1') throw new Error('BAREEQ_GEMINI_FREE_ARTICLES_PE
 if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
   console.log('V4.21.1 free-tier mode: paid Google Cloud TTS remains inactive; rebuilding the approved mixed-audio baseline before any Gemini free-quota attempt.');
 
-  runStrict('scripts/import-bundled-azure-audio.mjs', [], { BAREEQ_BUNDLED_SKIP_IDS: SKIP_STALE_FALLBACKS });
-  runStrict('scripts/import-studio-audio.mjs', [], { BAREEQ_STUDIO_SKIP_IDS: SKIP_STALE_FALLBACKS });
+  runStrict('scripts/import-bundled-azure-audio.mjs', [], { BAREEQ_BUNDLED_SKIP_IDS: SKIP_PUBLISHED_AND_STALE });
+  runStrict('scripts/import-studio-audio.mjs', [], { BAREEQ_STUDIO_SKIP_IDS: SKIP_PUBLISHED_AND_STALE });
 
   // The two already-published Sadaltager articles are mandatory and cache-only.
   runStrict('scripts/generate-audio.mjs', [], {
@@ -199,6 +205,7 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
   }
 
   await assertCompleteBaseline('fallback baseline');
+  await assertPublishedAudioUnchanged(publishedAudioBefore);
 
   if (!freeRolloutEnabled) {
     console.log('V4.21.1 Gemini free-tier rollout is paused by BAREEQ_GEMINI_FREE_ROLLOUT=0; 0 synthesis requests were sent.');
@@ -222,6 +229,7 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
   });
 
   await assertCompleteBaseline('post-Gemini rollout');
+  await assertPublishedAudioUnchanged(publishedAudioBefore);
   const geminiCoverage = await countGeminiCoverage();
   console.log(`V4.21.1 free-tier deployment ready: ${geminiCoverage}/${ALL_ARTICLES.length} article(s) currently use Gemini Sadaltager; remaining articles keep approved Hamed/Cedar audio until a later daily deployment.`);
   cleanTemporaryAudioRestores();
@@ -229,8 +237,8 @@ if (process.env.BAREEQ_CLOUD_TTS_ACTIVATE !== '1') {
 }
 
 console.log('V4.21.1 paid activation mode: preparing the approved baseline before deliberate Google Cloud TTS synthesis.');
-runStrict('scripts/import-bundled-azure-audio.mjs', [], { BAREEQ_BUNDLED_SKIP_IDS: SKIP_STALE_FALLBACKS });
-runStrict('scripts/import-studio-audio.mjs', [], { BAREEQ_STUDIO_SKIP_IDS: SKIP_STALE_FALLBACKS });
+runStrict('scripts/import-bundled-azure-audio.mjs', [], { BAREEQ_BUNDLED_SKIP_IDS: SKIP_PUBLISHED_AND_STALE });
+runStrict('scripts/import-studio-audio.mjs', [], { BAREEQ_STUDIO_SKIP_IDS: SKIP_PUBLISHED_AND_STALE });
 
 runStrict('scripts/generate-audio.mjs', [], {
   BAREEQ_TTS_PROVIDER: 'gemini',
@@ -267,4 +275,6 @@ for (const articleId of PENDING_CLOUD) {
 }
 
 console.log(`V4.21.1 Cloud TTS activation complete: ${PENDING_CLOUD.length} pending article(s) generated/restored with Gemini 2.5 Flash TTS, while ${RETAINED_GEMINI.length} existing Sadaltager article(s) were retained from production cache.`);
+await assertPublishedAudioUnchanged(publishedAudioBefore);
 cleanTemporaryAudioRestores();
+
