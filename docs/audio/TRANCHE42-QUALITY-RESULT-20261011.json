@@ -1,0 +1,269 @@
+{
+  "schema": "bareeq.audio-tranche42-qa.v1",
+  "decisionId": "COMPLETION15-TWO-REPAIRS-20261011-v1",
+  "runId": "38121863055",
+  "publicationPerformed": false,
+  "additionalTtsCalls": 0,
+  "ownerListeningRequired": true,
+  "targets": [
+    {
+      "id": "REPAIR2-S",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "expectedToken": "عندما",
+      "expectedIndex": 450,
+      "partNumber": 2,
+      "generatedSha256": "6026ae4662fa159a1c8fd03b43bec578dc9902697dd62381fbe6514c92c45588",
+      "repairedContextFile": "REPAIR2-S-repaired-context.mp3",
+      "repairedContextSha256": "8a6d329986c3784f907476130e8d2db2f74d6485d5c746e04dbc92d3e8dfe866",
+      "spliceProof": {
+        "id": "REPAIR2-S",
+        "articleId": "how-touchscreens-work",
+        "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+        "publicationPerformed": false,
+        "status": "SPLICED_REQUIRES_FULL_QA",
+        "partFile": "part-002-7f07942908df.mp3",
+        "partIndex": 1,
+        "baselinePartSha256": "2b55394a800b9eee63493aac9d49eeaeed9ea8cab9b1fcf72102e955149b9a7b",
+        "candidatePartFile": "REPAIR2-S-candidate-part.mp3",
+        "candidatePartSha256": "c43091092b40959cf163c878450b06171a7d29eaab7e768a3a42b5d81bda68bb",
+        "outsidePcmIdentical": true,
+        "sourceCutSamples": [
+          5165760,
+          5797680
+        ],
+        "candidateInsertedSamples": [
+          5165760,
+          5944800
+        ],
+        "generatedSha256": "6026ae4662fa159a1c8fd03b43bec578dc9902697dd62381fbe6514c92c45588",
+        "donorTrimSamples": [
+          11520,
+          790560
+        ],
+        "sourcePrefixPcmSha256": "839a954603fd5e861ec38b35a092907ae65d9801408fa03a7a0499b426619d01",
+        "candidatePrefixPcmSha256": "839a954603fd5e861ec38b35a092907ae65d9801408fa03a7a0499b426619d01",
+        "sourceSuffixPcmSha256": "138e6eea72ddfecf254c0b4614b5ac30610eea5b91f82a16ba0bd5abc2eaf32d",
+        "candidateSuffixPcmSha256": "138e6eea72ddfecf254c0b4614b5ac30610eea5b91f82a16ba0bd5abc2eaf32d",
+        "prefixCorrelation": 0.9998811529062194,
+        "suffixCorrelation": 0.9994378877754021,
+        "seamStep": 60,
+        "repairedContextFile": "REPAIR2-S-repaired-context.mp3",
+        "repairedContextSha256": "8a6d329986c3784f907476130e8d2db2f74d6485d5c746e04dbc92d3e8dfe866"
+      },
+      "status": "QA_INCOMPLETE_RETAINED",
+      "actualMicroModels": [
+        "gemini-3.5-flash-lite",
+        "gemini-3.6-flash"
+      ],
+      "micro": {
+        "schema": "bareeq.audio-dual-asr-adjudication.v1",
+        "status": "passed",
+        "passed": true,
+        "articleId": "how-touchscreens-work",
+        "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+        "candidateFingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+        "fullSha256": "6026ae4662fa159a1c8fd03b43bec578dc9902697dd62381fbe6514c92c45588",
+        "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+        "models": [
+          "gemini-3.5-flash-lite",
+          "gemini-3.5-flash"
+        ],
+        "method": "independent-dual-asr-consensus-with-recorded-representation-equivalence",
+        "policy": {
+          "version": 6,
+          "rawReportsImmutable": true,
+          "oneModelDivergence": "recorded-as-asr-disagreement; not counted as an audio error when the other independent model matches expected text",
+          "bothModelsSameNonEquivalentDivergence": "counted as a substantive spoken error",
+          "representationEquivalence": [
+            "same normalized token",
+            "final hamza carrier only",
+            "explicit approved Arabic ASR orthography شاتًا/شات, لإنهائه/لانهائه, and vitamin letter-name دال/د",
+            "strict per-name transliteration whitelist for أنثروبك/Anthropic, كلود/Claude, بروكتر/Procter, غامبل/Gamble",
+            "explicit numeric/cardinal/ordinal verbalization for 0-10, 20, 90, 100, 1000",
+            "lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)",
+            "Arabic ب proclitic tokenization only when the raw ASR explicitly records ب as the adjacent insertion (for example بما = ب + ما)",
+            "silent visual arrow marker → when both independent ASR models omit it"
+          ],
+          "fuzzyMatching": false,
+          "stemming": false,
+          "synonyms": false,
+          "verificationRepresentation": {
+            "version": 1,
+            "purpose": "comparison-only canonical verification; synthesis text and fingerprints are not mutated",
+            "synthesisFingerprintMutation": false,
+            "newEquivalenceRulesInV6": false
+          },
+          "humanListeningPolicy": "campaign publication policy governs; adjudication neither requires nor waives full-file listening"
+        },
+        "consensus": {
+          "substitutions": 0,
+          "deletions": 0,
+          "insertions": 0,
+          "unresolved": 0
+        },
+        "rawCounts": {
+          "gemini-3.5-flash-lite": {
+            "substitutions": 0,
+            "deletions": 0,
+            "insertions": 0,
+            "status": "passed"
+          },
+          "gemini-3.5-flash": {
+            "substitutions": 0,
+            "deletions": 0,
+            "insertions": 0,
+            "status": "passed"
+          }
+        },
+        "representationOnly": [],
+        "modelDisagreements": [],
+        "substantiveDifferences": [],
+        "unresolved": [],
+        "generatedAt": "2026-10-11T07:51:55.294Z"
+      },
+      "technicalPassed": true,
+      "synchronizationPassed": true,
+      "fullSha256": "ad56a3fea95f15b7d28da84c0a333c9e74880b6b12c84b6f34a922ffd491e39e",
+      "error": "ASR gemini-3.5-flash failed (503): {\"error\":{\"message\":\"gemini-3.5-flash is currently experiencing high demand, spikes in demand are usually temporary. Please try again later.\",\"code\":\"service_unavailable\"}}"
+    },
+    {
+      "id": "REPAIR2-C1",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "expectedToken": "ويعرض",
+      "expectedIndex": 617,
+      "partNumber": 3,
+      "generatedSha256": "d9908aa70ca27cb5d13a0a2c304ba17812286b60c511999bbdb90fd2df6e2c93",
+      "repairedContextFile": "REPAIR2-C1-repaired-context.mp3",
+      "repairedContextSha256": "306e062dd5be94d94bbf9451bb824d9450e4bd41c435fd9d4eda2e70a6ad37e6",
+      "spliceProof": {
+        "id": "REPAIR2-C1",
+        "articleId": "language-soft-power-politics",
+        "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+        "publicationPerformed": false,
+        "status": "SPLICED_REQUIRES_FULL_QA",
+        "partFile": "part-003-5e391f3731bb.mp3",
+        "partIndex": 2,
+        "baselinePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+        "candidatePartFile": "REPAIR2-C1-candidate-part.mp3",
+        "candidatePartSha256": "2d5ef608965d029010ef2b999d3a5c0714632f2629f74dce2aba8b4550ab5412",
+        "outsidePcmIdentical": true,
+        "sourceCutSamples": [
+          3500160,
+          4066560
+        ],
+        "candidateInsertedSamples": [
+          3500160,
+          4164960
+        ],
+        "generatedSha256": "d9908aa70ca27cb5d13a0a2c304ba17812286b60c511999bbdb90fd2df6e2c93",
+        "donorTrimSamples": [
+          8640,
+          673440
+        ],
+        "sourcePrefixPcmSha256": "576c6fda6c8a4922f27dfac2ce92fe5867e824cee8858faf32472e48ba089057",
+        "candidatePrefixPcmSha256": "576c6fda6c8a4922f27dfac2ce92fe5867e824cee8858faf32472e48ba089057",
+        "sourceSuffixPcmSha256": "e5427c93510004717eed8058ae5ad236ee6f83ed460d2917dca80e966c9e1dd0",
+        "candidateSuffixPcmSha256": "e5427c93510004717eed8058ae5ad236ee6f83ed460d2917dca80e966c9e1dd0",
+        "prefixCorrelation": 0.9997605766758697,
+        "suffixCorrelation": 0.9998700076590006,
+        "seamStep": 88,
+        "repairedContextFile": "REPAIR2-C1-repaired-context.mp3",
+        "repairedContextSha256": "306e062dd5be94d94bbf9451bb824d9450e4bd41c435fd9d4eda2e70a6ad37e6"
+      },
+      "status": "QA_INCOMPLETE_RETAINED",
+      "actualMicroModels": [
+        "gemini-3.5-flash-lite",
+        "gemini-3.6-flash"
+      ],
+      "micro": {
+        "schema": "bareeq.audio-dual-asr-adjudication.v1",
+        "status": "passed",
+        "passed": true,
+        "articleId": "language-soft-power-politics",
+        "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+        "candidateFingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+        "fullSha256": "d9908aa70ca27cb5d13a0a2c304ba17812286b60c511999bbdb90fd2df6e2c93",
+        "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+        "models": [
+          "gemini-3.5-flash-lite",
+          "gemini-3.5-flash"
+        ],
+        "method": "independent-dual-asr-consensus-with-recorded-representation-equivalence",
+        "policy": {
+          "version": 6,
+          "rawReportsImmutable": true,
+          "oneModelDivergence": "recorded-as-asr-disagreement; not counted as an audio error when the other independent model matches expected text",
+          "bothModelsSameNonEquivalentDivergence": "counted as a substantive spoken error",
+          "representationEquivalence": [
+            "same normalized token",
+            "final hamza carrier only",
+            "explicit approved Arabic ASR orthography شاتًا/شات, لإنهائه/لانهائه, and vitamin letter-name دال/د",
+            "strict per-name transliteration whitelist for أنثروبك/Anthropic, كلود/Claude, بروكتر/Procter, غامبل/Gamble",
+            "explicit numeric/cardinal/ordinal verbalization for 0-10, 20, 90, 100, 1000",
+            "lam-prefixed numeric tokenization only (for example لألف = ل1000 = ل + 1000)",
+            "Arabic ب proclitic tokenization only when the raw ASR explicitly records ب as the adjacent insertion (for example بما = ب + ما)",
+            "silent visual arrow marker → when both independent ASR models omit it"
+          ],
+          "fuzzyMatching": false,
+          "stemming": false,
+          "synonyms": false,
+          "verificationRepresentation": {
+            "version": 1,
+            "purpose": "comparison-only canonical verification; synthesis text and fingerprints are not mutated",
+            "synthesisFingerprintMutation": false,
+            "newEquivalenceRulesInV6": false
+          },
+          "humanListeningPolicy": "campaign publication policy governs; adjudication neither requires nor waives full-file listening"
+        },
+        "consensus": {
+          "substitutions": 0,
+          "deletions": 0,
+          "insertions": 0,
+          "unresolved": 0
+        },
+        "rawCounts": {
+          "gemini-3.5-flash-lite": {
+            "substitutions": 0,
+            "deletions": 0,
+            "insertions": 0,
+            "status": "passed"
+          },
+          "gemini-3.5-flash": {
+            "substitutions": 0,
+            "deletions": 0,
+            "insertions": 0,
+            "status": "passed"
+          }
+        },
+        "representationOnly": [],
+        "modelDisagreements": [],
+        "substantiveDifferences": [],
+        "unresolved": [],
+        "generatedAt": "2026-10-11T07:52:41.442Z"
+      },
+      "technicalPassed": true,
+      "synchronizationPassed": true,
+      "fullSha256": "6e75b72978803e251ef4e876ad0e24667f135836175528ed948acec0a87de3d7",
+      "error": "ASR gemini-3.5-flash failed (503): {\"error\":{\"message\":\"gemini-3.5-flash is currently experiencing high demand, spikes in demand are usually temporary. Please try again later.\",\"code\":\"service_unavailable\"}}"
+    }
+  ],
+  "microAsrTranscriptions": 4,
+  "fullAsrTranscriptions": 4,
+  "completed": true,
+  "qaRecoveryRunId": "38122766909",
+  "additionalMicroAsrTranscriptions": 0,
+  "documentedModelRedirect": {
+    "requestedModel": "gemini-3.5-flash",
+    "actualResponseModel": "gemini-3.6-flash",
+    "effectiveAt": "2026-10-08",
+    "source": "https://ai.google.dev/gemini-api/docs/changelog",
+    "verifiedAt": "2026-10-11",
+    "reason": "Google automatically routes retired 3.5 Flash requests to 3.6 Flash."
+  },
+  "prepared": true,
+  "qaComplete": false
+}
