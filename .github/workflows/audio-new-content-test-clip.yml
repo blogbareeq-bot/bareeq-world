@@ -1,0 +1,104 @@
+name: Bareeq new-content one-shot test clip
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/audio/NEW-CONTENT-TEST-CLIP-AUTHORIZATION.json'
+      - 'scripts/audio-new-content-test-clip.mjs'
+      - 'scripts/audio-tts-freeze-guard.mjs'
+      - 'scripts/test-audio-tts-freeze-guard.mjs'
+      - '.github/workflows/audio-new-content-test-clip.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bareeq-new-content-test-clip-one-shot
+  cancel-in-progress: false
+
+jobs:
+  test-clip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - id: gate
+        name: Check bounded authorization
+        shell: bash
+        run: |
+          STATUS=$(node -p "JSON.parse(require('fs').readFileSync('docs/audio/NEW-CONTENT-TEST-CLIP-AUTHORIZATION.json','utf8')).authorizationStatus")
+          if [ "$STATUS" = "AUTHORIZED" ] && [ "${GITHUB_RUN_ATTEMPT}" = "1" ]; then
+            echo "should-run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should-run=false" >> "$GITHUB_OUTPUT"
+            echo "TEST_CLIP_DISPATCH=SKIPPED status=$STATUS runAttempt=${GITHUB_RUN_ATTEMPT}"
+          fi
+
+      - name: Install dependencies
+        if: steps.gate.outputs.should-run == 'true'
+        run: npm ci
+
+      - name: Offline authorization tests
+        if: steps.gate.outputs.should-run == 'true'
+        run: |
+          node scripts/test-audio-tts-freeze-guard.mjs
+          node scripts/audio-new-content-test-clip.mjs --preflight
+          node scripts/test-speech-script-quality-gate.mjs
+          node scripts/check-speech-scripts.mjs
+
+      - name: Verify Gemini credential
+        if: steps.gate.outputs.should-run == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          test -n "$GEMINI_API_KEY"
+          echo "GEMINI_CREDENTIAL=present"
+
+      - name: Generate exactly one reviewed test clip
+        if: steps.gate.outputs.should-run == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-new-content-test-clip.mjs
+
+      - name: Persist execution metadata
+        if: always() && steps.gate.outputs.should-run == 'true'
+        shell: bash
+        run: |
+          RESULT=$(find audio-candidates/_test-clips -name result.json -type f 2>/dev/null | head -n 1 || true)
+          if [ -n "$RESULT" ]; then
+            cp "$RESULT" docs/audio/NEW-CONTENT-TEST-CLIP-RESULT.json
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/audio/NEW-CONTENT-TEST-CLIP-AUTHORIZATION.json
+          test ! -f docs/audio/NEW-CONTENT-TEST-CLIP-RESULT.json || git add docs/audio/NEW-CONTENT-TEST-CLIP-RESULT.json
+          if git diff --cached --quiet; then
+            echo "TEST_CLIP_STATE=no-change"
+            exit 0
+          fi
+          git commit -m "audio: record new-content test clip execution"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+
+      - name: Upload test clip evidence
+        if: always() && steps.gate.outputs.should-run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-new-content-test-clip-${{ github.run_id }}
+          path: |
+            audio-candidates/_test-clips/
+            docs/audio/NEW-CONTENT-TEST-CLIP-AUTHORIZATION.json
+            docs/audio/NEW-CONTENT-TEST-CLIP-RESULT.json
+          if-no-files-found: warn
+          retention-days: 30

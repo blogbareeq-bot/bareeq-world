@@ -6,6 +6,7 @@ import { tranche33OverrideAuthorized } from './audio-tranche33-authorization.mjs
 
 export const FREEZE_PATH = path.join(process.cwd(), 'docs', 'audio', 'TTS-FREEZE.json');
 export const GATE5_AUTH_PATH = path.join(process.cwd(), 'docs', 'audio', 'GATE-5-AUTHORIZATION.json');
+export const NEW_CONTENT_TEST_CLIP_AUTH_PATH = path.join(process.cwd(), 'docs', 'audio', 'NEW-CONTENT-TEST-CLIP-AUTHORIZATION.json');
 
 export async function gate5OverrideAuthorized({
   authorizationFile = GATE5_AUTH_PATH,
@@ -28,6 +29,37 @@ export async function gate5OverrideAuthorized({
   return ok ? auth : null;
 }
 
+
+export async function newContentTestClipOverrideAuthorized({
+  authorizationFile = NEW_CONTENT_TEST_CLIP_AUTH_PATH,
+  operation = 'tts-synthesis',
+  env = process.env,
+} = {}) {
+  if (env.BAREEQ_NEW_CONTENT_TEST_CLIP_AUTHORIZED !== '1') return null;
+  if (operation !== 'gemini-interactions-tts') return null;
+  if (env.GITHUB_ACTIONS !== 'true' || env.GITHUB_REF !== 'refs/heads/main' || env.GITHUB_RUN_ATTEMPT !== '1') return null;
+  const auth = JSON.parse(await readFile(authorizationFile, 'utf8'));
+  const ok = auth?.schema === 'bareeq.audio-new-content-test-clip-authorization.v1'
+    && auth.authorizationStatus === 'AUTHORIZED'
+    && auth.decisionId === env.BAREEQ_NEW_CONTENT_TEST_CLIP_DECISION_ID
+    && auth.targetArticleId === env.BAREEQ_NEW_CONTENT_TEST_CLIP_ARTICLE
+    && auth.speechScriptHash === env.BAREEQ_NEW_CONTENT_TEST_CLIP_SCRIPT_HASH
+    && auth.testClipPlanHash === env.BAREEQ_NEW_CONTENT_TEST_CLIP_PLAN_HASH
+    && auth.provider === 'gemini-interactions'
+    && auth.model === 'gemini-3.1-flash-tts-preview'
+    && auth.voice === 'Sadaltager'
+    && Number(auth.successfulTtsRequestsAuthorized) === 1
+    && Number(auth.successfulTtsRequestsConsumed) === 0
+    && Number(auth.providerAttemptsAuthorized) === 1
+    && Number(auth.providerAttemptsConsumed) === 1
+    && auth.automaticRetry === false
+    && auth.publicationAuthorized === false
+    && auth.fullArticleSynthesisAuthorized === false
+    && auth.legacyRenewalAuthorized === false
+    && auth.freezeRemainsActive === true;
+  return ok ? auth : null;
+}
+
 export async function readTtsFreeze(file = FREEZE_PATH) {
   const raw = JSON.parse(await readFile(file, 'utf8'));
   if (raw?.schema !== 'bareeq.audio-tts-freeze.v1') {
@@ -44,6 +76,11 @@ export async function ttsIsFrozen(file = FREEZE_PATH) {
 export async function assertTtsUnfrozen({ file = FREEZE_PATH, operation = 'tts-synthesis', tranche33Context, tranche40Context, text } = {}) {
   const state = await readTtsFreeze(file);
   if (state.active === true) {
+    const testClip = await newContentTestClipOverrideAuthorized({ operation });
+    if (testClip) {
+      console.error(`BAREEQ_NEW_CONTENT_TEST_CLIP_OVERRIDE=AUTHORIZED decision=${testClip.decisionId} target=${testClip.targetArticleId} successfulRequests=1 attempts=1`);
+      return { ...state, newContentTestClipAuthorization: testClip };
+    }
     const authorized40=await tranche40OverrideAuthorized({operation,context:tranche40Context,text});
     if(authorized40){console.error(`BAREEQ_TRANCHE40_OVERRIDE=AUTHORIZED decision=${authorized40.decisionId} target=${authorized40.requestId} maxHttpAttempts=1`);return {...state,tranche40Authorization:authorized40};}
     const tranche = await tranche33OverrideAuthorized({operation, context:tranche33Context, text});
