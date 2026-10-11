@@ -3,8 +3,8 @@
   "articleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
   "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
   "status": "ready",
-  "testClipPassed": false,
-  "fullSynthesisAllowed": false,
+  "testClipPassed": true,
+  "fullSynthesisAllowed": true,
   "expectedDurationSeconds": 60,
   "selectedSegments": [
     {
@@ -54,10 +54,13 @@
     "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
   ],
   "audioReview": {
-    "status": "not-performed",
-    "reviewedBy": "",
-    "reviewedAt": "",
-    "evidence": null
+    "status": "passed",
+    "reviewedBy": "owner",
+    "reviewedAt": "2026-10-11T07:12:00.000Z",
+    "evidence": {
+      "file": "docs/audio/NEW-CONTENT-TEST-CLIP-HUMAN-LISTENING.json",
+      "sha256": "5bb4000d204401cdfd15a079d120fbd2d31ac623a50d8f2457c78149d3a0364b"
+    }
   },
   "planHash": "faaeb2a6912421e6323a73fed25d95b0aeda93140e11b5e018ed5f6622ee6c55"
 }

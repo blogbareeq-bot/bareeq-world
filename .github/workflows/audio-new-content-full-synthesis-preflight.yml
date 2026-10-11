@@ -1,0 +1,70 @@
+name: Bareeq new-content full synthesis preflight
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/audio/NEW-CONTENT-TEST-CLIP-HUMAN-LISTENING.json'
+      - 'scripts/speech-test-clips/**'
+      - 'scripts/audio-new-content-full-synthesis-preflight.mjs'
+      - '.github/workflows/audio-new-content-full-synthesis-preflight.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/audio/NEW-CONTENT-TEST-CLIP-HUMAN-LISTENING.json'
+      - 'scripts/speech-test-clips/**'
+      - 'scripts/audio-new-content-full-synthesis-preflight.mjs'
+      - '.github/workflows/audio-new-content-full-synthesis-preflight.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - name: Verify speech and human evidence gates
+        run: |
+          node scripts/check-speech-scripts.mjs
+          node scripts/test-speech-script-quality-gate.mjs
+
+      - name: Build zero-provider full synthesis preflight
+        run: node scripts/audio-new-content-full-synthesis-preflight.mjs
+
+      - name: Persist preflight on main
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/audio/NEW-CONTENT-FULL-SYNTHESIS-PREFLIGHT.json
+          if git diff --cached --quiet; then
+            echo "FULL_SYNTHESIS_PREFLIGHT=no-change"
+            exit 0
+          fi
+          git commit -m "audio: record new-content full synthesis preflight"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+
+      - name: Upload preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-new-content-full-synthesis-preflight-${{ github.run_id }}
+          path: docs/audio/NEW-CONTENT-FULL-SYNTHESIS-PREFLIGHT.json
+          if-no-files-found: warn
+          retention-days: 30

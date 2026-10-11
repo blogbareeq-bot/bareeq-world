@@ -15,7 +15,11 @@ try {
   if (!Number.isInteger(inventory.articleCount) || inventory.articleCount <= 0) {
     throw new Error(`Published Speech Script inventory count is invalid: ${inventory.articleCount}.`);
   }
-  if (inventory.synthesisAllowed !== 0) throw new Error('Provider publication/synthesisAllowed must stay 0 until later listening/ASR gates pass.');
+  const synthesisAllowedArticles = inventory.articles.filter((article) => article.ttsSynthesisAllowed);
+  const invalidSynthesisAllowed = synthesisAllowedArticles.filter((article) => article.bucket !== 'A' || article.testClipPassed !== true);
+  if (invalidSynthesisAllowed.length) {
+    throw new Error(`Full TTS synthesis authorization requires bucket A + Test Clip Passed: ${invalidSynthesisAllowed.map((article) => article.articleId).join(', ')}.`);
+  }
 
   const reviewed = inventory.articles.filter((article) => article.bucket === 'A');
   const pendingFirstAudio = [];
@@ -42,11 +46,11 @@ try {
     }
   }
 
-  console.log(`Arabic Speech Script QA validated ${inventory.articleCount} article inventories: ${inventory.counts.passed} text/pronunciation-reviewed article(s), ${inventory.counts.needsReview} needing review, ${inventory.counts.highRisk} high-risk; provider publication allowed for 0 article(s).`);
+  console.log(`Arabic Speech Script QA validated ${inventory.articleCount} article inventories: ${inventory.counts.passed} text/pronunciation-reviewed article(s), ${inventory.counts.needsReview} needing review, ${inventory.counts.highRisk} high-risk; full TTS synthesis authorized after passed Test Clip for ${inventory.synthesisAllowed} article(s). Publication remains a separate later gate.`);
   if (pendingFirstAudio.length) {
     console.log(`First-audio queue may remain text-published before TTS review: ${pendingFirstAudio.map((article) => `${article.articleId}[${article.bucket}]`).join(', ')}.`);
   }
-  console.log('This result means Speech Script inventory integrity passed. It does NOT mean Test Clip Passed, Audio Review Passed, or Audio Ready.');
+  console.log('This result means Speech Script inventory integrity passed. A synthesisAllowed article has also passed its bound Test Clip review, but this does NOT mean full-candidate ASR/technical QA/final listening or publication are complete.');
 } finally {
   await rm(inventoryFile, { force: true }).catch(() => {});
 }
