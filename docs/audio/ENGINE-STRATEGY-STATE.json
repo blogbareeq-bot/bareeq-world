@@ -1,14 +1,14 @@
 {
   "schema": "bareeq.audio-engine-strategy.v1",
   "provider": "Gemini / Sadaltager",
-  "threshold": 40,
+  "threshold": 42,
   "exactBaseline": 13,
   "successfulTtsSinceLastNewExact": 40,
   "status": "paused",
-  "reason": "Three saved candidates promoted with zero provider calls after owner-bound review; consumed 40/40 remains unchanged; two owner-confirmed defects are withheld.",
+  "reason": "Owner approved exactly two fixed repair requests and their priority exception; keep global freeze and all 13 approved recordings unchanged.",
   "lastExactAt": "2026-10-11T06:20:04.939Z",
   "lastRunId": "37777589258",
-  "updatedAt": "2026-10-11T06:20:04.939Z",
+  "updatedAt": "2026-10-11T07:10:01.000Z",
   "targetedRecovery": null,
-  "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-40.json"
+  "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-42.json"
 }

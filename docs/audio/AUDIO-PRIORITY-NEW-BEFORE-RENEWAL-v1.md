@@ -36,3 +36,8 @@ The article `هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-ن
 - `scripts/audio-priority-guard.mjs --target=<articleId>` blocks legacy `generate-candidate` while new content waits.
 - `scripts/audio-priority-guard.mjs --allow-legacy` blocks the scheduled legacy progressive-repair lane while new content waits.
 - Validation/publication of already-generated legacy candidates is not blocked by this policy.
+
+## Bounded owner exception — 2026-10-11
+
+The owner approved `TTS-THRESHOLD-AMENDMENT-42.json`: exactly two fixed whole-context repairs, `REPAIR2-S` and `REPAIR2-C1`, may precede the new-content queue. This exception is enforced by `audio-tranche42-policy.mjs`; it does not authorize retries, full new-article synthesis, general legacy renewal, or alteration of the thirteen published Exact recordings. The ordinary priority guard and global freeze remain active outside these two one-shot dispatches. Owner listening of the new repaired contexts is required before final publication.
+

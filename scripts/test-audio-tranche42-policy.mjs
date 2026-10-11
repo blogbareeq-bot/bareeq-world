@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';
+import {readTranche42,validateTranche42Policy,validateTranche42Dispatch,DECISION42} from './audio-tranche42-policy.mjs';
+const real=await readTranche42();assert.equal(real.threshold,42);assert.equal(real.remaining,2);assert.equal(real.status.exactCount,13);
+const fresh=()=>structuredClone(real);
+for(const mutate of [x=>x.amendment.targets[0].generationText+=' آخر',x=>x.amendment.newThreshold=43,x=>x.amendment.targets.push(x.amendment.targets[0]),x=>x.amendment.priorityException.ownerApproved=false,x=>x.freeze.active=false,x=>x.strategy.successfulTtsSinceLastNewExact++,x=>x.amendment.protectedExact[0].fullSha256='0'.repeat(64),x=>x.amendment.automaticRetry=true,x=>x.amendment.targets[0].providerAttemptsConsumed=2]){const x=fresh();mutate(x);assert.throws(()=>validateTranche42Policy(x));}
+const x=fresh();x.amendment.authorizationStatus='IN_PROGRESS';x.amendment.executionStatus='EXECUTING';x.amendment.executionClaim={runId:'test',runAttempt:1};const t=x.amendment.targets[0];t.providerAttemptsConsumed=1;t.dispatchAttempt={runId:'test',attemptNumber:1,status:'RESERVED'};const arg={amendment:x.amendment,context:{decisionId:DECISION42,requestId:t.id,articleId:t.articleId,generationTextSha256:t.generationTextSha256},text:t.generationText,operation:'gemini-generate-content-tts',env:{GITHUB_ACTIONS:'true',GITHUB_REF:'refs/heads/main',GITHUB_RUN_ATTEMPT:'1',GITHUB_RUN_ID:'test'}};
+assert.equal(validateTranche42Dispatch(arg).requestId,t.id);
+for(const changed of [{...arg,text:arg.text+' غلط'},{...arg,env:{...arg.env,GITHUB_RUN_ATTEMPT:'2'}},{...arg,context:{...arg.context,articleId:'unapproved'}},{...arg,operation:'gemini-interactions-tts'}])assert.throws(()=>validateTranche42Dispatch(changed));t.successfulTtsConsumed=1;assert.throws(()=>validateTranche42Dispatch(arg));
+console.log('TRANCHE42_POLICY_TESTS=PASS budget/text/source/protected audio/priority/replay rejected; providerCalls=0');

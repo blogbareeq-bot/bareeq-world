@@ -1,0 +1,229 @@
+{
+  "schema": "bareeq.audio-tts-threshold-amendment.v3",
+  "decisionId": "COMPLETION15-TWO-REPAIRS-20261011-v1",
+  "authorizedBy": "project-owner",
+  "authorizationText": "اعتمد",
+  "authorizedAt": "2026-10-11T07:10:01.000Z",
+  "authorizationContext": "Owner approves raising this legacy repair tranche from 40 to 42 for two fixed TTS requests, with these repairs taking priority over the new article.",
+  "authorizationStatus": "AUTHORIZED",
+  "executionStatus": "PREFLIGHT_PASSED",
+  "previousThreshold": 40,
+  "newThreshold": 42,
+  "successfulRequestBaseline": 40,
+  "additionalSuccessfulRequestsAuthorized": 2,
+  "maximumProviderAttempts": 2,
+  "providerAttemptsConsumed": 0,
+  "successfulRequestsConsumed": 0,
+  "automaticExpansion": false,
+  "automaticRetry": false,
+  "automaticProviderDispatch": false,
+  "qualityPolicyUnchanged": true,
+  "existingExactAudioImmutable": true,
+  "approvedProposal": "docs/audio/TWO-DEFECT-REPAIR-PROPOSAL-20261011.json",
+  "approvedProposalSha256": "a3e31e6fea1119159643738d8bddb1844dd8d42459cfba9c9a7e241d926da44f",
+  "priorityException": {
+    "ownerApproved": true,
+    "scope": "these-two-legacy-repairs-before-new-content",
+    "policyOtherwiseUnchanged": true
+  },
+  "protectedExact": [
+    {
+      "articleId": "ai-agents-future-now",
+      "fingerprint": "7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488",
+      "fullSha256": "34fa55716fe40389283e40c3fc0fca3b8d7f2cf386a2f835edccabeb1d9b659b"
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "fingerprint": "429adbe4ebdabd03e5c77d122255a29c7840ec58b7f32a8e59e18b91aba2db21",
+      "fullSha256": "d7f00585b47dc3ece44c73ac0f62763ffb41a1e4f602ddeae1aabd3d65fd0567"
+    },
+    {
+      "articleId": "altadakhom-explained-simply",
+      "fingerprint": "58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45",
+      "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135"
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc"
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90"
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
+      "fullSha256": "dc2217a45d1872ab0de9010897ad22028f0e5e93fddb07178d1f6aa2f7f66a71"
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17"
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+      "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301"
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "fingerprint": "a7f364df849199a8f4096863f95739a948e2788cf0d4d65d1e94acec022765b6",
+      "fullSha256": "1586e603c9e59b9967a51a980b4d2f7b58af262ee2aff24a77eab948d2e969e6"
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
+      "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+      "fullSha256": "e8204d5a43005b8dbcf05745167a88225491c69ec94d1d69a72120b36c70990b"
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "fingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
+      "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d"
+    }
+  ],
+  "targets": [
+    {
+      "id": "REPAIR2-S",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "baselineFullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "sourcePartSha256": "2b55394a800b9eee63493aac9d49eeaeed9ea8cab9b1fcf72102e955149b9a7b",
+      "partIndex": 1,
+      "partNumber": 2,
+      "sourceFile": "S-baseline-part.mp3",
+      "wordFile": "S-words.json",
+      "expectedIndex": 450,
+      "expectedToken": "عندما",
+      "segmentId": "b0023",
+      "canonicalSpeechSegmentId": "paragraph-5a68206ac6a2",
+      "generationText": "فِي الشَّاشَةِ تُوجَدُ أَقْطَابٌ كَثِيرَةٌ مُرَتَّبَةٌ بِعِنَايَة، وَتَعْرِفُ دَارَةُ التَّحَكُّمِ الحَالَةَ الكَهْرَبَائِيَّةَ المُعْتَادَةَ لِلشَّبَكَةِ عِنْدَمَا لَا يَقْتَرِبُ مِنْهَا شَيْء. ثُمَّ يَدْخُلُ إِصْبَعُكَ إِلَى المَشْهَد.",
+      "generationTextSha256": "73ccd2c28781b8e8c65b7a12833eb08a5e8d7f0a4d6cad3ac58cf9911b56fc09",
+      "repairExpectedStart": 180,
+      "repairExpectedEnd": 203,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_UNAUTHORIZED",
+      "preflightPassed": true,
+      "cutStartSeconds": 107.62,
+      "cutEndSeconds": 120.785,
+      "quietStart": {
+        "sample": 5165760,
+        "windowSamples": 1920,
+        "rmsDb": -61.45530403271956,
+        "peakDb": -49.56046874038188
+      },
+      "quietEnd": {
+        "sample": 5797680,
+        "windowSamples": 1920,
+        "rmsDb": -44.64337040177028,
+        "peakDb": -31.02380609525738
+      },
+      "anchors": {
+        "before": [
+          "تسمي",
+          "هذه",
+          "الخاصية",
+          "السعة",
+          "الكهربايية"
+        ],
+        "after": [
+          "ماذا",
+          "يفعل",
+          "اصبعك",
+          "فعلا",
+          "جسم"
+        ],
+        "minimumUniqueFlankTokens": 2,
+        "wholeApprovedSentence": true
+      },
+      "baselineContextFile": "REPAIR2-S-baseline-context.mp3",
+      "baselineContextSha256": "77bd904cbabc5c9ee916de1bef76cf5206ef9de1c970012c917552d6a261c32f",
+      "baselineRegionTranscript": "في الشاشة توجد أقطاب كثيرة مرتبة بعينية وتعرف دارة التحكم الحالة الكهربائية المعتادة للشبكة عند لا يقترب منها شيء فما يدخل إصبعك إلى المشهد",
+      "maximumProviderAttempts": 1,
+      "providerAttemptsConsumed": 0,
+      "successfulTtsConsumed": 0
+    },
+    {
+      "id": "REPAIR2-C1",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "baselineFullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "sourcePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+      "partIndex": 2,
+      "partNumber": 3,
+      "sourceFile": "C1-baseline-part.mp3",
+      "wordFile": "C1-words.json",
+      "expectedIndex": 617,
+      "expectedToken": "ويعرض",
+      "segmentId": "b0029",
+      "canonicalSpeechSegmentId": "paragraph-81099c63d883",
+      "generationText": "وَيَعْرِضُ تقرير المنظمة الدولية للفرنكوفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين. (المنظمة الدولية للفرنكوفونية)",
+      "generationTextSha256": "5a0d93042dd7018af2d9caa53e8d71d4ebff02cb92357ce00bc817abbbe7b50b",
+      "repairExpectedStart": 103,
+      "repairExpectedEnd": 119,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_UNAUTHORIZED",
+      "preflightPassed": true,
+      "cutStartSeconds": 72.92,
+      "cutEndSeconds": 84.72,
+      "quietStart": {
+        "sample": 3500160,
+        "windowSamples": 1920,
+        "rmsDb": -53.12738298755452,
+        "peakDb": -43.50011640239199
+      },
+      "quietEnd": {
+        "sample": 4066560,
+        "windowSamples": 1920,
+        "rmsDb": -47.953645977616155,
+        "peakDb": -34.61665284653685
+      },
+      "anchors": {
+        "before": [
+          "والثقافة",
+          "والاعلام",
+          "والاقتصاد",
+          "والحضور",
+          "الدولي"
+        ],
+        "after": [
+          "لكن",
+          "الموسسة",
+          "ليست",
+          "بريية",
+          "دايما"
+        ],
+        "minimumUniqueFlankTokens": 2,
+        "wholeApprovedSentence": true
+      },
+      "baselineContextFile": "REPAIR2-C1-baseline-context.mp3",
+      "baselineContextSha256": "c58b1891a4d79593098c516bfe86c6d489b209e73a67683116faa325d997b4d6",
+      "baselineRegionTranscript": "ويعرض تقرير المنظمة الدولية للفرنكفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين المنظمة الدولية للفرنكفونية",
+      "maximumProviderAttempts": 1,
+      "providerAttemptsConsumed": 0,
+      "successfulTtsConsumed": 0
+    }
+  ],
+  "publicationRequiresNewHumanListening": true,
+  "asrModels": [
+    "gemini-3.5-flash-lite",
+    "gemini-3.5-flash"
+  ],
+  "maximumMicroAsrTranscriptions": 4,
+  "maximumFullAsrTranscriptions": 4
+}
