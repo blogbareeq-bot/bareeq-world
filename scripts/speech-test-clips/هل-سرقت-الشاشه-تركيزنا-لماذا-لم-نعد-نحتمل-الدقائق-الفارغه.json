@@ -1,40 +1,48 @@
 {
   "version": 1,
   "articleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
-  "speechScriptHash": "f134e73df1c195a8e24bcad2e989cb078af36b06d4a5b0adeca89e7f428cacf4",
-  "status": "pending-review",
+  "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
+  "status": "ready",
   "testClipPassed": false,
   "fullSynthesisAllowed": false,
-  "expectedDurationSeconds": 55,
+  "expectedDurationSeconds": 60,
   "selectedSegments": [
     {
-      "segmentId": "paragraph-b08384246328",
+      "segmentId": "paragraph-3ca80b1b13ac",
       "challenges": [
-        "baseline pronunciation and pacing review"
+        "يَعْرِضُ — known Bareeq misreading risk"
       ]
     },
     {
-      "segmentId": "paragraph-e527c93265de",
+      "segmentId": "paragraph-54872c0ed876",
       "challenges": [
-        "baseline pronunciation and pacing review"
+        "89% / 11%",
+        "هَايتْمَايَر",
+        "لَحْلُو"
       ]
     },
     {
-      "segmentId": "paragraph-e7279d95d711",
+      "segmentId": "paragraph-ad550ee8cc12",
       "challenges": [
-        "baseline pronunciation and pacing review"
+        "2025 / 27 / 2245",
+        "التَّذَكُّر",
+        "تِشِن"
       ]
     },
     {
-      "segmentId": "paragraph-9722d1223e17",
+      "segmentId": "paragraph-1d2f4c32c1c6",
       "challenges": [
-        "baseline pronunciation and pacing review"
+        "2023 / 59",
+        "كَامِيرِينِي",
+        "long sentence pacing"
       ]
     },
     {
-      "segmentId": "paragraph-9090c18ff6f2",
+      "segmentId": "paragraph-040ced01ad47",
       "challenges": [
-        "baseline pronunciation and pacing review"
+        "2024 / 166 / 53 / 33 / 4368",
+        "هَارْتَانْتُو",
+        "numeric pacing"
       ]
     }
   ],
@@ -51,5 +59,5 @@
     "reviewedAt": "",
     "evidence": null
   },
-  "planHash": "5df5695ae9450f050757456dbc1609a40f679d42dc5a80fefc05d2795590700a"
+  "planHash": "faaeb2a6912421e6323a73fed25d95b0aeda93140e11b5e018ed5f6622ee6c55"
 }
