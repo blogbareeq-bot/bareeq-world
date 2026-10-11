@@ -32,12 +32,13 @@ export async function validateNewContentTestClip({ root=ROOT, audioPath=process.
   const expectedText=selectedIds.map(id=>map.get(id)?.spokenText).filter(Boolean).join('\n\n');
   if(selectedIds.length!==5 || expectedText.length<100) throw new Error('selected test text is incomplete');
 
-  const { ffmpeg, ffprobe } = await assertFfmpeg();
+  const { ffmpeg } = await assertFfmpeg();
   const decode=await run(ffmpeg,['-v','error','-i',audioPath,'-f','null','-']);
-  const probe=await run(ffprobe,['-v','error','-show_entries','format=duration','-of','default=noprint_wrappers=1:nokey=1',audioPath]);
-  if (probe.code !== 0) throw new Error(`ffprobe could not determine test clip duration: ${probe.stderr.slice(0,500)}`);
-  const duration=Number(probe.stdout.trim());
-  if (!Number.isFinite(duration) || duration <= 0) throw new Error(`ffprobe returned invalid test clip duration: ${probe.stdout.trim()}`);
+  const probe=await run(ffmpeg,['-hide_banner','-i',audioPath,'-f','null','-']);
+  const durationMatch=probe.stderr.match(/Duration:\s*(\d+):(\d+):(\d+(?:\.\d+)?)/);
+  if (!durationMatch) throw new Error(`ffmpeg could not determine test clip duration: ${probe.stderr.slice(0,500)}`);
+  const duration=Number(durationMatch[1])*3600+Number(durationMatch[2])*60+Number(durationMatch[3]);
+  if (!Number.isFinite(duration) || duration <= 0) throw new Error(`ffmpeg returned invalid test clip duration: ${duration}`);
   const technical={
     decodePassed:decode.code===0,
     durationSeconds:duration,
