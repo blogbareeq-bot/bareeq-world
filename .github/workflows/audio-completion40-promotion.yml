@@ -1,0 +1,132 @@
+name: Bareeq completion40 owner review promotion
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-completion40-promotion.yml'
+      - 'scripts/audio-completion40-*.mjs'
+      - 'scripts/test-audio-completion40-review.mjs'
+      - 'docs/audio/REVIEW-COMPLETION40-*-20261011.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/audio-completion40-promotion.yml'
+      - 'scripts/audio-completion40-*.mjs'
+      - 'scripts/test-audio-completion40-review.mjs'
+      - 'docs/audio/REVIEW-COMPLETION40-*-20261011.json'
+permissions:
+  contents: read
+  actions: read
+  checks: read
+concurrency:
+  group: completion40-owner-promotion-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      actions: read
+      checks: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Refuse replay and verify no new synthesis allowance
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile} from 'node:fs/promises';
+          const j=async f=>JSON.parse(await readFile(f));
+          const s=await j('docs/audio/PROGRESSIVE-STATUS.json'),e=await j('docs/audio/ENGINE-STRATEGY-STATE.json'),f=await j('docs/audio/TTS-FREEZE.json');
+          if(s.exactCount!==10||s.fallbackCount!==5||e.threshold!==40||e.successfulTtsSinceLastNewExact!==40||f.active!==true||f.queuePolicy?.mode!=='new-content-before-renewal'||Number(process.env.GITHUB_RUN_ATTEMPT)!==1)throw new Error('Refuse replay or changed exhausted authorization');
+          NODE
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Verify owner binding and human-error precedence
+        run: |
+          node scripts/test-audio-completion40-review.mjs
+          node scripts/test-audio-human-evidence-adjudication.mjs
+          node scripts/test-audio-lifecycle.mjs
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche40-execution-37777589258
+          path: completion40-two
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37777589258'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-reconstructed-37626334800
+          path: completion40-others
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37626334800'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-completion40-final-review-37781294858
+          path: completion40-review
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37781294858'
+      - name: Certify three saved candidates without provider credentials or calls
+        run: |
+          node scripts/audio-completion40-certify.mjs
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          npm run build
+      - name: Restrict production delta to the three approved saved files
+        run: |
+          node --input-type=module <<'NODE'
+          import {execFileSync} from 'node:child_process';import {readFile} from 'node:fs/promises';
+          const allowed=['8f0fcef1d803164a','1d1b681593122b59','34e34b6f4633d928'].map(k=>'public/audio/articles/'+k+'/');
+          for(const p of execFileSync('git',['diff','--name-only','--','public/audio'],{encoding:'utf8'}).trim().split('\n').filter(Boolean))if(!allowed.some(x=>p.startsWith(x)))throw new Error('Unexpected public/audio mutation '+p);
+          const r=JSON.parse(await readFile('docs/audio/COMPLETION40-PUBLICATION-20261011.json'));if(r.published.length!==3||r.ttsCalls!==0||r.newAsrCalls!==0||r.actualAudioErrors!==2)throw new Error('Unexpected owner review outcome');
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-completion40-promotion-${{ github.run_id }}
+          path: |
+            docs/audio/COMPLETION40-PUBLICATION-20261011.json
+            docs/audio/COMPLETION40-REVIEW-VALIDATION-*-20261011.json
+            docs/audio/PROGRESSIVE-STATUS.json
+            docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json
+            docs/audio/ENGINE-STRATEGY-STATE.json
+            docs/audio/TTS-FREEZE.json
+            public/audio/articles/8f0fcef1d803164a/
+            public/audio/articles/1d1b681593122b59/
+            public/audio/articles/34e34b6f4633d928/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Commit verified 13/15 publication to main
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f public/audio/articles/8f0fcef1d803164a public/audio/articles/1d1b681593122b59 public/audio/articles/34e34b6f4633d928
+          git add docs/audio/COMPLETION40-PUBLICATION-20261011.json docs/audio/COMPLETION40-REVIEW-VALIDATION-*-20261011.json
+          git add docs/audio/PROGRESSIVE-STATUS.json docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json
+          git commit -m 'audio: publish 13/15 Exact after owner-bound completion40 review'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+      - name: Verify native Cloudflare deployment and live audio hashes
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/audio-completion40-verify-live.mjs
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && success()
+        with:
+          name: bareeq-completion40-live-${{ github.run_id }}
+          path: docs/audio/COMPLETION40-LIVE-VERIFICATION-20261011.json
+          retention-days: 90
+          if-no-files-found: error
