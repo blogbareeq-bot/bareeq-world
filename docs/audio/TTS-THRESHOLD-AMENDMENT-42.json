@@ -13,7 +13,7 @@
   "additionalSuccessfulRequestsAuthorized": 2,
   "maximumProviderAttempts": 2,
   "providerAttemptsConsumed": 1,
-  "successfulRequestsConsumed": 0,
+  "successfulRequestsConsumed": 1,
   "automaticExpansion": false,
   "automaticRetry": false,
   "automaticProviderDispatch": false,
@@ -154,13 +154,14 @@
       "baselineRegionTranscript": "في الشاشة توجد أقطاب كثيرة مرتبة بعينية وتعرف دارة التحكم الحالة الكهربائية المعتادة للشبكة عند لا يقترب منها شيء فما يدخل إصبعك إلى المشهد",
       "maximumProviderAttempts": 1,
       "providerAttemptsConsumed": 1,
-      "successfulTtsConsumed": 0,
+      "successfulTtsConsumed": 1,
       "dispatchAttempt": {
         "runId": "38121863055",
         "attemptNumber": 1,
-        "status": "RESERVED",
+        "status": "SUCCESSFUL_RESPONSE",
         "reservedAt": "2026-10-11T07:36:19.653Z"
-      }
+      },
+      "providerReceiptSha256": "349fc8d8d26799f4590db45b85fbb3c7c0ee21310ce2be50ddc44c77e3b109e2"
     },
     {
       "id": "REPAIR2-C1",

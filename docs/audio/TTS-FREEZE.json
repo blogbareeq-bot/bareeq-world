@@ -15,7 +15,7 @@
     "fallback": 2,
     "activePending": 2,
     "excluded": 0,
-    "successfulTtsSinceLastNewExact": 40,
+    "successfulTtsSinceLastNewExact": 41,
     "threshold": 42
   },
   "excludedArticles": [
@@ -134,7 +134,7 @@
     "boundedTranche42": {
       "decisionId": "COMPLETION15-TWO-REPAIRS-20261011-v1",
       "successfulRequestsAuthorized": 2,
-      "successfulRequestsConsumed": 0,
+      "successfulRequestsConsumed": 1,
       "maximumStrategyThreshold": 42,
       "executionStatus": "EXECUTING",
       "authorizationScope": "Two fixed whole-context repair texts, one provider attempt per target, no retries; new owner listening before publication."
