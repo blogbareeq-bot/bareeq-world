@@ -12,7 +12,7 @@
   "successfulRequestBaseline": 40,
   "additionalSuccessfulRequestsAuthorized": 2,
   "maximumProviderAttempts": 2,
-  "providerAttemptsConsumed": 1,
+  "providerAttemptsConsumed": 2,
   "successfulRequestsConsumed": 1,
   "automaticExpansion": false,
   "automaticRetry": false,
@@ -223,8 +223,14 @@
       "baselineContextSha256": "c58b1891a4d79593098c516bfe86c6d489b209e73a67683116faa325d997b4d6",
       "baselineRegionTranscript": "ويعرض تقرير المنظمة الدولية للفرنكفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين المنظمة الدولية للفرنكفونية",
       "maximumProviderAttempts": 1,
-      "providerAttemptsConsumed": 0,
-      "successfulTtsConsumed": 0
+      "providerAttemptsConsumed": 1,
+      "successfulTtsConsumed": 0,
+      "dispatchAttempt": {
+        "runId": "38121863055",
+        "attemptNumber": 1,
+        "status": "RESERVED",
+        "reservedAt": "2026-10-11T07:36:34.150Z"
+      }
     }
   ],
   "publicationRequiresNewHumanListening": true,
