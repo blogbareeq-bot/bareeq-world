@@ -1,0 +1,106 @@
+name: Bareeq new-content bounded full synthesis
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/audio/NEW-CONTENT-FULL-SYNTHESIS-AUTHORIZATION.json'
+      - 'scripts/audio-new-content-full-synthesis-execute.mjs'
+      - 'scripts/audio-tts-freeze-guard.mjs'
+      - 'scripts/audio-gemini-tts.mjs'
+      - '.github/workflows/audio-new-content-full-synthesis.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bareeq-new-content-full-synthesis-live
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - id: gate
+        name: Check exact bounded authorization
+        shell: bash
+        run: |
+          STATUS=$(node -p "JSON.parse(require('fs').readFileSync('docs/audio/NEW-CONTENT-FULL-SYNTHESIS-AUTHORIZATION.json','utf8')).authorizationStatus")
+          if [ "$STATUS" = "AUTHORIZED" ] && [ "${GITHUB_RUN_ATTEMPT}" = "1" ]; then
+            echo "should-run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should-run=false" >> "$GITHUB_OUTPUT"
+            echo "FULL_SYNTHESIS_DISPATCH=SKIPPED status=$STATUS runAttempt=${GITHUB_RUN_ATTEMPT}"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.should-run == 'true'
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.gate.outputs.should-run == 'true'
+        run: npm ci
+
+      - name: Offline safety gates
+        if: steps.gate.outputs.should-run == 'true'
+        run: |
+          node scripts/test-audio-tts-freeze-guard.mjs
+          node scripts/check-speech-scripts.mjs
+          node scripts/audio-priority-guard.mjs --target="هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه"
+          node scripts/audio-new-content-full-synthesis-preflight.mjs
+          node --check scripts/audio-new-content-full-synthesis-execute.mjs
+          node --check scripts/audio-gemini-tts.mjs
+
+      - name: Verify Gemini credential
+        if: steps.gate.outputs.should-run == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          test -n "$GEMINI_API_KEY"
+          echo "GEMINI_CREDENTIAL=present"
+
+      - name: Generate eight parts then run technical QA and dual ASR
+        if: steps.gate.outputs.should-run == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BAREEQ_AUDIO_PRODUCTION_LOCK: '1'
+        run: node scripts/audio-new-content-full-synthesis-execute.mjs
+
+      - name: Persist authorization and result state
+        if: always() && steps.gate.outputs.should-run == 'true'
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/audio/NEW-CONTENT-FULL-SYNTHESIS-AUTHORIZATION.json
+          test ! -f docs/audio/NEW-CONTENT-FULL-SYNTHESIS-RESULT.json || git add docs/audio/NEW-CONTENT-FULL-SYNTHESIS-RESULT.json
+          if git diff --cached --quiet; then
+            echo "FULL_SYNTHESIS_STATE=no-change"
+            exit 0
+          fi
+          git commit -m "audio: record screen-focus full synthesis execution"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+
+      - name: Upload immutable candidate evidence
+        if: always() && steps.gate.outputs.should-run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-screen-focus-full-candidate-${{ github.run_id }}
+          path: |
+            audio-candidates/
+            docs/audio/NEW-CONTENT-FULL-SYNTHESIS-AUTHORIZATION.json
+            docs/audio/NEW-CONTENT-FULL-SYNTHESIS-RESULT.json
+            docs/audio/NEW-CONTENT-FULL-SYNTHESIS-PREFLIGHT.json
+            docs/audio/NEW-CONTENT-TEST-CLIP-HUMAN-LISTENING.json
+          if-no-files-found: warn
+          retention-days: 30
