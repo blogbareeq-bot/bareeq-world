@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {resolveAsrResponseModel,recoverRedirectedMicroReport,assertIndependentActualModels,DOCUMENTED_FLASH_REDIRECT} from './audio-asr-documented-redirect.mjs';
+import {extractTranscript} from './audio-asr-transcribe.mjs';
+const requested='gemini-3.5-flash',actual='gemini-3.6-flash';
+assert.equal(resolveAsrResponseModel(requested,actual).accepted,false);
+assert.equal(resolveAsrResponseModel(requested,actual,true).accepted,true);
+for(const m of ['gemini-3.8-flash','gemini-3.6-flash-lite','some-other-model'])assert.equal(resolveAsrResponseModel(requested,m,true).accepted,false);
+assert.equal(resolveAsrResponseModel('gemini-3.5-flash-lite',actual,true).accepted,false);
+const payload={id:'retained-id',status:'completed',model:actual,steps:[{content:[{text:'ويعرض تقرير المنظمة الدولية'}]}]};
+const report={httpStatus:200,fullSha256:'sealed-audio',requestedModel:requested,actualResponseModel:actual,responseId:payload.id,error:'ASR response model does not match requested',rawTranscript:JSON.stringify(payload)};
+const recovered=recoverRedirectedMicroReport({report,expectedText:'وَيَعْرِضُ تقرير المنظمة الدولية',audioSha256:'sealed-audio',extractTranscript,sourceReportSha256:'sealed-report'});
+assert.equal(recovered.status,'passed');assert.equal(recovered.additionalProviderCalls,0);assert.deepEqual(recovered.documentedModelRedirect,DOCUMENTED_FLASH_REDIRECT);
+assert.throws(()=>recoverRedirectedMicroReport({report,expectedText:'x',audioSha256:'different-audio',extractTranscript}));
+assert.throws(()=>recoverRedirectedMicroReport({report:{...report,rawTranscript:'incomplete JSON'},expectedText:'x',audioSha256:'sealed-audio',extractTranscript}));
+assert.throws(()=>recoverRedirectedMicroReport({report:{...report,responseId:'wrong'},expectedText:'x',audioSha256:'sealed-audio',extractTranscript}));
+assert.throws(()=>assertIndependentActualModels([recovered,recovered]));
+assert.deepEqual(assertIndependentActualModels([recovered,{...recovered,actualResponseModel:'gemini-3.5-flash-lite'}]),[actual,'gemini-3.5-flash-lite']);
+console.log('TRANCHE42_QA_RECOVERY_OFFLINE=PASS strict-default, documented-opt-in, retained-response-binding, independent-actual-models; providerCalls=0');

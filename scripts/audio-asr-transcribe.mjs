@@ -17,6 +17,7 @@ import {
 import { deleteUploadedFile, uploadResumableFile, addHttp, emptyHttp } from './audio-files-api.mjs';
 import { boundIdentity } from './audio-report.mjs';
 import { PRODUCTION_NARRATOR } from './audio-lifecycle.mjs';
+import { resolveAsrResponseModel } from './audio-asr-documented-redirect.mjs';
 
 export function geminiInteractionsUrl() {
   const override = process.env.GEMINI_INTERACTIONS_ENDPOINT?.trim() || process.env.GEMINI_TTS_ENDPOINT?.trim();
@@ -153,6 +154,7 @@ export async function transcribeFullAudio({
   skipUpload = false,
   article = null,
   speechScriptHash = null,
+  allowDocumentedRedirect = false,
 }) {
   assertAsrModel(model);
   const startedAt = new Date().toISOString();
@@ -299,7 +301,8 @@ export async function transcribeFullAudio({
   }
   const responseModel = extractResponseModel(payload);
   const responseId = extractResponseId(payload);
-  if (responseModel && !String(responseModel).includes(model)) {
+  const responseModelResolution = resolveAsrResponseModel(model, responseModel, allowDocumentedRedirect);
+  if (!responseModelResolution.accepted) {
     await fail(`ASR response model ${responseModel} does not match requested ${model}. Silent substitution is forbidden.`, {
       actualResponseModel: responseModel,
       responseId,
@@ -323,6 +326,7 @@ export async function transcribeFullAudio({
       requestedModel: model,
       actualResponseModel: responseModel || null,
       actualResponseModelSource: responseModel ? 'response.model' : 'not-returned-by-api',
+      documentedModelRedirect: responseModelResolution.redirect,
       responseId,
       fileUri: uploaded.uri,
       asrInteractions: 1,
