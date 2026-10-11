@@ -3,6 +3,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { sha256 } from './audio-constants.mjs';
 import { mp3DurationSeconds } from './mp3-duration.mjs';
+import { assertFfmpeg } from './audio-ffmpeg.mjs';
 import { transcribeDualAsr } from './audio-asr-transcribe.mjs';
 
 const ROOT = process.cwd();
@@ -32,7 +33,8 @@ export async function validateNewContentTestClip({ root=ROOT, audioPath=process.
   const expectedText=selectedIds.map(id=>map.get(id)?.spokenText).filter(Boolean).join('\n\n');
   if(selectedIds.length!==5 || expectedText.length<100) throw new Error('selected test text is incomplete');
 
-  const decode=await run('ffmpeg',['-v','error','-i',audioPath,'-f','null','-']);
+  const { ffmpeg } = await assertFfmpeg();
+  const decode=await run(ffmpeg,['-v','error','-i',audioPath,'-f','null','-']);
   const duration=await mp3DurationSeconds(audioPath);
   const technical={
     decodePassed:decode.code===0,
