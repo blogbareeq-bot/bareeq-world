@@ -277,6 +277,13 @@
         "reservedAt": "2026-10-11T07:53:33.769Z",
         "actualResponseModel": "gemini-3.5-flash-lite",
         "reportSha256": "71fc7b253c9ea1266431bfc489d408ba7b7e121e5c9b5c0fdb29a518422c85f2"
+      },
+      {
+        "id": "REPAIR2-S",
+        "model": "gemini-3.5-flash",
+        "runId": "38122766909",
+        "status": "RESERVED",
+        "reservedAt": "2026-10-11T07:53:46.484Z"
       }
     ],
     "status": "IN_PROGRESS"
