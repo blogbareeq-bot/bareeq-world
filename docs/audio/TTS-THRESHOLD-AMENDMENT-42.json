@@ -268,7 +268,15 @@
       "runAttempt": 1,
       "claimedAt": "2026-10-11T07:53:30.769Z"
     },
-    "attempts": [],
+    "attempts": [
+      {
+        "id": "REPAIR2-S",
+        "model": "gemini-3.5-flash-lite",
+        "runId": "38122766909",
+        "status": "RESERVED",
+        "reservedAt": "2026-10-11T07:53:33.769Z"
+      }
+    ],
     "status": "IN_PROGRESS"
   }
 }
