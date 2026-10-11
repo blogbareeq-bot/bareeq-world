@@ -53,7 +53,7 @@ export async function buildFullSynthesisPreflight({ articleId=ARTICLE, root=ROOT
       active:true,
       generalSynthesisStillFrozen:true,
       legacyRenewalAuthorized:false,
-    }
+    },
     candidateFingerprint:fingerprint,
     successfulTtsRequestsRequired:split.ttsRequests,
     providerAttemptsMaximum:split.ttsRequests,
