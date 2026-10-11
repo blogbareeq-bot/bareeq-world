@@ -1,0 +1,24 @@
+{
+  "schema": "bareeq.audio-test-clip-human-listening.v1",
+  "decisionId": "NEW-CONTENT-SCREEN-FOCUS-TEST-CLIP-HUMAN-20261011-v1",
+  "articleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
+  "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
+  "testClipPlanHash": "faaeb2a6912421e6323a73fed25d95b0aeda93140e11b5e018ed5f6622ee6c55",
+  "audioSha256": "f9fb302f78e30ed1829ae0e8b3851921172802a0fff5a27299e5071e39bf532c",
+  "sourceRunId": "38118406428",
+  "artifactId": "11694398055",
+  "reviewedBy": "owner",
+  "reviewedAt": "2026-10-11T07:12:00.000Z",
+  "verdict": "passed",
+  "ownerStatement": "كلها سليمة",
+  "reviewedSegments": [
+    "paragraph-3ca80b1b13ac",
+    "paragraph-54872c0ed876",
+    "paragraph-ad550ee8cc12",
+    "paragraph-1d2f4c32c1c6",
+    "paragraph-040ced01ad47"
+  ],
+  "notes": "Owner listened to all five extracted review clips and confirmed all are correct. This human decision is bound to the immutable test-clip audio SHA-256 above.",
+  "fullArticleSynthesisApproved": true,
+  "publicationApproved": false
+}
