@@ -5,7 +5,7 @@
   "exactBaseline": 13,
   "successfulTtsSinceLastNewExact": 42,
   "status": "paused",
-  "reason": "Owner approved exactly two fixed repair requests and their priority exception; keep global freeze and all 13 approved recordings unchanged.",
+  "reason": "Two fixed repair attempts closed; retain audio for independent QA and owner listening; no further TTS or retries authorized.",
   "lastExactAt": "2026-10-11T06:20:04.939Z",
   "lastRunId": "38121863055",
   "updatedAt": "2026-10-11T07:36:43.452Z",

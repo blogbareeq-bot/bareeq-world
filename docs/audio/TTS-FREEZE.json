@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Execute the two approved legacy repairs under their bounded priority exception, then QA and owner listening before publication. Preserve the separately approved new-content budget and its final human listening gate.",
+    "nextAction": "Complete both repaired-context QA and obtain owner listening before publication. Preserve global freeze and new-content-first policy outside the consumed exception.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -136,7 +136,7 @@
       "successfulRequestsAuthorized": 2,
       "successfulRequestsConsumed": 2,
       "maximumStrategyThreshold": 42,
-      "executionStatus": "EXECUTING",
+      "executionStatus": "EXECUTED",
       "authorizationScope": "Two fixed whole-context repair texts, one provider attempt per target, no retries; new owner listening before publication."
     }
   },
