@@ -195,8 +195,8 @@ async function decodeAndEncodePcmAudio(outputAudio, ffmpegPath, label) {
   return encodeGeminiPcmToMp3(pcm, ffmpeg);
 }
 
-export async function synthesizeGeminiPart({ apiKey, part, context, voice = PRODUCTION_VOICE, model = PRODUCTION_TTS_MODEL, fetchImpl = globalThis.fetch, ffmpegPath }) {
-  if (fetchImpl === globalThis.fetch) await assertTtsUnfrozen({ operation: 'gemini-interactions-tts' });
+export async function synthesizeGeminiPart({ apiKey, part, context, voice = PRODUCTION_VOICE, model = PRODUCTION_TTS_MODEL, fetchImpl = globalThis.fetch, ffmpegPath, newContentFullContext }) {
+  if (fetchImpl === globalThis.fetch) await assertTtsUnfrozen({ operation: 'gemini-interactions-tts', newContentFullContext });
   if (!apiKey?.trim()) throw Object.assign(new Error('GEMINI_API_KEY is absent. No TTS request was sent.'), { exitCode: EXIT_CONFIG });
   const endpoint = geminiTtsEndpoint();
   let response;
@@ -273,6 +273,12 @@ export async function resolveProductionSynthesizer({ apiKey = process.env.GEMINI
     apiKey,
     part,
     context: { articleTitle: article.title, partIndex: part.partIndex, partCount: splitPlan.parts.length, correctionHint },
+    newContentFullContext: process.env.BAREEQ_NEW_CONTENT_FULL_AUTHORIZED === '1' ? {
+      articleId: article.articleId,
+      speechScriptHash: article.speechScriptHash,
+      partIndex: part.partIndex,
+      partCount: splitPlan.parts.length,
+    } : null,
     fetchImpl,
   });
 }
