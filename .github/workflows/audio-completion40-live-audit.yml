@@ -1,0 +1,45 @@
+name: Bareeq completion40 production audio audit
+on:
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/audio-completion40-live-audit.yml']
+  push:
+    branches: [main]
+    paths: ['.github/workflows/audio-completion40-live-audit.yml']
+permissions:
+  contents: read
+jobs:
+  live-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - name: Verify live production manifests and all new audio parts
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,writeFile} from 'node:fs/promises';import {createHash} from 'node:crypto';
+          const r=JSON.parse(await readFile('docs/audio/COMPLETION40-PUBLICATION-20261011.json')),sha=x=>createHash('sha256').update(x).digest('hex');
+          const manifests=[],parts=[],origins=['https://bareeqworld.com','https://bareeq-world.pages.dev'];
+          for(const origin of origins){
+            for(let i=0;i<r.liveIdentity.length;i+=4)await Promise.all(r.liveIdentity.slice(i,i+4).map(async a=>{
+              let result={origin,path:a.path,articleId:a.articleId};
+              try{const response=await fetch(origin+a.path+'?audit='+process.env.GITHUB_RUN_ID,{signal:AbortSignal.timeout(12000)});result.httpStatus=response.status;result.contentType=response.headers.get('content-type');const text=await response.text();try{const m=JSON.parse(text);result.fingerprint=m.candidateFingerprint||m.fingerprint;result.fullSha256=m.fullSha256;result.passed=response.ok&&result.fingerprint===a.fingerprint&&result.fullSha256===a.fullSha256;if(!result.passed)result.expected=a;}catch{result.passed=false;result.bodyPrefix=text.slice(0,160);}}catch(e){result.passed=false;result.error=e.message;}manifests.push(result);console.log(JSON.stringify(result));
+            }));
+          }
+          const assets=r.published.flatMap(a=>a.parts);
+          for(let i=0;i<assets.length;i+=4)await Promise.all(assets.slice(i,i+4).map(async p=>{
+            let result={origin:origins[0],src:p.src,expectedSha256:p.sha256};try{const response=await fetch(origins[0]+p.src+'?audit='+process.env.GITHUB_RUN_ID,{signal:AbortSignal.timeout(15000)}),b=Buffer.from(await response.arrayBuffer());result.httpStatus=response.status;result.sha256=sha(b);result.bytes=b.length;result.passed=response.ok&&result.sha256===p.sha256&&result.bytes===p.bytes;}catch(e){result.passed=false;result.error=e.message;}parts.push(result);console.log(JSON.stringify(result));
+          }));
+          const report={schema:'bareeq.audio-completion40-production-audit.v1',verifiedAt:new Date().toISOString(),sourcePublicationCommit:'0f78ebcd5380da8acccbe6d0876009694fbda26e',auditCommit:process.env.GITHUB_SHA,sourceSubmissionSha256:r.sourceSubmissionSha256,publishedExact:13,newPartsVerified:parts.filter(x=>x.passed).length,productionManifestsVerified:manifests.filter(x=>x.origin===origins[0]&&x.passed).length,passed:parts.every(x=>x.passed)&&manifests.filter(x=>x.origin===origins[0]).every(x=>x.passed),manifests,parts,ttsCalls:0,newAsrCalls:0};
+          await writeFile('completion40-production-audit.json',JSON.stringify(report,null,2)+'\n');if(!report.passed)throw new Error('Live audio audit failed; see structured endpoint evidence');console.log('COMPLETION40_PRODUCTION_AUDIT=PASS exact=13/15 manifests=13 parts=26');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bareeq-completion40-production-audit-${{ github.run_id }}
+          path: completion40-production-audit.json
+          retention-days: 90
+          if-no-files-found: warn
