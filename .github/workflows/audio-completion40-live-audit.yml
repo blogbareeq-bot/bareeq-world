@@ -34,7 +34,6 @@ jobs:
           console.log('PUBLISHED_AUDIO_DIST=PASS exact='+before.articles.length+' every protected source file copied unchanged');
           NODE
   live-audit:
-    if: github.event_name == 'push'
     needs: build-protection
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -48,8 +47,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           node --input-type=module <<'NODE'
-          import {execFileSync} from 'node:child_process';
-          for(let i=0;i<32;i++){const j=JSON.parse(execFileSync('gh',['api',`repos/${process.env.GITHUB_REPOSITORY}/commits/${process.env.GITHUB_SHA}/check-runs`],{encoding:'utf8'})),cf=j.check_runs.find(x=>x.name==='Cloudflare Pages');if(cf?.conclusion==='success'){console.log('NATIVE_CLOUDFLARE_MAIN=PASS '+process.env.GITHUB_SHA);process.exit(0);}if(cf?.conclusion==='failure')throw new Error('Native Cloudflare deployment failed');await new Promise(r=>setTimeout(r,15000));}throw new Error('Cloudflare main deployment timed out');
+          import {execFileSync} from 'node:child_process';import {readFile,writeFile} from 'node:fs/promises';
+          const api=path=>JSON.parse(execFileSync('gh',['api','repos/'+process.env.GITHUB_REPOSITORY+'/'+path],{encoding:'utf8'}));
+          const event=JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH)),source=event.pull_request?.base?.sha||process.env.GITHUB_SHA;
+          for(let i=0;i<32;i++){const head=api('git/ref/heads/main').object.sha,comparison=api('compare/'+source+'...'+head);if(!['ahead','identical'].includes(comparison.status))throw new Error('Current main is not a descendant of the audited source');const j=api('commits/'+head+'/check-runs?filter=all&per_page=100'),cf=j.check_runs.find(x=>x.name==='Cloudflare Pages'&&x.conclusion==='success');if(cf){await writeFile('completion40-deployment.json',JSON.stringify({sourceCommit:source,deployedMainCommit:head,cloudflareCheckId:cf.id,cloudflareConclusion:cf.conclusion}));console.log('NATIVE_CLOUDFLARE_MAIN=PASS '+head);process.exit(0);}await new Promise(r=>setTimeout(r,15000));}throw new Error('Cloudflare current-main deployment timed out');
           NODE
       - name: Verify live production manifests and all new audio parts
         run: |
@@ -67,13 +68,13 @@ jobs:
           for(let i=0;i<assets.length;i+=4)await Promise.all(assets.slice(i,i+4).map(async p=>{
             let result={origin:origins[0],src:p.src,expectedSha256:p.sha256};try{const response=await fetch(origins[0]+p.src+'?audit='+process.env.GITHUB_RUN_ID,{signal:AbortSignal.timeout(15000)}),b=Buffer.from(await response.arrayBuffer());result.httpStatus=response.status;result.sha256=sha(b);result.bytes=b.length;result.passed=response.ok&&result.sha256===p.sha256&&result.bytes===p.bytes;}catch(e){result.passed=false;result.error=e.message;}parts.push(result);console.log(JSON.stringify(result));
           }));
-          const report={schema:'bareeq.audio-completion40-production-audit.v1',verifiedAt:new Date().toISOString(),sourcePublicationCommit:'0f78ebcd5380da8acccbe6d0876009694fbda26e',auditCommit:process.env.GITHUB_SHA,sourceSubmissionSha256:r.sourceSubmissionSha256,publishedExact:13,auditRunId:process.env.GITHUB_RUN_ID,newPartsVerified:parts.filter(x=>x.passed&&newSources.has(x.src)).length,allPublishedPartsVerified:parts.filter(x=>x.passed).length,productionManifestsVerified:manifests.filter(x=>x.origin===origins[0]&&x.passed).length,passed:parts.every(x=>x.passed)&&manifests.filter(x=>x.origin===origins[0]).every(x=>x.passed),manifests,parts,ttsCalls:0,newAsrCalls:0};
+          const report={schema:'bareeq.audio-completion40-production-audit.v1',verifiedAt:new Date().toISOString(),sourcePublicationCommit:'0f78ebcd5380da8acccbe6d0876009694fbda26e',auditCommit:process.env.GITHUB_SHA,sourceSubmissionSha256:r.sourceSubmissionSha256,publishedExact:13,auditRunId:process.env.GITHUB_RUN_ID,deployment:JSON.parse(await readFile('completion40-deployment.json')),newPartsVerified:parts.filter(x=>x.passed&&newSources.has(x.src)).length,allPublishedPartsVerified:parts.filter(x=>x.passed).length,productionManifestsVerified:manifests.filter(x=>x.origin===origins[0]&&x.passed).length,passed:parts.every(x=>x.passed)&&manifests.filter(x=>x.origin===origins[0]).every(x=>x.passed),manifests,parts,ttsCalls:0,newAsrCalls:0};
           await writeFile('completion40-production-audit.json',JSON.stringify(report,null,2)+'\n');if(!report.passed)throw new Error('Live audio audit failed; see structured endpoint evidence');console.log('COMPLETION40_PRODUCTION_AUDIT=PASS exact=13/15 manifests=13 newParts=26 allParts='+report.allPublishedPartsVerified);
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: bareeq-completion40-production-audit-${{ github.run_id }}
+          name: bareeq-completion40-production-audit-${{ github.run_id }}-${{ github.run_attempt }}
           path: completion40-production-audit.json
           retention-days: 90
           if-no-files-found: warn
