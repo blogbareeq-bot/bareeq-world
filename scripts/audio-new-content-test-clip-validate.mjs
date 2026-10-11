@@ -2,7 +2,6 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { sha256 } from './audio-constants.mjs';
-import { mp3DurationSeconds } from './mp3-duration.mjs';
 import { assertFfmpeg } from './audio-ffmpeg.mjs';
 import { transcribeDualAsr } from './audio-asr-transcribe.mjs';
 
@@ -33,9 +32,12 @@ export async function validateNewContentTestClip({ root=ROOT, audioPath=process.
   const expectedText=selectedIds.map(id=>map.get(id)?.spokenText).filter(Boolean).join('\n\n');
   if(selectedIds.length!==5 || expectedText.length<100) throw new Error('selected test text is incomplete');
 
-  const { ffmpeg } = await assertFfmpeg();
+  const { ffmpeg, ffprobe } = await assertFfmpeg();
   const decode=await run(ffmpeg,['-v','error','-i',audioPath,'-f','null','-']);
-  const duration=await mp3DurationSeconds(audioPath);
+  const probe=await run(ffprobe,['-v','error','-show_entries','format=duration','-of','default=noprint_wrappers=1:nokey=1',audioPath]);
+  if (probe.code !== 0) throw new Error(`ffprobe could not determine test clip duration: ${probe.stderr.slice(0,500)}`);
+  const duration=Number(probe.stdout.trim());
+  if (!Number.isFinite(duration) || duration <= 0) throw new Error(`ffprobe returned invalid test clip duration: ${probe.stdout.trim()}`);
   const technical={
     decodePassed:decode.code===0,
     durationSeconds:duration,
