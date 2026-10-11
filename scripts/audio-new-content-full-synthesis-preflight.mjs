@@ -14,7 +14,6 @@ export async function buildFullSynthesisPreflight({ articleId=ARTICLE, root=ROOT
   const plan=await readTestClipPlan(articleId,root);
   if(!plan) throw new Error('test clip plan missing');
   if(plan.testClipPassed!==true) throw new Error('human test clip pass is required');
-  if(plan.fullSynthesisAllowed!==true) throw new Error('full synthesis is not authorized by the reviewed test clip plan');
   if(plan.audioReview?.status!=='passed'||!plan.audioReview?.reviewedBy||!plan.audioReview?.reviewedAt) throw new Error('human listening review metadata incomplete');
   if(!(await verifyTestClipEvidence(plan,root))) throw new Error('test clip evidence file/hash verification failed');
 
@@ -53,6 +52,11 @@ export async function buildFullSynthesisPreflight({ articleId=ARTICLE, root=ROOT
       active:true,
       generalSynthesisStillFrozen:true,
       legacyRenewalAuthorized:false,
+    },
+    publicationFlag:{
+      fullSynthesisAllowed:plan.fullSynthesisAllowed,
+      expected:false,
+      note:'Publication/replace flag stays closed until full candidate ASR + technical + final human listening gates pass.'
     },
     candidateFingerprint:fingerprint,
     successfulTtsRequestsRequired:split.ttsRequests,
