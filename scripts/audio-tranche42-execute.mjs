@@ -32,7 +32,7 @@ async function prepare(){
 async function execute(){
  const {amendment:a,strategy,freeze}=await readTranche42();const p=await json(path.join(out,'preflight.json'));
  if(env.GITHUB_ACTIONS!=='true'||env.GITHUB_REF!=='refs/heads/main'||env.GITHUB_RUN_ATTEMPT!=='1'||!env.GEMINI_API_KEY?.trim()||a.authorizationStatus!=='AUTHORIZED'||a.executionStatus!=='PREFLIGHT_PASSED'||a.executionClaim||!p.passed)throw new Error('first main authorized attempt required');
- a.executionClaim={runId:env.GITHUB_RUN_ID,runAttempt:1,headSha:env.GITHUB_SHA,claimedAt:new Date().toISOString()};a.authorizationStatus='IN_PROGRESS';a.executionStatus='EXECUTING';freeze.reviewPolicy.boundedTranche42.executionStatus='EXECUTING';await write(ledger[0],a);await write(ledger[2],freeze);persist('audio: claim two approved repairs once before TTS');
+ a.executionClaim={runId:env.GITHUB_RUN_ID,runAttempt:1,headSha:env.GITHUB_SHA,preflightSha256:digest42(await readFile(path.join(out,'preflight.json'))),claimedAt:new Date().toISOString()};a.authorizationStatus='IN_PROGRESS';a.executionStatus='EXECUTING';freeze.reviewPolicy.boundedTranche42.executionStatus='EXECUTING';await write(ledger[0],a);await write(ledger[2],freeze);persist('audio: claim two approved repairs once before TTS');
  const result={schema:'bareeq.audio-tranche42-execution.v1',decisionId:DECISION42,runId:env.GITHUB_RUN_ID,publicationPerformed:false,targets:[]};
  for(const t of a.targets){
   if(t.providerAttemptsConsumed||t.dispatchAttempt)throw new Error('repeated target');

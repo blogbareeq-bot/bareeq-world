@@ -41,10 +41,10 @@ export function validateTranche42Dispatch({amendment:a,context:c,text,operation,
  if(operation!=='gemini-generate-content-tts'||env.GITHUB_ACTIONS!=='true'||env.GITHUB_REF!=='refs/heads/main'||env.GITHUB_RUN_ATTEMPT!=='1')fail('first main run only');
  if(a.decisionId!==DECISION42||c.decisionId!==DECISION42||a.authorizationStatus!=='IN_PROGRESS'||a.executionStatus!=='EXECUTING'||a.executionClaim?.runId!==env.GITHUB_RUN_ID||a.executionClaim.runAttempt!==1||a.successfulRequestsConsumed>=2)fail('execution claim');
  const t=a.targets.find(x=>x.id===c.requestId);
- if(!t||t.articleId!==c.articleId||t.successfulTtsConsumed!==0||t.providerAttemptsConsumed!==1||t.dispatchAttempt?.status!=='RESERVED'||t.dispatchAttempt.runId!==env.GITHUB_RUN_ID||t.generationText!==text||digest42(text)!==c.generationTextSha256||c.generationTextSha256!==t.generationTextSha256)fail('single reserved exact text');
+ if(!t||t.articleId!==c.articleId||t.successfulTtsConsumed!==0||t.providerAttemptsConsumed!==1||t.dispatchAttempt?.status!=='RESERVED'||t.dispatchAttempt.attemptNumber!==1||t.dispatchAttempt.runId!==env.GITHUB_RUN_ID||t.generationText!==text||digest42(text)!==c.generationTextSha256||c.generationTextSha256!==t.generationTextSha256)fail('single reserved exact text');
  return {decisionId:a.decisionId,requestId:t.id};
 }
 const used=new Set();
 export async function tranche42OverrideAuthorized({operation,context,text,env=process.env}){
- if(!context)return null;const {amendment}=await readTranche42();const result=validateTranche42Dispatch({amendment,context,text,operation,env});const k=env.GITHUB_RUN_ID+':'+result.requestId;if(used.has(k))fail('duplicate dispatch');used.add(k);return result;
+ if(!context)return null;const {amendment}=await readTranche42();const preflight=await readFile('tranche42-execution/preflight.json');if(digest42(preflight)!==amendment.executionClaim?.preflightSha256)fail('sealed preflight drift');const result=validateTranche42Dispatch({amendment,context,text,operation,env});const k=env.GITHUB_RUN_ID+':'+result.requestId;if(used.has(k))fail('duplicate dispatch');used.add(k);return result;
 }
