@@ -5,8 +5,8 @@
   "authorizationText": "اعتمد",
   "authorizedAt": "2026-10-11T07:10:01.000Z",
   "authorizationContext": "Owner approves raising this legacy repair tranche from 40 to 42 for two fixed TTS requests, with these repairs taking priority over the new article.",
-  "authorizationStatus": "AUTHORIZED",
-  "executionStatus": "PREFLIGHT_PASSED",
+  "authorizationStatus": "IN_PROGRESS",
+  "executionStatus": "EXECUTING",
   "previousThreshold": 40,
   "newThreshold": 42,
   "successfulRequestBaseline": 40,
@@ -225,5 +225,12 @@
     "gemini-3.5-flash"
   ],
   "maximumMicroAsrTranscriptions": 4,
-  "maximumFullAsrTranscriptions": 4
+  "maximumFullAsrTranscriptions": 4,
+  "executionClaim": {
+    "runId": "38121863055",
+    "runAttempt": 1,
+    "headSha": "c9699530916612927957f3e9fa06ea0ca9350154",
+    "preflightSha256": "228cbb600c03b2aeb2ca7cca37b895f2ec35fa3f9f44d239ec922e084d3f235c",
+    "claimedAt": "2026-10-11T07:36:18.099Z"
+  }
 }

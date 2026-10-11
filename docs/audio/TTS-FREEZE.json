@@ -136,7 +136,7 @@
       "successfulRequestsAuthorized": 2,
       "successfulRequestsConsumed": 0,
       "maximumStrategyThreshold": 42,
-      "executionStatus": "PREFLIGHT_PASSED",
+      "executionStatus": "EXECUTING",
       "authorizationScope": "Two fixed whole-context repair texts, one provider attempt per target, no retries; new owner listening before publication."
     }
   },
