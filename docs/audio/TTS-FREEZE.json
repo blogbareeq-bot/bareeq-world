@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Three saved candidates promoted with 0 TTS; two owner-confirmed audio defects remain blocked; synthesis remains frozen at consumed 40/40.",
+  "reason": "Owner approved exactly two fixed repair requests and their priority exception; keep global freeze and all 13 approved recordings unchanged.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -16,7 +16,7 @@
     "activePending": 2,
     "excluded": 0,
     "successfulTtsSinceLastNewExact": 40,
-    "threshold": 40
+    "threshold": 42
   },
   "excludedArticles": [
     "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع"
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Execute the owner-approved bounded 8-part synthesis for the first new-content article, then run technical QA + dual ASR and stop before publication for final human listening. Keep legacy renewal frozen.",
+    "nextAction": "Execute the two approved legacy repairs under their bounded priority exception, then QA and owner listening before publication. Preserve the separately approved new-content budget and its final human listening gate.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -92,7 +92,7 @@
       "status": "EXECUTED_CONSUMED",
       "successfulTtsRequestsConsumed": 1
     },
-    "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-40.json",
+    "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-42.json",
     "boundedTranche": {
       "decisionId": "COMPLETION15-TRANCHE33-v1",
       "successfulRequestsAuthorized": 3,
@@ -130,6 +130,14 @@
         "S-01-450",
         "C1-01-617-owner"
       ]
+    },
+    "boundedTranche42": {
+      "decisionId": "COMPLETION15-TWO-REPAIRS-20261011-v1",
+      "successfulRequestsAuthorized": 2,
+      "successfulRequestsConsumed": 0,
+      "maximumStrategyThreshold": 42,
+      "executionStatus": "PREFLIGHT_PASSED",
+      "authorizationScope": "Two fixed whole-context repair texts, one provider attempt per target, no retries; new owner listening before publication."
     }
   },
   "queuePolicy": {
@@ -138,7 +146,17 @@
     "policy": "docs/audio/AUDIO-PRIORITY-NEW-BEFORE-RENEWAL-v1.md",
     "enforcement": "scripts/audio-priority-guard.mjs",
     "ownerApprovedAt": "2026-10-08",
-    "note": "Priority ordering only. Does not unfreeze synthesis or authorize additional TTS requests."
+    "note": "Priority ordering only. Does not unfreeze synthesis or authorize additional TTS requests.",
+    "boundedOwnerException": {
+      "decisionId": "COMPLETION15-TWO-REPAIRS-20261011-v1",
+      "authorizationFile": "docs/audio/TTS-THRESHOLD-AMENDMENT-42.json",
+      "ownerApprovedAt": "2026-10-11T07:10:01.000Z",
+      "targetArticleIds": [
+        "how-touchscreens-work",
+        "language-soft-power-politics"
+      ],
+      "requests": 2
+    }
   },
   "newContentTestClipAuthorization": {
     "decisionId": "NEW-CONTENT-SCREEN-FOCUS-TEST-CLIP-20261011-v1",

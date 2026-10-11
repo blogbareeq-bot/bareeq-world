@@ -7,6 +7,8 @@ const f={amendment:await json('docs/audio/TTS-THRESHOLD-AMENDMENT-33.json'),stra
 // Test the historical 30..33 envelope independently of the active amendment.
 f.strategy.threshold=33;f.strategy.successfulTtsSinceLastNewExact=30+f.amendment.successfulRequestsConsumed;
 f.freeze.strategySnapshot.threshold=33;f.freeze.strategySnapshot.successfulTtsSinceLastNewExact=f.strategy.successfulTtsSinceLastNewExact;
+// Test the historical 30-to-33 envelope against its own counters, not a later authorized tranche.
+f.strategy.threshold=33;f.strategy.successfulTtsSinceLastNewExact=30+f.amendment.successfulRequestsConsumed;f.freeze.strategySnapshot.threshold=33;f.freeze.strategySnapshot.successfulTtsSinceLastNewExact=f.strategy.successfulTtsSinceLastNewExact;
 assert.equal(validateThresholdAmendment(f).remaining,3-f.amendment.successfulRequestsConsumed);
 await assert.rejects(()=>assertTtsUnfrozen({operation:'gemini-generate-content-tts'}),e=>e.code==='BAREEQ_TTS_FROZEN');
 for(const edit of [
@@ -28,3 +30,4 @@ assert.equal(validateThresholdAmendment(closed).remaining,0);
 assert.equal(f.status.publishedCount,f.status.exactCount);
 assert.ok(f.status.publishedCount>=9&&f.status.publishedCount<=15);
 console.log('Threshold amendment tests passed: 3-request cap, per-target limits, immutable Exact identities, counter binding, no replenishment and global provider freeze.');
+
