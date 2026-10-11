@@ -1,7 +1,7 @@
 {
   "schema": "bareeq.audio-new-content-test-clip-authorization.v1",
   "decisionId": "NEW-CONTENT-SCREEN-FOCUS-TEST-CLIP-20261011-v1",
-  "authorizationStatus": "AUTHORIZED",
+  "authorizationStatus": "EXECUTED",
   "authorizedAt": "2026-10-11T06:06:00.000Z",
   "authorizedBy": "owner",
   "ownerInstruction": "أكمل",
@@ -13,14 +13,33 @@
   "model": "gemini-3.1-flash-tts-preview",
   "voice": "Sadaltager",
   "successfulTtsRequestsAuthorized": 1,
-  "successfulTtsRequestsConsumed": 0,
+  "successfulTtsRequestsConsumed": 1,
   "providerAttemptsAuthorized": 1,
-  "providerAttemptsConsumed": 0,
+  "providerAttemptsConsumed": 1,
   "automaticRetry": false,
   "publicationAuthorized": false,
   "fullArticleSynthesisAuthorized": false,
   "legacyRenewalAuthorized": false,
   "freezeRemainsActive": true,
   "statusNote": "One successful TTS request is authorized only for the reviewed new-article test clip. No automatic retry, no full synthesis, no legacy renewal.",
-  "result": null
+  "result": {
+    "status": "GENERATED_AWAITING_HUMAN_LISTENING",
+    "completedAt": "2026-10-11T06:34:16.874Z",
+    "bytes": 1875213,
+    "sha256": "f9fb302f78e30ed1829ae0e8b3851921172802a0fff5a27299e5071e39bf532c",
+    "selectedSegmentIds": [
+      "paragraph-3ca80b1b13ac",
+      "paragraph-54872c0ed876",
+      "paragraph-ad550ee8cc12",
+      "paragraph-1d2f4c32c1c6",
+      "paragraph-040ced01ad47"
+    ],
+    "spokenTextBytes": 2478,
+    "artifactPath": "audio-candidates/_test-clips/هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه/07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7/test-clip.mp3"
+  },
+  "execution": {
+    "runId": "38118406428",
+    "runAttempt": 1,
+    "startedAt": "2026-10-11T06:33:05.848Z"
+  }
 }

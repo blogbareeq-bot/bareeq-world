@@ -1,0 +1,60 @@
+{
+  "schema": "bareeq.audio-new-content-test-clip-result.v1",
+  "decisionId": "NEW-CONTENT-SCREEN-FOCUS-TEST-CLIP-20261011-v1",
+  "articleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
+  "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
+  "testClipPlanHash": "faaeb2a6912421e6323a73fed25d95b0aeda93140e11b5e018ed5f6622ee6c55",
+  "provider": "gemini-interactions",
+  "model": "gemini-3.1-flash-tts-preview",
+  "voice": "Sadaltager",
+  "successfulTtsRequestsConsumed": 1,
+  "providerAttemptsConsumed": 1,
+  "selectedSegments": [
+    {
+      "segmentId": "paragraph-3ca80b1b13ac",
+      "challenges": [
+        "يَعْرِضُ — known Bareeq misreading risk"
+      ]
+    },
+    {
+      "segmentId": "paragraph-54872c0ed876",
+      "challenges": [
+        "89% / 11%",
+        "هَايتْمَايَر",
+        "لَحْلُو"
+      ]
+    },
+    {
+      "segmentId": "paragraph-ad550ee8cc12",
+      "challenges": [
+        "2025 / 27 / 2245",
+        "التَّذَكُّر",
+        "تِشِن"
+      ]
+    },
+    {
+      "segmentId": "paragraph-1d2f4c32c1c6",
+      "challenges": [
+        "2023 / 59",
+        "كَامِيرِينِي",
+        "long sentence pacing"
+      ]
+    },
+    {
+      "segmentId": "paragraph-040ced01ad47",
+      "challenges": [
+        "2024 / 166 / 53 / 33 / 4368",
+        "هَارْتَانْتُو",
+        "numeric pacing"
+      ]
+    }
+  ],
+  "spokenTextBytes": 2478,
+  "audio": {
+    "file": "audio-candidates/_test-clips/هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه/07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7/test-clip.mp3",
+    "sha256": "f9fb302f78e30ed1829ae0e8b3851921172802a0fff5a27299e5071e39bf532c",
+    "bytes": 1875213
+  },
+  "status": "GENERATED_AWAITING_HUMAN_LISTENING",
+  "completedAt": "2026-10-11T06:34:16.874Z"
+}
