@@ -248,5 +248,27 @@
     "headSha": "c9699530916612927957f3e9fa06ea0ca9350154",
     "preflightSha256": "228cbb600c03b2aeb2ca7cca37b895f2ec35fa3f9f44d239ec922e084d3f235c",
     "claimedAt": "2026-10-11T07:36:18.099Z"
+  },
+  "qaRecovery": {
+    "schema": "bareeq.audio-tranche42-qa-recovery.v1",
+    "sourceRunId": "38121863055",
+    "additionalTtsCalls": 0,
+    "maximumAdditionalMicroCalls": 0,
+    "maximumFullCalls": 4,
+    "documentedModelRedirect": {
+      "requestedModel": "gemini-3.5-flash",
+      "actualResponseModel": "gemini-3.6-flash",
+      "effectiveAt": "2026-10-08",
+      "source": "https://ai.google.dev/gemini-api/docs/changelog",
+      "verifiedAt": "2026-10-11",
+      "reason": "Google automatically routes retired 3.5 Flash requests to 3.6 Flash."
+    },
+    "claim": {
+      "runId": "38122766909",
+      "runAttempt": 1,
+      "claimedAt": "2026-10-11T07:53:30.769Z"
+    },
+    "attempts": [],
+    "status": "IN_PROGRESS"
   }
 }
