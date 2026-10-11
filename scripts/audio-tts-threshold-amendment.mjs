@@ -1,4 +1,5 @@
 import {readFile} from 'node:fs/promises';
+import {validateTranche42Policy,readTranche42,TRANCHE42_PATH} from './audio-tranche42-policy.mjs';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 
@@ -6,6 +7,7 @@ import {validateTranche40Policy,TRANCHE40_PATH,digest40} from './audio-tranche40
 export const AMENDMENT_PATH='docs/audio/TTS-THRESHOLD-AMENDMENT-33.json';
 const fail=message=>{throw new Error(`TTS threshold amendment invalid: ${message}`);};
 export function validateThresholdAmendment({amendment:a,strategy,freeze,status}) {
+ if(a?.schema==='bareeq.audio-tts-threshold-amendment.v3')return validateTranche42Policy({amendment:a,strategy,freeze,status});
  if(a?.schema==='bareeq.audio-tts-threshold-amendment.v2')return validateTranche40Policy({amendment:a,strategy,freeze,status});
  if(a?.schema!=='bareeq.audio-tts-threshold-amendment.v1') fail('schema');
  if(!['AUTHORIZED','IN_PROGRESS','CONSUMED','BLOCKED'].includes(a.authorizationStatus)) fail('authorization status');
@@ -35,13 +37,15 @@ export function validateThresholdAmendment({amendment:a,strategy,freeze,status})
 export async function readThresholdAmendment(root=process.cwd()){
  const json=async p=>JSON.parse(await readFile(path.join(root,p),'utf8'));
  const [strategy,freeze,status]=await Promise.all([json('docs/audio/ENGINE-STRATEGY-STATE.json'),json('docs/audio/TTS-FREEZE.json'),json('docs/audio/PROGRESSIVE-STATUS.json')]);
- const amendment=await json(strategy.thresholdAmendment===TRANCHE40_PATH?TRANCHE40_PATH:AMENDMENT_PATH);
+ const amendment=await json(strategy.thresholdAmendment===TRANCHE42_PATH?TRANCHE42_PATH:strategy.thresholdAmendment===TRANCHE40_PATH?TRANCHE40_PATH:AMENDMENT_PATH);
  if(amendment.schema==='bareeq.audio-tts-threshold-amendment.v2'){
   const proposed=await readFile(path.join(root,amendment.approvedProposal));if(digest40(proposed)!==amendment.approvedProposalSha256)throw new Error('Owner-approved proposal digest changed');
   const proposal=JSON.parse(proposed);for(const [i,t] of amendment.targets.entries())for(const key of Object.keys(proposal.requests[i]).filter(k=>k!=='status'))if(JSON.stringify(t[key])!==JSON.stringify(proposal.requests[i][key]))throw new Error('Owner-approved request source/text drift: '+key);
  }
+ if(amendment.schema==='bareeq.audio-tts-threshold-amendment.v3')return readTranche42(root);
  return {...validateThresholdAmendment({amendment,strategy,freeze,status}),amendment};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  const r=await readThresholdAmendment(); console.log(`TTS_THRESHOLD_AMENDMENT=PASS threshold=${r.threshold} consumed=${r.consumed}/${r.amendment.additionalSuccessfulRequestsAuthorized} remaining=${r.remaining} globalFreeze=active`);
 }
+

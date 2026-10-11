@@ -3,6 +3,8 @@ import {readFile} from 'node:fs/promises';
 import {validateTranche40Policy} from './audio-tranche40-policy.mjs';
 const json=async p=>JSON.parse(await readFile(p,'utf8'));
 const fixture={amendment:await json('docs/audio/TTS-THRESHOLD-AMENDMENT-40.json'),strategy:await json('docs/audio/ENGINE-STRATEGY-STATE.json'),freeze:await json('docs/audio/TTS-FREEZE.json'),status:await json('docs/audio/PROGRESSIVE-STATUS.json')};
+// Retain historical tranche40 rejection coverage after a separate later owner amendment.
+fixture.strategy.threshold=40;fixture.strategy.successfulTtsSinceLastNewExact=33+fixture.amendment.successfulRequestsConsumed;fixture.freeze.strategySnapshot.threshold=40;fixture.freeze.strategySnapshot.successfulTtsSinceLastNewExact=fixture.strategy.successfulTtsSinceLastNewExact;
 assert.equal(validateTranche40Policy(fixture).threshold,40);
 for(const change of [
  x=>x.amendment.newThreshold=41,
@@ -17,3 +19,4 @@ for(const change of [
 ]){const x=structuredClone(fixture);change(x);assert.throws(()=>validateTranche40Policy(x));}
 const complete=structuredClone(fixture);complete.amendment.successfulRequestsConsumed=7;complete.amendment.authorizationStatus='CONSUMED';complete.amendment.targets.forEach(t=>t.successfulTtsConsumed=1);complete.strategy.successfulTtsSinceLastNewExact=40;complete.freeze.strategySnapshot.successfulTtsSinceLastNewExact=40;assert.equal(validateTranche40Policy(complete).remaining,0);
 console.log('TRANCHE40_POLICY_TESTS=PASS bounded=7 protected=10 closedRemaining=0');
+

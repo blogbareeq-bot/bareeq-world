@@ -1,0 +1,148 @@
+name: Bareeq two approved repairs and full QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-tranche42-*'
+      - 'scripts/test-audio-tranche42-*'
+      - 'scripts/audio-gemini-tts.mjs'
+      - 'scripts/audio-tts-freeze-guard.mjs'
+      - 'scripts/audio-tts-threshold-amendment.mjs'
+      - 'docs/audio/TTS-THRESHOLD-AMENDMENT-42.json'
+      - '.github/workflows/audio-tranche42-execute.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/audio-tranche42-execute.mjs'
+      - '.github/workflows/audio-tranche42-execute.yml'
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: bareeq-owner-two-repairs-42
+  cancel-in-progress: false
+jobs:
+  offline:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - name: Verify exact two-request scope, immutability, priority exception and replay protection
+        run: |
+          set -euo pipefail
+          node --check scripts/audio-tranche42-execute.mjs
+          node --check scripts/audio-tranche42-validate.mjs
+          python -m py_compile scripts/audio-tranche42-preflight.py scripts/audio-tranche42-splice.py
+          node scripts/test-audio-tranche42-policy.mjs
+          node scripts/test-audio-tranche40-policy.mjs
+          node scripts/test-audio-tts-threshold-amendment.mjs
+          node scripts/test-audio-tts-freeze-integration.mjs
+          node scripts/test-gemini-generate-content-tts.mjs
+          node scripts/audio-tts-threshold-amendment.mjs
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+  authorization-gate:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.auth.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - id: auth
+        run: |
+          node --input-type=module <<'NODE'
+          import {appendFile} from 'node:fs/promises';
+          import {readTranche42} from './scripts/audio-tranche42-policy.mjs';
+          const r=await readTranche42(),a=r.amendment;
+          const ready=process.env.GITHUB_RUN_ATTEMPT==='1' && r.remaining===2 && a.authorizationStatus==='AUTHORIZED' && a.executionStatus==='PREFLIGHT_PASSED' && !a.executionClaim && a.providerAttemptsConsumed===0;
+          await appendFile(process.env.GITHUB_OUTPUT,`ready=${ready}\n`);console.log(`TRANCHE42_GATE ready=${ready} remaining=${r.remaining}`);
+          NODE
+  execute:
+    needs: authorization-gate
+    if: github.event_name == 'push' && github.run_attempt == 1 && needs.authorization-gate.outputs.ready == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - name: Install audio tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install numpy
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche40-execution-37777589258
+          path: retained-evidence/touchscreen
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37777589258'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-tranche33-reconstructed-37626334800
+          path: retained-evidence/soft-power
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37626334800'
+      - name: Reproduce canonical source binding and quiet cuts before TTS
+        run: |
+          node scripts/test-audio-tranche42-policy.mjs
+          node scripts/audio-tranche42-execute.mjs --prepare
+      - name: Generate exactly the two fixed repair contexts and persist each successful response
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche42-execute.mjs --execute
+      - name: Retain provider responses before any processing or review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-tranche42-generated-${{ github.run_id }}
+          path: tranche42-execution/
+          retention-days: 90
+          if-no-files-found: warn
+      - name: Replace only the approved regions and verify retained source PCM
+        run: python scripts/audio-tranche42-splice.py
+      - name: Independent micro and full ASR plus full-file technical and synchronization QA
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche42-validate.mjs
+      - name: Verify all published audio stayed unchanged and accounting stayed bounded
+        if: always()
+        run: |
+          git diff --exit-code -- public/audio
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+      - name: Retain the repaired candidates, clips, all raw QA and response accounting
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-tranche42-execution-${{ github.run_id }}
+          path: |
+            tranche42-execution/
+            audio-candidates/how-touchscreens-work/
+            audio-candidates/language-soft-power-politics/
+            docs/audio/TTS-THRESHOLD-AMENDMENT-42.json
+            docs/audio/ENGINE-STRATEGY-STATE.json
+            docs/audio/TTS-FREEZE.json
+          retention-days: 90
+          if-no-files-found: warn

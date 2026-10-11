@@ -1,3 +1,4 @@
+import {tranche42OverrideAuthorized} from './audio-tranche42-policy.mjs';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -73,9 +74,11 @@ export async function ttsIsFrozen(file = FREEZE_PATH) {
   return state.active === true;
 }
 
-export async function assertTtsUnfrozen({ file = FREEZE_PATH, operation = 'tts-synthesis', tranche33Context, tranche40Context, text } = {}) {
+export async function assertTtsUnfrozen({ file = FREEZE_PATH, operation = 'tts-synthesis', tranche33Context, tranche40Context, tranche42Context, text } = {}) {
   const state = await readTtsFreeze(file);
   if (state.active === true) {
+    const authorized42=await tranche42OverrideAuthorized({operation,context:tranche42Context,text});
+    if(authorized42){console.error(`BAREEQ_TRANCHE42_OVERRIDE=AUTHORIZED request=${authorized42.requestId} maxHttpAttempts=1`);return {...state,tranche42Authorization:authorized42};}
     const testClip = await newContentTestClipOverrideAuthorized({ operation });
     if (testClip) {
       console.error(`BAREEQ_NEW_CONTENT_TEST_CLIP_OVERRIDE=AUTHORIZED decision=${testClip.decisionId} target=${testClip.targetArticleId} successfulRequests=1 attempts=1`);
@@ -122,3 +125,4 @@ async function cli() {
 
 const isCli = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isCli) await cli();
+
