@@ -143,7 +143,15 @@ const articleSchema = {
           <ol id="article-toc-list">{toc.map((heading) => <li class:list={[`depth-${heading.depth}`]}><a data-toc-link href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol>
         </aside>
       )}
-      <div id="article-content" class="article-content prose" data-article-content><Content /></div>
+      <div id="article-content" class="article-content prose" data-article-content>
+        <Content />
+        {related[0] && (
+          <p class="article-context-link">
+            <strong>قد يهمك أيضًا:</strong>{' '}
+            <a href={`/posts/${related[0].id}/`}>{related[0].data.title}</a>
+          </p>
+        )}
+      </div>
     </div>
 
     <footer class="article-footer">

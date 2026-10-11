@@ -62,7 +62,8 @@ export const series = [
     order: [
       'اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا',
       'كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار',
-      'intuition-first-impression-decisions-signature'
+      'intuition-first-impression-decisions-signature',
+      'هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه'
     ]
   },
   {

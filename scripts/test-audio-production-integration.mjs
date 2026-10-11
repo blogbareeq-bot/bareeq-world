@@ -197,7 +197,7 @@ assert.equal(publishNoFp.status, EXIT_USAGE);
 
 const tmp = await mkdtemp(path.join(os.tmpdir(), 'bareeq-audio-cli-'));
 const tmp2 = await mkdtemp(path.join(os.tmpdir(), 'bareeq-audio-cli-b-'));
-await writeApprovedFixture(tmp, { copyRulesFrom: ROOT });
+await writeApprovedFixture(tmp, { copyRulesFrom: ROOT, ttsFreezeActive: false });
 const fixtureArticle = await loadSpokenArticle('resume-fixture', tmp);
 const mock = await startMockServer({ failTtsAt: 3, spoken: fixtureArticle.spokenText });
 try {
@@ -221,7 +221,7 @@ try {
   const synthesized = requestLog.entries.filter((entry) => entry.action === 'synthesize');
   assert.equal(synthesized.length, 2, 'first two parts must succeed before the 429');
 
-  await writeApprovedFixture(tmp2, { copyRulesFrom: ROOT });
+  await writeApprovedFixture(tmp2, { copyRulesFrom: ROOT, ttsFreezeActive: false });
   await cp(path.join(tmp, 'audio-candidates'), path.join(tmp2, 'audio-candidates'), { recursive: true });
   const second = await runCliAsync(['--mode=generate-candidate', '--article=resume-fixture'], { cwd: tmp2, env });
   assert.equal(second.status, EXIT_OK, second.stderr + second.stdout);

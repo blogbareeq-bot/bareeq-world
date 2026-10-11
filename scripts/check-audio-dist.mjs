@@ -47,15 +47,18 @@ const temporaryAudioDirectories = (await readdir(audioArticleRoot, { withFileTyp
 if (temporaryAudioDirectories.length) throw new Error(`Temporary audio restore directories leaked into dist: ${temporaryAudioDirectories.join(', ')}`);
 
 const postFiles = (await readdir(POSTS)).filter((name) => name.endsWith('.md')).sort();
+const progressiveStatus = JSON.parse(await readFile(path.join(ROOT, 'docs', 'audio', 'PROGRESSIVE-STATUS.json'), 'utf8'));
+const knownAudioHistory = new Set((progressiveStatus.rows || []).map((row) => row.articleId).filter(Boolean));
 const published = [];
 for (const name of postFiles) {
   const source = await readFile(path.join(POSTS, name), 'utf8');
   if (!/^draft:\s*true\s*$/mi.test(source)) published.push(name.replace(/\.md$/, ''));
 }
-if (![13, 14, 15].includes(published.length)) throw new Error(`V4.21.6 audio-dist audit expected 13–15 published articles across supported release states, found ${published.length}.`);
+if (published.length < 13) throw new Error(`V4.21.6 audio-dist audit expected at least the 13-article compatibility baseline, found ${published.length}.`);
 if (!published.includes(NEW_ARTICLE)) throw new Error('V4.20 coworker article is missing from the published set.');
 
 let checkedArticles = 0;
+let pendingFirstAudioArticles = 0;
 let totalParts = 0;
 let totalFiles = 0;
 const providerCounts = new Map();
@@ -126,8 +129,20 @@ for (const id of published) {
   const key = sha(id).slice(0, 16);
   const manifestFile = path.join(DIST, 'audio', 'articles', key, 'manifest.json');
   let manifest;
-  try { manifest = JSON.parse(await readFile(manifestFile, 'utf8')); }
-  catch { throw new Error(`${id}: production audio manifest is missing or invalid.`); }
+  try {
+    manifest = JSON.parse(await readFile(manifestFile, 'utf8'));
+  } catch {
+    if (knownAudioHistory.has(id)) {
+      throw new Error(`${id}: production audio manifest is missing or invalid for an article with established audio history.`);
+    }
+    const html = await readFile(path.join(DIST, 'posts', id, 'index.html'), 'utf8');
+    const listenButton = html.match(/<button[^>]*data-reading-mode="listen"[^>]*>/i)?.[0] || '';
+    if (!/disabled/i.test(listenButton) || !/aria-disabled="true"/i.test(listenButton) || !html.includes('قيد الإعداد')) {
+      throw new Error(`${id}: first-audio article is missing a manifest but its listen UI is not safely disabled.`);
+    }
+    pendingFirstAudioArticles += 1;
+    continue;
+  }
 
   if (manifest.articleId !== id) throw new Error(`${id}: manifest articleId mismatch.`);
   if (manifest.disclosure !== 'الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.') throw new Error(`${id}: AI disclosure is missing.`);
@@ -214,7 +229,9 @@ for (const id of published) {
   checkedArticles += 1;
 }
 
-if (checkedArticles !== published.length) throw new Error(`V4.21.6 audio-dist audit expected ${published.length} complete audio articles, checked ${checkedArticles}.`);
+if (checkedArticles + pendingFirstAudioArticles !== published.length) {
+  throw new Error(`V4.21.6 audio-dist audit did not account for every published article: audio=${checkedArticles}, first-audio-pending=${pendingFirstAudioArticles}, published=${published.length}.`);
+}
 if (cloudActivated && (providerCounts.get('Cloud TTS Sadaltager') !== PENDING_CLOUD.length || providerCounts.get('Gemini Sadaltager') !== RETAINED_GEMINI.length)) throw new Error(`Activated rollout must publish exactly ${PENDING_CLOUD.length} Cloud TTS + ${RETAINED_GEMINI.length} retained Gemini articles.`);
 
 const textFiles = [];
@@ -248,4 +265,4 @@ for (const file of textFiles) {
 }
 
 const summary = [...providerCounts.entries()].map(([name, count]) => `${name}=${count}`).join(', ');
-console.log(`V4.21.6 mixed production audio audit passed: ${checkedArticles}/${published.length} articles, ${totalParts} synchronized parts, ${totalFiles} verified MP3 files; ${summary}; lazy provider metadata and no secret leakage.`);
+console.log(`V4.21.6 mixed production audio audit passed: ${checkedArticles} audio-ready + ${pendingFirstAudioArticles} first-audio-pending / ${published.length} published articles, ${totalParts} synchronized parts, ${totalFiles} verified MP3 files; ${summary}; lazy provider metadata and no secret leakage.`);
