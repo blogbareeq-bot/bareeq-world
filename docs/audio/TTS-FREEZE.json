@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Complete both repaired-context QA and obtain owner listening before publication. Preserve global freeze and new-content-first policy outside the consumed exception.",
+    "nextAction": "Do not synthesize again. Adjudicate the full screen-focus candidate against the bound SHA and run final owner listening. Publication remains blocked until ASR/human/technical gates are closed.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -197,6 +197,13 @@
     "freezeRemainsActive": true,
     "ownerInstruction": "كلها سليمة",
     "ownerApprovalAt": "2026-10-11T07:12:00.000Z",
-    "status": "AUTHORIZED_NEW_CONTENT_FULL_SYNTHESIS_ONLY"
+    "status": "EXECUTED_8_OF_8_AWAITING_VALIDATION_ADJUDICATION",
+    "successfulTtsRequestsConsumed": 8,
+    "providerAttemptsConsumed": 8,
+    "resultStatus": "GENERATED_AWAITING_VALIDATION_ADJUDICATION",
+    "fullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d",
+    "durationSeconds": 1209.672,
+    "sourceRunId": "38121403553",
+    "sourceArtifactId": "11695643508"
   }
 }
