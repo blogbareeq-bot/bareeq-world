@@ -1,0 +1,152 @@
+{
+  "schema": "bareeq.audio-owner-confirmed-two-defect-repair-proposal.v1",
+  "status": "PREPARED_UNAUTHORIZED",
+  "preparedAt": "2026-10-11",
+  "sourceSubmissionSha256": "5bc2e476bd49d57007aab6a51c1e27fa388b6ed6db3d4ffaeb6c551e60924ce3",
+  "currentPublishedExact": 13,
+  "currentThreshold": 40,
+  "successfulTtsConsumed": 40,
+  "additionalRequestsProposed": 2,
+  "proposedThresholdIfOwnerGrantsSpecificPriorityException": 42,
+  "automaticExpansion": false,
+  "automaticRetry": false,
+  "globalFreezeActive": true,
+  "newAsrCallsInPreparation": 0,
+  "ttsCallsInPreparation": 0,
+  "queueMode": "new-content-before-renewal",
+  "newContentWaiting": [
+    "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه"
+  ],
+  "authorizationRequired": "Two fixed TTS requests for these exact generation texts AND an owner-approved priority exception to repair the two legacy articles before the new article. Alternatively preserve new-content-first ordering; the new article budget is a separate future authorization.",
+  "qualityPolicy": "No quality reduction; existing 13 Exact audio immutable; source prefix/suffix PCM preserved; full technical and synchronization QA plus independent full ASR and SHA-bound human listening of repaired contexts before any remaining promotion.",
+  "targets": [
+    {
+      "id": "REPAIR2-S",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "baselineFullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "sourcePartSha256": "2b55394a800b9eee63493aac9d49eeaeed9ea8cab9b1fcf72102e955149b9a7b",
+      "partIndex": 1,
+      "partNumber": 2,
+      "sourceFile": "S-baseline-part.mp3",
+      "wordFile": "S-words.json",
+      "expectedIndex": 450,
+      "expectedToken": "عندما",
+      "segmentId": "b0023",
+      "canonicalSpeechSegmentId": "paragraph-5a68206ac6a2",
+      "generationText": "فِي الشَّاشَةِ تُوجَدُ أَقْطَابٌ كَثِيرَةٌ مُرَتَّبَةٌ بِعِنَايَة، وَتَعْرِفُ دَارَةُ التَّحَكُّمِ الحَالَةَ الكَهْرَبَائِيَّةَ المُعْتَادَةَ لِلشَّبَكَةِ عِنْدَمَا لَا يَقْتَرِبُ مِنْهَا شَيْء. ثُمَّ يَدْخُلُ إِصْبَعُكَ إِلَى المَشْهَد.",
+      "generationTextSha256": "73ccd2c28781b8e8c65b7a12833eb08a5e8d7f0a4d6cad3ac58cf9911b56fc09",
+      "repairExpectedStart": 180,
+      "repairExpectedEnd": 203,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_UNAUTHORIZED",
+      "preflightPassed": true,
+      "cutStartSeconds": 107.62,
+      "cutEndSeconds": 120.785,
+      "quietStart": {
+        "sample": 5165760,
+        "windowSamples": 1920,
+        "rmsDb": -61.45530403271956,
+        "peakDb": -49.56046874038188
+      },
+      "quietEnd": {
+        "sample": 5797680,
+        "windowSamples": 1920,
+        "rmsDb": -44.64337040177028,
+        "peakDb": -31.02380609525738
+      },
+      "anchors": {
+        "before": [
+          "تسمي",
+          "هذه",
+          "الخاصية",
+          "السعة",
+          "الكهربايية"
+        ],
+        "after": [
+          "ماذا",
+          "يفعل",
+          "اصبعك",
+          "فعلا",
+          "جسم"
+        ],
+        "minimumUniqueFlankTokens": 2,
+        "wholeApprovedSentence": true
+      },
+      "baselineContextFile": "REPAIR2-S-baseline-context.mp3",
+      "baselineContextSha256": "77bd904cbabc5c9ee916de1bef76cf5206ef9de1c970012c917552d6a261c32f",
+      "baselineRegionTranscript": "في الشاشة توجد أقطاب كثيرة مرتبة بعينية وتعرف دارة التحكم الحالة الكهربائية المعتادة للشبكة عند لا يقترب منها شيء فما يدخل إصبعك إلى المشهد"
+    },
+    {
+      "id": "REPAIR2-C1",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "baselineFullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "sourcePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+      "partIndex": 2,
+      "partNumber": 3,
+      "sourceFile": "C1-baseline-part.mp3",
+      "wordFile": "C1-words.json",
+      "expectedIndex": 617,
+      "expectedToken": "ويعرض",
+      "segmentId": "b0029",
+      "canonicalSpeechSegmentId": "paragraph-81099c63d883",
+      "generationText": "وَيَعْرِضُ تقرير المنظمة الدولية للفرنكوفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين. (المنظمة الدولية للفرنكوفونية)",
+      "generationTextSha256": "5a0d93042dd7018af2d9caa53e8d71d4ebff02cb92357ce00bc817abbbe7b50b",
+      "repairExpectedStart": 103,
+      "repairExpectedEnd": 119,
+      "maximumRequests": 1,
+      "automaticRetry": false,
+      "status": "PROPOSED_UNAUTHORIZED",
+      "preflightPassed": true,
+      "cutStartSeconds": 72.92,
+      "cutEndSeconds": 84.72,
+      "quietStart": {
+        "sample": 3500160,
+        "windowSamples": 1920,
+        "rmsDb": -53.12738298755452,
+        "peakDb": -43.50011640239199
+      },
+      "quietEnd": {
+        "sample": 4066560,
+        "windowSamples": 1920,
+        "rmsDb": -47.953645977616155,
+        "peakDb": -34.61665284653685
+      },
+      "anchors": {
+        "before": [
+          "والثقافة",
+          "والاعلام",
+          "والاقتصاد",
+          "والحضور",
+          "الدولي"
+        ],
+        "after": [
+          "لكن",
+          "الموسسة",
+          "ليست",
+          "بريية",
+          "دايما"
+        ],
+        "minimumUniqueFlankTokens": 2,
+        "wholeApprovedSentence": true
+      },
+      "baselineContextFile": "REPAIR2-C1-baseline-context.mp3",
+      "baselineContextSha256": "c58b1891a4d79593098c516bfe86c6d489b209e73a67683116faa325d997b4d6",
+      "baselineRegionTranscript": "ويعرض تقرير المنظمة الدولية للفرنكفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين المنظمة الدولية للفرنكفونية"
+    }
+  ],
+  "qualityVerificationAfterOwnerAuthorization": {
+    "maximumTtsRequests": 2,
+    "automaticRetry": false,
+    "independentMicroAsrCalls": 4,
+    "independentFullFileAsrCalls": 4,
+    "technicalQa": "offline full-file QA",
+    "synchronizationQa": "offline",
+    "humanReview": "owner listens to both repaired contexts, bound to generated and full SHA; publish only after confirmation",
+    "publicationTarget": 15
+  }
+}
