@@ -1,0 +1,135 @@
+{
+  "schema": "bareeq.audio-tranche42-review-ready.v1",
+  "recordedAt": "2026-10-11T08:01:08.794824+00:00",
+  "decisionId": "COMPLETION15-TWO-REPAIRS-20261011-v1",
+  "sourceTtsRunId": "38121863055",
+  "sourceQaRunId": "38122766909",
+  "sourceQaArtifactId": 11696195944,
+  "sourceQaArtifactSha256": "e4d34b7bd1184f3a18d51423e939f27aa2e823290032b7268a5f6f8693200a05",
+  "qualityResultSha256": "7088ab41e338d4344b2d28a7686ac1be56039d2b67ee0b9b2dd04ed0ba60a413",
+  "ttsSuccessfulRequests": 2,
+  "ttsProviderAttempts": 2,
+  "ttsBudgetConsumed": 42,
+  "ttsBudgetThreshold": 42,
+  "additionalTtsRequestsAuthorized": 0,
+  "publishedExact": 13,
+  "publicationPerformed": false,
+  "technicalPassed": true,
+  "synchronizationPassed": true,
+  "microAsr": {
+    "requestsConsumed": 4,
+    "transcriptionsSuccessful": 4,
+    "bothTargetsPassed": true
+  },
+  "fullAsr": {
+    "requestsConsumed": 4,
+    "transcriptionsSuccessful": 2,
+    "failedRequests": 2,
+    "failureHttpStatus": 503,
+    "status": "SECOND_MODEL_UNAVAILABLE_INDEPENDENT_FULL_ASR_PENDING",
+    "automaticRetryPerformed": false
+  },
+  "ownerListeningPerformed": false,
+  "packetId": "tranche42-repaired-38121863055",
+  "packetSha256": "30a695de7e6fadb0df1a865fa68c110f2448ca86526ab2a78fe4c4c43436d3f9",
+  "reviewFile": "bareeq-two-repairs-listening.html",
+  "targets": [
+    {
+      "caseId": "REPAIR2-S",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "ad56a3fea95f15b7d28da84c0a333c9e74880b6b12c84b6f34a922ffd491e39e",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "clipSha256": "8a6d329986c3784f907476130e8d2db2f74d6485d5c746e04dbc92d3e8dfe866",
+      "sourcePartSha256": "c43091092b40959cf163c878450b06171a7d29eaab7e768a3a42b5d81bda68bb",
+      "coveredExpectedIndices": [
+        436,
+        437,
+        438,
+        439,
+        440,
+        441,
+        442,
+        443,
+        444,
+        445,
+        446,
+        447,
+        448,
+        449,
+        450,
+        451,
+        452,
+        453,
+        454,
+        455,
+        456,
+        457,
+        458,
+        459
+      ],
+      "listeningSourceProof": {
+        "normalizedPlaybackPartSha256": "7db18883c2b850322ba62c16fbd450510ea97fdb54651de533cc46f35c8b2556",
+        "normalizedPlaybackStartSample": 4914385,
+        "mp3FramingAlignmentSamples": 1105,
+        "comparedSamples": 1163040,
+        "clipPlaybackCorrelation": 0.9992126670373958,
+        "sourceFullSha256": "ad56a3fea95f15b7d28da84c0a333c9e74880b6b12c84b6f34a922ffd491e39e"
+      }
+    },
+    {
+      "caseId": "REPAIR2-C1",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "6e75b72978803e251ef4e876ad0e24667f135836175528ed948acec0a87de3d7",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "clipSha256": "306e062dd5be94d94bbf9451bb824d9450e4bd41c435fd9d4eda2e70a6ad37e6",
+      "sourcePartSha256": "2d5ef608965d029010ef2b999d3a5c0714632f2629f74dce2aba8b4550ab5412",
+      "coveredExpectedIndices": [
+        617,
+        618,
+        619,
+        620,
+        621,
+        622,
+        623,
+        624,
+        625,
+        626,
+        627,
+        628,
+        629,
+        630,
+        631,
+        632,
+        633
+      ],
+      "listeningSourceProof": {
+        "normalizedPlaybackPartSha256": "a146157ec02aad5d42d19e839cecc088ae0d2994f5be246474a25b5d19431dbb",
+        "normalizedPlaybackStartSample": 3233905,
+        "mp3FramingAlignmentSamples": 1105,
+        "comparedSamples": 1048800,
+        "clipPlaybackCorrelation": 0.9998296058557198,
+        "sourceFullSha256": "6e75b72978803e251ef4e876ad0e24667f135836175528ed948acec0a87de3d7"
+      }
+    }
+  ],
+  "requestedNextAuthorization": {
+    "scope": "one-missing-independent-full-transcription-per-repaired-article",
+    "articleIds": [
+      "how-touchscreens-work",
+      "language-soft-power-politics"
+    ],
+    "fullSha256ByArticle": {
+      "how-touchscreens-work": "ad56a3fea95f15b7d28da84c0a333c9e74880b6b12c84b6f34a922ffd491e39e",
+      "language-soft-power-politics": "6e75b72978803e251ef4e876ad0e24667f135836175528ed948acec0a87de3d7"
+    },
+    "requestedModel": "gemini-3.6-flash",
+    "otherRetainedModel": "gemini-3.5-flash-lite",
+    "maximumAdditionalFullAsrRequests": 2,
+    "maximumAdditionalTtsRequests": 0,
+    "automaticRetry": false,
+    "authorizationRequired": true
+  },
+  "nextAction": "Owner reviews both new repaired contexts and may separately authorize the two missing full ASR checks; preserve 42/42 synthesis freeze and 13/15 until all publication gates pass."
+}
