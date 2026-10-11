@@ -70,6 +70,9 @@ jobs:
     if: github.event_name == 'push' && github.run_attempt == 1 && needs.authorization-gate.outputs.ready == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 75
+    env:
+      FFMPEG_PATH: /usr/bin/ffmpeg
+      FFPROBE_PATH: /usr/bin/ffprobe
     steps:
       - uses: actions/checkout@v4
         with:
