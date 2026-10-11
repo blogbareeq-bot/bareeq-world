@@ -304,6 +304,8 @@
         "error": "ASR gemini-3.5-flash failed (503): {\"error\":{\"message\":\"gemini-3.5-flash is currently experiencing high demand, spikes in demand are usually temporary. Please try again later.\",\"code\":\"service_unavailable\"}}"
       }
     ],
-    "status": "IN_PROGRESS"
+    "status": "QA_INCOMPLETE_NO_RETRY",
+    "fullAsrTranscriptions": 4,
+    "resultSha256": "7088ab41e338d4344b2d28a7686ac1be56039d2b67ee0b9b2dd04ed0ba60a413"
   }
 }
