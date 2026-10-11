@@ -1,0 +1,65 @@
+{
+  "schema": "bareeq.audio-new-content-full-synthesis-result.v1",
+  "decisionId": "NEW-CONTENT-SCREEN-FOCUS-FULL-SYNTHESIS-20261011-v1",
+  "articleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
+  "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
+  "testClipPlanHash": "faaeb2a6912421e6323a73fed25d95b0aeda93140e11b5e018ed5f6622ee6c55",
+  "candidateFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+  "fullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d",
+  "generation": {
+    "status": "generated",
+    "ttsRequestsPlanned": 8,
+    "ttsRequestsSent": 8,
+    "providerAttempts": 8,
+    "successfulRequests": 8,
+    "resumedParts": 0,
+    "completedParts": 8,
+    "transportsUsed": [
+      "developer-interactions"
+    ]
+  },
+  "technical": {
+    "status": "passed",
+    "durationSeconds": 1209.672,
+    "integratedLufs": -23.8,
+    "truePeakDbTP": -2.6,
+    "codec": "mp3",
+    "sampleRate": 48000,
+    "channels": "mono",
+    "liveUntouched": true
+  },
+  "sync": {
+    "status": "passed"
+  },
+  "validation": {
+    "status": "NEEDS_HUMAN_ADJUDICATION",
+    "models": [
+      "gemini-3.5-flash-lite",
+      "gemini-3.5-transcribe"
+    ],
+    "consensus": {
+      "substitutions": 9,
+      "deletions": 1,
+      "insertions": 1,
+      "unresolved": 4
+    },
+    "representationOnly": 1,
+    "substantiveDifferenceCount": 11,
+    "unresolvedCount": 4,
+    "artifactEvidence": {
+      "runId": "38121403553",
+      "artifactId": "11695643508",
+      "name": "bareeq-screen-focus-full-candidate-38121403553",
+      "adjudicationPath": "audio-candidates/هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه/dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525/reports/asr-adjudication.json"
+    }
+  },
+  "status": "GENERATED_AWAITING_VALIDATION_ADJUDICATION",
+  "publication": {
+    "authorized": false,
+    "performed": false
+  },
+  "finalHumanListening": {
+    "status": "required-not-performed"
+  },
+  "completedAt": "2026-10-11T07:38:39.235Z"
+}
