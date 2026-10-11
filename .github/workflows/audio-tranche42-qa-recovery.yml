@@ -1,0 +1,112 @@
+name: Bareeq retained repairs QA only
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-asr-documented-redirect.mjs'
+      - 'scripts/audio-tranche42-qa-recovery.mjs'
+      - 'scripts/test-audio-tranche42-qa-recovery.mjs'
+      - '.github/workflows/audio-tranche42-qa-recovery.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/audio-tranche42-qa-recovery.mjs'
+      - '.github/workflows/audio-tranche42-qa-recovery.yml'
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: bareeq-owner-two-repairs-42
+  cancel-in-progress: false
+jobs:
+  offline:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: |
+          set -euo pipefail
+          node --check scripts/audio-tranche42-qa-recovery.mjs
+          node scripts/test-audio-tranche42-qa-recovery.mjs
+          node scripts/test-audio-dual-asr-adjudicate.mjs
+          node scripts/test-audio-asr-fallback.mjs
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+  qa:
+    if: github.event_name == 'push' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      FFMPEG_PATH: /usr/bin/ffmpeg
+      FFPROBE_PATH: /usr/bin/ffprobe
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - id: gate
+        run: |
+          node --input-type=module <<'NODE'
+          import {appendFile} from 'node:fs/promises';
+          import {readTranche42} from './scripts/audio-tranche42-policy.mjs';
+          const {amendment:a}=await readTranche42();
+          const ready=a.authorizationStatus==='CONSUMED'&&a.executionStatus==='EXECUTED'&&a.executionClaim?.runId==='38121863055'&&!a.qaRecovery?.claim;
+          await appendFile(process.env.GITHUB_OUTPUT,`ready=${ready}\n`);console.log(`QA_ONLY_READY=${ready} TTS_CALLS=0`);
+          NODE
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.ready == 'true'
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+        if: steps.gate.outputs.ready == 'true'
+      - name: Install audio tools
+        if: steps.gate.outputs.ready == 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - uses: actions/download-artifact@v4
+        if: steps.gate.outputs.ready == 'true'
+        with:
+          name: bareeq-tranche42-execution-38121863055
+          path: ./
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '38121863055'
+      - name: Restore current authority after evidence extraction
+        if: steps.gate.outputs.ready == 'true'
+        run: git restore --source=HEAD -- docs/audio
+      - name: Recover saved micro responses and complete deterministic full gates without any API
+        if: steps.gate.outputs.ready == 'true'
+        run: node scripts/audio-tranche42-qa-recovery.mjs --prepare
+      - name: Use only the four remaining full ASR checks, with no retry and no TTS
+        if: steps.gate.outputs.ready == 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/audio-tranche42-qa-recovery.mjs --full
+      - name: Verify published sources and 42/42 freeze
+        if: always() && steps.gate.outputs.ready == 'true'
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- public/audio
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+      - name: Retain all repaired audio and raw recovery QA
+        if: always() && steps.gate.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-tranche42-qa-recovery-${{ github.run_id }}
+          path: |
+            tranche42-execution/
+            audio-candidates/how-touchscreens-work/
+            audio-candidates/language-soft-power-politics/
+            docs/audio/TTS-THRESHOLD-AMENDMENT-42.json
+          retention-days: 90
+          if-no-files-found: error
