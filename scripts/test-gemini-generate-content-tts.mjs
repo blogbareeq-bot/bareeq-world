@@ -46,6 +46,10 @@ try {
   process.env.GEMINI_GENERATE_CONTENT_ENDPOINT = `http://127.0.0.1:${port}/v1beta/models/${PRODUCTION_TTS_MODEL}:generateContent`;
   const result = await synthesizeGeminiGenerateContentPart({
     apiKey: 'contract-key',
+    fetchImpl: async (url, options) => {
+      assert.equal(new URL(url).hostname, '127.0.0.1');
+      return fetch(url, options);
+    },
     part: { text: 'هذه عينة تعاقدية محلية.' },
     context: { articleTitle: 'اختبار بريق', partIndex: 5, partCount: 6 },
   });
@@ -72,3 +76,4 @@ assert(prompt.includes('Do not add, omit, paraphrase, or reorder any word'));
 assert(prompt.includes('هذه عينة تعاقدية محلية'));
 
 console.log('Gemini generateContent TTS contract passed: non-streaming generateContent, Gemini 3.1, Sadaltager, strict Speech Script prompt, PCM→MP3. Real provider calls: 0.');
+
