@@ -5,10 +5,10 @@
   "voice": "Sadaltager",
   "publicationStatus": "partial-with-existing-live-fallback",
   "publicationComplete": false,
-  "publishedCount": 10,
-  "fallbackCount": 5,
+  "publishedCount": 13,
+  "fallbackCount": 2,
   "publicationPolicy": "docs/audio/PUBLICATION-POLICY-20260901.json",
-  "generatedAt": "2026-10-08T10:20:25.913Z",
+  "generatedAt": "2026-10-11T06:20:04.939Z",
   "articles": [
     {
       "articleId": "ai-agents-future-now",
@@ -59,6 +59,21 @@
       "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
       "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
       "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d"
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17"
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc"
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90"
     }
   ],
   "fallbacks": [
@@ -67,19 +82,7 @@
       "reason": "awaiting-exact-campaign-completion"
     },
     {
-      "articleId": "intuition-first-impression-decisions-signature",
-      "reason": "awaiting-exact-campaign-completion"
-    },
-    {
       "articleId": "language-soft-power-politics",
-      "reason": "awaiting-exact-campaign-completion"
-    },
-    {
-      "articleId": "why-some-passports-are-stronger",
-      "reason": "awaiting-exact-campaign-completion"
-    },
-    {
-      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
       "reason": "awaiting-exact-campaign-completion"
     }
   ]

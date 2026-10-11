@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "General synthesis remains frozen; owner approved only the seven targets in amendment40 after safe whole-sentence preflight.",
+  "reason": "Three saved candidates promoted with 0 TTS; two owner-confirmed audio defects remain blocked; synthesis remains frozen at consumed 40/40.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -10,11 +10,11 @@
     "expiresAt": "2027-01-03T08:35:52Z"
   },
   "strategySnapshot": {
-    "exact": 10,
+    "exact": 13,
     "total": 15,
-    "fallback": 5,
-    "activePending": 4,
-    "excluded": 1,
+    "fallback": 2,
+    "activePending": 2,
+    "excluded": 0,
     "successfulTtsSinceLastNewExact": 40,
     "threshold": 40
   },
@@ -119,7 +119,18 @@
       "executionStatus": "EXECUTED",
       "authorizationScope": "Seven fixed repair sentences only, including four morning regions; no retries or expansion."
     },
-    "approvedRepairProposal": "docs/audio/TARGETED-REPAIR-PROPOSAL-40.json"
+    "approvedRepairProposal": "docs/audio/TARGETED-REPAIR-PROPOSAL-40.json",
+    "completion40HumanReview": {
+      "record": "docs/audio/COMPLETION40-PUBLICATION-20261011.json",
+      "confirmed": 27,
+      "actualAudioErrors": 2,
+      "ttsCalls": 0,
+      "newAsrCalls": 0,
+      "remainingDefects": [
+        "S-01-450",
+        "C1-01-617-owner"
+      ]
+    }
   },
   "queuePolicy": {
     "schema": "bareeq.audio-priority-queue.v1",

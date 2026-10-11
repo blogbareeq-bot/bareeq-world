@@ -1,0 +1,707 @@
+{
+  "version": 3,
+  "generatorVersion": 10,
+  "syncVersion": 1,
+  "speechScriptHash": "58ddaca034694b69bb02e3c14fb1b8e5748c3ec8cf0159f3ef41d44f9f37544e",
+  "speechInput": "reviewed-contextual-speech-script",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "language": "ar",
+  "outputFormat": "audio-48khz-96kbitrate-mono-mp3",
+  "articleId": "why-some-passports-are-stronger",
+  "title": "لماذا تفتح بعض جوازات السفر أبواب العالم أكثر من غيرها؟",
+  "audioKey": "34e34b6f4633d928",
+  "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+  "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+  "defaultVoice": "sadaltager",
+  "voices": [
+    {
+      "id": "sadaltager",
+      "label": "سادالتاجر (Sadaltager)",
+      "description": "معرفي طبيعي مناسب لمقالات بريق",
+      "providerVoice": "Sadaltager",
+      "totalDurationSeconds": 1075.824
+    }
+  ],
+  "syncMethod": "paragraph-weighted",
+  "performanceInstructions": "### TASK\nSynthesize the approved Arabic transcript below as speech. TRANSCRIPT is the authoritative, linguistically reviewed Speech Script. Speak only its words, exactly as written. Every written Arabic diacritic is binding: do not reinterpret a vocalized word as another reading. Preserve each token's exact lexical and morphological form; never replace it with a more common, related, or neighboring form. For example, if the transcript says «تصعد», pronounce «تصعد» exactly and never substitute «تصاعد». Do not add, omit, paraphrase, or reorder any word. Do not normalize a written token into another lexical or morphological form. Do not read these directions or labels aloud.\n\n### AUDIO PROFILE\nA mature, well-read Arabic narrator for Bareeq, a refined knowledge blog for curious adult readers.\n\n### SCENE\nA contemporary Arabic recording studio in daylight. The narrator speaks naturally to one attentive listener in a calm, professional setting.\n\n### DIRECTOR'S NOTES\nUse clear Modern Standard Arabic. Sound natural, human, warm, and intellectually engaging. Use a normal conversational volume, never a whisper or a breathy delivery. Keep a comfortable medium pace with subtle organic variation. Articulate clearly without over-pronouncing words or sounding like a news anchor. Let questions carry gentle curiosity, explanations sound calm and confident, and conclusions feel reflective and quietly uplifting. Avoid theatrical acting, advertising energy, excessive solemnity, and monotone delivery.",
+  "sourceAudioFormat": "pcm-s16le-24000hz-mono",
+  "encodingTool": "ffmpeg-libmp3lame",
+  "disclosure": "الصوت مولّد بالذكاء الاصطناعي وليس صوتًا بشريًا.",
+  "parts": [
+    {
+      "characters": 1674,
+      "sync": [
+        {
+          "id": "b0001",
+          "type": "paragraph",
+          "match": "في صالة مطار واحدة يقف مسافران أمام الوجهة نفسها الأول حجز تذكرته قبل أيام وسيمر من بوابة الجوازات في دقائق أما الثاني ف",
+          "start": 0.041216,
+          "end": 0.204317
+        },
+        {
+          "id": "b0002",
+          "type": "paragraph",
+          "match": "الاثنان يحملان وثيقة تحمل الاسم نفسه جواز سفر فلماذا يفتح أحد الجوازين الباب شبه مباشرة بينما ينتظر الآخر موافقة قد تطول",
+          "start": 0.204317,
+          "end": 0.284695
+        },
+        {
+          "id": "b0003",
+          "type": "paragraph",
+          "match": "الجواب لا علاقة له بلون الغلاف ولا بجودة الورق خلف هذا الفارق تقف منظومة كاملة من الثقة والاتفاقيات والمصالح بين الدول و",
+          "start": 0.284695,
+          "end": 0.386505
+        },
+        {
+          "id": "b0004",
+          "type": "h2",
+          "match": "ماذا نعني عندما نقول إن جوازا ما قوي",
+          "start": 0.386505,
+          "end": 0.418849
+        },
+        {
+          "id": "b0005",
+          "type": "paragraph",
+          "match": "المقصود الشائع بسيط عدد الوجهات التي يستطيع حامل الجواز الوصول إليها دون الحاجة إلى استخراج تأشيرة مسبقة قبل السفر",
+          "start": 0.418849,
+          "end": 0.488568
+        },
+        {
+          "id": "b0006",
+          "type": "paragraph",
+          "match": "هذا الوصول الميسر يأخذ عادة ثلاث صور الأولى هي الدخول دون تأشيرة مسبقة مع بقاء شروط الدخول المعتادة التي تحددها الدولة ا",
+          "start": 0.488568,
+          "end": 0.711554
+        },
+        {
+          "id": "b0007",
+          "type": "paragraph",
+          "match": "ويحسن هنا التمييز بين هذا التصريح وe visa فالأخيرة تتطلب موافقة حكومية قبل المغادرة ولهذا تعدها منهجية مؤشر هينلي ضمن ال",
+          "start": 0.711554,
+          "end": 0.842843
+        },
+        {
+          "id": "b0008",
+          "type": "paragraph",
+          "match": "وهذا يقودنا إلى تفصيل مهم المؤشرات التي تقيس قوة الجوازات لا تحسب هذه الفئات كلها بالطريقة نفسها لذلك قد ترى جوازا في ال",
+          "start": 0.842843,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0001",
+        "b0002",
+        "b0003",
+        "b0004",
+        "b0005",
+        "b0006",
+        "b0007",
+        "b0008"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/34e34b6f4633d928/part-001-3e63fe6508b1.clean.mp3",
+          "bytes": 1652877,
+          "durationSeconds": 137.736,
+          "sha256": "32bc7d349220b315ddfdd81eec5aa12d67025ec36f5d89aded58292fd40b6906"
+        }
+      }
+    },
+    {
+      "characters": 1487,
+      "sync": [
+        {
+          "id": "b0009",
+          "type": "h2",
+          "match": "من يقرر أصلا من يدخل بلا تأشيرة",
+          "start": 0,
+          "end": 0.03243
+        },
+        {
+          "id": "b0010",
+          "type": "paragraph",
+          "match": "لا توجد جهة عالمية واحدة توزع الإعفاءات على الدول سياسة الدخول قرار سيادي كل دولة تقرر بنفسها من يدخل أراضيها وبأي شروط",
+          "start": 0.03243,
+          "end": 0.125808
+        },
+        {
+          "id": "b0011",
+          "type": "paragraph",
+          "match": "هذه القرارات تبنى غالبا عبر اتفاقيات ثنائية أو إقليمية ومن أشهر مبادئها مبدأ المعاملة بالمثل إذا أعفيت مواطني من التأشير",
+          "start": 0.125808,
+          "end": 0.225895
+        },
+        {
+          "id": "b0012",
+          "type": "paragraph",
+          "match": "تخيل دولتين نسميهما أ و ب وقعت الدولتان اتفاقية إعفاء متبادل فصار مواطنو كل منهما يدخلون الأخرى بالجواز فقط بعد سنوات قر",
+          "start": 0.225895,
+          "end": 0.538132
+        },
+        {
+          "id": "b0013",
+          "type": "paragraph",
+          "match": "لكن المعاملة بالمثل ليست قاعدة صارمة كثير من الدول تفتح أبوابها لجنسيات لا تعاملها بالمثل لأن لديها ما تكسبه من ذلك سياح",
+          "start": 0.538132,
+          "end": 0.822778
+        },
+        {
+          "id": "b0014",
+          "type": "h2",
+          "match": "لماذا تثق دولة في جواز أكثر من آخر",
+          "start": 0.822778,
+          "end": 0.858491
+        },
+        {
+          "id": "b0015",
+          "type": "paragraph",
+          "match": "هذا هو قلب الموضوع عندما تقرر دولة إعفاء مواطني دولة أخرى من التأشيرة فهي عمليا تجيب عن سؤال واحد ما حجم المخاطرة مقابل ",
+          "start": 0.858491,
+          "end": 0.989152
+        },
+        {
+          "id": "b0016",
+          "type": "h3",
+          "match": "العلاقات الدبلوماسية",
+          "start": 0.989152,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0009",
+        "b0010",
+        "b0011",
+        "b0012",
+        "b0013",
+        "b0014",
+        "b0015",
+        "b0016"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/34e34b6f4633d928/part-002-20df356a29e4.clean.mp3",
+          "bytes": 1599021,
+          "durationSeconds": 133.248,
+          "sha256": "b317d3c3da3cd2b7b82a239cf14dc58a74e6c9835a0259bfc9399133fcdf86b6"
+        }
+      }
+    },
+    {
+      "characters": 1704,
+      "sync": [
+        {
+          "id": "b0017",
+          "type": "paragraph",
+          "match": "الإعفاء من التأشيرة ثمرة علاقات مستقرة ومفاوضات طويلة الدول التي تبني شبكة واسعة من الشراكات والاتفاقيات تحصد ذلك في جوا",
+          "start": 0,
+          "end": 0.163876
+        },
+        {
+          "id": "b0018",
+          "type": "h3",
+          "match": "الوضع الاقتصادي",
+          "start": 0.163876,
+          "end": 0.172857
+        },
+        {
+          "id": "b0019",
+          "type": "paragraph",
+          "match": "الدولة المستقبلة تسأل نفسها هل القادمون زوار سيعودون إلى بلدهم أم باحثون عن فرصة للبقاء تفترض حكومات كثيرة أن ارتفاع الد",
+          "start": 0.172857,
+          "end": 0.37783
+        },
+        {
+          "id": "b0020",
+          "type": "h3",
+          "match": "سجل الالتزام بمدة الإقامة",
+          "start": 0.37783,
+          "end": 0.394853
+        },
+        {
+          "id": "b0021",
+          "type": "paragraph",
+          "match": "تتابع دول كثيرة نسبة من يبقون بعد انتهاء المدة القانونية لكل جنسية الولايات المتحدة مثلا تنشر تقريرا سنويا عن تجاوز مدة ",
+          "start": 0.394853,
+          "end": 0.552671
+        },
+        {
+          "id": "b0022",
+          "type": "h3",
+          "match": "موثوقية الجواز نفسه",
+          "start": 0.552671,
+          "end": 0.565673
+        },
+        {
+          "id": "b0023",
+          "type": "paragraph",
+          "match": "الجواز وثيقة ثقة قبل أن يكون وثيقة سفر الدول تثق أكثر بجوازات تصدر عبر أنظمة تحقق صارمة من الهوية وتحمل خصائص بيومترية ي",
+          "start": 0.565673,
+          "end": 0.762188
+        },
+        {
+          "id": "b0024",
+          "type": "h3",
+          "match": "الاستقرار السياسي والأمني",
+          "start": 0.762188,
+          "end": 0.776396
+        },
+        {
+          "id": "b0025",
+          "type": "paragraph",
+          "match": "كثيرا ما تترك الحروب والأزمات أثرها في حرية السفر فحين تتدهور الأوضاع في بلد ما قد تعلق دول أخرى إعفاءاتها أو تشدد اشترا",
+          "start": 0.776396,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0017",
+        "b0018",
+        "b0019",
+        "b0020",
+        "b0021",
+        "b0022",
+        "b0023",
+        "b0024",
+        "b0025"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/34e34b6f4633d928/part-003-a3c8f6b58ab3.clean.mp3",
+          "bytes": 1656045,
+          "durationSeconds": 138,
+          "sha256": "638be7a18b5da83b6fb2a521ce2d97b351bfedd5058188b335eb6a2d42ecfcf2"
+        }
+      }
+    },
+    {
+      "characters": 1563,
+      "sync": [
+        {
+          "id": "b0026",
+          "type": "h3",
+          "match": "المصلحة الاقتصادية والسياحية",
+          "start": 0,
+          "end": 0.015871
+        },
+        {
+          "id": "b0027",
+          "type": "paragraph",
+          "match": "وفي الاتجاه المقابل قد تخفف دولة شروط الدخول سعيا إلى جذب السياح ورجال الأعمال والمستثمرين حتى دون معاملة بالمثل فالتأشي",
+          "start": 0.015871,
+          "end": 0.134916
+        },
+        {
+          "id": "b0028",
+          "type": "paragraph",
+          "match": "المهم ألا نتخيل هذه العوامل معادلة حسابية ثابتة إنها موازنة تتحرك باستمرار دولة ترجح الأمن وأخرى ترجح السياحة وثالثة توا",
+          "start": 0.134916,
+          "end": 0.265141
+        },
+        {
+          "id": "b0029",
+          "type": "h2",
+          "match": "هل المسألة كلها سياسة إذن",
+          "start": 0.265141,
+          "end": 0.289826
+        },
+        {
+          "id": "b0030",
+          "type": "paragraph",
+          "match": "لا السياسة حاضرة بقوة لكنها خيط واحد في نسيج أوسع يشمل الاقتصاد والأمن والهجرة والسياحة والتجارة وحتى العلاقات التاريخية",
+          "start": 0.289826,
+          "end": 0.385504
+        },
+        {
+          "id": "b0031",
+          "type": "paragraph",
+          "match": "أوضح مثال على هذا التداخل هو الاتحاد الأوروبي فمن المبادئ التأسيسية للاتحاد حرية تنقل الأشخاص التي تتيح لمواطني الدول ال",
+          "start": 0.385504,
+          "end": 0.695451
+        },
+        {
+          "id": "b0032",
+          "type": "paragraph",
+          "match": "وقصة قريبة منا مواطنو دول مجلس التعاون الخليجي يتنقلون بين دول المجلس بإجراءات ميسرة وهو نموذج آخر لتكتل إقليمي يحول الج",
+          "start": 0.695451,
+          "end": 0.80513
+        },
+        {
+          "id": "b0033",
+          "type": "h2",
+          "match": "كيف يقيس العالم قوة الجواز",
+          "start": 0.80513,
+          "end": 0.829673
+        },
+        {
+          "id": "b0034",
+          "type": "paragraph",
+          "match": "توجد مؤشرات متخصصة تتابع هذا الملف أشهرها مؤشر هينلي لجوازات السفر الذي يصنف 199 جوازا وفق عدد الوجهات التي يمكن الوصول ",
+          "start": 0.829673,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0026",
+        "b0027",
+        "b0028",
+        "b0029",
+        "b0030",
+        "b0031",
+        "b0032",
+        "b0033",
+        "b0034"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/34e34b6f4633d928/part-004-3ab58b47fa13.clean.mp3",
+          "bytes": 1702125,
+          "durationSeconds": 141.84,
+          "sha256": "d85309e1e6899c766378b5c8bbfee80f368abfe55de8162f159caea7bf368e43"
+        }
+      }
+    },
+    {
+      "characters": 1454,
+      "sync": [
+        {
+          "id": "b0035",
+          "type": "paragraph",
+          "match": "بحسب إصدار الذكرى العشرين للمؤشر الصادر في 21 يوليو 2026 تتصدر سنغافورة التصنيف بوصول ميسر إلى 192 وجهة تليها اليابان وك",
+          "start": 0,
+          "end": 0.250257
+        },
+        {
+          "id": "b0036",
+          "type": "paragraph",
+          "match": "أما مؤشر passport index من arton capital فيعتمد منهجية مختلفة تجمع في درجة واحدة تسمى درجة التنقل الإعفاء الكامل والتأشي",
+          "start": 0.250257,
+          "end": 0.526316
+        },
+        {
+          "id": "b0037",
+          "type": "paragraph",
+          "match": "وماذا عن الجواز السعودي في أحدث بيانات هينلي المتاحة عند إعداد هذا المقال في أغسطس 2026 يأتي الجواز السعودي في منتصف الخ",
+          "start": 0.526316,
+          "end": 0.75899
+        },
+        {
+          "id": "b0038",
+          "type": "paragraph",
+          "match": "يبقى تنبيه ضروري هذه المؤشرات تصدر عن جهات خاصة بعضها يعمل في سوق الإقامة والجنسية أصلا وهي تقيس جانبا واحدا محددا هو حر",
+          "start": 0.75899,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0035",
+        "b0036",
+        "b0037",
+        "b0038"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/34e34b6f4633d928/part-005-304af2d79f93.clean.mp3",
+          "bytes": 1523565,
+          "durationSeconds": 126.96,
+          "sha256": "bb762530db01fe40093e4eec059aa5de9a69228026965586fe7d1d5f88947ffe"
+        }
+      }
+    },
+    {
+      "characters": 1655,
+      "sync": [
+        {
+          "id": "b0039",
+          "type": "h2",
+          "match": "هل يستطيع الإنسان شراء جواز قوي",
+          "start": 0,
+          "end": 0.026732
+        },
+        {
+          "id": "b0040",
+          "type": "paragraph",
+          "match": "سؤال يتردد كثيرا والجواب في نطاق محدود ويضيق مع الوقت",
+          "start": 0.026732,
+          "end": 0.068593
+        },
+        {
+          "id": "b0041",
+          "type": "paragraph",
+          "match": "توجد دول خارج الاتحاد الأوروبي تمنح جنسيتها عبر برامج الجنسية مقابل الاستثمار المنصوص عليها في تشريعاتها وترى فيها موردا",
+          "start": 0.068593,
+          "end": 0.27095
+        },
+        {
+          "id": "b0042",
+          "type": "paragraph",
+          "match": "وفي أوروبا تحديدا ضاق هذا الباب ففي أبريل 2025 قضت محكمة العدل التابعة للاتحاد الأوروبي في القضية c 181 23 بأن برنامج ما",
+          "start": 0.27095,
+          "end": 0.5803
+        },
+        {
+          "id": "b0043",
+          "type": "paragraph",
+          "match": "الخلاصة أن الحصول على جواز أقوى بالاستثمار ممكن قانونا في دول محدودة لكنه يخضع لقوانين تختلف جذريا من بلد إلى آخر ولتدقي",
+          "start": 0.5803,
+          "end": 0.679346
+        },
+        {
+          "id": "b0044",
+          "type": "h2",
+          "match": "الجواز الأقوى لا يعني دائما الحياة الأفضل",
+          "start": 0.679346,
+          "end": 0.706441
+        },
+        {
+          "id": "b0045",
+          "type": "paragraph",
+          "match": "هذه نقطة تستحق التوقف قوة الجواز تقيس شيئا واحدا محددا سهولة عبور الحدود وهي لا تعني تلقائيا أن الدولة صاحبة الجواز هي ا",
+          "start": 0.706441,
+          "end": 0.859171
+        },
+        {
+          "id": "b0046",
+          "type": "paragraph",
+          "match": "توجد دول صغيرة تسبق قوى كبرى في تصنيف الجوازات ودول ذات اقتصادات ضخمة يقع جوازها في منتصف القائمة لأن علاقاتها الدولية م",
+          "start": 0.859171,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0039",
+        "b0040",
+        "b0041",
+        "b0042",
+        "b0043",
+        "b0044",
+        "b0045",
+        "b0046"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/34e34b6f4633d928/part-006-640424b6f88b.clean.mp3",
+          "bytes": 1588077,
+          "durationSeconds": 132.336,
+          "sha256": "cf541d8cedae2c09173bb1b28455df24cbf3f0c09d99422a143a59533e9a84a8"
+        }
+      }
+    },
+    {
+      "characters": 1506,
+      "sync": [
+        {
+          "id": "b0047",
+          "type": "paragraph",
+          "match": "الجواز القوي مؤشر على شبكة علاقات ناجحة وثقة دولية متراكمة هذا كثير لكنه ليس كل شيء",
+          "start": 0,
+          "end": 0.067313
+        },
+        {
+          "id": "b0048",
+          "type": "h2",
+          "match": "وهل يبقى ترتيب الجواز ثابتا",
+          "start": 0.067313,
+          "end": 0.091676
+        },
+        {
+          "id": "b0049",
+          "type": "paragraph",
+          "match": "إطلاقا ترتيب الجوازات يتغير باستمرار مع كل اتفاقية إعفاء تبرم أو تلغى وكل أزمة تندلع أو تنطفئ وكل سياسة هجرة تتشدد أو تت",
+          "start": 0.091676,
+          "end": 0.187226
+        },
+        {
+          "id": "b0050",
+          "type": "paragraph",
+          "match": "القصة الأوضح في العقدين الأخيرين هي صعود الجواز الإماراتي فبحسب بيان إصدار الذكرى العشرين لمؤشر هينلي أضاف الجواز الإمار",
+          "start": 0.187226,
+          "end": 0.389597
+        },
+        {
+          "id": "b0051",
+          "type": "paragraph",
+          "match": "وفي الاتجاه المعاكس تراجع الجوازان الأمريكي والبريطاني كان الأول في صدارة العالم عام 2006 والثاني في المركز الثالث وتقاس",
+          "start": 0.389597,
+          "end": 0.620388
+        },
+        {
+          "id": "b0052",
+          "type": "paragraph",
+          "match": "الدرس هنا أن قوة الجواز ليست مكسبا دائما بل علاقة تحتاج إلى صيانة مستمرة بالتفاوض والاتفاقيات وقد تتراجع مع الأزمات أو ا",
+          "start": 0.620388,
+          "end": 0.713952
+        },
+        {
+          "id": "b0053",
+          "type": "h2",
+          "match": "في الختام",
+          "start": 0.713952,
+          "end": 0.721784
+        },
+        {
+          "id": "b0054",
+          "type": "paragraph",
+          "match": "عد الآن إلى مشهد المطار الذي بدأنا به المسافران يحملان كتيبين متشابهين في الحجم والشكل لكن أحدهما يحمل خلفه شبكة كثيفة م",
+          "start": 0.721784,
+          "end": 0.874241
+        },
+        {
+          "id": "b0055",
+          "type": "paragraph",
+          "match": "جواز السفر ليس مجرد وثيقة شخصية فمدى حركته يعكس جانبا من شبكة العلاقات والثقة والاتفاقيات التي بنتها دولته مع العالم وحي",
+          "start": 0.874241,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0047",
+        "b0048",
+        "b0049",
+        "b0050",
+        "b0051",
+        "b0052",
+        "b0053",
+        "b0054",
+        "b0055"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/34e34b6f4633d928/part-007-587d85ec41f6.clean.mp3",
+          "bytes": 1532205,
+          "durationSeconds": 127.68,
+          "sha256": "d0e0af40c9d750071f3ead549a0f28616cf65c28f8476677d2896bb10111403d"
+        }
+      }
+    },
+    {
+      "characters": 1598,
+      "sync": [
+        {
+          "id": "b0056",
+          "type": "paragraph",
+          "match": "والمطمئن في هذه القصة أن الشبكة ليست قدرا نهائيا فالحدود التي تتطلب اليوم تأشيرة وانتظارا قد يفتحها غدا اتفاق جديد",
+          "start": 0,
+          "end": 0.078792
+        },
+        {
+          "id": "b0057",
+          "type": "paragraph",
+          "match": "ولوجه آخر من وجوه النفوذ الهادئ بين الدول ضمن السلسلة نفسها اقرأ حين تصبح اللغة نفوذا كيف تعبر القوة الناعمة الحدود",
+          "start": 0.078792,
+          "end": 0.164993
+        },
+        {
+          "id": "b0058",
+          "type": "h2",
+          "match": "أسئلة شائعة",
+          "start": 0.164993,
+          "end": 0.173463
+        },
+        {
+          "id": "b0059",
+          "type": "h3",
+          "match": "ما المقصود بقوة جواز السفر",
+          "start": 0.173463,
+          "end": 0.196886
+        },
+        {
+          "id": "b0060",
+          "type": "paragraph",
+          "match": "هي عدد الوجهات التي يستطيع حامل الجواز دخولها دون استخراج تأشيرة مسبقة قبل السفر سواء بإعفاء تام أو بتأشيرة عند الوصول أ",
+          "start": 0.196886,
+          "end": 0.311175
+        },
+        {
+          "id": "b0061",
+          "type": "h3",
+          "match": "من يقرر دخول مواطني دولة دون تأشيرة",
+          "start": 0.311175,
+          "end": 0.34253
+        },
+        {
+          "id": "b0062",
+          "type": "paragraph",
+          "match": "كل دولة تقرر ذلك بنفسها فسياسة الدخول قرار سيادي وتبنى الإعفاءات عادة عبر اتفاقيات ثنائية أو إقليمية وكثيرا ما يحكمها مب",
+          "start": 0.34253,
+          "end": 0.436139
+        },
+        {
+          "id": "b0063",
+          "type": "h3",
+          "match": "هل يمكن أن تتغير قوة جواز السفر",
+          "start": 0.436139,
+          "end": 0.466957
+        },
+        {
+          "id": "b0064",
+          "type": "paragraph",
+          "match": "نعم وباستمرار اتفاقيات جديدة ترفع الترتيب وأزمات سياسية أو أمنية قد تخفضه الجواز الإماراتي أضاف 153 وجهة خلال عشرين عاما",
+          "start": 0.466957,
+          "end": 0.583169
+        },
+        {
+          "id": "b0065",
+          "type": "h3",
+          "match": "هل الجواز الأقوى يعني أن الدولة الأقوى",
+          "start": 0.583169,
+          "end": 0.614524
+        },
+        {
+          "id": "b0066",
+          "type": "paragraph",
+          "match": "لا قوة الجواز تقيس حرية السفر فقط ولا تعكس بالضرورة حجم الاقتصاد أو القوة العسكرية أو جودة الحياة دول صغيرة كثيرة تسبق ق",
+          "start": 0.614524,
+          "end": 0.721619
+        },
+        {
+          "id": "b0067",
+          "type": "h3",
+          "match": "ما الفرق بين الدخول دون تأشيرة والتأشيرة عند الوصول",
+          "start": 0.721619,
+          "end": 0.76158
+        },
+        {
+          "id": "b0068",
+          "type": "paragraph",
+          "match": "الدخول دون تأشيرة يعني عدم الحاجة إلى استخراج تأشيرة مسبقة مع بقاء شروط الدخول المعتادة التي تحددها كل دولة أما التأشيرة",
+          "start": 0.76158,
+          "end": 1
+        }
+      ],
+      "syncIds": [
+        "b0056",
+        "b0057",
+        "b0058",
+        "b0059",
+        "b0060",
+        "b0061",
+        "b0062",
+        "b0063",
+        "b0064",
+        "b0065",
+        "b0066",
+        "b0067",
+        "b0068"
+      ],
+      "audio": {
+        "sadaltager": {
+          "src": "/audio/articles/34e34b6f4633d928/part-008-e69e2208f8fd.clean.mp3",
+          "bytes": 1656333,
+          "durationSeconds": 138.024,
+          "sha256": "2c5eb3b73485a476074db04c71025e6b03619ba45a65fc05fcd9295d8838f415"
+        }
+      }
+    }
+  ],
+  "schema": "bareeq.audio-production-manifest.v3",
+  "candidateFingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+  "voice": "Sadaltager",
+  "toolVersion": 9,
+  "status": "published",
+  "generatedAt": "2026-10-11T06:20:04.813Z",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "ttsVoice": "Sadaltager",
+  "publishedFromCandidate": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+  "publishedAt": "2026-10-11T06:20:04.813Z"
+}

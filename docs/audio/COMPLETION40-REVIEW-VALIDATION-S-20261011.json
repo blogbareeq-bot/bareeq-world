@@ -1,0 +1,756 @@
+{
+  "schema": "bareeq.audio-human-evidence-adjudication.v1",
+  "articleId": "how-touchscreens-work",
+  "candidateFingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+  "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+  "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+  "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+  "provider": "Google Gemini API",
+  "model": "gemini-3.1-flash-tts-preview",
+  "voice": "Sadaltager",
+  "generatorVersion": 10,
+  "toolVersion": 9,
+  "status": "failed",
+  "generatedAt": "2026-10-11T06:20:03.651Z",
+  "ttsModel": "gemini-3.1-flash-tts-preview",
+  "ttsVoice": "Sadaltager",
+  "passed": false,
+  "models": [
+    "gemini-3.5-flash-lite",
+    "gemini-3.5-transcribe"
+  ],
+  "method": "independent-dual-asr-consensus-plus-binding-blind-human-triage",
+  "policy": {
+    "rawAsrReportsImmutable": true,
+    "baseAdjudicationImmutable": true,
+    "humanEvidenceMustBindCaseToArticleFingerprintAndFullSha": true,
+    "humanExpectedPronunciationMayResolveOnlyItsExactMappedIssue": true,
+    "phoneticCollisionMayResolveOnlyItsExactMappedIssue": true,
+    "humanConfirmedAudioErrorNeverRemoved": true,
+    "fuzzyMatching": false,
+    "ttsCalls": 0,
+    "newAsrCalls": 0
+  },
+  "consensus": {
+    "substitutions": 1,
+    "deletions": 0,
+    "insertions": 0,
+    "unresolved": 0
+  },
+  "rawCounts": {
+    "gemini-3.5-flash-lite": {
+      "substitutions": 38,
+      "deletions": 0,
+      "insertions": 1,
+      "status": "failed"
+    },
+    "gemini-3.5-transcribe": {
+      "substitutions": 14,
+      "deletions": 0,
+      "insertions": 0,
+      "status": "failed"
+    }
+  },
+  "representationOnly": [],
+  "modelDisagreements": [
+    {
+      "expectedIndex": 33,
+      "expected": "نقرة",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "نقرة",
+        "actual": "نكرة",
+        "expectedIndex": 33,
+        "actualIndex": 33
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 75,
+      "expected": "كاميرا",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "كاميرا",
+        "actual": "كميرة",
+        "expectedIndex": 75,
+        "actualIndex": 75
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 115,
+      "expected": "والاقتران",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "والاقتران",
+        "actual": "الاقتران",
+        "expectedIndex": 115,
+        "actualIndex": 115
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 136,
+      "expected": "اللمسة",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "اللمسة",
+        "actual": "اللمس",
+        "expectedIndex": 136,
+        "actualIndex": 136
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 142,
+      "expected": "الشاشات",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "الشاشات",
+        "actual": "شاشات",
+        "expectedIndex": 142,
+        "actualIndex": 142
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 154,
+      "expected": "كفيا",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "كفيا",
+        "actual": "كفيلا",
+        "expectedIndex": 154,
+        "actualIndex": 154
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 182,
+      "expected": "المقاومية",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "المقاومية",
+        "actual": "المقومية",
+        "expectedIndex": 182,
+        "actualIndex": 182
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 185,
+      "expected": "المقاومية",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "المقاومية",
+        "actual": "المقومية",
+        "expectedIndex": 185,
+        "actualIndex": 185
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 250,
+      "expected": "للمس",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "للمس",
+        "actual": "لللمس",
+        "expectedIndex": 250,
+        "actualIndex": 250
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 407,
+      "expected": "اللمسة",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "اللمسة",
+        "actual": "اللمس",
+        "expectedIndex": 407,
+        "actualIndex": 407
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 427,
+      "expected": "الشحنة",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "الشحنة",
+        "actual": "الشحنات",
+        "expectedIndex": 427,
+        "actualIndex": 427
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 428,
+      "expected": "والتأثر",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "والتأثر",
+        "actual": "والتاثر",
+        "expectedIndex": 428,
+        "actualIndex": 428
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 449,
+      "expected": "للشبكة",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "للشبكة",
+        "actual": "للشاشة",
+        "expectedIndex": 449,
+        "actualIndex": 449
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 469,
+      "expected": "والأيونات",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "والأيونات",
+        "actual": "والايونات",
+        "expectedIndex": 469,
+        "actualIndex": 469
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 485,
+      "expected": "بالأرض",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "بالأرض",
+        "actual": "بالارض",
+        "expectedIndex": 485,
+        "actualIndex": 485
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 489,
+      "expected": "إنه",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "إنه",
+        "actual": "أنه",
+        "expectedIndex": 489,
+        "actualIndex": 489
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 523,
+      "expected": "الإرسال",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "الإرسال",
+        "actual": "الارسال",
+        "expectedIndex": 523,
+        "actualIndex": 523
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 553,
+      "expected": "المقاس",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "المقاس",
+        "actual": "المقاسي",
+        "expectedIndex": 553,
+        "actualIndex": 553
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 556,
+      "expected": "الإرسال",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "الإرسال",
+        "actual": "الارسال",
+        "expectedIndex": 556,
+        "actualIndex": 556
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 577,
+      "expected": "للشبكة",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "للشبكة",
+        "actual": "للشاشة",
+        "expectedIndex": 577,
+        "actualIndex": 577
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 583,
+      "expected": "اللمسة",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "اللمسة",
+        "actual": "اللمس",
+        "expectedIndex": 583,
+        "actualIndex": 583
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 619,
+      "expected": "فالشاشة",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "فالشاشة",
+        "actual": "فالساشة",
+        "expectedIndex": 619,
+        "actualIndex": 619
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 668,
+      "expected": "وتقارن",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "وتقارن",
+        "actual": "وتققارن",
+        "expectedIndex": 668,
+        "actualIndex": 668
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 674,
+      "expected": "وطرف",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "وطرف",
+        "actual": "وترف",
+        "expectedIndex": 674,
+        "actualIndex": 674
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 691,
+      "expected": "متفاوتة",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "متفاوتة",
+        "actual": "متفاوته",
+        "expectedIndex": 691,
+        "actualIndex": 691
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 702,
+      "expected": "لتحصل",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "لتحصل",
+        "actual": "لتحصر",
+        "expectedIndex": 702,
+        "actualIndex": 702
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 706,
+      "expected": "وواي",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "وواي",
+        "actual": "واي",
+        "expectedIndex": 706,
+        "actualIndex": 707
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 723,
+      "expected": "أردت",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "أردت",
+        "actual": "اردت",
+        "expectedIndex": 723,
+        "actualIndex": 724
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 895,
+      "expected": "ألياف",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "ألياف",
+        "actual": "ألاف",
+        "expectedIndex": 895,
+        "actualIndex": 896
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 909,
+      "expected": "فالأمر",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "فالأمر",
+        "actual": "فالامر",
+        "expectedIndex": 909,
+        "actualIndex": 910
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 965,
+      "expected": "وحده",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "وحده",
+        "actual": "وحدها",
+        "expectedIndex": 965,
+        "actualIndex": 966
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 971,
+      "expected": "المقاومية",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "المقاومية",
+        "actual": "المقومية",
+        "expectedIndex": 971,
+        "actualIndex": 972
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 984,
+      "expected": "تضطرب",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "تضطرب",
+        "actual": "تضطربر",
+        "expectedIndex": 984,
+        "actualIndex": 984
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1023,
+      "expected": "أيونات",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "أيونات",
+        "actual": "ايونات",
+        "expectedIndex": 1023,
+        "actualIndex": 1024
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1082,
+      "expected": "اللمسات",
+      "matchedByModel": "gemini-3.5-flash-lite",
+      "divergentModel": "gemini-3.5-transcribe",
+      "divergence": {
+        "type": "substitution",
+        "expected": "اللمسات",
+        "actual": "الللمسات",
+        "expectedIndex": 1082,
+        "actualIndex": 1082
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1086,
+      "expected": "الإمكان",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "الإمكان",
+        "actual": "الامكان",
+        "expectedIndex": 1086,
+        "actualIndex": 1087
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1187,
+      "expected": "داخل",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "داخل",
+        "actual": "داخلية",
+        "expectedIndex": 1187,
+        "actualIndex": 1188
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1245,
+      "expected": "للمسة",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "للمسة",
+        "actual": "لمسة",
+        "expectedIndex": 1245,
+        "actualIndex": 1246
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1317,
+      "expected": "يتشقق",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "يتشقق",
+        "actual": "يتشقاق",
+        "expectedIndex": 1317,
+        "actualIndex": 1318
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1323,
+      "expected": "للمس",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "للمس",
+        "actual": "لللمس",
+        "expectedIndex": 1323,
+        "actualIndex": 1324
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1372,
+      "expected": "المنطقة",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "المنطقة",
+        "actual": "المنطقه",
+        "expectedIndex": 1372,
+        "actualIndex": 1373
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1416,
+      "expected": "الزجاج",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "الزجاج",
+        "actual": "زجاج",
+        "expectedIndex": 1416,
+        "actualIndex": 1417
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1434,
+      "expected": "والإلكترونيات",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "والإلكترونيات",
+        "actual": "والالكترونيات",
+        "expectedIndex": 1434,
+        "actualIndex": 1435
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 1445,
+      "expected": "المرة",
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": {
+        "type": "substitution",
+        "expected": "المرة",
+        "actual": "المره",
+        "expectedIndex": 1445,
+        "actualIndex": 1446
+      },
+      "verdict": "not-an-audio-error-because-the-other-independent-model-matched"
+    },
+    {
+      "expectedIndex": 706,
+      "expected": null,
+      "matchedByModel": "gemini-3.5-transcribe",
+      "divergentModel": "gemini-3.5-flash-lite",
+      "divergence": [
+        {
+          "type": "insertion",
+          "expected": null,
+          "actual": "و",
+          "expectedIndex": 706,
+          "actualIndex": 706
+        }
+      ],
+      "verdict": "not-an-audio-error-because-the-other-independent-model-had-no-insertion"
+    }
+  ],
+  "substantiveDifferences": [
+    {
+      "type": "substitution",
+      "expectedIndex": 450,
+      "expected": "عندما",
+      "actual": "عند",
+      "confirmedBy": [
+        "gemini-3.5-flash-lite",
+        "gemini-3.5-transcribe"
+      ]
+    }
+  ],
+  "unresolved": [],
+  "baseSchema": "bareeq.audio-human-evidence-adjudication.v1",
+  "baseConsensus": {
+    "substitutions": 3,
+    "deletions": 0,
+    "insertions": 0,
+    "unresolved": 0
+  },
+  "humanResolved": [
+    {
+      "caseId": "T07",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "expectedIndex": 249,
+      "expectedToken": "ملاءمة",
+      "originalIssueType": "substitution",
+      "resolution": "EXPECTED_PRONUNCIATION_CONFIRMED"
+    },
+    {
+      "caseId": "S-02-608",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "expectedIndex": 608,
+      "expectedToken": "النظام",
+      "originalIssueType": "substitution",
+      "resolution": "EXPECTED_PRONUNCIATION_CONFIRMED"
+    },
+    {
+      "caseId": "S-03-1456",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "expectedIndex": 1456,
+      "expectedToken": "يحتج",
+      "originalIssueType": "substitution",
+      "resolution": "EXPECTED_PRONUNCIATION_CONFIRMED"
+    }
+  ],
+  "humanConfirmedAudioErrors": [
+    {
+      "caseId": "S-01-450",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "expectedIndex": 450,
+      "expectedToken": "عندما",
+      "issueType": "substitution"
+    }
+  ],
+  "baseAdjudicationSha256": "ce6527ffdb34ed473938e8e6d30d020827d0bcb446ae856792a3393e0ca41ee1",
+  "derivativeProofSha256": "a058d0d66dfee3efa945cbdf5d4ec7c6a6875740ea3f4183d65c9f6844ee632b",
+  "ttsCalls": 0,
+  "newAsrCalls": 0
+}

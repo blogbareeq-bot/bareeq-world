@@ -1,0 +1,404 @@
+{
+  "schema": "bareeq.audio-completion40-publication.v1",
+  "generatedAt": "2026-10-11T06:20:04.939Z",
+  "publishedCount": 13,
+  "fallbackCount": 2,
+  "publicationComplete": false,
+  "sourceSubmissionSha256": "5bc2e476bd49d57007aab6a51c1e27fa388b6ed6db3d4ffaeb6c551e60924ce3",
+  "sourceReviewManifestSha256": "7edd77f7aae106b6f21daddf6adf94f32bd179fd75f63e3f1f69f8214187a014",
+  "sourceReviewRunId": "37781294858",
+  "reviewer": "صاحب المشروع",
+  "confirmed": 27,
+  "actualAudioErrors": 2,
+  "results": [
+    {
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "consensus": {
+        "substitutions": 1,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "humanResolvedCount": 3,
+      "humanConfirmedAudioErrors": [
+        {
+          "caseId": "S-01-450",
+          "articleId": "how-touchscreens-work",
+          "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+          "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+          "expectedIndex": 450,
+          "expectedToken": "عندما",
+          "issueType": "substitution"
+        }
+      ],
+      "technicalPassed": true,
+      "syncPassed": true,
+      "published": false
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "consensus": {
+        "substitutions": 0,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "humanResolvedCount": 13,
+      "humanConfirmedAudioErrors": [],
+      "technicalPassed": true,
+      "syncPassed": true,
+      "published": true
+    },
+    {
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "consensus": {
+        "substitutions": 1,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "humanResolvedCount": 8,
+      "humanConfirmedAudioErrors": [
+        {
+          "caseId": "C1-01-617-owner",
+          "clipCaseId": "C1-01",
+          "articleId": "language-soft-power-politics",
+          "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+          "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+          "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+          "sourcePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+          "partNumber": 3,
+          "clipSha256": "7891520ec12e68294cb2b592a1e4dbbee613cc15185933476e826a6573483555",
+          "clipStart": 56.86,
+          "clipEnd": 90.02,
+          "targetText": "ويعرض",
+          "expectedText": "تقدم الفرنسية مثالًا واضحًا على قوة الاستمرارية المؤسسية. فشبكات الفرنكوفونية لا تتعامل مع اللغة كدروس منفصلة فقط، بل تربطها بالتعليم والثقافة والإعلام والاقتصاد والحضور الدولي. ويعرض تقرير المنظمة الدولية للفرنكوفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين. (المنظمة الدولية للفرنكوفونية)",
+          "segmentId": "b0029",
+          "issueType": "substitution",
+          "validatorVersion": "audio-completion40-final-review-v1",
+          "schema": "bareeq.audio-owner-supplemental-defect.v1",
+          "expectedIndex": 617,
+          "expectedToken": "ويعرض",
+          "heard": "ويُغرض",
+          "decision": "ACTUAL_AUDIO_ERROR",
+          "humanReviewPerformed": true,
+          "source": "owner message with screenshot",
+          "sourceMessage": "كلمة \"ويعرض\" في الجملة (ويعرض تقرير المنظمة الدولية) تنطق خطأ (تنطق : ويُغرض)",
+          "sourceSubmissionSha256": "5bc2e476bd49d57007aab6a51c1e27fa388b6ed6db3d4ffaeb6c551e60924ce3",
+          "sourceImageSha256": "b331108ae07eb2d3f22645d07b503efd18d8083cce29bc9fcceb8225df12615a",
+          "reviewer": "صاحب المشروع"
+        }
+      ],
+      "technicalPassed": true,
+      "syncPassed": true,
+      "published": false
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "consensus": {
+        "substitutions": 0,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "humanResolvedCount": 7,
+      "humanConfirmedAudioErrors": [],
+      "technicalPassed": true,
+      "syncPassed": true,
+      "published": true
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "consensus": {
+        "substitutions": 0,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "humanResolvedCount": 6,
+      "humanConfirmedAudioErrors": [],
+      "technicalPassed": true,
+      "syncPassed": true,
+      "published": true
+    }
+  ],
+  "published": [
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17",
+      "audioKey": "8f0fcef1d803164a",
+      "parts": [
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-001-6d5dd12fb664.clean.mp3",
+          "bytes": 2118573,
+          "durationSeconds": 176.544,
+          "sha256": "89d0c4c11d350d062718b19f889d6145c293995b0c512e2c1a4bee3336a9c2f7"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-002-1f51597d5aa1.clean.mp3",
+          "bytes": 1826541,
+          "durationSeconds": 152.208,
+          "sha256": "7d970e1b6ba475f9c48d20111916fb930b62c52e13d9af679d73f134bb1d8083"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-003-72b2f2632d53.clean.mp3",
+          "bytes": 1873485,
+          "durationSeconds": 156.12,
+          "sha256": "7a9884888ff0dafe968b277db161aa3f6560c567136bcd948b04779df12865e3"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-004-69982f0f6cf8.clean.mp3",
+          "bytes": 1984365,
+          "durationSeconds": 165.36,
+          "sha256": "a96be2b541f919e42695a7090c09d3b3c0e499b0dfbd14590301f787964e58d8"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-005-6ba769c35d8e.clean.mp3",
+          "bytes": 1725741,
+          "durationSeconds": 143.808,
+          "sha256": "db587401d6654f3c24336300f0efad637dc5c72c4c4f0a8f65c130eb18afa1bc"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-006-8bcbfb90ad55.clean.mp3",
+          "bytes": 1946349,
+          "durationSeconds": 162.192,
+          "sha256": "821fdb1da97bccef77ef9fa00ba3655155b4af9afdca6746a543c5bd800e72c1"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-007-1e085e8fc20a.clean.mp3",
+          "bytes": 1559853,
+          "durationSeconds": 129.984,
+          "sha256": "c0e08abdbc527c0f7d9151be8830ec1635454f0e696fda85f7596e0cda84243b"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-008-3ee74448f7c3.clean.mp3",
+          "bytes": 1795725,
+          "durationSeconds": 149.64,
+          "sha256": "45645944f5bed2cf9978c016f9b2907dedb59b8c5e937bf7fd97623d8c56c4c8"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-009-d4d3415c6058.clean.mp3",
+          "bytes": 1797453,
+          "durationSeconds": 149.784,
+          "sha256": "fc2c062fefea0e50756b9990f72fc3a4b92f738467ff1d4ba3b0632686f428bf"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-010-54c7a019abea.clean.mp3",
+          "bytes": 1750797,
+          "durationSeconds": 145.896,
+          "sha256": "7e7eaf4ba725ed1bf3246cadf729d9ef373f5a472fedda9f06745bc3686e443b"
+        },
+        {
+          "src": "/audio/articles/8f0fcef1d803164a/part-011-0ff599d9cff2.clean.mp3",
+          "bytes": 1092429,
+          "durationSeconds": 91.032,
+          "sha256": "a14061fbfef32c726643c226a56c89ed117e120124853b68e365c4b45cf5c4dd"
+        }
+      ]
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc",
+      "audioKey": "1d1b681593122b59",
+      "parts": [
+        {
+          "src": "/audio/articles/1d1b681593122b59/part-001-aa7d049ba339.clean.mp3",
+          "bytes": 1624077,
+          "durationSeconds": 135.336,
+          "sha256": "cb3f30372394462d100ae5307c6b0e3614dcf9a60849fcc4c9c9188e862b71cd"
+        },
+        {
+          "src": "/audio/articles/1d1b681593122b59/part-002-d56425fb9c1c.clean.mp3",
+          "bytes": 1526157,
+          "durationSeconds": 127.176,
+          "sha256": "369d56d92224d7d58d0e1d4fe8555c9771768a0b14cdf1f5983d687826211cbe"
+        },
+        {
+          "src": "/audio/articles/1d1b681593122b59/part-003-dece0787f1a6.clean.mp3",
+          "bytes": 1271853,
+          "durationSeconds": 105.984,
+          "sha256": "992675a5d9959d76782df4e3199a9e3343cb371ce8b155844b85138bc0db5b12"
+        },
+        {
+          "src": "/audio/articles/1d1b681593122b59/part-004-86a17cc4d3c7.clean.mp3",
+          "bytes": 1652589,
+          "durationSeconds": 137.712,
+          "sha256": "f94dc3bf94cda83f5bd7d8ce8e5847f6650e794b2b3d3c1e0ccac255562099df"
+        },
+        {
+          "src": "/audio/articles/1d1b681593122b59/part-005-651b2b6e40a6.clean.mp3",
+          "bytes": 1377837,
+          "durationSeconds": 114.816,
+          "sha256": "646a1247bed03404b414f289a359060643aaf1ea6764c542ebe01bcbbea98234"
+        },
+        {
+          "src": "/audio/articles/1d1b681593122b59/part-006-3b14cbe3ad8d.clean.mp3",
+          "bytes": 1279053,
+          "durationSeconds": 106.584,
+          "sha256": "bd54e488438e07b7561935d09695bb5661c6a75519ff9c3e4ca0257365b48978"
+        },
+        {
+          "src": "/audio/articles/1d1b681593122b59/part-007-eaa111efc08f.clean.mp3",
+          "bytes": 1437741,
+          "durationSeconds": 119.808,
+          "sha256": "a076b7e305a4e56ba12eb4177bfdd3f7e54d4b6e9b31a0f28c3a328c4506e9ad"
+        }
+      ]
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90",
+      "audioKey": "34e34b6f4633d928",
+      "parts": [
+        {
+          "src": "/audio/articles/34e34b6f4633d928/part-001-3e63fe6508b1.clean.mp3",
+          "bytes": 1652877,
+          "durationSeconds": 137.736,
+          "sha256": "32bc7d349220b315ddfdd81eec5aa12d67025ec36f5d89aded58292fd40b6906"
+        },
+        {
+          "src": "/audio/articles/34e34b6f4633d928/part-002-20df356a29e4.clean.mp3",
+          "bytes": 1599021,
+          "durationSeconds": 133.248,
+          "sha256": "b317d3c3da3cd2b7b82a239cf14dc58a74e6c9835a0259bfc9399133fcdf86b6"
+        },
+        {
+          "src": "/audio/articles/34e34b6f4633d928/part-003-a3c8f6b58ab3.clean.mp3",
+          "bytes": 1656045,
+          "durationSeconds": 138,
+          "sha256": "638be7a18b5da83b6fb2a521ce2d97b351bfedd5058188b335eb6a2d42ecfcf2"
+        },
+        {
+          "src": "/audio/articles/34e34b6f4633d928/part-004-3ab58b47fa13.clean.mp3",
+          "bytes": 1702125,
+          "durationSeconds": 141.84,
+          "sha256": "d85309e1e6899c766378b5c8bbfee80f368abfe55de8162f159caea7bf368e43"
+        },
+        {
+          "src": "/audio/articles/34e34b6f4633d928/part-005-304af2d79f93.clean.mp3",
+          "bytes": 1523565,
+          "durationSeconds": 126.96,
+          "sha256": "bb762530db01fe40093e4eec059aa5de9a69228026965586fe7d1d5f88947ffe"
+        },
+        {
+          "src": "/audio/articles/34e34b6f4633d928/part-006-640424b6f88b.clean.mp3",
+          "bytes": 1588077,
+          "durationSeconds": 132.336,
+          "sha256": "cf541d8cedae2c09173bb1b28455df24cbf3f0c09d99422a143a59533e9a84a8"
+        },
+        {
+          "src": "/audio/articles/34e34b6f4633d928/part-007-587d85ec41f6.clean.mp3",
+          "bytes": 1532205,
+          "durationSeconds": 127.68,
+          "sha256": "d0e0af40c9d750071f3ead549a0f28616cf65c28f8476677d2896bb10111403d"
+        },
+        {
+          "src": "/audio/articles/34e34b6f4633d928/part-008-e69e2208f8fd.clean.mp3",
+          "bytes": 1656333,
+          "durationSeconds": 138.024,
+          "sha256": "2c5eb3b73485a476074db04c71025e6b03619ba45a65fc05fcd9295d8838f415"
+        }
+      ]
+    }
+  ],
+  "liveIdentity": [
+    {
+      "articleId": "ai-agents-future-now",
+      "path": "/audio/articles/84f9f6b53f7ce503/manifest.json",
+      "fingerprint": "7a4dd5f4325a9e144ef65f830873a76e5d07cc0aec7d23440e3742557fec2488",
+      "fullSha256": "34fa55716fe40389283e40c3fc0fca3b8d7f2cf386a2f835edccabeb1d9b659b"
+    },
+    {
+      "articleId": "ai-as-coworker-future-of-human-work",
+      "path": "/audio/articles/263e3d148e6386a8/manifest.json",
+      "fingerprint": "429adbe4ebdabd03e5c77d122255a29c7840ec58b7f32a8e59e18b91aba2db21",
+      "fullSha256": "d7f00585b47dc3ece44c73ac0f62763ffb41a1e4f602ddeae1aabd3d65fd0567"
+    },
+    {
+      "articleId": "altadakhom-explained-simply",
+      "path": "/audio/articles/3fe4cd044730c91d/manifest.json",
+      "fingerprint": "58130a1cbdae1efca15177a4ff26206bbdf4bd0ae1897817dd157b7c94bdab45",
+      "fullSha256": "3b94a9de1c963b6941ffe13fcdbc93f17bdb8ec2a22b1de888001a8007e8a135"
+    },
+    {
+      "articleId": "اطياف-الوهم-مغالطات-منطقيه-نقع-فيها-يوميا-تخدع-عقولنا",
+      "path": "/audio/articles/cf933330ca485220/manifest.json",
+      "fingerprint": "19fb411921cc08b8076d6017950443e04bd86e54b20457d3c546a9b76175cb94",
+      "fullSha256": "dc2217a45d1872ab0de9010897ad22028f0e5e93fddb07178d1f6aa2f7f66a71"
+    },
+    {
+      "articleId": "عادات-ثقافيه-مدهشه-من-حول-العالم-حين-يكون-الاختلاف-اثراء",
+      "path": "/audio/articles/0d7d16713d3cea31/manifest.json",
+      "fingerprint": "a7f364df849199a8f4096863f95739a948e2788cf0d4d65d1e94acec022765b6",
+      "fullSha256": "1586e603c9e59b9967a51a980b4d2f7b58af262ee2aff24a77eab948d2e969e6"
+    },
+    {
+      "articleId": "كيف-تتعامل-مع-المواقف-الصعبه-دليل-عملي-للهدوء-واتخاذ-القرار",
+      "path": "/audio/articles/9d04080d1962a365/manifest.json",
+      "fingerprint": "b8a3fa20617ad5debcfa5975a15c5cbc7c29d53cca081dbda8bd453c765568c3",
+      "fullSha256": "59924dde5e9338a3ba1de2f85c2a1a803935e858bd3fcbbbfdcd3b7e659382f3"
+    },
+    {
+      "articleId": "لا-تبحث-عن-شغفك-ابنه-الحقيقه-العلميه-التي-يجهلها-كثيرون",
+      "path": "/audio/articles/d15e87706b55a08d/manifest.json",
+      "fingerprint": "ea654a0735b9a3a0c280308454c77ea4900720ec289b0e96688cfbc69b60f47a",
+      "fullSha256": "199bde3ec056f3098b1b57365559f864089015e092ebe36cbe119ac3dd484ed7"
+    },
+    {
+      "articleId": "اللياقه-بعد-الاربعين-كيف-تستعيد-طاقتك-وتبني-حياه-اكثر-توازنا",
+      "path": "/audio/articles/43993d7a722d81d4/manifest.json",
+      "fingerprint": "41f6d91a845fb3412378ffe00c9505e199bdbea76fc8f0dbf7ab0ff27a2d2d77",
+      "fullSha256": "0cc49b3d76374f51153119c351898b74b842a689f8499c3b1300061f36265301"
+    },
+    {
+      "articleId": "كيف-يعرف-الانترنت-ما-الذي-تبحث-عنه-قبل-ان-تكمل-الكتابه",
+      "path": "/audio/articles/4d194dd1e6a739a8/manifest.json",
+      "fingerprint": "94ead074d5ee09a51b846380f1a74438b734527783b3433b82f4d4b842b1a15b",
+      "fullSha256": "e8204d5a43005b8dbcf05745167a88225491c69ec94d1d69a72120b36c70990b"
+    },
+    {
+      "articleId": "لماذا-لا-تسقط-الاقمار-الصناعيه-من-السماء",
+      "path": "/audio/articles/45d512425faa533a/manifest.json",
+      "fingerprint": "0e8e0e8b14ee1892061b86ef796cc65951d1ab09be67f4c622cf64db73e75486",
+      "fullSha256": "8fe4fd364e2f9d13bd256d9359ef5814da74692588f6fb7619aed236a388239d"
+    },
+    {
+      "articleId": "اعط-الصباح-فرصة-قراءة-في-كتاب-عبد-الوهاب-مطاوع",
+      "path": "/audio/articles/8f0fcef1d803164a/manifest.json",
+      "fingerprint": "0afbc2030f459e1a78ca07d1130be7bb6b4585889d652e35129c86f875135477",
+      "fullSha256": "79a15bdf5a3b2d6ed092a0d59f1510d638134189022f8f345df7c00b2227db17"
+    },
+    {
+      "articleId": "intuition-first-impression-decisions-signature",
+      "path": "/audio/articles/1d1b681593122b59/manifest.json",
+      "fingerprint": "ffd1bf6e71ede6114156a94a8fd0666c4f3ab5d5a4b53df745b7a5469c27176b",
+      "fullSha256": "aa7b8de471872095858ed47ca6a8326c609262bb81e2ca21bea26b2a0bebf7bc"
+    },
+    {
+      "articleId": "why-some-passports-are-stronger",
+      "path": "/audio/articles/34e34b6f4633d928/manifest.json",
+      "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
+      "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90"
+    }
+  ],
+  "protectedAudioFiles": 65,
+  "successfulTtsSinceLastNewExact": 40,
+  "threshold": 40,
+  "globalFreezeActive": true,
+  "queueMode": "new-content-before-renewal",
+  "ttsCalls": 0,
+  "newAsrCalls": 0
+}
