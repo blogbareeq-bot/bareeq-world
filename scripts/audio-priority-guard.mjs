@@ -20,9 +20,19 @@ async function exists(file) {
   try { await access(file); return true; } catch { return false; }
 }
 
+async function readKnownAudioHistory(root) {
+  try {
+    const status = JSON.parse(await readFile(path.join(root, 'docs', 'audio', 'PROGRESSIVE-STATUS.json'), 'utf8'));
+    return new Set((status.rows || []).map((row) => row.articleId).filter(Boolean));
+  } catch {
+    return new Set();
+  }
+}
+
 export async function buildAudioPriorityQueue(root = ROOT) {
   const postsDir = path.join(root, 'src', 'content', 'posts');
   const files = (await readdir(postsDir)).filter((name) => name.endsWith('.md')).sort();
+  const knownAudioHistory = await readKnownAudioHistory(root);
   const rows = [];
   for (const filename of files) {
     const articleId = filename.replace(/\.md$/, '');
@@ -31,12 +41,16 @@ export async function buildAudioPriorityQueue(root = ROOT) {
     if (meta.draft) continue;
     const liveManifest = path.join(liveAudioDir(articleId, root), 'manifest.json');
     const hasLiveAudio = await exists(liveManifest);
+    const hasAudioHistory = hasLiveAudio || knownAudioHistory.has(articleId);
+    const isNewContent = !hasAudioHistory;
     rows.push({
       articleId,
       title: meta.title,
       publishedAt: meta.publishedAt || null,
       hasLiveAudio,
-      priorityClass: hasLiveAudio ? 'legacy-existing-audio' : 'new-content-no-live-audio',
+      hasAudioHistory,
+      isNewContent,
+      priorityClass: isNewContent ? 'new-content-no-live-audio' : 'legacy-existing-audio',
       liveManifest: hasLiveAudio ? liveManifest : null,
     });
   }
@@ -48,8 +62,8 @@ export async function buildAudioPriorityQueue(root = ROOT) {
     return a.articleId.localeCompare(b.articleId, 'ar');
   };
 
-  const newContent = rows.filter((row) => !row.hasLiveAudio).sort(byPublishedAt);
-  const existingAudio = rows.filter((row) => row.hasLiveAudio).sort(byPublishedAt);
+  const newContent = rows.filter((row) => row.isNewContent).sort(byPublishedAt);
+  const existingAudio = rows.filter((row) => !row.isNewContent).sort(byPublishedAt);
   return {
     schema: 'bareeq.audio-priority-queue.v1',
     policy: 'new-content-before-renewal',
@@ -66,7 +80,7 @@ export function evaluateGenerationPriority(queue, targetArticleId) {
   if (!target) {
     return { allowed: false, exitCode: EXIT_USAGE, reason: 'target article is not a published article in the queue', target: null };
   }
-  if (!target.hasLiveAudio) {
+  if (target.isNewContent) {
     return {
       allowed: true,
       exitCode: 0,
