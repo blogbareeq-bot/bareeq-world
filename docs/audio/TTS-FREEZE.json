@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Execute the owner-authorized one-shot test clip for the first new-content article. Keep global synthesis frozen; do not renew legacy audio or synthesize the full article until human listening passes the test clip.",
+    "nextAction": "Execute the owner-approved bounded 8-part synthesis for the first new-content article, then run technical QA + dual ASR and stop before publication for final human listening. Keep legacy renewal frozen.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -153,5 +153,32 @@
     "ownerApprovalAt": "2026-10-11T06:06:00.000Z",
     "ownerInstruction": "أكمل",
     "status": "AUTHORIZED_ONE_SHOT_TEST_CLIP_ONLY"
+  },
+  "newContentFullSynthesisAuthorization": {
+    "decisionId": "NEW-CONTENT-SCREEN-FOCUS-FULL-SYNTHESIS-20261011-v1",
+    "authorizationFile": "docs/audio/NEW-CONTENT-FULL-SYNTHESIS-AUTHORIZATION.json",
+    "preflightFile": "docs/audio/NEW-CONTENT-FULL-SYNTHESIS-PREFLIGHT.json",
+    "targetArticleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
+    "candidateFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+    "successfulTtsRequestsAuthorized": 8,
+    "providerAttemptsAuthorized": 8,
+    "allowedPartIndexes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "automaticRetry": false,
+    "validationAfterGeneration": true,
+    "publicationAuthorized": false,
+    "legacyRenewalAuthorized": false,
+    "freezeRemainsActive": true,
+    "ownerInstruction": "كلها سليمة",
+    "ownerApprovalAt": "2026-10-11T07:12:00.000Z",
+    "status": "AUTHORIZED_NEW_CONTENT_FULL_SYNTHESIS_ONLY"
   }
 }
