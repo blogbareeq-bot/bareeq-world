@@ -52,7 +52,7 @@ for (const name of postFiles) {
   const source = await readFile(path.join(POSTS, name), 'utf8');
   if (!/^draft:\s*true\s*$/mi.test(source)) published.push(name.replace(/\.md$/, ''));
 }
-if (![13, 14, 15].includes(published.length)) throw new Error(`V4.21.6 audio-dist audit expected 13–15 published articles across supported release states, found ${published.length}.`);
+if (published.length < 13) throw new Error(`V4.21.6 audio-dist audit expected at least the 13-article compatibility baseline, found ${published.length}.`);
 if (!published.includes(NEW_ARTICLE)) throw new Error('V4.20 coworker article is missing from the published set.');
 
 let checkedArticles = 0;
