@@ -4,7 +4,7 @@
   "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
   "status": "ready",
   "testClipPassed": true,
-  "fullSynthesisAllowed": false,
+  "fullSynthesisAllowed": true,
   "expectedDurationSeconds": 60,
   "selectedSegments": [
     {
