@@ -231,7 +231,8 @@
         "status": "SUCCESSFUL_RESPONSE",
         "reservedAt": "2026-10-11T07:36:34.150Z"
       },
-      "providerReceiptSha256": "4c6dbe7c2ca9c03d4fbe1a5008c0984aafeb4908273b6266ad530a2c4c7dea0c"
+      "providerReceiptSha256": "4c6dbe7c2ca9c03d4fbe1a5008c0984aafeb4908273b6266ad530a2c4c7dea0c",
+      "executionOutcome": "GENERATED_REQUIRES_QA"
     }
   ],
   "publicationRequiresNewHumanListening": true,
