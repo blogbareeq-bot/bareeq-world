@@ -24,7 +24,7 @@ const review = {
   reviewedAt: '2026-08-29T00:00:00.000Z',
 };
 
-export async function writeApprovedFixture(dir, { articleId = 'resume-fixture', markdown = FIXTURE_MD, copyRulesFrom } = {}) {
+export async function writeApprovedFixture(dir, { articleId = 'resume-fixture', markdown = FIXTURE_MD, copyRulesFrom, ttsFreezeActive } = {}) {
   const posts = path.join(dir, 'src', 'content', 'posts');
   await mkdir(posts, { recursive: true });
   await writeFile(path.join(posts, `${articleId}.md`), markdown);
@@ -71,7 +71,16 @@ export async function writeApprovedFixture(dir, { articleId = 'resume-fixture', 
     await mkdir(path.join(dir, 'scripts'), { recursive: true });
     await cp(path.join(copyRulesFrom, 'scripts', 'contextual-ambiguities.json'), path.join(dir, 'scripts', 'contextual-ambiguities.json'));
     await mkdir(path.join(dir, 'docs', 'audio'), { recursive: true });
-    await cp(path.join(copyRulesFrom, 'docs', 'audio', 'TTS-FREEZE.json'), path.join(dir, 'docs', 'audio', 'TTS-FREEZE.json'));
+    const freezeTarget = path.join(dir, 'docs', 'audio', 'TTS-FREEZE.json');
+    await cp(path.join(copyRulesFrom, 'docs', 'audio', 'TTS-FREEZE.json'), freezeTarget);
+    if (typeof ttsFreezeActive === 'boolean') {
+      const freeze = JSON.parse(await (await import('node:fs/promises')).readFile(freezeTarget, 'utf8'));
+      freeze.active = ttsFreezeActive;
+      freeze.reason = ttsFreezeActive
+        ? 'integration fixture explicitly exercises frozen synthesis'
+        : 'integration fixture explicitly exercises quota/resume behavior with TTS freeze disabled';
+      await writeFile(freezeTarget, `${JSON.stringify(freeze, null, 2)}\n`);
+    }
   }
   return { model, script, plan };
 }
