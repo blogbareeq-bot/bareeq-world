@@ -28,6 +28,9 @@ function decisionSets(full, finalChoice){
 
 function removeOneIssue(result, mapping, caseId, resolution){
   const index=Number(mapping.expectedIndex);
+  if ((result.humanConfirmedAudioErrors || []).some(x => Number(x.expectedIndex) === index)) {
+    throw new Error(`${caseId}: cannot remove a human-confirmed audio error`);
+  }
   const type=String(mapping.issueType || mapping.hidden?.automatedType || '');
   const pools=[
     ['substantiveDifferences', result.substantiveDifferences],
@@ -66,7 +69,8 @@ function recompute(result){
   const insertions=result.substantiveDifferences.filter(x=>x.type==='insertion').length;
   const unresolved=result.unresolved.length;
   result.consensus={substitutions,deletions,insertions,unresolved};
-  result.passed=[substitutions,deletions,insertions,unresolved].every(x=>x===0);
+  result.passed=[substitutions,deletions,insertions,unresolved].every(x=>x===0)
+    && (result.humanConfirmedAudioErrors || []).length === 0;
   result.status=result.passed?'passed':'failed';
   return result;
 }
@@ -77,8 +81,8 @@ export function applyHumanEvidence({baseResult, mappings, resolvedCases, ambigui
   result.baseSchema=baseResult.schema;
   result.baseConsensus={...baseResult.consensus};
   result.method='independent-dual-asr-consensus-plus-binding-blind-human-triage';
-  result.humanResolved=[];
-  result.humanConfirmedAudioErrors=[];
+  result.humanResolved=structuredClone(baseResult.humanResolved || []);
+  result.humanConfirmedAudioErrors=structuredClone(baseResult.humanConfirmedAudioErrors || []);
 
   for(const caseId of [...resolvedCases].sort()){
     const mapping=mappings[caseId];
@@ -262,3 +266,4 @@ async function cli(){
 }
 const isCli=process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url);
 if(isCli) await cli();
+

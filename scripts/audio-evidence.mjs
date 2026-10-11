@@ -115,6 +115,9 @@ export async function loadBoundEvidence({
   }
 
   const consensus = validate?.asrAdjudication?.consensus || {};
+  if (validate?.asrAdjudication?.humanConfirmedAudioErrors?.length || record?.humanConfirmedAudioErrors?.length) {
+    failures.push('human-confirmed audio errors remain; publication is withheld');
+  }
   if (validate?.asrAdjudication) {
     if (validate.asrAdjudication.passed !== true
       || !['substitutions', 'deletions', 'insertions', 'unresolved'].every((key) => Number(consensus[key]) === 0)) {
@@ -204,3 +207,4 @@ export async function loadBoundEvidence({
   }
   return reports;
 }
+

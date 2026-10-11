@@ -107,6 +107,11 @@ export function evaluateAsr(record = {}) {
   const reports = Array.isArray(record.asrReports) ? record.asrReports : [];
   const models = unique(reports.map((item) => item.requestedModel || item.model));
   const adjudication = record.asrAdjudication || null;
+  const humanErrors = [
+    ...(Array.isArray(record.humanConfirmedAudioErrors) ? record.humanConfirmedAudioErrors : []),
+    ...(Array.isArray(adjudication?.humanConfirmedAudioErrors) ? adjudication.humanConfirmedAudioErrors : []),
+  ];
+  if (humanErrors.length) reasons.push('human-confirmed audio errors remain; automated consensus cannot override listening evidence');
   const expectedModels = Array.isArray(adjudication?.models) && adjudication.models.length === 2
     ? adjudication.models
     : INDEPENDENT_ASR_MODELS;
