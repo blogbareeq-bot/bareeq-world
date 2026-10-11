@@ -81,7 +81,20 @@ jobs:
           node scripts/audio-state-consistency.mjs
           node scripts/audio-gate4-governance.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+      - name: Build the prepared publication in an isolated worktree
+        run: |
+          set -euo pipefail
+          validation_root=$(mktemp -d)
+          git worktree add --detach "$validation_root" HEAD
+          cp -a public/audio/articles/8f0fcef1d803164a "$validation_root/public/audio/articles/"
+          cp -a public/audio/articles/1d1b681593122b59 "$validation_root/public/audio/articles/"
+          cp -a public/audio/articles/34e34b6f4633d928 "$validation_root/public/audio/articles/"
+          cp -a docs/audio/. "$validation_root/docs/audio/"
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$validation_root/node_modules"
+          cd "$validation_root"
           npm run build
+          cd "$GITHUB_WORKSPACE"
+          git worktree remove --force "$validation_root"
       - name: Restrict production delta to the three approved saved files
         run: |
           node --input-type=module <<'NODE'
