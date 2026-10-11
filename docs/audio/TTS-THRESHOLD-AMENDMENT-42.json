@@ -161,7 +161,8 @@
         "status": "SUCCESSFUL_RESPONSE",
         "reservedAt": "2026-10-11T07:36:19.653Z"
       },
-      "providerReceiptSha256": "349fc8d8d26799f4590db45b85fbb3c7c0ee21310ce2be50ddc44c77e3b109e2"
+      "providerReceiptSha256": "349fc8d8d26799f4590db45b85fbb3c7c0ee21310ce2be50ddc44c77e3b109e2",
+      "executionOutcome": "GENERATED_REQUIRES_QA"
     },
     {
       "id": "REPAIR2-C1",
