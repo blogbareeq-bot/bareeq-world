@@ -46,7 +46,7 @@ async function preflight(){
 
 async function execute(){
  const {a,s,e,f,m}=await preflight();
- if(process.env.GITHUB_ACTIONS!=='true'||process.env.GITHUB_RUN_ATTEMPT!=='1'||!['pull_request','push'].includes(process.env.GITHUB_EVENT_NAME||''))fail('execute requires first-attempt GitHub Actions');
+ if(process.env.GITHUB_ACTIONS!=='true'||process.env.GITHUB_REF!=='refs/heads/main'||process.env.GITHUB_RUN_ATTEMPT!=='1')fail('execute requires first-attempt main GitHub Actions');
  const apiKey=process.env.GEMINI_API_KEY;if(!apiKey)fail('GEMINI_API_KEY missing');
  const published=[];let asrCalls=0;
  for(const t of a.targets){
@@ -59,7 +59,7 @@ async function execute(){
   try{
    upload=await uploadAudioFile({apiKey,bytes,displayName:`${t.caseId}-final-full.mp3`});
    asrCalls+=1;if(asrCalls>a.additionalFullAsrRequestsAuthorized)fail('ASR budget exceeded');
-   try{await transcribeFullAudio({model:SECOND,audioPath:full,expectedText:article.spokenText,apiKey,outputPath:path.join(reportsDir,`asr-${SECOND}.json`),fingerprint:t.fingerprint,fullSha256:t.fullSha256,file:upload,skipUpload:true,article,speechScriptHash:t.speechScriptHash});}catch(error){if(error?.result?.httpStatus!==200||typeof error?.result?.transcript!=='string')throw error;}
+   await transcribeFullAudio({model:SECOND,audioPath:full,expectedText:article.spokenText,apiKey,outputPath:path.join(reportsDir,`asr-${SECOND}.json`),fingerprint:t.fingerprint,fullSha256:t.fullSha256,file:upload,skipUpload:true,article,speechScriptHash:t.speechScriptHash});
   }finally{if(upload?.name)await deleteUploadedFile({apiKey,name:upload.name}).catch(()=>null);}
   const adjudication=await adjudicateCandidate({articleId:t.articleId,fingerprint:t.fingerprint,models:[FIRST,SECOND]});
   if(!adjudication.passed||!['substitutions','deletions','insertions','unresolved'].every(k=>Number(adjudication.consensus?.[k])===0))fail('dual-ASR did not close '+t.articleId);

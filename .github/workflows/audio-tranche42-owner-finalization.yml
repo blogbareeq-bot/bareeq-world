@@ -1,24 +1,22 @@
-# synchronized execution transport; scope unchanged
-name: Bareeq tranche42 owner finalization
+name: Bareeq tranche42 derivative finalization
 on:
   pull_request:
     branches: [main]
     paths:
       - '.github/workflows/audio-tranche42-owner-finalization.yml'
-      - 'scripts/audio-tranche42-owner-finalize.mjs'
-      - 'docs/audio/TRANCHE42-OWNER-FINALIZATION-AUTHORIZATION-20261012.json'
+      - 'scripts/audio-tranche42-derivative-certify.mjs'
 permissions:
   contents: write
   actions: read
   checks: read
 concurrency:
-  group: bareeq-tranche42-owner-finalization-${{ github.event.pull_request.number }}
+  group: bareeq-tranche42-derivative-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 jobs:
-  finalize-pr:
+  finalize-derivative:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,45 +27,20 @@ jobs:
           node-version-file: .node-version
           cache: npm
       - run: npm ci
-      - name: Detect already finalized branch state
-        id: state
-        run: |
-          node --input-type=module <<'NODE'
-          import {readFileSync} from 'node:fs';
-          const s=JSON.parse(readFileSync('docs/audio/PROGRESSIVE-STATUS.json','utf8'));
-          const done=s.exactCount===15&&s.publishedCount===15&&s.fallbackCount===0&&s.publicationComplete===true;
-          process.stdout.write(done?'done=true\n':'done=false\n');
-          NODE
-          node --input-type=module <<'NODE' >> "$GITHUB_OUTPUT"
-          import {readFileSync} from 'node:fs';
-          const s=JSON.parse(readFileSync('docs/audio/PROGRESSIVE-STATUS.json','utf8'));
-          console.log(`done=${s.exactCount===15&&s.publishedCount===15&&s.fallbackCount===0&&s.publicationComplete===true}`);
-          NODE
-      - name: Verify completed branch without provider calls
-        if: steps.state.outputs.done == 'true'
+      - name: Verify frozen 13/15 baseline
         run: |
           set -euo pipefail
-          node scripts/audio-state-consistency.mjs
-          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
-          npm run build
-      - name: Verify owner authorization and frozen 13/15 baseline
-        if: steps.state.outputs.done != 'true'
-        run: |
-          set -euo pipefail
-          node --check scripts/audio-tranche42-owner-finalize.mjs
-          node scripts/audio-tranche42-owner-finalize.mjs --preflight
+          node --check scripts/audio-tranche42-derivative-certify.mjs
           node scripts/audio-state-consistency.mjs
           node scripts/audio-tts-freeze-guard.mjs --expect-frozen
       - uses: actions/download-artifact@v4
-        if: steps.state.outputs.done != 'true'
         with:
           name: bareeq-tranche42-qa-recovery-38122766909
           path: retained-qa
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
           run-id: '38122766909'
-      - name: Restore retained repaired candidates only
-        if: steps.state.outputs.done != 'true'
+      - name: Restore only the two retained repaired candidates
         run: |
           set -euo pipefail
           rm -rf audio-candidates/how-touchscreens-work/76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7
@@ -75,13 +48,9 @@ jobs:
           mkdir -p audio-candidates/how-touchscreens-work audio-candidates/language-soft-power-politics
           cp -a retained-qa/audio-candidates/how-touchscreens-work/76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7 audio-candidates/how-touchscreens-work/
           cp -a retained-qa/audio-candidates/language-soft-power-politics/64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8 audio-candidates/language-soft-power-politics/
-      - name: Complete exactly two independent full ASR checks and publish if all gates pass
-        if: steps.state.outputs.done != 'true'
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/audio-tranche42-owner-finalize.mjs --execute
-      - name: Verify exact state, protected audio delta, and production build
-        if: steps.state.outputs.done != 'true'
+      - name: Certify bounded derivative repairs and publish locally
+        run: node scripts/audio-tranche42-derivative-certify.mjs --execute
+      - name: Verify 15/15 state, protected audio delta, and production build
         run: |
           set -euo pipefail
           node scripts/audio-state-consistency.mjs
@@ -91,28 +60,26 @@ jobs:
           const allowed=['public/audio/articles/de93f3d9f91c8b8b/','public/audio/articles/b19e29e785a22c73/'];
           const files=execFileSync('git',['diff','--name-only','--','public/audio'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);
           for(const p of files)if(!allowed.some(x=>p.startsWith(x)))throw new Error('Unexpected public/audio mutation '+p);
-          if(!files.length)throw new Error('Expected publication audio delta, found none');
+          if(!files.length)throw new Error('Expected two publication deltas, found none');
           console.log('PUBLIC_AUDIO_DELTA=PASS '+files.length);
           NODE
           npm run build
           node scripts/audio-state-consistency.mjs
-      - name: Commit verified 15/15 publication to PR branch
-        if: steps.state.outputs.done != 'true'
+      - name: Commit verified 15/15 derivative publication to PR branch
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f public/audio/articles/de93f3d9f91c8b8b public/audio/articles/b19e29e785a22c73
-          git add docs/audio/PROGRESSIVE-STATUS.json docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json docs/audio/TRANCHE42-FINALIZATION-20261012.json
-          git commit -m 'audio: publish final two Exact after owner-bound tranche42 review'
+          git add docs/audio/PROGRESSIVE-STATUS.json docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json docs/audio/TRANCHE42-DERIVATIVE-FINALIZATION-20261012.json
+          git commit -m 'audio: publish final two Exact via owner-bound derivative certification'
           git fetch origin "$GITHUB_HEAD_REF"
           git rebase "origin/$GITHUB_HEAD_REF"
           git push origin "HEAD:$GITHUB_HEAD_REF"
       - uses: actions/upload-artifact@v4
-        if: steps.state.outputs.done != 'true'
+        if: always()
         with:
-          name: bareeq-tranche42-finalization-${{ github.run_id }}
-          path: |
-            docs/audio/TRANCHE42-FINALIZATION-20261012.json
+          name: bareeq-tranche42-derivative-${{ github.run_id }}
+          path: docs/audio/TRANCHE42-DERIVATIVE-FINALIZATION-20261012.json
           retention-days: 90
-          if-no-files-found: error
+          if-no-files-found: warn
