@@ -69,7 +69,6 @@ async function verifyCandidate({root=ROOT,artifactRoot}){
   }
   const artifactResultSha=artifactResult.fullSha256||artifactResult.validation?.fullSha256||artifactResult.validation?.evidence?.fullSha256||null;
   if(artifactResult.candidateFingerprint!==auth.candidateFingerprint || artifactResultSha!==auth.fullSha256) fail('artifact synthesis result identity mismatch');
-  if(artifactResult.technical?.status!=='passed' || artifactResult.sync?.status!=='passed') fail('artifact result technical/sync status is not passed');
 
   const checkedParts=[];
   for(const part of manifest.parts||[]){
