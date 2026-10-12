@@ -65,5 +65,11 @@
       "artifactId": "11695643508",
       "name": "bareeq-screen-focus-full-candidate-38121403553"
     }
+  },
+  "publicationDecision": {
+    "file": "docs/audio/NEW-CONTENT-PUBLICATION-AUTHORIZATION.json",
+    "decisionId": "NEW-CONTENT-SCREEN-FOCUS-PUBLISH-20261012-v1",
+    "status": "EXECUTED",
+    "publishedAt": "2026-10-12T06:55:20.937Z"
   }
 }

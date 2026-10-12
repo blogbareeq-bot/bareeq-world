@@ -1,7 +1,7 @@
 {
   "schema": "bareeq.audio-new-content-publication-authorization.v1",
   "decisionId": "NEW-CONTENT-SCREEN-FOCUS-PUBLISH-20261012-v1",
-  "authorizationStatus": "AUTHORIZED",
+  "authorizationStatus": "EXECUTED",
   "authorizedBy": "owner",
   "authorizedOn": "2026-10-12",
   "ownerInstruction": "كلها سليمة",
@@ -29,5 +29,12 @@
   "automaticRetry": false,
   "legacyRenewalAuthorized": false,
   "freezeRemainsActive": true,
-  "statusNote": "Publish the already-generated immutable candidate only after binding the owner's full-candidate listening approval to the candidate fingerprint and full SHA. Preserve raw ASR evidence; perform no synthesis, retry, or provider call."
+  "statusNote": "Publish the already-generated immutable candidate only after binding the owner's full-candidate listening approval to the candidate fingerprint and full SHA. Preserve raw ASR evidence; perform no synthesis, retry, or provider call.",
+  "executedAt": "2026-10-12T06:55:20.937Z",
+  "publication": {
+    "status": "PUBLISHED",
+    "audioKey": "2679e12bbe133339",
+    "publishedAt": "2026-10-12T06:55:20.937Z",
+    "manifest": "public/audio/articles/2679e12bbe133339/manifest.json"
+  }
 }

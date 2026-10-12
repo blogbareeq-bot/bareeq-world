@@ -1,0 +1,254 @@
+{
+  "schema": "bareeq.audio-new-content-publication.v1",
+  "decisionId": "NEW-CONTENT-SCREEN-FOCUS-PUBLISH-20261012-v1",
+  "status": "PUBLISHED",
+  "articleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
+  "audioKey": "2679e12bbe133339",
+  "candidateFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+  "fullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d",
+  "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
+  "sourceRunId": "38121403553",
+  "sourceArtifactId": "11695643508",
+  "sourceArtifactName": "bareeq-screen-focus-full-candidate-38121403553",
+  "publicationMethod": "owner-full-file-listening-bound-v1",
+  "technicalQa": "passed",
+  "sync": "passed",
+  "baseAsrConsensus": {
+    "substitutions": 9,
+    "deletions": 1,
+    "insertions": 1,
+    "unresolved": 4
+  },
+  "humanFinalConsensus": {
+    "substitutions": 0,
+    "deletions": 0,
+    "insertions": 0,
+    "unresolved": 0
+  },
+  "automatedFlaggedIssues": 15,
+  "humanResolvedIssues": [
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-01",
+      "expectedIndex": 518,
+      "expected": "تشن",
+      "automatedType": "substitution",
+      "automatedActual": "تشين",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-02",
+      "expectedIndex": 590,
+      "expected": "بعيدا",
+      "automatedType": "deletion",
+      "automatedActual": null,
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-03",
+      "expectedIndex": 702,
+      "expected": "هايتماير",
+      "automatedType": "substitution",
+      "automatedActual": "ماير",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-04",
+      "expectedIndex": 934,
+      "expected": "إن",
+      "automatedType": "substitution",
+      "automatedActual": "أن",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-05",
+      "expectedIndex": 946,
+      "expected": "إن",
+      "automatedType": "substitution",
+      "automatedActual": "أن",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-06",
+      "expectedIndex": 1151,
+      "expected": "يكون",
+      "automatedType": "substitution",
+      "automatedActual": "يقوم",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-07",
+      "expectedIndex": 1246,
+      "expected": "غير",
+      "automatedType": "substitution",
+      "automatedActual": "دون",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-08",
+      "expectedIndex": 1615,
+      "expected": "فتز",
+      "automatedType": "substitution",
+      "automatedActual": "فيتس",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-09",
+      "expectedIndex": 1652,
+      "expected": "تقرؤها",
+      "automatedType": "substitution",
+      "automatedActual": "تقرأها",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-10",
+      "expectedIndex": 1657,
+      "expected": "عمل",
+      "automatedType": "substitution",
+      "automatedActual": "عملا",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-11",
+      "expectedIndex": 702,
+      "expected": null,
+      "automatedType": "insertion",
+      "automatedActual": "هايت",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-12",
+      "expectedIndex": 1110,
+      "expected": "وللفيلم",
+      "automatedType": "unresolved",
+      "automatedActual": "ولفلم",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-13",
+      "expectedIndex": 1160,
+      "expected": "نظن",
+      "automatedType": "unresolved",
+      "automatedActual": "نص",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-14",
+      "expectedIndex": 1502,
+      "expected": "للحظة",
+      "automatedType": "unresolved",
+      "automatedActual": "لللحظة",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    },
+    {
+      "caseId": "SCREEN-FOCUS-OWNER-15",
+      "expectedIndex": 1728,
+      "expected": "أصبحت",
+      "automatedType": "unresolved",
+      "automatedActual": "ص",
+      "resolution": "OWNER_FULL_LISTENING_CONFIRMED_NO_AUDIBLE_DEFECT",
+      "evidenceFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "evidenceFullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d"
+    }
+  ],
+  "humanListening": {
+    "schema": "bareeq.audio-owner-full-listening.v1",
+    "status": "passed",
+    "reviewedBy": "owner",
+    "reviewedAt": "2026-10-12T06:55:20.937Z",
+    "ownerInstruction": "كلها سليمة",
+    "scope": "full-generated-candidate-all-eight-parts",
+    "evidence": {
+      "candidateFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "sha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d",
+      "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
+      "sourceRunId": "38121403553",
+      "sourceArtifactId": "11695643508"
+    }
+  },
+  "rawAsrReportsImmutable": true,
+  "baseAdjudicationImmutable": true,
+  "baseAdjudicationSha256": "95a814bcc1c70479f792edcec37a53296946f1d2ea28794cebe89c41755b94a5",
+  "publicManifestSha256": "9806c5e88a0856e3df388e5a071ad923b44c2c7571621488f6e981491b594e70",
+  "parts": [
+    {
+      "filename": "part-001-5f02f9941f94.clean.mp3",
+      "sha256": "22bfe5cdf3dbb9493b95ce8821a0c640bb409349c87a0efa2848169cfc917805",
+      "bytes": 2087181,
+      "durationSeconds": 173.928
+    },
+    {
+      "filename": "part-002-af6d8b6e645b.clean.mp3",
+      "sha256": "e99126cfb8b9419c3ec780f8129ae051c8e67fd25a938ba2cc33982948d66e0e",
+      "bytes": 2056365,
+      "durationSeconds": 171.36
+    },
+    {
+      "filename": "part-003-6b479414c67f.clean.mp3",
+      "sha256": "cc44381287806bc84c8e871e6c95a4a7b20f3193cfcaecd95b47df4d06dc1328",
+      "bytes": 1876077,
+      "durationSeconds": 156.336
+    },
+    {
+      "filename": "part-004-4e5f246c19d6.clean.mp3",
+      "sha256": "79defa51f1529cce3f43d1101644af7a081b572ac743b52a4a3dbf6a0e792ff8",
+      "bytes": 2022669,
+      "durationSeconds": 168.552
+    },
+    {
+      "filename": "part-005-8edc9d37fa20.clean.mp3",
+      "sha256": "7d1d8cf5c59907c4dd328bd68a97814a24e0d664e0fd77b2e6bdc6fa6c20e055",
+      "bytes": 2083149,
+      "durationSeconds": 173.592
+    },
+    {
+      "filename": "part-006-481530357bcc.clean.mp3",
+      "sha256": "04a526ef262211dd02113c78879fe20fdfe5966686e2c90a712c7eb50f53cfd3",
+      "bytes": 2109357,
+      "durationSeconds": 175.776
+    },
+    {
+      "filename": "part-007-ad13e4813a90.clean.mp3",
+      "sha256": "f73778e70ef1e2b870e0425ef64476e26ca0a161ec23773de2edcdb7914241c0",
+      "bytes": 1260909,
+      "durationSeconds": 105.072
+    },
+    {
+      "filename": "part-008-00024125fc4d.clean.mp3",
+      "sha256": "cc7ade9b2c2800aac804d3f823b548b018a193b0746fd8ad69978e6f14ba74e2",
+      "bytes": 1020141,
+      "durationSeconds": 85.008
+    }
+  ],
+  "ttsCalls": 0,
+  "newAsrCalls": 0,
+  "providerCalls": 0,
+  "publishedAt": "2026-10-12T06:55:20.937Z"
+}

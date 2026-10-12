@@ -53,13 +53,28 @@
       "adjudicationPath": "audio-candidates/هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه/dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525/reports/asr-adjudication.json"
     }
   },
-  "status": "GENERATED_AWAITING_VALIDATION_ADJUDICATION",
+  "status": "PUBLISHED_OWNER_VERIFIED",
   "publication": {
-    "authorized": false,
-    "performed": false
+    "authorized": true,
+    "performed": true,
+    "method": "owner-full-file-listening-bound-v1",
+    "publishedAt": "2026-10-12T06:55:20.937Z",
+    "audioKey": "2679e12bbe133339"
   },
   "finalHumanListening": {
-    "status": "required-not-performed"
+    "schema": "bareeq.audio-owner-full-listening.v1",
+    "status": "passed",
+    "reviewedBy": "owner",
+    "reviewedAt": "2026-10-12T06:55:20.937Z",
+    "ownerInstruction": "كلها سليمة",
+    "scope": "full-generated-candidate-all-eight-parts",
+    "evidence": {
+      "candidateFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+      "sha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d",
+      "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
+      "sourceRunId": "38121403553",
+      "sourceArtifactId": "11695643508"
+    }
   },
   "completedAt": "2026-10-11T07:38:39.235Z"
 }
