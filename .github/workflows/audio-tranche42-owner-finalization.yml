@@ -74,8 +74,6 @@ jobs:
           git add -f public/audio/articles/de93f3d9f91c8b8b public/audio/articles/b19e29e785a22c73
           git add docs/audio/PROGRESSIVE-STATUS.json docs/audio/PUBLISHED-SADALTAGER-PARTIAL-20260903.json docs/audio/ENGINE-STRATEGY-STATE.json docs/audio/TTS-FREEZE.json docs/audio/TRANCHE42-DERIVATIVE-FINALIZATION-20261012.json
           git commit -m 'audio: publish final two Exact via owner-bound derivative certification'
-          git fetch origin "$GITHUB_HEAD_REF"
-          git rebase "origin/$GITHUB_HEAD_REF"
           git push origin "HEAD:$GITHUB_HEAD_REF"
       - uses: actions/upload-artifact@v4
         if: always()
