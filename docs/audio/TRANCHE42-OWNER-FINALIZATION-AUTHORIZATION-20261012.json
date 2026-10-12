@@ -1,0 +1,51 @@
+{
+  "schema": "bareeq.audio-tranche42-owner-finalization-authorization.v1",
+  "decisionId": "COMPLETION15-TWO-REPAIRS-FINALIZE-20261012-v1",
+  "sourceDecisionId": "COMPLETION15-TWO-REPAIRS-20261011-v1",
+  "authorizedBy": "صاحب المشروع",
+  "ownerInstruction": "كلها سليمة",
+  "continuationInstruction": "أكمل من المحادثة السابقة",
+  "authorizedAt": "2026-10-12T04:52:00.000Z",
+  "ownerListeningPerformed": true,
+  "reviewedPacketId": "tranche42-repaired-38121863055",
+  "reviewedPacketSha256": "30a695de7e6fadb0df1a865fa68c110f2448ca86526ab2a78fe4c4c43436d3f9",
+  "sourceQaRunId": "38122766909",
+  "sourceQaArtifactId": 11696195944,
+  "sourceQaArtifactSha256": "e4d34b7bd1184f3a18d51423e939f27aa2e823290032b7268a5f6f8693200a05",
+  "additionalTtsRequestsAuthorized": 0,
+  "additionalFullAsrRequestsAuthorized": 2,
+  "retainedModel": "gemini-3.5-flash-lite",
+  "secondModel": "gemini-3.5-transcribe",
+  "asrResolution": {
+    "priorRequestedModel": "gemini-3.6-flash",
+    "priorFailure": "HTTP 503 service_unavailable",
+    "resolvedModel": "gemini-3.5-transcribe",
+    "reason": "Use the repository's current independent production ASR pair for the two missing full-file checks; no TTS and no retry expansion."
+  },
+  "automaticRetry": false,
+  "publicationAuthorizedOnlyIfAllGatesPass": true,
+  "preserveExistingExact": true,
+  "preserveNewContentPriority": true,
+  "targets": [
+    {
+      "caseId": "REPAIR2-S",
+      "articleId": "how-touchscreens-work",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "ad56a3fea95f15b7d28da84c0a333c9e74880b6b12c84b6f34a922ffd491e39e",
+      "speechScriptHash": "dd0e74ecdb7f030c507422bf97bd0e0ac447351efb0583dce721dc2f96b4cac0",
+      "clipSha256": "8a6d329986c3784f907476130e8d2db2f74d6485d5c746e04dbc92d3e8dfe866",
+      "reviewScope": "ENTIRE_REPAIRED_CONTEXT",
+      "decision": "EXPECTED_PRONUNCIATION_CONFIRMED"
+    },
+    {
+      "caseId": "REPAIR2-C1",
+      "articleId": "language-soft-power-politics",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "6e75b72978803e251ef4e876ad0e24667f135836175528ed948acec0a87de3d7",
+      "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+      "clipSha256": "306e062dd5be94d94bbf9451bb824d9450e4bd41c435fd9d4eda2e70a6ad37e6",
+      "reviewScope": "ENTIRE_REPAIRED_CONTEXT",
+      "decision": "EXPECTED_PRONUNCIATION_CONFIRMED"
+    }
+  ]
+}
