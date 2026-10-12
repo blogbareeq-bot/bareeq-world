@@ -1,0 +1,33 @@
+{
+  "schema": "bareeq.audio-new-content-publication-authorization.v1",
+  "decisionId": "NEW-CONTENT-SCREEN-FOCUS-PUBLISH-20261012-v1",
+  "authorizationStatus": "AUTHORIZED",
+  "authorizedBy": "owner",
+  "authorizedOn": "2026-10-12",
+  "ownerInstruction": "كلها سليمة",
+  "targetArticleId": "هل-سرقت-الشاشه-تركيزنا-لماذا-لم-نعد-نحتمل-الدقائق-الفارغه",
+  "candidateFingerprint": "dd12b7cbb506458c572be67216eaa140fe49cb935b447372439bb77c63e25525",
+  "fullSha256": "681faebc6b3c0d23c68fa86c89a3be8f333b6a7272dfeb7b2cdc2e885288cf6d",
+  "speechScriptHash": "07788a28b79150e844cda78d42db40c3a372188946fe37129782f259aaf015a7",
+  "sourceRunId": "38121403553",
+  "sourceArtifactId": "11695643508",
+  "sourceArtifactName": "bareeq-screen-focus-full-candidate-38121403553",
+  "publicationAuthorized": true,
+  "publicationMethod": "owner-full-file-listening-bound-v1",
+  "rawAsrReportsImmutable": true,
+  "baseAdjudicationImmutable": true,
+  "expectedBaseConsensus": {
+    "substitutions": 9,
+    "deletions": 1,
+    "insertions": 1,
+    "unresolved": 4
+  },
+  "expectedFlaggedIssues": 15,
+  "ttsCallsAuthorized": 0,
+  "newAsrCallsAuthorized": 0,
+  "providerCallsAuthorized": 0,
+  "automaticRetry": false,
+  "legacyRenewalAuthorized": false,
+  "freezeRemainsActive": true,
+  "statusNote": "Publish the already-generated immutable candidate only after binding the owner's full-candidate listening approval to the candidate fingerprint and full SHA. Preserve raw ASR evidence; perform no synthesis, retry, or provider call."
+}
