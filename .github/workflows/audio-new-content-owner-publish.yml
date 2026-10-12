@@ -1,0 +1,152 @@
+name: Bareeq new-content owner-approved publication
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/audio/NEW-CONTENT-PUBLICATION-AUTHORIZATION.json'
+      - 'scripts/audio-new-content-owner-publish.mjs'
+      - '.github/workflows/audio-new-content-owner-publish.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/audio/NEW-CONTENT-PUBLICATION-AUTHORIZATION.json'
+      - 'scripts/audio-new-content-owner-publish.mjs'
+      - '.github/workflows/audio-new-content-owner-publish.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: bareeq-new-content-owner-publication
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'main' }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - name: Prove synthesis remains frozen and canonical legacy state is intact
+        run: |
+          set -euo pipefail
+          node scripts/audio-tts-freeze-guard.mjs --expect-frozen
+          node scripts/audio-state-consistency.mjs
+          node scripts/audio-gate4-governance.mjs
+          node --check scripts/audio-new-content-owner-publish.mjs
+
+      - name: Download immutable generated candidate
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-screen-focus-full-candidate-38121403553
+          path: candidate-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '38121403553'
+
+      - name: Verify exact candidate identity and owner publication contract
+        run: |
+          set -euo pipefail
+          node scripts/audio-new-content-owner-publish.mjs --artifact-root=candidate-input --verify-only
+
+      - name: Prove verification made no production changes
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- public/audio docs/audio
+          echo 'OWNER_PUBLICATION_VERIFY=NO_MUTATION'
+
+  publish:
+    needs: verify
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - id: gate
+        name: Check one-shot publication authorization
+        shell: bash
+        run: |
+          STATUS=$(node -p "JSON.parse(require('fs').readFileSync('docs/audio/NEW-CONTENT-PUBLICATION-AUTHORIZATION.json','utf8')).authorizationStatus")
+          if [ "$STATUS" = "AUTHORIZED" ]; then
+            echo 'should-run=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'should-run=false' >> "$GITHUB_OUTPUT"
+            echo "NEW_CONTENT_PUBLICATION_DISPATCH=SKIPPED status=$STATUS"
+          fi
+
+      - name: Download immutable generated candidate
+        if: steps.gate.outputs.should-run == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: bareeq-screen-focus-full-candidate-38121403553
+          path: candidate-input
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '38121403553'
+
+      - name: Publish owner-approved candidate with zero provider calls
+        if: steps.gate.outputs.should-run == 'true'
+        run: |
+          set -euo pipefail
+          node scripts/audio-new-content-owner-publish.mjs --artifact-root=candidate-input
+          git diff --name-only -- public/audio/articles | while read -r file; do
+            case "$file" in
+              public/audio/articles/2679e12bbe133339/*) ;;
+              *) echo "Unexpected legacy audio mutation: $file"; exit 1 ;;
+            esac
+          done
+
+      - name: Commit publication to main
+        if: steps.gate.outputs.should-run == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f public/audio/articles/2679e12bbe133339
+          git add docs/audio/NEW-CONTENT-PUBLICATION-AUTHORIZATION.json
+          git add docs/audio/NEW-CONTENT-PUBLICATION-20261012.json
+          git add docs/audio/NEW-CONTENT-FULL-SYNTHESIS-RESULT.json
+          git add docs/audio/NEW-CONTENT-FULL-SYNTHESIS-AUTHORIZATION.json
+          git add docs/audio/TTS-FREEZE.json
+          git commit -m 'audio: publish screen-focus owner-approved candidate'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          echo 'NEW_CONTENT_PUBLICATION_TREE=PUSHED'
+
+      - name: Upload publication evidence
+        if: always() && steps.gate.outputs.should-run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-screen-focus-publication-${{ github.run_id }}
+          path: |
+            docs/audio/NEW-CONTENT-PUBLICATION-AUTHORIZATION.json
+            docs/audio/NEW-CONTENT-PUBLICATION-20261012.json
+            docs/audio/NEW-CONTENT-FULL-SYNTHESIS-RESULT.json
+            public/audio/articles/2679e12bbe133339/manifest.json
+          if-no-files-found: error
+          retention-days: 90
