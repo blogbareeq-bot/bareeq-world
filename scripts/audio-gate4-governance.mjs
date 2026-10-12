@@ -39,7 +39,7 @@ export function validateGate4Governance({
   const exact=Number(status?.exactCount);
   const published=Number(status?.publishedCount);
   const fallback=Number(status?.fallbackCount);
-  if(!Number.isInteger(exact) || exact<7 || exact>14) fail('Canonical campaign Exact count must remain within the governed 7..14 range');
+  if(!Number.isInteger(exact) || exact<7 || exact>15) fail('Canonical campaign Exact count must remain within the governed 7..15 range');
   if(published!==exact) fail('All governed Exact articles must be publishedExact');
   if(fallback!==15-exact) fail('Fallback count must equal 15 - Exact');
   if(Number(strategy?.exactBaseline)!==exact) fail('strategy exact baseline must match current Exact count');
