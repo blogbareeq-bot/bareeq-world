@@ -1,3 +1,4 @@
+# synchronized execution transport; scope unchanged
 name: Bareeq tranche42 owner finalization
 on:
   pull_request:
