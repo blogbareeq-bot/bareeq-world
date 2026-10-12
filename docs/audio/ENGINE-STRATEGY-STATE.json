@@ -2,13 +2,13 @@
   "schema": "bareeq.audio-engine-strategy.v1",
   "provider": "Gemini / Sadaltager",
   "threshold": 42,
-  "exactBaseline": 13,
+  "exactBaseline": 15,
   "successfulTtsSinceLastNewExact": 42,
   "status": "paused",
-  "reason": "Two fixed repair attempts closed; retain audio for independent QA and owner listening; no further TTS or retries authorized.",
-  "lastExactAt": "2026-10-11T06:20:04.939Z",
+  "reason": "Legacy audio campaign reached 15/15 Exact through owner-bound derivative certification of the two final repairs; synthesis remains frozen at 42/42. Next: adjudicate the already-generated screen-focus new-content candidate.",
+  "lastExactAt": "2026-10-12T05:28:36.468Z",
   "lastRunId": "38121863055",
-  "updatedAt": "2026-10-11T07:36:43.452Z",
+  "updatedAt": "2026-10-12T05:28:36.468Z",
   "targetedRecovery": null,
   "thresholdAmendment": "docs/audio/TTS-THRESHOLD-AMENDMENT-42.json"
 }

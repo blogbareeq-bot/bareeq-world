@@ -1,0 +1,185 @@
+{
+  "schema": "bareeq.audio-tranche42-derivative-finalization.v1",
+  "generatedAt": "2026-10-12T05:28:36.468Z",
+  "status": "PASS",
+  "publicationComplete": true,
+  "publishedCount": 15,
+  "exactCount": 15,
+  "fallbackCount": 0,
+  "decisionId": "COMPLETION15-TWO-REPAIRS-FINALIZE-20261012-v1",
+  "ownerInstruction": "كلها سليمة",
+  "ownerListeningPerformed": true,
+  "sourceCompletion40": {
+    "howTouchscreens": {
+      "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+      "consensus": {
+        "substitutions": 1,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "onlyConfirmedBlocker": {
+        "caseId": "S-01-450",
+        "articleId": "how-touchscreens-work",
+        "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+        "fullSha256": "1639362f2e3eaaf27075e5022ffa72a8edcf8a2fc179c2c942d00212ee1e4570",
+        "expectedIndex": 450,
+        "expectedToken": "عندما",
+        "issueType": "substitution"
+      },
+      "humanResolved": [
+        "T07",
+        "S-02-608",
+        "S-03-1456"
+      ]
+    },
+    "languageSoftPower": {
+      "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+      "consensus": {
+        "substitutions": 1,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "onlyConfirmedBlocker": {
+        "caseId": "C1-01-617-owner",
+        "clipCaseId": "C1-01",
+        "articleId": "language-soft-power-politics",
+        "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+        "fullSha256": "0eb1d93db3bf280c1bf049270a8487a163e5389fdb2bfad81144544c287983a2",
+        "speechScriptHash": "01a6517a80bdc0f7340b159f7d77b57d84b01eca70388a76c7f2cfb0f9caf91f",
+        "sourcePartSha256": "911bd0624b80595b72b9df32d4d937b09cc25c5279a936369f4170da18d219ce",
+        "partNumber": 3,
+        "clipSha256": "7891520ec12e68294cb2b592a1e4dbbee613cc15185933476e826a6573483555",
+        "clipStart": 56.86,
+        "clipEnd": 90.02,
+        "targetText": "ويعرض",
+        "expectedText": "تقدم الفرنسية مثالًا واضحًا على قوة الاستمرارية المؤسسية. فشبكات الفرنكوفونية لا تتعامل مع اللغة كدروس منفصلة فقط، بل تربطها بالتعليم والثقافة والإعلام والاقتصاد والحضور الدولي. ويعرض تقرير المنظمة الدولية للفرنكوفونية هذه السياقات المتعددة بدل اختزال الفرنسية في عدد المتحدثين. (المنظمة الدولية للفرنكوفونية)",
+        "segmentId": "b0029",
+        "issueType": "substitution",
+        "validatorVersion": "audio-completion40-final-review-v1",
+        "schema": "bareeq.audio-owner-supplemental-defect.v1",
+        "expectedIndex": 617,
+        "expectedToken": "ويعرض",
+        "heard": "ويُغرض",
+        "decision": "ACTUAL_AUDIO_ERROR",
+        "humanReviewPerformed": true,
+        "source": "owner message with screenshot",
+        "sourceMessage": "كلمة \"ويعرض\" في الجملة (ويعرض تقرير المنظمة الدولية) تنطق خطأ (تنطق : ويُغرض)",
+        "sourceSubmissionSha256": "5bc2e476bd49d57007aab6a51c1e27fa388b6ed6db3d4ffaeb6c551e60924ce3",
+        "sourceImageSha256": "b331108ae07eb2d3f22645d07b503efd18d8083cce29bc9fcceb8225df12615a",
+        "reviewer": "صاحب المشروع"
+      },
+      "humanResolved": [
+        "T08",
+        "T16",
+        "T19",
+        "T24",
+        "C1-01-601",
+        "C1-01-621",
+        "C1-01-633",
+        "C1-02-1425"
+      ]
+    }
+  },
+  "repairs": [
+    {
+      "articleId": "how-touchscreens-work",
+      "audioKey": "de93f3d9f91c8b8b",
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "ad56a3fea95f15b7d28da84c0a333c9e74880b6b12c84b6f34a922ffd491e39e",
+      "parts": 6,
+      "defaultVoice": "sadaltager",
+      "publishedAt": "2026-10-12T05:28:36.411Z",
+      "repairId": "REPAIR2-S",
+      "repairContextSha256": "8a6d329986c3784f907476130e8d2db2f74d6485d5c746e04dbc92d3e8dfe866",
+      "microConsensus": {
+        "substitutions": 0,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "outsidePcmIdentical": true,
+      "prefixCorrelation": 0.9998811529062194,
+      "suffixCorrelation": 0.9994378877754021,
+      "preservedHumanResolvedCases": [
+        "T07",
+        "S-02-608",
+        "S-03-1456"
+      ],
+      "supersededInsideRepairedContext": []
+    },
+    {
+      "articleId": "language-soft-power-politics",
+      "audioKey": "b19e29e785a22c73",
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "6e75b72978803e251ef4e876ad0e24667f135836175528ed948acec0a87de3d7",
+      "parts": 7,
+      "defaultVoice": "sadaltager",
+      "publishedAt": "2026-10-12T05:28:36.441Z",
+      "repairId": "REPAIR2-C1",
+      "repairContextSha256": "306e062dd5be94d94bbf9451bb824d9450e4bd41c435fd9d4eda2e70a6ad37e6",
+      "microConsensus": {
+        "substitutions": 0,
+        "deletions": 0,
+        "insertions": 0,
+        "unresolved": 0
+      },
+      "outsidePcmIdentical": true,
+      "prefixCorrelation": 0.9997605766758697,
+      "suffixCorrelation": 0.9998700076590006,
+      "preservedHumanResolvedCases": [
+        "T08",
+        "T16",
+        "T19",
+        "T24",
+        "C1-01-601",
+        "C1-02-1425"
+      ],
+      "supersededInsideRepairedContext": [
+        "C1-01-621",
+        "C1-01-633"
+      ]
+    }
+  ],
+  "failedFullAuditCorroboration": {
+    "runId": 38206767866,
+    "jobId": 114671866612,
+    "newFullAsrCallsConsumed": 1,
+    "usedForCertification": false,
+    "articleId": "how-touchscreens-work",
+    "substantiveDifferences": [
+      {
+        "expectedIndex": 249,
+        "expected": "ملاءمة",
+        "actual": "ملائمة",
+        "resolution": "prior-owner-bound-T07"
+      },
+      {
+        "expectedIndex": 485,
+        "expected": "بالأرض",
+        "actual": "بالارض",
+        "resolution": "ASR-orthography-only-same-pronunciation; not needed for derivative certification"
+      },
+      {
+        "expectedIndex": 608,
+        "expected": "النظام",
+        "actual": "نظام",
+        "resolution": "prior-owner-bound-S-02-608"
+      },
+      {
+        "expectedIndex": 1456,
+        "expected": "يحتج",
+        "actual": "يحتاج",
+        "resolution": "prior-owner-bound-S-03-1456"
+      }
+    ]
+  },
+  "providerUsageThisFinalization": {
+    "ttsCalls": 0,
+    "asrCalls": 0,
+    "providerCalls": 0
+  },
+  "counter": "42/42",
+  "nextAction": "Adjudicate the already-generated full screen-focus candidate against its bound SHA and issue final owner listening evidence. Do not synthesize again."
+}
