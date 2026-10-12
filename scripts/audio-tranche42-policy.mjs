@@ -13,14 +13,18 @@ export function validateTranche42Policy({amendment:a,strategy,freeze,status}){
  if(a.previousThreshold!==40||a.newThreshold!==42||a.successfulRequestBaseline!==40||a.additionalSuccessfulRequestsAuthorized!==2||a.maximumProviderAttempts!==2)fail('two-request budget');
  for(const k of ['automaticExpansion','automaticRetry','automaticProviderDispatch'])if(a[k]!==false)fail(k);
  if(a.qualityPolicyUnchanged!==true||a.existingExactAudioImmutable!==true||a.priorityException?.ownerApproved!==true||a.priorityException.scope!=='these-two-legacy-repairs-before-new-content')fail('scope/priority');
- if(freeze?.active!==true||freeze.queuePolicy?.mode!=='new-content-before-renewal'||strategy?.threshold!==42||freeze.strategySnapshot?.threshold!==42||status?.exactCount!==13||strategy.exactBaseline!==13)fail('freeze/13 protected/current policy');
+ const inFlight=status?.exactCount===13&&strategy?.exactBaseline===13&&freeze?.strategySnapshot?.exact===13;
+ const finalized=a.authorizationStatus==='CONSUMED'&&a.executionStatus==='EXECUTED'&&status?.exactCount===15&&strategy?.exactBaseline===15&&freeze?.strategySnapshot?.exact===15&&status?.publishedCount===15&&status?.fallbackCount===0;
+ if(freeze?.active!==true||freeze.queuePolicy?.mode!=='new-content-before-renewal'||strategy?.threshold!==42||freeze.strategySnapshot?.threshold!==42||(!inFlight&&!finalized))fail('freeze/protected/current policy');
  if(!Number.isInteger(a.successfulRequestsConsumed)||a.successfulRequestsConsumed<0||a.successfulRequestsConsumed>2||strategy.successfulTtsSinceLastNewExact!==40+a.successfulRequestsConsumed||freeze.strategySnapshot.successfulTtsSinceLastNewExact!==strategy.successfulTtsSinceLastNewExact)fail('counter');
  if(a.targets?.length!==2||a.protectedExact?.length!==13||new Set(a.protectedExact.map(x=>x.articleId)).size!==13)fail('targets/protected set');
  for(const p of a.protectedExact){const r=status.rows.find(x=>x.articleId===p.articleId);if(!r?.publishedExact||r.fingerprint!==p.fingerprint||r.fullSha256!==p.fullSha256)fail('published identity');}
  let consumed=0,attempts=0;
  for(const [i,t] of a.targets.entries()){
   if(t.id!==approved[i][0]||t.articleId!==approved[i][1]||t.generationTextSha256!==approved[i][2]||digest42(t.generationText)!==approved[i][2]||t.maximumRequests!==1||t.maximumProviderAttempts!==1||t.automaticRetry!==false||!t.preflightPassed)fail('target text');
-  const r=status.rows.find(x=>x.articleId===t.articleId);if(!r||r.publishedExact||r.fingerprint!==t.fingerprint)fail('pending target');
+  const r=status.rows.find(x=>x.articleId===t.articleId);if(!r||r.fingerprint!==t.fingerprint)fail('target identity');
+  if(inFlight&&r.publishedExact)fail('pending target');
+  if(finalized&&(!r.publishedExact||!r.exact||r.validationStatus!=='validated'||r.substitutions!==0||r.deletions!==0||r.insertions!==0||r.unresolved!==0))fail('finalized target');
   if(!Number.isInteger(t.successfulTtsConsumed)||t.successfulTtsConsumed<0||t.successfulTtsConsumed>1||!Number.isInteger(t.providerAttemptsConsumed)||t.providerAttemptsConsumed<0||t.providerAttemptsConsumed>1||t.successfulTtsConsumed>t.providerAttemptsConsumed)fail('target budget');
   for(const k of ['baselineFullSha256','sourcePartSha256','speechScriptHash'])if(!/^[a-f0-9]{64}$/.test(t[k]))fail('source binding');
   for(const q of [t.quietStart,t.quietEnd])if(q.windowSamples!==1920||!Number.isFinite(q.rmsDb)||!Number.isFinite(q.peakDb)||q.rmsDb> -42||q.peakDb> -30)fail('quiet cut');
