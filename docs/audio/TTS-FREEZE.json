@@ -2,7 +2,7 @@
   "schema": "bareeq.audio-tts-freeze.v1",
   "active": true,
   "effectiveAt": "2026-10-05T11:15:00Z",
-  "reason": "Owner approved exactly two fixed repair requests and their priority exception; keep global freeze and all 13 approved recordings unchanged.",
+  "reason": "Legacy campaign reached 15/15 Exact with zero additional TTS and zero additional provider calls in derivative finalization; synthesis remains frozen at 42/42 while the already-generated screen-focus candidate moves to adjudication/listening.",
   "sourceRunId": "37284619084",
   "evidenceArtifact": {
     "id": 11334211844,
@@ -10,10 +10,10 @@
     "expiresAt": "2027-01-03T08:35:52Z"
   },
   "strategySnapshot": {
-    "exact": 13,
+    "exact": 15,
     "total": 15,
-    "fallback": 2,
-    "activePending": 2,
+    "fallback": 0,
+    "activePending": 0,
     "excluded": 0,
     "successfulTtsSinceLastNewExact": 42,
     "threshold": 42
@@ -41,7 +41,7 @@
     "gate4Budget": "docs/audio/GATE-4-BUDGET.json",
     "gate4Status": "PILOT_PASS_CORROBORATION_REQUIRED",
     "additionalResearchRunsAuthorized": 0,
-    "nextAction": "Do not synthesize again. Adjudicate the full screen-focus candidate against the bound SHA and run final owner listening. Publication remains blocked until ASR/human/technical gates are closed.",
+    "nextAction": "Adjudicate the already-generated full screen-focus candidate against its bound SHA and issue final owner listening evidence. Do not synthesize again.",
     "ownerApprovalDate": "2026-10-06",
     "approvalScope": "one infrastructure-recovery workflow run only; no TTS, no paid API, no automatic extension",
     "lastAuthorizedGate4RunId": 37419623624,
@@ -138,6 +138,20 @@
       "maximumStrategyThreshold": 42,
       "executionStatus": "EXECUTED",
       "authorizationScope": "Two fixed whole-context repair texts, one provider attempt per target, no retries; new owner listening before publication."
+    },
+    "completion42Derivative": {
+      "record": "docs/audio/TRANCHE42-DERIVATIVE-FINALIZATION-20261012.json",
+      "status": "PASS",
+      "publishedExact": "15/15",
+      "targets": [
+        "REPAIR2-S",
+        "REPAIR2-C1"
+      ],
+      "ttsCalls": 0,
+      "newAsrCalls": 0,
+      "priorFailedAuditFullAsrCallsConsumed": 1,
+      "unusedAuthorizedFullAsrCalls": 1,
+      "certificationMethod": "source full human adjudication + byte/PCM-preserving single-region repair + local dual-ASR 0/0/0 + owner listening"
     }
   },
   "queuePolicy": {

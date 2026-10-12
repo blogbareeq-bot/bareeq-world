@@ -4,11 +4,11 @@
   "model": "gemini-3.1-flash-tts-preview",
   "voice": "Sadaltager",
   "publicationStatus": "partial-with-existing-live-fallback",
-  "publicationComplete": false,
-  "publishedCount": 13,
-  "fallbackCount": 2,
+  "publicationComplete": true,
+  "publishedCount": 15,
+  "fallbackCount": 0,
   "publicationPolicy": "docs/audio/PUBLICATION-POLICY-20260901.json",
-  "generatedAt": "2026-10-11T06:20:04.939Z",
+  "generatedAt": "2026-10-12T05:28:36.468Z",
   "articles": [
     {
       "articleId": "ai-agents-future-now",
@@ -74,16 +74,17 @@
       "articleId": "why-some-passports-are-stronger",
       "fingerprint": "2a506ff4683cf450ecc63525868c1688a4c9a5dc8a231254d766bd7c79d58a5b",
       "fullSha256": "38945dab4c6af24354b106285ca43ae3c29377f0905399175b3f8922382d8a90"
-    }
-  ],
-  "fallbacks": [
+    },
     {
       "articleId": "how-touchscreens-work",
-      "reason": "awaiting-exact-campaign-completion"
+      "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
+      "fullSha256": "ad56a3fea95f15b7d28da84c0a333c9e74880b6b12c84b6f34a922ffd491e39e"
     },
     {
       "articleId": "language-soft-power-politics",
-      "reason": "awaiting-exact-campaign-completion"
+      "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
+      "fullSha256": "6e75b72978803e251ef4e876ad0e24667f135836175528ed948acec0a87de3d7"
     }
-  ]
+  ],
+  "fallbacks": []
 }

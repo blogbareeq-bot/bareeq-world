@@ -1,14 +1,14 @@
 {
   "schema": "bareeq.audio-progressive-status.v2",
   "campaignId": "sadaltager-openrouter-20260901-v1",
-  "sourceRunId": "38117692267",
-  "sourceArtifact": "bareeq-completion40-promotion-38117692267",
-  "sourceEvent": "push",
-  "generatedAt": "2026-10-11T06:20:04.939Z",
-  "publicationComplete": false,
-  "publishedCount": 13,
-  "fallbackCount": 2,
-  "exactCount": 13,
+  "sourceRunId": "38208055075",
+  "sourceArtifact": "bareeq-tranche42-derivative-finalization-38208055075",
+  "sourceEvent": "pull_request",
+  "generatedAt": "2026-10-12T05:28:36.468Z",
+  "publicationComplete": true,
+  "publishedCount": 15,
+  "fallbackCount": 0,
+  "exactCount": 15,
   "rows": [
     {
       "articleId": "ai-agents-future-now",
@@ -67,18 +67,19 @@
       "audioKey": "de93f3d9f91c8b8b",
       "fingerprint": "76fa19bf8bb51391c6288f827c7d1fdc793712475731f8413e93776182fb5bf7",
       "generationStatus": "generated",
-      "validationStatus": "paused-quota",
-      "substitutions": 5,
+      "validationStatus": "validated",
+      "substitutions": 0,
       "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
-      "exact": false,
-      "publishedExact": false,
-      "fullSha256": "64ee91fa3b3b135f3030584e60cb9f2b975d0706e615ffbf90e6b4bedea0c60c",
+      "exact": true,
+      "publishedExact": true,
+      "fullSha256": "ad56a3fea95f15b7d28da84c0a333c9e74880b6b12c84b6f34a922ffd491e39e",
       "repairedParts": [
         1
       ],
-      "error": "Gemini TTS HTTP 429: {\"message\":\"Rate limit exceeded for model gemini-3.1-flash-tts (limit: 10 requests per day on Free Tier). Please retry in 2h36m25s or upgrade your tier at https://ai.dev/rate-limit.\",\"retryDelay\":null,\"retryDelayMs\":null,\"quota\":[],\"daily\":false}"
+      "error": null,
+      "verificationMethod": "tranche42-owner-bound-derivative-v1"
     },
     {
       "articleId": "intuition-first-impression-decisions-signature",
@@ -104,18 +105,19 @@
       "audioKey": "b19e29e785a22c73",
       "fingerprint": "64d18819c78cdd92b6c133409669ee47d492d7ba809d3172007a31a9101977f8",
       "generationStatus": "generated",
-      "validationStatus": "failed",
-      "substitutions": 3,
-      "deletions": 6,
+      "validationStatus": "validated",
+      "substitutions": 0,
+      "deletions": 0,
       "insertions": 0,
       "unresolved": 0,
-      "exact": false,
-      "publishedExact": false,
-      "fullSha256": "8046a0551920ed9cce4422610738917dc18da95f367e6aa6348450fd828c76df",
+      "exact": true,
+      "publishedExact": true,
+      "fullSha256": "6e75b72978803e251ef4e876ad0e24667f135836175528ed948acec0a87de3d7",
       "repairedParts": [
         1
       ],
-      "error": "dual-ASR consensus failed: S=3 D=0 I=0 unresolved=8"
+      "error": null,
+      "verificationMethod": "tranche42-owner-bound-derivative-v1"
     },
     {
       "articleId": "why-some-passports-are-stronger",
