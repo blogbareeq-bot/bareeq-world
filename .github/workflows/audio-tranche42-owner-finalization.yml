@@ -1,3 +1,4 @@
+# synchronize derivative certification; zero provider secrets/calls
 name: Bareeq tranche42 derivative finalization
 on:
   pull_request:
