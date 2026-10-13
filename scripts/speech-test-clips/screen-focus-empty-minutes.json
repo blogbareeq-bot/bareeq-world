@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "articleId": "screen-focus-empty-minutes",
+  "speechScriptHash": "d4dd29f62d3458750a5570bf3dae15e379003ab7a72bffc5b41dcf3d95290f1a",
+  "status": "draft-needs-speech-review",
+  "testClipPassed": false,
+  "fullSynthesisAllowed": false,
+  "expectedDurationSeconds": 30,
+  "selectedSegments": [
+    {
+      "segmentId": "title-6d233410eb88",
+      "challenges": [
+        "title/structure/natural pause control"
+      ]
+    },
+    {
+      "segmentId": "h2-461224b0f52f",
+      "challenges": [
+        "title/structure/natural pause control"
+      ]
+    },
+    {
+      "segmentId": "h2-671993cafeeb",
+      "challenges": [
+        "title/structure/natural pause control"
+      ]
+    },
+    {
+      "segmentId": "h2-1a5910c8c933",
+      "challenges": [
+        "title/structure/natural pause control"
+      ]
+    },
+    {
+      "segmentId": "h2-c26a35f1d815",
+      "challenges": [
+        "title/structure/natural pause control"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Every written Arabic diacritic is respected.",
+    "No approved word is reinterpreted to another contextual reading.",
+    "No word is added or omitted.",
+    "Foreign terms and abbreviations follow the approved pronunciation policy.",
+    "Performance remains natural Modern Standard Arabic and does not pronounce pause endings mechanically."
+  ],
+  "audioReview": {
+    "status": "not-performed",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "evidence": null
+  },
+  "planHash": "9bd2aa6a68ede0815e551e8ffbb1b373a924fb411ef64f1285b0e70ff8d2b4d1"
+}
