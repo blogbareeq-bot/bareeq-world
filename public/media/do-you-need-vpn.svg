@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">VPN بين الحماية والثقة</title>
+  <desc id="desc">تكوين تحريري تجريدي لمسار اتصال يمر عبر بوابة حماية مع توقيع بريق البصري.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#071421"/><stop offset="0.52" stop-color="#0A2342"/><stop offset="1" stop-color="#123a54"/></linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#23b7aa" stop-opacity=".36"/><stop offset="1" stop-color="#23b7aa" stop-opacity="0"/></radialGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7ce5d8" stop-opacity=".18"/><stop offset=".46" stop-color="#7ce5d8"/><stop offset=".54" stop-color="#d9b150"/><stop offset="1" stop-color="#d9b150" stop-opacity=".2"/></linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="20"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="800" cy="440" r="360" fill="url(#glow)"/>
+  <g opacity=".17" stroke="#b9d9e7" stroke-width="1"><path d="M0 164H1600M0 306H1600M0 448H1600M0 590H1600M0 732H1600"/><path d="M150 0V900M390 0V900M630 0V900M870 0V900M1110 0V900M1350 0V900"/></g>
+  <g fill="none" stroke="url(#line)" stroke-linecap="round"><path d="M96 450C300 450 420 318 610 360C694 379 721 421 774 440" stroke-width="14"/><path d="M826 440C936 398 1008 322 1130 350C1292 387 1360 508 1510 470" stroke-width="14"/><path d="M110 492C300 492 438 392 610 414" stroke-width="4" opacity=".65"/><path d="M992 469C1125 445 1268 520 1480 520" stroke-width="4" opacity=".6"/></g>
+  <g transform="translate(650 270)"><path d="M150 0C207 48 263 65 300 72V198C300 297 241 360 150 404C59 360 0 297 0 198V72C37 65 93 48 150 0Z" fill="#0d2d40" stroke="#8ae1d6" stroke-width="5"/><path d="M150 46C193 78 233 91 262 98V194C262 265 220 314 150 351C80 314 38 265 38 194V98C67 91 107 78 150 46Z" fill="none" stroke="#d9b150" stroke-width="3" opacity=".9"/><circle cx="150" cy="191" r="35" fill="#23b7aa" opacity=".95"/><path d="M150 226V276" stroke="#23b7aa" stroke-width="18" stroke-linecap="round"/></g>
+  <g fill="#bfe9e4"><circle cx="270" cy="370" r="7"/><circle cx="366" cy="520" r="4" opacity=".7"/><circle cx="1200" cy="287" r="6"/><circle cx="1320" cy="580" r="5" opacity=".75"/></g>
+  <g filter="url(#blur)" opacity=".3"><ellipse cx="808" cy="680" rx="260" ry="42" fill="#23b7aa"/></g>
+  <g transform="translate(1435 790)" fill="none" stroke="#e9f4f6" stroke-width="3" opacity=".9"><path d="M0 70H112M112 70V0"/><path d="M46 39l15 15M61 39L46 54" stroke="#d9b150" stroke-width="4"/><circle cx="112" cy="70" r="7" fill="#23b7aa" stroke="none"/></g>
+</svg>

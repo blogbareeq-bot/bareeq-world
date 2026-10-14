@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../lib/posts';
+import { getMonetizationCatalog, AMAZON_ASSOCIATE_DISCLOSURE, GENERAL_AFFILIATE_DISCLOSURE, hasAmazonAffiliate } from '../config/monetization';
+
+const latestPosts = (await getPublishedPosts()).slice(0, 6);
+const catalog = getMonetizationCatalog();
+const postHref = (postId: string) => `/posts/${postId}/`;
+---
+<BaseLayout
+  title="اختيارات بريق"
+  description="أدوات وكتب وخدمات يذكرها بريق عندما ترتبط فعلًا بالمحتوى، مع إفصاح واضح عن الروابط التسويقية ومنهج الاختيار."
+  canonicalPath="/picks/"
+  latestPosts={latestPosts}
+>
+  <section class="picks-hero shell narrow">
+    <span class="eyebrow">اختيارات بريق</span>
+    <h1>ما نوصي به يجب أن يظل مفيدًا حتى لو أزلنا العمولة</h1>
+    <p>هذه الصفحة تجمع الأدوات والكتب والخدمات والمنتجات الرقمية التي تظهر داخل مقالات بريق. لا نضيف رابطًا تجاريًا لمجرد وجود عمولة، ولا نعرض رابط شراكة قبل أن يكون معتمدًا وفعّالًا.</p>
+  </section>
+
+  <section class="shell narrow policy-box" aria-labelledby="picks-policy-title">
+    <div><span class="eyebrow">قاعدة التحرير</span><h2 id="picks-policy-title">المحتوى أولًا، والرابط ثانيًا</h2></div>
+    <ul>
+      <li>المقال يجب أن يبقى مكتمل القيمة حتى إذا لم يشترِ القارئ شيئًا.</li>
+      <li>نوضح وجود العمولة قرب الرابط، ولا نخفيها في صفحة قانونية بعيدة.</li>
+      <li>لا تؤثر الشراكة في نتيجة المراجعة أو النقد أو ذكر العيوب.</li>
+      <li>أي رابط غير مفعّل رسميًا يبقى غير قابل للنقر بدل توجيه القارئ إلى مسار وهمي.</li>
+    </ul>
+  </section>
+
+  <section class="shell narrow picks-section">
+    <div class="section-title"><span class="eyebrow">الحالة الحالية</span><h2>المنتجات والشراكات</h2></div>
+    <div class="picks-grid">
+      {catalog.map(({ postId, offer }) => (
+        <article class:list={['pick-card', { 'is-staged': !offer.active }]}>
+          <div class="pick-meta">
+            <span>{offer.eyebrow}</span>
+            <b>{offer.active ? 'مفعّل' : 'جاهز للتفعيل'}</b>
+          </div>
+          <h3>{offer.title}</h3>
+          <p>{offer.description}</p>
+          <div class="pick-actions">
+            <a href={postHref(postId)}>المقال المرتبط</a>
+            {offer.active ? (
+              <a
+                class="pick-primary"
+                href={offer.href}
+                target={offer.external ? '_blank' : undefined}
+                rel={offer.external ? 'sponsored nofollow noopener noreferrer' : undefined}
+              >{offer.cta}</a>
+            ) : <span class="pick-disabled" aria-label="الرابط غير مفعّل بعد">بانتظار الاعتماد</span>}
+          </div>
+          {offer.disclosure && offer.active && <small>{offer.disclosure}</small>}
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="shell narrow disclosure-box">
+    <span class="eyebrow">الإفصاح</span>
+    <h2>كيف يربح بريق من بعض الروابط؟</h2>
+    <p>{GENERAL_AFFILIATE_DISCLOSURE}</p>
+    {hasAmazonAffiliate() && <p><strong>أمازون:</strong> {AMAZON_ASSOCIATE_DISCLOSURE}</p>}
+    <p>أما منتجات بريق الرقمية، فالعائد منها يذهب إلى بريق مباشرة بعد رسوم بوابة الدفع عند تفعيلها.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow{max-width:1040px}.picks-hero{padding-block:clamp(3rem,8vw,7rem) 2.5rem}.eyebrow{color:#087566;font-weight:800;font-size:.86rem}.picks-hero h1{max-width:19ch;margin:.55rem 0 1rem;font-size:clamp(2rem,5vw,4.2rem);line-height:1.3}.picks-hero p{max-width:70ch;color:var(--text-muted,#63707a);font-size:1.1rem;line-height:2}
+  .policy-box{display:grid;grid-template-columns:.8fr 1.2fr;gap:2rem;padding-block:2rem;border-block:1px solid rgba(10,35,66,.1)}.policy-box h2{margin:.45rem 0}.policy-box ul{margin:0;padding:0;list-style:none;display:grid;gap:.75rem}.policy-box li{line-height:1.85}.policy-box li::before{content:'✓';margin-inline-end:.55rem;color:#087566;font-weight:900}
+  .picks-section{padding-block:4rem}.section-title h2{margin:.4rem 0 1.4rem;font-size:2rem}.picks-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.pick-card{padding:1.35rem;border:1px solid rgba(10,35,66,.1);border-radius:22px;background:var(--surface,#fff)}.pick-card.is-staged{border-style:dashed}.pick-meta{display:flex;justify-content:space-between;gap:.8rem;align-items:center}.pick-meta span{color:#087566;font-weight:800;font-size:.8rem}.pick-meta b{padding:.2rem .55rem;border-radius:999px;background:rgba(8,117,102,.08);font-size:.75rem}.is-staged .pick-meta b{color:#7b5b1d;background:rgba(217,177,80,.13)}.pick-card h3{margin:.65rem 0;font-size:1.2rem}.pick-card p{color:var(--text-muted,#64707a);line-height:1.9}.pick-actions{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-top:1rem}.pick-actions a,.pick-disabled{display:inline-flex;padding:.55rem .75rem;border-radius:11px;font-weight:800;text-decoration:none}.pick-actions>a:first-child{color:#0a2342;background:rgba(10,35,66,.055)}.pick-primary{color:#fff!important;background:#087566!important}.pick-disabled{color:#776a53;background:rgba(217,177,80,.1)}.pick-card small{display:block;margin-top:.8rem;color:var(--text-muted,#69737b);line-height:1.7}
+  .disclosure-box{margin-block:0 5rem;padding:2rem;border-radius:24px;background:linear-gradient(135deg,rgba(8,117,102,.07),rgba(217,177,80,.06))}.disclosure-box h2{margin:.45rem 0}.disclosure-box p{line-height:1.95;color:var(--text-muted,#616d76)}
+  :global(html[data-theme='dark']) .policy-box{border-color:rgba(255,255,255,.1)}:global(html[data-theme='dark']) .pick-card{border-color:rgba(255,255,255,.1);background:#0d1f2d}:global(html[data-theme='dark']) .pick-actions>a:first-child{color:#eaf3f7;background:rgba(255,255,255,.07)}
+  @media(max-width:760px){.policy-box{grid-template-columns:1fr}.picks-grid{grid-template-columns:1fr}.picks-hero h1{max-width:none}}
+</style>
