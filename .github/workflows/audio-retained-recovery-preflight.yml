@@ -1,0 +1,42 @@
+name: Bareeq retained recovery preflight
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/audio-retained-recovery-preflight.py'
+      - '.github/workflows/audio-retained-recovery-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          name: bareeq-gate5-passports-37581607040
+          path: retained-evidence
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '37581607040'
+      - name: Inspect six pending candidates without provider access
+        run: |
+          set -euo pipefail
+          python scripts/audio-retained-recovery-preflight.py --root retained-evidence --out retained-recovery-preflight
+      - name: Prove production audio is unchanged
+        run: git diff --exit-code -- public/audio
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bareeq-retained-recovery-preflight-${{ github.run_id }}
+          path: retained-recovery-preflight/
+          if-no-files-found: error
+          retention-days: 90
